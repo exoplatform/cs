@@ -110,8 +110,8 @@
     </childNodeDefinitions>
   </nodeType>
 
-	<nodeType name="lr:presencestatus" isMixin="false" hasOrderableChildNodes="false">
-	    <supertypes>
+  <nodeType name="lr:presencestatus" isMixin="false" hasOrderableChildNodes="false">
+      <supertypes>
       <supertype>nt:base</supertype>
     </supertypes>
     <propertyDefinitions>
@@ -128,13 +128,13 @@
         <defaultValues />
       </propertyDefinition>
     </propertyDefinitions>
-	</nodeType>
-	
+  </nodeType>
+  
  <nodeType name="lr:defaultpresencestatus" isMixin="false" hasOrderableChildNodes="false">
-	  <supertypes>
+    <supertypes>
       <supertype>nt:base</supertype>
     </supertypes>
-		<childNodeDefinitions>
+    <childNodeDefinitions>
       <childNodeDefinition name="*" defaultPrimaryType="lr:presencestatus"
         autoCreated="false" mandatory="false" onParentVersion="VERSION"
         protected="false" sameNameSiblings="false">
@@ -143,8 +143,8 @@
         </requiredPrimaryTypes>
       </childNodeDefinition>
     </childNodeDefinitions>
-	</nodeType>
-		
+  </nodeType>
+    
   <nodeType name="lr:conversation" isMixin="false"
     hasOrderableChildNodes="false">
     <supertypes>

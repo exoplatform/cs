@@ -1,14 +1,14 @@
 .UIContactPortlet .AddNew {
-	background: url('icons/Add.gif') no-repeat center;
-	height: 20px; width: 24px;
+  background: url('icons/Add.gif') no-repeat center;
+  height: 20px; width: 24px;
 }
 
 .UIContactPortlet .AddressOptionIcon {
-	background: url('icons/AddressOptionIcon.gif') no-repeat left center;
+  background: url('icons/AddressOptionIcon.gif') no-repeat left center;
 }
 
 .UIContactPortlet .TypeViewContactPortlet .ContactIcon {
-	background: url('icons/ContactIcon.gif') no-repeat left center;
+  background: url('icons/ContactIcon.gif') no-repeat left center;
 }
 
 .UIContactPortlet .TypeViewContactPortlet .MenuItem {
@@ -16,182 +16,182 @@
 }
 
 .UIContactPortlet .TypeViewContactPortlet .MenuItemSelected {
-	background: #dee4f2;
+  background: #dee4f2;
 }
 
 .UIContactPortlet .CustomLayoutIcon {
-	background: url('icons/CustomLayoutIcon.gif') no-repeat left center;
+  background: url('icons/CustomLayoutIcon.gif') no-repeat left center;
 }
 
 .UIContactPortlet .ExportContactIcon {
-	background: url('icons/ExportContactIcon.gif') no-repeat left center;
+  background: url('icons/ExportContactIcon.gif') no-repeat left center;
 }
 
 .UIContactPortlet .ChatIcon {
-	background: url('icons/GoChatIcon.gif') no-repeat left center;
-	width: 20px ; height: 20px;
+  background: url('icons/GoChatIcon.gif') no-repeat left center;
+  width: 20px ; height: 20px;
 }
 
 .UIContactPortlet .ImportContactIcon {
-	background: url('icons/ImportContactIcon.gif') no-repeat left center;
+  background: url('icons/ImportContactIcon.gif') no-repeat left center;
 }
 
 .UIContactPortlet .MessageIcon {
-	background: url('icons/MessageIcon.gif') no-repeat left center;
+  background: url('icons/MessageIcon.gif') no-repeat left center;
 }
 
 .UIContactPortlet .MoveAddressIcon {
-	background: url('icons/MoveAddressIcon.gif') no-repeat left center;
+  background: url('icons/MoveAddressIcon.gif') no-repeat left center;
 }
 
 .UIContactPortlet .MoveTagIcon {
-	background: url('icons/MoveTagIcon.gif') no-repeat left center;
+  background: url('icons/MoveTagIcon.gif') no-repeat left center;
 }
 
 .UIContactPortlet .MyLDAPIcon {
-	background: url('icons/MyLDAPIcon.gif') no-repeat left center;
+  background: url('icons/MyLDAPIcon.gif') no-repeat left center;
 }
 
 .UIContactPortlet .PrintIcon {
-	background: url('icons/PrintIcon.gif') no-repeat left center;
+  background: url('icons/PrintIcon.gif') no-repeat left center;
 }
 
 .UIContactPortlet .CopyContactIcon {
-	background: url('icons/Copy24x24.gif') no-repeat left center;
+  background: url('icons/Copy24x24.gif') no-repeat left center;
 }
 
 .UIContactPortlet .ViewIcon {
-	background: url('icons/ViewIcon.gif') no-repeat left center;
+  background: url('icons/ViewIcon.gif') no-repeat left center;
 }
 
 .UIContactPortlet .ActionsAddIcon {
-	background: url('icons/ActionsAdd.gif') no-repeat right center;
-	width: 26px; height: 18px;
+  background: url('icons/ActionsAdd.gif') no-repeat right center;
+  width: 26px; height: 18px;
 }
 
 .UIContactPortlet .PowderBlueTag {
-	background: url('icons/TagIcons.gif') no-repeat left top;
+  background: url('icons/TagIcons.gif') no-repeat left top;
 }
 
 .UIContactPortlet .OrchidTag {
-	background: url('icons/TagIcons.gif') no-repeat left -21px;
+  background: url('icons/TagIcons.gif') no-repeat left -21px;
 }
 
 .UIContactPortlet .PaleGoldenRodTag {
-	background: url('icons/TagIcons.gif') no-repeat left -42px;
+  background: url('icons/TagIcons.gif') no-repeat left -42px;
 }
 
 .UIContactPortlet .PaleGreenTag {
-	background: url('icons/TagIcons.gif') no-repeat left -63px;
+  background: url('icons/TagIcons.gif') no-repeat left -63px;
 }
 
 .UIContactPortlet .OliveTag {
-	background: url('icons/TagIcons.gif') no-repeat left -84px;
+  background: url('icons/TagIcons.gif') no-repeat left -84px;
 }
 
 .UIContactPortlet .OliveDrabTag {
-	background: url('icons/TagIcons.gif') no-repeat left -105px;
+  background: url('icons/TagIcons.gif') no-repeat left -105px;
 }
 
 .UIContactPortlet .OrangeRedTag {
-	background: url('icons/TagIcons.gif') no-repeat left -126px;
+  background: url('icons/TagIcons.gif') no-repeat left -126px;
 }
 
 .UIContactPortlet .PaleTurquoiseTag {
-	background: url('icons/TagIcons.gif') no-repeat left -147px;
+  background: url('icons/TagIcons.gif') no-repeat left -147px;
 }
 
 .UIContactPortlet .PaleVioletRedTag {
-	background: url('icons/TagIcons.gif') no-repeat left -168px;
+  background: url('icons/TagIcons.gif') no-repeat left -168px;
 }
 
 .UIContactPortlet .PapayaWhipTag {
-	background: url('icons/TagIcons.gif') no-repeat left -189px;
+  background: url('icons/TagIcons.gif') no-repeat left -189px;
 }
 
 .UIContactPortlet .PeachPuffTag {
-	background: url('icons/TagIcons.gif') no-repeat left -210px;
+  background: url('icons/TagIcons.gif') no-repeat left -210px;
 }
 
 .UIContactPortlet .PeruTag {
-	background: url('icons/TagIcons.gif') no-repeat left -231px;
+  background: url('icons/TagIcons.gif') no-repeat left -231px;
 }
 
 .UIContactPortlet .PinkTag  {
-	background: url('icons/TagIcons.gif') no-repeat left -252px;
+  background: url('icons/TagIcons.gif') no-repeat left -252px;
 }
 
 .UIContactPortlet .PlumTag {
-	background: url('icons/TagIcons.gif') no-repeat left -273px;
+  background: url('icons/TagIcons.gif') no-repeat left -273px;
 }
 
 .UIContactPortlet .PurpleTag {
-	background: url('icons/TagIcons.gif') no-repeat left -294px;
+  background: url('icons/TagIcons.gif') no-repeat left -294px;
 }
 
 .UIContactPortlet .RedTag {
-	background: url('icons/TagIcons.gif') no-repeat left -315px;
+  background: url('icons/TagIcons.gif') no-repeat left -315px;
 }
 
 .UIContactPortlet .RosyBrownTag {
-	background: url('icons/TagIcons.gif') no-repeat left -336px;
+  background: url('icons/TagIcons.gif') no-repeat left -336px;
 }
 
 .UIContactPortlet .RoyalBlueTag {
-	background: url('icons/TagIcons.gif') no-repeat left -357px;
+  background: url('icons/TagIcons.gif') no-repeat left -357px;
 }
 
 .UIContactPortlet .SaddleBrownTag {
-	background: url('icons/TagIcons.gif') no-repeat left -378px;
+  background: url('icons/TagIcons.gif') no-repeat left -378px;
 }
 
 .UIContactPortlet .SalmonTag {
-	background: url('icons/TagIcons.gif') no-repeat left -399px;
+  background: url('icons/TagIcons.gif') no-repeat left -399px;
 }
 
 .UIContactPortlet .SandyBrownTag {
-	background: url('icons/TagIcons.gif') no-repeat left -441px;
+  background: url('icons/TagIcons.gif') no-repeat left -441px;
 }
 
 .UIContactPortlet .SeaGreenTag {
-	background: url('icons/TagIcons.gif') no-repeat left -462px;
+  background: url('icons/TagIcons.gif') no-repeat left -462px;
 }
 
 .UIContactPortlet .SeaShellTag {
-	background: url('icons/TagIcons.gif') no-repeat left -483px;
+  background: url('icons/TagIcons.gif') no-repeat left -483px;
 }
 
 .UIContactPortlet .SilverTag {
-	background: url('icons/TagIcons.gif') no-repeat left -504px;
+  background: url('icons/TagIcons.gif') no-repeat left -504px;
 }
 
 .UIContactPortlet .SkyBlueTag {
-	background: url('icons/TagIcons.gif') no-repeat left -525px;
+  background: url('icons/TagIcons.gif') no-repeat left -525px;
 }
 
 .UIContactPortlet .ThistleTag {
-	background: url('icons/TagIcons.gif') no-repeat left -546px;
+  background: url('icons/TagIcons.gif') no-repeat left -546px;
 }
 
 .UIContactPortlet .TomatoTag {
-	background: url('icons/TagIcons.gif') no-repeat left -567px;
+  background: url('icons/TagIcons.gif') no-repeat left -567px;
 }
 .UIContactPortlet .TurquoiseTag {
-	background: url('icons/TagIcons.gif') no-repeat left -588px;
+  background: url('icons/TagIcons.gif') no-repeat left -588px;
 }
 
 .UIContactPortlet .VioletTag {
-	background: url('icons/TagIcons.gif') no-repeat left -609px;
+  background: url('icons/TagIcons.gif') no-repeat left -609px;
 }
 
 .UIContactPortlet .WheatTag {
-	background: url('icons/TagIcons.gif') no-repeat left -630px;
+  background: url('icons/TagIcons.gif') no-repeat left -630px;
 }
 
 .UIContactPortlet .YellowTag {
-	background: url('icons/TagIcons.gif') no-repeat left -651px;
+  background: url('icons/TagIcons.gif') no-repeat left -651px;
 }
 
 .UIContactPortlet .AddEventIcon {
-	background: url('icons/AddEvent.gif') no-repeat left;
+  background: url('icons/AddEvent.gif') no-repeat left;
 }

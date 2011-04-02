@@ -1,6 +1,6 @@
 <%
-def rcontext = _ctx.getRequestContext() ;	
-rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.isAllday("QuickAddEventContainer","") ;') ;	
+def rcontext = _ctx.getRequestContext() ;  
+rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.isAllday("QuickAddEventContainer","") ;') ;  
 %>
 <div class="UIQuickAddEvent" id="QuickAddEventContainer">
   <div class="QuickAddEventContainer">
@@ -86,7 +86,7 @@ rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.is
       <tr>
         <td align="center">
           <% for(action in uicomponent.getActions()) { 
-                	 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
+                   String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
                    String link = uicomponent.event(action) ;
           %>
           <div onclick="$link" class="ActionButton LightBlueStyle">

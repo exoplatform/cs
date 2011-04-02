@@ -1,16 +1,16 @@
 .UIMailPortlet .UIAccountCreationWizard {
-	background: #f3f3f3;
-	border: 1px solid #c0c0c0;
-	min-width: 450px;
+  background: #f3f3f3;
+  border: 1px solid #c0c0c0;
+  min-width: 450px;
 }
 
 .UIMailPortlet .UIAccountCreationWizard .UIFormTabPane {
-	padding: 0px;
+  padding: 0px;
 }
 
 .UIMailPortlet .UIAccountCreationWizard .AccountCreationStep .InfoContainer{
-	padding: 0px 20px 10px 20px;
-	background: white;
+  padding: 0px 20px 10px 20px;
+  background: white;
 }
 
 .UIMailPortlet .UIAccountCreationWizard .AccountCreationStep .StepInfos{
@@ -20,12 +20,12 @@
 
 .UIMailPortlet .UIAccountCreationWizard .AccountCreationStep .StepInfos .InfoTitle{
   font-size: 11px;
-	line-height: 22px;
-	font-weight: bold;
+  line-height: 22px;
+  font-weight: bold;
 }
 
 .UIMailPortlet .UIAccountCreationWizard .UIWizardAction {
-	height: 38px;
+  height: 38px;
   padding: 0px 0px 0px 15px;
 }
 
@@ -63,30 +63,30 @@
 }
 
 .UIMailPortlet .UIAccountCreationWizard .UIFormTabPane .TabPaneContent .UITabContentContainer {
-	border: 1px solid #c0c0c0;
-	border-left: none;
-	border-right: none;
+  border: 1px solid #c0c0c0;
+  border-left: none;
+  border-right: none;
 }
 
 .UIMailPortlet .UIAccountCreationWizard .UITabPane .TabPaneContent .UITabContentContainer .UITabContent {
-	border-right: none;
-	border-left: none;
-	border-top: 1px solid white;
-	border-bottom: 1px solid white;
-	padding: 10px 0px;
-	height: 250px;
+  border-right: none;
+  border-left: none;
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+  padding: 10px 0px;
+  height: 250px;
 }
 
 
 .UIMailPortlet .UIAccountCreationWizard .UIAction {
-	float: right;
-	width: 260px;
+  float: right;
+  width: 260px;
 }
 
 .UIMailPortlet .UIAccountCreationWizard .UITabPane .TabPaneContent {
-	padding: 0px;
+  padding: 0px;
 }
 
 .UIMailPortlet .UIAccountCreationWizard .UITabPane {
-	height: 99.5%;
+  height: 99.5%;
 }

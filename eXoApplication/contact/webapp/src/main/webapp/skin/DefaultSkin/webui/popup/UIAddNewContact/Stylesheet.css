@@ -1,37 +1,37 @@
 .UIContactPortlet .AddNewContact {
-	padding: 10px 20px;
-	min-width: 600px;
+  padding: 10px 20px;
+  min-width: 600px;
 }
 
 .UIContactPortlet .AddNewContact .AddContact .HorizontalLayout {
-	border: none;
-	padding: 0px;
+  border: none;
+  padding: 0px;
 }
 
 .UIContactPortlet .AddNewContact .AddContact .HorizontalLayout .UIFormInputSet {
-	width: 500px;
-	margin: auto;
-	height: auto;
+  width: 500px;
+  margin: auto;
+  height: auto;
 }
 
 /*============================= noteTab ===============================*/
 
 .UIContactPortlet .AddNewContact .noteTab textarea {
-	width: 300px;
-	height: 250px;
+  width: 300px;
+  height: 250px;
 }
 
 /*============================= shareContactTab ===============================*/
 
 .UIContactPortlet .AddNewContact .UIForm .UIFormInputSet {
-	width: 520px;
-	margin: 10px auto;
-	height: auto;
+  width: 520px;
+  margin: 10px auto;
+  height: auto;
 }
 
 .UIContactPortlet .AddNewContact .shareContactTab .AddIcon16x16 {
-	background-position: center;
-	width: 16px;
-	height: 16px;
-	cursor: pointer;
+  background-position: center;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
 }

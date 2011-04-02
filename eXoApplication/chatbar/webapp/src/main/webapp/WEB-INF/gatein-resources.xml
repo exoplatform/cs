@@ -11,162 +11,162 @@
     <skin-name>Default</skin-name>
     <css-path>/skin/DefaultStylesheet.css</css-path>
   </portlet-skin>
-	<!--
+  <!--
   <javascript>
-		<param>
-			<js-module>eXo.communication.chat.eXoChatBar</js-module>
-			<js-path>/javascript/eXo/communication/chat/eXoChatBar.js</js-path>
-		</param>
+    <param>
+      <js-module>eXo.communication.chat.eXoChatBar</js-module>
+      <js-path>/javascript/eXo/communication/chat/eXoChatBar.js</js-path>
+    </param>
   </javascript>
   <javascript>
-		<param>
-			<js-module>eXo.communication.chat.core.DateFormat</js-module>
-			<js-path>/javascript/eXo/communication/chat/core/DateFormat.js</js-path>
-		</param>
+    <param>
+      <js-module>eXo.communication.chat.core.DateFormat</js-module>
+      <js-path>/javascript/eXo/communication/chat/core/DateFormat.js</js-path>
+    </param>
   </javascript>
   <javascript>
-		<param>
-			<js-module>eXo.communication.chat.core.AdvancedDOMEvent</js-module>
-			<js-path>/javascript/eXo/communication/chat/core/AdvancedDOMEvent.js</js-path>
-		</param>
+    <param>
+      <js-module>eXo.communication.chat.core.AdvancedDOMEvent</js-module>
+      <js-path>/javascript/eXo/communication/chat/core/AdvancedDOMEvent.js</js-path>
+    </param>
   </javascript>
   <javascript>
-		<param>
-			<js-module>eXo.communication.chat.core.JSLogger</js-module>
-			<js-path>/javascript/eXo/communication/chat/core/JSLogger.js</js-path>
-		</param>
+    <param>
+      <js-module>eXo.communication.chat.core.JSLogger</js-module>
+      <js-path>/javascript/eXo/communication/chat/core/JSLogger.js</js-path>
+    </param>
   </javascript>
   <javascript>
-		<param>
-			<js-module>eXo.communication.chat.core.XMPPCommunicator</js-module>
-			<js-path>/javascript/eXo/communication/chat/core/XMPPCommunicator.js</js-path>
-		</param>
+    <param>
+      <js-module>eXo.communication.chat.core.XMPPCommunicator</js-module>
+      <js-path>/javascript/eXo/communication/chat/core/XMPPCommunicator.js</js-path>
+    </param>
   </javascript>
   <javascript>
-		<param>
-			<js-module>eXo.communication.chat.core.Utils</js-module>
-			<js-path>/javascript/eXo/communication/chat/core/Utils.js</js-path>
-		</param>
+    <param>
+      <js-module>eXo.communication.chat.core.Utils</js-module>
+      <js-path>/javascript/eXo/communication/chat/core/Utils.js</js-path>
+    </param>
   </javascript>
   <javascript>
-		<param>
-			<js-module>eXo.communication.chat.core.LocalTemplateEngine</js-module>
-			<js-path>/javascript/eXo/communication/chat/core/LocalTemplateEngine.js</js-path>
-		</param>
+    <param>
+      <js-module>eXo.communication.chat.core.LocalTemplateEngine</js-module>
+      <js-path>/javascript/eXo/communication/chat/core/LocalTemplateEngine.js</js-path>
+    </param>
   </javascript>
   <javascript>
-		<param>
-			<js-module>eXo.communication.chat.webui.UIWindow</js-module>
-			<js-path>/javascript/eXo/communication/chat/webui/UIWindow.js</js-path>
-		</param>
+    <param>
+      <js-module>eXo.communication.chat.webui.UIWindow</js-module>
+      <js-path>/javascript/eXo/communication/chat/webui/UIWindow.js</js-path>
+    </param>
   </javascript>
   <javascript>
-		<param>
-			<js-module>eXo.communication.chat.webui.UIPageIterator</js-module>
-			<js-path>/javascript/eXo/communication/chat/webui/UIPageIterator.js</js-path>
-		</param>
+    <param>
+      <js-module>eXo.communication.chat.webui.UIPageIterator</js-module>
+      <js-path>/javascript/eXo/communication/chat/webui/UIPageIterator.js</js-path>
+    </param>
   </javascript>
   <javascript>
-		<param>
-			<js-module>eXo.communication.chat.webui.TabScrollManager</js-module>
-			<js-path>/javascript/eXo/communication/chat/webui/TabScrollManager.js</js-path>
-		</param>
+    <param>
+      <js-module>eXo.communication.chat.webui.TabScrollManager</js-module>
+      <js-path>/javascript/eXo/communication/chat/webui/TabScrollManager.js</js-path>
+    </param>
   </javascript>
   <javascript>
-		<param>
-			<js-module>eXo.communication.chat.webui.UISlideAlert</js-module>
-			<js-path>/javascript/eXo/communication/chat/webui/UISlideAlert.js</js-path>
-		</param>
+    <param>
+      <js-module>eXo.communication.chat.webui.UISlideAlert</js-module>
+      <js-path>/javascript/eXo/communication/chat/webui/UISlideAlert.js</js-path>
+    </param>
   </javascript>
   <javascript>
-		<param>
-			<js-module>eXo.communication.chat.webui.component.BuddyListControl</js-module>
-			<js-path>/javascript/eXo/communication/chat/webui/component/BuddyListControl.js</js-path>
-		</param>
+    <param>
+      <js-module>eXo.communication.chat.webui.component.BuddyListControl</js-module>
+      <js-path>/javascript/eXo/communication/chat/webui/component/BuddyListControl.js</js-path>
+    </param>
   </javascript>
   <javascript>
-		<param>
-			<js-module>eXo.communication.chat.webui.component.JSUIBean</js-module>
-			<js-path>/javascript/eXo/communication/chat/webui/component/JSUIBean.js</js-path>
-		</param>
+    <param>
+      <js-module>eXo.communication.chat.webui.component.JSUIBean</js-module>
+      <js-path>/javascript/eXo/communication/chat/webui/component/JSUIBean.js</js-path>
+    </param>
   </javascript>
   <javascript>
-		<param>
-			<js-module>eXo.communication.chat.webui.component.JSUIBeanListener</js-module>
-			<js-path>/javascript/eXo/communication/chat/webui/component/JSUIBeanListener.js</js-path>
-		</param>
+    <param>
+      <js-module>eXo.communication.chat.webui.component.JSUIBeanListener</js-module>
+      <js-path>/javascript/eXo/communication/chat/webui/component/JSUIBeanListener.js</js-path>
+    </param>
   </javascript>
   <javascript>
-		<param>
-			<js-module>eXo.communication.chat.webui.UIStateManager</js-module>
-			<js-path>/javascript/eXo/communication/chat/webui/UIStateManager.js</js-path>
-		</param>
+    <param>
+      <js-module>eXo.communication.chat.webui.UIStateManager</js-module>
+      <js-path>/javascript/eXo/communication/chat/webui/UIStateManager.js</js-path>
+    </param>
   </javascript>
   <javascript>
-		<param>
-			<js-module>eXo.communication.chat.webui.UIMainChatWindow</js-module>
-			<js-path>/javascript/eXo/communication/chat/webui/UIMainChatWindow.js</js-path>
-		</param>
+    <param>
+      <js-module>eXo.communication.chat.webui.UIMainChatWindow</js-module>
+      <js-path>/javascript/eXo/communication/chat/webui/UIMainChatWindow.js</js-path>
+    </param>
   </javascript>
   <javascript>
-		<param>
-			<js-module>eXo.communication.chat.webui.UIPopupManager</js-module>
-			<js-path>/javascript/eXo/communication/chat/webui/UIPopupManager.js</js-path>
-		</param>
+    <param>
+      <js-module>eXo.communication.chat.webui.UIPopupManager</js-module>
+      <js-path>/javascript/eXo/communication/chat/webui/UIPopupManager.js</js-path>
+    </param>
   </javascript>
   <javascript>
-		<param>
-			<js-module>eXo.communication.chat.webui.UIChatWindow</js-module>
-			<js-path>/javascript/eXo/communication/chat/webui/UIChatWindow.js</js-path>
-		</param>
+    <param>
+      <js-module>eXo.communication.chat.webui.UIChatWindow</js-module>
+      <js-path>/javascript/eXo/communication/chat/webui/UIChatWindow.js</js-path>
+    </param>
   </javascript>
   <javascript>
-		<param>
-			<js-module>eXo.communication.chat.webui.UIAddContactPopupWindow</js-module>
-			<js-path>/javascript/eXo/communication/chat/webui/UIAddContactPopupWindow.js</js-path>
-		</param>
+    <param>
+      <js-module>eXo.communication.chat.webui.UIAddContactPopupWindow</js-module>
+      <js-path>/javascript/eXo/communication/chat/webui/UIAddContactPopupWindow.js</js-path>
+    </param>
   </javascript>
   <javascript>
-		<param>
-			<js-module>eXo.communication.chat.webui.UIChatDragDrop</js-module>
-			<js-path>/javascript/eXo/communication/chat/webui/UIChatDragDrop.js</js-path>
-		</param>
+    <param>
+      <js-module>eXo.communication.chat.webui.UIChatDragDrop</js-module>
+      <js-path>/javascript/eXo/communication/chat/webui/UIChatDragDrop.js</js-path>
+    </param>
   </javascript>
   <javascript>
-		<param>
-			<js-module>eXo.communication.chat.webui.UIChatResize</js-module>
-			<js-path>/javascript/eXo/communication/chat/webui/UIChatResize.js</js-path>
-		</param>
+    <param>
+      <js-module>eXo.communication.chat.webui.UIChatResize</js-module>
+      <js-path>/javascript/eXo/communication/chat/webui/UIChatResize.js</js-path>
+    </param>
   </javascript>
   <javascript>
-		<param>
-			<js-module>eXo.communication.chat.webui.UICreateNewRoomPopupWindow</js-module>
-			<js-path>/javascript/eXo/communication/chat/webui/UICreateNewRoomPopupWindow.js</js-path>
-		</param>
+    <param>
+      <js-module>eXo.communication.chat.webui.UICreateNewRoomPopupWindow</js-module>
+      <js-path>/javascript/eXo/communication/chat/webui/UICreateNewRoomPopupWindow.js</js-path>
+    </param>
   </javascript>
   <javascript>
-		<param>
-			<js-module>eXo.communication.chat.webui.UIRoomConfigPopupWindow</js-module>
-			<js-path>/javascript/eXo/communication/chat/webui/UIRoomConfigPopupWindow.js</js-path>
-		</param>
+    <param>
+      <js-module>eXo.communication.chat.webui.UIRoomConfigPopupWindow</js-module>
+      <js-path>/javascript/eXo/communication/chat/webui/UIRoomConfigPopupWindow.js</js-path>
+    </param>
   </javascript>
   <javascript>
-		<param>
-			<js-module>eXo.communication.chat.webui.UIJoinRoomPopupWindow</js-module>
-			<js-path>/javascript/eXo/communication/chat/webui/UIJoinRoomPopupWindow.js</js-path>
-		</param>
+    <param>
+      <js-module>eXo.communication.chat.webui.UIJoinRoomPopupWindow</js-module>
+      <js-path>/javascript/eXo/communication/chat/webui/UIJoinRoomPopupWindow.js</js-path>
+    </param>
   </javascript>
   <javascript>
-		<param>
-			<js-module>eXo.communication.chat.webui.UIChatBar</js-module>
-			<js-path>/javascript/eXo/communication/chat/webui/UIChatBar.js</js-path>
-		</param>
+    <param>
+      <js-module>eXo.communication.chat.webui.UIChatBar</js-module>
+      <js-path>/javascript/eXo/communication/chat/webui/UIChatBar.js</js-path>
+    </param>
   </javascript>
   <javascript>
-		<param>
-			<js-module>eXo.communication.chat.webui.UIPopupMessages</js-module>
-			<js-path>/javascript/eXo/communication/chat/webui/UIPopupMessages.js</js-path>
-		</param>
+    <param>
+      <js-module>eXo.communication.chat.webui.UIPopupMessages</js-module>
+      <js-path>/javascript/eXo/communication/chat/webui/UIPopupMessages.js</js-path>
+    </param>
   </javascript>
 -->  
 </gatein-resources>

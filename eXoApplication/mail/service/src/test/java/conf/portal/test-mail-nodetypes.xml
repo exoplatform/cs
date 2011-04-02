@@ -7,42 +7,42 @@
     ) -->
   
   <nodeType name="exo:folder" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
-  	<supertypes>
-  		<supertype>nt:base</supertype>
-  	</supertypes>
-  	<propertyDefinitions>
-  	  <propertyDefinition name="exo:id" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:name" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:label" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>  		
-  		<propertyDefinition name="exo:unreadMessages" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>  	
-  		<propertyDefinition name="exo:totalMessages" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:personal" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>  
-  		<propertyDefinition name="exo:folderType" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>  
-  		<propertyDefinition name="exo:lastStartCheckingTime" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:lastCheckedTime" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition> 			
-  		<propertyDefinition name="exo:checkFromDate" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition> 
-  	</propertyDefinitions>
-  	<childNodeDefinitions>
+    <supertypes>
+      <supertype>nt:base</supertype>
+    </supertypes>
+    <propertyDefinitions>
+      <propertyDefinition name="exo:id" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:name" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:label" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>      
+      <propertyDefinition name="exo:unreadMessages" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>    
+      <propertyDefinition name="exo:totalMessages" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:personal" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>  
+      <propertyDefinition name="exo:folderType" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>  
+      <propertyDefinition name="exo:lastStartCheckingTime" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:lastCheckedTime" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>       
+      <propertyDefinition name="exo:checkFromDate" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition> 
+    </propertyDefinitions>
+    <childNodeDefinitions>
       <childNodeDefinition name="*" defaultPrimaryType="exo:folder" autoCreated="false" mandatory="false" onParentVersion="VERSION" protected="false" sameNameSiblings="false">
         <requiredPrimaryTypes>
           <requiredPrimaryType>nt:base</requiredPrimaryType>
@@ -52,79 +52,79 @@
   </nodeType>
   
   <nodeType name="exo:account" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
-  	<supertypes>
-  		<supertype>nt:base</supertype>
-  	</supertypes>
-  	<propertyDefinitions>
-  		<propertyDefinition name="exo:id" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:label" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:userDisplayName" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:emailAddress" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:emailReplyAddress" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:signature" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:description" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition> 
-  		<propertyDefinition name="exo:checkMailAuto" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition> 
-  		<propertyDefinition name="exo:emptyTrash" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition> 
-  		<propertyDefinition name="exo:placeSignature" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition> 
-  		<propertyDefinition name="exo:serverProperties" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
-  			<valueConstraints/>
-  		</propertyDefinition> 		
-  		<propertyDefinition name="exo:smtpServerProperties" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
-  			<valueConstraints/>
-  		</propertyDefinition> 
-  		<propertyDefinition name="exo:lastStartCheckingTime" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:lastCheckedTime" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition> 
-  		<propertyDefinition name="exo:checkAll" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition> 
-  		<propertyDefinition name="exo:checkFromDate" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition> 
-  		<propertyDefinition name="exo:isSavePassword" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:secureAuthsIncoming" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:secureAuthsOutgoing" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:authMechsIncoming" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:authMechsOutgoing" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<!-- added since 2.2.0  -->
-  		<propertyDefinition name="exo:permissions" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
-  			<valueConstraints/>
-  		</propertyDefinition>    
-  	</propertyDefinitions>
-  	<childNodeDefinitions>
+    <supertypes>
+      <supertype>nt:base</supertype>
+    </supertypes>
+    <propertyDefinitions>
+      <propertyDefinition name="exo:id" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:label" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:userDisplayName" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:emailAddress" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:emailReplyAddress" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:signature" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:description" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition> 
+      <propertyDefinition name="exo:checkMailAuto" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition> 
+      <propertyDefinition name="exo:emptyTrash" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition> 
+      <propertyDefinition name="exo:placeSignature" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition> 
+      <propertyDefinition name="exo:serverProperties" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+        <valueConstraints/>
+      </propertyDefinition>     
+      <propertyDefinition name="exo:smtpServerProperties" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+        <valueConstraints/>
+      </propertyDefinition> 
+      <propertyDefinition name="exo:lastStartCheckingTime" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:lastCheckedTime" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition> 
+      <propertyDefinition name="exo:checkAll" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition> 
+      <propertyDefinition name="exo:checkFromDate" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition> 
+      <propertyDefinition name="exo:isSavePassword" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:secureAuthsIncoming" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:secureAuthsOutgoing" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:authMechsIncoming" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:authMechsOutgoing" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <!-- added since 2.2.0  -->
+      <propertyDefinition name="exo:permissions" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+        <valueConstraints/>
+      </propertyDefinition>    
+    </propertyDefinitions>
+    <childNodeDefinitions>
       <childNodeDefinition name="*" defaultPrimaryType="nt:unstructured" autoCreated="false" mandatory="false"
         onParentVersion="VERSION" protected="false" sameNameSiblings="false">
         <requiredPrimaryTypes>
@@ -132,8 +132,8 @@
         </requiredPrimaryTypes>
       </childNodeDefinition>
     </childNodeDefinitions>
-  </nodeType>  	
-	
+  </nodeType>    
+  
   <nodeType name="exo:message" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
     <supertypes>
       <supertype>nt:base</supertype>      
@@ -228,186 +228,186 @@
         <valueConstraints/>        
       </propertyDefinition>
       <propertyDefinition name="exo:headers" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" 
-      	protected="false" multiple="true">
-  	    <valueConstraints/>
-  	  </propertyDefinition> 
-  	  <propertyDefinition name="exo:isRoot" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" 
-      	protected="false" multiple="false">
-  	    <valueConstraints/>
-  	  </propertyDefinition>
-  	  <propertyDefinition name="exo:isLoaded" defaultValue="false" requiredType="Boolean" autoCreated="true" mandatory="false" onParentVersion="COPY" 
-      	protected="false" multiple="false">
-  	    <valueConstraints/>
-  	  </propertyDefinition>
-  	  <propertyDefinition name="exo:isLoadedProperly" requiredType="Boolean" autoCreated="true" mandatory="false" onParentVersion="COPY" 
-      	protected="false" multiple="false">
-  	    <valueConstraints/>
-  	  </propertyDefinition>  
-  	   <propertyDefinition name="exo:isReturnReceipt" requiredType="Boolean" autoCreated="true" mandatory="false" onParentVersion="COPY" 
-      	protected="false" multiple="false">
-  	    <valueConstraints/>
-  	  </propertyDefinition>
-  	  <propertyDefinition name="exo:lastUpdateTime" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY"
+        protected="false" multiple="true">
+        <valueConstraints/>
+      </propertyDefinition> 
+      <propertyDefinition name="exo:isRoot" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" 
+        protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:isLoaded" defaultValue="false" requiredType="Boolean" autoCreated="true" mandatory="false" onParentVersion="COPY" 
+        protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:isLoadedProperly" requiredType="Boolean" autoCreated="true" mandatory="false" onParentVersion="COPY" 
+        protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>  
+       <propertyDefinition name="exo:isReturnReceipt" requiredType="Boolean" autoCreated="true" mandatory="false" onParentVersion="COPY" 
+        protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:lastUpdateTime" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY"
         protected="false" multiple="false">
         <valueConstraints/>
       </propertyDefinition> 
     </propertyDefinitions>    
     <childNodeDefinitions>
-	  <childNodeDefinition name="*" defaultPrimaryType="" autoCreated="false" mandatory="false"
-	    onParentVersion="COPY" protected="false" sameNameSiblings="false">
-	      <requiredPrimaryTypes>
-	        <requiredPrimaryType>nt:unstructured</requiredPrimaryType>
-	      </requiredPrimaryTypes>
-	  </childNodeDefinition>	      
-	</childNodeDefinitions>
+    <childNodeDefinition name="*" defaultPrimaryType="" autoCreated="false" mandatory="false"
+      onParentVersion="COPY" protected="false" sameNameSiblings="false">
+        <requiredPrimaryTypes>
+          <requiredPrimaryType>nt:unstructured</requiredPrimaryType>
+        </requiredPrimaryTypes>
+    </childNodeDefinition>        
+  </childNodeDefinitions>
   </nodeType>
   
-  <nodeType	name="exo:mailAttachment" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
- 	<supertypes>
- 	  <supertype>nt:file</supertype>
- 	</supertypes>
- 	<propertyDefinitions>
-  	  <propertyDefinition name="exo:fileName" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  		<valueConstraints/>
-  	  </propertyDefinition>	  	
-  	  <propertyDefinition name="exo:isShownInBody" requiredType="Boolean" autoCreated="true" mandatory="false" onParentVersion="COPY" 
-      	protected="false" multiple="false">
-  	    <valueConstraints/>
-  	  </propertyDefinition>
+  <nodeType  name="exo:mailAttachment" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+   <supertypes>
+     <supertype>nt:file</supertype>
+   </supertypes>
+   <propertyDefinitions>
+      <propertyDefinition name="exo:fileName" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+      <valueConstraints/>
+      </propertyDefinition>      
+      <propertyDefinition name="exo:isShownInBody" requiredType="Boolean" autoCreated="true" mandatory="false" onParentVersion="COPY" 
+        protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
       <propertyDefinition name="exo:isLoadedProperly" requiredType="Boolean" autoCreated="true" mandatory="false" onParentVersion="COPY" 
-      	protected="false" multiple="false">
-  	    <valueConstraints/>
-  	  </propertyDefinition> 
-  	</propertyDefinitions>	
-  </nodeType>	  
+        protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition> 
+    </propertyDefinitions>  
+  </nodeType>    
   
   <nodeType name="exo:mailtag" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
-  	<supertypes>
-  		<supertype>nt:base</supertype>
-  	</supertypes>
-  	<propertyDefinitions>
-  		<propertyDefinition name="exo:id" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:name" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:description" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:color" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  	</propertyDefinitions>
+    <supertypes>
+      <supertype>nt:base</supertype>
+    </supertypes>
+    <propertyDefinitions>
+      <propertyDefinition name="exo:id" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:name" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:description" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:color" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+    </propertyDefinitions>
   </nodeType>
   
    <nodeType name="exo:filter" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
-  	<supertypes>
-  		<supertype>nt:base</supertype>
-  	</supertypes>
-  	<propertyDefinitions>
-  		<propertyDefinition name="exo:id" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:name" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:from" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:fromCondition" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:to" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:toCondition" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:subject" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:subjectCondition" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:body" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:bodyCondition" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:applyTag" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:applyFolder" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:keepInbox" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:applyForAll" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:folders" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:tags" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  	</propertyDefinitions>
+    <supertypes>
+      <supertype>nt:base</supertype>
+    </supertypes>
+    <propertyDefinitions>
+      <propertyDefinition name="exo:id" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:name" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:from" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:fromCondition" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:to" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:toCondition" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:subject" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:subjectCondition" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:body" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:bodyCondition" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:applyTag" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:applyFolder" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:keepInbox" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:applyForAll" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:folders" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:tags" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+        <valueConstraints/>
+      </propertyDefinition>
+    </propertyDefinitions>
   </nodeType>
   
   <nodeType name="exo:spamFilter" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
-  	<supertypes>
-  		<supertype>nt:base</supertype>
-  	</supertypes>
-  	<propertyDefinitions>
-  		<propertyDefinition name="exo:froms" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  	</propertyDefinitions>
+    <supertypes>
+      <supertype>nt:base</supertype>
+    </supertypes>
+    <propertyDefinitions>
+      <propertyDefinition name="exo:froms" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+        <valueConstraints/>
+      </propertyDefinition>
+    </propertyDefinitions>
   </nodeType>
   
   <nodeType name="exo:mailSetting" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
-  	<supertypes>
-  		<supertype>nt:base</supertype>
-  	</supertypes>
-  	<propertyDefinitions>
-  		<propertyDefinition name="exo:numberMsgPerPage" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:formatAsOriginal" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:replyWithAttach" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:forwardWithAttach" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:prefixMsgWith" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:periodCheckAuto" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:defaultAccount" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:useWysiwyg" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:saveMsgInSent" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:layout" requiredType="Long" defaultValue="" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:returnReceipt" requiredType="Long" defaultValue="0" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  	</propertyDefinitions>
-  </nodeType> 	
+    <supertypes>
+      <supertype>nt:base</supertype>
+    </supertypes>
+    <propertyDefinitions>
+      <propertyDefinition name="exo:numberMsgPerPage" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:formatAsOriginal" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:replyWithAttach" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:forwardWithAttach" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:prefixMsgWith" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:periodCheckAuto" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:defaultAccount" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:useWysiwyg" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:saveMsgInSent" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:layout" requiredType="Long" defaultValue="" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:returnReceipt" requiredType="Long" defaultValue="0" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+    </propertyDefinitions>
+  </nodeType>   
   
   <nodeType name="exo:messageMixin" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
     <propertyDefinitions>
@@ -420,12 +420,12 @@
   <!-- add this since cs 2.2.0 -->
   
   <nodeType name="exo:accountShared" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
-	    <propertyDefinitions>
-	      <propertyDefinition name="exo:sharedId" requiredType="Reference" autoCreated="false" mandatory="true"
-	        onParentVersion="COPY" protected="false" multiple="true">
-	        <valueConstraints/>
-	      </propertyDefinition>        
-	    </propertyDefinitions>
+      <propertyDefinitions>
+        <propertyDefinition name="exo:sharedId" requiredType="Reference" autoCreated="false" mandatory="true"
+          onParentVersion="COPY" protected="false" multiple="true">
+          <valueConstraints/>
+        </propertyDefinition>        
+      </propertyDefinitions>
   </nodeType> 
-	  
+    
 </nodeTypes>

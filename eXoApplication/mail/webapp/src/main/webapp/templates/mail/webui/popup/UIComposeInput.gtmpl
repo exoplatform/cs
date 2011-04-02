@@ -2,132 +2,132 @@
  uiForm = uicomponent.getParentFrom() ;
  
  private void renderActions(String fieldKey) {
-		def actions = uicomponent.getActionField(fieldKey) ;
-	  if(actions != null) {
-	    for(action in actions) {
-	    	String actionLabel = uiForm.getLabel("action." + action.actionName)  ;
-	    	if(actionLabel.equals("action." + action.actionName)) {
-	    		actionLabel = action.actionName ;
-	    	}
-	    	String actionLink ="";
-	      if(action.actionParameter != null) {
-	        actionLink = (uiForm.event(action.actionListener, action.actionParameter)) ;
-	      }else {
-	        actionLink = (uiForm.event(action.actionListener)) ;
-	      }
-	      if(actionLabel.lastIndexOf("-(") > 0)
-	      {
-	        String temp = actionLabel.substring(0, actionLabel.lastIndexOf("-(")) ;
-	        String sizeLabel = actionLabel.substring(actionLabel.lastIndexOf("-(")) ;
-	        if(temp.length() > 30) {
-	        actionLabel = temp.substring(0, 30) + "..." + sizeLabel ;}
-	      }
-	      if(action.actionType == action.TYPE_ICON) {
+    def actions = uicomponent.getActionField(fieldKey) ;
+    if(actions != null) {
+      for(action in actions) {
+        String actionLabel = uiForm.getLabel("action." + action.actionName)  ;
+        if(actionLabel.equals("action." + action.actionName)) {
+          actionLabel = action.actionName ;
+        }
+        String actionLink ="";
+        if(action.actionParameter != null) {
+          actionLink = (uiForm.event(action.actionListener, action.actionParameter)) ;
+        }else {
+          actionLink = (uiForm.event(action.actionListener)) ;
+        }
+        if(actionLabel.lastIndexOf("-(") > 0)
+        {
+          String temp = actionLabel.substring(0, actionLabel.lastIndexOf("-(")) ;
+          String sizeLabel = actionLabel.substring(actionLabel.lastIndexOf("-(")) ;
+          if(temp.length() > 30) {
+          actionLabel = temp.substring(0, 30) + "..." + sizeLabel ;}
+        }
+        if(action.actionType == action.TYPE_ICON) {
           if(action.isShowLabel) { println  actionLabel  ;}
-		  println "<a title=\"" + action.actionName + "\" href=\"" + actionLink +"\">";
-	        println "<img src=\"/eXoResources/skin/DefaultSkin/background/Blank.gif\" alt='' class=\"" + action.cssIconClass +"\"/>" ;
-	        
+      println "<a title=\"" + action.actionName + "\" href=\"" + actionLink +"\">";
+          println "<img src=\"/eXoResources/skin/DefaultSkin/background/Blank.gif\" alt='' class=\"" + action.cssIconClass +"\"/>" ;
+          
           println  "</a>";
-	      } else if(action.actionType == action.TYPE_LINK){
+        } else if(action.actionType == action.TYPE_LINK){
           println "<a title=\"" + action.actionName + "\" href=\"" + actionLink +"\">";
-		  println "<img src=\"/eXoResources/skin/DefaultSkin/background/Blank.gif\" alt='' class=\"RemoveBtn\" />"
+      println "<img src=\"/eXoResources/skin/DefaultSkin/background/Blank.gif\" alt='' class=\"RemoveBtn\" />"
           println  "</a>";
-	      }
-	      
-	      println "&nbsp;"; 
-	      if(action.isBreakLine) { println "<br/>" ;} 
-	    }
-	  }
-	}
+        }
+        
+        println "&nbsp;"; 
+        if(action.isBreakLine) { println "<br/>" ;} 
+      }
+    }
+  }
  
 %>
 <div id="$uicomponent.id">
-	<table class="UIFormGrid">
-	  <tr>
-	    <td class="FieldLabel"><%=_ctx.appRes(uiForm.id+ ".label.from") %> :&nbsp;&nbsp;</td>
-	    <td class="FieldComponent" style="width:75%;"><%uiForm.renderField("from")%></td>
-	  </tr>
-	  <tr>
-	    <td class="ToFieldLabel">
-	    		<a href="<%=uiForm.event("To")%>"><%=_ctx.appRes(uiForm.id+ ".label.to") %> :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
-	    </td>
-<!--	    add style to fix bug 3077-->
-	    <td class="ToFieldComponent"  colspan="2">
-	      <%uiForm.renderField("to")%> 
-	    </td>
-	  </tr>
+  <table class="UIFormGrid">
+    <tr>
+      <td class="FieldLabel"><%=_ctx.appRes(uiForm.id+ ".label.from") %> :&nbsp;&nbsp;</td>
+      <td class="FieldComponent" style="width:75%;"><%uiForm.renderField("from")%></td>
+    </tr>
+    <tr>
+      <td class="ToFieldLabel">
+          <a href="<%=uiForm.event("To")%>"><%=_ctx.appRes(uiForm.id+ ".label.to") %> :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+      </td>
+<!--      add style to fix bug 3077-->
+      <td class="ToFieldComponent"  colspan="2">
+        <%uiForm.renderField("to")%> 
+      </td>
+    </tr>
 <!-- render group -->
-	  <tr>
-	   <td></td>
-	   <td colspan="2"><%renderActions("To_Group")%></td>
-	  </tr>
-	   
-	  <tr>
-	    <td class="CCAndBCCFieldLabel">
-	    	
-	    </td>
-	    <td class="CCAndBCCFieldComponent FieldCCAndBCC">
-			  <%
-			  String ToggledCc = "" ;
-			  if (uicomponent.showCc_) { ToggledCc = "font-weight: bold;" ; }
-			  %>
-	      <a  href="<%=uiForm.event("ShowCc")%>"><span style="$ToggledCc"><%=_ctx.appRes(uiForm.id+ ".label.add-cc") %></span> |</a>
-	      
-	      <%
-			  String ToggledBcc = "" ;
-			  if (uicomponent.showBcc_) { ToggledBcc = "font-weight: bold;" ; }
-			  %> 
-	      <a  href="<%=uiForm.event("ShowBcc")%>"><span style="$ToggledBcc"> <%=_ctx.appRes(uiForm.id+ ".label.add-bcc")%></span></a>
-	    <%/* javascript:eXo.mail.UIMailPortlet.showHideAddMoreAddress('FIELD_BCC')*/ %>
-	    </td>
-	    </td>
-	  </tr>
-	  <%
-	  String displayCc = "display:none" ;
-	  if (uicomponent.showCc_) { displayCc = "" ; }
-	  %>
-	  	              <tr id="FIELD_CC" style="$displayCc">
-	  	                <td class="FieldLabel"><a href="<%=uiForm.event("ToCC")%>"><%=_ctx.appRes(uiForm.id+ ".label.cc") %> :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></td>
-	  	                <td class="FieldComponent" colspan="2">
-	  	                  <%uiForm.renderField("cc")%> 
-	  	                </td>
-	  	              </tr>
-	  	              <!-- render group -->
-					  <tr>
-					   <td></td>
-					   <td colspan="2"><%renderActions("Cc_Group")%></td>
-					  </tr>
-	  <%
-	  String displayBcc = "display:none" ;
-	  if (uicomponent.showBcc_) { displayBcc = "" ; }
-	  %>
-	  <tr id="FIELD_BCC" style="$displayBcc">
-	  	<td class="FieldLabel"><a href="<%=uiForm.event("ToBCC")%>"><%=_ctx.appRes(uiForm.id+ ".label.bcc") %> :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></td>
-	  	<td class="FieldComponent" colspan="2">
-	  	 <%uiForm.renderField("bcc")%> 
-	  	</td>
-	  </tr>
-	  <!-- render group -->
-	  <tr>
-	   <td></td>
-	   <td colspan="2"><%renderActions("Bcc_Group")%></td>
-	  </tr>
-	  <tr>
-	    <td class="SubjectFieldLabel"><%=_ctx.appRes(uiForm.id+ ".label.subject") %> :&nbsp;&nbsp;</td>
-	    <td class="SubjectFieldComponent" colspan="2">
-	      <%uiForm.renderField("subject")%>
-	    </td>
-	  </tr>
-	   <%
-	     if (uiForm.getUploadFileList().size() > 0) {
-	    %> 
-	   <tr>
-	    <td class="FieldLabel"><%=_ctx.appRes(uiForm.id+ ".label.attachments") %> :&nbsp;&nbsp;</td>
-	    <td class="FieldComponent" colspan="2">
-	      <%uiForm.renderField("attachments")%>
-	      <%renderActions("attachments")%>
-	    </td>
-	  </tr>
-	  <%}%>
-	</table>
+    <tr>
+     <td></td>
+     <td colspan="2"><%renderActions("To_Group")%></td>
+    </tr>
+     
+    <tr>
+      <td class="CCAndBCCFieldLabel">
+        
+      </td>
+      <td class="CCAndBCCFieldComponent FieldCCAndBCC">
+        <%
+        String ToggledCc = "" ;
+        if (uicomponent.showCc_) { ToggledCc = "font-weight: bold;" ; }
+        %>
+        <a  href="<%=uiForm.event("ShowCc")%>"><span style="$ToggledCc"><%=_ctx.appRes(uiForm.id+ ".label.add-cc") %></span> |</a>
+        
+        <%
+        String ToggledBcc = "" ;
+        if (uicomponent.showBcc_) { ToggledBcc = "font-weight: bold;" ; }
+        %> 
+        <a  href="<%=uiForm.event("ShowBcc")%>"><span style="$ToggledBcc"> <%=_ctx.appRes(uiForm.id+ ".label.add-bcc")%></span></a>
+      <%/* javascript:eXo.mail.UIMailPortlet.showHideAddMoreAddress('FIELD_BCC')*/ %>
+      </td>
+      </td>
+    </tr>
+    <%
+    String displayCc = "display:none" ;
+    if (uicomponent.showCc_) { displayCc = "" ; }
+    %>
+                    <tr id="FIELD_CC" style="$displayCc">
+                      <td class="FieldLabel"><a href="<%=uiForm.event("ToCC")%>"><%=_ctx.appRes(uiForm.id+ ".label.cc") %> :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></td>
+                      <td class="FieldComponent" colspan="2">
+                        <%uiForm.renderField("cc")%> 
+                      </td>
+                    </tr>
+                    <!-- render group -->
+            <tr>
+             <td></td>
+             <td colspan="2"><%renderActions("Cc_Group")%></td>
+            </tr>
+    <%
+    String displayBcc = "display:none" ;
+    if (uicomponent.showBcc_) { displayBcc = "" ; }
+    %>
+    <tr id="FIELD_BCC" style="$displayBcc">
+      <td class="FieldLabel"><a href="<%=uiForm.event("ToBCC")%>"><%=_ctx.appRes(uiForm.id+ ".label.bcc") %> :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></td>
+      <td class="FieldComponent" colspan="2">
+       <%uiForm.renderField("bcc")%> 
+      </td>
+    </tr>
+    <!-- render group -->
+    <tr>
+     <td></td>
+     <td colspan="2"><%renderActions("Bcc_Group")%></td>
+    </tr>
+    <tr>
+      <td class="SubjectFieldLabel"><%=_ctx.appRes(uiForm.id+ ".label.subject") %> :&nbsp;&nbsp;</td>
+      <td class="SubjectFieldComponent" colspan="2">
+        <%uiForm.renderField("subject")%>
+      </td>
+    </tr>
+     <%
+       if (uiForm.getUploadFileList().size() > 0) {
+      %> 
+     <tr>
+      <td class="FieldLabel"><%=_ctx.appRes(uiForm.id+ ".label.attachments") %> :&nbsp;&nbsp;</td>
+      <td class="FieldComponent" colspan="2">
+        <%uiForm.renderField("attachments")%>
+        <%renderActions("attachments")%>
+      </td>
+    </tr>
+    <%}%>
+  </table>
 </div>

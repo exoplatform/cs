@@ -11,8 +11,8 @@
           <%=_ctx.appRes(uicomponent.id+ ".label.filter") %>
         </div>
         <%
-        	String filterId = uicomponent.getSelectedFilterId() ;
-        	if(filterId != null && filterId.trim().length() > 0){
+          String filterId = uicomponent.getSelectedFilterId() ;
+          if(filterId != null && filterId.trim().length() > 0){
         %>
         <a href="<%=uicomponent.event("DeleteFilter",uicomponent.id,"id")%>" title="<%=_ctx.appRes(uicomponent.id+  ".label.delete-filter") %>">
           <div class="ControlBarIcon FilterDelete"><span></span></div>
@@ -106,19 +106,19 @@
             </div>
           </div>
         <% } else { %>
-        	<div class="TitleFilterMail"><%=_ctx.appRes(uicomponent.id+ ".label.filter") %></div>
-        	<div class="FilterContent">
-        		<div class="IntroductionContent">
-        			<div class="TitleFilter"><%=_ctx.appRes(uicomponent.id+ ".label.introduction-title1") %></div>
-        			<div class="Text">
-        			  <%=_ctx.appRes(uicomponent.id+ ".label.introduction-content1") %>
-        			</div>
-        			<div class="TitleFilter"><%=_ctx.appRes(uicomponent.id+ ".label.introduction-title2") %></div>
-        			<div class="Text">
+          <div class="TitleFilterMail"><%=_ctx.appRes(uicomponent.id+ ".label.filter") %></div>
+          <div class="FilterContent">
+            <div class="IntroductionContent">
+              <div class="TitleFilter"><%=_ctx.appRes(uicomponent.id+ ".label.introduction-title1") %></div>
+              <div class="Text">
+                <%=_ctx.appRes(uicomponent.id+ ".label.introduction-content1") %>
+              </div>
+              <div class="TitleFilter"><%=_ctx.appRes(uicomponent.id+ ".label.introduction-title2") %></div>
+              <div class="Text">
                 <%=_ctx.appRes(uicomponent.id+ ".label.introduction-content2") %> 
-        			</div>
-        		</div>
-        	</div>
+              </div>
+            </div>
+          </div>
         <%}%>
       </div>
     <div style="clear:left;"><span></span></div>

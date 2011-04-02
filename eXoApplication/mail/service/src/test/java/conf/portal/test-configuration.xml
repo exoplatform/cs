@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
-	xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
+  xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
 
   <component>
     <type>org.exoplatform.mail.service.impl.JCRDataStorage</type>
   </component>
   <component>
-	<key>org.exoplatform.services.scheduler.JobSchedulerService</key>
-	<type>org.exoplatform.mail.service.test.FakeJobSchedulerServiceImpl</type>
+  <key>org.exoplatform.services.scheduler.JobSchedulerService</key>
+  <type>org.exoplatform.mail.service.test.FakeJobSchedulerServiceImpl</type>
  </component>
  <component>
-  	<key>org.exoplatform.mail.service.MailService</key>
-  	<type>org.exoplatform.mail.service.impl.MailServiceImpl</type>
+    <key>org.exoplatform.mail.service.MailService</key>
+    <type>org.exoplatform.mail.service.impl.MailServiceImpl</type>
   </component>  
   <component>
     <key>org.exoplatform.services.log.LogConfigurationInitializer</key>
@@ -56,9 +56,9 @@
   
   <!-- REST -->
   
-	<component>
-		<type>org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService</type>
-	</component>
+  <component>
+    <type>org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService</type>
+  </component>
 
   <component>
     <key>org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator</key>
@@ -67,14 +67,14 @@
   
 
   <component>
-	  <type>org.exoplatform.services.jcr.ext.registry.RegistryService</type>
-	  <init-params>
-	    <properties-param>
-	    <name>locations</name>
-	    <property name="repository" value="collaboration"/>
-	    </properties-param>
-	  </init-params>
-	</component>
+    <type>org.exoplatform.services.jcr.ext.registry.RegistryService</type>
+    <init-params>
+      <properties-param>
+      <name>locations</name>
+      <property name="repository" value="collaboration"/>
+      </properties-param>
+    </init-params>
+  </component>
 
     <!-- component>
       <key>org.exoplatform.services.jcr.ext.audit.AuditService</key>
@@ -90,12 +90,12 @@
           <set-method>addPlugin</set-method>
           <type>org.exoplatform.services.jcr.impl.AddNodeTypePlugin</type>
           <init-params>
-	          <values-param>
-	            <name>autoCreatedInNewRepository</name>
-	            <description>Node types configuration file</description>
-	            <value>classpath:/conf/portal/test-mail-nodetypes.xml</value>	            
-	          </values-param>
-	        </init-params>
+            <values-param>
+              <name>autoCreatedInNewRepository</name>
+              <description>Node types configuration file</description>
+              <value>classpath:/conf/portal/test-mail-nodetypes.xml</value>              
+            </values-param>
+          </init-params>
         </component-plugin>
       </component-plugins>
     </component>
@@ -128,143 +128,143 @@
 <external-component-plugins>
     <target-component>org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator</target-component>
     <component-plugin>
-	    <name>addPaths</name>
-	    <set-method>addPlugin</set-method>
-	    <type>org.exoplatform.services.jcr.ext.hierarchy.impl.AddPathPlugin</type>            
-	    <init-params>
-	      <object-param>
-	        <name>cms.configuration</name>
-	        <description>configuration for the cms path</description>
-	        <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig">
-	        	<field  name="repository"><string>repository</string></field>
-	        	<field name="workspaces">
-	          	<collection type="java.util.ArrayList">
-	          		<value><string>collaboration</string></value>	          		               
-	          	</collection>              	
-	          </field>
-	          <field  name="jcrPaths">
-	          	<collection type="java.util.ArrayList">
-	          	  <value>              	
-		             	<object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">              	 	
-		             		<field name="alias"><string>userApplicationData</string></field>
-		                <field name="path"><string>ApplicationData</string></field>
-		                <field name="nodeType"><string>nt:unstructured</string></field>
-		                <field name="permissions">
-				              <collection type="java.util.ArrayList">               
-				                <value>                            
-				                  <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
-				                    <field name="identity"><string>*:/platform/administrators</string></field>
-				                    <field name="read"><string>true</string></field>                
-				                    <field name="addNode"><string>true</string></field>                
-				                    <field name="setProperty"><string>true</string></field>                
-				                    <field name="remove"><string>true</string></field>                
-				                  </object>  
-				                </value>			                  
-			                </collection>
-			              </field>			                 			               
-	              	</object>
-              	  </value>
-	          		<value>              	
-		             	<object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">              	 	
-		             		<field  name="alias"><string>eXoApplications</string></field>
-		                <field  name="path"><string>/exo:applications</string></field>		                				            	
-		                <field name="permissions">
-				              <collection type="java.util.ArrayList">               
-				                <value>                            
-				                  <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
-				                      <field name="identity"><string>*:/platform/administrators</string></field>
-				                      <field name="read"><string>true</string></field>                
-				                      <field name="addNode"><string>true</string></field>                
-				                      <field name="setProperty"><string>true</string></field>                
-				                      <field name="remove"><string>true</string></field>                
-				                    </object>  
-				                </value>			                  
-			                </collection>
-			              </field>   			               
-	              	</object>
-              	</value>
-             		<value>              	
-		             	<object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">              	 	
-		             		<field  name="alias"><string>eXoServices</string></field>
-		                <field  name="path"><string>/exo:services</string></field>		                
-		                <field name="permissions">
-				              <collection type="java.util.ArrayList">               
-				                <value>                            
-				                  <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
-				                      <field name="identity"><string>*:/platform/administrators</string></field>
-				                      <field name="read"><string>true</string></field>                
-				                      <field name="addNode"><string>true</string></field>                
-				                      <field name="setProperty"><string>true</string></field>                
-				                      <field name="remove"><string>true</string></field>                
-				                    </object>  
-				                </value>			                  
-			                </collection>
-			              </field>   			               
-	              	</object>
-              	</value>	          		
-              	<value>              	
-	              	<object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">              	 	
-	              		<field  name="alias"><string>usersPath</string></field>
-	                  <field  name="path"><string>/Users</string></field>
-	                  <field name="permissions">
-			                <collection type="java.util.ArrayList">               
-			                  <value>                            
-			                    <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
-			                      <field name="identity"><string>*:/platform/administrators</string></field>
-			                      <field name="read"><string>true</string></field>                
-			                      <field name="addNode"><string>true</string></field>                
-			                      <field name="setProperty"><string>true</string></field>                
-			                      <field name="remove"><string>true</string></field>                
-			                    </object>  
-			                  </value>
-			                  <value>                            
-			                    <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
-			                      <field name="identity"><string>any</string></field>
-			                      <field name="read"><string>true</string></field>                
-			                      <field name="addNode"><string>false</string></field>                
-			                      <field name="setProperty"><string>true</string></field>                
-			                      <field name="remove"><string>false</string></field>                
-			                    </object>  
-			                  </value>
-			                </collection>
-			              </field>   			               
-	              	</object>
-              	</value>
-              	<value>              	
-	              	<object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">              	 	
-	              		<field  name="alias"><string>groupsPath</string></field>
-	                  <field  name="path"><string>/Groups</string></field>
-	                  <field name="permissions">
-			                <collection type="java.util.ArrayList">               
-			                  <value>                            
-			                    <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
-			                      <field name="identity"><string>*:/platform/administrators</string></field>
-			                      <field name="read"><string>true</string></field>                
-			                      <field name="addNode"><string>true</string></field>                
-			                      <field name="setProperty"><string>true</string></field>                
-			                      <field name="remove"><string>true</string></field>                
-			                    </object>  
-			                  </value>
-			                  <value>                            
-			                    <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
-			                      <field name="identity"><string>any</string></field>
-			                      <field name="read"><string>true</string></field>                
-			                      <field name="addNode"><string>false</string></field>                
-			                      <field name="setProperty"><string>true</string></field>                
-			                      <field name="remove"><string>false</string></field>                
-			                    </object>  
-			                  </value>
-			                </collection>
-			              </field>   			               
-	              	</object>
-              	</value>	              		              		              		              	
-	          	</collection>              	              	
-	          </field>
-	        </object>
-	      </object-param>
-	    </init-params>            
-	  </component-plugin>
-	</external-component-plugins>
+      <name>addPaths</name>
+      <set-method>addPlugin</set-method>
+      <type>org.exoplatform.services.jcr.ext.hierarchy.impl.AddPathPlugin</type>            
+      <init-params>
+        <object-param>
+          <name>cms.configuration</name>
+          <description>configuration for the cms path</description>
+          <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig">
+            <field  name="repository"><string>repository</string></field>
+            <field name="workspaces">
+              <collection type="java.util.ArrayList">
+                <value><string>collaboration</string></value>                               
+              </collection>                
+            </field>
+            <field  name="jcrPaths">
+              <collection type="java.util.ArrayList">
+                <value>                
+                   <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">                   
+                     <field name="alias"><string>userApplicationData</string></field>
+                    <field name="path"><string>ApplicationData</string></field>
+                    <field name="nodeType"><string>nt:unstructured</string></field>
+                    <field name="permissions">
+                      <collection type="java.util.ArrayList">               
+                        <value>                            
+                          <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
+                            <field name="identity"><string>*:/platform/administrators</string></field>
+                            <field name="read"><string>true</string></field>                
+                            <field name="addNode"><string>true</string></field>                
+                            <field name="setProperty"><string>true</string></field>                
+                            <field name="remove"><string>true</string></field>                
+                          </object>  
+                        </value>                        
+                      </collection>
+                    </field>                                            
+                  </object>
+                  </value>
+                <value>                
+                   <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">                   
+                     <field  name="alias"><string>eXoApplications</string></field>
+                    <field  name="path"><string>/exo:applications</string></field>                                          
+                    <field name="permissions">
+                      <collection type="java.util.ArrayList">               
+                        <value>                            
+                          <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
+                              <field name="identity"><string>*:/platform/administrators</string></field>
+                              <field name="read"><string>true</string></field>                
+                              <field name="addNode"><string>true</string></field>                
+                              <field name="setProperty"><string>true</string></field>                
+                              <field name="remove"><string>true</string></field>                
+                            </object>  
+                        </value>                        
+                      </collection>
+                    </field>                        
+                  </object>
+                </value>
+                 <value>                
+                   <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">                   
+                     <field  name="alias"><string>eXoServices</string></field>
+                    <field  name="path"><string>/exo:services</string></field>                    
+                    <field name="permissions">
+                      <collection type="java.util.ArrayList">               
+                        <value>                            
+                          <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
+                              <field name="identity"><string>*:/platform/administrators</string></field>
+                              <field name="read"><string>true</string></field>                
+                              <field name="addNode"><string>true</string></field>                
+                              <field name="setProperty"><string>true</string></field>                
+                              <field name="remove"><string>true</string></field>                
+                            </object>  
+                        </value>                        
+                      </collection>
+                    </field>                        
+                  </object>
+                </value>                
+                <value>                
+                  <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">                   
+                    <field  name="alias"><string>usersPath</string></field>
+                    <field  name="path"><string>/Users</string></field>
+                    <field name="permissions">
+                      <collection type="java.util.ArrayList">               
+                        <value>                            
+                          <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
+                            <field name="identity"><string>*:/platform/administrators</string></field>
+                            <field name="read"><string>true</string></field>                
+                            <field name="addNode"><string>true</string></field>                
+                            <field name="setProperty"><string>true</string></field>                
+                            <field name="remove"><string>true</string></field>                
+                          </object>  
+                        </value>
+                        <value>                            
+                          <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
+                            <field name="identity"><string>any</string></field>
+                            <field name="read"><string>true</string></field>                
+                            <field name="addNode"><string>false</string></field>                
+                            <field name="setProperty"><string>true</string></field>                
+                            <field name="remove"><string>false</string></field>                
+                          </object>  
+                        </value>
+                      </collection>
+                    </field>                        
+                  </object>
+                </value>
+                <value>                
+                  <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">                   
+                    <field  name="alias"><string>groupsPath</string></field>
+                    <field  name="path"><string>/Groups</string></field>
+                    <field name="permissions">
+                      <collection type="java.util.ArrayList">               
+                        <value>                            
+                          <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
+                            <field name="identity"><string>*:/platform/administrators</string></field>
+                            <field name="read"><string>true</string></field>                
+                            <field name="addNode"><string>true</string></field>                
+                            <field name="setProperty"><string>true</string></field>                
+                            <field name="remove"><string>true</string></field>                
+                          </object>  
+                        </value>
+                        <value>                            
+                          <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
+                            <field name="identity"><string>any</string></field>
+                            <field name="read"><string>true</string></field>                
+                            <field name="addNode"><string>false</string></field>                
+                            <field name="setProperty"><string>true</string></field>                
+                            <field name="remove"><string>false</string></field>                
+                          </object>  
+                        </value>
+                      </collection>
+                    </field>                        
+                  </object>
+                </value>                                                                        
+              </collection>                                
+            </field>
+          </object>
+        </object-param>
+      </init-params>            
+    </component-plugin>
+  </external-component-plugins>
   <external-component-plugins>
     <target-component>org.exoplatform.services.database.HibernateService</target-component>
     <component-plugin> 
@@ -284,7 +284,7 @@
     </component-plugin>
   </external-component-plugins>
   
-	<external-component-plugins>
+  <external-component-plugins>
     <target-component>org.exoplatform.services.naming.InitialContextInitializer</target-component>
     <component-plugin>
       <name>bind.datasource</name>
@@ -324,302 +324,302 @@
     </component-plugin>
   </external-component-plugins>
   
-			
-	
-	
-	<external-component-plugins>
-  	<target-component>org.exoplatform.services.organization.OrganizationService</target-component>  	
-	  <component-plugin>
-	    <name>ecm.new.group.event.listener</name>
-	    <set-method>addListenerPlugin</set-method>
-	    <type>org.exoplatform.services.jcr.ext.hierarchy.impl.NewGroupListener</type>
-	    <description>description</description>
-	    <init-params>
-	      <object-param>
-	        <name>configuration></name>
-	        <description>description</description>
-	        <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig">
-          	<field  name="repository"><string>repository</string></field>
-           	<field name="workspaces">
-             	<collection type="java.util.ArrayList">
-              	<value><string>collaboration</string></value>              	              
-              </collection>              	
+      
+  
+  
+  <external-component-plugins>
+    <target-component>org.exoplatform.services.organization.OrganizationService</target-component>    
+    <component-plugin>
+      <name>ecm.new.group.event.listener</name>
+      <set-method>addListenerPlugin</set-method>
+      <type>org.exoplatform.services.jcr.ext.hierarchy.impl.NewGroupListener</type>
+      <description>description</description>
+      <init-params>
+        <object-param>
+          <name>configuration></name>
+          <description>description</description>
+          <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig">
+            <field  name="repository"><string>repository</string></field>
+             <field name="workspaces">
+               <collection type="java.util.ArrayList">
+                <value><string>collaboration</string></value>                              
+              </collection>                
             </field>            
             <field  name="jcrPaths">
-             	<collection type="java.util.ArrayList">
-                <value>              	
-		             	<object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">              	 	
-		             		<field name="alias"><string>groupApplicationData</string></field>
-		                <field name="path"><string>ApplicationData</string></field>
-		                <field name="nodeType"><string>nt:unstructured</string></field>
-		                <field name="permissions">
-				              <collection type="java.util.ArrayList">               
-				                <value>                            
-				                  <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
-				                    <field name="identity"><string>*:/platform/administrators</string></field>
-				                    <field name="read"><string>true</string></field>                
-				                    <field name="addNode"><string>true</string></field>                
-				                    <field name="setProperty"><string>true</string></field>                
-				                    <field name="remove"><string>true</string></field>                
-				                  </object>  
-				                </value>			                  
-			                </collection>
-			              </field>			                 			               
-	              	</object>
-              	</value>                             	              	             
-             	</collection>
+               <collection type="java.util.ArrayList">
+                <value>                
+                   <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">                   
+                     <field name="alias"><string>groupApplicationData</string></field>
+                    <field name="path"><string>ApplicationData</string></field>
+                    <field name="nodeType"><string>nt:unstructured</string></field>
+                    <field name="permissions">
+                      <collection type="java.util.ArrayList">               
+                        <value>                            
+                          <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
+                            <field name="identity"><string>*:/platform/administrators</string></field>
+                            <field name="read"><string>true</string></field>                
+                            <field name="addNode"><string>true</string></field>                
+                            <field name="setProperty"><string>true</string></field>                
+                            <field name="remove"><string>true</string></field>                
+                          </object>  
+                        </value>                        
+                      </collection>
+                    </field>                                            
+                  </object>
+                </value>                                                            
+               </collection>
             </field>            
-	        </object>
-	      </object-param>
-	    </init-params> 
-	  </component-plugin>
-	  <component-plugin>
-	    <name>ecm.new.user.event.listener</name>
-	    <set-method>addListenerPlugin</set-method>
-	    <type>org.exoplatform.services.jcr.ext.hierarchy.impl.NewUserListener</type>
-	    <description>description</description>
-	    <init-params>
-	      <object-param>
-	        <name>configuration</name>
-	        <description>description</description>
-	        <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig">
-          	<field  name="repository"><string>repository</string></field>
-           	<field name="workspaces">
-             	<collection type="java.util.ArrayList">
-              	<value><string>collaboration</string></value>              	              
-              </collection>              	
+          </object>
+        </object-param>
+      </init-params> 
+    </component-plugin>
+    <component-plugin>
+      <name>ecm.new.user.event.listener</name>
+      <set-method>addListenerPlugin</set-method>
+      <type>org.exoplatform.services.jcr.ext.hierarchy.impl.NewUserListener</type>
+      <description>description</description>
+      <init-params>
+        <object-param>
+          <name>configuration</name>
+          <description>description</description>
+          <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig">
+            <field  name="repository"><string>repository</string></field>
+             <field name="workspaces">
+               <collection type="java.util.ArrayList">
+                <value><string>collaboration</string></value>                              
+              </collection>                
             </field>            
             <field  name="jcrPaths">
-             	<collection type="java.util.ArrayList">
-                <value>              	
-		             	<object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">              	 	
-		             		<field name="alias"><string>userApplicationData</string></field>
-		                <field name="path"><string>ApplicationData</string></field>
-		                <field name="nodeType"><string>nt:unstructured</string></field>
-		                <field name="permissions">
-				              <collection type="java.util.ArrayList">               
-				                <value>                            
-				                  <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
-				                    <field name="identity"><string>*:/platform/administrators</string></field>
-				                    <field name="read"><string>true</string></field>                
-				                    <field name="addNode"><string>true</string></field>                
-				                    <field name="setProperty"><string>true</string></field>                
-				                    <field name="remove"><string>true</string></field>                
-				                  </object>  
-				                </value>			                  
-			                </collection>
-			              </field>			                 			               
-	              	</object>
-              	</value>                
-             	</collection>
-            </field>	          
-	        </object>
-	      </object-param>
-	    </init-params>
-	  </component-plugin>	  	  	  	  
-	</external-component-plugins>
+               <collection type="java.util.ArrayList">
+                <value>                
+                   <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">                   
+                     <field name="alias"><string>userApplicationData</string></field>
+                    <field name="path"><string>ApplicationData</string></field>
+                    <field name="nodeType"><string>nt:unstructured</string></field>
+                    <field name="permissions">
+                      <collection type="java.util.ArrayList">               
+                        <value>                            
+                          <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
+                            <field name="identity"><string>*:/platform/administrators</string></field>
+                            <field name="read"><string>true</string></field>                
+                            <field name="addNode"><string>true</string></field>                
+                            <field name="setProperty"><string>true</string></field>                
+                            <field name="remove"><string>true</string></field>                
+                          </object>  
+                        </value>                        
+                      </collection>
+                    </field>                                            
+                  </object>
+                </value>                
+               </collection>
+            </field>            
+          </object>
+        </object-param>
+      </init-params>
+    </component-plugin>                
+  </external-component-plugins>
 
   <external-component-plugins>
-  	<target-component>org.exoplatform.services.organization.OrganizationService</target-component>  	
-	  <component-plugin>
-	    <name>ecm.new.group.event.listener</name>
-	    <set-method>addListenerPlugin</set-method>
-	    <type>org.exoplatform.services.jcr.ext.hierarchy.impl.NewGroupListener</type>
-	    <description>description</description>
-	    <init-params>
-	      <object-param>
-	        <name>configuration></name>
-	        <description>description</description>
-	        <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig">
-          	<field  name="repository"><string>repository</string></field>
-           	<field name="workspaces">
-             	<collection type="java.util.ArrayList">
-              	<value><string>collaboration</string></value>              	              
-              </collection>              	
+    <target-component>org.exoplatform.services.organization.OrganizationService</target-component>    
+    <component-plugin>
+      <name>ecm.new.group.event.listener</name>
+      <set-method>addListenerPlugin</set-method>
+      <type>org.exoplatform.services.jcr.ext.hierarchy.impl.NewGroupListener</type>
+      <description>description</description>
+      <init-params>
+        <object-param>
+          <name>configuration></name>
+          <description>description</description>
+          <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig">
+            <field  name="repository"><string>repository</string></field>
+             <field name="workspaces">
+               <collection type="java.util.ArrayList">
+                <value><string>collaboration</string></value>                              
+              </collection>                
             </field>            
             <field  name="jcrPaths">
-             	<collection type="java.util.ArrayList">
-                <value>              	
-		             	<object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">              	 	
-		             		<field name="alias"><string>groupApplicationData</string></field>
-		                <field name="path"><string>ApplicationData</string></field>
-		                <field name="nodeType"><string>nt:unstructured</string></field>
-		                <field name="permissions">
-				              <collection type="java.util.ArrayList">               
-				                <value>                            
-				                  <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
-				                    <field name="identity"><string>*:/platform/administrators</string></field>
-				                    <field name="read"><string>true</string></field>                
-				                    <field name="addNode"><string>true</string></field>                
-				                    <field name="setProperty"><string>true</string></field>                
-				                    <field name="remove"><string>true</string></field>                
-				                  </object>  
-				                </value>			                  
-			                </collection>
-			              </field>			                 			               
-	              	</object>
-              	</value>                             	              	             
-             	</collection>
+               <collection type="java.util.ArrayList">
+                <value>                
+                   <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">                   
+                     <field name="alias"><string>groupApplicationData</string></field>
+                    <field name="path"><string>ApplicationData</string></field>
+                    <field name="nodeType"><string>nt:unstructured</string></field>
+                    <field name="permissions">
+                      <collection type="java.util.ArrayList">               
+                        <value>                            
+                          <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
+                            <field name="identity"><string>*:/platform/administrators</string></field>
+                            <field name="read"><string>true</string></field>                
+                            <field name="addNode"><string>true</string></field>                
+                            <field name="setProperty"><string>true</string></field>                
+                            <field name="remove"><string>true</string></field>                
+                          </object>  
+                        </value>                        
+                      </collection>
+                    </field>                                            
+                  </object>
+                </value>                                                            
+               </collection>
             </field>            
-	        </object>
-	      </object-param>
-	    </init-params> 
-	  </component-plugin>
-	  <component-plugin>
-	    <name>ecm.new.user.event.listener</name>
-	    <set-method>addListenerPlugin</set-method>
-	    <type>org.exoplatform.services.jcr.ext.hierarchy.impl.NewUserListener</type>
-	    <description>description</description>
-	    <init-params>
-	      <object-param>
-	        <name>configuration</name>
-	        <description>description</description>
-	        <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig">
-          	<field  name="repository"><string>repository</string></field>
-           	<field name="workspaces">
-             	<collection type="java.util.ArrayList">
-              	<value><string>collaboration</string></value>              	              
-              </collection>              	
+          </object>
+        </object-param>
+      </init-params> 
+    </component-plugin>
+    <component-plugin>
+      <name>ecm.new.user.event.listener</name>
+      <set-method>addListenerPlugin</set-method>
+      <type>org.exoplatform.services.jcr.ext.hierarchy.impl.NewUserListener</type>
+      <description>description</description>
+      <init-params>
+        <object-param>
+          <name>configuration</name>
+          <description>description</description>
+          <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig">
+            <field  name="repository"><string>repository</string></field>
+             <field name="workspaces">
+               <collection type="java.util.ArrayList">
+                <value><string>collaboration</string></value>                              
+              </collection>                
             </field>            
             <field  name="jcrPaths">
-             	<collection type="java.util.ArrayList">
-                <value>              	
-		             	<object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">              	 	
-		             		<field name="alias"><string>userApplicationData</string></field>
-		                <field name="path"><string>ApplicationData</string></field>
-		                <field name="nodeType"><string>nt:unstructured</string></field>
-		                <field name="permissions">
-				              <collection type="java.util.ArrayList">               
-				                <value>                            
-				                  <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
-				                    <field name="identity"><string>*:/platform/administrators</string></field>
-				                    <field name="read"><string>true</string></field>                
-				                    <field name="addNode"><string>true</string></field>                
-				                    <field name="setProperty"><string>true</string></field>                
-				                    <field name="remove"><string>true</string></field>                
-				                  </object>  
-				                </value>			                  
-			                </collection>
-			              </field>			                 			               
-	              	</object>
-              	</value>                
-             	</collection>
-            </field>	          
-	        </object>
-	      </object-param>
-	    </init-params>
-	  </component-plugin>	  	  	  	  
-	</external-component-plugins>
-	
-	<external-component-plugins>
-  	<target-component>org.exoplatform.mail.service.MailService</target-component>
-		<component-plugin>   
-    	<name>cs.mail.service.settings</name>
-   		<set-method>addPlugin</set-method>
+               <collection type="java.util.ArrayList">
+                <value>                
+                   <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">                   
+                     <field name="alias"><string>userApplicationData</string></field>
+                    <field name="path"><string>ApplicationData</string></field>
+                    <field name="nodeType"><string>nt:unstructured</string></field>
+                    <field name="permissions">
+                      <collection type="java.util.ArrayList">               
+                        <value>                            
+                          <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
+                            <field name="identity"><string>*:/platform/administrators</string></field>
+                            <field name="read"><string>true</string></field>                
+                            <field name="addNode"><string>true</string></field>                
+                            <field name="setProperty"><string>true</string></field>                
+                            <field name="remove"><string>true</string></field>                
+                          </object>  
+                        </value>                        
+                      </collection>
+                    </field>                                            
+                  </object>
+                </value>                
+               </collection>
+            </field>            
+          </object>
+        </object-param>
+      </init-params>
+    </component-plugin>                
+  </external-component-plugins>
+  
+  <external-component-plugins>
+    <target-component>org.exoplatform.mail.service.MailService</target-component>
+    <component-plugin>   
+      <name>cs.mail.service.settings</name>
+       <set-method>addPlugin</set-method>
       <type>org.exoplatform.mail.service.MailSettingConfigPlugin</type>
-    	<description>show or hide settings in account configuration form</description>
-			<init-params>
-				<object-param>
-					<name>leaveOnServer</name>
-		   		<description>option keep a copy of the message on the mail server after eXo Mail has downloaded the message</description>
-		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
-		     		<field name="name"><string>leaveOnServer</string></field>
-		     		<field name="userAllowed"><boolean>true</boolean></field>
-		     		<field name="defaultValue"><string>true</string></field>
-		   		</object>
-				</object-param>
-				<object-param>
-					<name>incomingServer</name>
-		   		<description>default incoming server to check for new mails.</description>
-		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
-		     		<field name="name"><string>incomingServer</string></field>
-		     		<field name="userAllowed"><boolean>true</boolean></field>
-		     		<field name="defaultValue"><string>imap.gmail.com</string></field>
-		   		</object>
-				</object-param>
-				<object-param>
-					<name>incomingPort</name>
-		   		<description>default port incoming server to check for new mails.</description>
-		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
-		     		<field name="name"><string>incomingPort</string></field>
-		     		<field name="userAllowed"><boolean>true</boolean></field>
-		     		<field name="defaultValue"><string>993</string></field>
-		   		</object>
-				</object-param>
-				<object-param>
-					<name>outgoingServer</name>
-		   		<description>default outgoing server to send mails.</description>
-		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
-		     		<field name="name"><string>outgoingServer</string></field>
-		     		<field name="userAllowed"><boolean>true</boolean></field>
-		     		<field name="defaultValue"><string>smtp.gmail.com</string></field>
-		   		</object>
-				</object-param>
-				<object-param>
-					<name>outgoingPort</name>
-		   		<description>default outgoing port to send mails.</description>
-		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
-		     		<field name="name"><string>outgoingPort</string></field>
-		     		<field name="userAllowed"><boolean>true</boolean></field>
-		     		<field name="defaultValue"><string>465</string></field>
-		   		</object>
-				</object-param>
-				<object-param>
-					<name>acceptIncomingSecureAuthentication</name>
-		   		<description>accept secure authentication</description>
-		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
-		     		<field name="name"><string>acceptIncomingSecureAuthentication</string></field>
-		     		<field name="userAllowed"><boolean>true</boolean></field>
-		     		<field name="defaultValue"><string>true</string></field>
-		   		</object>
-				</object-param>
-				<object-param>
-					<name>incomingSecureAuthentication</name>
-		   		<description>type of incoming secure authentication</description>
-		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
-		     		<field name="name"><string>incomingSecureAuthentication</string></field>
-		     		<field name="userAllowed"><boolean>true</boolean></field>
-		     		<field name="defaultValue"><string>starttls</string></field>
-		   		</object>
-				</object-param>
-				<object-param>
-					<name>incomingAuthenticationMechanism</name>
-		   		<description>type of incoming authentication mechanism</description>
-		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
-		     		<field name="name"><string>incomingAuthenticationMechanism</string></field>
-		     		<field name="userAllowed"><boolean>true</boolean></field>
-		     		<field name="defaultValue"><string>plain</string></field>
-		   		</object>
-				</object-param>
-				<object-param>
-					<name>acceptOutgoingSecureAuthentication</name>
-		   		<description>accept secure authentication</description>
-		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
-		     		<field name="name"><string>acceptOutgoingSecureAuthentication</string></field>
-		     		<field name="userAllowed"><boolean>true</boolean></field>
-		     		<field name="defaultValue"><string>true</string></field>
-		   		</object>
-				</object-param>
-				<object-param>
-					<name>outgoingSecureAuthentication</name>
-		   		<description>type of outgoing secure authentication</description>
-		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
-		     		<field name="name"><string>outgoingSecureAuthentication</string></field>
-		     		<field name="userAllowed"><boolean>true</boolean></field>
-		     		<field name="defaultValue"><string>starttls</string></field>
-		   		</object>
-				</object-param>
-				<object-param>
-					<name>outgoingAuthenticationMechanism</name>
-		   		<description>type of outgoing authentication mechanism</description>
-		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
-		     		<field name="name"><string>outgoingAuthenticationMechanism</string></field>
-		     		<field name="userAllowed"><boolean>true</boolean></field>
-		     		<field name="defaultValue"><string>plain</string></field>
-		   		</object>
-				</object-param>
-			</init-params>
-  	</component-plugin>      
+      <description>show or hide settings in account configuration form</description>
+      <init-params>
+        <object-param>
+          <name>leaveOnServer</name>
+           <description>option keep a copy of the message on the mail server after eXo Mail has downloaded the message</description>
+           <object type="org.exoplatform.mail.service.MailSettingConfig">
+             <field name="name"><string>leaveOnServer</string></field>
+             <field name="userAllowed"><boolean>true</boolean></field>
+             <field name="defaultValue"><string>true</string></field>
+           </object>
+        </object-param>
+        <object-param>
+          <name>incomingServer</name>
+           <description>default incoming server to check for new mails.</description>
+           <object type="org.exoplatform.mail.service.MailSettingConfig">
+             <field name="name"><string>incomingServer</string></field>
+             <field name="userAllowed"><boolean>true</boolean></field>
+             <field name="defaultValue"><string>imap.gmail.com</string></field>
+           </object>
+        </object-param>
+        <object-param>
+          <name>incomingPort</name>
+           <description>default port incoming server to check for new mails.</description>
+           <object type="org.exoplatform.mail.service.MailSettingConfig">
+             <field name="name"><string>incomingPort</string></field>
+             <field name="userAllowed"><boolean>true</boolean></field>
+             <field name="defaultValue"><string>993</string></field>
+           </object>
+        </object-param>
+        <object-param>
+          <name>outgoingServer</name>
+           <description>default outgoing server to send mails.</description>
+           <object type="org.exoplatform.mail.service.MailSettingConfig">
+             <field name="name"><string>outgoingServer</string></field>
+             <field name="userAllowed"><boolean>true</boolean></field>
+             <field name="defaultValue"><string>smtp.gmail.com</string></field>
+           </object>
+        </object-param>
+        <object-param>
+          <name>outgoingPort</name>
+           <description>default outgoing port to send mails.</description>
+           <object type="org.exoplatform.mail.service.MailSettingConfig">
+             <field name="name"><string>outgoingPort</string></field>
+             <field name="userAllowed"><boolean>true</boolean></field>
+             <field name="defaultValue"><string>465</string></field>
+           </object>
+        </object-param>
+        <object-param>
+          <name>acceptIncomingSecureAuthentication</name>
+           <description>accept secure authentication</description>
+           <object type="org.exoplatform.mail.service.MailSettingConfig">
+             <field name="name"><string>acceptIncomingSecureAuthentication</string></field>
+             <field name="userAllowed"><boolean>true</boolean></field>
+             <field name="defaultValue"><string>true</string></field>
+           </object>
+        </object-param>
+        <object-param>
+          <name>incomingSecureAuthentication</name>
+           <description>type of incoming secure authentication</description>
+           <object type="org.exoplatform.mail.service.MailSettingConfig">
+             <field name="name"><string>incomingSecureAuthentication</string></field>
+             <field name="userAllowed"><boolean>true</boolean></field>
+             <field name="defaultValue"><string>starttls</string></field>
+           </object>
+        </object-param>
+        <object-param>
+          <name>incomingAuthenticationMechanism</name>
+           <description>type of incoming authentication mechanism</description>
+           <object type="org.exoplatform.mail.service.MailSettingConfig">
+             <field name="name"><string>incomingAuthenticationMechanism</string></field>
+             <field name="userAllowed"><boolean>true</boolean></field>
+             <field name="defaultValue"><string>plain</string></field>
+           </object>
+        </object-param>
+        <object-param>
+          <name>acceptOutgoingSecureAuthentication</name>
+           <description>accept secure authentication</description>
+           <object type="org.exoplatform.mail.service.MailSettingConfig">
+             <field name="name"><string>acceptOutgoingSecureAuthentication</string></field>
+             <field name="userAllowed"><boolean>true</boolean></field>
+             <field name="defaultValue"><string>true</string></field>
+           </object>
+        </object-param>
+        <object-param>
+          <name>outgoingSecureAuthentication</name>
+           <description>type of outgoing secure authentication</description>
+           <object type="org.exoplatform.mail.service.MailSettingConfig">
+             <field name="name"><string>outgoingSecureAuthentication</string></field>
+             <field name="userAllowed"><boolean>true</boolean></field>
+             <field name="defaultValue"><string>starttls</string></field>
+           </object>
+        </object-param>
+        <object-param>
+          <name>outgoingAuthenticationMechanism</name>
+           <description>type of outgoing authentication mechanism</description>
+           <object type="org.exoplatform.mail.service.MailSettingConfig">
+             <field name="name"><string>outgoingAuthenticationMechanism</string></field>
+             <field name="userAllowed"><boolean>true</boolean></field>
+             <field name="defaultValue"><string>plain</string></field>
+           </object>
+        </object-param>
+      </init-params>
+    </component-plugin>      
   </external-component-plugins>
 
     <remove-configuration>org.exoplatform.services.transaction.ExoTransactionService</remove-configuration> 

@@ -32,7 +32,7 @@
     <entry key="sessionAlive">onDemand</entry>
   </properties>
 
- 	<portal-layout>
+   <portal-layout>
 
      <portlet-application>
        <portlet>
@@ -66,8 +66,8 @@
        <show-info-bar>false</show-info-bar>
      </portlet-application>
 
- 		<page-body>
- 		</page-body>
+     <page-body>
+     </page-body>
 
      <portlet-application>
        <portlet>

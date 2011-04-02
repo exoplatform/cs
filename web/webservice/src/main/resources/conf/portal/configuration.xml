@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
-	xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
+  xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
   <component>
     <type>org.exoplatform.webservice.cs.mail.MailWebservice</type>
   </component>
@@ -10,9 +10,9 @@
   </component>  
   
   <component>
-  	<type>org.exoplatform.services.jcr.impl.ext.action.SessionActionCatalog</type>
-  	<component-plugins>
-  	<component-plugin>
+    <type>org.exoplatform.services.jcr.impl.ext.action.SessionActionCatalog</type>
+    <component-plugins>
+    <component-plugin>
     <name>Last Update Action</name>
     <set-method>addPlugin</set-method>
     <type>org.exoplatform.services.jcr.impl.ext.action.AddActionsPlugin</type>
@@ -22,11 +22,11 @@
         <name>actions</name>
         <object type="org.exoplatform.services.jcr.impl.ext.action.AddActionsPlugin$ActionsConfig">
           <field  name="actions">
-            <collection type="java.util.ArrayList">	              
+            <collection type="java.util.ArrayList">                
               <value>
                 <object type="org.exoplatform.services.jcr.impl.ext.action.ActionConfiguration">
                   <field  name="eventTypes"><string>addNode,changeProperty</string></field>
-                  <field  name="nodeTypes"><string>exo:calendarEvent</string></field> 	                  
+                  <field  name="nodeTypes"><string>exo:calendarEvent</string></field>                     
                   <field  name="actionClassName"><string>org.exoplatform.webservice.cs.LastUpdateAction</string></field>
                 </object>
               </value>
@@ -35,8 +35,8 @@
         </object>
       </object-param>
     </init-params>
-  	</component-plugin>
-  	</component-plugins>
+    </component-plugin>
+    </component-plugins>
   </component>
   
   <external-component-plugins>

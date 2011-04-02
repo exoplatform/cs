@@ -21,11 +21,11 @@
 -->
 
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
-	xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
-	
+  xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
+  
   <external-component-plugins>
-	  <target-component>org.exoplatform.services.jcr.RepositoryService</target-component>  
-	  <component-plugin>
+    <target-component>org.exoplatform.services.jcr.RepositoryService</target-component>  
+    <component-plugin>
           <name>add.namespaces</name>
           <set-method>addPlugin</set-method>
           <type>org.exoplatform.services.jcr.impl.AddNamespacesPlugin</type>
@@ -36,22 +36,22 @@
             </properties-param>
           </init-params>
       </component-plugin>    
-	  <component-plugin> 
-	    <name>add.cs.nodeType</name>
-	    <set-method>addPlugin</set-method>
-	    <type>org.exoplatform.services.jcr.impl.AddNodeTypePlugin</type>
-	    <init-params>
-	      <values-param>
-	        <name>autoCreatedInNewRepository</name>
-	        <description>Node types configuration file</description>
-	        <value>war:/conf/csdemo/cs/contact/contact-nodetypes.xml</value>
-	        <value>war:/conf/csdemo/cs/calendar/calendar-nodetypes.xml</value>
-	        <value>war:/conf/csdemo/cs/chat/chat-nodetype-config.xml</value>
-	        <value>war:/conf/csdemo/cs/content/content-nodetypes.xml</value>
-	        <value>war:/conf/csdemo/cs/mail/mail-nodetypes.xml</value>
-	        <value>war:/conf/csdemo/cs/webservice/webservice-nodetype-config.xml</value>
-	      </values-param>
-	    </init-params>
-	  </component-plugin>
-	</external-component-plugins>  
+    <component-plugin> 
+      <name>add.cs.nodeType</name>
+      <set-method>addPlugin</set-method>
+      <type>org.exoplatform.services.jcr.impl.AddNodeTypePlugin</type>
+      <init-params>
+        <values-param>
+          <name>autoCreatedInNewRepository</name>
+          <description>Node types configuration file</description>
+          <value>war:/conf/csdemo/cs/contact/contact-nodetypes.xml</value>
+          <value>war:/conf/csdemo/cs/calendar/calendar-nodetypes.xml</value>
+          <value>war:/conf/csdemo/cs/chat/chat-nodetype-config.xml</value>
+          <value>war:/conf/csdemo/cs/content/content-nodetypes.xml</value>
+          <value>war:/conf/csdemo/cs/mail/mail-nodetypes.xml</value>
+          <value>war:/conf/csdemo/cs/webservice/webservice-nodetype-config.xml</value>
+        </values-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>  
 </configuration>

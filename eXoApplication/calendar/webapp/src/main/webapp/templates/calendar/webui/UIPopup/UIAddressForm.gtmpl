@@ -83,9 +83,9 @@
     <table class="ActionContainer" align="center">
       <tr>
         <td align="center"> 
-      	<%for(String action : uicomponent.getActions()){
-      		String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
-      	%>
+        <%for(String action : uicomponent.getActions()){
+          String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
+        %>
          <a href="<%=uicomponent.event(action)%>" class="ActionButton LightBlueStyle">
             <div class="ButtonLeft">
               <div class="ButtonRight">

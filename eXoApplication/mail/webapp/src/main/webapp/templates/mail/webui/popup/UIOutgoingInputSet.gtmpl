@@ -9,18 +9,18 @@
     import org.exoplatform.mail.webui.popup.UIAccountSetting;
     import org.exoplatform.mail.webui.popup.UIAccountCreation;
     import org.exoplatform.mail.service.Utils;
-	def jsMan = _ctx.getRequestContext().getJavascriptManager() ;
-	jsMan.addJavascript("eXo.mail.UIMailPortlet.validateFieldsOutgoing('" + uicomponent.id + "') ;");
-	def field;
-	def label;
-	def smtpSsltPort = UIAccountCreation.DEFAULT_SMTPSSL_PORT;
+  def jsMan = _ctx.getRequestContext().getJavascriptManager() ;
+  jsMan.addJavascript("eXo.mail.UIMailPortlet.validateFieldsOutgoing('" + uicomponent.id + "') ;");
+  def field;
+  def label;
+  def smtpSsltPort = UIAccountCreation.DEFAULT_SMTPSSL_PORT;
     def smtpPort= UIAccountCreation.DEFAULT_SMTP_PORT;
     def port = smtpSsltPort+ ":" + smtpPort;//smtpsslport:imapport
-	def mechs =  '';
-	Integer count = 0;
+  def mechs =  '';
+  Integer count = 0;
     for(String mech:Utils.MECHANISM){
-	 if(count == Utils.MECHANISM.length -1) mechs = mechs + mech; 
-  	 else mechs = mechs + mech + ",";
+   if(count == Utils.MECHANISM.length -1) mechs = mechs + mech; 
+     else mechs = mechs + mech + ",";
      count = count +1;
     }
 %>
@@ -56,43 +56,43 @@
         def labelCheckSupported = _ctx.appRes("UIMailSettings.label.checkForSupported").replaceAll("\"", "");
         def onclickValue = "eXo.mail.UIMailPortlet.checkForSupportedType(this)";
         def classCheckSupported = "CheckForSupported";
-		    if(!useSSL){
-			     inputAuthType.setEnable(false);
-	   			 lblColor = "color:gray;";
-	  			 fieldMech.setEnable(false);
-	  			 onclickValue = ""
-	  			 classCheckSupported = "CheckForSupportedDisable";   	
-		    }
+        if(!useSSL){
+           inputAuthType.setEnable(false);
+            lblColor = "color:gray;";
+           fieldMech.setEnable(false);
+           onclickValue = ""
+           classCheckSupported = "CheckForSupportedDisable";     
+        }
       %>
       <tr style="height:30px;">
-      	<td colspan="2">
-      		<div class="FieldInput" id='<%=field.getId()%>'  defaultport="<%=port%>">
-		        <span class="FieldComponent"><%uicomponent.renderUIComponent(field)%></span>
-		        <span class="Label">$label</span>
-		        <span class="FieldComponentAuto"><%uicomponent.renderUIComponent(inputAuthType)%></span>
-	        </div>
-	     </td>   
+        <td colspan="2">
+          <div class="FieldInput" id='<%=field.getId()%>'  defaultport="<%=port%>">
+            <span class="FieldComponent"><%uicomponent.renderUIComponent(field)%></span>
+            <span class="Label">$label</span>
+            <span class="FieldComponentAuto"><%uicomponent.renderUIComponent(inputAuthType)%></span>
+          </div>
+       </td>   
       </tr>
       <tr style="height:35px;">
-      	<td colspan="2">
-      		<div class="FieldInput" id='<%=fieldMech.getId()%>'>
-		       <span class="Label" style="padding-left:0px;<%=lblColor%>">$labelMech</span>
-		       <span class="FieldComponentAuto"><%uicomponent.renderUIComponent(fieldMech)%></span>
-		       <span class="<%=classCheckSupported%>" mechs="<%=mechs%>" onclick="<%=onclickValue%>" username="<%=uicomponent.getUsername()%>" protocol="<%=uicomponent.getProtocol()%>" host="<%=uicomponent.getHost()%>">$labelCheckSupported</span>
-		  	 </div>  
-		</td>  	   
+        <td colspan="2">
+          <div class="FieldInput" id='<%=fieldMech.getId()%>'>
+           <span class="Label" style="padding-left:0px;<%=lblColor%>">$labelMech</span>
+           <span class="FieldComponentAuto"><%uicomponent.renderUIComponent(fieldMech)%></span>
+           <span class="<%=classCheckSupported%>" mechs="<%=mechs%>" onclick="<%=onclickValue%>" username="<%=uicomponent.getUsername()%>" protocol="<%=uicomponent.getProtocol()%>" host="<%=uicomponent.getHost()%>">$labelCheckSupported</span>
+         </div>  
+    </td>       
       </tr>
       
       <%              
         field = uicomponent.getChildById(uicomponent.IS_OUTGOING_AUTHENTICATION)
         label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
-     		def useOutgoingAuth = field.isChecked();
+         def useOutgoingAuth = field.isChecked();
       %>
       <tr style="height:20px;">
-      	<td colspan="2">
-      	<div class="FieldInput" id='<%=field.getId()%>'>
-	        <span class="FieldComponent" style="padding-left:0px;"><%uicomponent.renderUIComponent(field)%></span>
-	        <span class="InputFieldLabel" style="padding-left:10px;">$label</span>
+        <td colspan="2">
+        <div class="FieldInput" id='<%=field.getId()%>'>
+          <span class="FieldComponent" style="padding-left:0px;"><%uicomponent.renderUIComponent(field)%></span>
+          <span class="InputFieldLabel" style="padding-left:10px;">$label</span>
         </div>
         </td>
       </tr>
@@ -113,30 +113,30 @@
                 def labelPW = _ctx.appRes(uicomponent.getParent().id+ ".label." + fieldPW.getId()) ;
                 
                 if(!useOutgoingAuth){
-					 field.setEnable(false);
-					 lblColor = "color:gray;"
-					 accountColor= "color:gray;"
-					 field.setChecked(false);
-					 fieldUsername.setEnable(false);
-					 fieldPW.setEnable(false);
-		        }else{
-		         if(useIncomingSetting){
-		         	accountColor= "color:gray;";
-		         	fieldUsername.setEnable(false);
-				 	fieldPW.setEnable(false);	
-		         }else{
-		         	fieldUsername.setEnable(true);
-				 	fieldPW.setEnable(true);
-				 	accountColor= "color:black;";
-		         }
-		         field.setEnable(true);
-				 lblColor = "color:black;"
-		        }
+           field.setEnable(false);
+           lblColor = "color:gray;"
+           accountColor= "color:gray;"
+           field.setChecked(false);
+           fieldUsername.setEnable(false);
+           fieldPW.setEnable(false);
+            }else{
+             if(useIncomingSetting){
+               accountColor= "color:gray;";
+               fieldUsername.setEnable(false);
+           fieldPW.setEnable(false);  
+             }else{
+               fieldUsername.setEnable(true);
+           fieldPW.setEnable(true);
+           accountColor= "color:black;";
+             }
+             field.setEnable(true);
+         lblColor = "color:black;"
+            }
               %>
               <tr  style="height:25px;"><td>
-              	<div class="FieldInput" id='<%=field.getId()%>'>
-	                <span class="FieldComponent" style="padding-left:0px;"><%uicomponent.renderUIComponent(field)%></span>
-	                <span class="Label" style="padding-left:10px;<%=lblColor%>">$label</span>
+                <div class="FieldInput" id='<%=field.getId()%>'>
+                  <span class="FieldComponent" style="padding-left:0px;"><%uicomponent.renderUIComponent(field)%></span>
+                  <span class="Label" style="padding-left:10px;<%=lblColor%>">$label</span>
                 </div>
               </td></tr>
               <tr  style="height:25px;">
@@ -144,16 +144,16 @@
                   <div  style="padding-left:50px;">
                     <table>
                       <tr style="height:25px;"><td>
-                    	<div class="FieldInput" id='id-<%=fieldUsername.getId()%>' style="white-space:nowarp; width:auto;">
-                      		<span class="InputFieldLabel" style="width:100px;<%=accountColor%>">$labelUsername</span>
-                      		<span class="FieldComponent"  style="padding-left:7px;"><%uicomponent.renderUIComponent(fieldUsername)%></span>
-                      	</div>
-                      	</td></tr>
+                      <div class="FieldInput" id='id-<%=fieldUsername.getId()%>' style="white-space:nowarp; width:auto;">
+                          <span class="InputFieldLabel" style="width:100px;<%=accountColor%>">$labelUsername</span>
+                          <span class="FieldComponent"  style="padding-left:7px;"><%uicomponent.renderUIComponent(fieldUsername)%></span>
+                        </div>
+                        </td></tr>
                         <tr style="height:22px;"><td>
-                        	<div class="FieldInput" id='id-<%=fieldPW.getId()%>' style="white-space:nowarp; width:auto;">
-                          		<span class="InputFieldLabel" style="width:100px;<%=accountColor%>">$labelPW</span>
-		                        <span class="FieldComponent" style="padding-left:7px;"><%uicomponent.renderUIComponent(fieldPW)%></span>
-		                     </div>
+                          <div class="FieldInput" id='id-<%=fieldPW.getId()%>' style="white-space:nowarp; width:auto;">
+                              <span class="InputFieldLabel" style="width:100px;<%=accountColor%>">$labelPW</span>
+                            <span class="FieldComponent" style="padding-left:7px;"><%uicomponent.renderUIComponent(fieldPW)%></span>
+                         </div>
                         </td></tr>
                     </table>
                   </div>

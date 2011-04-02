@@ -11,15 +11,15 @@
 
 <%/*The class UIContentNavigationContainer for fix bug */%>
 <div class="UIContentNavigationContainer">
-	<div class="CategoryControlBar">
-		<div class="LeftBar">
-			<div class="RightBar">
-				<div class="MiddleBar">
-					<div class="RSSReaderHeader"><%=_ctx.appRes("UIContentNavigation.label.rssreader")%></div>
-				</div>
-			</div>
-		</div>
-	</div>
+  <div class="CategoryControlBar">
+    <div class="LeftBar">
+      <div class="RightBar">
+        <div class="MiddleBar">
+          <div class="RSSReaderHeader"><%=_ctx.appRes("UIContentNavigation.label.rssreader")%></div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="NewsCategory">
     <div class="UIVerticalSlideTabs">
       <div class="UpArrowBar" title="<%=_ctx.appRes("UIContentNavigation.label.upLevel")%>">
@@ -32,18 +32,18 @@
       </div>
       
       <div class="ActionBar">
-				<%
+        <%
        String removeLink = uicomponent.event("RemoveNode") ;
        String editLink = uicomponent.event("EditNode") ;
         %>
         <%//if(uicomponent.isLogon()) { %>
-	        <a href="<%=uicomponent.event("AddNode")%>" class="NavigationControlIcon AddCategory24x24Icon" title="<%=_ctx.appRes("UIContentNavigation.label.addCategory")%>"><span></span></a>
-	        <a href="<%=editLink%>" class="NavigationControlIcon EditCategory24x24Icon" title="<%=_ctx.appRes("UIContentNavigation.label.editSelectedCategory")%>"><span></span></a>
-	        <a href="<%=removeLink%>" class="NavigationControlIcon DeleteCategory24x24Icon" title="<%=_ctx.appRes("UIContentNavigation.label.removeSelectedCategory")%>"><span></span></a>
-	    	<% //}%>
-	    	<div style="clear: left"><span></span></div>
-	    </div>
-	    <div style="clear: both"><span></span></div>
+          <a href="<%=uicomponent.event("AddNode")%>" class="NavigationControlIcon AddCategory24x24Icon" title="<%=_ctx.appRes("UIContentNavigation.label.addCategory")%>"><span></span></a>
+          <a href="<%=editLink%>" class="NavigationControlIcon EditCategory24x24Icon" title="<%=_ctx.appRes("UIContentNavigation.label.editSelectedCategory")%>"><span></span></a>
+          <a href="<%=removeLink%>" class="NavigationControlIcon DeleteCategory24x24Icon" title="<%=_ctx.appRes("UIContentNavigation.label.removeSelectedCategory")%>"><span></span></a>
+        <% //}%>
+        <div style="clear: left"><span></span></div>
+      </div>
+      <div style="clear: both"><span></span></div>
       <div class="UIVTab VTabStyle3">
         <%
           for(node in navigations) {
@@ -86,7 +86,7 @@
                   <div class="SubItem">
                       <div class="ItemIcon"><span></span></div>
                       <a href="<%=actionChildLink%>" class="<%=labelClass%>"><%=child.getLabel()%></a>
-											<div style="clear: left"><span></span></div>                      
+                      <div style="clear: left"><span></span></div>                      
                   </div>
               <%}%>
             </div>

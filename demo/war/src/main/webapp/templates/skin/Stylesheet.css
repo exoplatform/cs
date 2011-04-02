@@ -6,61 +6,61 @@
 
 
 @font-face {
-	font-family: Hattori;
-	src: url("/csdemo/templates/skin/fonts/HATTORHL.eot");
+  font-family: Hattori;
+  src: url("/csdemo/templates/skin/fonts/HATTORHL.eot");
 }
 
 @font-face {
-	font-family: Hattori;
-	src: url("/csdemo/templates/skin/fonts/HATTORHL.TTF");
+  font-family: Hattori;
+  src: url("/csdemo/templates/skin/fonts/HATTORHL.TTF");
 }
 
 @font-face {
-	font-family: Lucida;
-	src: url("/csdemo/templates/skin/fonts/Lucida_Sans_Regular.eot");
+  font-family: Lucida;
+  src: url("/csdemo/templates/skin/fonts/Lucida_Sans_Regular.eot");
 }
 
 @font-face {
-	font-family: Lucida;
-	src: url("/csdemo/templates/skin/fonts/Lucida_Sans_Regular.ttf");
-	font-weight:normal;
+  font-family: Lucida;
+  src: url("/csdemo/templates/skin/fonts/Lucida_Sans_Regular.ttf");
+  font-weight:normal;
 }
 
 *, div, table, th, tr, td, img, form ,p, h1, h2, h3, h4, h5, h6 {
-	margin:0;
-	outline:medium none;
-	padding:0;
-	font-family:Lucida,Tahoma,Verdana,Arial,Helvetica,sans-serif;
-	font-size:12px;
+  margin:0;
+  outline:medium none;
+  padding:0;
+  font-family:Lucida,Tahoma,Verdana,Arial,Helvetica,sans-serif;
+  font-size:12px;
 }
 
 
 a {
-	color:#28175A;
-	text-decoration:none;
+  color:#28175A;
+  text-decoration:none;
 }
 
 img {
-	border: none;
-	vertical-align: middle;
+  border: none;
+  vertical-align: middle;
 }
 
 ul {
-	list-style: none;
+  list-style: none;
 }
 
-.ClearFix:after {	
-	clear: both;
-	content: ".";
-	display: block;
-	height: 0px;
-	visibility: hidden;
+.ClearFix:after {  
+  clear: both;
+  content: ".";
+  display: block;
+  height: 0px;
+  visibility: hidden;
 }
 
 .ClearFix {
-	!display: inline-block;
-	!zoom: 1;
-	!display: block; 
+  !display: inline-block;
+  !zoom: 1;
+  !display: block; 
 }
 
 
@@ -68,24 +68,24 @@ ul {
 /*Css one selector using for general css has same*/
 
 .FL {
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
+  float: left; /* orientation=lt */
+  float: right; /* orientation=rt */
 }
 
 .FR {
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
+  float: left; /* orientation=lt */
+  float: right; /* orientation=rt */
 }
 
 
 .TxtBlue {
-	color: #0068FF;
+  color: #0068FF;
 }
 
 .TxtOrg {
-	color: #F58220;
+  color: #F58220;
 }
 
 .TextBold {
-	font-weight: bold;
+  font-weight: bold;
 }

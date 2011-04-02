@@ -1,50 +1,50 @@
 .UICalendarPortlet .UISearchForm {
-	background: url('../background/CalendarBackground.gif') repeat-x center -251px;	
-	line-height: 34px;
-	padding:0px 13px 0px 0px; /* orientation=lt */
-	padding:0px 0px 0px 13px; /* orientation=rt */
-	border: 1px solid #c7c7c7;
-	margin-bottom: 4px;
-	width: 210px;
+  background: url('../background/CalendarBackground.gif') repeat-x center -251px;  
+  line-height: 34px;
+  padding:0px 13px 0px 0px; /* orientation=lt */
+  padding:0px 0px 0px 13px; /* orientation=rt */
+  border: 1px solid #c7c7c7;
+  margin-bottom: 4px;
+  width: 210px;
 }
 
 .UICalendarPortlet .UISearchForm .UISearchLabel {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-	line-height: 20px;
-	margin: 5px 0px;
-	color: #555; 
+  float: right; /* orientation=lt */
+  float: left; /* orientation=rt */
+  line-height: 20px;
+  margin: 5px 0px;
+  color: #555; 
 }
 
 .UICalendarPortlet .UISearchForm input {
-	width: 140px;
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-	margin: 6px 5px;
+  width: 140px;
+  float: right; /* orientation=lt */
+  float: left; /* orientation=rt */
+  margin: 6px 5px;
 }
 
 .UICalendarPortlet .UICalendarContainer .SearchIcon {
-	height: 20px;
-	width: 20px;
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-	margin: 8px 5px 0px 0px; /* orientation=lt */
-	margin: 8px 0px 0px 5px; /* orientation=rt */
-	cursor: pointer;
+  height: 20px;
+  width: 20px;
+  float: right; /* orientation=lt */
+  float: left; /* orientation=rt */
+  margin: 8px 5px 0px 0px; /* orientation=lt */
+  margin: 8px 0px 0px 5px; /* orientation=rt */
+  cursor: pointer;
 }
 
 .UICalendarPortlet .UISearchForm .AdvancedSearch {
-	height: 20px; 
-	width: 20px;
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-	margin: 8px 0px 0px 2px; /* orientation=lt */
-	margin: 8px 2px 0px 0px; /* orientation=rt */
-	cursor: pointer;
+  height: 20px; 
+  width: 20px;
+  float: right; /* orientation=lt */
+  float: left; /* orientation=rt */
+  margin: 8px 0px 0px 2px; /* orientation=lt */
+  margin: 8px 2px 0px 0px; /* orientation=rt */
+  cursor: pointer;
 }
 
 .UICalendarPortlet .UISearchForm .Clear{
-	clear: right; /* orientation=lt */
-	clear: left; /* orientation=rt */
+  clear: right; /* orientation=lt */
+  clear: left; /* orientation=rt */
 }
 

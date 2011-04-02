@@ -1,52 +1,52 @@
 <div class="UIActionBar">
-	<div class="UIToolbar">
-		<div class="HeaderToolbar">
-			<div class="LeftBar">
-				<div class="RightBar">
-					<div class="CenterBar">
-						<div onclick="<%=uicomponent.event("CheckMail")%>" class="ControlButton">
-							<div class="IconHolder CheckMailIcon">
-								<%=_ctx.appRes(uicomponent.id+ ".label.check-mail") %>
-							</div>
-						</div>
-						
-						<div onclick="<%=uicomponent.event("Compose")%>" class="ControlButton">
-							<div class="IconHolder ComposeIcon">
-								<%=_ctx.appRes(uicomponent.id+ ".label.compose") %>
-							</div>
-						</div>
-						<div class="SeparatorLine"><span></span></div>
-						<div onclick="<%=uicomponent.event("Address")%>" class="ControlButton">
-							<div class="IconHolder AddressIcon">
-								<%=_ctx.appRes(uicomponent.id+ ".label.address-book") %>
-							</div>
-						</div>
-						<div onclick="<%=uicomponent.event("AddEvent")%>" class="ControlButton">
-							<div class="IconHolder AddEventIcon">
-								<%=_ctx.appRes(uicomponent.id+ ".label.add-event") %>
-							</div>
-						</div>
+  <div class="UIToolbar">
+    <div class="HeaderToolbar">
+      <div class="LeftBar">
+        <div class="RightBar">
+          <div class="CenterBar">
+            <div onclick="<%=uicomponent.event("CheckMail")%>" class="ControlButton">
+              <div class="IconHolder CheckMailIcon">
+                <%=_ctx.appRes(uicomponent.id+ ".label.check-mail") %>
+              </div>
+            </div>
+            
+            <div onclick="<%=uicomponent.event("Compose")%>" class="ControlButton">
+              <div class="IconHolder ComposeIcon">
+                <%=_ctx.appRes(uicomponent.id+ ".label.compose") %>
+              </div>
+            </div>
+            <div class="SeparatorLine"><span></span></div>
+            <div onclick="<%=uicomponent.event("Address")%>" class="ControlButton">
+              <div class="IconHolder AddressIcon">
+                <%=_ctx.appRes(uicomponent.id+ ".label.address-book") %>
+              </div>
+            </div>
+            <div onclick="<%=uicomponent.event("AddEvent")%>" class="ControlButton">
+              <div class="IconHolder AddEventIcon">
+                <%=_ctx.appRes(uicomponent.id+ ".label.add-event") %>
+              </div>
+            </div>
             <div onclick="<%=uicomponent.event("Filter")%>" class="ControlButton">
               <div class="IconHolder FilterIcon">
                 <%=_ctx.appRes(uicomponent.id+ ".label.filter") %>
               </div>
             </div>
-						<div class="SeparatorLine"><span></span></div>
-						
+            <div class="SeparatorLine"><span></span></div>
+            
             <div onclick="<%=uicomponent.event("AccountSettings")%>" class="ControlButton">
               <div class="IconHolder AccountSettingIcon">
                 <%=_ctx.appRes(uicomponent.id+ ".label.accounts") %>
               </div>
             </div>
             <div onclick="<%=uicomponent.event("MailSettings")%>" class="ControlButton">
-							<div class="IconHolder SettingsIcon">
+              <div class="IconHolder SettingsIcon">
                 <%=_ctx.appRes(uicomponent.id+ ".label.settings") %>
               </div>
-						</div>
-						<div style="clear:left;"><span></span></div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+            </div>
+            <div style="clear:left;"><span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

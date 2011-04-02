@@ -21,51 +21,51 @@
 
 <messagebundle>
   <msg name="title">
-  	Messages
+    Messages
   </msg>
-	<msg name="baseurl">
-  	Base url
+  <msg name="baseurl">
+    Base url
   </msg>
-	<msg name="subscribeurl">
-  	Subscription url
+  <msg name="subscribeurl">
+    Subscription url
   </msg>
-	<msg name="limit">
-  	Number of items is displayed
+  <msg name="limit">
+    Number of items is displayed
   </msg>
-	<msg name="back">
-  	Back
+  <msg name="back">
+    Back
   </msg>
-	<msg name="nomessage">
-  	No unread message
+  <msg name="nomessage">
+    No unread message
   </msg>
-	<msg name="account">
-  	Account
+  <msg name="account">
+    Account
   </msg>
-	<msg name="folder">
-  	Folder
+  <msg name="folder">
+    Folder
   </msg>
-	<msg name="tag">
-  	Tag
+  <msg name="tag">
+    Tag
   </msg>
-	<msg name="save">
-  	Save
+  <msg name="save">
+    Save
   </msg>
-	<msg name="cancel">
-  	Cancel
+  <msg name="cancel">
+    Cancel
   </msg>
-	<msg name="setting">
-  	Setting
+  <msg name="setting">
+    Setting
   </msg>
-	<msg name="showAll">
-  	Show All
+  <msg name="showAll">
+    Show All
   </msg>
-	<msg name="numberRequired">
-  	Number required in limit field.
+  <msg name="numberRequired">
+    Number required in limit field.
   </msg>
-	<msg name="selectfolderTagRequired">
-  	Select folder or tag is required.
+  <msg name="selectfolderTagRequired">
+    Select folder or tag is required.
   </msg>
-	<msg name="noAccount">
-  	no account found , create one in mail application
+  <msg name="noAccount">
+    no account found , create one in mail application
   </msg>
 </messagebundle>

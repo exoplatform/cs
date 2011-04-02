@@ -8,7 +8,7 @@
   <key>Test Vietnamese</key>
   <!--
   #############################################################################
-  #  org.exoplatform.content.webui.component.UIContentForm 					#
+  #  org.exoplatform.content.webui.component.UIContentForm           #
   #############################################################################
   -->
   <UIContentForm>
@@ -37,7 +37,7 @@
   </UIDetailContent>
   <!--
   #############################################################################
-  #          org.exoplatform.content.webui.component.UIContentDetail 					#
+  #          org.exoplatform.content.webui.component.UIContentDetail           #
   #############################################################################
   -->
   <UIContentDetail>

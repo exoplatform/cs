@@ -1,5 +1,5 @@
 <%
-	import org.exoplatform.mail.webui.popup.UIAddressForm.ContactData;
+  import org.exoplatform.mail.webui.popup.UIAddressForm.ContactData;
   uiform.begin() 
   def rcontext = _ctx.getRequestContext() ;
   String actionLink = uicomponent.event('SearchContact') ;

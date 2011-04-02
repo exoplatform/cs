@@ -11,31 +11,31 @@
   import org.exoplatform.mail.webui.popup.UIMailSettings;
   import org.exoplatform.mail.service.AccountDelegation;
   import org.exoplatform.mail.webui.popup.UIDelegationAccountGrid;
-	def label; 
-	def input;
+  def label; 
+  def input;
   def tabId = uicomponent.id;
   def jsMan = _ctx.getRequestContext().getJavascriptManager() ;
   jsMan.importJavascript('eXo.mail.AutoComplete','/mail/javascript/');
   jsMan.addJavascript('eXo.mail.AutoComplete.initUserSeach(["'+ UIMailSettings.FIELD_DELEGATED_ACCOUNTS +'"]);');
 %>
 <div class="UIDelegationInputSet" id="$tabId">
-	<div class="AccountsInput">
-	<table style="width:100%;">
-		<tbody>
+  <div class="AccountsInput">
+  <table style="width:100%;">
+    <tbody>
       <%
         input = uicomponent.getChildById(UIMailSettings.FIELD_OWNER_ACCOUNTS);
         label = _ctx.appRes(uicomponent.getParent().id + ".label." + input.getId()) ;
         def inputDA = uicomponent.getChildById(UIMailSettings.FIELD_DELEGATED_ACCOUNTS);
         def labelDA = _ctx.appRes(uicomponent.getParent().id + ".label." + inputDA.getId()) ;
       %>  
-			<tr>
-				<td class="InputField">$label</td>
-				<td class="InputField">$labelDA</td>
-			</tr>
+      <tr>
+        <td class="InputField">$label</td>
+        <td class="InputField">$labelDA</td>
+      </tr>
       <tr>
         <td class="InputField">
-	  <%uicomponent.renderUIComponent(input)%>          
-	</td>
+    <%uicomponent.renderUIComponent(input)%>          
+  </td>
         <td class="InputField">
         <div class="AddUserFeild">
         <%uicomponent.renderUIComponent(inputDA)%>
@@ -46,14 +46,14 @@
         </td>  
       </tr>     
       <tr>
-	<td>
+  <td>
         <%
-		label = _ctx.appRes(uicomponent.getParent().id + ".label.privileges");
-		def inputPriFull = uicomponent.getChildById(UIMailSettings.FIELD_PRIVILEGE_FULL);
-		def labelPriFull = _ctx.appRes(uicomponent.getParent().id + ".label." + inputPriFull.getId());
-		
-	%>
-	<div class="PrivilegeSpace">
+    label = _ctx.appRes(uicomponent.getParent().id + ".label.privileges");
+    def inputPriFull = uicomponent.getChildById(UIMailSettings.FIELD_PRIVILEGE_FULL);
+    def labelPriFull = _ctx.appRes(uicomponent.getParent().id + ".label." + inputPriFull.getId());
+    
+  %>
+  <div class="PrivilegeSpace">
      
         <div><span class="PrivilegeLabel">$label:</span></div>
         <div  class="PrivilegeInput">
@@ -65,18 +65,18 @@
         %>
         <div  class="AddMoreDelegatedAccount" tabId="$tabId" title="$label"  onclick="<%=uicomponent.event("AddAccount")%>"><span></span></div>
         
-  	</div>
+    </div>
 
-	</td>
-	<td>
+  </td>
+  <td>
         </td>
        </tr> 
-		</tbody>
-	</table>
-	</div>
-		<div class="DelegatedAccountsList">
-	 <%
+    </tbody>
+  </table>
+  </div>
+    <div class="DelegatedAccountsList">
+   <%
       uicomponent.renderChild(UIDelegationAccountGrid.class);
      %>
-	</div>	
+  </div>  
 </div>

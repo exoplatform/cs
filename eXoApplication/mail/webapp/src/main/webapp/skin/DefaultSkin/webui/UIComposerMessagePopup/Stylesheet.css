@@ -1,319 +1,319 @@
 .UIMailPortlet .UIMessageCompose {
-	min-width: 640px;
-	/*min-width:860px;*/
+  min-width: 640px;
+  /*min-width:860px;*/
 }
 
 .UIMailPortlet .UIMessageCompose .MailListActionsbar .ControlButton {
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
-	line-height: 26px;
-	cursor: pointer;
+  float: left; /* orientation=lt */
+  float: right; /* orientation=rt */
+  line-height: 26px;
+  cursor: pointer;
 }
 
 .UIMailPortlet .UIMessageCompose .MailListActionsbar a {
-	color: #000000;
-	margin: 3px 1px 0px 1px;
-	line-height: 26px;
+  color: #000000;
+  margin: 3px 1px 0px 1px;
+  line-height: 26px;
 }
 
 .UIMailPortlet .UIMessageCompose .MailListActionsbar a:hover {
-	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
-	color: #058ee6; border: 1px solid #cbcbcb;
-	height: 24px;
-	margin: 3px 0px 0px 0px;
+  background: url('background/ControlButtonBG1x26.gif') repeat-x ;
+  color: #058ee6; border: 1px solid #cbcbcb;
+  height: 24px;
+  margin: 3px 0px 0px 0px;
 }
 
 .UIMailPortlet .UIMessageCompose .MailListActionsbar .UIRightClickPopupMenu a {
-	margin: 0px;
+  margin: 0px;
 }
 
 .UIMailPortlet .UIMessageCompose .MailListActionsbar .UIRightClickPopupMenu a:hover {
-	background: none; height: auto;
-	color: #058ee6; border: none;
+  background: none; height: auto;
+  color: #058ee6; border: none;
 }
 
 .UIMailPortlet .UIMessageCompose .MailListActionsbar .ControlButton .Label {
-	line-height: 24px;
+  line-height: 24px;
 }
 
 .UIMailPortlet .UIMessageCompose .MailListActionsbar .SeparatorLine {
   float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
+  float: right; /* orientation=rt */
   margin: 3px 5px 2px 5px;
 }
 
 .UIMailPortlet .UIMessageCompose .MailListActionsbar .ControlButton .IconHolder {
-	line-height: 26px;
-	margin: 1px 5px 0px 5px;
-	padding-left: 26px; /* orientation=lt */
-	padding-right: 26px; /* orientation=rt */
-	width: auto;
+  line-height: 26px;
+  margin: 1px 5px 0px 5px;
+  padding-left: 26px; /* orientation=lt */
+  padding-right: 26px; /* orientation=rt */
+  width: auto;
 }
 
 .UIMessageCompose .MailListActionsbar .ControlButton .SendMailIcon {
-	background: url('icons/24x24/SendMail.gif') no-repeat left center; /* orientation=lt */
-	background: url('icons/24x24/SendMail.gif') no-repeat right center; /* orientation=rt */
+  background: url('icons/24x24/SendMail.gif') no-repeat left center; /* orientation=lt */
+  background: url('icons/24x24/SendMail.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMessageCompose .MailListActionsbar .ControlButton .SaveAsADraftIcon {
-	background: url('icons/24x24/SaveAsADraft.gif') no-repeat left center; /* orientation=lt */
-	background: url('icons/24x24/SaveAsADraft.gif') no-repeat right center; /* orientation=rt */
+  background: url('icons/24x24/SaveAsADraft.gif') no-repeat left center; /* orientation=lt */
+  background: url('icons/24x24/SaveAsADraft.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMessageCompose .MailListActionsbar .ControlButton .DiscardIcon {
-	background: url('icons/24x24/Discard.gif') no-repeat left center; /* orientation=lt */
-	background: url('icons/24x24/Discard.gif') no-repeat right center; /* orientation=rt */
+  background: url('icons/24x24/Discard.gif') no-repeat left center; /* orientation=lt */
+  background: url('icons/24x24/Discard.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMessageCompose .MailListActionsbar .ControlButton .AttachFileIcon {
-	background: url('icons/24x24/AttachFiles.gif') no-repeat left center; /* orientation=lt */
-	background: url('icons/24x24/AttachFiles.gif') no-repeat right center; /* orientation=rt */
+  background: url('icons/24x24/AttachFiles.gif') no-repeat left center; /* orientation=lt */
+  background: url('icons/24x24/AttachFiles.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMessageCompose .MailListActionsbar .ControlButton .PriorityIcon {
-	background: url('icons/24x24/MessagePriority.gif') no-repeat left top; /* orientation=lt */
-	background: url('icons/24x24/MessagePriority.gif') no-repeat right top; /* orientation=rt */
-	height: auto;
+  background: url('icons/24x24/MessagePriority.gif') no-repeat left top; /* orientation=lt */
+  background: url('icons/24x24/MessagePriority.gif') no-repeat right top; /* orientation=rt */
+  height: auto;
 }
 
 .UIMessageCompose .MailListActionsbar .ControlButton .OptionsIcon {
-	background: url('icons/24x24/MessageOptions.gif') no-repeat left top; /* orientation=lt */
-	background: url('icons/24x24/MessageOptions.gif') no-repeat right top; /* orientation=rt */
-	height: auto;
+  background: url('icons/24x24/MessageOptions.gif') no-repeat left top; /* orientation=lt */
+  background: url('icons/24x24/MessageOptions.gif') no-repeat right top; /* orientation=rt */
+  height: auto;
 }
 
 .UIMessageCompose .MailListActionsbar .ControlButton .EditorOptionsIcon {
-	background: url('icons/24x24/EditorOptions.gif') no-repeat left top; /* orientation=lt */
-	background: url('icons/24x24/EditorOptions.gif') no-repeat right top; /* orientation=rt */
+  background: url('icons/24x24/EditorOptions.gif') no-repeat left top; /* orientation=lt */
+  background: url('icons/24x24/EditorOptions.gif') no-repeat right top; /* orientation=rt */
 }
 
 .UIMessageCompose .MailListActionsbar .ControlButton .DownArrow1Icon {
-	line-height: 24px;
-	padding-right: 16px; /* orientation=lt */
-	padding-left: 16px; /* orientation=rt */
-	background-position: right; /* orientation=lt */
-	background-position: left; /* orientation=rt */
-	margin-top: 4px;
+  line-height: 24px;
+  padding-right: 16px; /* orientation=lt */
+  padding-left: 16px; /* orientation=rt */
+  background-position: right; /* orientation=lt */
+  background-position: left; /* orientation=rt */
+  margin-top: 4px;
 }
 
 
 
 
 .UIMailPortlet .AttachServerIcon {
-	padding-left: 24px; /* orientation=lt */
-	padding-right: 24px; /* orientation=rt */
-	line-height: 24px;
-	background: url('icons/24x24/AttachServerIcon.png') no-repeat left top; /* orientation=lt */
-	background: url('icons/24x24/AttachServerIcon.png') no-repeat right top; /* orientation=rt */
+  padding-left: 24px; /* orientation=lt */
+  padding-right: 24px; /* orientation=rt */
+  line-height: 24px;
+  background: url('icons/24x24/AttachServerIcon.png') no-repeat left top; /* orientation=lt */
+  background: url('icons/24x24/AttachServerIcon.png') no-repeat right top; /* orientation=rt */
 }
 
 .UIMessageCompose .MailListActionsbar .ControlButton .AttachLocalIcon {
-	background: url('icons/24x24/AttachLocalIcon.png') no-repeat left top; /* orientation=lt */
-	background: url('icons/24x24/AttachLocalIcon.png') no-repeat right top; /* orientation=rt */
+  background: url('icons/24x24/AttachLocalIcon.png') no-repeat left top; /* orientation=lt */
+  background: url('icons/24x24/AttachLocalIcon.png') no-repeat right top; /* orientation=rt */
 }
 
 /*===========================Compose Message Address==================================*/
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageCompose .MessageAddress {
-	background: #f3f3f3;
-	float: none;
+  background: #f3f3f3;
+  float: none;
 }
 
 .UIMessageCompose .MessageAddress .AddAddress {
-	width: 100px;
-	float: right;
-	padding: 0px 25px;
+  width: 100px;
+  float: right;
+  padding: 0px 25px;
 }
 
 .UIMessageCompose .MessageAddress .AddAddress a {
-	color:#126ca5;
+  color:#126ca5;
 }
 
 .UIMessageCompose .MessageAddress .UIComposeForm .UIFormGrid {
-	width: 95%;
+  width: 95%;
 }
 
 .UIComposeForm .UIMessageCompose .UIPopupCategory {
-	top: 5px;
+  top: 5px;
 }
 
 .UIMessageCompose table {
-	background: none;
+  background: none;
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout td.FieldLabel {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout td {
-	border: none;
-	white-space:normal;
-}	
+  border: none;
+  white-space:normal;
+}  
 
 .UIMessageCompose .UIForm .HorizontalLayout .FieldCCAndBCC {
-	width: 100%;
-	font-size:10px;
+  width: 100%;
+  font-size:10px;
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout .FieldCCAndBCC .LabelLink {
-	color: #2A82C6;
+  color: #2A82C6;
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout .FieldCCAndBCC a {
-	color: #2A82C6;
+  color: #2A82C6;
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout .FieldCCAndBCC a:hover {
-	color: #058ee6;
+  color: #058ee6;
 }
-	
-	
+  
+  
 .UIMessageCompose .UIForm .HorizontalLayout {
-	padding: 10px 0px;
-	border: 1px solid #cccccc;
-	border-bottom: 0px ;
+  padding: 10px 0px;
+  border: 1px solid #cccccc;
+  border-bottom: 0px ;
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout input {
-	width: 85.8%;
+  width: 85.8%;
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout select {
-	width: 100%;
+  width: 100%;
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout .FieldLabel .HoverButton {
-	line-height: 21px; width: 71px; height: 21px; float: right;
+  line-height: 21px; width: 71px; height: 21px; float: right;
 }
 
 
 .UIMessageCompose .UIForm .HorizontalLayout textarea {
-	width: 85.8%; 
-	height: 40px; 
-	font-family: tahoma;
-	overflow:auto;
+  width: 85.8%; 
+  height: 40px; 
+  font-family: tahoma;
+  overflow:auto;
 }
 
 .UIMessageCompose .MessageAddress .ZipFileIcon {
-	float: left;
-	background: url('icons/16x16/ZipFile.gif') no-repeat left;
-	line-height: 16px; 
-	padding-left: 20px;
-	width: auto;
+  float: left;
+  background: url('icons/16x16/ZipFile.gif') no-repeat left;
+  line-height: 16px; 
+  padding-left: 20px;
+  width: auto;
 }
 
 .UIMessageCompose .MessageAddress .RemoveButton {
-	float: left;
-	margin: 0px 0px 0px 5px;
-	color: #126ca5;
+  float: left;
+  margin: 0px 0px 0px 5px;
+  color: #126ca5;
 }
 
 .UIMessageCompose .MessageAddress .UIFormGrid .FieldLabel{
-	vertical-align:top;
+  vertical-align:top;
 }
 
 .UIMessageCompose .MessageAddress .UIFormGrid .FieldLabel a {
-	color: black;
-	text-indent:2px;
-	white-space:nowrap;
-	min-width:50px;
-	line-height: 26px;
-	height: 26px;
-	display: block;
-	float:left;
-	border: 1px solid #cbcbcb;
+  color: black;
+  text-indent:2px;
+  white-space:nowrap;
+  min-width:50px;
+  line-height: 26px;
+  height: 26px;
+  display: block;
+  float:left;
+  border: 1px solid #cbcbcb;
 }
 
 .UIMessageCompose .MessageAddress .UIFormGrid .FieldLabel a:hover {
-	color: #058ee6; 
-	background: url('background/ControlButtonBG1x26.gif') repeat-x;
-	border: 1px solid #cbcbcb;
-	line-height: 26px;
+  color: #058ee6; 
+  background: url('background/ControlButtonBG1x26.gif') repeat-x;
+  border: 1px solid #cbcbcb;
+  line-height: 26px;
 }
 
 .UIMessageCompose .MessageAddress img {
-	border:medium none;
-	margin-left:5px;
-	padding:0px;
-	vertical-align:bottom;
+  border:medium none;
+  margin-left:5px;
+  padding:0px;
+  vertical-align:bottom;
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout .UIFormGrid td.FieldLabel {
-	padding:4px 4px 4px 4px;
-	text-align:left;
-	vertical-align:top;
+  padding:4px 4px 4px 4px;
+  text-align:left;
+  vertical-align:top;
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout .UIFormGrid td.ToFieldLabel {
-	padding:4px 4px 0px 4px;
-	text-align:left;
-	vertical-align:top;
-	font-weight: bold;
-	white-space:nowrap;
+  padding:4px 4px 0px 4px;
+  text-align:left;
+  vertical-align:top;
+  font-weight: bold;
+  white-space:nowrap;
 }
 
 .UIMessageCompose .MessageAddress .UIFormGrid .ToFieldLabel a {
-	color: black;
-	text-indent:2px;
-	white-space:nowrap;
-	min-width:50px;
-	line-height: 26px;
-	height: 26px;
-	display: block;
-	float:left;
-	border: 1px solid #cbcbcb;
+  color: black;
+  text-indent:2px;
+  white-space:nowrap;
+  min-width:50px;
+  line-height: 26px;
+  height: 26px;
+  display: block;
+  float:left;
+  border: 1px solid #cbcbcb;
 }
 
 .UIMessageCompose .MessageAddress .UIFormGrid .ToFieldLabel a:hover {
-	color: #058ee6; 
-	background: url('background/ControlButtonBG1x26.gif') repeat-x;
-	border: 1px solid #cbcbcb;
-	line-height: 26px;
+  color: #058ee6; 
+  background: url('background/ControlButtonBG1x26.gif') repeat-x;
+  border: 1px solid #cbcbcb;
+  line-height: 26px;
 }
 
 .UIMessageCompose .UIForm .UIFormGrid td.ToFieldComponent {
-	padding:4px 4px 0px 4px;
+  padding:4px 4px 0px 4px;
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout .UIFormGrid td.CCAndBCCFieldLabel {
-	padding:0px 4px 0px 4px;
+  padding:0px 4px 0px 4px;
 }
 
 .UIMessageCompose .UIForm .UIFormGrid td.CCAndBCCFieldComponent {
-	padding:0px 4px 0px 4px;
+  padding:0px 4px 0px 4px;
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout .UIFormGrid td.SubjectFieldLabel {
-	padding:8px 4px 4px 4px;
-	text-align:left;
-	vertical-align:top;
-	font-weight: bold;
-	white-space:nowrap;
+  padding:8px 4px 4px 4px;
+  text-align:left;
+  vertical-align:top;
+  font-weight: bold;
+  white-space:nowrap;
 }
 
 .UIMessageCompose .UIForm .UIFormGrid td.SubjectFieldComponent {
-	padding:8px 4px 4px 4px;
+  padding:8px 4px 4px 4px;
 }
 
 /*=========================Text Actions Bar=============================*/
 
 .UIMessageCompose .MessageContent {
-	background: #f3f3f3;
-	_padding-left: 2px;
-	_border-right: 1px solid  #cbcbcb;
+  background: #f3f3f3;
+  _padding-left: 2px;
+  _border-right: 1px solid  #cbcbcb;
 }
 
 .UIMessageCompose .MessageContent .PlainTextMessage {
-	/*height: 250px;*/
-	height : 100%;
-	border: 1px solid  #cbcbcb;
-	border-top: none;
-	_border-right: none;
-	padding-left:14px;
-	padding-right:14px;
+  /*height: 250px;*/
+  height : 100%;
+  border: 1px solid  #cbcbcb;
+  border-top: none;
+  _border-right: none;
+  padding-left:14px;
+  padding-right:14px;
 }
 .UIMessageCompose .MessageContent .PlainTextMessage .textarea {
-	width:99.5%; 
-	height: 252px; 
-	text-align: left ;
+  width:99.5%; 
+  height: 252px; 
+  text-align: left ;
 }

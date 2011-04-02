@@ -22,25 +22,25 @@
 @import url('UIQuickAddEvent/Stylesheet.css') ;
 
 .UIWindow .UIContactPortlet {
-	margin: 0px;
-	border: none;
-	min-width: 900px;
+  margin: 0px;
+  border: none;
+  min-width: 900px;
 }
 
 .UIContactPortlet {
-	background: white;
+  background: white;
 }
 
 .UIWindow .UIEmpty {
-	margin: 0px;
-	border: none ;
-	min-width: none ;
+  margin: 0px;
+  border: none ;
+  min-width: none ;
 }
 
 .UIEmpty {
-	background: none;
-	border: none;
-	margin: 0px;
+  background: none;
+  border: none;
+  margin: 0px;
 }
 /***************************** PopUp ****************************/
 
@@ -48,63 +48,63 @@
 /*-----------------------UITagInfo-------------------*/
 
 .UIContactPortlet .UITagInfo {
-	padding: 10px;
-	background: #f3f3f3;
+  padding: 10px;
+  background: #f3f3f3;
 }
 
 .UIContactPortlet .UITagInfo .UIFormGrid {
-	margin: auto;
-	border: 1px solid #a5a5a6;
-	background: white;
+  margin: auto;
+  border: 1px solid #a5a5a6;
+  background: white;
 }
 
 .UIContactPortlet .UITagInfo .UIFormGrid th {
-	background: url('background/BGTitle1x21.gif') repeat-x ;
-	height: 21px;
-	line-height: 21px;
-	padding-left: 4px;
-	text-align: left;
+  background: url('background/BGTitle1x21.gif') repeat-x ;
+  height: 21px;
+  line-height: 21px;
+  padding-left: 4px;
+  text-align: left;
 }
 
 .UIContactPortlet .UITagInfo .UIFormGrid td {
-	padding: 0px 4px;
-	line-height: 20px;
+  padding: 0px 4px;
+  line-height: 20px;
 }
 
 .UIContactPortlet .UITagInfo .UIFormGrid .TagIcon {
-	height: 23px;
-	width: 20px;
-	margin: auto;
+  height: 23px;
+  width: 20px;
+  margin: auto;
 }
 
 .UIContactPortlet .UITagInfo .UIFormGrid .Border {
-	border-right: 1px solid #EBE7EA;
-	width: 30px;
+  border-right: 1px solid #EBE7EA;
+  width: 30px;
 }
 
 .UIContactPortlet .UIContactPortlet .UIWorkingContainer .UISearchForm {
-  background: url('background/SearchForm1x34.gif') repeat-x;	
+  background: url('background/SearchForm1x34.gif') repeat-x;  
   line-height: 34px;
-	padding:4px 13px 0px 0px;
-	border: 1px solid #c7c7c7;
-	margin-bottom: 4px;
+  padding:4px 13px 0px 0px;
+  border: 1px solid #c7c7c7;
+  margin-bottom: 4px;
 }
 
 .UIContactPortlet .SelectUserIcon {
-	width : 16px ;
-	height : 16px ;
+  width : 16px ;
+  height : 16px ;
 }
 
 .UIContactPortlet .SelectMemberIcon {
-	width : 16px ;
-	height : 16px ;
+  width : 16px ;
+  height : 16px ;
 }
 .UIContactPortlet .SelectGroupIcon {
-	width : 16px ;
-	height : 16px ;
+  width : 16px ;
+  height : 16px ;
 }
 .UIMailPortlet .UIMessageCompose table {
-	background: none;
+  background: none;
 }
 
 .UIContactPortlet .UIAddEditPermission .UISharedForm .UIFormInputSet{
@@ -113,18 +113,18 @@
 /*=====================Table Color===========================*/
 
 .UIPopupCategory{
-	right:0px; /* orientation=rt */
-	position:absolute;
+  right:0px; /* orientation=rt */
+  position:absolute;
 }
 
 .UIPopupCategory .UIContextMenuContainer {
-	white-space: nowrap;
+  white-space: nowrap;
 }
 
 .UIPopupCategory .ContactTableColor {
-	background: #e4eaf5;
-	padding: 5px;
-	margin: 1px;
+  background: #e4eaf5;
+  padding: 5px;
+  margin: 1px;
 }
 
 .UIPopupCategory .ContactTableColor .ColorCell {
@@ -138,31 +138,31 @@
 }
 
 .UIPopupCategory .ContactTableColor .SelectedColorCell {
-	background: url('skinIcons/icons/CalendarIcons.gif') no-repeat left -342px;
-	width: 12px; height: 12px;
+  background: url('skinIcons/icons/CalendarIcons.gif') no-repeat left -342px;
+  width: 12px; height: 12px;
 }
 
 .UIPopupCategory .ContactTableColor a:hover {
-	border: 1px solid red; 
+  border: 1px solid red; 
 }
 
 /* Popup Menu Positioning*/
 
 .UIContactPortlet .ActionIcon .UIRightClickPopupMenu{
-	top:18px;
-	left:0px;
+  top:18px;
+  left:0px;
 }
 
 .UIContactPortlet .TagIcon .UIPopupCategory {
-	top:18px;
-	left:0px;
+  top:18px;
+  left:0px;
 }
 
 .selection {
-	background-color: rgb(204, 204, 204);
-	position: absolute ;
-	opacity: 0.66 ;
-	width: 100% ;
+  background-color: rgb(204, 204, 204);
+  position: absolute ;
+  opacity: 0.66 ;
+  width: 100% ;
 }
 
 /* Colors*/
@@ -201,235 +201,235 @@
 .Yellow {background-color: #FFFF00;}    
 
 .UIContactPortlet .UIForm .UIFormGrid td.FieldComponent {
-	white-space: nowrap;
+  white-space: nowrap;
 }
 
 .UIContactPortlet .UIForm .UIFormGrid td.FieldLabel {
-	white-space: nowrap;
+  white-space: nowrap;
 }
 
 .UIContactPortlet .UIImportForm .UIFormGrid td.FieldComponent {
-	white-space: normal;
+  white-space: normal;
 }
 
 .UIContactPortlet .UISharedForm .UIFormGrid td.FieldComponent {
-	white-space: normal;
+  white-space: normal;
 }
 
 .UIContactPortlet .UIContactPreview .DecoratorBox .ViewBoxStyle .TopLeftViewBoxStyle {
-	height: 8px;
+  height: 8px;
 }
 
 .UIContactPortlet .UIForm .SelectFileFrame {
-	width : 300px;
+  width : 300px;
 }
 
 .UIContactPortlet .UIImageForm .UIFormGrid td.FieldComponent {
-	white-space: normal;
+  white-space: normal;
 }
 
 .UIContactPortlet .UIContextMenuContainer .MenuItem .ItemIcon{
-	background-position: 4px center; /* orientation=lt */
-	background-position: 98% center; /* orientation=rt */
+  background-position: 4px center; /* orientation=lt */
+  background-position: 98% center; /* orientation=rt */
 }
 
 .UIRightClickPopupMenu .MenuItem .ItemIcon{
-	padding: 0px 5px 0px 28px; /* orientation=lt */
-	padding: 0px 28px 0px 5px; /* orientation=rt */
-	margin: 0px 2px;
-	line-height: 24px;
+  padding: 0px 5px 0px 28px; /* orientation=lt */
+  padding: 0px 28px 0px 5px; /* orientation=rt */
+  margin: 0px 2px;
+  line-height: 24px;
 }
 
 .UIRightClickPopupMenu .MenuItem .ItemIcon:hover {
-	background-color: #dee4f2;
-	color: orange;
+  background-color: #dee4f2;
+  color: orange;
 }
 
 /* Create color tag */
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .YellowTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -651px; /* orientation=lt */
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -651px; /* orientation=rt */
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .YellowTag  {
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -651px; /* orientation=lt */
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -651px; /* orientation=rt */
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .WheatTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -630px; /* orientation=lt */
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -630px; /* orientation=rt */
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .WheatTag  {
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -630px; /* orientation=lt */
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -630px; /* orientation=rt */
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .VioletTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -609px; /* orientation=lt */
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -609px; /* orientation=rt */
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .VioletTag  {
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -609px; /* orientation=lt */
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -609px; /* orientation=rt */
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .TurquoiseTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -588px; /* orientation=lt */
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -588px; /* orientation=rt */
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .TurquoiseTag  {
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -588px; /* orientation=lt */
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -588px; /* orientation=rt */
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .TomatoTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -567px; /* orientation=lt */
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -567px; /* orientation=rt */
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .TomatoTag  {
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -567px; /* orientation=lt */
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -567px; /* orientation=rt */
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .ThistleTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -546px; /* orientation=lt */
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -546px; /* orientation=rt */
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .ThistleTag  {
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -546px; /* orientation=lt */
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -546px; /* orientation=rt */
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .SkyBlueTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -525px; /* orientation=lt */
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -525px; /* orientation=rt */
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .SkyBlueTag  {
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -525px; /* orientation=lt */
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -525px; /* orientation=rt */
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .SilverTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -504px; /* orientation=lt */
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -504px; /* orientation=rt */
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .SilverTag  {
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -504px; /* orientation=lt */
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -504px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .SeaShellTag {
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -483px; /* orientation=lt */
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -483px; /* orientation=rt */
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -483px; /* orientation=lt */
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -483px; /* orientation=rt */
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .SeaGreenTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -462px; /* orientation=lt */
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -462px; /* orientation=rt */
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .SeaGreenTag  {
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -462px; /* orientation=lt */
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -462px; /* orientation=rt */
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .SandyBrownTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -441px; /* orientation=lt */
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -441px; /* orientation=rt */
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .SandyBrownTag  {
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -441px; /* orientation=lt */
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -441px; /* orientation=rt */
 }
 
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .SalmonTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -399px; /* orientation=lt */
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -399px; /* orientation=rt */
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .SalmonTag  {
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -399px; /* orientation=lt */
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -399px; /* orientation=rt */
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .SaddleBrownTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -378px; /* orientation=lt */
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -378px; /* orientation=rt */
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .SaddleBrownTag  {
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -378px; /* orientation=lt */
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -378px; /* orientation=rt */
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .RoyalBlueTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -357px; /* orientation=lt */
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -357px; /* orientation=rt */
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .RoyalBlueTag  {
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -357px; /* orientation=lt */
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -357px; /* orientation=rt */
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .RosyBrownTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -336px; /* orientation=lt */
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -336px; /* orientation=rt */
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .RosyBrownTag  {
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -336px; /* orientation=lt */
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -336px; /* orientation=rt */
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .RedTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -315px; /* orientation=lt */
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -315px; /* orientation=rt */
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .RedTag  {
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -315px; /* orientation=lt */
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -315px; /* orientation=rt */
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PurpleTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -294px; /* orientation=lt */
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -294px; /* orientation=rt */
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PurpleTag  {
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -294px; /* orientation=lt */
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -294px; /* orientation=rt */
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PlumTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -273px; /* orientation=lt */
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -273px; /* orientation=rt */
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PlumTag  {
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -273px; /* orientation=lt */
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -273px; /* orientation=rt */
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PinkTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -252px; /* orientation=lt */
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -252px; /* orientation=rt */
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PinkTag  {
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -252px; /* orientation=lt */
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -252px; /* orientation=rt */
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PeruTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -231px; /* orientation=lt */
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -231px; /* orientation=rt */
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PeruTag  {
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -231px; /* orientation=lt */
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -231px; /* orientation=rt */
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PeachPuffTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -210px; /* orientation=lt */
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -210px; /* orientation=rt */
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PeachPuffTag  {
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -210px; /* orientation=lt */
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -210px; /* orientation=rt */
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PapayaWhipTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -189px; /* orientation=lt */
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -189px; /* orientation=rt */
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PapayaWhipTag  {
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -189px; /* orientation=lt */
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -189px; /* orientation=rt */
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PaleVioletRedTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -168px; /* orientation=lt */
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -168px; /* orientation=rt */
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PaleVioletRedTag  {
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -168px; /* orientation=lt */
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -168px; /* orientation=rt */
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PaleTurquoiseTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -147px; /* orientation=lt */
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -147px; /* orientation=rt */
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PaleTurquoiseTag  {
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -147px; /* orientation=lt */
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -147px; /* orientation=rt */
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .OrangeRedTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -126px; /* orientation=lt */
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -126px; /* orientation=rt */
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .OrangeRedTag  {
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -126px; /* orientation=lt */
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -126px; /* orientation=rt */
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .OliveDrabTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -105px; /* orientation=lt */
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -105px; /* orientation=rt */
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .OliveDrabTag  {
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -105px; /* orientation=lt */
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -105px; /* orientation=rt */
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .OliveTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -84px; /* orientation=lt */
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -84px; /* orientation=rt */
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .OliveTag  {
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -84px; /* orientation=lt */
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -84px; /* orientation=rt */
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PaleGreenTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -63px; /* orientation=lt */
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -63px; /* orientation=rt */
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PaleGreenTag  {
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -63px; /* orientation=lt */
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -63px; /* orientation=rt */
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PaleGoldenRodTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -42px; /* orientation=lt */
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -42px; /* orientation=rt */
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PaleGoldenRodTag  {
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -42px; /* orientation=lt */
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -42px; /* orientation=rt */
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .OrchidTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -21px; /* orientation=lt */
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -21px; /* orientation=rt */
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .OrchidTag  {
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -21px; /* orientation=lt */
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -21px; /* orientation=rt */
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PowderBlueTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px top; /* orientation=lt */
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% top; /* orientation=rt */
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PowderBlueTag  {
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px top; /* orientation=lt */
+  background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% top; /* orientation=rt */
 }
 
 .UIUserSelector .UISearch .UIAddressSearchForm .SearchIcon{
-	margin: 3px 4px;
-	width:24px;
+  margin: 3px 4px;
+  width:24px;
 }
 
 .UIUserSelector .UIAddressSearchForm .GroupInput{
-	width: 308px;
+  width: 308px;
 }
 
 /*----------------------- Create Clean  -------------------*/
 
 .UIContactPortlet .ClearContact{
-	clear: left; /* orientation=lt */
-	clear: right; /* orientation=rt */
+  clear: left; /* orientation=lt */
+  clear: right; /* orientation=rt */
 }
 
 .UIContactPortlet .ContactContainer .UISearchForm .ClearSearchForm{
-	clear: right; /* orientation=lt */
-	clear: left; /* orientation=rt */
+  clear: right; /* orientation=lt */
+  clear: left; /* orientation=rt */
 }
 
 .UIContactPortlet .UIGrid .UIHightLight {
-	background-color:#FFFFCC;	
+  background-color:#FFFFCC;  
 }
 
 .UIContactPortlet .UIVCardsContent .UIVcardHightLight {
-	border: solid 1px red;	
+  border: solid 1px red;  
 }
 
 .UIContactPortlet .SharedContact {
@@ -437,15 +437,15 @@
 } 
 /*AutoComplete Style*/
 .AutoCompleteMenu {
-	position:absolute;
-	border: solid 1px black;
-	background:white;
+  position:absolute;
+  border: solid 1px black;
+  background:white;
 }
 .AutoCompleteItem {
-	padding: 3px 3px 3px 1px;
+  padding: 3px 3px 3px 1px;
 }
 
 .AutoCompleteOver {
-	background: blue;
-	color:white;
+  background: blue;
+  color:white;
 }

@@ -1,497 +1,497 @@
 <% 
-	if (uicomponent.isPopup()) uiform.begin();
-	import java.util.LinkedHashMap;
-	import java.util.Map;
-	import org.exoplatform.contact.service.Contact;
-	import org.exoplatform.download.DownloadService;
-	import org.exoplatform.contact.ContactUtils;
-	import org.exoplatform.contact.webui.UIContacts;
-	import org.exoplatform.container.PortalContainer;
-	UIContacts uiContacts = null;
-	String compId = uicomponent.getId() ;
-	Contact contact = uicomponent.getContact();
-	import org.exoplatform.contact.service.ContactAttachment;
-	def rcontext = _ctx.getRequestContext() ;
+  if (uicomponent.isPopup()) uiform.begin();
+  import java.util.LinkedHashMap;
+  import java.util.Map;
+  import org.exoplatform.contact.service.Contact;
+  import org.exoplatform.download.DownloadService;
+  import org.exoplatform.contact.ContactUtils;
+  import org.exoplatform.contact.webui.UIContacts;
+  import org.exoplatform.container.PortalContainer;
+  UIContacts uiContacts = null;
+  String compId = uicomponent.getId() ;
+  Contact contact = uicomponent.getContact();
+  import org.exoplatform.contact.service.ContactAttachment;
+  def rcontext = _ctx.getRequestContext() ;
 %>
 
 <div class="UIContactPreview" id="<%=uicomponent.getId()%>">
-<% if(contact != null) { %>	
-	<% if (!uicomponent.isPopup()) { uiContacts = uicomponent.uiContacts(); %>
-	<div class="ContactPreviewBar" >
-		<div class="Subject"><%=_ctx.appRes("UIContactPreview.label.contactDetails")%></div>
-		<div class="MaximizeButton" title="<%=_ctx.appRes("UIContactPreview.label.viewFull")%>" onclick = "eXo.cs.Utils.showHidePane(this,document.getElementById('UIListUsers').parentNode,'<%=uicomponent.getId()%>')"><span></span></div>
-		<%
-		java.util.Date lastUpdated = contact.getLastUpdated()
-		if (lastUpdated != null) { 
-		%>
-			<span class="LastUpdated">				
-					<%=_ctx.appRes("UIContactPreview.label.lastUpdated")%> : <%=lastUpdated%>
-			</span>
-		<% } %>		
-		<div style="clear:both;"><span></span></div>
-	</div>
-	<div class="ContactPreviewDetails SpliterResizableListArea" id="<%=contact.getId()%>" type="<%=contact.getContactType()%>" havePermission="<%=uiContacts.havePermission(contact)%>" havePermissionAdd="<%=uiContacts.havePermissionAdd(contact)%>" isSharedAddress = "<%=uiContacts.isSharedAddress(contact)%>" isOwner="<%=contact.isOwner()%>">
-	<% } else { %>
-			<div class="ContactPreviewDetails">
-	<% } %>
+<% if(contact != null) { %>  
+  <% if (!uicomponent.isPopup()) { uiContacts = uicomponent.uiContacts(); %>
+  <div class="ContactPreviewBar" >
+    <div class="Subject"><%=_ctx.appRes("UIContactPreview.label.contactDetails")%></div>
+    <div class="MaximizeButton" title="<%=_ctx.appRes("UIContactPreview.label.viewFull")%>" onclick = "eXo.cs.Utils.showHidePane(this,document.getElementById('UIListUsers').parentNode,'<%=uicomponent.getId()%>')"><span></span></div>
+    <%
+    java.util.Date lastUpdated = contact.getLastUpdated()
+    if (lastUpdated != null) { 
+    %>
+      <span class="LastUpdated">        
+          <%=_ctx.appRes("UIContactPreview.label.lastUpdated")%> : <%=lastUpdated%>
+      </span>
+    <% } %>    
+    <div style="clear:both;"><span></span></div>
+  </div>
+  <div class="ContactPreviewDetails SpliterResizableListArea" id="<%=contact.getId()%>" type="<%=contact.getContactType()%>" havePermission="<%=uiContacts.havePermission(contact)%>" havePermissionAdd="<%=uiContacts.havePermissionAdd(contact)%>" isSharedAddress = "<%=uiContacts.isSharedAddress(contact)%>" isOwner="<%=contact.isOwner()%>">
+  <% } else { %>
+      <div class="ContactPreviewDetails">
+  <% } %>
 <!--  Start DecoratorBox ViewBoxStyle -->
-		<div class="DecoratorBox">
-			<div class="ViewBoxStyle">
-				<div class="TopLeftViewBoxStyle">
-					<div class="TopRightViewBoxStyle">
-						<div class="TopCenterViewBoxStyle"><span></span></div>										
-					</div>
-				</div>
-				<div class="MiddleLeftViewBoxStyle">
-					<div class="MiddleRightViewBoxStyle">
-						<div class="MiddleCenterViewBoxStyle">
-						
-							<div class="ContactPreviewContainer"	>		
-								<% 
-								stylePrint = "display:none;";
-								if (uicomponent.isPopup()) stylePrint = "";
-								String imageLink = "/contact/skin/DefaultSkin/webui/background/Img2.gif" ;
-								ContactAttachment att = contact.getAttachment() ;
-								if (att != null) {	
-									try {
-										imageLink = "/"+ PortalContainer.getInstance().getRestContextName() + "/private/jcr/" +uicomponent.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
-										imageLink = imageLink + "?rnd=" + System.currentTimeMillis();
-									} catch (Exception e) {}
-								}
-			  				%>
-								
-								<div class="InfoContainer"  style="padding:0px;">
-									<div class="Content" style="padding:0px;">
-										
-										<div class="LeftContentProfile" id="widthFirstProfileField" >
-											<table>
-												<tr>
-													<td width="20%">
-														<img src="$imageLink" width=63 height=81 class="Avatar"/>
-													</td>
-													<td style="padding-left:10px;">
-														
-														<div class="State"><%= ContactUtils.encodeHTML(contact.getFullName()) %></div>
-														<% if (!ContactUtils.isEmpty(contact.getJobTitle())) { %>
-																 <div class="Job"> <%= ContactUtils.encodeHTML(contact.getJobTitle()) %></div>
-														<% } %>
-														<% if (!ContactUtils.isEmpty(contact.getEmailAddress())) { %>
-															<% if (!uicomponent.isPopup() || !uicomponent.isPrintForm) { 
-																	 emailAdd = contact.getEmailAddress();
-																	 subEmail = emailAdd;
-															%>
-																 <div class="Job">
-																   <a title="$emailAdd" style="color:blue;border-bottom:1px solid blue;" href="<%=uicomponent.event("SendEmail", emailAdd)%>">
-																 	   <%= ContactUtils.encodeHTML(subEmail) %>
-																 	 </a>
-																 </div>
-															<%  rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactPortlet.fitStringToWidth('widthFirstProfileField','$emailAdd',1) ;") ;														
-																} else { %>
-																		<div class="Job" >	
-																 	   <%= ContactUtils.encodeHTML(contact.getEmailAddress()) %>
-																 		</div>
-															<% } %>
-														<% } %>
-														<%
-															 Map<String, String> phones = ContactUtils.getPhones(contact);
-															 if (phones.size() > 0) {
-															   workLabel = "UIContactPreview.label." + phones.get(phones.keySet().iterator().next());
-														%>
-																 <div class="Job"> <%= ContactUtils.encodeHTML(phones.keySet().iterator().next()) %>&nbsp;<span style="color:#B5B6B6"><%=_ctx.appRes(workLabel)%></span></div>
-														<% } %>
-																	
-													</td>
-												</tr>
-											</table>
-										</div>
+    <div class="DecoratorBox">
+      <div class="ViewBoxStyle">
+        <div class="TopLeftViewBoxStyle">
+          <div class="TopRightViewBoxStyle">
+            <div class="TopCenterViewBoxStyle"><span></span></div>                    
+          </div>
+        </div>
+        <div class="MiddleLeftViewBoxStyle">
+          <div class="MiddleRightViewBoxStyle">
+            <div class="MiddleCenterViewBoxStyle">
+            
+              <div class="ContactPreviewContainer"  >    
+                <% 
+                stylePrint = "display:none;";
+                if (uicomponent.isPopup()) stylePrint = "";
+                String imageLink = "/contact/skin/DefaultSkin/webui/background/Img2.gif" ;
+                ContactAttachment att = contact.getAttachment() ;
+                if (att != null) {  
+                  try {
+                    imageLink = "/"+ PortalContainer.getInstance().getRestContextName() + "/private/jcr/" +uicomponent.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
+                    imageLink = imageLink + "?rnd=" + System.currentTimeMillis();
+                  } catch (Exception e) {}
+                }
+                %>
+                
+                <div class="InfoContainer"  style="padding:0px;">
+                  <div class="Content" style="padding:0px;">
+                    
+                    <div class="LeftContentProfile" id="widthFirstProfileField" >
+                      <table>
+                        <tr>
+                          <td width="20%">
+                            <img src="$imageLink" width=63 height=81 class="Avatar"/>
+                          </td>
+                          <td style="padding-left:10px;">
+                            
+                            <div class="State"><%= ContactUtils.encodeHTML(contact.getFullName()) %></div>
+                            <% if (!ContactUtils.isEmpty(contact.getJobTitle())) { %>
+                                 <div class="Job"> <%= ContactUtils.encodeHTML(contact.getJobTitle()) %></div>
+                            <% } %>
+                            <% if (!ContactUtils.isEmpty(contact.getEmailAddress())) { %>
+                              <% if (!uicomponent.isPopup() || !uicomponent.isPrintForm) { 
+                                   emailAdd = contact.getEmailAddress();
+                                   subEmail = emailAdd;
+                              %>
+                                 <div class="Job">
+                                   <a title="$emailAdd" style="color:blue;border-bottom:1px solid blue;" href="<%=uicomponent.event("SendEmail", emailAdd)%>">
+                                      <%= ContactUtils.encodeHTML(subEmail) %>
+                                    </a>
+                                 </div>
+                              <%  rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactPortlet.fitStringToWidth('widthFirstProfileField','$emailAdd',1) ;") ;                            
+                                } else { %>
+                                    <div class="Job" >  
+                                      <%= ContactUtils.encodeHTML(contact.getEmailAddress()) %>
+                                     </div>
+                              <% } %>
+                            <% } %>
+                            <%
+                               Map<String, String> phones = ContactUtils.getPhones(contact);
+                               if (phones.size() > 0) {
+                                 workLabel = "UIContactPreview.label." + phones.get(phones.keySet().iterator().next());
+                            %>
+                                 <div class="Job"> <%= ContactUtils.encodeHTML(phones.keySet().iterator().next()) %>&nbsp;<span style="color:#B5B6B6"><%=_ctx.appRes(workLabel)%></span></div>
+                            <% } %>
+                                  
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
                     <div class="CenterContentProfile" id="widthFirstProfileField1" style="padding-left:2px;">
-                    	<div style="font-style:italic;">
-                    		 <% if (contact.getBirthday() != null){ %>
-                    		 <%= ContactUtils.getAge(contact) %> &nbsp; <%=_ctx.appRes("UIContactPreview.label.yearsOld")%>,
-                    		 <% } %>
-                    		 <% if (contact.getGender() != null) { %>
-                    		  <%=_ctx.appRes("UIContactPreview.label."+contact.getGender()) %>
-                    		  <% } %>
-                    	</div>	  
-                    	<% if (!ContactUtils.isEmpty(contact.getNickName())) { %> 
-                    		<div><%=_ctx.appRes("UIContactPreview.label.alsoKnownAs")%>&nbsp;<span style="font-style:italic;"><%= ContactUtils.encodeHTML(contact.getNickName())%></span></div>	
-                    	<% } %>
-                    	<% 
+                      <div style="font-style:italic;">
+                         <% if (contact.getBirthday() != null){ %>
+                         <%= ContactUtils.getAge(contact) %> &nbsp; <%=_ctx.appRes("UIContactPreview.label.yearsOld")%>,
+                         <% } %>
+                         <% if (contact.getGender() != null) { %>
+                          <%=_ctx.appRes("UIContactPreview.label."+contact.getGender()) %>
+                          <% } %>
+                      </div>    
+                      <% if (!ContactUtils.isEmpty(contact.getNickName())) { %> 
+                        <div><%=_ctx.appRes("UIContactPreview.label.alsoKnownAs")%>&nbsp;<span style="font-style:italic;"><%= ContactUtils.encodeHTML(contact.getNickName())%></span></div>  
+                      <% } %>
+                      <% 
                       email = ContactUtils.listToString(contact.getEmailAddresses()) ;
                       if (!ContactUtils.isEmpty(email) && (Arrays.asList(email.split(";")).size() > 1)){
                         List<String> emails = new ArrayList<String>() ;
-                      	emails.addAll(Arrays.asList(email.split(";"))) ;
-                      	emailAdd = emails.get(1);
-											  subEmail = emailAdd;
-											  
+                        emails.addAll(Arrays.asList(email.split(";"))) ;
+                        emailAdd = emails.get(1);
+                        subEmail = emailAdd;
+                        
                       %>
-                    	<div style="padding-top:5px;">
-                    		<table>
-                    			<tr>
-                    				<td style="padding-left:0px;"><%=_ctx.appRes("UIContactPreview.label.email")%></td>
-                    				<td style="padding-left:2px;">
-                    					<a title="$emailAdd" style="border-bottom:1px solid blue;" border-bottom:1px solid blue; href="<%=uicomponent.event("SendEmail", emailAdd)%>">
-				                      	<%= subEmail %>
-				                      </a>
-				                    </td>
-                    			</tr>
-                    		<% 
-                    			if (!uicomponent.isPopup() || !uicomponent.isPrintForm) 
-                    				rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactPortlet.fitStringToWidth('widthFirstProfileField1','$emailAdd',1) ;") ;                    		
-                    		 %>                    			
-                    	<% if (emails.size() > 2) { %>                    	                   	
-                    	<%                  		
+                      <div style="padding-top:5px;">
+                        <table>
+                          <tr>
+                            <td style="padding-left:0px;"><%=_ctx.appRes("UIContactPreview.label.email")%></td>
+                            <td style="padding-left:2px;">
+                              <a title="$emailAdd" style="border-bottom:1px solid blue;" border-bottom:1px solid blue; href="<%=uicomponent.event("SendEmail", emailAdd)%>">
+                                <%= subEmail %>
+                              </a>
+                            </td>
+                          </tr>
+                        <% 
+                          if (!uicomponent.isPopup() || !uicomponent.isPrintForm) 
+                            rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactPortlet.fitStringToWidth('widthFirstProfileField1','$emailAdd',1) ;") ;                        
+                         %>                          
+                      <% if (emails.size() > 2) { %>                                           
+                      <%                      
                         for (i = 2; i < emails.size(); i++) {
-                        	emailAdd = emails.get(i);
-											  	subEmail = emailAdd;
-			                %>
-                    			<tr class="HideEmailAddress" style="$stylePrint">
-                    				<td><span></span></td>
-                    				<td style="padding-left:2px;">
-                    					<a title="$emailAdd" style="border-bottom:1px solid blue;" href="<%=uicomponent.event("SendEmail", emailAdd)%>">
-                    						$subEmail
-                    					</a>
-                    				</td>
-                    			</tr>
-                    			<% 
-                    			if (!uicomponent.isPopup() || !uicomponent.isPrintForm) 
-                    				rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactPortlet.fitStringToWidth('widthFirstProfileField1','$emailAdd',$i) ;") ;                    		
-                    		 %>
-                    			
-                    			<%  } %>
-                    			<% if (!uicomponent.isPopup()) { %>
-                    			<tr class="ShowMore">
-                    				<td><span></span></td>
-                    				<td style="padding-left:10px;">
-                    					<a style="cursor:pointer;border-bottom:1px solid blue;" onclick="eXo.contact.UIContactPortlet.showHideInfo(this);">
-                    						<%= emails.size()-2 %>&nbsp;<%=_ctx.appRes("UIContactPreview.label.more")%>
-                    					</a>
-                    				</td>
-                    			</tr>
-                    			<tr class="Hide" style="display:none;">
-                    				<td><span></span></td>
-                    				<td style="padding-left:10px;">
-                    					<a style="border-bottom:1px solid blue;cursor:pointer;" onclick="eXo.contact.UIContactPortlet.showHideInfo(this);">
-                    						<%=_ctx.appRes("UIContactPreview.label.hide")%>
-                    					</a>
-                    				</td>
-                    			</tr>
-                    			<% } %>
-                    			
-                    			<% } %>
-                    		</table>
-                    	</div>
-                    	<% } %>
+                          emailAdd = emails.get(i);
+                          subEmail = emailAdd;
+                      %>
+                          <tr class="HideEmailAddress" style="$stylePrint">
+                            <td><span></span></td>
+                            <td style="padding-left:2px;">
+                              <a title="$emailAdd" style="border-bottom:1px solid blue;" href="<%=uicomponent.event("SendEmail", emailAdd)%>">
+                                $subEmail
+                              </a>
+                            </td>
+                          </tr>
+                          <% 
+                          if (!uicomponent.isPopup() || !uicomponent.isPrintForm) 
+                            rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactPortlet.fitStringToWidth('widthFirstProfileField1','$emailAdd',$i) ;") ;                        
+                         %>
+                          
+                          <%  } %>
+                          <% if (!uicomponent.isPopup()) { %>
+                          <tr class="ShowMore">
+                            <td><span></span></td>
+                            <td style="padding-left:10px;">
+                              <a style="cursor:pointer;border-bottom:1px solid blue;" onclick="eXo.contact.UIContactPortlet.showHideInfo(this);">
+                                <%= emails.size()-2 %>&nbsp;<%=_ctx.appRes("UIContactPreview.label.more")%>
+                              </a>
+                            </td>
+                          </tr>
+                          <tr class="Hide" style="display:none;">
+                            <td><span></span></td>
+                            <td style="padding-left:10px;">
+                              <a style="border-bottom:1px solid blue;cursor:pointer;" onclick="eXo.contact.UIContactPortlet.showHideInfo(this);">
+                                <%=_ctx.appRes("UIContactPreview.label.hide")%>
+                              </a>
+                            </td>
+                          </tr>
+                          <% } %>
+                          
+                          <% } %>
+                        </table>
+                      </div>
+                      <% } %>
                     </div>
                     <div class="RightContentProfile">
-                    	<% if (ContactUtils.getIMs(contact).keySet().size() > 0) { boolean hadIm = false; %>
-                    	<div>
-                    		<table>
-                    			<tr>
-                    				<td style="padding-left:0px;"><%=_ctx.appRes("UIContactPreview.label.im")%></td>
-                    		
-                    		<% if (!ContactUtils.isEmpty(contact.getExoId())) { hadIm = true; %>                    		
-                    				<td style="padding-left:0px;">
-                    					<%= ContactUtils.encodeHTML(contact.getExoId()) %>
-                    					<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.exoChat")%></span>
-                    				</td>
-                    			</tr>
-                    		<% } %>
+                      <% if (ContactUtils.getIMs(contact).keySet().size() > 0) { boolean hadIm = false; %>
+                      <div>
+                        <table>
+                          <tr>
+                            <td style="padding-left:0px;"><%=_ctx.appRes("UIContactPreview.label.im")%></td>
+                        
+                        <% if (!ContactUtils.isEmpty(contact.getExoId())) { hadIm = true; %>                        
+                            <td style="padding-left:0px;">
+                              <%= ContactUtils.encodeHTML(contact.getExoId()) %>
+                              <span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.exoChat")%></span>
+                            </td>
+                          </tr>
+                        <% } %>
                         <% if (!ContactUtils.isEmpty(contact.getGoogleId())) { %>
-                    			<% if (hadIm) { %>
-                    			<tr  class="HideEmailAddress" style="$stylePrint">
-                    				<td><span></span></td>
-                    			<% } %>
-                    				<td style="padding-left:0px;">
-                    					<%= ContactUtils.encodeHTML(contact.getGoogleId())%>
-                    					<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.google")%></span>
-                    				</td>
-                    			</tr>
-                    			<%   hadIm = true; } %>
+                          <% if (hadIm) { %>
+                          <tr  class="HideEmailAddress" style="$stylePrint">
+                            <td><span></span></td>
+                          <% } %>
+                            <td style="padding-left:0px;">
+                              <%= ContactUtils.encodeHTML(contact.getGoogleId())%>
+                              <span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.google")%></span>
+                            </td>
+                          </tr>
+                          <%   hadIm = true; } %>
                           <% if (!ContactUtils.isEmpty(contact.getMsnId())) {  %>
-                          	<% if (hadIm) { %>
-                    			<tr class="HideEmailAddress" style="$stylePrint">
-                    				<td><span></span></td>
-                    				<% } %>
-                    				<td style="padding-left:0px;">                    				
-                    					<%= ContactUtils.encodeHTML(contact.getMsnId())%>
-															<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.msn")%></span>                  				
-                    				</td>
-                    			</tr>
-                    			<%  hadIm = true; } %>
+                            <% if (hadIm) { %>
+                          <tr class="HideEmailAddress" style="$stylePrint">
+                            <td><span></span></td>
+                            <% } %>
+                            <td style="padding-left:0px;">                            
+                              <%= ContactUtils.encodeHTML(contact.getMsnId())%>
+                              <span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.msn")%></span>                          
+                            </td>
+                          </tr>
+                          <%  hadIm = true; } %>
                           <% if (!ContactUtils.isEmpty(contact.getAolId())) {  %>
-                          	<% if (hadIm) { %>
-                    			<tr class="HideEmailAddress" style="$stylePrint">
-                    				<td><span></span></td>
-                    				<% } %>
-                    				<td style="padding-left:0px;">
-                    					<%= ContactUtils.encodeHTML(contact.getAolId())%>
-                    					<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.aol-aim")%></span>
-                    				</td>
-                    			</tr>
-                    			<%  hadIm = true; } %>
+                            <% if (hadIm) { %>
+                          <tr class="HideEmailAddress" style="$stylePrint">
+                            <td><span></span></td>
+                            <% } %>
+                            <td style="padding-left:0px;">
+                              <%= ContactUtils.encodeHTML(contact.getAolId())%>
+                              <span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.aol-aim")%></span>
+                            </td>
+                          </tr>
+                          <%  hadIm = true; } %>
                           <% if (!ContactUtils.isEmpty(contact.getYahooId())) {%>
-                          	<% if (hadIm) { %>
-                    			<tr class="HideEmailAddress" style="$stylePrint">
-                    				<td><span></span></td>
-                    				<% } %>
-                    				<td style="padding-left:0px;">
-                    					<%= ContactUtils.encodeHTML(contact.getYahooId())%>
-                    					<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.yahoo")%></span>	
-                    				</td>
-                    			</tr>
-                    			<%   hadIm = true; } %>
+                            <% if (hadIm) { %>
+                          <tr class="HideEmailAddress" style="$stylePrint">
+                            <td><span></span></td>
+                            <% } %>
+                            <td style="padding-left:0px;">
+                              <%= ContactUtils.encodeHTML(contact.getYahooId())%>
+                              <span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.yahoo")%></span>  
+                            </td>
+                          </tr>
+                          <%   hadIm = true; } %>
                           <% if (!ContactUtils.isEmpty(contact.getIcrId())) { %>
-                          	<% if (hadIm) { %>
-                    			<tr class="HideEmailAddress" style="$stylePrint">
-                    				<td><span></span></td>
-                    				<% } %>
-                    				<td style="padding-left:0px;">
-                    					<%= ContactUtils.encodeHTML(contact.getIcrId())%>
-                    					<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.icr")%></span>
-                    				</td>
-                    			</tr>                    			
-                    			<%  hadIm = true;  } %>
+                            <% if (hadIm) { %>
+                          <tr class="HideEmailAddress" style="$stylePrint">
+                            <td><span></span></td>
+                            <% } %>
+                            <td style="padding-left:0px;">
+                              <%= ContactUtils.encodeHTML(contact.getIcrId())%>
+                              <span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.icr")%></span>
+                            </td>
+                          </tr>                          
+                          <%  hadIm = true;  } %>
                           <% if (!ContactUtils.isEmpty(contact.getSkypeId())) {%>
-                          	<% if (hadIm) { %>
-                    			<tr class="HideEmailAddress" style="$stylePrint">
-                    				<td><span></span></td>
-                    				<% } %>
-                    				<td style="padding-left:0px;">
-                    					<%= ContactUtils.encodeHTML(contact.getSkypeId())%>
-                    					<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.skype")%></span>
-                    				</td>
-                    			</tr>                    			
-                    			<%   hadIm = true;  } %>
+                            <% if (hadIm) { %>
+                          <tr class="HideEmailAddress" style="$stylePrint">
+                            <td><span></span></td>
+                            <% } %>
+                            <td style="padding-left:0px;">
+                              <%= ContactUtils.encodeHTML(contact.getSkypeId())%>
+                              <span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.skype")%></span>
+                            </td>
+                          </tr>                          
+                          <%   hadIm = true;  } %>
                           <% if (!ContactUtils.isEmpty(contact.getIcqId())) { %>
-                          	<% if (hadIm) { %>
-                    			<tr class="HideEmailAddress" style="$stylePrint">
-                    				<td><span></span></td>
-                    				<% } %>
-                    				<td style="padding-left:0px;">
-                    					<%= ContactUtils.encodeHTML(contact.getIcqId())%>
-                    					<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.icq")%></span>	
-                    				</td>
-                    			</tr>
-                    			<% } %>
-                    			<% if ((ContactUtils.getIMs(contact).keySet().size() > 1) && !uicomponent.isPopup()) { %>
-                    			<tr class="ShowMore">
-                    				<td><span></span></td>
-                    				<td style="padding-left:10px;">
-                    					<a style="cursor:pointer;border-bottom:1px solid blue;" onclick="eXo.contact.UIContactPortlet.showHideInfo(this);">
-                    						<%= ContactUtils.getIMs(contact).keySet().size() - 1 %>&nbsp;<%=_ctx.appRes("UIContactPreview.label.more")%>
-                    					</a>
-                    				</td>
-                    			</tr>
-                    			<tr class="Hide" style="display:none;">
-                    				<td><span></span></td>
-                    				<td style="padding-left:10px;">
-                    					<a style="border-bottom:1px solid blue;cursor:pointer;" onclick="eXo.contact.UIContactPortlet.showHideInfo(this);">
-                    						<%=_ctx.appRes("UIContactPreview.label.hide")%>
-                    					</a>
-                    				</td>
-                    			</tr>
-                    			<% } %>
-                    		</table>
-                    	</div>
-                    	<% } %>
+                            <% if (hadIm) { %>
+                          <tr class="HideEmailAddress" style="$stylePrint">
+                            <td><span></span></td>
+                            <% } %>
+                            <td style="padding-left:0px;">
+                              <%= ContactUtils.encodeHTML(contact.getIcqId())%>
+                              <span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.icq")%></span>  
+                            </td>
+                          </tr>
+                          <% } %>
+                          <% if ((ContactUtils.getIMs(contact).keySet().size() > 1) && !uicomponent.isPopup()) { %>
+                          <tr class="ShowMore">
+                            <td><span></span></td>
+                            <td style="padding-left:10px;">
+                              <a style="cursor:pointer;border-bottom:1px solid blue;" onclick="eXo.contact.UIContactPortlet.showHideInfo(this);">
+                                <%= ContactUtils.getIMs(contact).keySet().size() - 1 %>&nbsp;<%=_ctx.appRes("UIContactPreview.label.more")%>
+                              </a>
+                            </td>
+                          </tr>
+                          <tr class="Hide" style="display:none;">
+                            <td><span></span></td>
+                            <td style="padding-left:10px;">
+                              <a style="border-bottom:1px solid blue;cursor:pointer;" onclick="eXo.contact.UIContactPortlet.showHideInfo(this);">
+                                <%=_ctx.appRes("UIContactPreview.label.hide")%>
+                              </a>
+                            </td>
+                          </tr>
+                          <% } %>
+                        </table>
+                      </div>
+                      <% } %>
 
-                    	<% 
-                    		int sizePhones = phones.keySet().size();
-                    		if (sizePhones > 1) {
-                    			boolean hadPhone = false;                    	
-                    	%>
-                    	
-                    		<div>
-                    		<table>
-                    			<tr>
-                    				<td style="padding-left:0px;"><%=_ctx.appRes("UIContactPreview.label.phoneTitle")%></td>
+                      <% 
+                        int sizePhones = phones.keySet().size();
+                        if (sizePhones > 1) {
+                          boolean hadPhone = false;                      
+                      %>
+                      
+                        <div>
+                        <table>
+                          <tr>
+                            <td style="padding-left:0px;"><%=_ctx.appRes("UIContactPreview.label.phoneTitle")%></td>
                           <% if (!ContactUtils.isEmpty(contact.getWorkPhone2())&& (!contact.getWorkPhone2().equals(phones.keySet().iterator().next()))) { %>
-                    				<td style="padding-left:2px;">                    				
-                    					<%= ContactUtils.encodeHTML(contact.getWorkPhone2())%>
-															<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.work")%></span>                  				
-                    				</td>
-                    			</tr>
-                    			<%  hadPhone = true;  } %>
-                    			<% if (!ContactUtils.isEmpty(contact.getMobilePhone())&& (!contact.getMobilePhone().equals(phones.keySet().iterator().next()))) { %>
-                          	<% if (hadPhone) { %>
-                    			<tr class="HideEmailAddress" style="$stylePrint">
-                    				<td><span></span></td>
-                    				<% } %>
-                    				<td style="padding-left:2px;">
-                    					<%= ContactUtils.encodeHTML(contact.getMobilePhone())%>
-                    					<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.work")%></span>	
-                    				</td>
-                    			</tr>
-                    			<%  hadPhone = true;  } %>
+                            <td style="padding-left:2px;">                            
+                              <%= ContactUtils.encodeHTML(contact.getWorkPhone2())%>
+                              <span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.work")%></span>                          
+                            </td>
+                          </tr>
+                          <%  hadPhone = true;  } %>
+                          <% if (!ContactUtils.isEmpty(contact.getMobilePhone())&& (!contact.getMobilePhone().equals(phones.keySet().iterator().next()))) { %>
+                            <% if (hadPhone) { %>
+                          <tr class="HideEmailAddress" style="$stylePrint">
+                            <td><span></span></td>
+                            <% } %>
+                            <td style="padding-left:2px;">
+                              <%= ContactUtils.encodeHTML(contact.getMobilePhone())%>
+                              <span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.work")%></span>  
+                            </td>
+                          </tr>
+                          <%  hadPhone = true;  } %>
                           <% if (!ContactUtils.isEmpty(contact.getHomePhone1())&& (!contact.getHomePhone1().equals(phones.keySet().iterator().next()))) {  %>
-                          	<% if (hadPhone) { %>
-                    			<tr class="HideEmailAddress" style="$stylePrint">
-                    				<td><span></span></td>
-                    				<% } %>
-                    				<td style="padding-left:2px;">
-                    					<%= ContactUtils.encodeHTML(contact.getHomePhone1())%>
-                    					<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.home")%></span>
-                    				</td>
-                    			</tr>
-                    			<%  hadPhone = true; } %>
+                            <% if (hadPhone) { %>
+                          <tr class="HideEmailAddress" style="$stylePrint">
+                            <td><span></span></td>
+                            <% } %>
+                            <td style="padding-left:2px;">
+                              <%= ContactUtils.encodeHTML(contact.getHomePhone1())%>
+                              <span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.home")%></span>
+                            </td>
+                          </tr>
+                          <%  hadPhone = true; } %>
                           <% if (!ContactUtils.isEmpty(contact.getHomePhone2())&& (!contact.getHomePhone2().equals(phones.keySet().iterator().next()))) { %>
-                          	<% if (hadPhone) { %>
-                    			<tr class="HideEmailAddress" style="$stylePrint">
-                    				<td><span></span></td>
-                    				<% } %>
-                    				<td style="padding-left:2px;">
-                    					<%= ContactUtils.encodeHTML(contact.getHomePhone2())%>
-                    					<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.home")%></span>	
-                    				</td>
-                    			</tr>
-                    			<%  hadPhone = true;  } %>                                
-                                       			
-                    			<% if ((sizePhones > 2) && !uicomponent.isPopup()) { %>
-                    			<tr class="ShowMore">
-                    				<td><span></span></td>
-                    				<td style="padding-left:10px;">
-                    					<a style="cursor:pointer;border-bottom:1px solid blue;" onclick="eXo.contact.UIContactPortlet.showHideInfo(this);">
-                    						<%= sizePhones - 2 %>&nbsp;<%=_ctx.appRes("UIContactPreview.label.more")%>
-                    					</a>
-                    				</td>
-                    			</tr>
-                    			<tr class="Hide" style="display:none;">
-                    				<td><span></span></td>
-                    				<td style="padding-left:10px;">
-                    					<a style="border-bottom:1px solid blue;cursor:pointer;" onclick="eXo.contact.UIContactPortlet.showHideInfo(this);">
-                    						<%=_ctx.appRes("UIContactPreview.label.hide")%>
-                    					</a>
-                    				</td>
-                    			</tr>
-                    			<% } %>
-                    		
-                    		</table>
-                    	</div>
-                    	
-                    	<% } %>
+                            <% if (hadPhone) { %>
+                          <tr class="HideEmailAddress" style="$stylePrint">
+                            <td><span></span></td>
+                            <% } %>
+                            <td style="padding-left:2px;">
+                              <%= ContactUtils.encodeHTML(contact.getHomePhone2())%>
+                              <span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.home")%></span>  
+                            </td>
+                          </tr>
+                          <%  hadPhone = true;  } %>                                
+                                             
+                          <% if ((sizePhones > 2) && !uicomponent.isPopup()) { %>
+                          <tr class="ShowMore">
+                            <td><span></span></td>
+                            <td style="padding-left:10px;">
+                              <a style="cursor:pointer;border-bottom:1px solid blue;" onclick="eXo.contact.UIContactPortlet.showHideInfo(this);">
+                                <%= sizePhones - 2 %>&nbsp;<%=_ctx.appRes("UIContactPreview.label.more")%>
+                              </a>
+                            </td>
+                          </tr>
+                          <tr class="Hide" style="display:none;">
+                            <td><span></span></td>
+                            <td style="padding-left:10px;">
+                              <a style="border-bottom:1px solid blue;cursor:pointer;" onclick="eXo.contact.UIContactPortlet.showHideInfo(this);">
+                                <%=_ctx.appRes("UIContactPreview.label.hide")%>
+                              </a>
+                            </td>
+                          </tr>
+                          <% } %>
+                        
+                        </table>
+                      </div>
+                      
+                      <% } %>
                     </div>
                     <div style="clear: left;"><span></span></div>
                   </div>
-								</div>
+                </div>
 
-								<div class="ClearContact"><span></span></div>
-														
-								<div class="InfoContainer">
-									<div class="TitleInfo">
-										<table>
-											<tr>
-												<td width="50%"><%=_ctx.appRes("UIContactPreview.label.workTitle")%></td>
-												<td style="padding-left:10px;"><%=_ctx.appRes("UIContactPreview.label.homeTitle")%></td>
-											</tr>
-										</table>		
-									</div>									
-									  <div class="Content">
+                <div class="ClearContact"><span></span></div>
+                            
+                <div class="InfoContainer">
+                  <div class="TitleInfo">
+                    <table>
+                      <tr>
+                        <td width="50%"><%=_ctx.appRes("UIContactPreview.label.workTitle")%></td>
+                        <td style="padding-left:10px;"><%=_ctx.appRes("UIContactPreview.label.homeTitle")%></td>
+                      </tr>
+                    </table>    
+                  </div>                  
+                    <div class="Content">
                       <div class="LeftContent">
                         <table>
                           <% if (!ContactUtils.isEmpty(contact.getWorkAddress()) || !ContactUtils.isEmpty(contact.getWorkPostalCode()) || !ContactUtils.isEmpty(contact.getWorkCity())) { %>
                           <tr>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
-			                          <tr>
-			                            <td>
+                              <table class="InfoTitle2" >
+                                <tr>
+                                  <td>
                                     <div class="InfoTitle3">
                                     <% if (!ContactUtils.isEmpty(contact.getWorkAddress())) { %>
-                                    	<%= ContactUtils.encodeHTML(contact.getWorkAddress()) %>&nbsp;-
+                                      <%= ContactUtils.encodeHTML(contact.getWorkAddress()) %>&nbsp;-
                                     <% } %>
                                     <% if (!ContactUtils.isEmpty(contact.getWorkPostalCode())) { %>
-                                    	<%= ContactUtils.encodeHTML(contact.getWorkPostalCode()) %>&nbsp;-
-                                    <% } %>	
+                                      <%= ContactUtils.encodeHTML(contact.getWorkPostalCode()) %>&nbsp;-
+                                    <% } %>  
                                     <% if (!ContactUtils.isEmpty(contact.getWorkCity())) { %>
-                                    	<%= ContactUtils.encodeHTML(contact.getWorkCity()) %>
+                                      <%= ContactUtils.encodeHTML(contact.getWorkCity()) %>
                                     <% } %>
                                     </div>
                                   </td>
-			                          </tr>
-			                        </table>
+                                </tr>
+                              </table>
                             </td>
                           </tr>
                           <% } %>
                           <% if (!ContactUtils.isEmpty(contact.getWorkStateProvince()) || !ContactUtils.isEmpty(contact.getWorkCountry())) { %>
                           <tr>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
-			                          <tr>
-			                            <td>
+                              <table class="InfoTitle2" >
+                                <tr>
+                                  <td>
                                     <div class="InfoTitle3">
                                     <% if (!ContactUtils.isEmpty(contact.getWorkStateProvince())) { %>
-                                    	<%= ContactUtils.encodeHTML(contact.getWorkStateProvince()) %>&nbsp;-
+                                      <%= ContactUtils.encodeHTML(contact.getWorkStateProvince()) %>&nbsp;-
                                     <% } %>
                                     <% if (!ContactUtils.isEmpty(contact.getWorkCountry())) { %>
-                                    	<%= ContactUtils.encodeHTML(contact.getWorkCountry()) %>
+                                      <%= ContactUtils.encodeHTML(contact.getWorkCountry()) %>
                                     <% } %>
                                     </div>
                                   </td>
-			                          </tr>
-			                        </table>
+                                </tr>
+                              </table>
                             </td>
                           </tr>
                           <% } %>
                           <% if (!ContactUtils.isEmpty(contact.getWorkPhone1()) || !ContactUtils.isEmpty(contact.getWorkPhone2()) || !ContactUtils.isEmpty(contact.getMobilePhone())) { %>
                           <tr>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
-			                          <% if (!ContactUtils.isEmpty(contact.getWorkPhone1())) { %>
-			                          <tr>
-			                            <td>
+                              <table class="InfoTitle2" >
+                                <% if (!ContactUtils.isEmpty(contact.getWorkPhone1())) { %>
+                                <tr>
+                                  <td>
                                     <div class="InfoTitle3">                                    
-                                    	<%= ContactUtils.encodeHTML(contact.getWorkPhone1()) %>&nbsp;<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.phone")%></span>
+                                      <%= ContactUtils.encodeHTML(contact.getWorkPhone1()) %>&nbsp;<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.phone")%></span>
                                     </div>
                                   </td>
-			                          </tr>
-			                          <% } %>
-			                          
-			                          <% if (!ContactUtils.isEmpty(contact.getWorkPhone2())) { %>
-			                          <tr>
-			                            <td>
+                                </tr>
+                                <% } %>
+                                
+                                <% if (!ContactUtils.isEmpty(contact.getWorkPhone2())) { %>
+                                <tr>
+                                  <td>
                                     <div class="InfoTitle3">
-                                    	<%= ContactUtils.encodeHTML(contact.getWorkPhone2()) %>&nbsp;<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.phone")%></span>
+                                      <%= ContactUtils.encodeHTML(contact.getWorkPhone2()) %>&nbsp;<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.phone")%></span>
                                     </div>
                                   </td>
-			                          </tr>
-			                          <% } %>
-			                          
-			                          <% if (!ContactUtils.isEmpty(contact.getMobilePhone())) { %>
-			                          <tr>
-			                            <td>
+                                </tr>
+                                <% } %>
+                                
+                                <% if (!ContactUtils.isEmpty(contact.getMobilePhone())) { %>
+                                <tr>
+                                  <td>
                                     <div class="InfoTitle3">
-                                    	<%= ContactUtils.encodeHTML(contact.getMobilePhone()) %>&nbsp;<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.mobile")%></span>
+                                      <%= ContactUtils.encodeHTML(contact.getMobilePhone()) %>&nbsp;<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.mobile")%></span>
                                     </div>
                                   </td>
-			                          </tr>
-			                          <% } %>
-			                          
-			                        </table>
+                                </tr>
+                                <% } %>
+                                
+                              </table>
                             </td>
                           </tr>
                           <% } %>
                           <% if (!ContactUtils.isEmpty(contact.getWorkFax())) { %>
                           <tr>                          
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
-			                          <tr>
-			                            <td><div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getWorkFax()) %>&nbsp;<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.fax")%></span></div></td>
-			                          </tr>
-			                        </table>
-			                      </td>
+                              <table class="InfoTitle2" >
+                                <tr>
+                                  <td><div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getWorkFax()) %>&nbsp;<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.fax")%></span></div></td>
+                                </tr>
+                              </table>
+                            </td>
                           </tr>
                           <% } %>
                           <% if (!ContactUtils.isEmpty(contact.getWebPage())) { %>
                           <tr>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
-			                          <tr>
-			                            <td>
-			                              <div class="InfoTitle3"><a target="_blank" href="<%= contact.getWebPage() %>"><%= ContactUtils.encodeHTML(contact.getWebPage())%></a></div>
-			                            </td>
-			                          </tr>
-			                        </table>
-			                      </td>
+                              <table class="InfoTitle2" >
+                                <tr>
+                                  <td>
+                                    <div class="InfoTitle3"><a target="_blank" href="<%= contact.getWebPage() %>"><%= ContactUtils.encodeHTML(contact.getWebPage())%></a></div>
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>
                           </tr>
                           <% } %>
                           
@@ -503,99 +503,99 @@
                           <% if (!ContactUtils.isEmpty(contact.getHomeAddress()) || !ContactUtils.isEmpty(contact.getHomePostalCode()) || !ContactUtils.isEmpty(contact.getHomeCity())) { %>
                           <tr>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
-			                          <tr>
-			                            <td>
+                              <table class="InfoTitle2" >
+                                <tr>
+                                  <td>
                                     <div class="InfoTitle3">
                                     <% if (!ContactUtils.isEmpty(contact.getHomeAddress())) { %>
-                                    	<%= ContactUtils.encodeHTML(contact.getHomeAddress()) %>&nbsp;-
+                                      <%= ContactUtils.encodeHTML(contact.getHomeAddress()) %>&nbsp;-
                                     <% } %>
                                     <% if (!ContactUtils.isEmpty(contact.getHomePostalCode())) { %>
-                                    	<%= ContactUtils.encodeHTML(contact.getHomePostalCode()) %>&nbsp;-
-                                    <% } %>	
+                                      <%= ContactUtils.encodeHTML(contact.getHomePostalCode()) %>&nbsp;-
+                                    <% } %>  
                                     <% if (!ContactUtils.isEmpty(contact.getHomeCity())) { %>
-                                    	<%= ContactUtils.encodeHTML(contact.getHomeCity()) %>
+                                      <%= ContactUtils.encodeHTML(contact.getHomeCity()) %>
                                     <% } %>
                                     </div>
                                   </td>
-			                          </tr>
-			                        </table>
+                                </tr>
+                              </table>
                             </td>
                           </tr>
                           <% } %>
                           <% if (!ContactUtils.isEmpty(contact.getHomeState_province()) || !ContactUtils.isEmpty(contact.getHomeCountry())) { %>
                           <tr>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
-			                          <tr>
-			                            <td>
+                              <table class="InfoTitle2" >
+                                <tr>
+                                  <td>
                                     <div class="InfoTitle3">
                                     <% if (!ContactUtils.isEmpty(contact.getHomeState_province())) { %>
-                                    	<%= ContactUtils.encodeHTML(contact.getHomeState_province()) %>&nbsp;-
+                                      <%= ContactUtils.encodeHTML(contact.getHomeState_province()) %>&nbsp;-
                                     <% } %>
                                     <% if (!ContactUtils.isEmpty(contact.getHomeCountry())) { %>
-                                    	<%= ContactUtils.encodeHTML(contact.getHomeCountry()) %>
+                                      <%= ContactUtils.encodeHTML(contact.getHomeCountry()) %>
                                     <% } %>
                                     </div>
                                   </td>
-			                          </tr>
-			                        </table>
+                                </tr>
+                              </table>
                             </td>
                           </tr>
                           <% } %>
                           <% if (!ContactUtils.isEmpty(contact.getHomePhone1()) || !ContactUtils.isEmpty(contact.getHomePhone2()) || !ContactUtils.isEmpty(contact.getMobilePhone())) { %>
                           <tr>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
-			                        	
-			                        	
-			                        	<% if (!ContactUtils.isEmpty(contact.getHomePhone1())) { %>
-			                          <tr>
-			                            <td>
+                              <table class="InfoTitle2" >
+                                
+                                
+                                <% if (!ContactUtils.isEmpty(contact.getHomePhone1())) { %>
+                                <tr>
+                                  <td>
                                     <div class="InfoTitle3">
-                                    	<%= ContactUtils.encodeHTML(contact.getHomePhone1()) %>&nbsp;<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.phone")%></span>
+                                      <%= ContactUtils.encodeHTML(contact.getHomePhone1()) %>&nbsp;<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.phone")%></span>
                                     </div>
                                   </td>
-			                          </tr>
-			                          <% } %>
-			                          <% if (!ContactUtils.isEmpty(contact.getHomePhone2())) { %>
-			                          <tr>
-			                            <td>
+                                </tr>
+                                <% } %>
+                                <% if (!ContactUtils.isEmpty(contact.getHomePhone2())) { %>
+                                <tr>
+                                  <td>
                                     <div class="InfoTitle3">
-                                    	<%= ContactUtils.encodeHTML(contact.getHomePhone2()) %>&nbsp;<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.phone")%></span>
+                                      <%= ContactUtils.encodeHTML(contact.getHomePhone2()) %>&nbsp;<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.phone")%></span>
                                     </div>
                                   </td>
-			                          </tr>
-			                          <% } %>
-			                        </table>
+                                </tr>
+                                <% } %>
+                              </table>
                             </td>
                           </tr>
                           <% } %>
                           <% if (!ContactUtils.isEmpty(contact.getHomeFax())) { %>
                           <tr>                          
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
-			                          <tr>
-			                            <td>
-			                            	<div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getHomeFax()) %>&nbsp;<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.fax")%></span>
-			                            	</div>
-			                            </td>
-			                          </tr>
-			                        </table>
-			                      </td>
+                              <table class="InfoTitle2" >
+                                <tr>
+                                  <td>
+                                    <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getHomeFax()) %>&nbsp;<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.fax")%></span>
+                                    </div>
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>
                           </tr>
                           <% } %>
                           <% if (!ContactUtils.isEmpty(contact.getPersonalSite())) { %>
                           <tr>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
-			                          <tr>
-			                            <td>
-			                              <div class="InfoTitle3"><a target="_blank" href="<%= contact.getPersonalSite() %>"><%= ContactUtils.encodeHTML(contact.getPersonalSite())%></a></div>
-			                            </td>
-			                          </tr>
-			                        </table>
-			                      </td>
+                              <table class="InfoTitle2" >
+                                <tr>
+                                  <td>
+                                    <div class="InfoTitle3"><a target="_blank" href="<%= contact.getPersonalSite() %>"><%= ContactUtils.encodeHTML(contact.getPersonalSite())%></a></div>
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>
                           </tr>
                           <% } %>
                           
@@ -605,149 +605,149 @@
                       
                       <div style="clear: left;"><span></span></div>
                     </div>
-								</div>				
-								
-								<% 
-									String note ;
-									if (ContactUtils.isEmpty(contact.getNote())) note = "" ;
-									else {
-										note = ContactUtils.encodeHTML(contact.getNote()).replaceAll("\n", "<br>") ;
-										// add to fix bug cs-1524
-										note = note.replaceAll("\\\\n", "<br>") ;	
-									}		
-								 %>
-								<div class="InfoContainer">
-									<div class="TitleInfo"><%=_ctx.appRes("UIContactPreview.label.note")%></div>
-									<div class="Content">
-										<!--<div class="LeftContent">					
-											<div class="Member">-->
-												<div class="Job"><%= note %></div>
-											<!--</div>	
-										</div>-->
-									</div>
-								</div>
-								<div style="clear: left;"><span></span></div>
-								
-							</div>
-							
-						</div>	
-															
-					</div>
-				</div>
-				<div class="BottomLeftViewBoxStyle">
-					<div class="BottomRightViewBoxStyle">
-						<div class="BottomCenterViewBoxStyle"><span></span></div>										
-					</div>
-				</div>
-			</div>
-		</div>
+                </div>        
+                
+                <% 
+                  String note ;
+                  if (ContactUtils.isEmpty(contact.getNote())) note = "" ;
+                  else {
+                    note = ContactUtils.encodeHTML(contact.getNote()).replaceAll("\n", "<br>") ;
+                    // add to fix bug cs-1524
+                    note = note.replaceAll("\\\\n", "<br>") ;  
+                  }    
+                 %>
+                <div class="InfoContainer">
+                  <div class="TitleInfo"><%=_ctx.appRes("UIContactPreview.label.note")%></div>
+                  <div class="Content">
+                    <!--<div class="LeftContent">          
+                      <div class="Member">-->
+                        <div class="Job"><%= note %></div>
+                      <!--</div>  
+                    </div>-->
+                  </div>
+                </div>
+                <div style="clear: left;"><span></span></div>
+                
+              </div>
+              
+            </div>  
+                              
+          </div>
+        </div>
+        <div class="BottomLeftViewBoxStyle">
+          <div class="BottomRightViewBoxStyle">
+            <div class="BottomCenterViewBoxStyle"><span></span></div>                    
+          </div>
+        </div>
+      </div>
+    </div>
 <!--  End DecoratorBox ViewBoxStyle -->
-		
-	</div>
-				<% if (uicomponent.isPopup()) { %>
-							<style type="text/css" media="print">	
-								.Printable {
-									display: none ;
-									visibility : hidden ;
-								}
-							</style>
-							<div class="UIAction Printable"> 
-				        <table class="ActionContainer" align="center">
-				        	<tr>
-				        		<td align="center">
-											<%	
-				          		if (uicomponent.isPrintForm) {
-				          			rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactPortlet.printList('"+uiform.id+"') ;") ;
-				          		%>	
-				          		<a href="#" onclick="javascript:window.print() ;" class="ActionButton LightBlueStyle">
-				                <div class="ButtonLeft">
-				                  <div class="ButtonRight">
-				                    <div class="ButtonMiddle">
-				                    <%=_ctx.appRes("UIContactPreview.action.print")%>
-				                    </div>
-				                  </div>
-				                </div>
-				           		</a>
-				           		<% } else { %>
-				           		<a href="#" onclick="javascript:eXo.contact.UIContactPortlet.printpreview(this) ;" printLabel="<%=_ctx.appRes("UIContactPreview.action.print")%>" class="ActionButton LightBlueStyle">
-				                <div class="ButtonLeft">
-				                  <div class="ButtonRight">
-				                    <div class="ButtonMiddle">
-				                    <%=_ctx.appRes("UIContactPreview.action.printPreview")%>
-				                    </div>
-				                  </div>
-				                </div>
-				           		</a> 
-				           		<% } %>
-				           		
-				           		<% 
-				           			// cs-1648
-				           			for(action in uicomponent.getActions()) { 
-				                	 String actionLabel = _ctx.appRes("UIContactPreview.action." + action) ;
-				                   String link = uicomponent.event(action) ;
-				          		%>
-				          		<a href="$link" class="ActionButton LightBlueStyle">
-				                <div class="ButtonLeft">
-				                  <div class="ButtonRight">
-				                    <div class="ButtonMiddle">
-				                      $actionLabel
-				                    </div>
-				                  </div>
-				                </div>
-				           		</a>
-				          		<% } %>  		    
-				          	</td>
-				          </tr>  
-				        </table>
-				      </div>
-				<% } %>
+    
+  </div>
+        <% if (uicomponent.isPopup()) { %>
+              <style type="text/css" media="print">  
+                .Printable {
+                  display: none ;
+                  visibility : hidden ;
+                }
+              </style>
+              <div class="UIAction Printable"> 
+                <table class="ActionContainer" align="center">
+                  <tr>
+                    <td align="center">
+                      <%  
+                      if (uicomponent.isPrintForm) {
+                        rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactPortlet.printList('"+uiform.id+"') ;") ;
+                      %>  
+                      <a href="#" onclick="javascript:window.print() ;" class="ActionButton LightBlueStyle">
+                        <div class="ButtonLeft">
+                          <div class="ButtonRight">
+                            <div class="ButtonMiddle">
+                            <%=_ctx.appRes("UIContactPreview.action.print")%>
+                            </div>
+                          </div>
+                        </div>
+                       </a>
+                       <% } else { %>
+                       <a href="#" onclick="javascript:eXo.contact.UIContactPortlet.printpreview(this) ;" printLabel="<%=_ctx.appRes("UIContactPreview.action.print")%>" class="ActionButton LightBlueStyle">
+                        <div class="ButtonLeft">
+                          <div class="ButtonRight">
+                            <div class="ButtonMiddle">
+                            <%=_ctx.appRes("UIContactPreview.action.printPreview")%>
+                            </div>
+                          </div>
+                        </div>
+                       </a> 
+                       <% } %>
+                       
+                       <% 
+                         // cs-1648
+                         for(action in uicomponent.getActions()) { 
+                           String actionLabel = _ctx.appRes("UIContactPreview.action." + action) ;
+                           String link = uicomponent.event(action) ;
+                      %>
+                      <a href="$link" class="ActionButton LightBlueStyle">
+                        <div class="ButtonLeft">
+                          <div class="ButtonRight">
+                            <div class="ButtonMiddle">
+                              $actionLabel
+                            </div>
+                          </div>
+                        </div>
+                       </a>
+                      <% } %>          
+                    </td>
+                  </tr>  
+                </table>
+              </div>
+        <% } %>
 <%} else { %>
-	<div class="DecoratorBox">
-		<div class="ViewBoxStyle">
-			<div class="TopLeftViewBoxStyle">
-				<div class="TopRightViewBoxStyle">
-					<div class="TopCenterViewBoxStyle"><span></span></div>										
-				</div>
-			</div>
-			<div class="MiddleLeftViewBoxStyle">
-				<div class="MiddleRightViewBoxStyle">
-					<div class="MiddleCenterViewBoxStyle">
-					
-						<div class="UIWelcomeContact" >
-						
-						  <div class="WelcomeContact">
-						    <div class="LabelWelcomeContact"><%=_ctx.appRes("UIWelcomeContact.label.label0")%></div>
-						    <div class="LabelComment"><%=_ctx.appRes("UIWelcomeContact.label.label1")%></div>
-						    <div style="clear: both;"><span></span></div>
-						  </div>
-						  <div class="LogoContact">
-						    <span></span>
-						  </div>
-						  <div class="OverviewContact">
-						    <%=_ctx.appRes("UIWelcomeContact.label.label2")%>
-						  </div>
-						  <div class="ContentContact">
-								<%=_ctx.appRes("UIWelcomeContact.label.label3")%>
-							</div>
-						  <div class="FeaturesContact">
-						    <%=_ctx.appRes("UIWelcomeContact.label.label4")%>
-						  </div>
-						  <div class="ContentContact">
-						    <%=_ctx.appRes("UIWelcomeContact.label.label5")%>
-						  </div>
-					  </div>
-						
-					</div>	
-														
-				</div>
-			</div>
-			<div class="BottomLeftViewBoxStyle">
-				<div class="BottomRightViewBoxStyle">
-					<div class="BottomCenterViewBoxStyle"><span></span></div>										
-				</div>
-			</div>
-		</div>
-	</div>
+  <div class="DecoratorBox">
+    <div class="ViewBoxStyle">
+      <div class="TopLeftViewBoxStyle">
+        <div class="TopRightViewBoxStyle">
+          <div class="TopCenterViewBoxStyle"><span></span></div>                    
+        </div>
+      </div>
+      <div class="MiddleLeftViewBoxStyle">
+        <div class="MiddleRightViewBoxStyle">
+          <div class="MiddleCenterViewBoxStyle">
+          
+            <div class="UIWelcomeContact" >
+            
+              <div class="WelcomeContact">
+                <div class="LabelWelcomeContact"><%=_ctx.appRes("UIWelcomeContact.label.label0")%></div>
+                <div class="LabelComment"><%=_ctx.appRes("UIWelcomeContact.label.label1")%></div>
+                <div style="clear: both;"><span></span></div>
+              </div>
+              <div class="LogoContact">
+                <span></span>
+              </div>
+              <div class="OverviewContact">
+                <%=_ctx.appRes("UIWelcomeContact.label.label2")%>
+              </div>
+              <div class="ContentContact">
+                <%=_ctx.appRes("UIWelcomeContact.label.label3")%>
+              </div>
+              <div class="FeaturesContact">
+                <%=_ctx.appRes("UIWelcomeContact.label.label4")%>
+              </div>
+              <div class="ContentContact">
+                <%=_ctx.appRes("UIWelcomeContact.label.label5")%>
+              </div>
+            </div>
+            
+          </div>  
+                            
+        </div>
+      </div>
+      <div class="BottomLeftViewBoxStyle">
+        <div class="BottomRightViewBoxStyle">
+          <div class="BottomCenterViewBoxStyle"><span></span></div>                    
+        </div>
+      </div>
+    </div>
+  </div>
 <% } %>
 </div>
 <% if (uicomponent.isPopup()) uiform.end() %>

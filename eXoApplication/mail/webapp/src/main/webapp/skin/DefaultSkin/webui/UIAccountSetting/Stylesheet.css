@@ -3,242 +3,242 @@
 }
 
 .UIMailPortlet .UIAccountSetting .AccountSetting {
-	border: 1px solid #c0c0c0;
-	padding: 10px;
-	background: #f3f3f3;
+  border: 1px solid #c0c0c0;
+  padding: 10px;
+  background: #f3f3f3;
 }
 
 /*===========================AccountSettingCategory===========================*/
 
 .UIMailPortlet .UIAccountSetting .AccountSettingCategory {
-	width: 212px; height: 342px;
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
-	background: white;
-	border: 1px solid #a5a5a5;
+  width: 212px; height: 342px;
+  float: left; /* orientation=lt */
+  float: right; /* orientation=rt */
+  background: white;
+  border: 1px solid #a5a5a5;
 }
 
 .UIMailPortlet .UIAccountSetting .AccountSettingCategory .CategoryControlBar {
-	background: url('background/BgTitleTag1x20.gif') repeat-x ;
-	height: 20px; line-height: 20px;
-	padding: 0px 10px 0px 8px;
+  background: url('background/BgTitleTag1x20.gif') repeat-x ;
+  height: 20px; line-height: 20px;
+  padding: 0px 10px 0px 8px;
 }
 
 .UIMailPortlet .UIAccountSetting .AccountSettingCategory .CategoryControlBar .Title {
-	color: #3d3d3d;
-	font-weight: bold;
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
+  color: #3d3d3d;
+  font-weight: bold;
+  float: left; /* orientation=lt */
+  float: right; /* orientation=rt */
 }
 
 .UIMailPortlet .UIAccountSetting .AccountSettingCategory .CategoryControlBar .DeleteIcon {
-	background: url('icons/DeleteIcon.gif') no-repeat center ;
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-	height: 18px; width: 20px;
-	cursor: pointer;
-	margin: 0px 0px 0px 4px; /* orientation=lt */
-	margin: 0px 4px 0px 0px; /* orientation=rt */
+  background: url('icons/DeleteIcon.gif') no-repeat center ;
+  float: right; /* orientation=lt */
+  float: left; /* orientation=rt */
+  height: 18px; width: 20px;
+  cursor: pointer;
+  margin: 0px 0px 0px 4px; /* orientation=lt */
+  margin: 0px 4px 0px 0px; /* orientation=rt */
 }
 
 .UIMailPortlet .UIAccountSetting .AccountSettingCategory .CategoryControlBar .AddIcon {
-	background: url('icons/AddIcon.gif') no-repeat center ;
-	float: right;
-	height: 18px; width: 20px;
-	cursor: pointer;
-	margin: 0px 0px 0px 4px;
+  background: url('icons/AddIcon.gif') no-repeat center ;
+  float: right;
+  height: 18px; width: 20px;
+  cursor: pointer;
+  margin: 0px 0px 0px 4px;
 }
 
 .UIMailPortlet .UIAccountSetting .AccountSettingCategory .AccountSettingList {
-	color: #3d3d3d;
-	overflow-y: auto;
-	height: 322px;
+  color: #3d3d3d;
+  overflow-y: auto;
+  height: 322px;
 }
 
 .UIMailPortlet .UIAccountSetting .AccountSettingCategory .NormalItem {
-	padding: 0px 27px;
-	line-height: 22px;
-	margin: 2px 0px;
+  padding: 0px 27px;
+  line-height: 22px;
+  margin: 2px 0px;
 }
 
 .UIMailPortlet .UIAccountSetting .AccountSettingCategory .SelectedItem {
-	padding: 0px 27px;
-	margin: 2px 0px;
-	line-height: 22px;
-	background: #cbdaf4 url('icons/SelectedIcon.gif') no-repeat 5% center; /* orientation=lt */
-	background: #cbdaf4 url('icons/SelectedIcon.gif') no-repeat 95% center; /* orientation=rt */
+  padding: 0px 27px;
+  margin: 2px 0px;
+  line-height: 22px;
+  background: #cbdaf4 url('icons/SelectedIcon.gif') no-repeat 5% center; /* orientation=lt */
+  background: #cbdaf4 url('icons/SelectedIcon.gif') no-repeat 95% center; /* orientation=rt */
 }
 /************************************AccountSettingContainer*************************************/
 
 .UIMailPortlet .UIAccountSetting .AccountSettingContainer {
-	margin-left: 223px; /* orientation=lt */
-	margin-right: 223px; /* orientation=rt */
+  margin-left: 223px; /* orientation=lt */
+  margin-right: 223px; /* orientation=rt */
 }
 
 .UIMailPortlet .UIAccountSetting .UITabPane .TabPaneContent {
-	padding: 0px 8px 8px 8px;
+  padding: 0px 8px 8px 8px;
 }
 
 .UIMailPortlet .UIAccountSetting .UIHorizontalTabs {
-	background: url('background/HorizontalTabBackground.gif') repeat-x bottom;
+  background: url('background/HorizontalTabBackground.gif') repeat-x bottom;
 }
 
 .UIMailPortlet .UIAccountSetting .UIHorizontalTabs .NormalTabStyle .SelectedTab {
-	float: left;
+  float: left;
 }
 
 .UIAccountSetting .UIHorizontalTabs .NormalTabStyle .NormalTab {
-	float: left;
+  float: left;
 }
 
 .UIMailPortlet .UIAccountSetting .UIFormTabPane {
-	padding: 0px;
+  padding: 0px;
 }
 
 .UIMailPortlet .UIAccountSetting .UITabPane .UITabContentContainer {
-	border: 1px solid #939393;
-	border-top: none;
-	height: 100%;
+  border: 1px solid #939393;
+  border-top: none;
+  height: 100%;
 }
 
 .UIMailPortlet .UIAccountSetting .UITabPane .UITabContentContainer .UITabContent {
-	border: 1px solid white;	
-	border-top: none;
-	padding: 0px;
-	height: 100%;
+  border: 1px solid white;  
+  border-top: none;
+  padding: 0px;
+  height: 100%;
 }
 
 .UIMailPortlet .UIAccountSetting .UIForm .HorizontalLayout .serverSettings {
-	overflow-y: auto;
-	overflow-x: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .UIMailPortlet .UIAccountSetting .UITabPane .UIForm {
 }
 
 .UIMailPortlet .UIAccountSetting .UITabPane .UIForm .HorizontalLayout {
-	border: none;
+  border: none;
 }
 
 .UIMailPortlet .UIAccountSetting .ServerSettings .UIFormGrid td.FieldLabel {
-	width: 150px;
+  width: 150px;
 }
 
 .UIMailPortlet .UIAccountSetting .ServerSettings .UIFormGrid input {
-	float: left;
+  float: left;
 }
 
 .UIMailPortlet .UIAccountSetting .ServerSettings .UIFormGrid .FieldComponent a {
-	color: black;
+  color: black;
 }
 
 .UIMailPortlet .UIAccountSetting .ServerSettings .UIFormGrid .Icon {
-	float: left;
-	line-height: 20px;
+  float: left;
+  line-height: 20px;
 }
 
 .UIMailPortlet .UIAccountSetting .ServerSettings .UIFormGrid .DefaultIcon {
-	background: url('icons/DefaultIcon.gif') no-repeat left center;
-	padding-left: 24px; 
+  background: url('icons/DefaultIcon.gif') no-repeat left center;
+  padding-left: 24px; 
 }
 
 .UIMailPortlet .UIAccountSetting .UIForm .UIFormInputSet {
-	padding: 15px 10px;
-	height: 287px;
-	width: auto;
+  padding: 15px 10px;
+  height: 287px;
+  width: auto;
 }
 
 
 .UIMailPortlet .UIAccountSetting .ServerSettings .UIFormGrid td.FieldButton{
-	width: auto;
-	padding-right: 17px;
-	text-align: left;
+  width: auto;
+  padding-right: 17px;
+  text-align: left;
 }
 
 .UIMailPortlet .UIAccountSetting .CheckForSupportedDisable{
-	vertical-align:middle;
-	text-align:center;
-	text-decoration:none;
-	font-size:11px;
-	width:65px;
-	padding:3px 3px;
-	color:gray;
-	border:1px solid #DDD;/*#3278BE;*/
-	-moz-border-radius:2px;
-	-webkit-border-radius:2px;
-	-o-border-radius:2px;
-	border-radius:2px;
-	background:-moz-linear-gradient(0% 90% 90deg, #EEE, #FFF);
-	display: none;
+  vertical-align:middle;
+  text-align:center;
+  text-decoration:none;
+  font-size:11px;
+  width:65px;
+  padding:3px 3px;
+  color:gray;
+  border:1px solid #DDD;/*#3278BE;*/
+  -moz-border-radius:2px;
+  -webkit-border-radius:2px;
+  -o-border-radius:2px;
+  border-radius:2px;
+  background:-moz-linear-gradient(0% 90% 90deg, #EEE, #FFF);
+  display: none;
 }
 
 .UIMailPortlet .UIAccountSetting .CheckForSupported{
-	vertical-align:middle;
-	text-align:center;
-	text-decoration:none;
-	font-size:11px;
-	width:65px;
-	padding:3px 3px;
-	cursor:pointer;
-	color:#000;
-	border:1px solid #DDD;/*#3278BE;*/
-	-moz-border-radius:2px;
-	-webkit-border-radius:2px;
-	-o-border-radius:2px;
-	border-radius:2px;
-	background:-moz-linear-gradient(0% 90% 90deg, #EEE, #FFF);
-	display: none;
+  vertical-align:middle;
+  text-align:center;
+  text-decoration:none;
+  font-size:11px;
+  width:65px;
+  padding:3px 3px;
+  cursor:pointer;
+  color:#000;
+  border:1px solid #DDD;/*#3278BE;*/
+  -moz-border-radius:2px;
+  -webkit-border-radius:2px;
+  -o-border-radius:2px;
+  border-radius:2px;
+  background:-moz-linear-gradient(0% 90% 90deg, #EEE, #FFF);
+  display: none;
 }
 
 .UIMailPortlet .UIAccountSetting .CheckForSupported:hover{
-	background:-moz-linear-gradient(0% 90% 90deg, #EEE, yellow);
+  background:-moz-linear-gradient(0% 90% 90deg, #EEE, yellow);
 }
 
 .UIMailPortlet .UIAccountSetting .ServerSettings .UIFormGrid td.InputFieldLabel{
-	width: 150px;
-	text-align: left;
+  width: 150px;
+  text-align: left;
 }
 
 .UIMailPortlet .UIAccountSetting .ServerSettings .UIFormGrid .FieldInput{
-	fload:left;
-	width:auto;
+  fload:left;
+  width:auto;
 }
 
 .UIMailPortlet .UIAccountSetting .ServerSettings .UIFormGrid .FieldComponentAuto a {
-	color: black;
-	text-align:left;
+  color: black;
+  text-align:left;
 }
 .UIMailPortlet .UIAccountSetting .FieldComponentAuto select{
-	width: 100px;
-	paddding:0px 7px; 
+  width: 100px;
+  paddding:0px 7px; 
 }
 
 .UIMailPortlet .UIAccountSetting .ServerSettings .UIFormGrid .Label{
-	text-align:left;
-	width:auto;
-	padding-left:8px; 
+  text-align:left;
+  width:auto;
+  padding-left:8px; 
 }
 
 /************************************UIAction*************************************/
 
 .UIMailPortlet .UIForm .UIFormGrid #outgoingUsername {
-	width:170px;
+  width:170px;
 }
 
 .UIMailPortlet .UIForm .UIFormGrid #outgoingPassword {
-	width:170px;
+  width:170px;
 }
 
 .UIMailPortlet .UIForm .UIFormGrid  #messageComeInFolder {
-	width:150px;
+  width:150px;
 }
 
 .UIMailPortlet .UIForm .fetchOptions .UIFormGrid .fromDateTimePicker input {
-	width:150px;
+  width:150px;
 }
 
 .UIMailPortlet .UIForm .fetchOptions .UIFormGrid .fromDateTimePicker .CalendarTimeBox .CalendarTimeBoxM input.InputTime {
-	width:15px;
+  width:15px;
 }
 
 .UIMailPortlet .UIForm .fetchOptions .UIFormGrid {

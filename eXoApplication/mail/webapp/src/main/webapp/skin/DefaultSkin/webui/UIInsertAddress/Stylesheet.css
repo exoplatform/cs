@@ -1,35 +1,35 @@
 .UIMailPortlet .UIInsertAddress {
-	background: #f3f3f3;
+  background: #f3f3f3;
 }
 
 .UIMailPortlet .UIInsertAddress .InsertAddressContainer {
-	padding: 10px;
+  padding: 10px;
 }
 
 .UIMailPortlet .UIInsertAddress .AddressContainer {
-	padding-top: 10px;
+  padding-top: 10px;
 }
 
 .UIMailPortlet .UIInsertAddress .UIGrid th {
-	background: url('background/ThGridTitle1x20.gif') repeat-x;
-	line-height: 17px; height: 18px;
-	text-align: left;
-	padding: 0px 5px;
+  background: url('background/ThGridTitle1x20.gif') repeat-x;
+  line-height: 17px; height: 18px;
+  text-align: left;
+  padding: 0px 5px;
 }
 
 .UIMailPortlet .UIInsertAddress .UIGrid th input {
-	text-align: center;
-	margin: 2px 0px 0px 0px;
+  text-align: center;
+  margin: 2px 0px 0px 0px;
 }
 
 .UIMailPortlet .UIInsertAddress .UIGrid tbody {
-	background: white;	
-	padding-bottom: 10px;
+  background: white;  
+  padding-bottom: 10px;
 }
 
 .UIMailPortlet .UIInsertAddress .UIGrid td {
-	height: 23px;
-	padding: 4px 0px 0px 5px;
+  height: 23px;
+  padding: 4px 0px 0px 5px;
 }
 
 /*********************************************UISearch*****************************************/
@@ -43,22 +43,22 @@
 
 
 .UIMailPortlet .UIInsertAddress .AddressLabel {
-	width: 120px;
-	padding: 0px 4px;
+  width: 120px;
+  padding: 0px 4px;
 }
 
 .UIMailPortlet .UIInsertAddress select {
-	width: 160px;
-	margin: 10px 0px 0px 0px;
-	font-size: 11px;
+  width: 160px;
+  margin: 10px 0px 0px 0px;
+  font-size: 11px;
 }
 
 /*********************************************ListAddress*****************************************/
 
 .UIMailPortlet .UIInsertAddress .ListAddress {
-	height: auto;
-	overflow-y: auto;
-	overflow-x: hidden;
+  height: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .UIMailPortlet .UIInsertAddress .ListAddress .UIGrid .BlueDownArrowIcon{
@@ -69,15 +69,15 @@
 }
 
 .UIMailPortlet .UIInsertAddress .ListAddress .UIGrid thead {
-	border: none;
+  border: none;
 }
 
 .UIMailPortlet .UIInsertAddress .ListAddress .UIGrid th {
-	border-left: none;
-	border-top: none;
+  border-left: none;
+  border-top: none;
 }
 
 .UIMailPortlet .UIInsertAddress .ListAddress .UIGrid td {
-	border-left: none;
+  border-left: none;
 }
 

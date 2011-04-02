@@ -98,9 +98,9 @@
             }
           %> 
           </div>
-	        <div style="float:left;padding:10px 4px 0 0;">
-	          <div style="font-weight:bolder;"><%=MailUtils.decodeAttachName(attach.getName())%></div>
-	          <div><%=_ctx.appRes(uicomponent.id+ ".label.size") %>: <%=MailUtils.convertSize(attach.getSize())%></div>
+          <div style="float:left;padding:10px 4px 0 0;">
+            <div style="font-weight:bolder;"><%=MailUtils.decodeAttachName(attach.getName())%></div>
+            <div><%=_ctx.appRes(uicomponent.id+ ".label.size") %>: <%=MailUtils.convertSize(attach.getSize())%></div>
           </div>
           <div style="clear:left;"><span></span></div>
         </div>

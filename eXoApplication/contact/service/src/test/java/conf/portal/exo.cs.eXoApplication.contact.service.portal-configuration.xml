@@ -158,7 +158,7 @@
           <object type="org.exoplatform.services.organization.OrganizationConfig">
             <field  name="membershipType">
               <collection type="java.util.ArrayList">
-              	<value>
+                <value>
                   <object type="org.exoplatform.services.organization.OrganizationConfig$MembershipType">
                     <field  name="type"><string>manager</string></field>
                     <field  name="description"><string>manager membership type</string></field>

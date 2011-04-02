@@ -15,146 +15,146 @@
 <div class="$uicomponent.id">
   <div class="ApplicationMinWidth">
   
-  	<div class="UIMessageCompose">
-  	
-			<div class="UIToolbar">
-				<div class="HeaderToolbar">
-					<div class="LeftBar">
-						<div class="RightBar">
-							<div class="CenterBar">
-								<div class="MailListActionsbar">
-								
-									<a href="<%=uicomponent.event("Send")%>" class="ControlButton MailListActionsbarButton">
-										<div class="IconHolder SendMailIcon">
-											<div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.send-mail") %></div>
-										</div>
-									</a>
-									
-									<div class="SeparatorLine MailListActionsbarButton"><span></span></div>
-									
-									<a href="<%=uicomponent.event("SaveDraft")%>" class="ControlButton MailListActionsbarButton">
-										<div class="IconHolder SaveAsADraftIcon">
-											<div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.save-as-a-draft") %></div>
-										</div>
-									</a>
-									
-									<div class="SeparatorLine MailListActionsbarButton"><span></span></div>
-									
-									<a href="<%=uicomponent.event("DiscardChange")%>" class="ControlButton MailListActionsbarButton">
-										<div class="IconHolder DiscardIcon">
-											<div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.discard") %></div>
-										</div>
-									</a>
-									
-									<div class="SeparatorLine MailListActionsbarButton"><span></span></div>
-									
-									<div class="ControlButton MailListActionsbarButton" onmouseover="eXo.mail.UIMailPortlet.showView(this, event)">
-										<div onclick="<%=uicomponent.event("Attachment")%>" class="IconHolder AttachLocalIcon">
-											<div class="Label <% if (org.exoplatform.mail.MailUtils.hasECMS()) print "DownArrow1Icon"; %>"><%=_ctx.appRes(uicomponent.id+ ".label.attach-file") %></div>
-										</div>									
-									
-									<% if (org.exoplatform.mail.MailUtils.hasECMS()) { %>
-									<% /*Begin Popup Menu*/ %>
-										<div style="position: relative;">
-					      				<div class="UIRightClickPopupMenu" style="display: none;">
-					      					<div class="UIContextMenuContainer">
-													  <div class="TopLeftRightClickPopupMenu">
-							          			<div class="TopRightRightClickPopupMenu">
-							            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-							          			</div>
-							        			</div>
-										        <div class="MiddleLeftRightClickPopupMenu">
-										          <div class="MiddleRightRightClickPopupMenu">
-							              		<div class="UIRightPopupMenuContainer">																	
-							                    <a class="MenuItem" href="<%=uicomponent.event("CallDMSSelector")%>">
-							                    	<div class="IconHolder AttachServerIcon"> 
-																			<div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.attach-from-dms") %></div>
-																		</div>
-																	</a>							                   
-																</div>
-								          		</div>
-								        		</div>
-											      <div class="BottomLeftRightClickPopupMenu">
-										        <div class="BottomRightRightClickPopupMenu">
-										          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-										        </div>
-										      </div>
-							      			</div>
-							      			
-										    </div>
-					      			</div>
-					      		<% /*End Popup Menu*/ %>
-									<% } %>
-					      		</div>
-									<div class="SeparatorLine MailListActionsbarButton"><span></span></div>
-									
-									<div class="ControlButton MailListActionsbarButton" onclick="eXo.mail.UIMailPortlet.showPopupMenu(this, event);" >
-										<div class="IconHolder PriorityIcon">
-											<div class="Label DownArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.message-priority") %></div>
-										</div>
-										<% /*Begin Popup Menu*/ %>
-										<div style="position: relative;">
-					      				<div class="UIRightClickPopupMenu" style="display: none;">
-					      					<div class="UIContextMenuContainer">
-													  <div class="TopLeftRightClickPopupMenu">
-							          			<div class="TopRightRightClickPopupMenu">
-							            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-							          			</div>
-							        			</div>
-										        <div class="MiddleLeftRightClickPopupMenu">
-										          <div class="MiddleRightRightClickPopupMenu">
-							              		<div class="UIRightPopupMenuContainer">
-																	<%
-																	  String lowPriorityLink = uicomponent.event("ChangePriority", String.valueOf(Utils.PRIORITY_LOW));
-																	  String lowCssClass = "";
-	                                  if (uicomponent.getPriority() == Utils.PRIORITY_LOW) lowCssClass = "CheckItem";
-																	%>
-							                    <a class="MenuItem" href="$lowPriorityLink"> <div class="ItemIcon $lowCssClass"> <%=_ctx.appRes(uicomponent.id+ ".label.low-priority") %> </div> </a>
-							                    <%  
-							                      String normalPriorityLink = uicomponent.event("ChangePriority", String.valueOf(Utils.PRIORITY_NORMAL));
-							                      String normalCssClass = "";
-							                      if (uicomponent.getPriority() == Utils.PRIORITY_NORMAL) normalCssClass = "CheckItem";
-							                    %>
-							                    <a class="MenuItem" href="$normalPriorityLink"> <div class="ItemIcon $normalCssClass"><%=_ctx.appRes(uicomponent.id+ ".label.normal-priority") %></div> </a>
-							                    <%  
-							                      String highPriorityLink = uicomponent.event("ChangePriority", String.valueOf(Utils.PRIORITY_HIGH)); 
-							                      String highCssClass = "";
-							                      if (uicomponent.getPriority() == Utils.PRIORITY_HIGH) highCssClass = "CheckItem";
-							                    %>
-							                    <a class="MenuItem" href="$highPriorityLink"> <div class="ItemIcon $highCssClass"> <%=_ctx.appRes(uicomponent.id+ ".label.hight-priority") %> </div> </a>
-																</div>
-								          		</div>
-								        		</div>
-											      <div class="BottomLeftRightClickPopupMenu">
-										        <div class="BottomRightRightClickPopupMenu">
-										          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-										        </div>
-										      </div>
-							      			</div>
-							      			
-										    </div>
-					      			</div>
-					      		<% /*End Popup Menu*/ %>
-									</div>
-									
-									<div class="SeparatorLine MailListActionsbarButton"><span></span></div>
-									
-									<div class="ControlButton MailListActionsbarButton" onclick="eXo.mail.UIMailPortlet.showPopupMenu(this, event);" >
-										<div class="IconHolder EditorOptionsIcon">
-											<div class="Label DownArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.editor-options") %></div>
-										</div>
-										<% /*Begin Popup Menu*/ %>
-										<div style="position: relative;">
-					      				<div class="UIRightClickPopupMenu" style="display: none; ">
-					      					<div class="UIContextMenuContainer">
-													  <div class="TopLeftRightClickPopupMenu">
-							          			<div class="TopRightRightClickPopupMenu">
-							            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-							          			</div>
-							        			</div>
-										        <div class="MiddleLeftRightClickPopupMenu">
-										          <div class="MiddleRightRightClickPopupMenu">
-							              		<div class="UIRightPopupMenuContainer">
+    <div class="UIMessageCompose">
+    
+      <div class="UIToolbar">
+        <div class="HeaderToolbar">
+          <div class="LeftBar">
+            <div class="RightBar">
+              <div class="CenterBar">
+                <div class="MailListActionsbar">
+                
+                  <a href="<%=uicomponent.event("Send")%>" class="ControlButton MailListActionsbarButton">
+                    <div class="IconHolder SendMailIcon">
+                      <div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.send-mail") %></div>
+                    </div>
+                  </a>
+                  
+                  <div class="SeparatorLine MailListActionsbarButton"><span></span></div>
+                  
+                  <a href="<%=uicomponent.event("SaveDraft")%>" class="ControlButton MailListActionsbarButton">
+                    <div class="IconHolder SaveAsADraftIcon">
+                      <div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.save-as-a-draft") %></div>
+                    </div>
+                  </a>
+                  
+                  <div class="SeparatorLine MailListActionsbarButton"><span></span></div>
+                  
+                  <a href="<%=uicomponent.event("DiscardChange")%>" class="ControlButton MailListActionsbarButton">
+                    <div class="IconHolder DiscardIcon">
+                      <div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.discard") %></div>
+                    </div>
+                  </a>
+                  
+                  <div class="SeparatorLine MailListActionsbarButton"><span></span></div>
+                  
+                  <div class="ControlButton MailListActionsbarButton" onmouseover="eXo.mail.UIMailPortlet.showView(this, event)">
+                    <div onclick="<%=uicomponent.event("Attachment")%>" class="IconHolder AttachLocalIcon">
+                      <div class="Label <% if (org.exoplatform.mail.MailUtils.hasECMS()) print "DownArrow1Icon"; %>"><%=_ctx.appRes(uicomponent.id+ ".label.attach-file") %></div>
+                    </div>                  
+                  
+                  <% if (org.exoplatform.mail.MailUtils.hasECMS()) { %>
+                  <% /*Begin Popup Menu*/ %>
+                    <div style="position: relative;">
+                        <div class="UIRightClickPopupMenu" style="display: none;">
+                          <div class="UIContextMenuContainer">
+                            <div class="TopLeftRightClickPopupMenu">
+                              <div class="TopRightRightClickPopupMenu">
+                                <div class="TopCenterRightClickPopupMenu"><span></span></div>
+                              </div>
+                            </div>
+                            <div class="MiddleLeftRightClickPopupMenu">
+                              <div class="MiddleRightRightClickPopupMenu">
+                                <div class="UIRightPopupMenuContainer">                                  
+                                  <a class="MenuItem" href="<%=uicomponent.event("CallDMSSelector")%>">
+                                    <div class="IconHolder AttachServerIcon"> 
+                                      <div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.attach-from-dms") %></div>
+                                    </div>
+                                  </a>                                 
+                                </div>
+                              </div>
+                            </div>
+                            <div class="BottomLeftRightClickPopupMenu">
+                            <div class="BottomRightRightClickPopupMenu">
+                              <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+                            </div>
+                          </div>
+                          </div>
+                          
+                        </div>
+                      </div>
+                    <% /*End Popup Menu*/ %>
+                  <% } %>
+                    </div>
+                  <div class="SeparatorLine MailListActionsbarButton"><span></span></div>
+                  
+                  <div class="ControlButton MailListActionsbarButton" onclick="eXo.mail.UIMailPortlet.showPopupMenu(this, event);" >
+                    <div class="IconHolder PriorityIcon">
+                      <div class="Label DownArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.message-priority") %></div>
+                    </div>
+                    <% /*Begin Popup Menu*/ %>
+                    <div style="position: relative;">
+                        <div class="UIRightClickPopupMenu" style="display: none;">
+                          <div class="UIContextMenuContainer">
+                            <div class="TopLeftRightClickPopupMenu">
+                              <div class="TopRightRightClickPopupMenu">
+                                <div class="TopCenterRightClickPopupMenu"><span></span></div>
+                              </div>
+                            </div>
+                            <div class="MiddleLeftRightClickPopupMenu">
+                              <div class="MiddleRightRightClickPopupMenu">
+                                <div class="UIRightPopupMenuContainer">
+                                  <%
+                                    String lowPriorityLink = uicomponent.event("ChangePriority", String.valueOf(Utils.PRIORITY_LOW));
+                                    String lowCssClass = "";
+                                    if (uicomponent.getPriority() == Utils.PRIORITY_LOW) lowCssClass = "CheckItem";
+                                  %>
+                                  <a class="MenuItem" href="$lowPriorityLink"> <div class="ItemIcon $lowCssClass"> <%=_ctx.appRes(uicomponent.id+ ".label.low-priority") %> </div> </a>
+                                  <%  
+                                    String normalPriorityLink = uicomponent.event("ChangePriority", String.valueOf(Utils.PRIORITY_NORMAL));
+                                    String normalCssClass = "";
+                                    if (uicomponent.getPriority() == Utils.PRIORITY_NORMAL) normalCssClass = "CheckItem";
+                                  %>
+                                  <a class="MenuItem" href="$normalPriorityLink"> <div class="ItemIcon $normalCssClass"><%=_ctx.appRes(uicomponent.id+ ".label.normal-priority") %></div> </a>
+                                  <%  
+                                    String highPriorityLink = uicomponent.event("ChangePriority", String.valueOf(Utils.PRIORITY_HIGH)); 
+                                    String highCssClass = "";
+                                    if (uicomponent.getPriority() == Utils.PRIORITY_HIGH) highCssClass = "CheckItem";
+                                  %>
+                                  <a class="MenuItem" href="$highPriorityLink"> <div class="ItemIcon $highCssClass"> <%=_ctx.appRes(uicomponent.id+ ".label.hight-priority") %> </div> </a>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="BottomLeftRightClickPopupMenu">
+                            <div class="BottomRightRightClickPopupMenu">
+                              <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+                            </div>
+                          </div>
+                          </div>
+                          
+                        </div>
+                      </div>
+                    <% /*End Popup Menu*/ %>
+                  </div>
+                  
+                  <div class="SeparatorLine MailListActionsbarButton"><span></span></div>
+                  
+                  <div class="ControlButton MailListActionsbarButton" onclick="eXo.mail.UIMailPortlet.showPopupMenu(this, event);" >
+                    <div class="IconHolder EditorOptionsIcon">
+                      <div class="Label DownArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.editor-options") %></div>
+                    </div>
+                    <% /*Begin Popup Menu*/ %>
+                    <div style="position: relative;">
+                        <div class="UIRightClickPopupMenu" style="display: none; ">
+                          <div class="UIContextMenuContainer">
+                            <div class="TopLeftRightClickPopupMenu">
+                              <div class="TopRightRightClickPopupMenu">
+                                <div class="TopCenterRightClickPopupMenu"><span></span></div>
+                              </div>
+                            </div>
+                            <div class="MiddleLeftRightClickPopupMenu">
+                              <div class="MiddleRightRightClickPopupMenu">
+                                <div class="UIRightPopupMenuContainer">
                                   <%
                                     String checkVisualEditor = "";
                                     if (uicomponent.isVisualEditor()) checkVisualEditor = "CheckItem";
@@ -175,90 +175,90 @@
                                     <%=_ctx.appRes(uicomponent.id+ ".label.plain-text") %>
                                     </div>
                                   </a>        
-																</div>
-								          		</div>
-								        		</div>
-											      <div class="BottomLeftRightClickPopupMenu">
-										        <div class="BottomRightRightClickPopupMenu">
-										          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-										        </div>
-										      </div>
-							      			</div>
-										    </div>
-					      			</div>
-					      		<% /*End Popup Menu*/ %>
-									</div>
-									<div class="SeparatorLine MailListActionsbarButton"><span></span></div>
-									<div class="ControlButton MailListActionsbarButton" onclick="eXo.mail.UIMailPortlet.showPopupMenu(this, event);" >
-										<div class="IconHolder OptionsIcon">
-											<div class="Label DownArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.options") %></div>
-										</div>
-										<% /*Begin Popup Menu*/ %>
-										<div style="position: relative;">
-					      				<div class="UIRightClickPopupMenu" style="display: none;">
-					      					<div class="UIContextMenuContainer">
-													  <div class="TopLeftRightClickPopupMenu">
-							          			<div class="TopRightRightClickPopupMenu">
-							            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-							          			</div>
-							        			</div>
-										        <div class="MiddleLeftRightClickPopupMenu">
-										          <div class="MiddleRightRightClickPopupMenu">
-							              		<div class="UIRightPopupMenuContainer">
-																	<%
-																	  String returnReceiptLink = uicomponent.event("ReturnReceipt");
-																	  String returnReceipt = "";
-	                                  if (uicomponent.isReturnReceipt) returnReceipt = "CheckItem";
-																	%>
-							                    <a class="MenuItem" href="$returnReceiptLink"> <div class="ItemIcon $returnReceipt"> <%=_ctx.appRes(uicomponent.id+ ".label.returnReceipt") %> </div> </a>
-							                    
-																</div>
-								          		</div>
-								        		</div>
-											      <div class="BottomLeftRightClickPopupMenu">
-										        <div class="BottomRightRightClickPopupMenu">
-										          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-										        </div>
-										      </div>
-							      			</div>
-							      			
-										    </div>
-					      			</div>
-					      		<% /*End Popup Menu*/ %>
-									</div>
-									<div style="display: none;" class="ScrollButtons">
-					      		<div class="DisableScrollLeftButton" title="Previous">
-					      			<div class="ScrollRightButton" title="Next"><span></span></div>
-					      		</div>
-				      	</div>
-									<div style="clear:left;"><span></span></div>
-									
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-			</div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="BottomLeftRightClickPopupMenu">
+                            <div class="BottomRightRightClickPopupMenu">
+                              <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+                            </div>
+                          </div>
+                          </div>
+                        </div>
+                      </div>
+                    <% /*End Popup Menu*/ %>
+                  </div>
+                  <div class="SeparatorLine MailListActionsbarButton"><span></span></div>
+                  <div class="ControlButton MailListActionsbarButton" onclick="eXo.mail.UIMailPortlet.showPopupMenu(this, event);" >
+                    <div class="IconHolder OptionsIcon">
+                      <div class="Label DownArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.options") %></div>
+                    </div>
+                    <% /*Begin Popup Menu*/ %>
+                    <div style="position: relative;">
+                        <div class="UIRightClickPopupMenu" style="display: none;">
+                          <div class="UIContextMenuContainer">
+                            <div class="TopLeftRightClickPopupMenu">
+                              <div class="TopRightRightClickPopupMenu">
+                                <div class="TopCenterRightClickPopupMenu"><span></span></div>
+                              </div>
+                            </div>
+                            <div class="MiddleLeftRightClickPopupMenu">
+                              <div class="MiddleRightRightClickPopupMenu">
+                                <div class="UIRightPopupMenuContainer">
+                                  <%
+                                    String returnReceiptLink = uicomponent.event("ReturnReceipt");
+                                    String returnReceipt = "";
+                                    if (uicomponent.isReturnReceipt) returnReceipt = "CheckItem";
+                                  %>
+                                  <a class="MenuItem" href="$returnReceiptLink"> <div class="ItemIcon $returnReceipt"> <%=_ctx.appRes(uicomponent.id+ ".label.returnReceipt") %> </div> </a>
+                                  
+                                </div>
+                              </div>
+                            </div>
+                            <div class="BottomLeftRightClickPopupMenu">
+                            <div class="BottomRightRightClickPopupMenu">
+                              <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+                            </div>
+                          </div>
+                          </div>
+                          
+                        </div>
+                      </div>
+                    <% /*End Popup Menu*/ %>
+                  </div>
+                  <div style="display: none;" class="ScrollButtons">
+                    <div class="DisableScrollLeftButton" title="Previous">
+                      <div class="ScrollRightButton" title="Next"><span></span></div>
+                    </div>
+                </div>
+                  <div style="clear:left;"><span></span></div>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
 <!-- End Mail ControlBar -->
 <!-- Start  Message Address -->
-			<div class="MessageAddress">
-				<div class="UIForm">
+      <div class="MessageAddress">
+        <div class="UIForm">
           <div class="HorizontalLayout">
               <%uicomponent.renderField(uicomponent.FIELD_TO_SET)%>
           </div>
-				</div>
-			</div>
+        </div>
+      </div>
 <!-- End Compose Message Address -->
 <!-- Start Compose Message Detail -->
-			<div class="MessageContent">
-				<div class="PlainTextMessage">
-					<%uiform.renderField(uicomponent.FIELD_MESSAGECONTENT)%>
-				</div>
-			</div>
+      <div class="MessageContent">
+        <div class="PlainTextMessage">
+          <%uiform.renderField(uicomponent.FIELD_MESSAGECONTENT)%>
+        </div>
+      </div>
 <!-- End Compose Message Detail -->
-  	</div>  	
-  	
+    </div>    
+    
   </div>
 </div>
 </div>

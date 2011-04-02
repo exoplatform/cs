@@ -1,6 +1,6 @@
 <% 
-	import org.exoplatform.crawler.webui.component.UICrawlerNavigation ;
-	import org.exoplatform.webui.core.UIContainer ;
+  import org.exoplatform.crawler.webui.component.UICrawlerNavigation ;
+  import org.exoplatform.webui.core.UIContainer ;
 %>
 
 <%
@@ -13,14 +13,14 @@
 %>
 
 <div class="UICrawlerPortlet UIApplication">
-	<div class="UICrawlerPortletContainer">
-		<div class="OverflowContainer">
-		  <div class="UICrawlerNavigation">
-			 <% uicomponent.renderChild(UICrawlerNavigation.class) %>
-			</div>
-			<div class="UICrawlerDetail">
-			  <% uicomponent.renderChild("UICrawlerWorkingArea") %>
-			</div>
-		</div>
-	</div>
+  <div class="UICrawlerPortletContainer">
+    <div class="OverflowContainer">
+      <div class="UICrawlerNavigation">
+       <% uicomponent.renderChild(UICrawlerNavigation.class) %>
+      </div>
+      <div class="UICrawlerDetail">
+        <% uicomponent.renderChild("UICrawlerWorkingArea") %>
+      </div>
+    </div>
+  </div>
 </div>

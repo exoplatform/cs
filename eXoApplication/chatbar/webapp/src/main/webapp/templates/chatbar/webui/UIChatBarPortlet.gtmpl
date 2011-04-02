@@ -1,42 +1,42 @@
 <%
   String user = uicomponent.getRemoteUser() ;
   if(user != null && user.trim().length() > 0) { 
-	def rcontext = _ctx.getRequestContext() ;
-	def jsManager = rcontext.getJavascriptManager();
-	jsManager.importJavascript("eXo.cs.CSUtils", "/csResources/javascript/");
-	//jsManager.importJavascript("eXo.cs.CSCometd", "/csResources/javascript/");
-	jsManager.importJavascript("eXo.communication.chat.eXoChatBar", "/chatbar/javascript/");
-	jsManager.importJavascript("eXo.communication.chat.core.DateFormat", "/chatbar/javascript/");
-	jsManager.importJavascript("eXo.communication.chat.core.AdvancedDOMEvent", "/chatbar/javascript/");
-	jsManager.importJavascript("eXo.communication.chat.core.JSLogger", "/chatbar/javascript/");
-	jsManager.importJavascript("eXo.communication.chat.core.XMPPCommunicator", "/chatbar/javascript/");
-	jsManager.importJavascript("eXo.communication.chat.core.Utils", "/chatbar/javascript/");
-	jsManager.importJavascript("eXo.communication.chat.core.LocalTemplateEngine", "/chatbar/javascript/");
-	jsManager.importJavascript("eXo.communication.chat.webui.UIWindow", "/chatbar/javascript/");
-	jsManager.importJavascript("eXo.communication.chat.webui.UIPageIterator", "/chatbar/javascript/");
-	jsManager.importJavascript("eXo.communication.chat.webui.TabScrollManager", "/chatbar/javascript/");
-	jsManager.importJavascript("eXo.communication.chat.webui.UISlideAlert", "/chatbar/javascript/");
-	jsManager.importJavascript("eXo.communication.chat.webui.component.BuddyListControl", "/chatbar/javascript/");
-	jsManager.importJavascript("eXo.communication.chat.webui.component.JSUIBean", "/chatbar/javascript/");
-	jsManager.importJavascript("eXo.communication.chat.webui.component.JSUIBeanListener", "/chatbar/javascript/");
-	jsManager.importJavascript("eXo.communication.chat.webui.UIStateManager", "/chatbar/javascript/");
-	jsManager.importJavascript("eXo.communication.chat.webui.UIMainChatWindow", "/chatbar/javascript/");
-	jsManager.importJavascript("eXo.communication.chat.webui.UIPopupManager", "/chatbar/javascript/");
-	jsManager.importJavascript("eXo.communication.chat.webui.UIChatWindow", "/chatbar/javascript/");
-	jsManager.importJavascript("eXo.communication.chat.webui.UIAddContactPopupWindow", "/chatbar/javascript/");
-	jsManager.importJavascript("eXo.communication.chat.webui.UIChatDragDrop", "/chatbar/javascript/");
-	jsManager.importJavascript("eXo.communication.chat.webui.UIChatResize", "/chatbar/javascript/");
-	jsManager.importJavascript("eXo.communication.chat.webui.UICreateNewRoomPopupWindow", "/chatbar/javascript/");
-	jsManager.importJavascript("eXo.communication.chat.webui.UIRoomConfigPopupWindow", "/chatbar/javascript/");
-	jsManager.importJavascript("eXo.communication.chat.webui.UIJoinRoomPopupWindow", "/chatbar/javascript/");
-	jsManager.importJavascript("eXo.communication.chat.webui.UIChatBar", "/chatbar/javascript/");
-	jsManager.importJavascript("eXo.communication.chat.webui.UIPopupMessages", "/chatbar/javascript/");
-	jsManager.importJavascript("eXo.communication.chat.webui.UITooltipAtTop", "/chatbar/javascript/");
+  def rcontext = _ctx.getRequestContext() ;
+  def jsManager = rcontext.getJavascriptManager();
+  jsManager.importJavascript("eXo.cs.CSUtils", "/csResources/javascript/");
+  //jsManager.importJavascript("eXo.cs.CSCometd", "/csResources/javascript/");
+  jsManager.importJavascript("eXo.communication.chat.eXoChatBar", "/chatbar/javascript/");
+  jsManager.importJavascript("eXo.communication.chat.core.DateFormat", "/chatbar/javascript/");
+  jsManager.importJavascript("eXo.communication.chat.core.AdvancedDOMEvent", "/chatbar/javascript/");
+  jsManager.importJavascript("eXo.communication.chat.core.JSLogger", "/chatbar/javascript/");
+  jsManager.importJavascript("eXo.communication.chat.core.XMPPCommunicator", "/chatbar/javascript/");
+  jsManager.importJavascript("eXo.communication.chat.core.Utils", "/chatbar/javascript/");
+  jsManager.importJavascript("eXo.communication.chat.core.LocalTemplateEngine", "/chatbar/javascript/");
+  jsManager.importJavascript("eXo.communication.chat.webui.UIWindow", "/chatbar/javascript/");
+  jsManager.importJavascript("eXo.communication.chat.webui.UIPageIterator", "/chatbar/javascript/");
+  jsManager.importJavascript("eXo.communication.chat.webui.TabScrollManager", "/chatbar/javascript/");
+  jsManager.importJavascript("eXo.communication.chat.webui.UISlideAlert", "/chatbar/javascript/");
+  jsManager.importJavascript("eXo.communication.chat.webui.component.BuddyListControl", "/chatbar/javascript/");
+  jsManager.importJavascript("eXo.communication.chat.webui.component.JSUIBean", "/chatbar/javascript/");
+  jsManager.importJavascript("eXo.communication.chat.webui.component.JSUIBeanListener", "/chatbar/javascript/");
+  jsManager.importJavascript("eXo.communication.chat.webui.UIStateManager", "/chatbar/javascript/");
+  jsManager.importJavascript("eXo.communication.chat.webui.UIMainChatWindow", "/chatbar/javascript/");
+  jsManager.importJavascript("eXo.communication.chat.webui.UIPopupManager", "/chatbar/javascript/");
+  jsManager.importJavascript("eXo.communication.chat.webui.UIChatWindow", "/chatbar/javascript/");
+  jsManager.importJavascript("eXo.communication.chat.webui.UIAddContactPopupWindow", "/chatbar/javascript/");
+  jsManager.importJavascript("eXo.communication.chat.webui.UIChatDragDrop", "/chatbar/javascript/");
+  jsManager.importJavascript("eXo.communication.chat.webui.UIChatResize", "/chatbar/javascript/");
+  jsManager.importJavascript("eXo.communication.chat.webui.UICreateNewRoomPopupWindow", "/chatbar/javascript/");
+  jsManager.importJavascript("eXo.communication.chat.webui.UIRoomConfigPopupWindow", "/chatbar/javascript/");
+  jsManager.importJavascript("eXo.communication.chat.webui.UIJoinRoomPopupWindow", "/chatbar/javascript/");
+  jsManager.importJavascript("eXo.communication.chat.webui.UIChatBar", "/chatbar/javascript/");
+  jsManager.importJavascript("eXo.communication.chat.webui.UIPopupMessages", "/chatbar/javascript/");
+  jsManager.importJavascript("eXo.communication.chat.webui.UITooltipAtTop", "/chatbar/javascript/");
 
-	jsManager.addJavascript("eXo.communication.chatbar.eXoChatBar.applicationId = '" + uicomponent.getId() + "';");
-	jsManager.addJavascript("eXo.communication.chatbar.eXoChatBar.restcontextname = '" + uicomponent.getRestContextName() + "';");
-	jsManager.addJavascript("eXo.communication.chatbar.eXoChatBar.cometdcontextname = '" + uicomponent.getCometdContextName() + "';");
-	jsManager.addOnLoadJavascript("eXo.communication.chatbar.eXoChatBar.init");
+  jsManager.addJavascript("eXo.communication.chatbar.eXoChatBar.applicationId = '" + uicomponent.getId() + "';");
+  jsManager.addJavascript("eXo.communication.chatbar.eXoChatBar.restcontextname = '" + uicomponent.getRestContextName() + "';");
+  jsManager.addJavascript("eXo.communication.chatbar.eXoChatBar.cometdcontextname = '" + uicomponent.getCometdContextName() + "';");
+  jsManager.addOnLoadJavascript("eXo.communication.chatbar.eXoChatBar.init");
 %>
 <!-- Begin UIChat -->
 <div class="UIChat ChatSharedIcons UIChatBarPortlet" id="<%=uicomponent.id%>" oncontextmenu="return false;"
@@ -131,8 +131,8 @@
                                     <div class="RightIconButton">
                                         <div class="CenterIconButton">
                                       <!--      <a class="IconHolder ContactManageIcon" title="<%=_ctx.appRes("UIChatBarPortlet.label.addContact");%>"><%=_ctx.appRes("UIChatBarPortlet.label.contacts");%></a> 
-									  -->
-											<a class="IconHolder ContactManageIcon" title="<%=_ctx.appRes("UIChatBarPortlet.label.addContact");%>"></a> 
+                    -->
+                      <a class="IconHolder ContactManageIcon" title="<%=_ctx.appRes("UIChatBarPortlet.label.addContact");%>"></a> 
                                         </div>
                                     </div>
                                 </div>
@@ -277,21 +277,21 @@
                             </div>
                         </div>
                         
-						<!-- writed by hoa.do --> 
-						<div class="LContent">
-						    <% if(uicomponent.isShowEmailLink()) { %>
-								<a class="ItemBar Email" href="<%=uicomponent.getEmailLink()%>"></a>
-							<% } 
-							   if(uicomponent.isShowContactLink()) {%>
-								<a class="ItemBar Contact" href="<%=uicomponent.getContactLink()%>"></a>
-							<% }
-							   if(uicomponent.isShowCalendarLink()) {  
-							%>
-								<a class="ItemBar Calendar" href="<%=uicomponent.getCalendarLink()%>"></a>
-							<% }%>
-						</div>
-						<!-- end -->
-						<div style="padding: 5px 5px 0px 0px; display: none;">
+            <!-- writed by hoa.do --> 
+            <div class="LContent">
+                <% if(uicomponent.isShowEmailLink()) { %>
+                <a class="ItemBar Email" href="<%=uicomponent.getEmailLink()%>"></a>
+              <% } 
+                 if(uicomponent.isShowContactLink()) {%>
+                <a class="ItemBar Contact" href="<%=uicomponent.getContactLink()%>"></a>
+              <% }
+                 if(uicomponent.isShowCalendarLink()) {  
+              %>
+                <a class="ItemBar Calendar" href="<%=uicomponent.getCalendarLink()%>"></a>
+              <% }%>
+            </div>
+            <!-- end -->
+            <div style="padding: 5px 5px 0px 0px; display: none;">
                             <div class="FilterField">
                                 <span></span>
                             </div>
@@ -882,14 +882,14 @@
                                         </td>
                                     </tr>
                                     <!--tr>
-							        <td class="FieldLabel">
-							          <label>Change Subject:</label>
-							        </td>
-							        <td class="FieldComponent">
-							          <input type="checkbox" name="changesubject">
-							        </td>
-							      </tr>
-							      <tr-->
+                      <td class="FieldLabel">
+                        <label>Change Subject:</label>
+                      </td>
+                      <td class="FieldComponent">
+                        <input type="checkbox" name="changesubject">
+                      </td>
+                    </tr>
+                    <tr-->
                                     <tr>
                                         <td class="FieldLabel">
                                             <label>
@@ -900,13 +900,13 @@
                                         </td>
                                     </tr>
                                     <!--tr>
-							        <td class="FieldLabel">
-							          <label>Enable logging:</label>
-							        </td>
-							        <td class="FieldComponent">
-							          <input type="checkbox" name="enablelogging">
-							        </td>
-							      </tr-->
+                      <td class="FieldLabel">
+                        <label>Enable logging:</label>
+                      </td>
+                      <td class="FieldComponent">
+                        <input type="checkbox" name="enablelogging">
+                      </td>
+                    </tr-->
                                     <tr>
                                         <td class="FieldLabel">
                                             <label>
@@ -993,21 +993,21 @@
                                         </td>
                                     </tr>
                                     <!--tr>
-							        <td class="FieldLabel">
-							          <label>Can Change Nick:</label>
-							        </td>
-							        <td class="FieldComponent">
-							          <input type="checkbox" name="canchangenick">
-							        </td>
-							      </tr>
-							      <tr>
-							        <td class="FieldLabel">
-							          <label>Registration :</label>
-							        </td>
-							        <td class="FieldComponent">
-							          <input type="checkbox" name="registration">
-							        </td>
-							      </tr-->
+                      <td class="FieldLabel">
+                        <label>Can Change Nick:</label>
+                      </td>
+                      <td class="FieldComponent">
+                        <input type="checkbox" name="canchangenick">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="FieldLabel">
+                        <label>Registration :</label>
+                      </td>
+                      <td class="FieldComponent">
+                        <input type="checkbox" name="registration">
+                      </td>
+                    </tr-->
                                     <tr>
                                         <td class="FieldLabel">
                                             <label>
@@ -1107,143 +1107,143 @@
 <!--end room config form -->
 <!-- Start popup messages form -->
 <div class="UIPopupWindow UIDragObject MessagesPopup"  style="position: absolute; top: 150px; left: 250px; width: 550px; display: none; visibility: visible; ">
-  	<div class="ExoMessageDecorator">
-		  <div class="TopLeftCornerDecorator">
-		    <div class="TopRightCornerDecorator">
-		      <div class="TopCenterDecorator">
-		        <div class="OverflowContainer">
-			        <div class="PopupTitleIcon"><span></span></div>
-			        <div onclick="eXo.communication.chatbar.webui.UIPopupMessages.setVisible(false);" title="Close Window" class="CloseButton"><span></span></div>
-			        <div class="PopupTitle">eXo Messages</div>
-			      </div>
-		      </div>
-		    </div>
-		  </div>
-		  
-		  <div class="MiddleLeftSideDecorator">
-			  <div class="MiddleRightSideDecorator">
-			    <div class="MiddleCenterDecorator">
-		        
-		        <div class="UIWindowContent">
-		          <div class="PopupContent">
-			          <div class="UIPopupMessages">	
-			          	          
-								  <div class="UIHorizontalTabs">
-								    <div class="TabsContainer">
-							      
-					            <div class="UITab MessageTabDialog">
-						            <div class="DisabledTab">
-					  	            <div class="LeftTab">
-						                <div class="RightTab">
-					    
-					                    <div class="MiddleTab"><div class="TabIcon ErrorIcon">Error</div></div>
-					
-					                  </div>
-					                </div>
-					              </div>
-					            </div>
+    <div class="ExoMessageDecorator">
+      <div class="TopLeftCornerDecorator">
+        <div class="TopRightCornerDecorator">
+          <div class="TopCenterDecorator">
+            <div class="OverflowContainer">
+              <div class="PopupTitleIcon"><span></span></div>
+              <div onclick="eXo.communication.chatbar.webui.UIPopupMessages.setVisible(false);" title="Close Window" class="CloseButton"><span></span></div>
+              <div class="PopupTitle">eXo Messages</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="MiddleLeftSideDecorator">
+        <div class="MiddleRightSideDecorator">
+          <div class="MiddleCenterDecorator">
+            
+            <div class="UIWindowContent">
+              <div class="PopupContent">
+                <div class="UIPopupMessages">  
+                            
+                  <div class="UIHorizontalTabs">
+                    <div class="TabsContainer">
+                    
+                      <div class="UITab MessageTabDialog">
+                        <div class="DisabledTab">
+                          <div class="LeftTab">
+                            <div class="RightTab">
+              
+                              <div class="MiddleTab"><div class="TabIcon ErrorIcon">Error</div></div>
+          
+                            </div>
+                          </div>
+                        </div>
+                      </div>
     
 
-					            <div class="UITab MessageTabDialog">
-						            <div class="SelectedTab">
-					  	            <div class="LeftTab">
-						                <div class="RightTab">
-					    
-					                    <div onclick="" class="MiddleTab"><div class="TabIcon WarningIcon">Warning</div></div>
-					
-					                  </div>
-					                </div>
-					              </div>
-					            </div>
+                      <div class="UITab MessageTabDialog">
+                        <div class="SelectedTab">
+                          <div class="LeftTab">
+                            <div class="RightTab">
+              
+                              <div onclick="" class="MiddleTab"><div class="TabIcon WarningIcon">Warning</div></div>
+          
+                            </div>
+                          </div>
+                        </div>
+                      </div>
     
 
-					            <div class="UITab MessageTabDialog">
-						            <div class="DisabledTab">
-					  	            <div class="LeftTab">
-						                <div class="RightTab">
-					    
-					                    <div class="MiddleTab"><div class="TabIcon InfoIcon">Information</div></div>
-					
-					                  </div>
-					                </div>
-					              </div>
-					            </div>
+                      <div class="UITab MessageTabDialog">
+                        <div class="DisabledTab">
+                          <div class="LeftTab">
+                            <div class="RightTab">
+              
+                              <div class="MiddleTab"><div class="TabIcon InfoIcon">Information</div></div>
+          
+                            </div>
+                          </div>
+                        </div>
+                      </div>
     
 
-								    </div>
-								  </div>
-								  
-								  <div class="UITabContentContainer">
-										<div style="display: none;" class="UITabContent">
-										   <div class="PopupMessageBox">
-										      <div class="ErrorMessage">
-												      <div class="PopupMessageContainer">
-											         </div>
-										       </div>
-										    </div>
-                  	</div>
-										<div class="UITabContent">
-										   <div class="PopupMessageBox">
-										      <div class="WarningMessage">
-												      <div class="PopupMessageContainer">
-												        <div class="MessageContainer">
-											            <div class="PopupIcon WarningMessageIcon"><span></span></div>
-											            <div class="PopupMessage">
-										                
-										             </div>
-										             <div style="clear: left;"><span></span></div>
-										           </div>
-											         </div>
-										       </div>
-										    </div>
-										 </div>
-										<div style="display: none;" class="UITabContent">
-										   <div class="PopupMessageBox">
-										      <div class="InfoMessage">
-												      <div class="PopupMessageContainer">
-											         </div>
-										       </div>
-										    </div>
-										 </div>
+                    </div>
+                  </div>
+                  
+                  <div class="UITabContentContainer">
+                    <div style="display: none;" class="UITabContent">
+                       <div class="PopupMessageBox">
+                          <div class="ErrorMessage">
+                              <div class="PopupMessageContainer">
+                               </div>
+                           </div>
+                        </div>
+                    </div>
+                    <div class="UITabContent">
+                       <div class="PopupMessageBox">
+                          <div class="WarningMessage">
+                              <div class="PopupMessageContainer">
+                                <div class="MessageContainer">
+                                  <div class="PopupIcon WarningMessageIcon"><span></span></div>
+                                  <div class="PopupMessage">
+                                    
+                                 </div>
+                                 <div style="clear: left;"><span></span></div>
+                               </div>
+                               </div>
+                           </div>
+                        </div>
+                     </div>
+                    <div style="display: none;" class="UITabContent">
+                       <div class="PopupMessageBox">
+                          <div class="InfoMessage">
+                              <div class="PopupMessageContainer">
+                               </div>
+                           </div>
+                        </div>
+                     </div>
 
-								  </div>
-								  <div class="MessageActionBar">
-					          
-										<div class="UIAction"> 
-									    <table class="ActionContainer">
-										    <tbody><tr>
-										    	<td>
-											      <div class="ActionButton LightBlueStyle" onclick="eXo.communication.chatbar.webui.UIPopupMessages.setVisible(false);">
-											        <div class="ButtonLeft">
-											          <div class="ButtonRight">
-											            <div class="ButtonMiddle">
-											              <a href="javascript:void(0);">OK</a>
-											            </div>
-											          </div>
-											        </div>
-											      </div>
-											    </td>
-									      </tr>
-									 	  </tbody></table>
-										</div>
-										
-									</div>
-									
-			          </div>
-		          </div>	          
-		        </div>
-	
-			    </div>
-			  </div>
-		  </div>
-		  <div><span></span></div>
-		  <div class="BottomLeftCornerDecorator">
-			  <div class="BottomRightCornerDecorator">
-			    <div class="BottomCenterDecorator"><span></span></div>
-			  </div>
-		  </div>
-	  </div>
-	</div>
+                  </div>
+                  <div class="MessageActionBar">
+                    
+                    <div class="UIAction"> 
+                      <table class="ActionContainer">
+                        <tbody><tr>
+                          <td>
+                            <div class="ActionButton LightBlueStyle" onclick="eXo.communication.chatbar.webui.UIPopupMessages.setVisible(false);">
+                              <div class="ButtonLeft">
+                                <div class="ButtonRight">
+                                  <div class="ButtonMiddle">
+                                    <a href="javascript:void(0);">OK</a>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                       </tbody></table>
+                    </div>
+                    
+                  </div>
+                  
+                </div>
+              </div>            
+            </div>
+  
+          </div>
+        </div>
+      </div>
+      <div><span></span></div>
+      <div class="BottomLeftCornerDecorator">
+        <div class="BottomRightCornerDecorator">
+          <div class="BottomCenterDecorator"><span></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
 <!-- end popup messages form -->
 <!-- Start template area -->
 <div id="templateArea" style="display: none;">
@@ -1459,17 +1459,17 @@
                                                 <span></span>
                                             </div>
                                             <div class="SendFileIcon" title="<%=_ctx.appRes("UIChatBarPortlet.label.sendFile");%>">
-											 <form method="POST" enctype="multipart/form-data" class="ChatSendFileForm" target="chatFileExchangeIframe" action="#">
-											  <input type="file" size="1" class="InputSendFile"  name="uploadfile" onchange="eXo.communication.chatbar.webui.UIChatWindow.sendFile(this, event);" />
-											  <span class="SendFileLabel"><%=_ctx.appRes("UIChatBarPortlet.label.sendFile");%></span>
-											 </form>
-											</div>
-											                      <div class="SeperatorLine">
+                       <form method="POST" enctype="multipart/form-data" class="ChatSendFileForm" target="chatFileExchangeIframe" action="#">
+                        <input type="file" size="1" class="InputSendFile"  name="uploadfile" onchange="eXo.communication.chatbar.webui.UIChatWindow.sendFile(this, event);" />
+                        <span class="SendFileLabel"><%=_ctx.appRes("UIChatBarPortlet.label.sendFile");%></span>
+                       </form>
+                      </div>
+                                            <div class="SeperatorLine">
                                                 <span></span>
                                             </div>
             
-											                      <div class="Icon HistoryIcon" onclick="eXo.communication.chatbar.webui.UIChatWindow.showPopupMenu(this, event)">
-											                        <div class="IconHolder HistoryIcon">
+                                            <div class="Icon HistoryIcon" onclick="eXo.communication.chatbar.webui.UIChatWindow.showPopupMenu(this, event)">
+                                              <div class="IconHolder HistoryIcon">
                                                 <div class="Label DownArrow1Icon"><%=_ctx.appRes("UIChatBarPortlet.label.history") %></div>
                                               </div> 
                                               
@@ -1515,7 +1515,7 @@
                                               </div>
                                               <% /*End Popup Menu*/ %>
                                             </div>
-											                      
+                                            
                                             <div class="ClearLeft">
                                                 <span></span>
                                             </div>

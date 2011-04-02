@@ -1,13 +1,13 @@
 <%
-	import org.exoplatform.calendar.CalendarUtils;
-	uiForm = uicomponent.getParentFrom() ;
-	int timeInterval = 15;
-	int blocks = 60/timeInterval ;
-	public int mod(int value, int div) {
-		return (value % div) ;
-	}
-	def rcontext = _ctx.getRequestContext() ;
-	rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.UICalendarPortlet.initCheck("' + uicomponent.id + '") ;') ;
+  import org.exoplatform.calendar.CalendarUtils;
+  uiForm = uicomponent.getParentFrom() ;
+  int timeInterval = 15;
+  int blocks = 60/timeInterval ;
+  public int mod(int value, int div) {
+    return (value % div) ;
+  }
+  def rcontext = _ctx.getRequestContext() ;
+  rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.UICalendarPortlet.initCheck("' + uicomponent.id + '") ;') ;
 %>
 <div class="UIAddNewEvent $uicomponent.id" id="$uicomponent.id" serverTimeZone="<%=uicomponent.getServerTimeZone()%>" >
   <div class="NewEventAttendee">
@@ -36,20 +36,20 @@
                 :
               </div>
               <div class="TimeField">
-	              <div class="Field">
-	               <%uiForm.renderField(uicomponent.FIELD_TO_TIME)%>
-	              </div>
-	              <div class="Label">
-	                <%=_ctx.appRes(uiForm.id + ".label." + uicomponent.FIELD_FROM_TIME)%>
-	                :
-	              </div>
-	              <div class="Field">
-	               <%uiForm.renderField(uicomponent.FIELD_FROM_TIME)%>
-	              </div>
-	              <div class="Label">
-	                <%=_ctx.appRes(uiForm.id + ".label." + uicomponent.FIELD_TO_TIME)%>
-	                :
-	              </div>
+                <div class="Field">
+                 <%uiForm.renderField(uicomponent.FIELD_TO_TIME)%>
+                </div>
+                <div class="Label">
+                  <%=_ctx.appRes(uiForm.id + ".label." + uicomponent.FIELD_FROM_TIME)%>
+                  :
+                </div>
+                <div class="Field">
+                 <%uiForm.renderField(uicomponent.FIELD_FROM_TIME)%>
+                </div>
+                <div class="Label">
+                  <%=_ctx.appRes(uiForm.id + ".label." + uicomponent.FIELD_TO_TIME)%>
+                  :
+                </div>
               </div>
               <div style="clear: right;">
                 <span></span>
@@ -73,18 +73,18 @@
                   </div>
                 </td>
                 <%
-									int i = 0 ;
-									while(i < 24){
-										if(i < 10) {
-											mylabel = "0" + i ;
-										}else {
-											mylabel = i ;
-										}
+                  int i = 0 ;
+                  while(i < 24){
+                    if(i < 10) {
+                      mylabel = "0" + i ;
+                    }else {
+                      mylabel = i ;
+                    }
                 %>
-								<td colspan="4"; class="TimeNumber">$mylabel</td>
-                <%	
-										i++ ;
-									}
+                <td colspan="4"; class="TimeNumber">$mylabel</td>
+                <%  
+                    i++ ;
+                  }
                 %>
               </tr>
               <tr>
@@ -106,15 +106,15 @@
                     </div>
                 </td>
                 <%
-									styleClassF = "ParticipantsFreeTime" ;
-									j = 0
-									while(j < 96){
+                  styleClassF = "ParticipantsFreeTime" ;
+                  j = 0
+                  while(j < 96){
                 %>
                 <td class="$styleClassF UICellBlock">
                   &nbsp;</td>
                 <%
-									j ++ ;
-								}								
+                  j ++ ;
+                }                
                 %>
               </tr>
               <% Map parMap = uicomponent.getMap() ; %>
@@ -132,15 +132,15 @@
                   </div>
                 </td>
                 <%
-										j = 0 ;
-										styleClassF = "FreeTime" ;										
-										while(j < 96){										
+                    j = 0 ;
+                    styleClassF = "FreeTime" ;                    
+                    while(j < 96){                    
                 %>
                 <td class="$styleClassF">
                   &nbsp;</td>
                 <%
-										j ++ ;
-									}%>
+                    j ++ ;
+                  }%>
               </tr>
               <%}%>
             </tbody>

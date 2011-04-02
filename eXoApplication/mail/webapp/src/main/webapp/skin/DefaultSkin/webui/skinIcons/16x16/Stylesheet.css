@@ -1,521 +1,521 @@
 .UIMailPortlet .TagIcon {
-	background: url('icons/RedTag.gif') no-repeat;
-	width: 16px; height: 16px;
-	cursor: pointer;
-	float: left;
+  background: url('icons/RedTag.gif') no-repeat;
+  width: 16px; height: 16px;
+  cursor: pointer;
+  float: left;
 }
 
 .UIMailPortlet .CheckedMenu {
-	background: url('icons/BlueCheckerIcon.gif') no-repeat left center;
+  background: url('icons/BlueCheckerIcon.gif') no-repeat left center;
 }
 
 .UIMailPortlet .MaximizeReadingPane {
-	background: url('icons/MaximizeReadingPane.gif') no-repeat;
-	width: 17px; height: 16px;
-	cursor: pointer;
+  background: url('icons/MaximizeReadingPane.gif') no-repeat;
+  width: 17px; height: 16px;
+  cursor: pointer;
 }
 
 .UIMailPortlet .ReadingPaneBar .BackToList {
-	background: url('icons/BackToListIcon.gif') no-repeat;
-	width: 17px; height: 16px;
-	cursor: pointer;
-	float:left;
-	margin:4px 4px 0px 10px;
+  background: url('icons/BackToListIcon.gif') no-repeat;
+  width: 17px; height: 16px;
+  cursor: pointer;
+  float:left;
+  margin:4px 4px 0px 10px;
 }
 
 .UIMailPortlet .ReadingPaneBar .HidePreview {
-	background: url('icons/HidePreviewIcon.gif') no-repeat;
-	width: 17px; height: 16px;
-	cursor: pointer;
-	float:left;
-	margin:4px 4px 0px 10px;
+  background: url('icons/HidePreviewIcon.gif') no-repeat;
+  width: 17px; height: 16px;
+  cursor: pointer;
+  float:left;
+  margin:4px 4px 0px 10px;
 }
 
 .UIMailPortlet .ReadingPaneBar .SplitLayout {
-	background: url('icons/SplitLayoutIcon.gif') no-repeat;
-	width: 26px; height: 16px;
-	cursor: pointer;
-	float:left;
-	margin:4px 4px 0px 10px;
+  background: url('icons/SplitLayoutIcon.gif') no-repeat;
+  width: 26px; height: 16px;
+  cursor: pointer;
+  float:left;
+  margin:4px 4px 0px 10px;
 }
 
 .UIMailPortlet .MinimumReadingPane {
-	background: url('icons/MinimumReadingPane.gif') no-repeat;
-	width: 17px; height: 16px;
-	cursor: pointer;
+  background: url('icons/MinimumReadingPane.gif') no-repeat;
+  width: 17px; height: 16px;
+  cursor: pointer;
 }
 
 .UIMailPortlet .PriorityIcon {
-	background: url('icons/LowPriorityIcon.gif') no-repeat;
-	width: 16px; height: 16px;
+  background: url('icons/LowPriorityIcon.gif') no-repeat;
+  width: 16px; height: 16px;
 }
 
 .UIMailPortlet .PriorityHighlightIcon {
-	background: url('icons/PriorityHighLight.gif') no-repeat;
-	width: 16px; height: 16px;
+  background: url('icons/PriorityHighLight.gif') no-repeat;
+  width: 16px; height: 16px;
 }
 
 .UIMailPortlet .TotalMessageIcon {
-	background: url('icons/TotalMessageIcon.gif') no-repeat;
-	width: 16px; height: 16px;
+  background: url('icons/TotalMessageIcon.gif') no-repeat;
+  width: 16px; height: 16px;
 }
 
 .UIMailPortlet .DownArrow3Icon {
-	background: url('icons/BlackDownArrow.gif') no-repeat left center;
-	height: 16px; width: 16px;
-	cursor: pointer;
+  background: url('icons/BlackDownArrow.gif') no-repeat left center;
+  height: 16px; width: 16px;
+  cursor: pointer;
 }
 
 .UIMailPortlet .AddressIcon {
-	background: url('icons/AddressBookIcon.gif') no-repeat left center;
+  background: url('icons/AddressBookIcon.gif') no-repeat left center;
 }
 
 .UIMailPortlet .BlueTag {
-	background: url('icons/BlueTag.gif') no-repeat left center; /* orientation=lt */
-	background: url('icons/BlueTag.gif') no-repeat right center; /* orientation=rt */
+  background: url('icons/BlueTag.gif') no-repeat left center; /* orientation=lt */
+  background: url('icons/BlueTag.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMailPortlet .RedTag {
-	background: url('icons/RedTag.gif') no-repeat left center;
+  background: url('icons/RedTag.gif') no-repeat left center;
 }
 
 .UIMailPortlet .GreenTag {
-	background: url('icons/GreenTag.gif') no-repeat left center;
+  background: url('icons/GreenTag.gif') no-repeat left center;
 }
 
 .UIMailPortlet .VioletTag {
-	background: url('icons/VioletTag.gif') no-repeat left center;
+  background: url('icons/VioletTag.gif') no-repeat left center;
 }
 
 .UIMailPortlet .brownTag {
-	background: url('icons/brownTag.gif') no-repeat left center;
+  background: url('icons/brownTag.gif') no-repeat left center;
 }
 
 .UIMailPortlet .OrangeTag {
-	background: url('icons/OrangeTag.gif') no-repeat left center;
+  background: url('icons/OrangeTag.gif') no-repeat left center;
 }
 
 .UIMailPortlet .PingTag {
-	background: url('icons/PingTag.gif') no-repeat left center;
+  background: url('icons/PingTag.gif') no-repeat left center;
 }
 
 .UIMailPortlet .PingVioletTag {
-	background: url('icons/PingVioletTag.gif') no-repeat left center;
+  background: url('icons/PingVioletTag.gif') no-repeat left center;
 }
 
 .UIMailPortlet .YellowTag {
-	background: url('icons/YellowTag.gif') no-repeat left center;
+  background: url('icons/YellowTag.gif') no-repeat left center;
 }
 
 .UIMailPortlet .MultipTag {
-	background: url('icons/MultipTag.gif') no-repeat left center; /* orientation=lt */
-	background: url('icons/MultipTag-rt.gif') no-repeat right center; /* orientation=rt */
+  background: url('icons/MultipTag.gif') no-repeat left center; /* orientation=lt */
+  background: url('icons/MultipTag-rt.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMailPortlet .MoreActionsIcon {
-	background: url('icons/MoreActions.gif') no-repeat left; /* orientation=lt */
-	background: url('icons/MoreActions.gif') no-repeat right; /* orientation=rt */
+  background: url('icons/MoreActions.gif') no-repeat left; /* orientation=lt */
+  background: url('icons/MoreActions.gif') no-repeat right; /* orientation=rt */
 }
 
 .UIMailPortlet .View {
-	background: url('icons/View.gif') no-repeat left; /* orientation=lt */
-	background: url('icons/View.gif') no-repeat right; /* orientation=rt */
+  background: url('icons/View.gif') no-repeat left; /* orientation=lt */
+  background: url('icons/View.gif') no-repeat right; /* orientation=rt */
 }
 
 .UIMailPortlet .ReplyMailAllIcon {
-	background: url('icons/ReplyAllcon16x14.gif') no-repeat left 6px;
+  background: url('icons/ReplyAllcon16x14.gif') no-repeat left 6px;
 }
 
 .UIMailPortlet .ReplyMailIcon {
-	background: url('icons/Replyicon16x14.gif') no-repeat left 6px;
+  background: url('icons/Replyicon16x14.gif') no-repeat left 6px;
 }
 
 .UIMailPortlet .ReplyIcon {
-	background: url('icons/ReplyIcon.gif') no-repeat left 6px;
+  background: url('icons/ReplyIcon.gif') no-repeat left 6px;
 }
 
 .UIMailPortlet .DeleteMailIcon {
-	background: url('icons/DeleteMail16x11.gif') no-repeat left 6px;
+  background: url('icons/DeleteMail16x11.gif') no-repeat left 6px;
 }
 
 .UIMailPortlet .ExportIcon {
-	background: url('icons/ExportMail.gif') no-repeat left 6px;
+  background: url('icons/ExportMail.gif') no-repeat left 6px;
 }
 
 .UIMailPortlet .ViewFullHeadersIcon {
-	background: url('icons/ViewFullHeaders.gif') no-repeat left 6px;
+  background: url('icons/ViewFullHeaders.gif') no-repeat left 6px;
 }
 
 .UIMailPortlet .AddContactIcon {
-	background: url('icons/AddContact16x13.gif') no-repeat left 6px;
+  background: url('icons/AddContact16x13.gif') no-repeat left 6px;
 }
 
 
 .UIMailPortlet .PrintMailIcon {
-	background: url('icons/Printmail16x16.gif') no-repeat left 6px;
+  background: url('icons/Printmail16x16.gif') no-repeat left 6px;
 }
 
 .UIMailPortlet .ReplyAllMailIcon {
-	background: url('icons/ReplyAllcon16x14.gif') no-repeat left 6px;
+  background: url('icons/ReplyAllcon16x14.gif') no-repeat left 6px;
 }
 
 .UIMailPortlet .ForwardMailIcon {
-	background: url('icons/Forward16x14.gif') no-repeat left 6px;
+  background: url('icons/Forward16x14.gif') no-repeat left 6px;
 }
 
 .UIMailPortlet .MoveMailIcon {
-	background: url('icons/MoveMessageIcon.gif') no-repeat left 6px;
+  background: url('icons/MoveMessageIcon.gif') no-repeat left 6px;
 }
 
 .UIMailPortlet .CreateFilterIcon {
-	background: url('icons/FilterAddIcon.gif') no-repeat left 6px;
+  background: url('icons/FilterAddIcon.gif') no-repeat left 6px;
 }
 
 .UIMailPortlet .TagMailIcon {
-	background: url('icons/VioletTag.gif') no-repeat left 6px;
+  background: url('icons/VioletTag.gif') no-repeat left 6px;
 }
 
 .UIMailPortlet .OpenMailIcon {
-	background: url('icons/ReadMessagesIcon.gif') no-repeat left 6px;
+  background: url('icons/ReadMessagesIcon.gif') no-repeat left 6px;
 }
 
 .UIMailPortlet .ReplyAllIcon {
-	background: url('icons/ReplyAllIcon.gif') no-repeat left 6px;
+  background: url('icons/ReplyAllIcon.gif') no-repeat left 6px;
 }
 
 .UIMailPortlet .ForwardIcon {
-	background: url('icons/ForwardIcon.gif') no-repeat left 6px;
+  background: url('icons/ForwardIcon.gif') no-repeat left 6px;
 }
 
 .UIMailPortlet .DefaultLayoutIcon {
-	background: url('icons/DefaultLayout.gif') no-repeat left 6px;
+  background: url('icons/DefaultLayout.gif') no-repeat left 6px;
 }
 
 .UIMailPortlet .HideFolderListIcon {
-	background: url('icons/HideFolderList.gif') no-repeat left 6px;
+  background: url('icons/HideFolderList.gif') no-repeat left 6px;
 }
 
 .UIMailPortlet .HideMessagesPaneIcon {
-	background: url('icons/HideMessagesPane.gif') no-repeat left 6px;
+  background: url('icons/HideMessagesPane.gif') no-repeat left 6px;
 }
 
 .UIMailPortlet .HideReadingPaneIcon {
-	background: url('icons/HideReadingPane.gif') no-repeat left 6px;
+  background: url('icons/HideReadingPane.gif') no-repeat left 6px;
 }
 
 .UIMailPortlet .EditDraftIcon {
-	background: url('icons/EditDraftsIcon.gif') no-repeat left center;
+  background: url('icons/EditDraftsIcon.gif') no-repeat left center;
 }
 
 .UIMailPortlet .PrintIcon {
-	background: url('icons/PrintIcon.gif') no-repeat left center;
-	width: 2px; height: 26px;
+  background: url('icons/PrintIcon.gif') no-repeat left center;
+  width: 2px; height: 26px;
 }
 
 .UIMailPortlet .MarkReadIcon {
-	background: url('icons/MarkReadIcon.gif') no-repeat left center;
+  background: url('icons/MarkReadIcon.gif') no-repeat left center;
 }
 
 .UIMailPortlet .MarkUnreadIcon {
-	background: url('icons/MarkUnreadIcon.gif') no-repeat left center;
+  background: url('icons/MarkUnreadIcon.gif') no-repeat left center;
 }
 
 .UIMailPortlet .RemoveStarIcon {
-	background: url('icons/RemoveStarIcon.gif') no-repeat left center;
+  background: url('icons/RemoveStarIcon.gif') no-repeat left center;
 }
 
 .UIMailPortlet .MoveMessageIcon {
-	background: url('icons/MoveMessageIcon.gif') no-repeat left center;
+  background: url('icons/MoveMessageIcon.gif') no-repeat left center;
 }
 
 .UIMailPortlet .ImportMessageIcon {
-	background: url('icons/ImportMessageIcon.gif') no-repeat left center;
+  background: url('icons/ImportMessageIcon.gif') no-repeat left center;
 }
 
 .UIMailPortlet .EmportMessageIcon {
-	background: url('icons/EmportMessageIcon.gif') no-repeat left center;
+  background: url('icons/EmportMessageIcon.gif') no-repeat left center;
 }
 
 .UIMailPortlet .AllMessagesIcon {
-	background: url('icons/AllMessagesIcon.gif') no-repeat left center;
+  background: url('icons/AllMessagesIcon.gif') no-repeat left center;
 }
 
 .UIMailPortlet .ViewAsIcon {
-	background: url('icons/ViewAsIcon.gif') no-repeat left 6px;
+  background: url('icons/ViewAsIcon.gif') no-repeat left 6px;
 }
 
 .UIMailPortlet .ListIcon {
-	background: url('icons/ListIcon.gif') no-repeat left center;
+  background: url('icons/ListIcon.gif') no-repeat left center;
 }
 
 .UIMailPortlet .ThreadIcon {
-	background: url('icons/ThreadIcon.gif') no-repeat left center;
+  background: url('icons/ThreadIcon.gif') no-repeat left center;
 }
 
 .UIMailPortlet .ConversationIcon {
-	background: url('icons/ConversationIcon.gif') no-repeat left center;
+  background: url('icons/ConversationIcon.gif') no-repeat left center;
 }
 
 .UIMailPortlet .GroupByDateIcon {
-	background:transparent url('icons/GroupByDate.gif') no-repeat left center;
+  background:transparent url('icons/GroupByDate.gif') no-repeat left center;
 }
 
 .UIMailPortlet .CheckedIcon{
-	background:transparent url('icons/BlueCheckerIcon.gif') no-repeat left center;
+  background:transparent url('icons/BlueCheckerIcon.gif') no-repeat left center;
 }
 
 
 .UIMailPortlet .StaredMessagesIcon {
-	background: url('icons/AllMessagesIcon.gif') no-repeat left center;
+  background: url('icons/AllMessagesIcon.gif') no-repeat left center;
 }
 
 .UIMailPortlet .UnreadMessagesIcon {
-	background: url('icons/UnreadMessagesIcon.gif') no-repeat left center;
+  background: url('icons/UnreadMessagesIcon.gif') no-repeat left center;
 }
 
 .UIMailPortlet .ReadMessagesIcon {
-	background: url('icons/ReadMessagesIcon.gif') no-repeat left center;
+  background: url('icons/ReadMessagesIcon.gif') no-repeat left center;
 }
 
 .UIMailPortlet .MessagesAttachmentIcon {
-	background: url('icons/MessagesAttachmentIcon.gif') no-repeat left center;
+  background: url('icons/MessagesAttachmentIcon.gif') no-repeat left center;
 }
 
 .UIMailPortlet .DeleteIcon {
-	background: url('icons/Dustbin.gif') no-repeat left center;
-	width: 2px; height: 26px;
+  background: url('icons/Dustbin.gif') no-repeat left center;
+  width: 2px; height: 26px;
 }
 
 .UIMailPortlet .UnStarredIcon {
-	background: url('icons/NomalStarIcon.gif') no-repeat left center;
-	height: 16px;
-	cursor: pointer;
+  background: url('icons/NomalStarIcon.gif') no-repeat left center;
+  height: 16px;
+  cursor: pointer;
 }
 
 .UIMailPortlet .UIContextMenuContainer .MenuItem .StarredIcon {
-	background: url('icons/HighLightStarIcon.gif') no-repeat left center;
-	height: auto;
+  background: url('icons/HighLightStarIcon.gif') no-repeat left center;
+  height: auto;
 }
 
 .UIMailPortlet .StarredIcon {
-	background: url('icons/HighLightStarIcon.gif') no-repeat left center;
-	cursor: pointer;	 
-	height: 16px;
+  background: url('icons/HighLightStarIcon.gif') no-repeat left center;
+  cursor: pointer;   
+  height: 16px;
 }
 
 .UIMailPortlet .AttachmentIcon {
-	background: url('icons/AttackmentIcon.gif') no-repeat left center;
-	height: 16px;
-	cursor: pointer;
+  background: url('icons/AttackmentIcon.gif') no-repeat left center;
+  height: 16px;
+  cursor: pointer;
 }
 
 .UIMailPortlet .WarningAttachmentIcon {
-	background: url('icons/WarningAttachmentIcon.gif') no-repeat left center;
-	height: 16px;
-	cursor: pointer;
+  background: url('icons/WarningAttachmentIcon.gif') no-repeat left center;
+  height: 16px;
+  cursor: pointer;
 }
 
 
 .UIMailPortlet .NomalReadingPane {
-	background: url('icons/NomalReadingPane.gif') no-repeat left center;
-	height: 16px;
-	cursor: pointer;
+  background: url('icons/NomalReadingPane.gif') no-repeat left center;
+  height: 16px;
+  cursor: pointer;
 }
 
 .UIMailPortlet .NextPageArrow {
-	background: url('icons/NextPage.gif') no-repeat left center;
-	height: 16px;
-	width: 16px;
-	cursor: pointer;
+  background: url('icons/NextPage.gif') no-repeat left center;
+  height: 16px;
+  width: 16px;
+  cursor: pointer;
 }
 
 .UIMailPortlet .LastPageArrow {
-	background: url('icons/LastPage.gif') no-repeat left center;
-	height: 16px;
-	width: 16px;
-	cursor: pointer;
+  background: url('icons/LastPage.gif') no-repeat left center;
+  height: 16px;
+  width: 16px;
+  cursor: pointer;
 }
 
 .UIMailPortlet .FirstPageArrow{
-	background: url('icons/PreviousPage.gif') no-repeat left center;
-	height: 16px;
-	width: 16px;
-	cursor: pointer;
+  background: url('icons/PreviousPage.gif') no-repeat left center;
+  height: 16px;
+  width: 16px;
+  cursor: pointer;
 }
 
 .UIMailPortlet .PreviousPageArrow {
-	background: url('icons/BackPage.gif') no-repeat;
-	height: 16px;
-	width: 16px;
-	cursor: pointer;
+  background: url('icons/BackPage.gif') no-repeat;
+  height: 16px;
+  width: 16px;
+  cursor: pointer;
 }
 
 .UIMailPortlet .FolderIcon {
-	background: url('icons/FolderIcon.gif') no-repeat left center; /* orientation=lt */
-	background: url('icons/FolderIcon.gif') no-repeat right center; /* orientation=rt */
+  background: url('icons/FolderIcon.gif') no-repeat left center; /* orientation=lt */
+  background: url('icons/FolderIcon.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMailPortlet .AccountIcon {
-	background: url('icons/AccountIcon.gif') no-repeat left center;
-	width: 17px;
+  background: url('icons/AccountIcon.gif') no-repeat left center;
+  width: 17px;
 }
 
 .UIMailPortlet .NoPriority { }
 
 .UIMailPortlet .LowPriority {
-	background: url('icons/LowPriorityIcon.gif') no-repeat;
-	text-align: center;
-	cursor: pointer;
-	width: 16px; height: 16px;
-	margin: auto;
+  background: url('icons/LowPriorityIcon.gif') no-repeat;
+  text-align: center;
+  cursor: pointer;
+  width: 16px; height: 16px;
+  margin: auto;
 }
 
 .UIMailPortlet .HighPriority {
-	background: url('icons/HighPriorityIcon.gif') no-repeat;
-	text-align: center;
-	cursor: pointer;
-	width: 16px; height: 16px;
-	margin: auto;
+  background: url('icons/HighPriorityIcon.gif') no-repeat;
+  text-align: center;
+  cursor: pointer;
+  width: 16px; height: 16px;
+  margin: auto;
 }
 
 .UIMailPortlet .UpArrow1Icon {
-	background: url('icons/BlueUpArrow.gif') no-repeat;
+  background: url('icons/BlueUpArrow.gif') no-repeat;
 }
 
 .UIMailPortlet .ViewDownloadIcon {
-	background: url('icons/ViewIcon.gif') no-repeat left center; /* orientation=lt */
-	background: url('icons/ViewIcon.gif') no-repeat right center; /* orientation=rt */
+  background: url('icons/ViewIcon.gif') no-repeat left center; /* orientation=lt */
+  background: url('icons/ViewIcon.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMailPortlet .DownloadIcon {
-	background: url('icons/DownloadIcon.gif') no-repeat left center; /* orientation=lt */
-	background: url('icons/DownloadIcon.gif') no-repeat right center; /* orientation=rt */
+  background: url('icons/DownloadIcon.gif') no-repeat left center; /* orientation=lt */
+  background: url('icons/DownloadIcon.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMailPortlet .AddAccount {
-	background: url('icons/AddAccount.gif') no-repeat left center; /* orientation=lt */
-	background: url('icons/AddAccount.gif') no-repeat right center; /* orientation=rt */
+  background: url('icons/AddAccount.gif') no-repeat left center; /* orientation=lt */
+  background: url('icons/AddAccount.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMailPortlet .AddFolderIcon {
-	background: url('icons/AddNewFolderIcon.gif') no-repeat left center; /* orientation=lt */
-	background: url('icons/AddNewFolderIcon.gif') no-repeat right center; /* orientation=rt */
+  background: url('icons/AddNewFolderIcon.gif') no-repeat left center; /* orientation=lt */
+  background: url('icons/AddNewFolderIcon.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMailPortlet .AddTagIcon {
-	background: url('icons/AddNewTagIcon.gif') no-repeat left center; /* orientation=lt */
-	background: url('icons/AddNewTagIcon.gif') no-repeat right center; /* orientation=rt */
+  background: url('icons/AddNewTagIcon.gif') no-repeat left center; /* orientation=lt */
+  background: url('icons/AddNewTagIcon.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMailPortlet .CheckItem {
-	background: url('icons/CheckItem.gif') no-repeat left center; /* orientation=lt */
-	background: url('icons/CheckItem.gif') no-repeat right center; /* orientation=rt */
+  background: url('icons/CheckItem.gif') no-repeat left center; /* orientation=lt */
+  background: url('icons/CheckItem.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMailPortlet .CloseFolder {
-	background: url('icons/DefaultIcon.gif') no-repeat left center; /* orientation=lt */
-	background: url('icons/DefaultIcon.gif') no-repeat right center; /* orientation=rt */
+  background: url('icons/DefaultIcon.gif') no-repeat left center; /* orientation=lt */
+  background: url('icons/DefaultIcon.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMailPortlet .Folder {
-	background: url('icons/DefaultIcon.gif') no-repeat left center; /* orientation=lt */
-	background: url('icons/DefaultIcon-rt.gif') no-repeat right center; /* orientation=rt */
+  background: url('icons/DefaultIcon.gif') no-repeat left center; /* orientation=lt */
+  background: url('icons/DefaultIcon-rt.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMailPortlet .ParentFolder {
-	background: url('icons/ParentIcon.gif') no-repeat left center; /* orientation=lt */
-	background: url('icons/ParentIcon-rt.gif') no-repeat right center; /* orientation=rt */
+  background: url('icons/ParentIcon.gif') no-repeat left center; /* orientation=lt */
+  background: url('icons/ParentIcon-rt.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMailPortlet .DeleteAccount {
-	background: url('icons/DeleteAccount.gif') no-repeat left center; /* orientation=lt */
-	background: url('icons/DeleteAccount.gif') no-repeat right center; /* orientation=rt */
+  background: url('icons/DeleteAccount.gif') no-repeat left center; /* orientation=lt */
+  background: url('icons/DeleteAccount.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMailPortlet .EditAccount {
-	background: url('icons/EditAccount.gif') no-repeat left center; /* orientation=lt */
-	background: url('icons/EditAccount.gif') no-repeat right center; /* orientation=rt */
+  background: url('icons/EditAccount.gif') no-repeat left center; /* orientation=lt */
+  background: url('icons/EditAccount.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMailPortlet .EmptyIcon {
-	background: url('icons/EmptyIcon.gif') no-repeat left center; /* orientation=lt */
-	background: url('icons/EmptyIcon-rt.gif') no-repeat right center; /* orientation=rt */
+  background: url('icons/EmptyIcon.gif') no-repeat left center; /* orientation=lt */
+  background: url('icons/EmptyIcon-rt.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMailPortlet .MarkAll {
-	background: url('icons/MarkAll.gif') no-repeat left center;
+  background: url('icons/MarkAll.gif') no-repeat left center;
 }
 
 .UIMailPortlet .MoveToTrash {
-	background: url('icons/MoveToTrashIcon.gif') no-repeat left center;
+  background: url('icons/MoveToTrashIcon.gif') no-repeat left center;
 }
 
 .UIMailPortlet .RemoveFolderIcon {
-	background: url('icons/RemoveFolderIcon.gif') no-repeat left center;
+  background: url('icons/RemoveFolderIcon.gif') no-repeat left center;
 }
 
 .UIMailPortlet .RenameFolderIcon {
-	background: url('icons/RenameFolderIcon.gif') no-repeat left center;
+  background: url('icons/RenameFolderIcon.gif') no-repeat left center;
 }
 
 .UIMailPortlet .SearchFolderIcon {
-	background: url('icons/SearchFolderIcon.gif') no-repeat left center;
+  background: url('icons/SearchFolderIcon.gif') no-repeat left center;
 }
 
 .UIMailPortlet .SearchActions {
-	background: url('icons/SearchActions.gif') no-repeat center;
+  background: url('icons/SearchActions.gif') no-repeat center;
 }
 
 .UIMailPortlet .LoadingIcon {
-	background: url('icons/loading.gif') no-repeat center;
-	float: left;
-	width: 16px;
-	height: 16px;
-	margin: 0px 2px 0px 0px;
+  background: url('icons/loading.gif') no-repeat center;
+  float: left;
+  width: 16px;
+  height: 16px;
+  margin: 0px 2px 0px 0px;
 }
 .UIMailPortlet .OwnerIcon {
-	background: url('icons/OwnerIcon.gif') no-repeat left center;
-	height: 16px;
+  background: url('icons/OwnerIcon.gif') no-repeat left center;
+  height: 16px;
 }
 
 .UIMailPortlet .OfflineIcon {
-	background: url('icons/OffLineIcon.png') no-repeat left center;
-	height: 16px;
+  background: url('icons/OffLineIcon.png') no-repeat left center;
+  height: 16px;
 }
  .UIMailPortlet .CheckingIcon {
-	background: url('icons/loading.gif') no-repeat center left center;
+  background: url('icons/loading.gif') no-repeat center left center;
 }
 
  .UIMailPortlet .MyFolderContent .CheckingIcon {
-	height: 20px; 
-	width:20px; 
-	float:left; 
-	margin-left:-48px; 
-	position:absolute;
+  height: 20px; 
+  width:20px; 
+  float:left; 
+  margin-left:-48px; 
+  position:absolute;
 }
 
 .UIMailPortlet .SyncIcon {
-	background: url('icons/Sync.gif') no-repeat center;
-	height:12px;
- 	width:11px;
- 	margin-right:5px;/* orientation=lt */
- 	margin-left:5px;/* orientation=rt */
- 	float: right; /* orientation=lt */
- 	float: left; /* orientation=rt */
+  background: url('icons/Sync.gif') no-repeat center;
+  height:12px;
+   width:11px;
+   margin-right:5px;/* orientation=lt */
+   margin-left:5px;/* orientation=rt */
+   float: right; /* orientation=lt */
+   float: left; /* orientation=rt */
 }
 
 .UIMailPortlet .SyncingIcon {
-	background: url('icons/loading.gif') no-repeat center;
-	height:12px;
- 	width:11px;
- 	margin-right:5px;/* orientation=lt */
- 	margin-left:5px;/* orientation=rt */
- 	float: right; /* orientation=lt */
- 	float: left; /* orientation=rt */
+  background: url('icons/loading.gif') no-repeat center;
+  height:12px;
+   width:11px;
+   margin-right:5px;/* orientation=lt */
+   margin-left:5px;/* orientation=rt */
+   float: right; /* orientation=lt */
+   float: left; /* orientation=rt */
 }
 
 .UIMailPortlet .SendMailIcon {
-	background: url('icons/SendMailIcon.gif') no-repeat;
+  background: url('icons/SendMailIcon.gif') no-repeat;
 }
 
 /*

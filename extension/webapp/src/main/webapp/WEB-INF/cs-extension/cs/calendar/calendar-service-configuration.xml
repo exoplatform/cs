@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
-	xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
-	
-	<component>
+  xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
+  
+  <component>
     <key>org.exoplatform.calendar.service.CalendarService</key>
     <type>org.exoplatform.calendar.service.impl.CalendarServiceImpl</type>
-		<init-params>
+    <init-params>
       <properties-param>
         <name>eventNumber.info</name>
         <property name="eventNumber" value="100"/>         
@@ -14,25 +14,25 @@
   </component>    
   
   <external-component-plugins>
-  	<target-component>org.exoplatform.services.organization.OrganizationService</target-component>
-	  
-	  <component-plugin>
-	    <name>calendar.new.user.event.listener</name>
-	    <set-method>addListenerPlugin</set-method>
-	    <type>org.exoplatform.calendar.service.impl.NewUserListener</type>
-	    <description>description</description>
-	    <init-params>
+    <target-component>org.exoplatform.services.organization.OrganizationService</target-component>
+    
+    <component-plugin>
+      <name>calendar.new.user.event.listener</name>
+      <set-method>addListenerPlugin</set-method>
+      <type>org.exoplatform.calendar.service.impl.NewUserListener</type>
+      <description>description</description>
+      <init-params>
         <value-param>
-        	<name>defaultEventCategories</name>
-        	<value>Meeting,Calls,Clients,Holiday,Anniversary</value><!-- Multi value, use coma (,) to split values-->
+          <name>defaultEventCategories</name>
+          <value>Meeting,Calls,Clients,Holiday,Anniversary</value><!-- Multi value, use coma (,) to split values-->
         </value-param>
         <value-param>
-        	<name>defaultCalendarCategory</name>
-        	<value>My group</value><!-- Single value-->
+          <name>defaultCalendarCategory</name>
+          <value>My group</value><!-- Single value-->
         </value-param>
         <value-param>
-        	<name>defaultCalendar</name>
-        	<value>Default</value><!-- Multi value, use coma (,) to split values-->
+          <name>defaultCalendar</name>
+          <value>Default</value><!-- Multi value, use coma (,) to split values-->
         </value-param>
         <!--Params for default calendar setting-->
         <value-param>
@@ -81,67 +81,67 @@
         </value-param>
         
          <value-param>
-	         <name>workingTimeEnd</name>
-	         <value>18:00</value><!--  -->
+           <name>workingTimeEnd</name>
+           <value>18:00</value><!--  -->
         </value-param>
         
         <values-param>
-	        <name>ignoredUsers</name>
-	        <description>Definition users to ignore create default calendar</description>
-	        <!-- 
-	        <value>demo</value> 
-	        <value>marry</value>
-	         -->
+          <name>ignoredUsers</name>
+          <description>Definition users to ignore create default calendar</description>
+          <!-- 
+          <value>demo</value> 
+          <value>marry</value>
+           -->
         </values-param>
         
         
-	    </init-params>    
-	  </component-plugin>
-	  
-	  <component-plugin>
-	    <name>calendar.new.group.event.listener</name>
-	    <set-method>addListenerPlugin</set-method>
-	    <type>org.exoplatform.calendar.service.impl.NewGroupListener</type>
-	    <description>description</description>
-	    <init-params>
+      </init-params>    
+    </component-plugin>
+    
+    <component-plugin>
+      <name>calendar.new.group.event.listener</name>
+      <set-method>addListenerPlugin</set-method>
+      <type>org.exoplatform.calendar.service.impl.NewGroupListener</type>
+      <description>description</description>
+      <init-params>
         <value-param>
-        	<name>defaultEditPermission</name>
-        	<value>*.*</value><!-- Multi value membership, use coma (,) to split values-->
+          <name>defaultEditPermission</name>
+          <value>*.*</value><!-- Multi value membership, use coma (,) to split values-->
         </value-param>
         <value-param>
-        	<name>defaultViewPermission</name>
-        	<value>*.*</value><!-- Multi value membership, use coma (,) to split values-->
+          <name>defaultViewPermission</name>
+          <value>*.*</value><!-- Multi value membership, use coma (,) to split values-->
         </value-param>
         
         <value-param>
-	      	<name>defaultLocale</name>
-	        <value>BEL</value><!-- see more locale ids http://userpage.chemie.fu-berlin.de/diverse/doc/ISO_3166.html -->
-      	</value-param>
+          <name>defaultLocale</name>
+          <value>BEL</value><!-- see more locale ids http://userpage.chemie.fu-berlin.de/diverse/doc/ISO_3166.html -->
+        </value-param>
       
-      	<value-param>
-	      	<name>defaultTimeZone</name>
-	      	<value>Europe/Brussels</value><!-- see more for timeZone ids http://www.unicode.org/cldr/data/docs/design/formatting/zone_log.html#windows_ids -->
-      	</value-param>	
+        <value-param>
+          <name>defaultTimeZone</name>
+          <value>Europe/Brussels</value><!-- see more for timeZone ids http://www.unicode.org/cldr/data/docs/design/formatting/zone_log.html#windows_ids -->
+        </value-param>  
       
         <values-param>
-	        <name>ignoredGroups</name>
-	        <description>Definition group to ignore create default calendar</description>
-	        <!-- 
-	        <value>/platform/guests</value>
-	         -->
-	        <value>/spaces/*</value> <!-- single value, use more <value> tags to add more group -->
+          <name>ignoredGroups</name>
+          <description>Definition group to ignore create default calendar</description>
+          <!-- 
+          <value>/platform/guests</value>
+           -->
+          <value>/spaces/*</value> <!-- single value, use more <value> tags to add more group -->
         </values-param>
         
         
-	    </init-params>    
-	  </component-plugin>
-	  <component-plugin>
-	    <name>calendar.new.membership.event.listener</name>
-	    <set-method>addListenerPlugin</set-method>
-	    <type>org.exoplatform.calendar.service.impl.NewMembershipListener</type>
-	    <description>description</description>	     
-	  </component-plugin>
-	  
+      </init-params>    
+    </component-plugin>
+    <component-plugin>
+      <name>calendar.new.membership.event.listener</name>
+      <set-method>addListenerPlugin</set-method>
+      <type>org.exoplatform.calendar.service.impl.NewMembershipListener</type>
+      <description>description</description>       
+    </component-plugin>
+    
   </external-component-plugins>   
- 	
+   
 </configuration>

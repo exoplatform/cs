@@ -1,17 +1,17 @@
 <%
-	import org.exoplatform.contact.webui.UINavigationContainer;
-	import org.exoplatform.contact.webui.UIContactContainer;
+  import org.exoplatform.contact.webui.UINavigationContainer;
+  import org.exoplatform.contact.webui.UIContactContainer;
 %>
 
 
 <div class="UIWorkingContainer" id="<%=uicomponent.getId()%>">
 <!-- Start UINavigationContainer -->
-	<% uicomponent.renderChild(UINavigationContainer.class) ;%>		
+  <% uicomponent.renderChild(UINavigationContainer.class) ;%>    
 <!-- End UINavigationContainer -->
-		
+    
 <!-- Start UIContactContainer -->
-	<% uicomponent.renderChild(UIContactContainer.class) ;%>		
+  <% uicomponent.renderChild(UIContactContainer.class) ;%>    
 <!-- End UIContactContainer -->
 
-		<div class="ClearContact"><span></span></div>
-	</div>
+    <div class="ClearContact"><span></span></div>
+  </div>

@@ -1,64 +1,64 @@
 .UIContactPortlet .Profile {
-	padding: 10px;
-	height: auto;
+  padding: 10px;
+  height: auto;
 }
 
 .UIContactPortlet .Profile .ProfileContainer {
-	float: left;
-	width: 400px;
+  float: left;
+  width: 400px;
 }
 
 .UIContactPortlet .Profile .AvatarContent {
-	margin-left: 420px;
-	width: 120px;
+  margin-left: 420px;
+  width: 120px;
 }
 
 .UIContactPortlet .Profile .AvatarContent .Label {
-	height: 20px; line-height: 20px;
-	text-align: center;
+  height: 20px; line-height: 20px;
+  text-align: center;
 }
 
 .UIContactPortlet .Profile .AvatarContent .Avatar {
-	border: 1px solid #c2c2c2;
-	margin: 10px 0px;
-	padding: 10px 25px;
-	background: white;
-	width: 63px; height: 81px;
+  border: 1px solid #c2c2c2;
+  margin: 10px 0px;
+  padding: 10px 25px;
+  background: white;
+  width: 63px; height: 81px;
 }
 
 .UIContactPortlet .Profile .AvatarContent .ImgAvatar {
-	border: 1px solid #c2c2c2;
+  border: 1px solid #c2c2c2;
 }
 
 .UIContactPortlet .Profile .AvatarContent .Action {
-	text-align: center;
-	padding-right: 5px;
+  text-align: center;
+  padding-right: 5px;
 }
 
 .UIContactPortlet .Profile .AvatarContent a {
-	color: #1e6ac2;
+  color: #1e6ac2;
 }
 
 .UIContactPortlet .Profile .UIFormGrid .FieldComponent .Icon {
-	width: 16px; height: 20px;
-	margin: 0px 2px 0px 5px;
+  width: 16px; height: 20px;
+  margin: 0px 2px 0px 5px;
 }
 
 .UIContactPortlet .Profile .UIFormGrid .FieldComponent .textarea {
-	width: 300px;
-	height: 270px;
+  width: 300px;
+  height: 270px;
 }
 
 .UIContactPortlet .Profile .UIForm .HorizontalLayout .UIFormInputSet {
-	width: 400px;
-	padding: 10px 0px;
+  width: 400px;
+  padding: 10px 0px;
 }
 
 .UIContactPortlet .Profile .UIForm .HorizontalLayout .Home {
-	background: none;
+  background: none;
 }
 
 .UIContactPortlet .UIForm .HorizontalLayout .Profile select.selectbox {
-	width: 61px;
-	text-align: center;
+  width: 61px;
+  text-align: center;
 }

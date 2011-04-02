@@ -7,7 +7,7 @@
 %> 
 <div class="UISelectUserForm">
   <div class="SelectUserContainer">
-  	<%if(uicomponent.isShowSearch()){%>
+    <%if(uicomponent.isShowSearch()){%>
     <div class="UISearch">
       <div class="UIBarStyle">
         <div class="NormalBarStyle">
@@ -19,20 +19,20 @@
                   
                   <div class="QuickSet">
                     <%uiform.renderField(uiform.FIELD_KEYWORD)%>
-                  	<div class="FilterSelect">
-                  		<%uiform.renderField(uiform.FIELD_FILTER)%>
-                  	</div>  
-                  	<a class="SearchIcon" href="<%=uicomponent.event('Search')%>" title="<%=uiform.getLabel(uiform.FIELD_KEYWORD)%>"><span></span></a>
+                    <div class="FilterSelect">
+                      <%uiform.renderField(uiform.FIELD_FILTER)%>
+                    </div>  
+                    <a class="SearchIcon" href="<%=uicomponent.event('Search')%>" title="<%=uiform.getLabel(uiform.FIELD_KEYWORD)%>"><span></span></a>
                   </div>
-                	<div class="AddressesGroup">
-                  	<div class="AddressLabel">
-                  		<%=uiform.getLabel(uiform.FIELD_GROUP)%>
-                  	</div>
-                  	<div class="GroupSelect">
-                  	<%uiform.renderField(uiform.FIELD_GROUP)%>
-                  	</div>
-                	</div>
-                	
+                  <div class="AddressesGroup">
+                    <div class="AddressLabel">
+                      <%=uiform.getLabel(uiform.FIELD_GROUP)%>
+                    </div>
+                    <div class="GroupSelect">
+                    <%uiform.renderField(uiform.FIELD_GROUP)%>
+                    </div>
+                  </div>
+                  
                 </div>
                 
               </div>
@@ -53,14 +53,14 @@
                 <th class="BorderAddress">
                   <div class="BlueDownArrowIcon">
                     <div class="Label">
-                   	<%=uiform.getLabel('name')%>
+                     <%=uiform.getLabel('name')%>
                     </div>
                   </div>
                 </th>
                 <th class="BorderAddress">
                   <div class="BlueDownArrowIcon">
                     <div class="Label">
-                   	<%=uiform.getLabel('email')%>
+                     <%=uiform.getLabel('email')%>
                     </div>
                   </div>
                 </th>
@@ -94,12 +94,12 @@
     <table class="ActionContainer" align="center">
       <tr>
         <td align="center"> 
-      	<%for(String action : uicomponent.getActions()){%>
+        <%for(String action : uicomponent.getActions()){%>
          <a href="<%=uicomponent.event(action)%>" class="ActionButton LightBlueStyle">
             <div class="ButtonLeft">
               <div class="ButtonRight">
                 <div class="ButtonMiddle">
-                	<%=uiform.getLabel(action)%>
+                  <%=uiform.getLabel(action)%>
                 </div>
               </div>
             </div>

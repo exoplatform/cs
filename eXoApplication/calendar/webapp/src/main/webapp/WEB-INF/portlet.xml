@@ -25,6 +25,6 @@
       <short-title>Calendar Portlet</short-title>
       <keywords>collaboration</keywords>
     </portlet-info>
-	  <supported-processing-event><name>RefreshCalendar</name></supported-processing-event>
+    <supported-processing-event><name>RefreshCalendar</name></supported-processing-event>
   </portlet>  
 </portlet-app>

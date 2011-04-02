@@ -25,10 +25,10 @@
   xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
 
   <component>
-  	<key>org.exoplatform.services.cache.CacheService</key>
+    <key>org.exoplatform.services.cache.CacheService</key>
     <jmx-name>cache:type=CacheService</jmx-name>
-  	<type>org.exoplatform.services.cache.impl.CacheServiceImpl</type>
-  	<init-params>
+    <type>org.exoplatform.services.cache.impl.CacheServiceImpl</type>
+    <init-params>
       <object-param>
         <name>cache.config.default</name>
         <description>The default cache configuration</description>
@@ -106,33 +106,33 @@
   </component>
 
   <external-component-plugins>
- 		<target-component>org.exoplatform.services.jcr.RepositoryService</target-component>
- 		<component-plugin>
- 		  <name>add.namespaces</name>
- 		  <set-method>addPlugin</set-method>
- 		  <type>org.exoplatform.services.jcr.impl.AddNamespacesPlugin</type>
- 		  <init-params>
- 		    <properties-param>
- 		      <name>namespaces</name>
+     <target-component>org.exoplatform.services.jcr.RepositoryService</target-component>
+     <component-plugin>
+       <name>add.namespaces</name>
+       <set-method>addPlugin</set-method>
+       <type>org.exoplatform.services.jcr.impl.AddNamespacesPlugin</type>
+       <init-params>
+         <properties-param>
+           <name>namespaces</name>
           <property name="gtn" value="http://www.gatein.org/jcr/gatein/1.0/"/>
           <property name="mop" value="http://www.gatein.org/jcr/mop/1.0/"/>
- 		      </properties-param>
- 		  </init-params>
- 		</component-plugin>
- 		<component-plugin>
- 		  <name>add.nodeType</name>
- 		  <set-method>addPlugin</set-method>
- 		  <type>org.exoplatform.services.jcr.impl.AddNodeTypePlugin</type>
- 		  <init-params>
- 		    <values-param>
- 		      <name>autoCreatedInNewRepository</name>
- 		      <description>Node types configuration file</description>
+           </properties-param>
+       </init-params>
+     </component-plugin>
+     <component-plugin>
+       <name>add.nodeType</name>
+       <set-method>addPlugin</set-method>
+       <type>org.exoplatform.services.jcr.impl.AddNodeTypePlugin</type>
+       <init-params>
+         <values-param>
+           <name>autoCreatedInNewRepository</name>
+           <description>Node types configuration file</description>
            <value>jar:/conf/gatein-nodetypes.xml</value>
            <value>jar:/conf/mop-nodetypes.xml</value>
            <value>jar:/conf/content-nodetypes.xml</value>
- 		    </values-param>
- 		  </init-params>
- 		</component-plugin>
+         </values-param>
+       </init-params>
+     </component-plugin>
   </external-component-plugins>
 
   <external-component-plugins>

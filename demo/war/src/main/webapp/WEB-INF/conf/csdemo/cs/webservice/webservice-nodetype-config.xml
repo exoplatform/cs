@@ -21,11 +21,11 @@
     <propertyDefinitions>
       <propertyDefinition name="exo:dateCreated" requiredType="Date" autoCreated="true" mandatory="false"
         onParentVersion="COPY" protected="false" multiple="false">
-        <valueConstraints/>	      
+        <valueConstraints/>        
       </propertyDefinition>
       <propertyDefinition name="exo:dateModified" requiredType="Date" autoCreated="true" mandatory="false"
         onParentVersion="COPY" protected="false" multiple="false">
-        <valueConstraints/>	      
+        <valueConstraints/>        
       </propertyDefinition>
     </propertyDefinitions>
   </nodeType>

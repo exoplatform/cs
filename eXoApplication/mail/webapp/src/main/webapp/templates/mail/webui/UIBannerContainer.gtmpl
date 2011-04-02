@@ -1,12 +1,12 @@
 <%
-	import org.exoplatform.mail.webui.UISearchForm ;
+  import org.exoplatform.mail.webui.UISearchForm ;
 // move this to the method processRender
 %>
 <!-- Start Mail Banner -->
 <div class="UIBannerContainer">
-	<div class="LeftHorizontalLine">
-		<div class="RepeatHorizontalLine">a Powerful, Open-source Messaging</div>					
-	</div>
-	<%uicomponent.renderChild(UISearchForm.class);%>
+  <div class="LeftHorizontalLine">
+    <div class="RepeatHorizontalLine">a Powerful, Open-source Messaging</div>          
+  </div>
+  <%uicomponent.renderChild(UISearchForm.class);%>
 </div>
 <!-- End Mail Banner -->

@@ -20,40 +20,40 @@
 -->
 
 <messagebundle>
-	<msg name="title">
-  	My Tasks
+  <msg name="title">
+    My Tasks
   </msg>
-	<msg name="baseurl">
-  	Base url
+  <msg name="baseurl">
+    Base url
   </msg>
-	<msg name="subscribeurl">
-  	Subscription url
+  <msg name="subscribeurl">
+    Subscription url
   </msg>
-	<msg name="limit">
-  	Number of items is displayed
+  <msg name="limit">
+    Number of items is displayed
   </msg>
-	<msg name="format">
-  	Date time format
+  <msg name="format">
+    Date time format
   </msg>  
   <msg name="showall">
-  	Show all
+    Show all
   </msg>
-	<msg name="noevent">
-  	No tasks for today
+  <msg name="noevent">
+    No tasks for today
   </msg>
-	<msg name="calendars">
-  	Calendar
+  <msg name="calendars">
+    Calendar
   </msg>
-	<msg name="setting">
-  	Setting
+  <msg name="setting">
+    Setting
   </msg>
-	<msg name="save">
-  	Save
+  <msg name="save">
+    Save
   </msg>
-	<msg name="cancel">
-  	Cancel
+  <msg name="cancel">
+    Cancel
   </msg>
-	<msg name="confirm">
-  	Are you sure this task completed?
+  <msg name="confirm">
+    Are you sure this task completed?
   </msg>
 </messagebundle>

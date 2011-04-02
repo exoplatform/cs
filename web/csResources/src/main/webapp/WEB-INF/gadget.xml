@@ -25,13 +25,13 @@
     xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_0 http://www.gatein.org/xml/ns/gadgets_1_0"
     xmlns="http://www.gatein.org/xml/ns/gadgets_1_0">
 
-	<gadget name="eventslist">
-		<path>/gadgets/events/Events.xml</path>
-	</gadget>
-	<gadget name="taskslist">
-		<path>/gadgets/tasks/Tasks.xml</path>
-	</gadget>
-	<gadget name="messageslist">
-		<path>/gadgets/messages/Messages.xml</path>
-	</gadget>
+  <gadget name="eventslist">
+    <path>/gadgets/events/Events.xml</path>
+  </gadget>
+  <gadget name="taskslist">
+    <path>/gadgets/tasks/Tasks.xml</path>
+  </gadget>
+  <gadget name="messageslist">
+    <path>/gadgets/messages/Messages.xml</path>
+  </gadget>
 </gadgets>

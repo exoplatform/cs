@@ -20,28 +20,28 @@
 -->
 
 <messagebundle>
-	<msg name="title">
-  	Événements à venir
+  <msg name="title">
+    Événements à venir
   </msg>
-	<msg name="baseurl">
-  	URL de base
+  <msg name="baseurl">
+    URL de base
   </msg>
-	<msg name="subscribeurl">
-  	URL de Service
+  <msg name="subscribeurl">
+    URL de Service
   </msg>
-	<msg name="limit">
-  	Nombre d'item affichés
+  <msg name="limit">
+    Nombre d'item affichés
   </msg>
-	<msg name="format">
-  	Format de l'heure
+  <msg name="format">
+    Format de l'heure
   </msg>
   <msg name="showall">
-  	Montrer tout
+    Montrer tout
   </msg>
-	<msg name="noevent">
-  	Aucun événement aujourd'hui
+  <msg name="noevent">
+    Aucun événement aujourd'hui
   </msg>
-	<msg name="back">
-  	Précédent
+  <msg name="back">
+    Précédent
   </msg>
 </messagebundle>

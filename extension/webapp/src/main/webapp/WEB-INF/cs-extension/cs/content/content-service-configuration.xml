@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
-	xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
+  xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
 
   <component>
     <key>org.exoplatform.content.service.ContentDAO</key>
@@ -9,19 +9,19 @@
   
    <external-component-plugins> 
        <target-component>org.exoplatform.content.service.ContentDAO</target-component>  
-	   <component-plugin>
-	      <name>rssreader.listener</name>
-	      <set-method>addPlugin</set-method>
-	      <type>org.exoplatform.content.service.RSSContentPlugin</type>
-	      <description>rss reader plugin</description>     
-	    </component-plugin>
-	    
-	    <component-plugin>
-	      <name>description.listener</name>
-	      <set-method>addPlugin</set-method>
-	      <type>org.exoplatform.content.service.DescriptionPlugin</type>
-	      <description>Description plugin</description>     
-	    </component-plugin>
+     <component-plugin>
+        <name>rssreader.listener</name>
+        <set-method>addPlugin</set-method>
+        <type>org.exoplatform.content.service.RSSContentPlugin</type>
+        <description>rss reader plugin</description>     
+      </component-plugin>
+      
+      <component-plugin>
+        <name>description.listener</name>
+        <set-method>addPlugin</set-method>
+        <type>org.exoplatform.content.service.DescriptionPlugin</type>
+        <description>Description plugin</description>     
+      </component-plugin>
     </external-component-plugins>   
 </configuration>
 

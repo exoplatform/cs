@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
-	xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
+  xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
 
   <component>
     <key>org.exoplatform.services.scheduler.JobSchedulerService</key>
@@ -17,7 +17,7 @@
    <component>
       <type>org.exoplatform.services.scheduler.QueueTasks</type>
    </component>
-	 
+   
   <external-component-plugins>
     <target-component>org.exoplatform.services.scheduler.JobSchedulerService</target-component>
     <component-plugin>
@@ -39,7 +39,7 @@
         </properties-param>
       </init-params>
     </component-plugin>
-	<component-plugin>
+  <component-plugin>
       <name>PopupRecordsJob</name>
       <set-method>addPeriodJob</set-method>
       <type>org.exoplatform.calendar.service.PopupReminderPeriodJob</type>
@@ -56,7 +56,7 @@
           <property name="startTime" value="+60000"/>
           <property name="endTime" value=""/>               
         </properties-param>
-				<properties-param>
+        <properties-param>
           <name>popupreminder.info</name>
           <description>save the monitor data  periodically</description>
           <property name="portalName" value="csdemo"/> 
@@ -87,13 +87,13 @@
  
  
     <external-component-plugins>
-    	<target-component>org.exoplatform.services.listener.ListenerService</target-component>
-   		<component-plugin>   
+      <target-component>org.exoplatform.services.listener.ListenerService</target-component>
+       <component-plugin>   
             <name>exo.core.security.ConversationRegistry.unregister</name>
-     		<set-method>addListener</set-method>
+         <set-method>addListener</set-method>
             <type>org.exoplatform.mail.service.AuthenticationLogoutListener</type>
-      		<description>description</description>     
-    	</component-plugin>      
-  	</external-component-plugins>
+          <description>description</description>     
+      </component-plugin>      
+    </external-component-plugins>
   
 </configuration>

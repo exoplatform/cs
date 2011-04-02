@@ -1,116 +1,116 @@
 <nodeTypes xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0"
-	xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
 
-	<nodeType name="lr:historicalmessage" isMixin="false"
-		hasOrderableChildNodes="false">
-		<supertypes>
-			<supertype>nt:base</supertype>
-		</supertypes>
-		<propertyDefinitions>
-			<propertyDefinition name="lr:messagefrom"
-				requiredType="String" autoCreated="true" onParentVersion="COPY"
-				mandatory="true" protected="false" multiple="false">
-				<valueConstraints />
-				<defaultValues />
-			</propertyDefinition>
-			<propertyDefinition name="lr:messageto"
-				requiredType="String" autoCreated="true" onParentVersion="COPY"
-				mandatory="true" protected="false" multiple="false">
-				<valueConstraints />
-				<defaultValues />
-			</propertyDefinition>
-			<propertyDefinition name="lr:messagetype"
-				requiredType="String" autoCreated="true" onParentVersion="COPY"
-				mandatory="true" protected="false" multiple="false">
-				<valueConstraints />
-				<defaultValues />
-			</propertyDefinition>
-			<propertyDefinition name="lr:messagebody"
-				requiredType="String" autoCreated="true" onParentVersion="COPY"
-				mandatory="true" protected="false" multiple="false">
-				<valueConstraints />
-				<defaultValues />
-			</propertyDefinition>
-			<propertyDefinition name="lr:messagedateSend"
-				requiredType="Date" autoCreated="true" onParentVersion="COPY"
-				mandatory="true" protected="false" multiple="false">
-				<valueConstraints />
-				<defaultValues />
-			</propertyDefinition>
-			<propertyDefinition name="lr:messagereceive"
-				requiredType="Boolean" autoCreated="true" onParentVersion="COPY"
-				mandatory="true" protected="false" multiple="false">
-				<valueConstraints />
-				<defaultValues />
-			</propertyDefinition>
-		</propertyDefinitions>
-	</nodeType>
+  <nodeType name="lr:historicalmessage" isMixin="false"
+    hasOrderableChildNodes="false">
+    <supertypes>
+      <supertype>nt:base</supertype>
+    </supertypes>
+    <propertyDefinitions>
+      <propertyDefinition name="lr:messagefrom"
+        requiredType="String" autoCreated="true" onParentVersion="COPY"
+        mandatory="true" protected="false" multiple="false">
+        <valueConstraints />
+        <defaultValues />
+      </propertyDefinition>
+      <propertyDefinition name="lr:messageto"
+        requiredType="String" autoCreated="true" onParentVersion="COPY"
+        mandatory="true" protected="false" multiple="false">
+        <valueConstraints />
+        <defaultValues />
+      </propertyDefinition>
+      <propertyDefinition name="lr:messagetype"
+        requiredType="String" autoCreated="true" onParentVersion="COPY"
+        mandatory="true" protected="false" multiple="false">
+        <valueConstraints />
+        <defaultValues />
+      </propertyDefinition>
+      <propertyDefinition name="lr:messagebody"
+        requiredType="String" autoCreated="true" onParentVersion="COPY"
+        mandatory="true" protected="false" multiple="false">
+        <valueConstraints />
+        <defaultValues />
+      </propertyDefinition>
+      <propertyDefinition name="lr:messagedateSend"
+        requiredType="Date" autoCreated="true" onParentVersion="COPY"
+        mandatory="true" protected="false" multiple="false">
+        <valueConstraints />
+        <defaultValues />
+      </propertyDefinition>
+      <propertyDefinition name="lr:messagereceive"
+        requiredType="Boolean" autoCreated="true" onParentVersion="COPY"
+        mandatory="true" protected="false" multiple="false">
+        <valueConstraints />
+        <defaultValues />
+      </propertyDefinition>
+    </propertyDefinitions>
+  </nodeType>
 
-	<nodeType name="lr:interlocutor" isMixin="false"
-		hasOrderableChildNodes="false">
-		<supertypes>
-			<supertype>nt:base</supertype>
-		</supertypes>
-		<propertyDefinitions>
-			<propertyDefinition name="lr:conversationId"
-				requiredType="String" autoCreated="true" onParentVersion="COPY"
-				mandatory="true" protected="false" multiple="false">
-				<valueConstraints />
-				<defaultValues />
-			</propertyDefinition>
-			<propertyDefinition name="lr:interlocutorjid"
-				requiredType="String" autoCreated="true" onParentVersion="COPY"
-				mandatory="true" protected="false" multiple="false">
-				<valueConstraints />
-				<defaultValues />
-			</propertyDefinition>
-			<propertyDefinition name="lr:interlocutorname"
-				requiredType="String" autoCreated="true" onParentVersion="COPY"
-				mandatory="true" protected="false" multiple="false">
-				<valueConstraints />
-				<defaultValues />
-			</propertyDefinition>
-			<propertyDefinition name="lr:interlocutorisRoom"
-				requiredType="Boolean" autoCreated="true" onParentVersion="COPY"
-				mandatory="true" protected="false" multiple="false">
-				<valueConstraints />
-				<defaultValues />
-			</propertyDefinition>
-		</propertyDefinitions>
-	</nodeType>
+  <nodeType name="lr:interlocutor" isMixin="false"
+    hasOrderableChildNodes="false">
+    <supertypes>
+      <supertype>nt:base</supertype>
+    </supertypes>
+    <propertyDefinitions>
+      <propertyDefinition name="lr:conversationId"
+        requiredType="String" autoCreated="true" onParentVersion="COPY"
+        mandatory="true" protected="false" multiple="false">
+        <valueConstraints />
+        <defaultValues />
+      </propertyDefinition>
+      <propertyDefinition name="lr:interlocutorjid"
+        requiredType="String" autoCreated="true" onParentVersion="COPY"
+        mandatory="true" protected="false" multiple="false">
+        <valueConstraints />
+        <defaultValues />
+      </propertyDefinition>
+      <propertyDefinition name="lr:interlocutorname"
+        requiredType="String" autoCreated="true" onParentVersion="COPY"
+        mandatory="true" protected="false" multiple="false">
+        <valueConstraints />
+        <defaultValues />
+      </propertyDefinition>
+      <propertyDefinition name="lr:interlocutorisRoom"
+        requiredType="Boolean" autoCreated="true" onParentVersion="COPY"
+        mandatory="true" protected="false" multiple="false">
+        <valueConstraints />
+        <defaultValues />
+      </propertyDefinition>
+    </propertyDefinitions>
+  </nodeType>
 
-	<nodeType name="lr:participantchat" isMixin="false"
-		hasOrderableChildNodes="false">
-		<supertypes>
-			<supertype>nt:base</supertype>
-		</supertypes>
-		<propertyDefinitions>
-			<propertyDefinition name="lr:participantchatjid"
-				requiredType="String" autoCreated="true" onParentVersion="COPY"
-				mandatory="true" protected="false" multiple="false">
-				<valueConstraints />
-				<defaultValues />
-			</propertyDefinition>
-			<propertyDefinition name="lr:participantchatusername"
-				requiredType="String" autoCreated="true" onParentVersion="COPY"
-				mandatory="true" protected="false" multiple="false">
-				<valueConstraints />
-				<defaultValues />
-			</propertyDefinition>
-		</propertyDefinitions>
-		<childNodeDefinitions>
-			<childNodeDefinition name="*" defaultPrimaryType="nt:unstructured"
-				autoCreated="false" mandatory="false" onParentVersion="VERSION"
-				protected="false" sameNameSiblings="false">
-				<requiredPrimaryTypes>
-					<requiredPrimaryType>nt:unstructured</requiredPrimaryType>
-				</requiredPrimaryTypes>
-			</childNodeDefinition>
-		</childNodeDefinitions>
-	</nodeType>
+  <nodeType name="lr:participantchat" isMixin="false"
+    hasOrderableChildNodes="false">
+    <supertypes>
+      <supertype>nt:base</supertype>
+    </supertypes>
+    <propertyDefinitions>
+      <propertyDefinition name="lr:participantchatjid"
+        requiredType="String" autoCreated="true" onParentVersion="COPY"
+        mandatory="true" protected="false" multiple="false">
+        <valueConstraints />
+        <defaultValues />
+      </propertyDefinition>
+      <propertyDefinition name="lr:participantchatusername"
+        requiredType="String" autoCreated="true" onParentVersion="COPY"
+        mandatory="true" protected="false" multiple="false">
+        <valueConstraints />
+        <defaultValues />
+      </propertyDefinition>
+    </propertyDefinitions>
+    <childNodeDefinitions>
+      <childNodeDefinition name="*" defaultPrimaryType="nt:unstructured"
+        autoCreated="false" mandatory="false" onParentVersion="VERSION"
+        protected="false" sameNameSiblings="false">
+        <requiredPrimaryTypes>
+          <requiredPrimaryType>nt:unstructured</requiredPrimaryType>
+        </requiredPrimaryTypes>
+      </childNodeDefinition>
+    </childNodeDefinitions>
+  </nodeType>
 
 <nodeType name="lr:presencestatus" isMixin="false" hasOrderableChildNodes="false">
-	    <supertypes>
+      <supertypes>
       <supertype>nt:base</supertype>
     </supertypes>
     <propertyDefinitions>
@@ -127,13 +127,13 @@
         <defaultValues />
       </propertyDefinition>
     </propertyDefinitions>
-	</nodeType>
-	
+  </nodeType>
+  
 <nodeType name="lr:defaultpresencestatus" isMixin="false" hasOrderableChildNodes="false">
-	  <supertypes>
+    <supertypes>
       <supertype>nt:base</supertype>
     </supertypes>
-		<childNodeDefinitions>
+    <childNodeDefinitions>
       <childNodeDefinition name="*" defaultPrimaryType="lr:presencestatus"
         autoCreated="false" mandatory="false" onParentVersion="VERSION"
         protected="false" sameNameSiblings="false">
@@ -142,94 +142,94 @@
         </requiredPrimaryTypes>
       </childNodeDefinition>
     </childNodeDefinitions>
-	</nodeType>
-	
-	<nodeType name="lr:conversation" isMixin="false"
-		hasOrderableChildNodes="false">
-		<supertypes>
-			<supertype>nt:base</supertype>
-		</supertypes>
-		<propertyDefinitions>
-			<propertyDefinition name="lr:conversationlastActiveDate"
-				requiredType="Date" autoCreated="true" onParentVersion="COPY"
-				mandatory="true" protected="false" multiple="false">
-				<valueConstraints />
-				<defaultValues />
-			</propertyDefinition>
-			<propertyDefinition name="lr:conversationstartDate"
-				requiredType="Date" autoCreated="true" onParentVersion="COPY"
-				mandatory="true" protected="false" multiple="false">
-				<valueConstraints />
-				<defaultValues />
-			</propertyDefinition>
-		</propertyDefinitions>
-		<childNodeDefinitions>
-			<childNodeDefinition name="*" defaultPrimaryType="nt:unstructured"
-				autoCreated="false" mandatory="false" onParentVersion="VERSION"
-				protected="false" sameNameSiblings="false">
-				<requiredPrimaryTypes>
-					<requiredPrimaryType>nt:unstructured</requiredPrimaryType>
-				</requiredPrimaryTypes>
-			</childNodeDefinition>
-		</childNodeDefinitions>
-	</nodeType>
+  </nodeType>
+  
+  <nodeType name="lr:conversation" isMixin="false"
+    hasOrderableChildNodes="false">
+    <supertypes>
+      <supertype>nt:base</supertype>
+    </supertypes>
+    <propertyDefinitions>
+      <propertyDefinition name="lr:conversationlastActiveDate"
+        requiredType="Date" autoCreated="true" onParentVersion="COPY"
+        mandatory="true" protected="false" multiple="false">
+        <valueConstraints />
+        <defaultValues />
+      </propertyDefinition>
+      <propertyDefinition name="lr:conversationstartDate"
+        requiredType="Date" autoCreated="true" onParentVersion="COPY"
+        mandatory="true" protected="false" multiple="false">
+        <valueConstraints />
+        <defaultValues />
+      </propertyDefinition>
+    </propertyDefinitions>
+    <childNodeDefinitions>
+      <childNodeDefinition name="*" defaultPrimaryType="nt:unstructured"
+        autoCreated="false" mandatory="false" onParentVersion="VERSION"
+        protected="false" sameNameSiblings="false">
+        <requiredPrimaryTypes>
+          <requiredPrimaryType>nt:unstructured</requiredPrimaryType>
+        </requiredPrimaryTypes>
+      </childNodeDefinition>
+    </childNodeDefinitions>
+  </nodeType>
 
-	<nodeType name="lr:participantschat" isMixin="false"
-		hasOrderableChildNodes="false">
-		<supertypes>
-			<supertype>nt:base</supertype>
-		</supertypes>
-		<childNodeDefinitions>
-			<childNodeDefinition name="*" defaultPrimaryType="lr:participantchat"
-				autoCreated="false" mandatory="false" onParentVersion="VERSION"
-				protected="false" sameNameSiblings="false">
-				<requiredPrimaryTypes>
-					<requiredPrimaryType>lr:participantchat</requiredPrimaryType>
-				</requiredPrimaryTypes>
-			</childNodeDefinition>
-		</childNodeDefinitions>
-	</nodeType>
-
-
-	<nodeType name="lr:conversations" isMixin="false"
-		hasOrderableChildNodes="false">
-		<supertypes>
-			<supertype>nt:base</supertype>
-		</supertypes>
-		<childNodeDefinitions>
-			<childNodeDefinition name="*" defaultPrimaryType="lr:conversation"
-				autoCreated="false" mandatory="false" onParentVersion="VERSION"
-				protected="false" sameNameSiblings="false">
-				<requiredPrimaryTypes>
-					<requiredPrimaryType>lr:conversation</requiredPrimaryType>
-				</requiredPrimaryTypes>
-			</childNodeDefinition>
-		</childNodeDefinitions>
-	</nodeType>
+  <nodeType name="lr:participantschat" isMixin="false"
+    hasOrderableChildNodes="false">
+    <supertypes>
+      <supertype>nt:base</supertype>
+    </supertypes>
+    <childNodeDefinitions>
+      <childNodeDefinition name="*" defaultPrimaryType="lr:participantchat"
+        autoCreated="false" mandatory="false" onParentVersion="VERSION"
+        protected="false" sameNameSiblings="false">
+        <requiredPrimaryTypes>
+          <requiredPrimaryType>lr:participantchat</requiredPrimaryType>
+        </requiredPrimaryTypes>
+      </childNodeDefinition>
+    </childNodeDefinitions>
+  </nodeType>
 
 
+  <nodeType name="lr:conversations" isMixin="false"
+    hasOrderableChildNodes="false">
+    <supertypes>
+      <supertype>nt:base</supertype>
+    </supertypes>
+    <childNodeDefinitions>
+      <childNodeDefinition name="*" defaultPrimaryType="lr:conversation"
+        autoCreated="false" mandatory="false" onParentVersion="VERSION"
+        protected="false" sameNameSiblings="false">
+        <requiredPrimaryTypes>
+          <requiredPrimaryType>lr:conversation</requiredPrimaryType>
+        </requiredPrimaryTypes>
+      </childNodeDefinition>
+    </childNodeDefinitions>
+  </nodeType>
 
-	<nodeType name="lr:chathistory" isMixin="false"
-		hasOrderableChildNodes="false">
-		<supertypes>
-			<supertype>nt:base</supertype>
-		</supertypes>
-		<childNodeDefinitions>
-			<childNodeDefinition name="*" defaultPrimaryType="lr:conversations"
-				autoCreated="false" mandatory="false" onParentVersion="VERSION"
-				protected="false" sameNameSiblings="false">
-				<requiredPrimaryTypes>
-					<requiredPrimaryType>lr:conversations</requiredPrimaryType>
-				</requiredPrimaryTypes>
-			</childNodeDefinition>
-			<childNodeDefinition name="*" defaultPrimaryType="lr:participantschat"
-				autoCreated="false" mandatory="false" onParentVersion="VERSION"
-				protected="false" sameNameSiblings="false">
-				<requiredPrimaryTypes>
-					<requiredPrimaryType>lr:participantschat</requiredPrimaryType>
-				</requiredPrimaryTypes>
-			</childNodeDefinition>
-			<childNodeDefinition name="*"
+
+
+  <nodeType name="lr:chathistory" isMixin="false"
+    hasOrderableChildNodes="false">
+    <supertypes>
+      <supertype>nt:base</supertype>
+    </supertypes>
+    <childNodeDefinitions>
+      <childNodeDefinition name="*" defaultPrimaryType="lr:conversations"
+        autoCreated="false" mandatory="false" onParentVersion="VERSION"
+        protected="false" sameNameSiblings="false">
+        <requiredPrimaryTypes>
+          <requiredPrimaryType>lr:conversations</requiredPrimaryType>
+        </requiredPrimaryTypes>
+      </childNodeDefinition>
+      <childNodeDefinition name="*" defaultPrimaryType="lr:participantschat"
+        autoCreated="false" mandatory="false" onParentVersion="VERSION"
+        protected="false" sameNameSiblings="false">
+        <requiredPrimaryTypes>
+          <requiredPrimaryType>lr:participantschat</requiredPrimaryType>
+        </requiredPrimaryTypes>
+      </childNodeDefinition>
+      <childNodeDefinition name="*"
         defaultPrimaryType="lr:defaultpresencestatus" autoCreated="false"
         mandatory="false" onParentVersion="VERSION" protected="false"
         sameNameSiblings="false">
@@ -237,7 +237,7 @@
           <requiredPrimaryType>lr:defaultpresencestatus</requiredPrimaryType>
         </requiredPrimaryTypes>
       </childNodeDefinition>
-		</childNodeDefinitions>
-	</nodeType>
-	
+    </childNodeDefinitions>
+  </nodeType>
+  
 </nodeTypes>

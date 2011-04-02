@@ -1,32 +1,32 @@
 <%uiform.begin()%>  
-	<div style="background: #ffe98f; padding: 2px 0px 5px 10px; height: 18px; display: none" id="checkMailInfobar">
-		<div class="LoadingIcon"><span></span></div>
-		<div style=" float: left; margin-top: 2px" class="StatusText"> 
-			<%=_ctx.appRes(uicomponent.id+ ".label.starting") %> ...
-		</div>
-		
-		<div style=" float: left; margin: 2px 0px 0px 5px; color: #00f; cursor: pointer" class="StopCheckMail" onclick="eXo.mail.MailServiceHandler.stopCheckMail()"><%=_ctx.appRes(uicomponent.id+ ".label.stop") %></div>
-		<div style=" float: right; padding-right: 10px; margin-top: 2px; color: #00f; cursor: pointer; display:none" class="Hide" onclick="document.getElementById('checkMailInfobar').style.display = 'none'">| <%=_ctx.appRes(uicomponent.id+ ".label.hide") %></div>
-		<div style="float: right; padding-right: 5px; margin-top: 2px;" class="Here"><a style=" color: #00f;" href="<%=uicomponent.event("Refresh")%>"> <%=_ctx.appRes(uicomponent.id+ ".label.refresh")%></a></div>
-		<div style=" float: left; margin: 2px 0px 0px 5px; color: red; cursor: pointer; display:none" class="WarningMessage" ></div>
-		
+  <div style="background: #ffe98f; padding: 2px 0px 5px 10px; height: 18px; display: none" id="checkMailInfobar">
+    <div class="LoadingIcon"><span></span></div>
+    <div style=" float: left; margin-top: 2px" class="StatusText"> 
+      <%=_ctx.appRes(uicomponent.id+ ".label.starting") %> ...
+    </div>
+    
+    <div style=" float: left; margin: 2px 0px 0px 5px; color: #00f; cursor: pointer" class="StopCheckMail" onclick="eXo.mail.MailServiceHandler.stopCheckMail()"><%=_ctx.appRes(uicomponent.id+ ".label.stop") %></div>
+    <div style=" float: right; padding-right: 10px; margin-top: 2px; color: #00f; cursor: pointer; display:none" class="Hide" onclick="document.getElementById('checkMailInfobar').style.display = 'none'">| <%=_ctx.appRes(uicomponent.id+ ".label.hide") %></div>
+    <div style="float: right; padding-right: 5px; margin-top: 2px;" class="Here"><a style=" color: #00f;" href="<%=uicomponent.event("Refresh")%>"> <%=_ctx.appRes(uicomponent.id+ ".label.refresh")%></a></div>
+    <div style=" float: left; margin: 2px 0px 0px 5px; color: red; cursor: pointer; display:none" class="WarningMessage" ></div>
+    
     <div style="display:none" id="UpdateImapFolder"><a href="<%=uicomponent.event("UpdateFolder")%>"></a></div>
-		<%if (uicomponent.isUpdate()) {%>
-			<div id="UpdateList" style="float: right; padding-right: 5px; margin-top: 2px;" class="UpdateList"><a style=" color: #00f;" href="<%=uicomponent.event("UpdateList", "msgId")%>"></a></div>
-		<%}%>
-		<div style="clear: both;"><span></span></div>
-		
-		<div style=" float: left; margin: 2px 0px 0px 5px; color: #00f; cursor: pointer; display:none" class="StopingCheckMail" ><%=_ctx.appRes(uicomponent.id+ ".label.stoping") %>...</div>
-		<div id="checkmail-notice" style="display:none;"><%= _ctx.appRes(uicomponent.id+ ".label.checkmail-notice") %></div>
-		<div id="starting-status" style="display:none;"><%= _ctx.appRes(uicomponent.id+ ".label.starting-status") %></div>
-		<div id="fetching-mail" style="display:none;"><%= _ctx.appRes(uicomponent.id+ ".label.fetching-mail") %></div>
-		<div id="start-sync-folder" style="display:none;"><%= _ctx.appRes(uicomponent.id+ ".label.start-sync-folder") %></div>
-		<div id="finish-sync-folder" style="display:none;"><%= _ctx.appRes(uicomponent.id+ ".label.finish-sync-folder") %></div>
-		<div id="finish-check-mail" style="display:none;"><%= _ctx.appRes(uicomponent.id+ ".label.finish-check-mail") %></div>
-		<div id="finish-check-mail-by-interrupted"style="display:none;"><%= _ctx.appRes(uicomponent.id+ ".label.finish-check-mail-by-interrupted") %></div>
-		<div id="error-connection-fail" style="display:none;"><%= _ctx.appRes(uicomponent.id+ ".label.error-connection-fail") %></div>
-		<div id="msg-retry-password" style="display:none;"><%= _ctx.appRes(uicomponent.id+ ".label.msg-retry-password") %></div>
-		<div id="error-common" style="display:none;"><%= _ctx.appRes(uicomponent.id+ ".label.error-common") %></div>
-		
-	</div>
+    <%if (uicomponent.isUpdate()) {%>
+      <div id="UpdateList" style="float: right; padding-right: 5px; margin-top: 2px;" class="UpdateList"><a style=" color: #00f;" href="<%=uicomponent.event("UpdateList", "msgId")%>"></a></div>
+    <%}%>
+    <div style="clear: both;"><span></span></div>
+    
+    <div style=" float: left; margin: 2px 0px 0px 5px; color: #00f; cursor: pointer; display:none" class="StopingCheckMail" ><%=_ctx.appRes(uicomponent.id+ ".label.stoping") %>...</div>
+    <div id="checkmail-notice" style="display:none;"><%= _ctx.appRes(uicomponent.id+ ".label.checkmail-notice") %></div>
+    <div id="starting-status" style="display:none;"><%= _ctx.appRes(uicomponent.id+ ".label.starting-status") %></div>
+    <div id="fetching-mail" style="display:none;"><%= _ctx.appRes(uicomponent.id+ ".label.fetching-mail") %></div>
+    <div id="start-sync-folder" style="display:none;"><%= _ctx.appRes(uicomponent.id+ ".label.start-sync-folder") %></div>
+    <div id="finish-sync-folder" style="display:none;"><%= _ctx.appRes(uicomponent.id+ ".label.finish-sync-folder") %></div>
+    <div id="finish-check-mail" style="display:none;"><%= _ctx.appRes(uicomponent.id+ ".label.finish-check-mail") %></div>
+    <div id="finish-check-mail-by-interrupted"style="display:none;"><%= _ctx.appRes(uicomponent.id+ ".label.finish-check-mail-by-interrupted") %></div>
+    <div id="error-connection-fail" style="display:none;"><%= _ctx.appRes(uicomponent.id+ ".label.error-connection-fail") %></div>
+    <div id="msg-retry-password" style="display:none;"><%= _ctx.appRes(uicomponent.id+ ".label.msg-retry-password") %></div>
+    <div id="error-common" style="display:none;"><%= _ctx.appRes(uicomponent.id+ ".label.error-common") %></div>
+    
+  </div>
 <%uiform.end()%>  

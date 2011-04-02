@@ -7,6 +7,6 @@
 <web-app>
   <display-name>zzzstarter</display-name>
   <listener>
-	<listener-class>org.exoplatform.container.web.PortalContainerCreator</listener-class> 
+  <listener-class>org.exoplatform.container.web.PortalContainerCreator</listener-class> 
   </listener> 
 </web-app>

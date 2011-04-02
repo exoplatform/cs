@@ -1,8 +1,8 @@
 <% 
-	import org.exoplatform.contact.service.Contact;
+  import org.exoplatform.contact.service.Contact;
     import org.exoplatform.contact.service.ContactAttachment;
     import org.exoplatform.container.PortalContainer;
-	uiform.begin() 
+  uiform.begin() 
 %>
 <div style="overflow-x:auto; width:99%;">
 <div><div style="width:620px;" ><span style="display:none;"></span></div></div>
@@ -18,7 +18,7 @@
           <td class="FieldComponent">
             <% uicomponent.renderField(uicomponent.SELECT_GROUP)%>
             <% if (!uicomponent.isEdited_) {%><a href="<%=uicomponent.event("AddGroup")%>" title="Add Address Book"><img class="AddNewNodeIcon" src="/eXoResources/skin/DefaultSkin/background/Blank.gif" alt=""/></a><%}%>
-         	</td>           
+           </td>           
         </tr>
       </tbody>
     </table>
@@ -55,22 +55,22 @@
                   <tr>
                     <td class="FieldLabel"> <%=_ctx.appRes(uicomponent.id+ ".label.gender") %> </td>
                     <td class="FieldComponent">
-                    	<% 
-                    		maleChecked = "" ;
-                    		femaleChecked = "" ;
-                    		gender = uicomponent.getFieldGender() ;
-                    		if (gender != null && gender.equalsIgnoreCase("male")) maleChecked = "checked" ; 
-												else if (gender != null && gender.equalsIgnoreCase("female"))femaleChecked = "checked" ;
-                    	 %>
+                      <% 
+                        maleChecked = "" ;
+                        femaleChecked = "" ;
+                        gender = uicomponent.getFieldGender() ;
+                        if (gender != null && gender.equalsIgnoreCase("male")) maleChecked = "checked" ; 
+                        else if (gender != null && gender.equalsIgnoreCase("female"))femaleChecked = "checked" ;
+                       %>
                     
                       <input class="radio" type="radio" value="Male" $maleChecked name="gender"/>
-          	 					<span style="padding:0px 20px 0px 5px" class="Lable">
-												<%=_ctx.appRes(uicomponent.getParent().id+ ".label.male") %>
-											</span>
-											<input class="radio" type="radio" value="Female" $femaleChecked name="gender"/>
-											<span style="padding-left:3px;" class="Lable">
-											 	 <%=_ctx.appRes(uicomponent.getParent().id+ ".label.female") %>
-											 </span>
+                       <span style="padding:0px 20px 0px 5px" class="Lable">
+                        <%=_ctx.appRes(uicomponent.getParent().id+ ".label.male") %>
+                      </span>
+                      <input class="radio" type="radio" value="Female" $femaleChecked name="gender"/>
+                      <span style="padding-left:3px;" class="Lable">
+                          <%=_ctx.appRes(uicomponent.getParent().id+ ".label.female") %>
+                       </span>
                     </td>
                   </tr>
                   <tr>
@@ -107,17 +107,17 @@
     <div class="AvatarContent">
       <div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.picture") %>:</div>
       <% 
-      	String imageLink = "/contact/skin/DefaultSkin/webui/background/Img2.gif" ;
-				Contact contact = uicomponent.getTempContact() ;
-				if (contact != null) {
-					ContactAttachment att = contact.getAttachment() ;
-					if (att != null) {	
-						try {
-							imageLink = "/"+ PortalContainer.getInstance().getRestContextName() + "/private/jcr/" +uicomponent.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
-							imageLink = imageLink + "?rnd=" + System.currentTimeMillis();
-						} catch (Exception e) {}
-					}
-				}
+        String imageLink = "/contact/skin/DefaultSkin/webui/background/Img2.gif" ;
+        Contact contact = uicomponent.getTempContact() ;
+        if (contact != null) {
+          ContactAttachment att = contact.getAttachment() ;
+          if (att != null) {  
+            try {
+              imageLink = "/"+ PortalContainer.getInstance().getRestContextName() + "/private/jcr/" +uicomponent.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
+              imageLink = imageLink + "?rnd=" + System.currentTimeMillis();
+            } catch (Exception e) {}
+          }
+        }
       %>
       <div class="Avatar">
         <img src="$imageLink" width=63 height=81 class="ImgAvatar"/>

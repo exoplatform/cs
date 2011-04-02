@@ -6,14 +6,14 @@
 
 <web-app>
 
-	<!--If define the Portlet Application name MUST end with .par-->
-	<display-name>content</display-name>
+  <!--If define the Portlet Application name MUST end with .par-->
+  <display-name>content</display-name>
 
-	<description>
+  <description>
     This application is a portlet. It can not be used outside a portal.
     This web.xml file is mandatory in each .par archive file.
-	</description>	
-	
+  </description>  
+  
   <filter>
     <filter-name>ResourceRequestFilter</filter-name>
     <filter-class>org.exoplatform.portal.application.ResourceRequestFilter</filter-class>

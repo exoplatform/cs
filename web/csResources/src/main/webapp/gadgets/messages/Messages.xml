@@ -1,82 +1,82 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Module>
   <ModulePrefs author="eXoPlatform"
-		title="Unread Messages"
-		directory_title="Unread Messages"
-		title_url="http://www.exoplatform.org"
-		description="Unread Messages list."
-		thumbnail="/csResources/gadgets/messages/skin/thumb.png">
-		<Locale messages="/csResources/gadgets/messages/locale/default.xml" />
-		<Locale lang="ar" messages="/csResources/gadgets/messages/locale/ar.xml" language_direction="rtl"/>
-		<Locale lang="fr" messages="/csResources/gadgets/messages/locale/fr.xml" />
-		<Locale lang="vi" messages="/csResources/gadgets/messages/locale/vi.xml" />
-		<Require feature="setprefs"/>
-		<Require feature="dynamic-height"/>
-	</ModulePrefs>
+    title="Unread Messages"
+    directory_title="Unread Messages"
+    title_url="http://www.exoplatform.org"
+    description="Unread Messages list."
+    thumbnail="/csResources/gadgets/messages/skin/thumb.png">
+    <Locale messages="/csResources/gadgets/messages/locale/default.xml" />
+    <Locale lang="ar" messages="/csResources/gadgets/messages/locale/ar.xml" language_direction="rtl"/>
+    <Locale lang="fr" messages="/csResources/gadgets/messages/locale/fr.xml" />
+    <Locale lang="vi" messages="/csResources/gadgets/messages/locale/vi.xml" />
+    <Require feature="setprefs"/>
+    <Require feature="dynamic-height"/>
+  </ModulePrefs>
 <UserPref name="setting" datatype="hidden" />
   <Content type="html">
     <![CDATA[
-			<link rel="stylesheet" href="skin/messages.css" type="text/css"/>
+      <link rel="stylesheet" href="skin/messages.css" type="text/css"/>
 
 <script type="text/javascript" src="skin/messages.js">
 
 </script>
-			<div id="noAccount" style="display:none;color:red;">__MSG_noAccount__</div>
-			<form id="SettingMessage" onSubmit="return eXoMessageGadget.saveSetting();" action="#" style="display:none;">
-				<table>
-  				<tr>
-  					<td>__MSG_baseurl__</td>
-  					<td><input type="text" name="urlMessage"></td>
-    			</tr>
-    			<tr>
-    				<td>__MSG_subscribeurl__</td>
-    				<td><input type="text" name="subscribeurlMessage"></td>
-    			</tr>
-					<tr>
-						<td>__MSG_account__</td>
-						<td>
-							<select type="text" name="account" onChange="eXoMessageGadget.getFoldersTags();">
-			
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td>__MSG_folder__</td>
-						<td>
-							<select type="text" name="folder"></select>
-						</td>
-					</tr>
-					<tr>
-						<td>__MSG_tag__</td>
-						<td>
-							<select type="text" name="tag">
-							
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td>__MSG_limit__</td>
-						<td><input type="text" name="limit" value="5"></td>
-					</tr>
-					<tr>
-						<td>
-							<input type="submit" name="save" value="__MSG_save__">
-							<input type="button" name="cancel" value="__MSG_cancel__" onclick="eXoMessageGadget.showHideSetting(false);">
-						</td>					
-					</tr>
-				</table>
-			</form>
+      <div id="noAccount" style="display:none;color:red;">__MSG_noAccount__</div>
+      <form id="SettingMessage" onSubmit="return eXoMessageGadget.saveSetting();" action="#" style="display:none;">
+        <table>
+          <tr>
+            <td>__MSG_baseurl__</td>
+            <td><input type="text" name="urlMessage"></td>
+          </tr>
+          <tr>
+            <td>__MSG_subscribeurl__</td>
+            <td><input type="text" name="subscribeurlMessage"></td>
+          </tr>
+          <tr>
+            <td>__MSG_account__</td>
+            <td>
+              <select type="text" name="account" onChange="eXoMessageGadget.getFoldersTags();">
+      
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>__MSG_folder__</td>
+            <td>
+              <select type="text" name="folder"></select>
+            </td>
+          </tr>
+          <tr>
+            <td>__MSG_tag__</td>
+            <td>
+              <select type="text" name="tag">
+              
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>__MSG_limit__</td>
+            <td><input type="text" name="limit" value="5"></td>
+          </tr>
+          <tr>
+            <td>
+              <input type="submit" name="save" value="__MSG_save__">
+              <input type="button" name="cancel" value="__MSG_cancel__" onclick="eXoMessageGadget.showHideSetting(false);">
+            </td>          
+          </tr>
+        </table>
+      </form>
       <div id="content" class="UIGadgetThemes UIYellowThemes">
-				<div class="TitGad ClearFix" id = "TitleMessage">
-					<a href="#demo" class="IconDropDown" id="ShowAllMessage" target="_blank">__MSG_showAll__</a>
-					<div class="SettingButton" id="SettingButtonMessage" title="__MSG_setting__">
-						<a href="javascript:eXoMessageGadget.showHideSetting(true);"><span></span></a>
-					</div>
-					<div class="ContTit">__MSG_title__</div>
-				</div>
-				<div class="GadCont UnreadMessages" id="ItemContainer"></div>
-			</div>
-			
+        <div class="TitGad ClearFix" id = "TitleMessage">
+          <a href="#demo" class="IconDropDown" id="ShowAllMessage" target="_blank">__MSG_showAll__</a>
+          <div class="SettingButton" id="SettingButtonMessage" title="__MSG_setting__">
+            <a href="javascript:eXoMessageGadget.showHideSetting(true);"><span></span></a>
+          </div>
+          <div class="ContTit">__MSG_title__</div>
+        </div>
+        <div class="GadCont UnreadMessages" id="ItemContainer"></div>
+      </div>
+      
     ]]>
   </Content>
 </Module>

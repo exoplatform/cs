@@ -1,16 +1,16 @@
 .UINotification  {
-	position: absolute;
-	top: 0px;
-	right: 5px;
-	width: 250px;
+  position: absolute;
+  top: 0px;
+  right: 5px;
+  width: 250px;
 }
 
 .UINotification .LeftControlInfo {
   background: url('../background/Event.png') no-repeat left -18px;
   padding-left: 7px;
   width: 70px;
-	float: right;
-	margin-right: 5px;
+  float: right;
+  margin-right: 5px;
 }
 
 .UINotification .RightControlInfo {

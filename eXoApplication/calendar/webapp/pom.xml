@@ -78,8 +78,8 @@
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
-		
-		<dependency>
+    
+    <dependency>
       <groupId>org.exoplatform.cs</groupId>
       <artifactId>exo.cs.web.webservice</artifactId>
       <version>${project.version}</version>

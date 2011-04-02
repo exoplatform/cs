@@ -1,6 +1,6 @@
 #banner {
-	border-top: 1px solid white;
-}	
+  border-top: 1px solid white;
+}  
 
 .UIBannerPortlet {
   overflow: auto;
@@ -9,7 +9,7 @@
 
 .UIBannerPortlet .LeftBanner {
   padding: 0px 0px 0px 264px;  /* orientation=lt */
-	background: url('VistaSkin/background/Banner.png') no-repeat left top; /* orientation=lt */
+  background: url('VistaSkin/background/Banner.png') no-repeat left top; /* orientation=lt */
   background: url('VistaSkin/background/Banner.png') no-repeat right top; /* orientation=rt */
 }
 

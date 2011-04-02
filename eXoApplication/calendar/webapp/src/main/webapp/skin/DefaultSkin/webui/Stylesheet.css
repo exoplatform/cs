@@ -21,115 +21,115 @@
 /*=========================== MailBanner ==================================*/
 
 .UIWindow .UICalendarPortlet {
-	margin: 0px;
-	border: none;
-	min-width: 900px;
+  margin: 0px;
+  border: none;
+  min-width: 900px;
 }
 
 .UICalendarPortlet {
-	background: white;
-	color: #292929;
+  background: white;
+  color: #292929;
 }
 
 .UIEmpty {
-	margin: 0px;
-	border: none;
-	min-width: 1px;
-	background: none;
-	color:none;
+  margin: 0px;
+  border: none;
+  min-width: 1px;
+  background: none;
+  color:none;
 }
 
 .UIWindow .UIEmpty {
-	margin: 0px;
-	border: none;
-	min-width: 1px;
-	background: none;
-	color:none;
+  margin: 0px;
+  border: none;
+  min-width: 1px;
+  background: none;
+  color:none;
 }
 
 
 .UIPageDesktop .FixWidth {
-	_width: 940px;
+  _width: 940px;
 }
 
 /*==============================Calendar Working Container================================*/
 .UICalendarPortlet .CalendarWorkingWorkspace {
-	padding: 10px 5px;
+  padding: 10px 5px;
 }
 
 
 /*==================Calendar Working Container===================*/
 
 .UICalendarPortlet .TitleBar .UIPopupCategory {
-	left: 21px;
-	position:absolute;
-	top: 19px;
-	width: auto;
+  left: 21px;
+  position:absolute;
+  top: 19px;
+  width: auto;
 }
 
 .UICalendarPortlet .TitleBar .UIRightClickPopupMenu {
-	width:160px;
+  width:160px;
 }
 
 .UICalendarPortlet .UICalendarWorkingContainer {
-	background-color: #f3f3f3;
-	border: 1px solid #c7c7c7;
+  background-color: #f3f3f3;
+  border: 1px solid #c7c7c7;
 }
 
 .UICalendarPortlet .UICalendarWorkingContainer .SeparatorLine {
   float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
+  float: right; /* orientation=rt */
   margin: 4px 3px 0px 3px;
   background: url('background/CalendarBackground.gif') no-repeat left top; /* orientation=lt */
-	background: url('background/CalendarBackground.gif') no-repeat right top; /* orientation=rt */	
+  background: url('background/CalendarBackground.gif') no-repeat right top; /* orientation=rt */  
   height: 18px; 
   width: 2px;
 }
 .UICalendarPortlet .UICalendarContainer {
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
-	width: 225px;
-	padding: 8px;
+  float: left; /* orientation=lt */
+  float: right; /* orientation=rt */
+  width: 225px;
+  padding: 8px;
 }
  
 /*==========================================*/
 .UICalendarPortlet .SeparatorLine {
-  background: url('background/CalendarBackground.gif') no-repeat right top;	
+  background: url('background/CalendarBackground.gif') no-repeat right top;  
   height: 26px; width: 2px;
 }
 
 .UICalendarPortlet .TitleBar {
-  background: url('background/CalendarBackground.gif') repeat-x  center -51px;	
+  background: url('background/CalendarBackground.gif') repeat-x  center -51px;  
   height: 22px;
   line-height: 22px ;
   font-weight: bold ;
-	border: 1px solid #c7c7c7;
-	border-right: none; /* orientation=lt */
-	border-left: none; /* orientation=rt */
+  border: 1px solid #c7c7c7;
+  border-right: none; /* orientation=lt */
+  border-left: none; /* orientation=rt */
 }
 
 .UICalendarPortlet .UIWeekView .TitleBar {
-	border-bottom: none;
+  border-bottom: none;
 }
 
 .UICalendarPortlet .UIListContainer .TitleBar {
-	border-bottom: none;
+  border-bottom: none;
 }
 
 .UICalendarPortlet .CurrentTitleBar {
-  background: url('background/CalendarBackground.gif') repeat-x center -27px;	
+  background: url('background/CalendarBackground.gif') repeat-x center -27px;  
   height: 23px;
   line-height: 23px ;
   text-align: center ;
   font-weight: bold ;
-	color: #0b18c8;
+  color: #0b18c8;
 }
 
 .UICalendarPortlet .ResizeReadingPane {
-	background: url('background/CalendarBackground.gif') repeat-x center -75px;
-	width: 40px; height: 4px;
-	cursor: n-resize;
-	margin: 3px auto;
+  background: url('background/CalendarBackground.gif') repeat-x center -75px;
+  width: 40px; height: 4px;
+  cursor: n-resize;
+  margin: 3px auto;
 }
 
 .UICalendarPortlet .UIForm .HorizontalLayout .setting input.checkbox {
@@ -139,13 +139,13 @@
 /*=====================Table Color===========================*/
 
 .UIContextMenuContainer {
-	white-space: nowrap;
+  white-space: nowrap;
 }
 
 .UIContextMenuContainer .CalendarTableColor {
-	background: #e4eaf5;
-	padding: 5px;
-	margin: 1px;
+  background: #e4eaf5;
+  padding: 5px;
+  margin: 1px;
 }
 
 .UIContextMenuContainer .CalendarTableColor .ColorCell {
@@ -160,27 +160,27 @@
 }
 
 .UIContextMenuContainer .CalendarTableColor .SelectedColorCell {
-	background: url('skinIcons/icons/CalendarIcons.gif') no-repeat left -342px;
-	width: 12px; 
-	height: 12px;
-	border: 1px solid red;
+  background: url('skinIcons/icons/CalendarIcons.gif') no-repeat left -342px;
+  width: 12px; 
+  height: 12px;
+  border: 1px solid red;
 }
 
 .UIContextMenuContainer .CalendarTableColor a:hover {
-	border: 1px solid red;
-	margin: 2px;
+  border: 1px solid red;
+  margin: 2px;
 }
 
 /* Popup Menu Positioning*/
 .UIActionBar .SelectButton .UIPopupCategory {
-	left: 7px ;
+  left: 7px ;
 }
 
 .selection {
-	background-color: rgb(204, 204, 204);
-	position: absolute ;
-	opacity: 0.66 ;
-	width: 100% ;
+  background-color: rgb(204, 204, 204);
+  position: absolute ;
+  opacity: 0.66 ;
+  width: 100% ;
 }
 
 /* Colors*/
@@ -219,47 +219,47 @@
 .Yellow {background-color: #FFFF00;}    
 
 .EventTitle {
-	background-color:#000000 ;
-	filter:alpha(opacity=30);
-	-moz-opacity:0.3;
-	opacity:0.3;
+  background-color:#000000 ;
+  filter:alpha(opacity=30);
+  -moz-opacity:0.3;
+  opacity:0.3;
 }
 
 .EventTitle p {
-	font-weight:bold;
-	color:white;
-	padding-left: 2px ;
-	margin: 0px ;
-	white-space:nowrap ;
-	font-size: 10px;
-	line-height: 10px;
+  font-weight:bold;
+  color:white;
+  padding-left: 2px ;
+  margin: 0px ;
+  white-space:nowrap ;
+  font-size: 10px;
+  line-height: 10px;
 }
 
 .UserSelectionBlock {
-	background: #cccccc ;
-	position: absolute ;
-	opacity: 0.5 ;
-	filter:alpha(opacity=50) ;
-	-moz-user-select : none ;
+  background: #cccccc ;
+  position: absolute ;
+  opacity: 0.5 ;
+  filter:alpha(opacity=50) ;
+  -moz-user-select : none ;
 }
 
 .UICalendarPortlet .SelectFileFrame {
-	width: 300px;
+  width: 300px;
 }
 
 .UICalendarPortlet .SelectMemberIcon {
-	width: 20px ; 
-	height: 16px;
+  width: 20px ; 
+  height: 16px;
 }
 
 .UICalendarPortlet .SelectUserIcon {
-	width: 20px ; 
-	height: 16px;
+  width: 20px ; 
+  height: 16px;
 }
 
 .UICalendarPortlet .SelectGroupIcon {
-	width: 20px ; 
-	height: 16px;
+  width: 20px ; 
+  height: 16px;
 }
 
 .UICalendarPortlet .UISharedForm .UIFormGrid {
@@ -268,65 +268,65 @@
 }
 
 .UICalendarPortlet .UIForm .UIFormGrid td.FieldComponent {
-	white-space: nowrap;
+  white-space: nowrap;
 }
 
 .UICalendarPortlet .UIAttachFileForm .UIForm .UIFormGrid td.FieldComponent {
-	white-space: normal;
+  white-space: normal;
 }
 
 .UICalendarPortlet .UIAttachFileForm .SelectFileFrame {
-	width: 350px;
+  width: 350px;
 }
 
 .UICalendarPortlet .UIForm .UIGrid .ViewDescription {
-	height: auto;
-	overflow: hidden;
-	width: 80%;
-	margin: 0px;
-	font-family: Tahoma,Verdana,Arial;
+  height: auto;
+  overflow: hidden;
+  width: 80%;
+  margin: 0px;
+  font-family: Tahoma,Verdana,Arial;
 }
 
 .UICalendarPortlet .BlueCircleMinus { 
-	height: 16px;
-	width: 16px;
+  height: 16px;
+  width: 16px;
 }
 
 .UICalendarPortlet .busyIcon {
-	padding-left: 22px; /* orientation=lt */
-	padding-right: 15px; /* orientation=rt */
-	height: 16px;
+  padding-left: 22px; /* orientation=lt */
+  padding-right: 15px; /* orientation=rt */
+  height: 16px;
 }
 
 .UICalendarPortlet .outsideIcon {
-	 padding-left:20px; /* orientation=lt */
- 	 padding-right:20px; /* orientation=rt */
-	 height: 16px;
+   padding-left:20px; /* orientation=lt */
+    padding-right:20px; /* orientation=rt */
+   height: 16px;
 }
 
 .UICalendarPortlet .ItemIcon{
-	padding: 0px 0px 0px 23px; /* orientation=lt */
-	padding: 0px 23px 0px 0px; /* orientation=rt */
-	line-height: 22px;
-	margin: 0px 2px;
-	height: 22px;
+  padding: 0px 0px 0px 23px; /* orientation=lt */
+  padding: 0px 23px 0px 0px; /* orientation=rt */
+  line-height: 22px;
+  margin: 0px 2px;
+  height: 22px;
 }
 
 .UICalendarPortlet .MenuItem .ItemIcon {
-	line-height: 25px;
-	height: 25px;
+  line-height: 25px;
+  height: 25px;
 }
 
 .UICalendarPortlet .MenuItem .ItemIcon:hover {
-	background-color: #dee4f2;
-	color: orange;
+  background-color: #dee4f2;
+  color: orange;
 }
 .UICalendarPortlet .UICalendarViewContainer {
-	-khtml-user-select:none;	
+  -khtml-user-select:none;  
 }
 
 .UICalendarPortlet .UIHightlightEvent {
-	border:solid 1px red;
+  border:solid 1px red;
 }
 
 .UICalendarPortlet .ICalIcon{
@@ -336,22 +336,22 @@
 }
 
 .UICalendarPortlet .RemoveBtn {
-	
+  
 }
 
 /*Override style of Right click menu*/
 .UIRightClickPopupMenu .MenuItem .ItemIcon{
-	padding: 0px 5px 0px 28px; /* orientation=lt */
-	padding: 0px 28px 0px 5px; /* orientation=rt */
-	margin: 0px 2px;
-	line-height: 24px;
+  padding: 0px 5px 0px 28px; /* orientation=lt */
+  padding: 0px 28px 0px 5px; /* orientation=rt */
+  margin: 0px 2px;
+  line-height: 24px;
 }
 
 /* For SearchIcon of UIUserSelector */
 .UIUserSelector .UIAddressSearchForm .SearchIcon 
 {
-	float:left;
-	height:20px;
-	margin:3px 4px;
-	width:24px;
+  float:left;
+  height:20px;
+  margin:3px 4px;
+  width:24px;
 }

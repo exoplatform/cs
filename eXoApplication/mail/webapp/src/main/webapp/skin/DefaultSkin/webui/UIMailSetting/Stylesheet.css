@@ -1,106 +1,106 @@
 
 .UIMailPortlet .UIMailSetting {
-	min-width: 600px;
+  min-width: 600px;
 }
 
 /*****************************FlatTabStyle****************************************/
 
 .UIMailPortlet .UIMailSetting .UITabSelector .FlatTabStyle .SelectedTab {
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
+  float: left; /* orientation=lt */
+  float: right; /* orientation=rt */
 }
 
 .UIMailPortlet .UIMailSetting .UITabSelector .FlatTabStyle .NormalTab {
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
+  float: left; /* orientation=lt */
+  float: right; /* orientation=rt */
 }
 
 .UIMailPortlet .UIMailSetting .UITabSelector .FlatTabStyle .TabIcon {
-	margin: 1px 4px 0px 4px;
-	padding-left: 25px; /* orientation=rt */
-	padding-right: 25px; /* orientation=lt */
+  margin: 1px 4px 0px 4px;
+  padding-left: 25px; /* orientation=rt */
+  padding-right: 25px; /* orientation=lt */
 }
 
 .UIMailPortlet .UIMailSetting .UITabSelector .FlatTabStyle .ShortcutKeyIcon {
-	background: url('icons/ShortcutkeyIcon.gif') no-repeat center;
-	height: 27px; width: 24px;
+  background: url('icons/ShortcutkeyIcon.gif') no-repeat center;
+  height: 27px; width: 24px;
 }
 
 .UIMailPortlet .UIMailSetting .UITabSelector .FlatTabStyle .AccountIcon {
-	background: url('icons/AccountIcon.gif') no-repeat center;
-	height: 25px; width: 24px;
+  background: url('icons/AccountIcon.gif') no-repeat center;
+  height: 25px; width: 24px;
 }
 
 .UIMailPortlet .UIMailSetting .UITabSelector .UITabContentContainer {
-	border: 1px solid #d5d5d5;
+  border: 1px solid #d5d5d5;
 }
 
 .UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout {
-	border: none;
-	padding: 0px 0px 20px 0px;
+  border: none;
+  padding: 0px 0px 20px 0px;
 }
 
 /******************************Layout Setting Style********************************/
 
 .UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .VerticalSplitContainer {
-	display:block;
-	float:left;
+  display:block;
+  float:left;
 }
 
 .UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .HorizontalSplitContainer {
-	display:block;
-	float:left;
-	margin-left:50px;
+  display:block;
+  float:left;
+  margin-left:50px;
 }
 
 .UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .VerticalSplitContainer .ImgVeticalSplit{
-	background: url('background/ItemSelector.gif') no-repeat left top;
-	width:270px;
-	height:168px;
+  background: url('background/ItemSelector.gif') no-repeat left top;
+  width:270px;
+  height:168px;
 }
 
 .UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .HorizontalSplitContainer .ImgHorizontalSplit{
-	background: url('background/ItemSelector.gif') no-repeat left -168px;
-	width:270px;
-	height:168px;
+  background: url('background/ItemSelector.gif') no-repeat left -168px;
+  width:270px;
+  height:168px;
 }
 
 .UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .NoSplitContainer .ImgNoSplit{
-	background: url('background/ItemSelector.gif') no-repeat left top;
-	width:270px;
-	height:168px;
+  background: url('background/ItemSelector.gif') no-repeat left top;
+  width:270px;
+  height:168px;
 }
 
 .UIMailPortlet .UIMailSetting .UIForm .NoSplitContainer .MiddleSection {
-	width: 10px;
-	height: 15px;
-	display:block;
-	float:left;	
-	background: url('background/IconChange.gif') no-repeat center;
-	margin-left:131px;
-	margin-top:72px;
+  width: 10px;
+  height: 15px;
+  display:block;
+  float:left;  
+  background: url('background/IconChange.gif') no-repeat center;
+  margin-left:131px;
+  margin-top:72px;
 }
 
 .UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .NoSplitContainer {
-	display:block;
-	margin-top:10px;
-	float:left;
+  display:block;
+  margin-top:10px;
+  float:left;
 }
 
 .UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .LayoutSettingRadio {
-	width:10px;
+  width:10px;
 }
 
 .UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .LayoutSettingHeader {
-	font-weight:bold;
+  font-weight:bold;
 }
 
 .UIMailPortlet .UIMailSetting .SelectUser {
     height: 16px; 
     width: 16px;
-	cursor: pointer;
-	float: left;
-	margin: -2px 5px;
+  cursor: pointer;
+  float: left;
+  margin: -2px 5px;
 }
 
 .UIMailPortlet .UIMailSetting .AddUserFeild {
@@ -109,45 +109,45 @@
 
 /*UIDelegationInputset account*/
 .UIMailPortlet .UIDelegationInputSet{
-	font-color:#747480;
+  font-color:#747480;
 }
 
 .UIMailPortlet .UIDelegationInputSet .AccountsInput{
-	text-align:center;
+  text-align:center;
 }
 
 .UIMailPortlet .UIDelegationInputSet .AccountsInput .InputField{
-	text-align:left;
-	padding:0px 0px 5px 30px;
+  text-align:left;
+  padding:0px 0px 5px 30px;
 }
 
 .UIMailPortlet .UIDelegationInputSet .PrivilegeSpace{
-	padding:20px 30px;
-	text-align:left;
+  padding:20px 30px;
+  text-align:left;
 }
 
 .UIMailPortlet .UIDelegationInputSet .PrivilegeLabel{
-	float:left;
-	width:auto;
-	padding:0px 20px 0px 0px;  
+  float:left;
+  width:auto;
+  padding:0px 20px 0px 0px;  
 }
 .UIMailPortlet .UIDelegationInputSet .PrivilegeInput{
-	float:left;
-	width:auto;
-	padding: 0px 5px;
-	text-align:left;
+  float:left;
+  width:auto;
+  padding: 0px 5px;
+  text-align:left;
 }
 
 .UIMailPortlet .UIDelegationInputSet .AddMoreDelegatedAccount {
-	background: url('icons/add_delegation_icon1-rt.png') no-repeat transparent center ;
-       	height: 32px; width: 32px;
-	cursor: pointer;
-	margin: -10px 20px;
-	float: left;
+  background: url('icons/add_delegation_icon1-rt.png') no-repeat transparent center ;
+         height: 32px; width: 32px;
+  cursor: pointer;
+  margin: -10px 20px;
+  float: left;
 }
 
 .UIMailPortlet .UIDelegationInputSet .DelegatedAccountsList{
-	padding:10px 5px;
+  padding:10px 5px;
 }
 
 .UIMailPortlet .UIDelegationAccountGrid {
@@ -155,5 +155,5 @@
 }
 
 .UIMailPortlet .UIDelegationAccountGrid .RemoveIcon{
-	background: url('icons/recyclebin.png') no-repeat transparent center ;
+  background: url('icons/recyclebin.png') no-repeat transparent center ;
 }

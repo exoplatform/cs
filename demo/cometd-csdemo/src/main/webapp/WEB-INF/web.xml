@@ -28,7 +28,7 @@
     <!--listener>
           <listener-class>org.exoplatform.ws.frameworks.servlet.StandaloneContainerInitializedListener</listener-class>
      </listener-->
-	    
+      
   
   <servlet>
     <servlet-name>cometd</servlet-name>

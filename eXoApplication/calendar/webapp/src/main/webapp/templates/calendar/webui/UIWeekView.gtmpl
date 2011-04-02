@@ -1,64 +1,64 @@
 <%
-	import java.util.Calendar;
-	import java.lang.Math ;
-	import java.util.GregorianCalendar;
-	import java.text.DateFormat;
-	import java.text.SimpleDateFormat;
-	import org.exoplatform.calendar.CalendarUtils;
-	import java.util.Locale;
-	import org.exoplatform.webui.application.WebuiRequestContext;
-	import org.exoplatform.calendar.service.CalendarEvent;
-	import java.text.ParseException;
-	uiform.begin()
- 	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
- 	Calendar currentCalendar = uicomponent.getCurrentCalendar() ;
- 	int currentDay = uicomponent.getCurrentDay() ;
-	int currentMonth = uicomponent.getCurrentMonth() ;
- 	int currentYear = uicomponent.getCurrentYear() ;
-	timeInterval = uicomponent.getTimeInterval() ;
- 	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT, String.valueOf(Calendar.WEEK_OF_YEAR)) ;
- 	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS, String.valueOf(Calendar.WEEK_OF_YEAR)) ;
- 	int weekNumber = uicomponent.getCurrentWeek() ;
- 	def rcontext = _ctx.getRequestContext() ;
-	numberOfDays = 7 ;
-	styleWidth = "width:13.8%;*width:14%;" ;
-	if(uicomponent.isShowCustomView()) {
-		numberOfDays = 5 ;
-		styleWidth = "width:19.8%;*width:20%;" ;
-	} 
-	workingStart = uicomponent.getCalendarSetting().getWorkingTimeBegin() ;
-	rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarMan','/calendar/javascript/') ;
+  import java.util.Calendar;
+  import java.lang.Math ;
+  import java.util.GregorianCalendar;
+  import java.text.DateFormat;
+  import java.text.SimpleDateFormat;
+  import org.exoplatform.calendar.CalendarUtils;
+  import java.util.Locale;
+  import org.exoplatform.webui.application.WebuiRequestContext;
+  import org.exoplatform.calendar.service.CalendarEvent;
+  import java.text.ParseException;
+  uiform.begin()
+   _ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
+   Calendar currentCalendar = uicomponent.getCurrentCalendar() ;
+   int currentDay = uicomponent.getCurrentDay() ;
+  int currentMonth = uicomponent.getCurrentMonth() ;
+   int currentYear = uicomponent.getCurrentYear() ;
+  timeInterval = uicomponent.getTimeInterval() ;
+   String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT, String.valueOf(Calendar.WEEK_OF_YEAR)) ;
+   String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS, String.valueOf(Calendar.WEEK_OF_YEAR)) ;
+   int weekNumber = uicomponent.getCurrentWeek() ;
+   def rcontext = _ctx.getRequestContext() ;
+  numberOfDays = 7 ;
+  styleWidth = "width:13.8%;*width:14%;" ;
+  if(uicomponent.isShowCustomView()) {
+    numberOfDays = 5 ;
+    styleWidth = "width:19.8%;*width:20%;" ;
+  } 
+  workingStart = uicomponent.getCalendarSetting().getWorkingTimeBegin() ;
+  rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarMan','/calendar/javascript/') ;
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UIWeekView','/calendar/javascript/') ;
   int defaultTimeInterval = uicomponent.getDefaultTimeInterval() ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.getWorkingdays('+numberOfDays+') ;') ;
-	//rcontext.getJavascriptManager().addOnLoadJavascript('eXo.calendar.UICalendarPortlet.onLoad') ;
-	rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.UICalendarPortlet.checkFilter();') ;
-	rcontext.getJavascriptManager().addOnResizeJavascript('eXo.calendar.UIWeekView.onResize') ;
- 	
- 	WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
- 	Locale locale = context.getParentAppRequestContext().getLocale() ;
- 	String currentMonthName = uicomponent.getMonthName(currentMonth) ;
- 	dateFormat = uicomponent.getDateFormat() ;
-	timeFormat = uicomponent.getTimeFormat() ;
-	dateTimeFormat = uicomponent.getDateTimeFormat() ;
-	String startWorkingTime = uicomponent.getStartTime() ;
-	String endWorkingTime = uicomponent.getEndTime() ;
-	Calendar startDateOfWeek = uicomponent.getBeginDateOfWeek();
-	Calendar endDateOfWeek = uicomponent.getEndDateOfWeek();
-	String startDayViewAction = uicomponent.TYPE_DAY +"&currentTime="+ startDateOfWeek.getTimeInMillis();
-	String startMonthViewAction = uicomponent.TYPE_MONTH +"&currentTime="+ startDateOfWeek.getTimeInMillis();
-	String startYearViewAction = uicomponent.TYPE_YEAR +"&currentTime="+ startDateOfWeek.getTimeInMillis();
-	String endDayViewAction = uicomponent.TYPE_DAY +"&currentTime="+ endDateOfWeek.getTimeInMillis();
-	String endMonthViewAction = uicomponent.TYPE_MONTH +"&currentTime="+ endDateOfWeek.getTimeInMillis();
-	String endYearViewAction = uicomponent.TYPE_YEAR +"&currentTime="+ endDateOfWeek.getTimeInMillis();
-	boolean isShowWorkingTime = uicomponent.isShowWorkingTime() ;
-	DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
-	DateFormat tf = new SimpleDateFormat(timeFormat, locale) ;
-	tf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
-	DateFormat dtf = new SimpleDateFormat(dateFormat+" "+CalendarUtils.TIMEFORMAT, locale) ;
-	DateFormat wf = new  SimpleDateFormat("EEE, dd MMM", locale) ;
-	DateFormat tempFormat =  new  SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss", Locale.ENGLISH) ;
-	tempFormat.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
+  //rcontext.getJavascriptManager().addOnLoadJavascript('eXo.calendar.UICalendarPortlet.onLoad') ;
+  rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.UICalendarPortlet.checkFilter();') ;
+  rcontext.getJavascriptManager().addOnResizeJavascript('eXo.calendar.UIWeekView.onResize') ;
+   
+   WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+   Locale locale = context.getParentAppRequestContext().getLocale() ;
+   String currentMonthName = uicomponent.getMonthName(currentMonth) ;
+   dateFormat = uicomponent.getDateFormat() ;
+  timeFormat = uicomponent.getTimeFormat() ;
+  dateTimeFormat = uicomponent.getDateTimeFormat() ;
+  String startWorkingTime = uicomponent.getStartTime() ;
+  String endWorkingTime = uicomponent.getEndTime() ;
+  Calendar startDateOfWeek = uicomponent.getBeginDateOfWeek();
+  Calendar endDateOfWeek = uicomponent.getEndDateOfWeek();
+  String startDayViewAction = uicomponent.TYPE_DAY +"&currentTime="+ startDateOfWeek.getTimeInMillis();
+  String startMonthViewAction = uicomponent.TYPE_MONTH +"&currentTime="+ startDateOfWeek.getTimeInMillis();
+  String startYearViewAction = uicomponent.TYPE_YEAR +"&currentTime="+ startDateOfWeek.getTimeInMillis();
+  String endDayViewAction = uicomponent.TYPE_DAY +"&currentTime="+ endDateOfWeek.getTimeInMillis();
+  String endMonthViewAction = uicomponent.TYPE_MONTH +"&currentTime="+ endDateOfWeek.getTimeInMillis();
+  String endYearViewAction = uicomponent.TYPE_YEAR +"&currentTime="+ endDateOfWeek.getTimeInMillis();
+  boolean isShowWorkingTime = uicomponent.isShowWorkingTime() ;
+  DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
+  DateFormat tf = new SimpleDateFormat(timeFormat, locale) ;
+  tf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
+  DateFormat dtf = new SimpleDateFormat(dateFormat+" "+CalendarUtils.TIMEFORMAT, locale) ;
+  DateFormat wf = new  SimpleDateFormat("EEE, dd MMM", locale) ;
+  DateFormat tempFormat =  new  SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss", Locale.ENGLISH) ;
+  tempFormat.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
 %>
 <div class="UIWeekView">
   <div class="TitleBar">
@@ -80,19 +80,19 @@
               <a href="<%=uicomponent.event('GotoDate',startMonthViewAction)%>"><%=uicomponent.getMonthName(startDateOfWeek.get(Calendar.MONTH))%></a>
               <a href="<%=uicomponent.event('GotoDate',startYearViewAction)%>"><%=startDateOfWeek.get(Calendar.YEAR)%></a>
               <% } else { %>
-	            <a href="<%=uicomponent.event('GotoDate',startDayViewAction)%>"><%=startDateOfWeek.get(Calendar.DAY_OF_MONTH)%></a>
-	            <a href="<%=uicomponent.event('GotoDate',startMonthViewAction)%>"><%=uicomponent.getMonthName(startDateOfWeek.get(Calendar.MONTH))%></a>
-	            <a href="<%=uicomponent.event('GotoDate',startYearViewAction)%>"><%=startDateOfWeek.get(Calendar.YEAR)%></a> - 
-	            <a href="<%=uicomponent.event('GotoDate',endDayViewAction)%>"><%=endDateOfWeek.get(Calendar.DAY_OF_MONTH)%></a>
-	            <a href="<%=uicomponent.event('GotoDate',endMonthViewAction)%>"><%=uicomponent.getMonthName(endDateOfWeek.get(Calendar.MONTH))%></a>
-	            <a href="<%=uicomponent.event('GotoDate',endYearViewAction)%>"><%=endDateOfWeek.get(Calendar.YEAR)%></a>
-							<% } %>
+              <a href="<%=uicomponent.event('GotoDate',startDayViewAction)%>"><%=startDateOfWeek.get(Calendar.DAY_OF_MONTH)%></a>
+              <a href="<%=uicomponent.event('GotoDate',startMonthViewAction)%>"><%=uicomponent.getMonthName(startDateOfWeek.get(Calendar.MONTH))%></a>
+              <a href="<%=uicomponent.event('GotoDate',startYearViewAction)%>"><%=startDateOfWeek.get(Calendar.YEAR)%></a> - 
+              <a href="<%=uicomponent.event('GotoDate',endDayViewAction)%>"><%=endDateOfWeek.get(Calendar.DAY_OF_MONTH)%></a>
+              <a href="<%=uicomponent.event('GotoDate',endMonthViewAction)%>"><%=uicomponent.getMonthName(endDateOfWeek.get(Calendar.MONTH))%></a>
+              <a href="<%=uicomponent.event('GotoDate',endYearViewAction)%>"><%=endDateOfWeek.get(Calendar.YEAR)%></a>
+              <% } %>
             </div>
           </td>
           <td>
-			  <div onclick="$linkDayNext" class="NextIcon" title="<%=uiform.getLabel('nextWeek')%>">
-				<span></span>
-			  </div>
+        <div onclick="$linkDayNext" class="NextIcon" title="<%=uiform.getLabel('nextWeek')%>">
+        <span></span>
+        </div>
           </td>
         </tr>
       </tbody>
@@ -103,21 +103,21 @@
       <table class="UIGrid"  cellspacing="0" cellpadding="0" exocallback="eXo.calendar.UIWeekView.callbackSelectionX();">
           <tr>
             <td style="width: 55px;" class="UIEmtyBlock"><div style="width: 55px;"><span></span></div></td>
-            <%			
-							cl = uicomponent.getBeginDateOfWeek() ;				
-						  t = 0 ; 
-							while(t++ <numberOfDays) {
-						  	cssClass = "Day" ;
-						  	if(uicomponent.isCurrentDay(cl.get(Calendar.DATE), cl.get(Calendar.MONTH), cl.get(Calendar.YEAR))) {
-						  		cssClass = "Today" ;
-						  	}
-							  dayActionLink = uicomponent.TYPE_DAY +"&currentTime="+ cl.getTimeInMillis() ;
-							  actionLink =  uicomponent.event("GotoDate",dayActionLink) ;
-							  styleCss = "" ;
-							  if(cl.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
-								   styleCss = "color:red;" ;
-								}
-							 	wf.setCalendar(cl) ;
+            <%      
+              cl = uicomponent.getBeginDateOfWeek() ;        
+              t = 0 ; 
+              while(t++ <numberOfDays) {
+                cssClass = "Day" ;
+                if(uicomponent.isCurrentDay(cl.get(Calendar.DATE), cl.get(Calendar.MONTH), cl.get(Calendar.YEAR))) {
+                  cssClass = "Today" ;
+                }
+                dayActionLink = uicomponent.TYPE_DAY +"&currentTime="+ cl.getTimeInMillis() ;
+                actionLink =  uicomponent.event("GotoDate",dayActionLink) ;
+                styleCss = "" ;
+                if(cl.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
+                   styleCss = "color:red;" ;
+                }
+                 wf.setCalendar(cl) ;
             %>
             <td class="$cssClass UICellBlock" style="$styleWidth" startTime="<%=cl.getTimeInMillis()%>"  startTimeFull="<%=tempFormat.format(cl.getTime())%>">
               <a href="$actionLink" style="$styleCss">
@@ -125,96 +125,96 @@
               </a>
             </td>
             <%
-							cl.add(Calendar.DATE,1) ;
-						 }
+              cl.add(Calendar.DATE,1) ;
+             }
             %>
           </tr>
       </table>
-	  
-		<div id="UIWeekViewGridAllDay" class="EventAllday" style="" numberOfDays="$numberOfDays">
-			<div class="Space"><span></span></div>
-			<div style="margin-left: 55px;">
-				<div class="EventAlldayBoard">
-	                <% for (event in uicomponent.getEventList().values()) {
-										begindate =  event.getFromDateTime().getTime() ;  
-										enddate = event.getToDateTime().getTime() ; 
-										leftClass = "LeftResizeEvent ResizableSign" ;
-										if(event.fromDateTime.before(uicomponent.getBeginDateOfWeek().getTime())){
-										  leftClass = "LeftContinueEvent" ;
-										}  
-										rightClass = "RightResizeEvent ResizableSign" ;
-										if(event.toDateTime.after(uicomponent.getEndDateOfWeek().getTime())){
-										  rightClass = "RightContinueEvent" ;
-										}  		
-									  long 	startTime = event.getFromDateTime().getTime() ;  
-									  long	finishTime = event.getToDateTime().getTime() ;  
-										color = uicomponent.getColors().get(event.calType +CalendarUtils.COLON+ event.getCalendarId()) ;
-										title = tf.format(event.getFromDateTime()) + "->" + tf.format(event.getToDateTime())+ ":&#013; " + event.summary ;
-										actionLink =  uicomponent.event("SaveEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
-										Boolean isOccur = (event.getRepeatType() != null && !CalendarEvent.RP_NOREPEAT.equals(event.getRepeatType()) && (event.getIsExceptionOccurrence() == null || !event.getIsExceptionOccurrence()));
-										String recurId = event.getRecurrenceId();
-	                %>
-	                <div class="EventContainer EventAlldayContainer WeekViewEventBoxes $color" eventcat="$event.eventCategoryId" style="position:absolute; border: solid 1px grey;" caltype="$event.calType" eventid="$event.id" isOccur="$isOccur" recurId="$recurId" calid="$event.calendarId" startTime="$begindate"  endTime="$enddate" 
-	                startTimeFull="<%=tempFormat.format(event.getFromDateTime())%>" endTimeFull="<%=tempFormat.format(event.getToDateTime())%>"
-	                  actionlink="$actionLink">
-	                  <div class="$leftClass">
-	                    <span></span>
-	                  </div>
-	                  <div class="EventAlldayContent">
-	                    <%=event.summary%>
-	                  </div>
-	                  <div class="$rightClass">
-	                    <span></span>
-	                  </div>
-	                  <div style="clear: left;">
-	                    <span></span>
-	                  </div>
-	                </div>
-	                <%}%>
-	            </div>
-			 </div>
+    
+    <div id="UIWeekViewGridAllDay" class="EventAllday" style="" numberOfDays="$numberOfDays">
+      <div class="Space"><span></span></div>
+      <div style="margin-left: 55px;">
+        <div class="EventAlldayBoard">
+                  <% for (event in uicomponent.getEventList().values()) {
+                    begindate =  event.getFromDateTime().getTime() ;  
+                    enddate = event.getToDateTime().getTime() ; 
+                    leftClass = "LeftResizeEvent ResizableSign" ;
+                    if(event.fromDateTime.before(uicomponent.getBeginDateOfWeek().getTime())){
+                      leftClass = "LeftContinueEvent" ;
+                    }  
+                    rightClass = "RightResizeEvent ResizableSign" ;
+                    if(event.toDateTime.after(uicomponent.getEndDateOfWeek().getTime())){
+                      rightClass = "RightContinueEvent" ;
+                    }      
+                    long   startTime = event.getFromDateTime().getTime() ;  
+                    long  finishTime = event.getToDateTime().getTime() ;  
+                    color = uicomponent.getColors().get(event.calType +CalendarUtils.COLON+ event.getCalendarId()) ;
+                    title = tf.format(event.getFromDateTime()) + "->" + tf.format(event.getToDateTime())+ ":&#013; " + event.summary ;
+                    actionLink =  uicomponent.event("SaveEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
+                    Boolean isOccur = (event.getRepeatType() != null && !CalendarEvent.RP_NOREPEAT.equals(event.getRepeatType()) && (event.getIsExceptionOccurrence() == null || !event.getIsExceptionOccurrence()));
+                    String recurId = event.getRecurrenceId();
+                  %>
+                  <div class="EventContainer EventAlldayContainer WeekViewEventBoxes $color" eventcat="$event.eventCategoryId" style="position:absolute; border: solid 1px grey;" caltype="$event.calType" eventid="$event.id" isOccur="$isOccur" recurId="$recurId" calid="$event.calendarId" startTime="$begindate"  endTime="$enddate" 
+                  startTimeFull="<%=tempFormat.format(event.getFromDateTime())%>" endTimeFull="<%=tempFormat.format(event.getToDateTime())%>"
+                    actionlink="$actionLink">
+                    <div class="$leftClass">
+                      <span></span>
+                    </div>
+                    <div class="EventAlldayContent">
+                      <%=event.summary%>
+                    </div>
+                    <div class="$rightClass">
+                      <span></span>
+                    </div>
+                    <div style="clear: left;">
+                      <span></span>
+                    </div>
+                  </div>
+                  <%}%>
+              </div>
+       </div>
 
-		</div>
-	  
+    </div>
+    
     </div>
     <div class="EventWeekContent" style="position: relative;" onresize="eXo.calendar.UIWeekView.onResize() ;">
       <div class="EventBoard">
         <%
-				cl = uicomponent.getBeginDateOfWeek() ;				
-			  t = 0 ; 
-				while(t++ < numberOfDays) {
-					day = cl.get(Calendar.DATE) ;
-		 			month = cl.get(Calendar.MONTH) ;
-		 			year = cl.get(Calendar.YEAR) ;
-		 			key = uicomponent.keyGen(day, month, year) ;
-		 			dayOfWeek = cl.get(Calendar.DAY_OF_WEEK) ;
-					events = uicomponent.getEventData().get(key) ; 
-					if(events != null) {
-					for(event in events.values()){ 
-						begin =  tf.format(event.fromDateTime) ;
-						begindate = dtf.format(event.fromDateTime) ;
-						end = tf.format(event.toDateTime) ; 
-						cal = CalendarUtils.getInstanceTempCalendar() ;
-					 	cal.setTime(event.getFromDateTime()) ;
-					  beginTime = cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;
-					  cal.setTime(event.getToDateTime()) ;
-					  endTime = cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;
-						color = uicomponent.getColors().get(event.calType +CalendarUtils.COLON+ event.getCalendarId()) ;
-						//actionLink =  uicomponent.event("UpdateEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
-						actionLink =  uicomponent.url("UpdateEvent",event.getId()) ;
-						Boolean isOccur = (event.getRepeatType() != null && !CalendarEvent.RP_NOREPEAT.equals(event.getRepeatType()) && (event.getIsExceptionOccurrence() == null || !event.getIsExceptionOccurrence()));
-						String recurId = event.getRecurrenceId();
-						
+        cl = uicomponent.getBeginDateOfWeek() ;        
+        t = 0 ; 
+        while(t++ < numberOfDays) {
+          day = cl.get(Calendar.DATE) ;
+           month = cl.get(Calendar.MONTH) ;
+           year = cl.get(Calendar.YEAR) ;
+           key = uicomponent.keyGen(day, month, year) ;
+           dayOfWeek = cl.get(Calendar.DAY_OF_WEEK) ;
+          events = uicomponent.getEventData().get(key) ; 
+          if(events != null) {
+          for(event in events.values()){ 
+            begin =  tf.format(event.fromDateTime) ;
+            begindate = dtf.format(event.fromDateTime) ;
+            end = tf.format(event.toDateTime) ; 
+            cal = CalendarUtils.getInstanceTempCalendar() ;
+             cal.setTime(event.getFromDateTime()) ;
+            beginTime = cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;
+            cal.setTime(event.getToDateTime()) ;
+            endTime = cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;
+            color = uicomponent.getColors().get(event.calType +CalendarUtils.COLON+ event.getCalendarId()) ;
+            //actionLink =  uicomponent.event("UpdateEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
+            actionLink =  uicomponent.url("UpdateEvent",event.getId()) ;
+            Boolean isOccur = (event.getRepeatType() != null && !CalendarEvent.RP_NOREPEAT.equals(event.getRepeatType()) && (event.getIsExceptionOccurrence() == null || !event.getIsExceptionOccurrence()));
+            String recurId = event.getRecurrenceId();
+            
         %>
         <div class="EventContainerBorder WeekViewEventBoxes $color" eventindex="$dayOfWeek"
           style="position: absolute;" eventcat="$event.eventCategoryId" caltype="$event.calType"
           eventid="$event.id" calid="$event.calendarId" actionlink="$actionLink" unselectable="on"
           startTime="$beginTime" endTime="$endTime" isOccur="$isOccur" recurId="$recurId">
            <div class="<%=event.eventState%>Icon">
-	           <div class="<%=event.getPriority()%>PriorityIcon" style="float: left;">
-		            <span></span>
-		          </div>
-	          </div>
+             <div class="<%=event.getPriority()%>PriorityIcon" style="float: left;">
+                <span></span>
+              </div>
+            </div>
           <div class="EventContainerBar EventTitle" title="<%=uiform.getLabel('moveEvent')%>" >
             <p unselectable="on">
               $begin - $end
@@ -229,30 +229,30 @@
           </div>
         </div>
         <% }
-							}
-					cl.add(Calendar.DATE, 1) ;
-					}
+              }
+          cl.add(Calendar.DATE, 1) ;
+          }
         %>
       </div>
       <table class="UIGrid" style="table-layout: fixed;" id="UIWeekViewGrid" lastupdatedid="<%=uicomponent.getLastUpdatedEventId()%>" cellspacing="0" cellpadding="0">
         <tbody>
           <% 
-					boolean flag = false ;
-					style = "none" ;
-					if(isShowWorkingTime) {style = "WorkOffTime" ;}	
-					
-					String tempTimeFormat = CalendarUtils.TIMEFORMATPATTERNS[0] ;
-					if (timeFormat.startsWith("HH")) tempTimeFormat = CalendarUtils.TIMEFORMATPATTERNS[1] ;
+          boolean flag = false ;
+          style = "none" ;
+          if(isShowWorkingTime) {style = "WorkOffTime" ;}  
+          
+          String tempTimeFormat = CalendarUtils.TIMEFORMATPATTERNS[0] ;
+          if (timeFormat.startsWith("HH")) tempTimeFormat = CalendarUtils.TIMEFORMATPATTERNS[1] ;
 
-					for(full in uicomponent.getDisplayTimes(tempTimeFormat, timeInterval, Locale.ENGLISH)){
-					String time = full.substring(0,full.lastIndexOf("_")) ;
-					String display = full.substring(full.lastIndexOf("_")+1) ;
-				if(isShowWorkingTime) {
-        			if(time.equals(startWorkingTime)) {style = "" ;}
-        			if(time.equals(endWorkingTime)) {style = "WorkOffTime" ;}
-        		}
-						if(flag) {styleClass = "TdDotLine" ;}
-						else {styleClass = "TdLine";}
+          for(full in uicomponent.getDisplayTimes(tempTimeFormat, timeInterval, Locale.ENGLISH)){
+          String time = full.substring(0,full.lastIndexOf("_")) ;
+          String display = full.substring(full.lastIndexOf("_")+1) ;
+        if(isShowWorkingTime) {
+              if(time.equals(startWorkingTime)) {style = "" ;}
+              if(time.equals(endWorkingTime)) {style = "WorkOffTime" ;}
+            }
+            if(flag) {styleClass = "TdDotLine" ;}
+            else {styleClass = "TdLine";}
           %>
           <tr class="$style">
             <td class="TdTime">
@@ -261,45 +261,45 @@
               </div>
             </td>
             <%
-					 		cl = uicomponent.getBeginDateOfWeek() ;
-					 		DateFormat dayFormat = new SimpleDateFormat(dateFormat, Locale.ENGLISH) ;
+               cl = uicomponent.getBeginDateOfWeek() ;
+               DateFormat dayFormat = new SimpleDateFormat(dateFormat, Locale.ENGLISH) ;
               DateFormat fullDateFormat = new SimpleDateFormat(dateFormat+" "+CalendarUtils.TIMEFORMAT, Locale.ENGLISH) ;
               dayFormat.setCalendar(cl);
               fullDateFormat.setCalendar(cl);
-					 						
-						  t = 0 ; 
-							while(t++ < numberOfDays) {
-								//df.setCalendar(cl) ;
-					 			startTime = dayFormat.format(cl.getTime()) + " " + time;
-					 			//dtf.setCalendar(cl) ;
-					 			fullDateFormat.setLenient(false);
-					 			// add try-catch block to handle Daylight Saving Time problem 
-					 			try {
-					 			  cl.setTime(fullDateFormat.parse(startTime)) ;
-					 			} catch (ParseException e) {
-					 			  fullDateFormat.setLenient(true);
-					 			  cl.setTime(fullDateFormat.parse(startTime));   
-					 			}
-					 			dayOfWeek = cl.get(Calendar.DAY_OF_WEEK) ;
-					 		  if(uicomponent.isCurrentDay(cl.get(Calendar.DATE), cl.get(Calendar.MONTH), cl.get(Calendar.YEAR))) {
-						  		cssClass = "Today" ;
-						  	}else if(dayOfWeek == 1 || dayOfWeek == 7){
-					 				cssClass = "Weekend" ;
-					 		  } else {
-					 		  	cssClass = "Weekday" ;
-					 		  }
+                       
+              t = 0 ; 
+              while(t++ < numberOfDays) {
+                //df.setCalendar(cl) ;
+                 startTime = dayFormat.format(cl.getTime()) + " " + time;
+                 //dtf.setCalendar(cl) ;
+                 fullDateFormat.setLenient(false);
+                 // add try-catch block to handle Daylight Saving Time problem 
+                 try {
+                   cl.setTime(fullDateFormat.parse(startTime)) ;
+                 } catch (ParseException e) {
+                   fullDateFormat.setLenient(true);
+                   cl.setTime(fullDateFormat.parse(startTime));   
+                 }
+                 dayOfWeek = cl.get(Calendar.DAY_OF_WEEK) ;
+                 if(uicomponent.isCurrentDay(cl.get(Calendar.DATE), cl.get(Calendar.MONTH), cl.get(Calendar.YEAR))) {
+                  cssClass = "Today" ;
+                }else if(dayOfWeek == 1 || dayOfWeek == 7){
+                   cssClass = "Weekend" ;
+                 } else {
+                   cssClass = "Weekday" ;
+                 }
             %>
             <td startFull="<%=tempFormat.format(cl.getTime())%>" startTime="<%=cl.getTimeInMillis()%>" eventindex="$dayOfWeek" class="$styleClass $cssClass $style" style="$styleWidth">
               <span></span>
             </td>
-            <%		
-					 			cl.add(Calendar.DATE, 1) ;
-					 		}
-					 	flag = ! flag ;
-					 	%>
+            <%    
+                 cl.add(Calendar.DATE, 1) ;
+               }
+             flag = ! flag ;
+             %>
           </tr>
-					 	<%
-					 }
+             <%
+           }
             %>
         </tbody>
       </table>
@@ -321,9 +321,9 @@
       <div class="MiddleRightRightClickPopupMenu">
         <div class="UIRightPopupMenuContainer">
           <%
-			      				for(String act : uicomponent.getQuickEditMenu()) {
-			      				link = uicomponent.event(act,uicomponent.id,"id&$uicomponent.CALENDARID=calId&calType=caltype&isOccur=isOccur&recurId=recurId") ;
-			      				icon = act + "EventIcon" ;
+                    for(String act : uicomponent.getQuickEditMenu()) {
+                    link = uicomponent.event(act,uicomponent.id,"id&$uicomponent.CALENDARID=calId&calType=caltype&isOccur=isOccur&recurId=recurId") ;
+                    icon = act + "EventIcon" ;
           %>
           <div style="display: none;" class="EventActionMenu MenuItem">
             <a class="ItemIcon $icon" href="$link">
@@ -331,7 +331,7 @@
             </a>
           </div>
           <%}%>
-					<div class="MenuItem EventActionMenu" style="display: none;">
+          <div class="MenuItem EventActionMenu" style="display: none;">
             <a class="ItemIcon ExportCalendarIcon" href="<%=uicomponent.event("ExportEvent","id&$uicomponent.CALENDARID=calId&$uicomponent.CALTYPE=caltype")%>">
               <%=_ctx.appRes("ContextMenu.label.ExportEvent")%>
             </a>
@@ -341,7 +341,7 @@
               <%=_ctx.appRes("ContextMenu.label.addEvent")%>
             </a>
           </div>
-		  <div class="MenuItem">
+      <div class="MenuItem">
             <a class="ItemIcon QuickAddTask" href="#">
               <%=_ctx.appRes("ContextMenu.label.addTask")%>
             </a>

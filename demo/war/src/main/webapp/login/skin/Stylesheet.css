@@ -18,28 +18,28 @@
  */
 
 .UILogin {
- 	height: 236px;
-	font-family: tahoma; 
-	font-size: 11px;
-	margin: 110px auto 7px auto;
-	padding:0 5px 0 120px;
-	width: 275px;
-	background: url('../skin/images/LoginBackground.gif') no-repeat top;
-	color: #3f3f3f;
+   height: 236px;
+  font-family: tahoma; 
+  font-size: 11px;
+  margin: 110px auto 7px auto;
+  padding:0 5px 0 120px;
+  width: 275px;
+  background: url('../skin/images/LoginBackground.gif') no-repeat top;
+  color: #3f3f3f;
 }
   
 .UILogin .LoginHeader {
-	height: 33px;
-	line-height: 33px;
-	color: #a1c0e9;
-	font-size: 13px;
-	font-family: arial;
-	text-align: right;
-	padding: 10px 15px 0px 0px
+  height: 33px;
+  line-height: 33px;
+  color: #a1c0e9;
+  font-size: 13px;
+  font-family: arial;
+  text-align: right;
+  padding: 10px 15px 0px 0px
 }
 
 .UILogin  .LoginContent {
-	padding-top: 12px;
+  padding-top: 12px;
 }
 
 .UILogin .LoginContent .CenterLoginContent {
@@ -56,16 +56,16 @@
 }
 
 .UILogin .LoginContent table {
-	margin: auto;
+  margin: auto;
 }
 
 .UILogin .LoginContent table .FieldLabel {
-	text-align: right;
-	padding-right: 5px;
+  text-align: right;
+  padding-right: 5px;
 }
 
 .UILogin .LoginContent table .FieldLabel input {
-	margin: 5px 0px;
+  margin: 5px 0px;
 }
 
 .UILogin .LoginContent .FieldContainer {
@@ -79,10 +79,10 @@
   float: left;
   width: 80px ; height: 20px; 
   line-height: 20px; 
-	text-align: right;
-	font-weight: bold ;
-	margin-right: 5px;
-	color: #3f3f3f;
+  text-align: right;
+  font-weight: bold ;
+  margin-right: 5px;
+  color: #3f3f3f;
 }
 
 .UILogin .LoginContent .FieldContainer input.UserName {
@@ -139,9 +139,9 @@
 }
 
 .UILogin .LoginContent .LoginButtonContainer {
-	padding-left: 32px; /* orientation=rt */
-	width: auto;
-	margin: auto;
+  padding-left: 32px; /* orientation=rt */
+  width: auto;
+  margin: auto;
 }
 
 .UILogin .LoginContent .Button {

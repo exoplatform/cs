@@ -9,11 +9,11 @@
       <set-method>addSpaceListener</set-method>
       <type>org.exoplatform.cs.ext.impl.CalendarDataInitialize</type>
       <init-params>
-				<value-param>
-					<name>portletName</name>
-					<value>CalendarPortlet</value>
-				</value-param>
-			</init-params>
+        <value-param>
+          <name>portletName</name>
+          <value>CalendarPortlet</value>
+        </value-param>
+      </init-params>
     </component-plugin>
   </external-component-plugins>
 
@@ -24,11 +24,11 @@
       <set-method>addSpaceListener</set-method>
       <type>org.exoplatform.cs.ext.impl.ContactDataInitialize</type>
       <init-params>
-				<value-param>
-					<name>portletName</name>
-					<value>ContactPortlet</value>
-				</value-param>
-			</init-params>
+        <value-param>
+          <name>portletName</name>
+          <value>ContactPortlet</value>
+        </value-param>
+      </init-params>
     </component-plugin>
   </external-component-plugins>
   

@@ -13,7 +13,7 @@
         </prop>
 
     Most properties are stored in the Openfire database. A
-	property viewer and editor is included in the admin console.
+  property viewer and editor is included in the admin console.
 -->
 <!-- root element, all properties must be under this element -->
 <jive> 
@@ -100,7 +100,7 @@
         <groupsCountURL>/organization/xml/group/count</groupsCountURL>  
         <groupsCountMethod>GET</groupsCountMethod> 
       </exoGroupProvider>
-	</provider>  
+  </provider>  
   </eXo>  
   <!-- Network settings. By default, Openfire will bind to all network interfaces.
       Alternatively, you can specify a specific network interfaces that the server

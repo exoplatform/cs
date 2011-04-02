@@ -11,37 +11,37 @@
 }
 
 .UIContactPortlet .UIBannerContainer .RepeatHorizontalLine {
-	font-size: 13px; font-family: tahoma;
-	color: #fc7203; font-weight: bold;
-  background: url('background/RepeatHorizontalLine1x2.gif') repeat-x bottom;	
+  font-size: 13px; font-family: tahoma;
+  color: #fc7203; font-weight: bold;
+  background: url('background/RepeatHorizontalLine1x2.gif') repeat-x bottom;  
   height: 21px; padding-top: 9px;
 }
 
 .UIContactPortlet .UIBannerContainer .SearchForm {
-  background: url('background/RightBottomBanner440x34.gif') no-repeat right;	
+  background: url('background/RightBottomBanner440x34.gif') no-repeat right;  
   height: 34px; line-height: 34px;
-	padding-right: 13px; /* orientation=lt */
-	padding-left: 13px; /* orientation=rt */
-	border-right: 1px solid #787e9f;
+  padding-right: 13px; /* orientation=lt */
+  padding-left: 13px; /* orientation=rt */
+  border-right: 1px solid #787e9f;
 }
 
 .UIContactPortlet .UISearchForm .SearchLabel {
-	float: right;
-	line-height: 20px;
-	margin: 4px 0px 5px 0px;
-	color: #595b6a; 
+  float: right;
+  line-height: 20px;
+  margin: 4px 0px 5px 0px;
+  color: #595b6a; 
 }
 
 .UIContactPortlet .UISearchForm input {
-	width: 140px;
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-	margin: 0px 8px 0px 0px; /* orientation=lt */
-	margin: 0px 0px 0px 8px; /* orientation=rt */
+  width: 140px;
+  float: right; /* orientation=lt */
+  float: left; /* orientation=rt */
+  margin: 0px 8px 0px 0px; /* orientation=lt */
+  margin: 0px 0px 0px 8px; /* orientation=rt */
 }
 
 .UIContactPortlet .UISearchForm .Search {
-  background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/SearchIcon.gif') no-repeat ;	
+  background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/SearchIcon.gif') no-repeat ;  
   height: 16px;
   width: 16px;
   float: right; /* orientation=lt */
@@ -53,16 +53,16 @@
 }
 
 .UIContactPortlet .UISearchForm {
-	background: url('background/SearchForm1x34.gif') repeat-x ;
+  background: url('background/SearchForm1x34.gif') repeat-x ;
   border: 1px solid #c7c7c7;
-	padding: 4px 13px 3px 0px; /* orientation=lt */
-	padding: 4px 0px 3px 13px; /* orientation=rt */
-	margin-bottom: 8px;
-	line-height: 34px;
+  padding: 4px 13px 3px 0px; /* orientation=lt */
+  padding: 4px 0px 3px 13px; /* orientation=rt */
+  margin-bottom: 8px;
+  line-height: 34px;
 }
   
 .UIContactPortlet .UISearchForm .AdvancedSearch {
-  background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/FindIcon.gif') no-repeat ;	
+  background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/FindIcon.gif') no-repeat ;  
   height: 16px; 
   width: 16px;
   float: right; /* orientation=lt */
@@ -74,260 +74,260 @@
 }
 
 .UIContactPortlet .UISearchForm .SeparatorLine {
-	background: url('background/SeparatorLineBaner2x26.gif') no-repeat ;
+  background: url('background/SeparatorLineBaner2x26.gif') no-repeat ;
   float: right;
   margin: 3px 7px;
   height: 26px; width: 2px;
 }
 
 .UIContactPortlet .IconHolder {
-	line-height: 26px;
-	margin: 2px 7px;
-	padding-left: 26px; /* orientation=lt */
-	padding-right: 26px; /* orientation=rt */
-	background-position: left center; /* orientation=lt */
-	background-position: right center; /* orientation=rt */
-	background-repeat: no-repeat; 
-	cursor: pointer;
+  line-height: 26px;
+  margin: 2px 7px;
+  padding-left: 26px; /* orientation=lt */
+  padding-right: 26px; /* orientation=rt */
+  background-position: left center; /* orientation=lt */
+  background-position: right center; /* orientation=rt */
+  background-repeat: no-repeat; 
+  cursor: pointer;
 }
 
 .UIContactPortlet .IconHolder2 {
-	line-height: 26px;
-	margin: 2px 7px;
-	padding-left: 26px;
-	background-repeat: no-repeat; 
-	cursor: pointer;
+  line-height: 26px;
+  margin: 2px 7px;
+  padding-left: 26px;
+  background-repeat: no-repeat; 
+  cursor: pointer;
 }
 
 .UIContactPortlet .SeparatorLine {
-  background: url('background/SeparatorLine2x26.gif') no-repeat ;	
+  background: url('background/SeparatorLine2x26.gif') no-repeat ;  
   height: 26px; width: 2px;
 }
 
 .UIContactPortlet .ControlButton {
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
-	margin: 0px 3px;
-	cursor: pointer;
+  float: left; /* orientation=lt */
+  float: right; /* orientation=rt */
+  margin: 0px 3px;
+  cursor: pointer;
 }
 
 .UIContactPortlet .SelectButton {
-	float:left; /* orientation=lt */
-	float: right; /* orientation=rt */
-	line-height:18px;
-	margin: 4px 1px 0px 1px;
-	cursor: pointer;
+  float:left; /* orientation=lt */
+  float: right; /* orientation=rt */
+  line-height:18px;
+  margin: 4px 1px 0px 1px;
+  cursor: pointer;
 }
 
 .UIContactPortlet .SelectButton:hover{
-	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
-	border: 1px solid #9d9d9d;
-	color: #126ca5;
-	line-height: 24px;
-	margin: 3px 0px 0px 0px;
+  background: url('background/ControlButtonBG1x26.gif') repeat-x ;
+  border: 1px solid #9d9d9d;
+  color: #126ca5;
+  line-height: 24px;
+  margin: 3px 0px 0px 0px;
 }
 
 .UIContactPortlet .SelectButton .ItemIcon {
-	background-position: 3px center; /* orientation=lt */
-	background-position: right center; /* orientation=rt */
-	margin-right: 3px; /* orientation=rt */
+  background-position: 3px center; /* orientation=lt */
+  background-position: right center; /* orientation=rt */
+  margin-right: 3px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIRightClickPopupMenu .ItemIcon {
-	width: auto;
-	line-height: 14px;
+  width: auto;
+  line-height: 14px;
 }
 /*********************************** UIActionBar ***************************************/
 
 .UIContactPortlet .UIActionBar {
-	padding: 10px 0px 0px 0px;
+  padding: 10px 0px 0px 0px;
 }
 
 .UIContactPortlet .UIActionBar .SeparatorLine {
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
-	margin: 3px 5px 2px;
+  float: left; /* orientation=lt */
+  float: right; /* orientation=rt */
+  margin: 3px 5px 2px;
 }
 
 .UIContactPortlet .UIActionBar .IconHolder {
-	margin: 0px 7px;
-	line-height: 24px;
-	color: black;
-	display: block;
+  margin: 0px 7px;
+  line-height: 24px;
+  color: black;
+  display: block;
 }
 
 .UIContactPortlet .UIActionBar a {
-	line-height: 24px;
-	margin: 3px 1px 0px 1px;
+  line-height: 24px;
+  margin: 3px 1px 0px 1px;
 }
 
 .UIContactPortlet .UIActionBar a:hover {
-	color: orange;
+  color: orange;
 }
 
 .UIContactPortlet .UIActionBar .Label {
-	line-height: 24px;
+  line-height: 24px;
 }
 
 .UIContactPortlet .UIActionBar .BlueCirclePlusIcon {
-	width: auto;
-	height: auto;
+  width: auto;
+  height: auto;
 }
 
 .UIContactPortlet .UIActionBar .DownArrow1Icon {
-	background-position: right center; /* orientation=lt */
-	background-position: left center; /* orientation=rt */
-	padding-right: 16px; /* orientation=lt */
-	padding-left: 16px; /* orientation=rt */
+  background-position: right center; /* orientation=lt */
+  background-position: left center; /* orientation=rt */
+  padding-right: 16px; /* orientation=lt */
+  padding-left: 16px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIActionBar .UIPopupCategory {
-	left: 0px;
-	top: 0px;
+  left: 0px;
+  top: 0px;
 }
 
 /************************************** UIWorkingContainer *******************************/
 
 .UIContactPortlet .ContactContainer {
-	padding: 0px 5px 5px 5px;
-	height: 100%;
+  padding: 0px 5px 5px 5px;
+  height: 100%;
 }
 
 .UIContactPortlet .UIWorkingContainer {
-	padding: 0px 5px 5px 5px;
-	border: 1px solid #c2c2c2;
-	background: #f3f3f3;
-	height: auto;
+  padding: 0px 5px 5px 5px;
+  border: 1px solid #c2c2c2;
+  background: #f3f3f3;
+  height: auto;
 }
 
 /*======================== UINavigationContainer =========================*/
 
 .UIContactPortlet .UIWorkingContainer .UINavigationContainer {
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
-	width: 215px;
-	padding: 7px 2px 0px 2px;
+  float: left; /* orientation=lt */
+  float: right; /* orientation=rt */
+  width: 215px;
+  padding: 7px 2px 0px 2px;
 }
 
 /*============================== TagList ================================*/
 
 .UIContactPortlet .UINavigationContainer .UIAddressBooks {
-	background: white;
-	border: 1px solid #a5a5a5;
-	margin: 1px 0px 7px 0px;
+  background: white;
+  border: 1px solid #a5a5a5;
+  margin: 1px 0px 7px 0px;
 }
 
 .UIContactPortlet .UINavigationContainer .UIAddressBooks a {
-	color: #1e1f21;
+  color: #1e1f21;
 }
 
 .UIContactPortlet .UINavigationContainer .UIAddressBooks a:hover {
-	color: orange;
+  color: orange;
 }
 
 .UIContactPortlet .UINavigationContainer .UITags {
-	background: white;
-	border: 1px solid #a5a5a5;
-	margin: 1px 0px;
-	padding: 0px;
-	width: auto;
+  background: white;
+  border: 1px solid #a5a5a5;
+  margin: 1px 0px;
+  padding: 0px;
+  width: auto;
 }
 
 .UIContactPortlet .UINavigationContainer .TitleBar {
-	background: url('background/BgTitleBar1x24.gif') repeat-x;
-	height: 24px; line-height: 24px;
-	padding:0px 5px;
+  background: url('background/BgTitleBar1x24.gif') repeat-x;
+  height: 24px; line-height: 24px;
+  padding:0px 5px;
 }
 
 .UIContactPortlet .UINavigationContainer .TitleIcon {
-	padding-left: 5px; /* orientation=lt */
-	padding-right: 5px; /* orientation=rt */
-	color: #3d3d3d;
-	font-weight: bold;	
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
+  padding-left: 5px; /* orientation=lt */
+  padding-right: 5px; /* orientation=rt */
+  color: #3d3d3d;
+  font-weight: bold;  
+  float: left; /* orientation=lt */
+  float: right; /* orientation=rt */
 }
 
 .UIContactPortlet .UINavigationContainer .AddressTitle {
-	background: url('background/LineTitle166x1.gif') no-repeat left bottom; /* orientation=lt */
-	background: url('background/LineTitle166x1-rt.gif') no-repeat right bottom; /* orientation=rt */
-	line-height: 20px;
-	margin: 0px 0px 5px 0px;
-	height: 20px;
-	padding: 0px 8px;
+  background: url('background/LineTitle166x1.gif') no-repeat left bottom; /* orientation=lt */
+  background: url('background/LineTitle166x1-rt.gif') no-repeat right bottom; /* orientation=rt */
+  line-height: 20px;
+  margin: 0px 0px 5px 0px;
+  height: 20px;
+  padding: 0px 8px;
 }
 
 .UIContactPortlet .UINavigationContainer .ActionIcon {
-	background:transparent url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/ActionIcon.gif') no-repeat scroll center;
-	float:right; /* orientation=lt */
-	float:left; /* orientation=rt */
-	height:20px;
-	width:20px;
+  background:transparent url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/ActionIcon.gif') no-repeat scroll center;
+  float:right; /* orientation=lt */
+  float:left; /* orientation=rt */
+  height:20px;
+  width:20px;
 }
 
 .UIContactPortlet .UINavigationContainer .ItemList {
-	padding: 0px 13px;
-	line-height: 24px;
-	overflow: hidden;
-	white-space: nowrap;
-	width: 180px;
+  padding: 0px 13px;
+  line-height: 24px;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 180px;
 }
 
 .UIContactPortlet .UINavigationContainer .UIPopupCategory a.MenuItem {
-	padding: 0px;
-	color: #1E1F21;
+  padding: 0px;
+  color: #1E1F21;
 }
 
 .UIContactPortlet .UINavigationContainer .UIRightClickPopupMenu {
-	top: 17px;
-	left: 11px;
+  top: 17px;
+  left: 11px;
 }
-	
+  
 .UIContactPortlet .UINavigationContainer .UIPopupCategory {
-	top: -5px;
-	left: 0px;
+  top: -5px;
+  left: 0px;
 }
 
 .UIContactPortlet .UINavigationContainer .Selected {
-	background: #e6e8f5;
-	margin: 0px 1px;
+  background: #e6e8f5;
+  margin: 0px 1px;
 }
 
 .UIContactPortlet .UINavigationContainer .Selected a {
-	color: #058ee6;
+  color: #058ee6;
 }
 
 .UIContactPortlet .UINavigationContainer .Normal {
-	margin: 0px 1px;
+  margin: 0px 1px;
 }
 
 .UIContactPortlet .UINavigationContainer .ListContent {
-	padding: 8px 0px 8px 0px;
+  padding: 8px 0px 8px 0px;
 }
 
 .UIContactPortlet .UINavigationContainer .ListContent a {
-	line-height: 20px;
-	color: #3d3d3d;
-	display: block;
+  line-height: 20px;
+  color: #3d3d3d;
+  display: block;
 }
 
 .UIContactPortlet .UINavigationContainer .ListContent a:hover {
-	color: #126ca5;
+  color: #126ca5;
 }
 
 .UIContactPortlet .UINavigationContainer .PersonalAddress {
-	padding: 5px 0px 10px 0px;
+  padding: 5px 0px 10px 0px;
 }
 
 .UIContactPortlet .UINavigationContainer .PublicAddress {
-	padding: 5px 0px 20px 0px;
+  padding: 5px 0px 20px 0px;
 }
 
 /*============================== UIContactContainer ================================*/
 
 .UIContactPortlet .UIContactContainer {
-	margin-left: 225px; /* orientation=lt */
-	margin-right: 225px; /* orientation=rt */
+  margin-left: 225px; /* orientation=lt */
+  margin-right: 225px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIContactContainer .DecoratorBox {
@@ -337,453 +337,453 @@
 }
 
 .UIContactPortlet .UIContactContainer .MessageNotice {
-	background-color: #ECEFFC;
-	border: 1px solid #C7C7C7;
-	line-height: 35px;
-	margin: 20px auto;
-	text-align: center;
-	width: 300px;
+  background-color: #ECEFFC;
+  border: 1px solid #C7C7C7;
+  line-height: 35px;
+  margin: 20px auto;
+  text-align: center;
+  width: 300px;
 }
 
 .UIContactPortlet .Result {
-	background: url('background/BgTitleBar1x24.gif') repeat-x;
-	border-left: 1px solid #CCCCCC;
-	border-right: 1px solid #CCCCCC;
-	font-weight: bold;
-	line-height: 25px;
-	height: 25px;
-	text-align: center;
-	_margin-right: 2px;
+  background: url('background/BgTitleBar1x24.gif') repeat-x;
+  border-left: 1px solid #CCCCCC;
+  border-right: 1px solid #CCCCCC;
+  font-weight: bold;
+  line-height: 25px;
+  height: 25px;
+  text-align: center;
+  _margin-right: 2px;
 }
 
 .UIContactPortlet .TitleSearch {
-	text-align: center;
-	line-height: 23px;
-	font-size: 12px;
-	background: url('background/BgTitleBar1x24.gif') repeat-x;
-	border-left: 1px solid #CCCCCC;
-	border-right: 1px solid #CCCCCC;
-	font-weight: bold;
-	_margin: 0px 2px 0px 3px;
+  text-align: center;
+  line-height: 23px;
+  font-size: 12px;
+  background: url('background/BgTitleBar1x24.gif') repeat-x;
+  border-left: 1px solid #CCCCCC;
+  border-right: 1px solid #CCCCCC;
+  font-weight: bold;
+  _margin: 0px 2px 0px 3px;
 }
 
 .UIContactPortlet .UIContactActionsBar {
-	background: url('background/BgTitleBar1x24.gif') repeat-x;
-	height: 24px;
-	border-left: 1px solid #c0c0c0;
-	border-right: 1px solid #c0c0c0;
+  background: url('background/BgTitleBar1x24.gif') repeat-x;
+  height: 24px;
+  border-left: 1px solid #c0c0c0;
+  border-right: 1px solid #c0c0c0;
 }
 
 .UIContactPortlet .UIContactActionsBar .SeparatorLine {
-	float: left;
-	background: url('background/SeparatorLine2x17.gif') no-repeat;
-	width: 2px;
-	height: 17px;
-	margin-top: 3px;
+  float: left;
+  background: url('background/SeparatorLine2x17.gif') no-repeat;
+  width: 2px;
+  height: 17px;
+  margin-top: 3px;
 }
 
 .UIContactPortlet .UIContactContainer .UIContactActionsBar .Icon {
-	margin: 2px 7px 0px 7px;
-	width: 20px; height: 20px;
-	background-repeat: no-repeat;
-	background-position: center;
+  margin: 2px 7px 0px 7px;
+  width: 20px; height: 20px;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .UIContactPortlet .UIContactContainer .Result .Icon {
-	margin: 2px 7px 0px 7px;
-	width: 20px; height: 20px;
-	background-repeat: no-repeat;
+  margin: 2px 7px 0px 7px;
+  width: 20px; height: 20px;
+  background-repeat: no-repeat;
 }
 
 .UIContactPortlet .UIContactContainer .UIContactActionsBar .IconHolder {
-	line-height: 18px;
-	height: auto;
+  line-height: 18px;
+  height: auto;
 }
 
 .UIContactPortlet .UIContactContainer .UIContactActionsBar a {
-	color: #000000;
+  color: #000000;
 }
 
 .UIContactPortlet .UIContactContainer .UIContactActionsBar a:hover {
-	color: #126ca5;
+  color: #126ca5;
 }
 
 .UIContactPortlet .UIContactContainer .UIContactActionsBar .MoreActionsIcon {
-	margin: 2px 0px 0px 10px;
-	line-height: 24px;
-	padding-left: 24px;
+  margin: 2px 0px 0px 10px;
+  line-height: 24px;
+  padding-left: 24px;
 }
 
 .UIContactPortlet .UIContactContainer .UIContactActionsBar .ViewIcon {
-	margin: 2px 0px 0px 10px;
-	line-height: 24px;
-	padding-left: 24px;
+  margin: 2px 0px 0px 10px;
+  line-height: 24px;
+  padding-left: 24px;
 }
 
 .UIContactPortlet .UIContactContainer .UIContactActionsBar .DownArrow1Icon {
-	line-height: 20px;
-	background-position: right;
-	padding-right: 16px; 
+  line-height: 20px;
+  background-position: right;
+  padding-right: 16px; 
 }
 
 .UIContactPortlet .UIContactContainer .UIContactActionsBar .UpArrow1Icon {
-	line-height: 20px;
-	background-position: right;
-	padding-right: 16px; 
+  line-height: 20px;
+  background-position: right;
+  padding-right: 16px; 
 }
 
 .UIContactPortlet .UIContactContainer .Selected {
-	background: #e6e8f5;
-	margin: 0px 1px;
+  background: #e6e8f5;
+  margin: 0px 1px;
 }
 
 .UIContactPortlet .UIContactContainer .Normal {
-	background: #ffffff;
-	margin: 0px 1px;
+  background: #ffffff;
+  margin: 0px 1px;
 }
 
 .UIContactPortlet .UIContactContainer .Selected a {
-	color: #058ee6;
+  color: #058ee6;
 }
 
 /*=====================Page Iterator Container===================*/
 
 .UIContactPortlet .UIContactContainer .FloatBlock {
-	float: left;
-	margin: 2px 3px;
+  float: left;
+  margin: 2px 3px;
 } 
 
 .UIContactPortlet .UIContactContainer .FloatBlockHidden {
-	float: left;
-	margin: 2px 3px;
-	filter:alpha(opacity=30);-moz-opacity:.30;opacity:.30;
+  float: left;
+  margin: 2px 3px;
+  filter:alpha(opacity=30);-moz-opacity:.30;opacity:.30;
 } 
 
 .UIContactPortlet .UIContactContainer .UIAddressPageList {
-	margin: 0px;
+  margin: 0px;
 }
 
 .UIAddressPageList .ContactIteratorContainer {
-	line-height:22px;
-	padding: 0px 10px 0px 15px;
+  line-height:22px;
+  padding: 0px 10px 0px 15px;
 }
 
 .UIAddressPageList .ContactIteratorContainer .RightPageIteratorBlock {
-	float:right;
+  float:right;
 }
 
 .UIAddressPageList .ContactIteratorContainer .LeftPageIteratorBlock {
-	float:right;
-	margin-right:15px;
+  float:right;
+  margin-right:15px;
 }
 
 .UIAddressPageList .TotalPages {
-	float:left;
-	line-height:19px;
-	vertical-align:middle;
+  float:left;
+  line-height:19px;
+  vertical-align:middle;
 }
 
 .UIAddressPageList .Number {
-	float:left;
-	line-height:19px;
-	vertical-align:middle;
-	font-weight: bold;
-	margin: 0px 2px;
+  float:left;
+  line-height:19px;
+  vertical-align:middle;
+  font-weight: bold;
+  margin: 0px 2px;
 }
 
 /*================================== UIGrid========================================*/
 
 .UIContactPortlet .UIContactContainer .UIMessageList {
-	padding-left: 1px;
-	_padding-left: 0px;
-	overflow-y: auto;
-	overflow-x: hidden;
-	_overflow-x: auto;
-	_width: 99.5%;
+  padding-left: 1px;
+  _padding-left: 0px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  _overflow-x: auto;
+  _width: 99.5%;
 }
 
 .UIContactPortlet .UIContactContainer .UIGrid {
-	border-top: none;
-	background: #ffffff;
+  border-top: none;
+  background: #ffffff;
 }
 
 .UIContactPortlet .UIContactContainer .UIGrid th {
-	background: url(background/ThGridRepeatBg1x19.gif) repeat-x left 3px;
-	text-align: left;
-	border-bottom: 1px solid #d8d8d8;
-	border-top: none;
-	padding-top: 0px;
-	white-space: nowrap;
+  background: url(background/ThGridRepeatBg1x19.gif) repeat-x left 3px;
+  text-align: left;
+  border-bottom: 1px solid #d8d8d8;
+  border-top: none;
+  padding-top: 0px;
+  white-space: nowrap;
 }
 
 .UIContactPortlet .UIContactContainer .UIGrid .Icon {
-	width: 24px; height: 18px;
-	background-position: center;
+  width: 24px; height: 18px;
+  background-position: center;
 }
 
 .UIContactPortlet .UIContactContainer .UIGrid .Icon2 {
-	width: 24px; height: 20px;
-	margin-left: 8px;
+  width: 24px; height: 20px;
+  margin-left: 8px;
 }
 
 .UIContactPortlet .UIContactContainer .UIGrid .State {
-	padding-left: 20px;
-	width: auto;
-	height: auto;
+  padding-left: 20px;
+  width: auto;
+  height: auto;
 }
 
 .UIContactPortlet .UIContactContainer .AttachmentIcon {
-	margin: 1px 0px 0px 3px;
+  margin: 1px 0px 0px 3px;
 }
 
 .UIContactPortlet .UIContactContainer .TotalMessageIcon {
-	margin: 1px 0px 0px 4px;
+  margin: 1px 0px 0px 4px;
 }
 
 .UIContactPortlet .UIContactContainer .PriorityIcon {
-	margin: 1px 0px 0px 4px;
+  margin: 1px 0px 0px 4px;
 }
 
 .UIContactPortlet .UIContactContainer td {
-	border-top: none;
-	padding-left: 10px; /* orientation=lt */
-	padding-right: 10px; /* orientation=rt */
+  border-top: none;
+  padding-left: 10px; /* orientation=lt */
+  padding-right: 10px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIContactContainer .text {
-	border-right: 1px solid #e8e8e8;
+  border-right: 1px solid #e8e8e8;
 }
 
 .UIContactPortlet .UIContactContainer .textBold {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 .UIContactPortlet .UIContactContainer .ResizeReadingPane {
-	margin: 1px auto 1px auto;
-	background: url('background/ResizeReadingPane38x3.gif') no-repeat center;
-	height: 5px;
-	cursor: n-resize;
-	margin-right: 9px;
+  margin: 1px auto 1px auto;
+  background: url('background/ResizeReadingPane38x3.gif') no-repeat center;
+  height: 5px;
+  cursor: n-resize;
+  margin-right: 9px;
 }
 
 .UIContactPortlet .UIContactContainer .UIMessageList .DownArrow1Icon {
-	height: 16px; width: 50px;
-	line-height: 16px;
-	margin: 3px 0px 0px 0px;
-	cursor: pointer;
-	background-position: right;
-	padding-right: 16px;
+  height: 16px; width: 50px;
+  line-height: 16px;
+  margin: 3px 0px 0px 0px;
+  cursor: pointer;
+  background-position: right;
+  padding-right: 16px;
 }
 
 .UIContactPortlet .UIContactContainer .UIMessageList .UpArrow1Icon {
-	height: 16px; width: 50px;
-	line-height: 16px;
-	margin: 3px 0px 0px 0px;
-	cursor: pointer;
-	background-position: right;
-	padding-right: 16px;
-	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/BlueUpArrow.gif') no-repeat right;
+  height: 16px; width: 50px;
+  line-height: 16px;
+  margin: 3px 0px 0px 0px;
+  cursor: pointer;
+  background-position: right;
+  padding-right: 16px;
+  background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/BlueUpArrow.gif') no-repeat right;
 }
 
 /*=================================UIContactPreview==================================*/
 
 .UIContactPortlet .UIContactContainer .UIContactPreview {
-	border: 1px solid #c0c0c0;
-	background: #ffffff;
-	height: 100%;
+  border: 1px solid #c0c0c0;
+  background: #ffffff;
+  height: 100%;
 }
 
 .UIContactPortlet .UIContactContainer .UIContactPreview .ViewBoxStyle {
-	padding: 3px;
+  padding: 3px;
 }
 
 .UIContactPortlet .UIContactContainer .UIContactPreview .ContactPreviewDetails {
-	overflow: auto;
+  overflow: auto;
 }
 
 .UIContactPortlet .UIContactContainer .UIContactPreview .ContactPreviewBar {
-	background: #e7e7e7;
-	height: 25px;
-	border: 1px solid #ffffff;
+  background: #e7e7e7;
+  height: 25px;
+  border: 1px solid #ffffff;
 }
 
 .UIContactPortlet .UIContactContainer .UIContactPreview .Subject {
-	float: left;
-	font-weight: bold;
-	font-size: 11px;
-	margin: 5px 0px 0px 10px; 
-	padding-left: 20px;
-	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/ContactIcon.gif') no-repeat left center;
+  float: left;
+  font-weight: bold;
+  font-size: 11px;
+  margin: 5px 0px 0px 10px; 
+  padding-left: 20px;
+  background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/ContactIcon.gif') no-repeat left center;
 }
 /*
 .UIContactPortlet .UIContactContainer .UIContactPreview .MaximizeContactPane {
   float: right;
-	width: 30px;
-	height: 25px;
-	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/MaximizeReadingPane.gif') no-repeat center;
+  width: 30px;
+  height: 25px;
+  background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/MaximizeReadingPane.gif') no-repeat center;
 }
 
 .UIContactPortlet .UIContactContainer .UIContactPreview .MaximizeContactPane {
   float: right;
-	width: 30px;
-	height: 25px;
-	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/MaximizeReadingPane.gif') no-repeat center;
+  width: 30px;
+  height: 25px;
+  background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/MaximizeReadingPane.gif') no-repeat center;
 }*/
 
 .UIContactPortlet .UIContactContainer .UIContactPreview .MaximizeButton {
   float: right;
-	width: 30px;
-	height: 25px;
-	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/MaximizeReadingPane.gif') no-repeat center;
+  width: 30px;
+  height: 25px;
+  background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/MaximizeReadingPane.gif') no-repeat center;
 }
 
 .UIContactPortlet .UIContactContainer .UIContactPreview .MinimizeButton {
  float: right;
-	width: 30px;
-	height: 25px;
-	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/MinimumReadingPane.gif') no-repeat center;
+  width: 30px;
+  height: 25px;
+  background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/MinimumReadingPane.gif') no-repeat center;
 }
 
 .UIContactPortlet .UIContactContainer .UIContactPreview .LastUpdated {
-	float: right;
-	line-height: 25px;
+  float: right;
+  line-height: 25px;
 }
 
 /*================================= UIContactSummaryPane ===============================*/
 
 .UIContactPortlet .ContactPreviewContainer {
-	padding: 10px 15px;
-	color: #1e1f21;
+  padding: 10px 15px;
+  color: #1e1f21;
 }
 
 .UIContactPortlet .ContactPreviewContainer .Avatar {
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
-	margin: 0px 0px 5px 0px;
-	border: 1px solid #545454;
+  float: left; /* orientation=lt */
+  float: right; /* orientation=rt */
+  margin: 0px 0px 5px 0px;
+  border: 1px solid #545454;
 }
 
 .UIContactPortlet .ContactPreviewContainer .Member {
-	margin-left: 80px; /* orientation=lt */
-	margin-right: 80px; /* orientation=rt */
-	width: 60%;
+  margin-left: 80px; /* orientation=lt */
+  margin-right: 80px; /* orientation=rt */
+  width: 60%;
 }
 
 .UIContactPortlet .ContactPreviewContainer .State {
-	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/OnlineIcon.gif') no-repeat left center;
-	padding-left: 2px;
-	line-height: 25px;
-	font-size: 14px;
-	font-weight: bold;
+  background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/OnlineIcon.gif') no-repeat left center;
+  padding-left: 2px;
+  line-height: 25px;
+  font-size: 14px;
+  font-weight: bold;
 }
 
 .UIContactPortlet .ContactPreviewContainer .Job {
-	font-size: 13px;
-	padding-left: 2px;
+  font-size: 13px;
+  padding-left: 2px;
 }
 
 .UIContactPortlet .ContactPreviewContainer .InfoContainer {
-	padding: 5px 0px;
-	width: 97%;
+  padding: 5px 0px;
+  width: 97%;
 }
 
 .UIContactPortlet .InfoContainer .TitleInfo {
-	color: #f56301;
-	font-size: 14px;
-	border-bottom: 1px solid #cbcbcb;
-	padding: 0px 0px 5px;
+  color: #f56301;
+  font-size: 14px;
+  border-bottom: 1px solid #cbcbcb;
+  padding: 0px 0px 5px;
 }
 
 .UIContactPortlet .InfoContainer .Content {
-	padding: 10px 0px;
-	line-height: 20px;
-	font-size: 12px;
+  padding: 10px 0px;
+  line-height: 20px;
+  font-size: 12px;
 }
 
 .UIContactPortlet .InfoContainer .Content a {
-	color: blue;
+  color: blue;
 }
 
 .UIContactPortlet .InfoContainer .LeftContent {
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
-	padding-right: 10px; /* orientation=lt */
-	padding-left: 10px; /* orientation=rt */
-	width: 46%;
+  float: left; /* orientation=lt */
+  float: right; /* orientation=rt */
+  padding-right: 10px; /* orientation=lt */
+  padding-left: 10px; /* orientation=rt */
+  width: 46%;
 }
 
 .UIContactPortlet .InfoContainer .LeftContentProfile {
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
-	padding-right: 10px; /* orientation=lt */
-	padding-left: 10px; /* orientation=rt */
-	width: 40%;
+  float: left; /* orientation=lt */
+  float: right; /* orientation=rt */
+  padding-right: 10px; /* orientation=lt */
+  padding-left: 10px; /* orientation=rt */
+  width: 40%;
 }
 
 .UIContactPortlet .InfoContainer .CenterContentProfile {
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
-	padding-right: 10px; /* orientation=lt */
-	padding-left: 10px; /* orientation=rt */
-	width: 30%;
+  float: left; /* orientation=lt */
+  float: right; /* orientation=rt */
+  padding-right: 10px; /* orientation=lt */
+  padding-left: 10px; /* orientation=rt */
+  width: 30%;
 }
 
 .UIContactPortlet .InfoContainer .RightContent {
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
-	width: 46%;
-	padding-left: 10px; /* orientation=lt */
-	padding-right: 10px; /* orientation=rt */
+  float: left; /* orientation=lt */
+  float: right; /* orientation=rt */
+  width: 46%;
+  padding-left: 10px; /* orientation=lt */
+  padding-right: 10px; /* orientation=rt */
 }
 
 .UIContactPortlet .InfoContainer .RightContentProfile {
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
-	width: 25%;
-	padding-left: 10px; /* orientation=lt */
-	padding-right: 10px; /* orientation=rt */
+  float: left; /* orientation=lt */
+  float: right; /* orientation=rt */
+  width: 25%;
+  padding-left: 10px; /* orientation=lt */
+  padding-right: 10px; /* orientation=rt */
 }
 
 .UIContactPortlet .InfoContainer .Content .InfoLabel {
-	white-space: nowrap;
+  white-space: nowrap;
 }
 
 
 .UIContactPortlet .InfoContainer .Content .InfoTitle1 {
-	white-space: normal;
-	padding: 0px 10px 0px 4px;
-	width: 100%;
+  white-space: normal;
+  padding: 0px 10px 0px 4px;
+  width: 100%;
 }
 
 .UIContactPortlet .InfoContainer .Content .InfoTitle2 {
-	white-space: normal;
-	width: 100%; 
-	table-layout: fixed;
+  white-space: normal;
+  width: 100%; 
+  table-layout: fixed;
 }
 
 .UIContactPortlet .InfoContainer .Content .InfoTitle3 {
-	white-space: normal;
+  white-space: normal;
 
 }
 
 .UIContactPortlet .InfoContainer .Content .InfoTitle {
-	white-space: nowrap;
-	padding: 0px 10px 0px 2px;
+  white-space: nowrap;
+  padding: 0px 10px 0px 2px;
 }
 
 .UIContactPortlet .InfoContainer .Content .Email {
-	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/EmailIcon.gif') no-repeat left center; /* orientation=lt */
-	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/EmailIcon.gif') no-repeat right center; /* orientation=rt */
-	padding-left: 20px; /* orientation=lt */
-	padding-right: 20px; /* orientation=rt */
+  background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/EmailIcon.gif') no-repeat left center; /* orientation=lt */
+  background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/EmailIcon.gif') no-repeat right center; /* orientation=rt */
+  padding-left: 20px; /* orientation=lt */
+  padding-right: 20px; /* orientation=rt */
 }
 
 .UIEmpty .OwnerIcon {
-	width: auto;
-	padding-left: 20px;
+  width: auto;
+  padding-left: 20px;
 }
 
 .UIEmpty .OfflineIcon {
-	width: auto;
-	padding-left: 20px;
+  width: auto;
+  padding-left: 20px;
 }

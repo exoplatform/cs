@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
-	xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
-	
-	<component>
+  xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
+  
+  <component>
     <key>org.exoplatform.contact.service.ContactService</key>
     <type>org.exoplatform.contact.service.impl.ContactServiceImpl</type>
     <init-params>
@@ -21,42 +21,42 @@
   </component>    
 
  <external-component-plugins>
-    	<target-component>org.exoplatform.services.listener.ListenerService</target-component>
-   		<component-plugin>   
-      	<name>exo.core.security.ConversationRegistry.unregister</name>
-     		<set-method>addListener</set-method>
+      <target-component>org.exoplatform.services.listener.ListenerService</target-component>
+       <component-plugin>   
+        <name>exo.core.security.ConversationRegistry.unregister</name>
+         <set-method>addListener</set-method>
         <type>org.exoplatform.contact.service.AuthenticationLogoutListener</type>
-      	<description>description</description>     
-    	</component-plugin>      
-  	</external-component-plugins>
+        <description>description</description>     
+      </component-plugin>      
+    </external-component-plugins>
 
-	<external-component-plugins>
-  	<target-component>org.exoplatform.services.organization.OrganizationService</target-component>	
-		 <component-plugin>
-	    <name>contact.new.user.event.listener</name>
-	    <set-method>addListenerPlugin</set-method>
-	    <type>org.exoplatform.contact.service.impl.NewUserListener</type>
-	    <description>description</description>
-	  </component-plugin>
-		<component-plugin>
-	    <name>contact.new.group.event.listener</name>
-	    <set-method>addListenerPlugin</set-method>
-	    <type>org.exoplatform.contact.service.impl.NewGroupListener</type>
-	    <description>description</description>
-	  </component-plugin>
-	  <component-plugin>
-	    <name>contact.new.membership.event.listener</name>
-	    <set-method>addListenerPlugin</set-method>
-	    <type>org.exoplatform.contact.service.impl.NewMembershipListener</type>
-	    <description>description</description>	     
-	  </component-plugin>
-	  <component-plugin>
-	    <name>contact.new.userprofile.event.listener</name>
-	    <set-method>addListenerPlugin</set-method>
-	    <type>org.exoplatform.contact.service.impl.UpdateUserProfileListener</type>
-	    <description>description</description>	     
-	  </component-plugin>
-	 </external-component-plugins>
+  <external-component-plugins>
+    <target-component>org.exoplatform.services.organization.OrganizationService</target-component>  
+     <component-plugin>
+      <name>contact.new.user.event.listener</name>
+      <set-method>addListenerPlugin</set-method>
+      <type>org.exoplatform.contact.service.impl.NewUserListener</type>
+      <description>description</description>
+    </component-plugin>
+    <component-plugin>
+      <name>contact.new.group.event.listener</name>
+      <set-method>addListenerPlugin</set-method>
+      <type>org.exoplatform.contact.service.impl.NewGroupListener</type>
+      <description>description</description>
+    </component-plugin>
+    <component-plugin>
+      <name>contact.new.membership.event.listener</name>
+      <set-method>addListenerPlugin</set-method>
+      <type>org.exoplatform.contact.service.impl.NewMembershipListener</type>
+      <description>description</description>       
+    </component-plugin>
+    <component-plugin>
+      <name>contact.new.userprofile.event.listener</name>
+      <set-method>addListenerPlugin</set-method>
+      <type>org.exoplatform.contact.service.impl.UpdateUserProfileListener</type>
+      <description>description</description>       
+    </component-plugin>
+   </external-component-plugins>
 
-	
+  
 </configuration>

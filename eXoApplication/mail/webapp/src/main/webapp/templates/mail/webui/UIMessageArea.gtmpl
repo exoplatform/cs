@@ -22,8 +22,8 @@
 %>
 
 <div class="MailWorkingDetails SpliterContainer">
-	<%uicomponent.renderChild(UIFetchingBar.class);%>
-	<div id="<%=uicomponent.getId()%>">
+  <%uicomponent.renderChild(UIFetchingBar.class);%>
+  <div id="<%=uicomponent.getId()%>">
   <%
     if (uicomponent.isVerticalLayout()) {
       if (uicomponent.getUIMessagePreview().getMessage() == null) {
@@ -56,33 +56,33 @@
           <%uicomponent.renderChild(UIMessagePreview.class);%>
         </div>  
       </div>
-	<%
+  <%
       }
     } else if (uicomponent.isHorizontalLayout()) {
-	%>
-  	<div class="UIMessageArea" id="uiMessageListResizableArea" >		
-  		<%uicomponent.renderChild(UIMessageList.class);%>
-  	</div>
-  	<div class="ResizeReadingPane" id="ResizeReadingPane" onmousedown="eXo.cs.Spliter.doResize(event, this);"><span></span></div>
-  	<div id="SpliterResizableArea">
-  		<%uicomponent.renderChild(UIMessagePreview.class);%>
-  	</div>
+  %>
+    <div class="UIMessageArea" id="uiMessageListResizableArea" >    
+      <%uicomponent.renderChild(UIMessageList.class);%>
+    </div>
+    <div class="ResizeReadingPane" id="ResizeReadingPane" onmousedown="eXo.cs.Spliter.doResize(event, this);"><span></span></div>
+    <div id="SpliterResizableArea">
+      <%uicomponent.renderChild(UIMessagePreview.class);%>
+    </div>
   <%
-	  } else if (uicomponent.isNoSplitLayout()) {
-  	  if (uicomponent.getUIMessagePreview().getMessage() != null) {
-  %>	    
+    } else if (uicomponent.isNoSplitLayout()) {
+      if (uicomponent.getUIMessagePreview().getMessage() != null) {
+  %>      
         <div id="SpliterResizableArea">
-  	      <%uicomponent.renderChild(UIMessagePreview.class);%>
-  	    </div>
-  <% 	  
-  	  } else {
+          <%uicomponent.renderChild(UIMessagePreview.class);%>
+        </div>
+  <%     
+      } else {
   %>
       <div class="UIMessageArea" id="uiMessageListResizableArea" style="border-top:0px">    
         <%uicomponent.renderChild(UIMessageList.class);%>
       </div>  
-  <%	  
-  	  }
-	  }
+  <%    
+      }
+    }
   %>
 </div>
 </div>

@@ -25,14 +25,14 @@
   Message msgRoot = uicomponent.getMessage();
   if (msgRoot != null) {
 %> 
-	<div class="ReadingPaneBar">
-	  <% if (uicomponent.getParent().isNoSplitLayout()) { %>
-	    <div>
-	      <div onclick="<%=uicomponent.event("BackToList")%>" title="<%=_ctx.appRes(uicomponent.id+ '.label.back-to-list') %>"><span class="BackToList"></span></div>
-	    </div>
-	    <div class="TextBackToList"><div onclick="<%=uicomponent.event("BackToList")%>" title="<%=_ctx.appRes(uicomponent.id+ '.label.back-to-list') %>"><%=_ctx.appRes(uicomponent.id+ '.label.back-to-list') %></div></div>
-	    <div class="Subject" style="width:80%">
-		<% } else if (uicomponent.getParent().isVerticalLayout()) { %>
+  <div class="ReadingPaneBar">
+    <% if (uicomponent.getParent().isNoSplitLayout()) { %>
+      <div>
+        <div onclick="<%=uicomponent.event("BackToList")%>" title="<%=_ctx.appRes(uicomponent.id+ '.label.back-to-list') %>"><span class="BackToList"></span></div>
+      </div>
+      <div class="TextBackToList"><div onclick="<%=uicomponent.event("BackToList")%>" title="<%=_ctx.appRes(uicomponent.id+ '.label.back-to-list') %>"><%=_ctx.appRes(uicomponent.id+ '.label.back-to-list') %></div></div>
+      <div class="Subject" style="width:80%">
+    <% } else if (uicomponent.getParent().isVerticalLayout()) { %>
       <div>
         <%
           if (!uicomponent.isHideMessageList()) {
@@ -44,26 +44,26 @@
       </div>
       <div class="Subject" style="width:50%">
     <% } else { %>
-		  <div class="Subject">
-		<% } %>
-		  <span><%=_ctx.appRes(uicomponent.id+ ".label.subject") %>:</span><span>
-  		<%
-  		  String subject = "(" + _ctx.appRes(uicomponent.id+ ".label.no-subject") + ")"
-  		  if (msgRoot.getSubject() != null && msgRoot.getSubject() != "") {
-  		    subject = msgRoot.getSubject();
-  		    subject = MailUtils.encodeHTML(subject);
-  		  }
-  		%>
-  		<%=subject%>
-  		</span>
+      <div class="Subject">
+    <% } %>
+      <span><%=_ctx.appRes(uicomponent.id+ ".label.subject") %>:</span><span>
+      <%
+        String subject = "(" + _ctx.appRes(uicomponent.id+ ".label.no-subject") + ")"
+        if (msgRoot.getSubject() != null && msgRoot.getSubject() != "") {
+          subject = msgRoot.getSubject();
+          subject = MailUtils.encodeHTML(subject);
+        }
+      %>
+      <%=subject%>
+      </span>
     </div>
     <% if (uicomponent.getParent().isHorizontalLayout()) { %>
-		  <div><a href="javascript:void(0);" onclick="eXo.mail.UIMailPortlet.showHidePreviewPane(this);"><span id="ActionReadingPane" class="MaximizeReadingPane" title="<%=_ctx.appRes(uicomponent.id+ '.label.maximize-reading-pane') %>"></span></a></div>
-		<%}%>
-		<div style="clear:both;"><span></span></div>
-	</div>
+      <div><a href="javascript:void(0);" onclick="eXo.mail.UIMailPortlet.showHidePreviewPane(this);"><span id="ActionReadingPane" class="MaximizeReadingPane" title="<%=_ctx.appRes(uicomponent.id+ '.label.maximize-reading-pane') %>"></span></a></div>
+    <%}%>
+    <div style="clear:both;"><span></span></div>
+  </div>
   
-	<div id="ReadingPaneDetails" class="ReadingPaneDetails"> 
+  <div id="ReadingPaneDetails" class="ReadingPaneDetails"> 
   
 <!--  Start DecoratorBox ViewBoxStyle -->
     <% 
@@ -78,7 +78,7 @@
       }
       if (!hasUnreadMsg && (msgIndex == uicomponent.getShowedMessages().size() -1)) showDetail = true;
     %>
-		<div class="DecoratorBox SpliterResizableListArea" previewId="<%= newId %>">
+    <div class="DecoratorBox SpliterResizableListArea" previewId="<%= newId %>">
     <%
         String starClass = "UnStarredIcon" ;
         if (msg.hasStar()) starClass = "StarredIcon";
@@ -156,30 +156,30 @@
         if (!showDetail) styleExpand = "none";
       %>
       <div class="ExpandMessage">
-  			<div class="ViewBoxStyle">
-  				<div class="TopLeftViewBoxStyle">
-  					<div class="TopRightViewBoxStyle">
-  						<div class="TopCenterViewBoxStyle"><span></span></div>										
-  					</div>
-  				</div>
-  				<div class="MiddleLeftViewBoxStyle">
-  					<div class="MiddleRightViewBoxStyle">
-  						<div class="MiddleCenterViewBoxStyle">
-  							<div class="MessageHeader">
-  								<div class="MessageCheck">
-  									<div><a href="<%=uicomponent.event("AddStar", newId) %>"><div  class="$starClass" title="<%=_ctx.appRes(uicomponent.id+ '.label.add-star-for-this-message') %>"><span></span></div></a></div>
-  									<div style="clear: left;"><span></span></div>
-  								</div>
-  								<div id="CollapseMessageAddressPreview" class="CollapseMessageAddress" onclick="javascript:eXo.mail.UIMailPortlet.showHideMessageDetails(this);">
-  										<span class="LinkAddress">
-  										  <%
-  										    if (!MailUtils.isFieldEmpty(msg.getFrom())) {
-  										      InternetAddress[] fromAddress1 = Utils.getInternetAddress(msg.getFrom());
-  										      InternetAddress from1 = fromAddress1[0];
-  										  %>
-  										      <span dir="ltr">&nbsp;<%=Utils.getPersonal(from1)%> <% print((from1 != null) ? ("&lt; " + from1.getAddress() + " &gt;") : "") %> </span>
+        <div class="ViewBoxStyle">
+          <div class="TopLeftViewBoxStyle">
+            <div class="TopRightViewBoxStyle">
+              <div class="TopCenterViewBoxStyle"><span></span></div>                    
+            </div>
+          </div>
+          <div class="MiddleLeftViewBoxStyle">
+            <div class="MiddleRightViewBoxStyle">
+              <div class="MiddleCenterViewBoxStyle">
+                <div class="MessageHeader">
+                  <div class="MessageCheck">
+                    <div><a href="<%=uicomponent.event("AddStar", newId) %>"><div  class="$starClass" title="<%=_ctx.appRes(uicomponent.id+ '.label.add-star-for-this-message') %>"><span></span></div></a></div>
+                    <div style="clear: left;"><span></span></div>
+                  </div>
+                  <div id="CollapseMessageAddressPreview" class="CollapseMessageAddress" onclick="javascript:eXo.mail.UIMailPortlet.showHideMessageDetails(this);">
+                      <span class="LinkAddress">
+                        <%
+                          if (!MailUtils.isFieldEmpty(msg.getFrom())) {
+                            InternetAddress[] fromAddress1 = Utils.getInternetAddress(msg.getFrom());
+                            InternetAddress from1 = fromAddress1[0];
+                        %>
+                            <span dir="ltr">&nbsp;<%=Utils.getPersonal(from1)%> <% print((from1 != null) ? ("&lt; " + from1.getAddress() + " &gt;") : "") %> </span>
                         <%} %>    
-  										</span>
+                      </span>
                       <span class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.to") %>:</span>
                       <span class="LinkAddress"> 
                         <%
@@ -202,7 +202,7 @@
                           <%=msg.getMessageTo()%>
                         <% } }%>
                       </span>
-  								</div>
+                  </div>
                   
                   <!-- Begin Expand Message Header -->
                   <div id="MessageAddressPreview" class="MessageAddress" style="display : none;">
@@ -316,23 +316,23 @@
                   </div>
                   <!-- End Expand Message Header-->
                   
-  								<div class="MessageActions" >
-  									<div class="DownArrow1Icon"><span></span></div>
-  									<div class="ShowHideTitle" onclick="javascript:eXo.mail.UIMailPortlet.showHideMessageHeader(this)" showhideheader="<%=_ctx.appRes(uicomponent.id+ '.label.show-details') %> ,<%=_ctx.appRes(uicomponent.id+ '.label.hide-details') %>"><%=_ctx.appRes(uicomponent.id+ ".label.show-details") %></div>
-  									<div class="MonthDate">
-  									<%if (msg.getReceivedDate() != null) { %>
+                  <div class="MessageActions" >
+                    <div class="DownArrow1Icon"><span></span></div>
+                    <div class="ShowHideTitle" onclick="javascript:eXo.mail.UIMailPortlet.showHideMessageHeader(this)" showhideheader="<%=_ctx.appRes(uicomponent.id+ '.label.show-details') %> ,<%=_ctx.appRes(uicomponent.id+ '.label.hide-details') %>"><%=_ctx.appRes(uicomponent.id+ ".label.show-details") %></div>
+                    <div class="MonthDate">
+                    <%if (msg.getReceivedDate() != null) { %>
                       <%=MailUtils.formatDate(msg.getReceivedDate(), locale)%>
                     <%} else if (msg.getSendDate() != null){%>
                       <%=MailUtils.formatDate(msg.getSendDate(), locale)%>
                     <%}%>
-  									</div>
-  									
-  									<% if (!isShowReplyAll) { %>
-  									 <div class="MessageActionIcon MessagePreviewMenu"><a onclick="<%=uicomponent.event("Reply", newId)%>" class="ReplyMailIcon "><%=_ctx.appRes(uicomponent.id+ ".label.reply") %></a></div>
-  									<% } else {%>
-  									 <div class="MessageActionIcon MessagePreviewMenu"><a onclick="<%=uicomponent.event("ReplyAll", newId)%>" class="ReplyAllMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.reply-to-all") %></a></div>
-  									<% } %>
-  									<div class="Actions" title="<%=_ctx.appRes(uicomponent.id+ '.label.action-on-this-messge') %>" onclick="eXo.mail.UIMailPortlet.showMessageAction(this, event);">
+                    </div>
+                    
+                    <% if (!isShowReplyAll) { %>
+                     <div class="MessageActionIcon MessagePreviewMenu"><a onclick="<%=uicomponent.event("Reply", newId)%>" class="ReplyMailIcon "><%=_ctx.appRes(uicomponent.id+ ".label.reply") %></a></div>
+                    <% } else {%>
+                     <div class="MessageActionIcon MessagePreviewMenu"><a onclick="<%=uicomponent.event("ReplyAll", newId)%>" class="ReplyAllMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.reply-to-all") %></a></div>
+                    <% } %>
+                    <div class="Actions" title="<%=_ctx.appRes(uicomponent.id+ '.label.action-on-this-messge') %>" onclick="eXo.mail.UIMailPortlet.showMessageAction(this, event);">
                     <% /*Begin Popup Menu*/ %>
                       <div style="position: relative;height:1px;">
                             <div class="UIRightClickPopupMenu" style="display: none;">
@@ -345,8 +345,8 @@
                                 <div class="MiddleLeftRightClickPopupMenu">
                                   <div class="MiddleRightRightClickPopupMenu">
                                     <div class="UIRightPopupMenuContainer">
-                                      <%                                      	
-                                      	if (isShowReplyAll) {
+                                      <%                                        
+                                        if (isShowReplyAll) {
                                       %>
                                       <a class="MenuItem" href="<%=uicomponent.event("Reply", newId)%>">   
                                         <div class="ItemIcon ReplyMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.reply-to-sender") %></div>
@@ -393,10 +393,10 @@
                           </div>
                   <% /*End Popup Menu*/ %>
                     </div>
-  									<div style="clear: left;"><span></span></div>
-  								</div>
-  								<div style="clear: both;"><span></span></div>
-  							</div>
+                    <div style="clear: left;"><span></span></div>
+                  </div>
+                  <div style="clear: both;"><span></span></div>
+                </div>
               <% 
                 if (!MailUtils.isInvitation(msg)) {
                   String frameId = "IframeMessagePreview" + msgIndex ;
@@ -416,7 +416,7 @@
                 <%
                   rcontext.getJavascriptManager().addJavascript("eXo.mail.UIMailPortlet.resizeIframe('" + textAreaId + "', '" + frameId + "', '" + styleExpand + "', '" + contentType + "');") ;
                 %>
-  							<textarea id="$textAreaId" class="MessageDetails" style="display:none">
+                <textarea id="$textAreaId" class="MessageDetails" style="display:none">
                   <%
                   String msgBody = msg.getMessageBody();
                   msgBody = MailUtils.camovylageLessGreateTag(msgBody);      
@@ -427,37 +427,37 @@
                     }
                     println(msgBody);
                   %>
-  							</textarea>
+                </textarea>
                 <%} else {%>
                   <div class="InvitationBG">
                   <%=msg.getMessageBody()%>
                   <div class="ActionBox">
-                  	<%  
-                  		String status = uicomponent.getAnswerStatus();
-                  		display0 = new String("");
-                  		display1 = new String("");
-                  		display2 = new String("");
-                  		display3 = new String("");
-                  		if(status == null){
-                  			display1="display:none;";
-                  			display2="display:none;";
-                  			display3="display:none;";
-                  		}
-                  		if(status != null && status.trim().length()> 0){
-                  			if(status.equals("yes"))
-                  				display1="display:none;";
-                  			else if(status.equals("no"))
-                  						display2="display:none;";
-                 						 else 
-                 						 	display3="display:none;";
-                 			}
-                  		
-                  	%>
+                    <%  
+                      String status = uicomponent.getAnswerStatus();
+                      display0 = new String("");
+                      display1 = new String("");
+                      display2 = new String("");
+                      display3 = new String("");
+                      if(status == null){
+                        display1="display:none;";
+                        display2="display:none;";
+                        display3="display:none;";
+                      }
+                      if(status != null && status.trim().length()> 0){
+                        if(status.equals("yes"))
+                          display1="display:none;";
+                        else if(status.equals("no"))
+                              display2="display:none;";
+                              else 
+                                display3="display:none;";
+                       }
+                      
+                    %>
                     <span style="font-weight: bold ;"><%=_ctx.appRes(uicomponent.id+ ".label." + uicomponent.QUESTION)%> 
-	                    <a href="<%=uicomponent.event('AnswerInvitation', '3&messageId=' + newId)%>" style="$display0"><%=_ctx.appRes(uicomponent.id+ ".label." + uicomponent.ANSWER_IMPORT)%></a>
-	                    <span style="$display1"> - </span><a href="<%=uicomponent.event('AnswerInvitation', '1&messageId=' + newId)%>" style="$display1"><%=_ctx.appRes(uicomponent.id+ ".label." + uicomponent.ANSWER_YES)%></a>
-	                    <span style="$display2"> - </span><a href="<%=uicomponent.event('AnswerInvitation', '0&messageId=' + newId)%>" style="$display2"><%=_ctx.appRes(uicomponent.id+ ".label." + uicomponent.ANSWER_NO)%></a>
-	                    <span style="$display3"> - </span><a href="<%=uicomponent.event('AnswerInvitation', '2&messageId=' + newId)%>" style="$display3"><%=_ctx.appRes(uicomponent.id+ ".label." + uicomponent.ANSWER_MAYBE)%></a> 
+                      <a href="<%=uicomponent.event('AnswerInvitation', '3&messageId=' + newId)%>" style="$display0"><%=_ctx.appRes(uicomponent.id+ ".label." + uicomponent.ANSWER_IMPORT)%></a>
+                      <span style="$display1"> - </span><a href="<%=uicomponent.event('AnswerInvitation', '1&messageId=' + newId)%>" style="$display1"><%=_ctx.appRes(uicomponent.id+ ".label." + uicomponent.ANSWER_YES)%></a>
+                      <span style="$display2"> - </span><a href="<%=uicomponent.event('AnswerInvitation', '0&messageId=' + newId)%>" style="$display2"><%=_ctx.appRes(uicomponent.id+ ".label." + uicomponent.ANSWER_NO)%></a>
+                      <span style="$display3"> - </span><a href="<%=uicomponent.event('AnswerInvitation', '2&messageId=' + newId)%>" style="$display3"><%=_ctx.appRes(uicomponent.id+ ".label." + uicomponent.ANSWER_MAYBE)%></a> 
                     </span>
                   </div>
                   </div> 
@@ -466,7 +466,7 @@
                   if (msg.hasAttachment() && msg.getAttachments() != null && msg.getAttachments().size() > 0 && !uicomponent.isShowPicInBody(msg)) {
                 %>
                   <div class="AttachmentContainer">
-    						  	<div class="AttachmentTitle"><%=_ctx.appRes(uicomponent.id+ ".label.attachments") %>:</div>            
+                    <div class="AttachmentTitle"><%=_ctx.appRes(uicomponent.id+ ".label.attachments") %>:</div>            
                     <%
                       DownloadService dservice = uicomponent.getDownloadService() ;
                       String attLink ;
@@ -476,7 +476,7 @@
                         String downloadAction = uicomponent.event("DownloadAttachment", newId + "&attachId=" + MailUtils.encodeURL(attach.getId()));
                         String saveToDMSAction = uicomponent.event("SaveAttachmentToDMS", newId + "&attachId=" + MailUtils.encodeURL(attach.getId()));
                     %>
-      						  	<div class="AttachmentContent">
+                      <div class="AttachmentContent">
                         <%
                           attLink = MailUtils.getImageSource(attach, dservice) ;
                           boolean isImage = false ;
@@ -494,8 +494,8 @@
                             }
                             if (isImage) {
                         %> 
-      						  		      <img class="AttachmentFile" style="height:auto ;width: 200px;padding-right: 5px;" src="$attLink" />
-      						  		<%
+                              <img class="AttachmentFile" style="height:auto ;width: 200px;padding-right: 5px;" src="$attLink" />
+                        <%
                             } else if (isSupportedIcon){
                         %>
                               <img class="AttachmentFile" src="$attLink"/>
@@ -504,30 +504,30 @@
                           }
                         %> 
                         <div class="AttachmentBox">
-      										<div class="AttachmentIcon"><%=MailUtils.decodeAttachName(attach.getName())%></div>
-													<div class="Size"><%=_ctx.appRes(uicomponent.id+ ".label.size") %>: <%=MailUtils.convertSize(attach.getSize())%> &nbsp;&nbsp;&nbsp;
-													<% 
+                          <div class="AttachmentIcon"><%=MailUtils.decodeAttachName(attach.getName())%></div>
+                          <div class="Size"><%=_ctx.appRes(uicomponent.id+ ".label.size") %>: <%=MailUtils.convertSize(attach.getSize())%> &nbsp;&nbsp;&nbsp;
+                          <% 
                             boolean validType = false ;
-      											String name = MailUtils.decodeAttachName(attach.getName()).trim() ;
-     												for (int i = 0; i < MailUtils.SUPPORTED_VIEW_TYPE_ATTACH.length; i++) {
-     												  String type = MailUtils.SUPPORTED_VIEW_TYPE_ATTACH[i].trim() ;
-     												  if(name.substring(name.lastIndexOf(".") + 1, name.length()).equalsIgnoreCase(type))
-        												validType = true ;
-        										}
-        										if (validType) {
-      										%>
-														<span class="Icon ViewDownloadIcon"><a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.view") %></a></span>
-													<% 
-      											}	
-      										%>
-														<span class="Icon DownloadIcon"> <a href="$downloadAction"><%=_ctx.appRes(uicomponent.id+ ".label.download") %></a></span>
-														<% if (org.exoplatform.mail.MailUtils.hasECMS()) { %>
-														<span class="Icon DownloadIcon"> <a href="$saveToDMSAction"><%=_ctx.appRes(uicomponent.id+ ".label.save-to-dms") %></a></span>
-														<% } %>
-														</div>
-      						  		</div>
-      						  		<div style="clear: left;"><span></span></div>
-      						  	</div>
+                            String name = MailUtils.decodeAttachName(attach.getName()).trim() ;
+                             for (int i = 0; i < MailUtils.SUPPORTED_VIEW_TYPE_ATTACH.length; i++) {
+                               String type = MailUtils.SUPPORTED_VIEW_TYPE_ATTACH[i].trim() ;
+                               if(name.substring(name.lastIndexOf(".") + 1, name.length()).equalsIgnoreCase(type))
+                                validType = true ;
+                            }
+                            if (validType) {
+                          %>
+                            <span class="Icon ViewDownloadIcon"><a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.view") %></a></span>
+                          <% 
+                            }  
+                          %>
+                            <span class="Icon DownloadIcon"> <a href="$downloadAction"><%=_ctx.appRes(uicomponent.id+ ".label.download") %></a></span>
+                            <% if (org.exoplatform.mail.MailUtils.hasECMS()) { %>
+                            <span class="Icon DownloadIcon"> <a href="$saveToDMSAction"><%=_ctx.appRes(uicomponent.id+ ".label.save-to-dms") %></a></span>
+                            <% } %>
+                            </div>
+                        </div>
+                        <div style="clear: left;"><span></span></div>
+                      </div>
                     <% 
                       } else {
                     %>
@@ -541,36 +541,36 @@
                       }
                       }
                     %>
-    						  </div>
+                  </div>
                 <% 
                   } 
                 %>
-                			<div style="border-top: 1px dotted #b7b7b7; padding-top: 3px">
-                				<div class="MessageActionIcon "><a href="<%=uicomponent.event("Reply", newId)%>" style="display: block;" class="ReplyMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.reply") %></a></div>
-                				<% if (isShowReplyAll) {%>
-                				<div class="MessageActionIcon "><a href="<%=uicomponent.event("ReplyAll", newId)%>" style="display: block;" class="ReplyAllMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.reply-to-all") %></a></div>
-                				<% } %>
-			                	<div class="MessageActionIcon "><a href="<%=uicomponent.event("Forward", newId)%>" style="display: block;" class="ForwardMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.forward") %></a></div>
-			                	<div style="clear: left"><span></span></div>
-			                </div>
-  						</div>										
-  					</div>
-  				</div>	
-  				<div class="BottomLeftViewBoxStyle">
-  					<div class="BottomRightViewBoxStyle">
-  						<div class="BottomCenterViewBoxStyle"><span></span></div>										
-  					</div>
-  				</div>
-  			</div>
+                      <div style="border-top: 1px dotted #b7b7b7; padding-top: 3px">
+                        <div class="MessageActionIcon "><a href="<%=uicomponent.event("Reply", newId)%>" style="display: block;" class="ReplyMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.reply") %></a></div>
+                        <% if (isShowReplyAll) {%>
+                        <div class="MessageActionIcon "><a href="<%=uicomponent.event("ReplyAll", newId)%>" style="display: block;" class="ReplyAllMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.reply-to-all") %></a></div>
+                        <% } %>
+                        <div class="MessageActionIcon "><a href="<%=uicomponent.event("Forward", newId)%>" style="display: block;" class="ForwardMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.forward") %></a></div>
+                        <div style="clear: left"><span></span></div>
+                      </div>
+              </div>                    
+            </div>
+          </div>  
+          <div class="BottomLeftViewBoxStyle">
+            <div class="BottomRightViewBoxStyle">
+              <div class="BottomCenterViewBoxStyle"><span></span></div>                    
+            </div>
+          </div>
+        </div>
       </div>
-		</div>
+    </div>
     <%
      msgIndex++;
     }
     } 
     }%>
 <!--  End DecoratorBox ViewBoxStyle -->
-	</div>
+  </div>
 <%} else {
     _ctx.include("app:/templates/mail/webui/UIIntroduction.gtmpl");
   } 

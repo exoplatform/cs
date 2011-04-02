@@ -13,51 +13,51 @@
 <div class="$uicomponent.id UIApplication">
   <div class="ApplicationMinWidth">
   
-  	<div class="UIMessageCompose">
-  	
-			<div class="UIToolbar">
-				<div class="HeaderToolbar">
-					<div class="LeftBar">
-						<div class="RightBar">
-							<div class="CenterBar">
-								<div class="MailListActionsbar">
-								
-									<a href="<%=uicomponent.event("Send")%>" class="ControlButton">
-										<div class="IconHolder SendMailIcon">
-											<div class="Label"><%=_ctx.appRes(uicomponent.getName() + ".label.sendMail")%></div>
-										</div>
-									</a>
-									<div class="SeparatorLine"><span></span></div>
-									
-									<a href="<%=uicomponent.event("DiscardChange")%>" class="ControlButton">
-										<div class="IconHolder DiscardIcon">
-											<div class="Label"><%=_ctx.appRes(uicomponent.getName() + ".label.discard")%></div>
-										</div>
-									</a>
-									
-									<div class="SeparatorLine"><span></span></div>
-									<!--
-									<a href="<%=uicomponent.event("Attachment")%>" class="ControlButton">
-										<div class="IconHolder AttachFileIcon">
-											<div class="Label">Attach File</div>
-										</div>
-									</a>
-									
-									<div class="SeparatorLine"><span></span></div>
-								-->
-									<div style="clear:left;"><span></span></div>
-									
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-			</div>
+    <div class="UIMessageCompose">
+    
+      <div class="UIToolbar">
+        <div class="HeaderToolbar">
+          <div class="LeftBar">
+            <div class="RightBar">
+              <div class="CenterBar">
+                <div class="MailListActionsbar">
+                
+                  <a href="<%=uicomponent.event("Send")%>" class="ControlButton">
+                    <div class="IconHolder SendMailIcon">
+                      <div class="Label"><%=_ctx.appRes(uicomponent.getName() + ".label.sendMail")%></div>
+                    </div>
+                  </a>
+                  <div class="SeparatorLine"><span></span></div>
+                  
+                  <a href="<%=uicomponent.event("DiscardChange")%>" class="ControlButton">
+                    <div class="IconHolder DiscardIcon">
+                      <div class="Label"><%=_ctx.appRes(uicomponent.getName() + ".label.discard")%></div>
+                    </div>
+                  </a>
+                  
+                  <div class="SeparatorLine"><span></span></div>
+                  <!--
+                  <a href="<%=uicomponent.event("Attachment")%>" class="ControlButton">
+                    <div class="IconHolder AttachFileIcon">
+                      <div class="Label">Attach File</div>
+                    </div>
+                  </a>
+                  
+                  <div class="SeparatorLine"><span></span></div>
+                -->
+                  <div style="clear:left;"><span></span></div>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
 <!-- End Mail ControlBar -->
 <!-- Start  Message Address -->
-			<div class="MessageAddress">
-				<div class="UIForm">
+      <div class="MessageAddress">
+        <div class="UIForm">
             <div class="HorizontalLayout">
             <table class="UIFormGrid">
               <tr>
@@ -90,18 +90,18 @@
               <% } %>
             </table>
           </div>
-				</div>
-			</div>
+        </div>
+      </div>
 <!-- End Compose Message Address -->
 <!-- Start Compose Message Detail -->
-			<div class="MessageContent">
-				<div class="PlainTextMessage">
-					<%uiform.renderField(uicomponent.FIELD_MESSAGECONTENT)%>
-				</div>
-			</div>
+      <div class="MessageContent">
+        <div class="PlainTextMessage">
+          <%uiform.renderField(uicomponent.FIELD_MESSAGECONTENT)%>
+        </div>
+      </div>
 <!-- End Compose Message Detail -->
-  	</div>  	
-  	
+    </div>    
+    
   </div>
 </div>
 

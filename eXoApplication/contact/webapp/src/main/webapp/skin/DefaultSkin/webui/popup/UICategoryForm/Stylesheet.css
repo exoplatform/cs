@@ -1,10 +1,10 @@
 .UIContactPortlet .UICategoryForm {
-	padding: 10px;
-	min-width: 380px;
+  padding: 10px;
+  min-width: 380px;
 }
 
 .UIContactPortlet .UICategoryForm .UIForm .HorizontalLayout {
-	background: #F3F3F3;
-	margin: auto;
-	padding: 10px;
+  background: #F3F3F3;
+  margin: auto;
+  padding: 10px;
 }

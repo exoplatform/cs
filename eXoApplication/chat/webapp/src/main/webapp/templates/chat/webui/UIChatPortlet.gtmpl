@@ -795,14 +795,14 @@
                                         </td>
                                     </tr>
                                     <!--tr>
-							        <td class="FieldLabel">
-							          <label>Change Subject:</label>
-							        </td>
-							        <td class="FieldComponent">
-							          <input type="checkbox" name="changesubject">
-							        </td>
-							      </tr>
-							      <tr-->
+                      <td class="FieldLabel">
+                        <label>Change Subject:</label>
+                      </td>
+                      <td class="FieldComponent">
+                        <input type="checkbox" name="changesubject">
+                      </td>
+                    </tr>
+                    <tr-->
                                     <tr>
                                         <td class="FieldLabel">
                                             <label>
@@ -813,13 +813,13 @@
                                         </td>
                                     </tr>
                                     <!--tr>
-							        <td class="FieldLabel">
-							          <label>Enable logging:</label>
-							        </td>
-							        <td class="FieldComponent">
-							          <input type="checkbox" name="enablelogging">
-							        </td>
-							      </tr-->
+                      <td class="FieldLabel">
+                        <label>Enable logging:</label>
+                      </td>
+                      <td class="FieldComponent">
+                        <input type="checkbox" name="enablelogging">
+                      </td>
+                    </tr-->
                                     <tr>
                                         <td class="FieldLabel">
                                             <label>
@@ -906,21 +906,21 @@
                                         </td>
                                     </tr>
                                     <!--tr>
-							        <td class="FieldLabel">
-							          <label>Can Change Nick:</label>
-							        </td>
-							        <td class="FieldComponent">
-							          <input type="checkbox" name="canchangenick">
-							        </td>
-							      </tr>
-							      <tr>
-							        <td class="FieldLabel">
-							          <label>Registration :</label>
-							        </td>
-							        <td class="FieldComponent">
-							          <input type="checkbox" name="registration">
-							        </td>
-							      </tr-->
+                      <td class="FieldLabel">
+                        <label>Can Change Nick:</label>
+                      </td>
+                      <td class="FieldComponent">
+                        <input type="checkbox" name="canchangenick">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="FieldLabel">
+                        <label>Registration :</label>
+                      </td>
+                      <td class="FieldComponent">
+                        <input type="checkbox" name="registration">
+                      </td>
+                    </tr-->
                                     <tr>
                                         <td class="FieldLabel">
                                             <label>
@@ -1226,12 +1226,12 @@
                                                 <span></span>
                                             </div>
                                             <div class="SendFileIcon" title="<%=_ctx.appRes("UIChatPortlet.label.sendFile");%>">
-											 <form method="POST" enctype="multipart/form-data" class="ChatSendFileForm" target="chatFileExchangeIframe" action="#">
-											  <input type="file" size="1" class="InputSendFile"  name="uploadfile" onchange="eXo.communication.chat.webui.UIChatWindow.sendFile(this, event);" />
-											  <span class="SendFileLabel"><%=_ctx.appRes("UIChatPortlet.label.sendFile");%></span>
-											 </form>
-											</div>
-											                      <div class="SeperatorLine">
+                       <form method="POST" enctype="multipart/form-data" class="ChatSendFileForm" target="chatFileExchangeIframe" action="#">
+                        <input type="file" size="1" class="InputSendFile"  name="uploadfile" onchange="eXo.communication.chat.webui.UIChatWindow.sendFile(this, event);" />
+                        <span class="SendFileLabel"><%=_ctx.appRes("UIChatPortlet.label.sendFile");%></span>
+                       </form>
+                      </div>
+                                            <div class="SeperatorLine">
                                                 <span></span>
                                             </div>
             
@@ -1282,7 +1282,7 @@
                                               </div>
                                               <% /*End Popup Menu*/ %>
                                             </div>
-											                      									
+                                                              
                                             <div class="ClearLeft">
                                                 <span></span>
                                             </div>

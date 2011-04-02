@@ -3,10 +3,10 @@
   
   String user = uicomponent.getRemoteUser() ;
   if(user != null && user.trim().length() > 0) { 
-	def rcontext = _ctx.getRequestContext() ;
-	def jsManager = rcontext.getJavascriptManager();
-	jsManager.importJavascript("eXo.communication.chat.eXoChatBar", "/chatbar/javascript/");
-	
+  def rcontext = _ctx.getRequestContext() ;
+  def jsManager = rcontext.getJavascriptManager();
+  jsManager.importJavascript("eXo.communication.chat.eXoChatBar", "/chatbar/javascript/");
+  
 %>
 <!-- Begin UIChat edit mode -->
 <div id="<%=uicomponent.id%>" oncontextmenu="return false;">

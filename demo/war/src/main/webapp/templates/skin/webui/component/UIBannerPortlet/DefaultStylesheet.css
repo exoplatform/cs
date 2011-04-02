@@ -1,12 +1,12 @@
 #banner {
-	border-top: 1px solid white;
-}	
+  border-top: 1px solid white;
+}  
 
 .UIBannerPortlet {
-	overflow: auto;
-	background: url('DefaultSkin/background/BgBanner.gif') repeat-x bottom center;
-	padding:8px 40px 6px;
-	zoom: 1;
+  overflow: auto;
+  background: url('DefaultSkin/background/BgBanner.gif') repeat-x bottom center;
+  padding:8px 40px 6px;
+  zoom: 1;
 }
 
 
@@ -43,7 +43,7 @@
 
 .UIBannerPortlet .MiddleLoginContainer a {
   color: #0d62af;
-	outline: none;
+  outline: none;
 }
 
 .UIBannerPortlet .MiddleLoginContainer a:hover {
@@ -51,19 +51,19 @@
 }
 
 .UIBannerPortlet .MiddleLoginContainer .Name {
-	text-align: left;	 
-	color: #0d62af;
-	font-size: 10px;
-	margin-bottom: 6px;
-	line-height: 15px;
+  text-align: left;   
+  color: #0d62af;
+  font-size: 10px;
+  margin-bottom: 6px;
+  line-height: 15px;
 }
 
 .UIBannerPortlet .MiddleLoginContainer .Logout {
   background: url('DefaultSkin/background/Container.gif') no-repeat left -144px;
   margin-right: 12px;
-  padding-left: 20px;	 	
+  padding-left: 20px;     
   cursor: pointer;
-  float: left;	
+  float: left;  
   font-weight: bold;
   font-size: 10px;
   display: block;
@@ -72,7 +72,7 @@
 
 
 .UIBannerPortlet .MiddleLoginContainer a {
-	background: none;
+  background: none;
     color: #FFD400;
     cursor: pointer;
     display: block;
@@ -100,6 +100,6 @@
 }
 
 .UIUserSelector .UIAddressSearchForm select {
-	height: auto;
-	padding:1px 0;
+  height: auto;
+  padding:1px 0;
 }
