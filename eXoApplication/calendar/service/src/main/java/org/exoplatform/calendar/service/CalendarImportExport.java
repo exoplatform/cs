@@ -21,15 +21,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
-
-
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen
  *          hung.nguyen@exoplatform.com
  * Jul 2, 2007  
  */
-public interface CalendarImportExport {  
+public interface CalendarImportExport {
 
   /**
    * The method imports events form icalendar(.ics) or outlook calendar exported .csv file to the system
@@ -42,7 +40,7 @@ public interface CalendarImportExport {
    * @param isNew import to new calendar or existed calendar
    * @throws Exception
    */
-  public void importCalendar(String username, InputStream inputStream, String calendarId, String calendarName, java.util.Calendar from, java.util.Calendar to, boolean isNew) throws Exception ;
+  public void importCalendar(String username, InputStream inputStream, String calendarId, String calendarName, java.util.Calendar from, java.util.Calendar to, boolean isNew) throws Exception;
 
   /**
    * The method exports events from eXo Calendar to icalendar file (.ics) or .csv file
@@ -53,7 +51,7 @@ public interface CalendarImportExport {
    * @return data output stream
    * @throws Exception
    */
-  public OutputStream exportCalendar(String username, List<String> calendarIds, String type, int number) throws Exception ;
+  public OutputStream exportCalendar(String username, List<String> calendarIds, String type, int number) throws Exception;
 
   /**
    * The method export calendar event to output stream by given event id
@@ -64,7 +62,7 @@ public interface CalendarImportExport {
    * @return data output stream
    * @throws Exception
    */
-  public OutputStream exportEventCalendar(String username, String calendarId, String type, String eventId) throws Exception ;
+  public OutputStream exportEventCalendar(String username, String calendarId, String type, String eventId) throws Exception;
 
   /**
    * The method maps the input stream to event object
@@ -72,14 +70,14 @@ public interface CalendarImportExport {
    * @return List of calendar event objects contant infomations
    * @throws Exception
    */
-  public List<CalendarEvent> getEventObjects(InputStream icalInputStream) throws Exception ;
+  public List<CalendarEvent> getEventObjects(InputStream icalInputStream) throws Exception;
 
   /**
    * The method return true if the input stream is correct format 
    * @param icalInputStream the input stream
    * @throws Exception
    */
-  public boolean isValidate(InputStream icalInputStream) throws Exception ;
+  public boolean isValidate(InputStream icalInputStream) throws Exception;
 
   /**
    * The method export binary from event object

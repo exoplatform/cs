@@ -73,7 +73,7 @@ public class InterlocutorImpl implements Interlocutor {
    * 
    */
   public InterlocutorImpl() {
-   
+
   }
 
   /**
@@ -97,14 +97,13 @@ public class InterlocutorImpl implements Interlocutor {
     return conversationId;
   }
 
- /**
- * @return
- */
-public String getHexName() {
-  return hexName;
-}
+  /**
+  * @return
+  */
+  public String getHexName() {
+    return hexName;
+  }
 
-  
   /**
    * {@inheritDoc}
    */

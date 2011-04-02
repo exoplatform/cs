@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.webui.UIFormComboBox;

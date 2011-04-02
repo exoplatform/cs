@@ -119,5 +119,5 @@ public class UserInfo {
   public void setOrganization(String organization) {
     this.organization = organization;
   }
-  
+
 }

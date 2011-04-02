@@ -34,8 +34,8 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInput;
 import org.exoplatform.webui.form.UIFormInputBase;
 import org.exoplatform.webui.form.UIFormInputContainer;
-import org.exoplatform.webui.form.validator.Validator;
 import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.validator.Validator;
 
 /**
  * Author : Nhu Dinh Thuan

@@ -25,7 +25,7 @@ package org.exoplatform.contact.service.impl;
 public class AddressBookNotFoundException extends Exception {
 
   private String addressBookId;
-  
+
   public AddressBookNotFoundException(String addressBookId) {
     super("AddressBook Not found " + addressBookId);
     this.addressBookId = addressBookId;
@@ -38,5 +38,5 @@ public class AddressBookNotFoundException extends Exception {
   public void setAddressBookId(String addressBookId) {
     this.addressBookId = addressBookId;
   }
-  
+
 }

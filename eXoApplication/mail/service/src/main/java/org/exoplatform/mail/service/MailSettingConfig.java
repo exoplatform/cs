@@ -16,7 +16,6 @@
  */
 package org.exoplatform.mail.service;
 
-
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Hoang
@@ -24,16 +23,33 @@ package org.exoplatform.mail.service;
  * Mar 16, 2011  
  */
 public class MailSettingConfig {
-  private String name ;
-  private boolean userAllowed ;
-  private String defaultValue ;
-  
-  public String getName() { return name ; }
-  public void setName(String name_) { this.name = name_ ; }
+  private String  name;
 
-  public boolean getUserAllowed() { return userAllowed ; }
-  public void setUserAllowed(boolean b) { userAllowed = b ; }
-  
-  public String getDefaultValue() { return defaultValue ; }
-  public void setDefaultValue(String b) { defaultValue = b ; }
+  private boolean userAllowed;
+
+  private String  defaultValue;
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name_) {
+    this.name = name_;
+  }
+
+  public boolean getUserAllowed() {
+    return userAllowed;
+  }
+
+  public void setUserAllowed(boolean b) {
+    userAllowed = b;
+  }
+
+  public String getDefaultValue() {
+    return defaultValue;
+  }
+
+  public void setDefaultValue(String b) {
+    defaultValue = b;
+  }
 }

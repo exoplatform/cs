@@ -25,44 +25,86 @@ import java.io.InputStream;
  * Jun 23, 2007  
  */
 abstract public class Attachment {
-  private String id ;
-  private String name ;
-  private String mimeType ;
-  private long size ;
-  private String path ;
-  private boolean isLoadedProperly = true;
-  protected String resoureId ;
-  private boolean isShownInBody = false;
-  
-  public String getId() { return id ; }
-  public void setId(String id) { this.id = id ; }
-  
-  public String getMimeType() { return mimeType ; }
-  public void setMimeType(String mimeType_) { this.mimeType = mimeType_ ; }
-  
-  public long getSize() { return size ; }
-  public void setSize(long size_) { this.size = size_ ; }
-  
-  public String getName() { return name ; }
-  public void setName(String name_) { this.name = name_ ; }
-  //TODO: should not have  Session in the api
-  public abstract InputStream getInputStream() throws Exception ;
+  private String   id;
+
+  private String   name;
+
+  private String   mimeType;
+
+  private long     size;
+
+  private String   path;
+
+  private boolean  isLoadedProperly = true;
+
+  protected String resoureId;
+
+  private boolean  isShownInBody    = false;
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  public String getMimeType() {
+    return mimeType;
+  }
+
+  public void setMimeType(String mimeType_) {
+    this.mimeType = mimeType_;
+  }
+
+  public long getSize() {
+    return size;
+  }
+
+  public void setSize(long size_) {
+    this.size = size_;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name_) {
+    this.name = name_;
+  }
+
+  // TODO: should not have Session in the api
+  public abstract InputStream getInputStream() throws Exception;
+
   public void setPath(String path) {
     this.path = path;
   }
+
   public String getPath() {
     return path;
   }
-  
-  public boolean isLoadedProperly() { return isLoadedProperly; }
-  public void setIsLoadedProperly(boolean b) { isLoadedProperly = b; }
+
+  public boolean isLoadedProperly() {
+    return isLoadedProperly;
+  }
+
+  public void setIsLoadedProperly(boolean b) {
+    isLoadedProperly = b;
+  }
+
   public void setResoureId(String resoureId) {
     this.resoureId = resoureId;
   }
+
   public String getResoureId() {
     return resoureId;
   }
-  
-  public boolean isShownInBody() { return isShownInBody; }
-  public void setIsShowInBody(boolean b) { isShownInBody = b; } 
+
+  public boolean isShownInBody() {
+    return isShownInBody;
+  }
+
+  public void setIsShowInBody(boolean b) {
+    isShownInBody = b;
+  }
 }

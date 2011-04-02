@@ -18,14 +18,14 @@ import org.exoplatform.content.model.ContentNode;
  * Jul 21, 2006  
  */
 public class DescriptionPlugin extends ContentPlugin {
-  
+
   private List<DescItem> list;
 
-  public DescriptionPlugin(){
+  public DescriptionPlugin() {
     super();
     list = new ArrayList<DescItem>(1);
     list.add(new DescItem());
-    type ="desc";
+    type = "desc";
   }
 
   @SuppressWarnings("unchecked")
@@ -33,38 +33,65 @@ public class DescriptionPlugin extends ContentPlugin {
     list.get(0).setTitle(node.getLabel());
     list.get(0).setDesc(node.getDescription());
     return new ContentPageList(list);
-  } 
+  }
 
   static public class DescItem implements ContentItem {
-    
-    private String desc = "";
+
+    private String desc  = "";
+
     private String title = "";
-    
-    public DescItem(){ }
 
-    public String getDesc() { return desc; }
-    public void setDesc(String desciption) {this.desc = desciption; }
+    public DescItem() {
+    }
 
-    public String getLink() { return "#"; }
-    @SuppressWarnings("unused")
-    public void setLink(String url) {}
+    public String getDesc() {
+      return desc;
+    }
 
-    public String getTime() { return null; }
-    @SuppressWarnings("unused")
-    public void setTime(String time) {}
-    
-    public String getImage() { return null; }
+    public void setDesc(String desciption) {
+      this.desc = desciption;
+    }
 
-    @SuppressWarnings("unused")
-    public void setImage(String image) {}
-
-    public String getTitle() { return title;}
-    public void setTitle(String title) { this.title = title;     }
+    public String getLink() {
+      return "#";
+    }
 
     @SuppressWarnings("unused")
-    public void setCreator(String creator){ }
-    public String getCreator(){ return null; }
+    public void setLink(String url) {
+    }
+
+    public String getTime() {
+      return null;
+    }
+
+    @SuppressWarnings("unused")
+    public void setTime(String time) {
+    }
+
+    public String getImage() {
+      return null;
+    }
+
+    @SuppressWarnings("unused")
+    public void setImage(String image) {
+    }
+
+    public String getTitle() {
+      return title;
+    }
+
+    public void setTitle(String title) {
+      this.title = title;
+    }
+
+    @SuppressWarnings("unused")
+    public void setCreator(String creator) {
+    }
+
+    public String getCreator() {
+      return null;
+    }
 
   }
-  
+
 }

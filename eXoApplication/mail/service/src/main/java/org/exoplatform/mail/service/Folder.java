@@ -28,66 +28,134 @@ import java.util.Date;
  * 
  */
 public class Folder {
-  private String id ;
-  private String path;
-  private String name ;
-  private String urlName = "";
-  private long unreadMessage = 0 ;
-  private long allMessages = 0;
-  private boolean isPersonalFolder = true ;
-  private Date lastCheckedDate_ ;
-  private Date lastStartCheckingTime_ ;
-  private Date checkFromDate_;
-  private long type_ = 3;
-  
+  private String  id;
+
+  private String  path;
+
+  private String  name;
+
+  private String  urlName          = "";
+
+  private long    unreadMessage    = 0;
+
+  private long    allMessages      = 0;
+
+  private boolean isPersonalFolder = true;
+
+  private Date    lastCheckedDate_;
+
+  private Date    lastStartCheckingTime_;
+
+  private Date    checkFromDate_;
+
+  private long    type_            = 3;
+
   /**
    * The id folder should have the form AccountId/DefaultFolder/folderName or AccountId/UserFolder/folderName
    * @return the id of the folder
    */
-  public String getId()  { return id ; }
-  public void   setId(String s) { id = s ; }
-  
-  public String getPath() { return path ; }
-  public void setPath(String s) { path = s; }
-  
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String s) {
+    id = s;
+  }
+
+  public String getPath() {
+    return path;
+  }
+
+  public void setPath(String s) {
+    path = s;
+  }
+
   /**
    * The name of the folder like Inbox, Sent, MyFolder
    * @return The name of the folder
    */
-  public String getName() { return name ; }
-  public void   setName(String s) { name = s ; }
-  
-  public long getType() { return type_; }
-  public void setType(long type) { type_ = type; }
-  
-  public String getURLName() { return urlName ; }
-  public void   setURLName(String s) { urlName = s ; }
-  
-  public Date getLastCheckedDate() { return lastCheckedDate_; }
-  public void setLastCheckedDate(Date date) { lastCheckedDate_ = date ; }
-  
-  public Date getLastStartCheckingTime() { return lastStartCheckingTime_; }
-  public void setLastStartCheckingTime(Date date) { lastStartCheckingTime_ = date ; }
-  
-  public Date getCheckFromDate() { return checkFromDate_; }
-  public void setCheckFromDate(Date date) { checkFromDate_ = date ; }
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String s) {
+    name = s;
+  }
+
+  public long getType() {
+    return type_;
+  }
+
+  public void setType(long type) {
+    type_ = type;
+  }
+
+  public String getURLName() {
+    return urlName;
+  }
+
+  public void setURLName(String s) {
+    urlName = s;
+  }
+
+  public Date getLastCheckedDate() {
+    return lastCheckedDate_;
+  }
+
+  public void setLastCheckedDate(Date date) {
+    lastCheckedDate_ = date;
+  }
+
+  public Date getLastStartCheckingTime() {
+    return lastStartCheckingTime_;
+  }
+
+  public void setLastStartCheckingTime(Date date) {
+    lastStartCheckingTime_ = date;
+  }
+
+  public Date getCheckFromDate() {
+    return checkFromDate_;
+  }
+
+  public void setCheckFromDate(Date date) {
+    checkFromDate_ = date;
+  }
+
   /**
    * @return  The number of the unread messages
    */
-  public long  getNumberOfUnreadMessage() { return unreadMessage ; }
-  public void setNumberOfUnreadMessage(long number) { unreadMessage = number ; }
-  
+  public long getNumberOfUnreadMessage() {
+    return unreadMessage;
+  }
+
+  public void setNumberOfUnreadMessage(long number) {
+    unreadMessage = number;
+  }
+
   /**
    * The total of the folder
    */
-  public long getTotalMessage() { return allMessages; }
-  public void setTotalMessage(long number) { this.allMessages = number; }
-  
+  public long getTotalMessage() {
+    return allMessages;
+  }
+
+  public void setTotalMessage(long number) {
+    this.allMessages = number;
+  }
+
   /**
    * @return Calculate and return the account id  of the folder base on the id of  the folder
    */
-  public String getAccountId() { return null ; }
-  
-  public boolean  isPersonalFolder() { return isPersonalFolder ; }
-  public void setPersonalFolder(boolean isPersonal) { isPersonalFolder = isPersonal ; }
+  public String getAccountId() {
+    return null;
+  }
+
+  public boolean isPersonalFolder() {
+    return isPersonalFolder;
+  }
+
+  public void setPersonalFolder(boolean isPersonal) {
+    isPersonalFolder = isPersonal;
+  }
 }

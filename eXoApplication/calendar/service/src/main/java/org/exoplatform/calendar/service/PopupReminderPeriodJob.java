@@ -27,14 +27,18 @@ import org.quartz.JobDataMap;
  *          hung.nguyen@exoplatform.com
  * nov 29, 2007
  */
-public class PopupReminderPeriodJob extends  PeriodJob {
-  private JobDataMap jdatamap_ ;
+public class PopupReminderPeriodJob extends PeriodJob {
+  private JobDataMap jdatamap_;
+
   public PopupReminderPeriodJob(InitParams params) throws Exception {
-    super(params) ;
-    ExoProperties props =  params.getPropertiesParam("popupreminder.info").getProperties() ;
-    jdatamap_ = new JobDataMap() ;
-    String portalName = props.getProperty("portalName") ;
-    jdatamap_.put("portalName", portalName) ;
- }
-  public JobDataMap  getJobDataMap() {  return jdatamap_ ;  }
+    super(params);
+    ExoProperties props = params.getPropertiesParam("popupreminder.info").getProperties();
+    jdatamap_ = new JobDataMap();
+    String portalName = props.getProperty("portalName");
+    jdatamap_.put("portalName", portalName);
+  }
+
+  public JobDataMap getJobDataMap() {
+    return jdatamap_;
+  }
 }

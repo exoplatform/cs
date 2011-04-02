@@ -22,7 +22,6 @@ import java.util.Map;
 import org.exoplatform.container.component.BaseComponentPlugin;
 import org.exoplatform.container.xml.InitParams;
 
-
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Hoang
@@ -30,17 +29,25 @@ import org.exoplatform.container.xml.InitParams;
  * Mar 16, 2011  
  */
 public class MailSettingConfigPlugin extends BaseComponentPlugin {
-  private Map<String, MailSettingConfig>  mailSettingConfig = new HashMap<String, MailSettingConfig>();
-  private String name ;
-  
+  private Map<String, MailSettingConfig> mailSettingConfig = new HashMap<String, MailSettingConfig>();
+
+  private String                         name;
+
   public MailSettingConfigPlugin(InitParams initParams) {
     for (MailSettingConfig mConfig : initParams.getObjectParamValues(MailSettingConfig.class)) {
       mailSettingConfig.put(mConfig.getName(), mConfig);
     }
   }
-  
-  public Map<String, MailSettingConfig>  getMailSettingConfig() { return mailSettingConfig ; }
-  
-  public String getName() { return name ; }
-  public void setName(String name_) { this.name = name_ ; }
+
+  public Map<String, MailSettingConfig> getMailSettingConfig() {
+    return mailSettingConfig;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name_) {
+    this.name = name_;
+  }
 }

@@ -1,13 +1,17 @@
 package org.exoplatform.mail.service;
 
 public class StatusInfo {
-  private int status_;
+  private int    status_;
+
   private String accountId_;
-  private int previousStatus_;
+
+  private int    previousStatus_;
+
   private String statusMsg_;
-  
-  public StatusInfo() {}
-  
+
+  public StatusInfo() {
+  }
+
   protected void setStatus(int status) {
     status_ = status;
   }
@@ -27,6 +31,7 @@ public class StatusInfo {
   public int getStatus() {
     return status_;
   }
+
   public String getStatusMsg() {
     return statusMsg_;
   }

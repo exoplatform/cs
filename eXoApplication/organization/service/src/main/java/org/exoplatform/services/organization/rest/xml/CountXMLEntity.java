@@ -33,7 +33,8 @@ import javax.xml.stream.XMLStreamWriter;
 
 public class CountXMLEntity implements StreamingOutput {
 
-  private final int count_;
+  private final int    count_;
+
   private final String typeRes_;
 
   public CountXMLEntity(int count, String typeres) {
@@ -43,7 +44,6 @@ public class CountXMLEntity implements StreamingOutput {
 
   /*
    * (non-Javadoc)
-   * 
    * @see org.exoplatform.services.rest.transformer.SerializableEntity#writeObject(java.io.OutputStream)
    */
   public void write(OutputStream _out) throws IOException {

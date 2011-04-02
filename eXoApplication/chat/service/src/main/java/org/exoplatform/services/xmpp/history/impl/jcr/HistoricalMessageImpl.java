@@ -85,7 +85,7 @@ public class HistoricalMessageImpl implements HistoricalMessage {
    * 
    */
   public HistoricalMessageImpl() {
-  
+
   }
 
   /**

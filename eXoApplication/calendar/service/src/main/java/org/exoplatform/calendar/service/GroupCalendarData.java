@@ -25,31 +25,50 @@ import java.util.List;
  * Jul 11, 2007  
  */
 public class GroupCalendarData {
-  private String id ;
-  private String name ;
-  private List<Calendar> calendars ;
-  
-  public GroupCalendarData(String id, String name, List<Calendar> calendars) throws Exception {
-    this.id = id ;
-    this.name = name ;
-    this.calendars = calendars ;
-  }
-  public String getId() { return id ; }
-  public void setId(String id) { this.id = id ; }
-  
-  public String getName() { return name ; }
-  public void setName(String name) { this.name = name ; }
+  private String         id;
 
-  public List<Calendar> getCalendars() { return calendars ; }
-  public void setCalendars(List<Calendar> calendars) { this.calendars = calendars ; }
+  private String         name;
+
+  private List<Calendar> calendars;
+
+  public GroupCalendarData(String id, String name, List<Calendar> calendars) throws Exception {
+    this.id = id;
+    this.name = name;
+    this.calendars = calendars;
+  }
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public List<Calendar> getCalendars() {
+    return calendars;
+  }
+
+  public void setCalendars(List<Calendar> calendars) {
+    this.calendars = calendars;
+  }
+
   public Calendar getCalendarById(String calendarId) {
-    if(calendarId != null && calendars != null && !calendars.isEmpty()) {
+    if (calendarId != null && calendars != null && !calendars.isEmpty()) {
       for (Calendar cal : calendars) {
-        if(calendarId.equals(cal.getId())) {
-          return cal ;
+        if (calendarId.equals(cal.getId())) {
+          return cal;
         }
       }
     }
-    return null ;
+    return null;
   }
 }

@@ -89,17 +89,17 @@ public class Conversation {
    * @param message the message 
    */
   public void addMessage(HistoricalMessageImpl message) {
-    if(message == null) return;
+    if (message == null)
+      return;
     boolean hasExist = false;
-    if(message.getId() != null)
-      for(HistoricalMessageImpl hisMessage: messageList)
-      {
-        if(message.getId().equals(hisMessage.getId()) && message.getFrom().equals(hisMessage.getFrom())){
+    if (message.getId() != null)
+      for (HistoricalMessageImpl hisMessage : messageList) {
+        if (message.getId().equals(hisMessage.getId()) && message.getFrom().equals(hisMessage.getFrom())) {
           hasExist = true;
           break;
         }
       }
-    if(!hasExist)
+    if (!hasExist)
       messageList.add(message);
   }
 

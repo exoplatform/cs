@@ -34,7 +34,7 @@ public class ErrorMessageFilter extends AndFilter {
    * Class logger.
    */
   private final Log log = ExoLogger.getLogger("cs.chat.service");
-  
+
   public ErrorMessageFilter() {
     super();
     addFilter(new PacketTypeFilter(Message.class));

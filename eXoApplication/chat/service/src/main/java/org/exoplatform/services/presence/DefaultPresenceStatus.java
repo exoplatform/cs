@@ -33,57 +33,62 @@ import org.exoplatform.services.xmpp.history.impl.jcr.HistoryImpl;
  */
 
 public class DefaultPresenceStatus {
-    
-  private static final Log log = ExoLogger.getLogger(DefaultPresenceStatus.class);
-  
-  public final static String DEFAULT_STATUS              =     "default_presence_status";
-  
-  private String status_ = DEFAULT_STATUS;
-  
+
+  private static final Log   log            = ExoLogger.getLogger(DefaultPresenceStatus.class);
+
+  public final static String DEFAULT_STATUS = "default_presence_status";
+
+  private String             status_        = DEFAULT_STATUS;
+
   public String getStatus_() {
     return status_;
   }
-  
-  public DefaultPresenceStatus() {}
-  
-  public DefaultPresenceStatus(InitParams param){
+
+  public DefaultPresenceStatus() {
+  }
+
+  public DefaultPresenceStatus(InitParams param) {
     PropertiesParam pparam = param.getPropertiesParam("presence-status");
-    if(pparam != null){
-      status_ = (pparam.getProperty("mode") == null)?DEFAULT_STATUS:pparam.getProperty("mode");
+    if (pparam != null) {
+      status_ = (pparam.getProperty("mode") == null) ? DEFAULT_STATUS : pparam.getProperty("mode");
     }
   }
 
   /**
    * Getting user chat status**/
-  public String getPreviousStatus(String userId){
-    //get status from jcr here
+  public String getPreviousStatus(String userId) {
+    // get status from jcr here
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     HistoryImpl history = (HistoryImpl) container.getComponentInstanceOfType(HistoryImpl.class);
     SessionProvider provider = SessionProvider.createSystemProvider();
     String ps = null;
     try {
       ps = history.getPresenceStatusHistory(provider, userId);
-      if (ps == null) ps = getStatus_();//set default presence status
+      if (ps == null)
+        ps = getStatus_();// set default presence status
     } finally {
-      if(provider != null) provider.close();
+      if (provider != null)
+        provider.close();
     }
     return ps;
   }
-  
+
   /**
    * Saving user chat status**/
-  public void savePresenceStatus(String userId, String status){
-    //if can not get status form jcr, then set status default
+  public void savePresenceStatus(String userId, String status) {
+    // if can not get status form jcr, then set status default
     SessionProvider provider = SessionProvider.createSystemProvider();
     try {
       ExoContainer container = ExoContainerContext.getCurrentContainer();
       HistoryImpl history = (HistoryImpl) container.getComponentInstanceOfType(HistoryImpl.class);
-      history.savePresenceStatus(provider, userId, status);  
+      history.savePresenceStatus(provider, userId, status);
     } catch (Exception e) {
-      if (log.isWarnEnabled()) log.warn("Error when saving present status!", e);
+      if (log.isWarnEnabled())
+        log.warn("Error when saving present status!", e);
     } finally {
-      if(provider != null) provider.close();
+      if (provider != null)
+        provider.close();
     }
-    
+
   }
 }

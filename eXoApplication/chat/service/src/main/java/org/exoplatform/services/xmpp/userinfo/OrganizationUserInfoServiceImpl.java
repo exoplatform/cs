@@ -16,8 +16,6 @@
  */
 package org.exoplatform.services.xmpp.userinfo;
 
-import org.exoplatform.container.PortalContainer;
-import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.OrganizationService;
@@ -35,7 +33,7 @@ public class OrganizationUserInfoServiceImpl implements UserInfoService {
   /**
    * Logger.
    */
-  private final Log                        log                    = ExoLogger.getLogger("cs.chat.service");
+  private final Log                 log = ExoLogger.getLogger("cs.chat.service");
 
   /**
    * 
@@ -43,13 +41,13 @@ public class OrganizationUserInfoServiceImpl implements UserInfoService {
   private final OrganizationService organizationService;
 
   protected void start() {
-    //PortalContainer manager = PortalContainer.getInstance() ;
-    //((ComponentRequestLifecycle)organizationService).startRequest(manager);
+    // PortalContainer manager = PortalContainer.getInstance() ;
+    // ((ComponentRequestLifecycle)organizationService).startRequest(manager);
   }
 
   protected void stop() {
-    //PortalContainer manager = PortalContainer.getInstance() ;
-    //((ComponentRequestLifecycle)organizationService).endRequest(manager);
+    // PortalContainer manager = PortalContainer.getInstance() ;
+    // ((ComponentRequestLifecycle)organizationService).endRequest(manager);
   }
 
   /**
@@ -83,7 +81,7 @@ public class OrganizationUserInfoServiceImpl implements UserInfoService {
       // userInfo.setUnit("office"); //temporary
       return userInfo;
     } catch (Exception e) {
-      if ( log.isDebugEnabled())
+      if (log.isDebugEnabled())
         e.printStackTrace();
     }
     return null;
@@ -96,10 +94,10 @@ public class OrganizationUserInfoServiceImpl implements UserInfoService {
     try {
       ConversationState curentState = ConversationState.getCurrent();
       String username = curentState.getIdentity().getUserId();
-      if(userID != null && userID.equals(username))
-        return (String)curentState.getIdentity().getSubject().getPrivateCredentials().iterator().next();
+      if (userID != null && userID.equals(username))
+        return (String) curentState.getIdentity().getSubject().getPrivateCredentials().iterator().next();
     } catch (Exception e) {
-      if ( log.isDebugEnabled())
+      if (log.isDebugEnabled())
         e.printStackTrace();
     }
     return null;

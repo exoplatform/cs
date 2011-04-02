@@ -58,7 +58,7 @@ public class MessageBean {
    * 
    */
   public MessageBean() {
-   
+
   }
 
   /**

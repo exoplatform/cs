@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
-import java.util.Set;
 import java.util.Map.Entry;
 
 import javax.mail.FetchProfile;
@@ -30,10 +28,12 @@ import com.sun.mail.imap.Rights;
 import com.sun.mail.imap.protocol.IMAPProtocol;
 
 public class MockImapFolder extends IMAPFolder {
-  private final Mailbox mailbox;
-  
+  private final Mailbox                mailbox;
+
   private final HashMap<Long, Message> messageMapByUUID = new HashMap<Long, Message>();
-  int i = 0;
+
+  int                                  i                = 0;
+
   protected MockImapFolder(ExoMockStore store, Mailbox mailbox) {
     super("INBOX", ';', store);
     this.mailbox = mailbox;
@@ -85,7 +85,7 @@ public class MockImapFolder extends IMAPFolder {
   }
 
   public boolean renameTo(Folder f) throws MessagingException {
-     return true;
+    return true;
   }
 
   public void open(int mode) throws MessagingException {
@@ -153,8 +153,7 @@ public class MockImapFolder extends IMAPFolder {
 
   /*
    * (non-Javadoc)
-   * @seecom.sun.mail.imap.IMAPFolder#addMessageCountListener(javax.mail.event.
-   * MessageCountListener)
+   * @seecom.sun.mail.imap.IMAPFolder#addMessageCountListener(javax.mail.event. MessageCountListener)
    */
   @Override
   public synchronized void addMessageCountListener(MessageCountListener l) {
@@ -169,7 +168,7 @@ public class MockImapFolder extends IMAPFolder {
   public synchronized Message[] addMessages(Message[] msgs) throws MessagingException {
     mailbox.addAll(Arrays.asList(msgs));
     for (Message msg : msgs) {
-      messageMapByUUID.put((long)++i, msg);
+      messageMapByUUID.put((long) ++i, msg);
     }
     return msgs;
   }
@@ -180,7 +179,6 @@ public class MockImapFolder extends IMAPFolder {
    */
   @Override
   public void addRights(ACL acl) throws MessagingException {
-    // TODO Auto-generated method stub
     throw new UnsupportedOperationException();
   }
 
@@ -190,59 +188,48 @@ public class MockImapFolder extends IMAPFolder {
    */
   @Override
   public synchronized AppendUID[] appendUIDMessages(Message[] msgs) throws MessagingException {
-    // TODO Auto-generated method stub
     throw new UnsupportedOperationException();
   }
 
   /*
    * (non-Javadoc)
-   * @see com.sun.mail.imap.IMAPFolder#copyMessages(javax.mail.Message[],
-   * javax.mail.Folder)
+   * @see com.sun.mail.imap.IMAPFolder#copyMessages(javax.mail.Message[], javax.mail.Folder)
    */
   @Override
   public synchronized void copyMessages(Message[] msgs, Folder folder) throws MessagingException {
-    // TODO Auto-generated method stub
     throw new UnsupportedOperationException();
   }
 
   /*
    * (non-Javadoc)
-   * @seecom.sun.mail.imap.IMAPFolder#doCommand(com.sun.mail.imap.IMAPFolder.
-   * ProtocolCommand)
+   * @seecom.sun.mail.imap.IMAPFolder#doCommand(com.sun.mail.imap.IMAPFolder. ProtocolCommand)
    */
   @Override
   public Object doCommand(ProtocolCommand cmd) throws MessagingException {
-    // TODO Auto-generated method stub
     throw new UnsupportedOperationException();
   }
 
   /*
    * (non-Javadoc)
-   * @seecom.sun.mail.imap.IMAPFolder#doCommandIgnoreFailure(com.sun.mail.imap.
-   * IMAPFolder.ProtocolCommand)
+   * @seecom.sun.mail.imap.IMAPFolder#doCommandIgnoreFailure(com.sun.mail.imap. IMAPFolder.ProtocolCommand)
    */
   @Override
   public Object doCommandIgnoreFailure(ProtocolCommand cmd) throws MessagingException {
-    // TODO Auto-generated method stub
     throw new UnsupportedOperationException();
   }
 
   /*
    * (non-Javadoc)
-   * @see com.sun.mail.imap.IMAPFolder#doOptionalCommand(java.lang.String,
-   * com.sun.mail.imap.IMAPFolder.ProtocolCommand)
+   * @see com.sun.mail.imap.IMAPFolder#doOptionalCommand(java.lang.String, com.sun.mail.imap.IMAPFolder.ProtocolCommand)
    */
   @Override
   public Object doOptionalCommand(String err, ProtocolCommand cmd) throws MessagingException {
-    // TODO Auto-generated method stub
     throw new UnsupportedOperationException();
   }
 
   /*
    * (non-Javadoc)
-   * @see
-   * com.sun.mail.imap.IMAPFolder#doProtocolCommand(com.sun.mail.imap.IMAPFolder
-   * .ProtocolCommand)
+   * @see com.sun.mail.imap.IMAPFolder#doProtocolCommand(com.sun.mail.imap.IMAPFolder .ProtocolCommand)
    */
   @Override
   protected Object doProtocolCommand(ProtocolCommand cmd) throws ProtocolException {
@@ -260,8 +247,7 @@ public class MockImapFolder extends IMAPFolder {
 
   /*
    * (non-Javadoc)
-   * @see com.sun.mail.imap.IMAPFolder#fetch(javax.mail.Message[],
-   * javax.mail.FetchProfile)
+   * @see com.sun.mail.imap.IMAPFolder#fetch(javax.mail.Message[], javax.mail.FetchProfile)
    */
   @Override
   public synchronized void fetch(Message[] msgs, FetchProfile fp) throws MessagingException {
@@ -274,7 +260,6 @@ public class MockImapFolder extends IMAPFolder {
    */
   @Override
   public synchronized void forceClose() throws MessagingException {
-    // TODO Auto-generated method stub
     throw new UnsupportedOperationException();
   }
 
@@ -284,7 +269,6 @@ public class MockImapFolder extends IMAPFolder {
    */
   @Override
   public ACL[] getACL() throws MessagingException {
-    // TODO Auto-generated method stub
     throw new UnsupportedOperationException();
   }
 
@@ -294,7 +278,6 @@ public class MockImapFolder extends IMAPFolder {
    */
   @Override
   public synchronized String[] getAttributes() throws MessagingException {
-    // TODO Auto-generated method stub
     throw new UnsupportedOperationException();
   }
 
@@ -304,7 +287,6 @@ public class MockImapFolder extends IMAPFolder {
    */
   @Override
   public synchronized int getDeletedMessageCount() throws MessagingException {
-    // TODO Auto-generated method stub
     throw new UnsupportedOperationException();
   }
 
@@ -452,9 +434,7 @@ public class MockImapFolder extends IMAPFolder {
 
   /*
    * (non-Javadoc)
-   * @see
-   * com.sun.mail.imap.IMAPFolder#releaseStoreProtocol(com.sun.mail.imap.protocol
-   * .IMAPProtocol)
+   * @see com.sun.mail.imap.IMAPFolder#releaseStoreProtocol(com.sun.mail.imap.protocol .IMAPProtocol)
    */
   @Override
   protected synchronized void releaseStoreProtocol(IMAPProtocol p) {
@@ -481,8 +461,7 @@ public class MockImapFolder extends IMAPFolder {
 
   /*
    * (non-Javadoc)
-   * @see com.sun.mail.imap.IMAPFolder#search(javax.mail.search.SearchTerm,
-   * javax.mail.Message[])
+   * @see com.sun.mail.imap.IMAPFolder#search(javax.mail.search.SearchTerm, javax.mail.Message[])
    */
   @Override
   public synchronized Message[] search(SearchTerm term, Message[] msgs) throws MessagingException {
@@ -500,8 +479,7 @@ public class MockImapFolder extends IMAPFolder {
 
   /*
    * (non-Javadoc)
-   * @see com.sun.mail.imap.IMAPFolder#setFlags(javax.mail.Message[],
-   * javax.mail.Flags, boolean)
+   * @see com.sun.mail.imap.IMAPFolder#setFlags(javax.mail.Message[], javax.mail.Flags, boolean)
    */
   @Override
   public synchronized void setFlags(Message[] msgs, Flags flag, boolean value) throws MessagingException {

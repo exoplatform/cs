@@ -30,7 +30,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.httpclient.HttpStatus;
-
 import org.exoplatform.rest.client.openfire.Utils.Response;
 import org.jivesoftware.openfire.user.User;
 import org.jivesoftware.openfire.user.UserAlreadyExistsException;
@@ -48,62 +47,78 @@ import org.w3c.dom.NodeList;
 
 public class ExoUserProvider implements UserProvider {
 
-  private static final String FIND_USERS_URL = "eXo.provider.exoUserProvider.findUsersURL";
-  private static final String FIND_USERS_METHHOD = "eXo.provider.exoUserProvider.findUsersMethod";
-  private static final String FIND_USERS_PARAMS = "eXo.provider.exoUserProvider.findUsersParams";
+  private static final String       FIND_USERS_URL     = "eXo.provider.exoUserProvider.findUsersURL";
 
-  private static final String GET_USERS_URL = "eXo.provider.exoUserProvider.getUsersURL";
-  private static final String GET_USERS_METHOD = "eXo.provider.exoUserProvider.getUsersMethod";
-  private static final String GET_USERS_PARAMS = "eXo.provider.exoUserProvider.getUsersParams";
-  
-  private static final String USERS_COUNT_URL = "eXo.provider.exoUserProvider.usersCountURL";
-  private static final String USERS_COUNT_METHOD = "eXo.provider.exoUserProvider.usersCountMethod";
-  private static final String USERS_COUNT_PARAMS = "eXo.provider.exoUserProvider.usersCountParams";
+  private static final String       FIND_USERS_METHHOD = "eXo.provider.exoUserProvider.findUsersMethod";
 
-  private static final String USER_INFO_URL = "eXo.provider.exoUserProvider.userInfoURL";
-  private static final String USER_INFO_METHOD = "eXo.provider.exoUserProvider.userInfoMethod";
-  private static final String USER_INFO_PARAMS = "eXo.provider.exoUserProvider.userInfoParams";
+  private static final String       FIND_USERS_PARAMS  = "eXo.provider.exoUserProvider.findUsersParams";
+
+  private static final String       GET_USERS_URL      = "eXo.provider.exoUserProvider.getUsersURL";
+
+  private static final String       GET_USERS_METHOD   = "eXo.provider.exoUserProvider.getUsersMethod";
+
+  private static final String       GET_USERS_PARAMS   = "eXo.provider.exoUserProvider.getUsersParams";
+
+  private static final String       USERS_COUNT_URL    = "eXo.provider.exoUserProvider.usersCountURL";
+
+  private static final String       USERS_COUNT_METHOD = "eXo.provider.exoUserProvider.usersCountMethod";
+
+  private static final String       USERS_COUNT_PARAMS = "eXo.provider.exoUserProvider.usersCountParams";
+
+  private static final String       USER_INFO_URL      = "eXo.provider.exoUserProvider.userInfoURL";
+
+  private static final String       USER_INFO_METHOD   = "eXo.provider.exoUserProvider.userInfoMethod";
+
+  private static final String       USER_INFO_PARAMS   = "eXo.provider.exoUserProvider.userInfoParams";
 
   // URL for searching user names.
-  private final String findUsersURL_;
+  private final String              findUsersURL_;
+
   // HTTP method for searching user names.
-  private final String findUsersMethod_;
+  private final String              findUsersMethod_;
+
   // Query parameters
-  private final Map<String, String> findUsersParams_; 
+  private final Map<String, String> findUsersParams_;
 
   // URL for getting all user names.
-  private final String getUsersURL_;
+  private final String              getUsersURL_;
+
   // HTTP method for getting all user names.
-  private final String getUsersMethod_;
+  private final String              getUsersMethod_;
+
   // Query parameters
-  private final Map<String, String> getUsersParams_; 
-  
+  private final Map<String, String> getUsersParams_;
+
   // URL for getting total number of user.
-  private final String usersCountURL_;
+  private final String              usersCountURL_;
+
   // HTTP method for getting total number of user.
-  private final String usersCountMethod_;
+  private final String              usersCountMethod_;
+
   // Query parameters
-  private final Map<String, String> usersCountParams_; 
-  
+  private final Map<String, String> usersCountParams_;
+
   // URL for getting user information about specified user.
-  private final String userInfoURL_;
+  private final String              userInfoURL_;
+
   // HTTP method for getting user information about specified user.
-  private final String userInfoMethod_;
+  private final String              userInfoMethod_;
+
   // Query parameters
-  private final Map<String, String> userInfoParams_; 
+  private final Map<String, String> userInfoParams_;
 
   public ExoUserProvider() {
     String t = JiveGlobals.getXMLProperty(FIND_USERS_URL);
-    
+
     findUsersURL_ = Utils.getBaseURL() + (t.endsWith("/") ? t : t + "/");
     findUsersMethod_ = JiveGlobals.getXMLProperty(FIND_USERS_METHHOD);
     findUsersParams_ = Utils.parseQuery(JiveGlobals.getXMLProperties(FIND_USERS_PARAMS));
-    
+
     t = JiveGlobals.getXMLProperty(GET_USERS_URL);
     getUsersURL_ = Utils.getBaseURL() + (t.endsWith("/") ? t : t + "/");
     getUsersMethod_ = JiveGlobals.getXMLProperty(GET_USERS_METHOD);
     getUsersParams_ = Utils.parseQuery(JiveGlobals.getXMLProperties(GET_USERS_PARAMS));
-    
+
     t = JiveGlobals.getXMLProperty(USERS_COUNT_URL);
     usersCountURL_ = Utils.getBaseURL() + (t.endsWith("/") ? t : t + "/");
     usersCountMethod_ = JiveGlobals.getXMLProperty(USERS_COUNT_METHOD);
@@ -114,44 +129,38 @@ public class ExoUserProvider implements UserProvider {
     userInfoMethod_ = JiveGlobals.getXMLProperty(USER_INFO_METHOD);
     userInfoParams_ = Utils.parseQuery(JiveGlobals.getXMLProperties(USER_INFO_PARAMS));
   }
-  
+
   /*
    * (non-Javadoc)
    * @see org.jivesoftware.openfire.user.UserProvider#findUsers(java.util.Set,java.lang.String)
    */
-  public Collection<User> findUsers(Set<String> fields, String query)
-      throws UnsupportedOperationException {
+  public Collection<User> findUsers(Set<String> fields, String query) throws UnsupportedOperationException {
     String url = findUsersURL_;
     String method = findUsersMethod_;
     if (query == null || "".equals(query) || fields.isEmpty())
       return Collections.emptyList();
     if (!getSearchFields().containsAll(fields))
-      throw new IllegalArgumentException("Search fields "
-          + fields + " are not valid.");
+      throw new IllegalArgumentException("Search fields " + fields + " are not valid.");
     Collection<String> usernames = findUsers(fields, query, url, method);
     return new UserCollection(usernames.toArray(new String[usernames.size()]));
   }
 
   /*
    * (non-Javadoc)
-   * @see org.jivesoftware.openfire.user.UserProvider#findUsers(java.util.Set,
-   *      java.lang.String, int, int)
+   * @see org.jivesoftware.openfire.user.UserProvider#findUsers(java.util.Set, java.lang.String, int, int)
    */
-  public Collection<User> findUsers(Set<String> fields, String query,
-      int startIndex, int numResults) throws UnsupportedOperationException {
+  public Collection<User> findUsers(Set<String> fields, String query, int startIndex, int numResults) throws UnsupportedOperationException {
     String url = findUsersURL_ + startIndex + "/" + (startIndex + numResults);
     String method = findUsersMethod_;
     if (query == null || "".equals(query) || fields.isEmpty())
       return Collections.emptyList();
     if (!getSearchFields().containsAll(fields))
-      throw new IllegalArgumentException("Search fields "
-          + fields + " are not valid.");
+      throw new IllegalArgumentException("Search fields " + fields + " are not valid.");
     Collection<String> usernames = findUsers(fields, query, url, method);
     return new UserCollection(usernames.toArray(new String[usernames.size()]));
   }
 
-  private Collection<String> findUsers(Set<String> fields, String query,
-      String url, String method) {
+  private Collection<String> findUsers(Set<String> fields, String query, String url, String method) {
     Response resp = null;
     HashMap<String, String> params = new HashMap<String, String>(findUsersParams_);
     for (String field : fields) {
@@ -168,9 +177,7 @@ public class ExoUserProvider implements UserProvider {
       else if ("GET".equalsIgnoreCase(method))
         resp = Utils.doGet(new URL(url), params);
       else
-        throw new IllegalStateException(
-            "Configuration error, only HTTP methods 'POST' or 'GET' are allowed, "
-            + "but found '" + method + "'.");
+        throw new IllegalStateException("Configuration error, only HTTP methods 'POST' or 'GET' are allowed, " + "but found '" + method + "'.");
     } catch (Exception e) {
       e.printStackTrace();
       return null;
@@ -180,8 +187,7 @@ public class ExoUserProvider implements UserProvider {
     } else if (resp.getStatus() == HttpStatus.SC_NOT_FOUND) {
       return Collections.emptyList();
     }
-    throw new IllegalStateException("Unknown response status : " +
-        resp.getStatus());
+    throw new IllegalStateException("Unknown response status : " + resp.getStatus());
   }
 
   /*
@@ -207,20 +213,16 @@ public class ExoUserProvider implements UserProvider {
       else if ("GET".equalsIgnoreCase(method))
         resp = Utils.doGet(new URL(url), params);
       else
-        throw new IllegalStateException(
-            "Configuration error, only HTTP methods 'POST' or 'GET' are allowed, "
-            + "but found '" + method + "'.");
+        throw new IllegalStateException("Configuration error, only HTTP methods 'POST' or 'GET' are allowed, " + "but found '" + method + "'.");
     } catch (Exception e) {
       e.printStackTrace();
       return -1;
     }
     if (resp.getStatus() == HttpStatus.SC_OK) {
       Document d = resp.getResponseDoc();
-      return Integer.valueOf(d.getDocumentElement().getElementsByTagName(
-          "number").item(0).getTextContent());
+      return Integer.valueOf(d.getDocumentElement().getElementsByTagName("number").item(0).getTextContent());
     }
-    throw new IllegalStateException("Unknown response status : " +
-        resp.getStatus());
+    throw new IllegalStateException("Unknown response status : " + resp.getStatus());
   }
 
   /*
@@ -257,12 +259,10 @@ public class ExoUserProvider implements UserProvider {
     try {
       if ("POST".equalsIgnoreCase(method))
         resp = Utils.doPost(new URL(url), params);
-      else if("GET".equalsIgnoreCase(method))
+      else if ("GET".equalsIgnoreCase(method))
         resp = Utils.doGet(new URL(url), params);
       else
-        throw new IllegalStateException(
-            "Configuration error, only HTTP methods 'POST' or 'GET' are allowed, "
-            + "but found '" + method + "'.");
+        throw new IllegalStateException("Configuration error, only HTTP methods 'POST' or 'GET' are allowed, " + "but found '" + method + "'.");
     } catch (Exception e) {
       e.printStackTrace();
       return null;
@@ -270,8 +270,7 @@ public class ExoUserProvider implements UserProvider {
     if (resp.getStatus() == HttpStatus.SC_OK) {
       return createUserList(resp.getResponseDoc());
     }
-    throw new IllegalStateException("Unknown response status : " +
-        resp.getStatus());
+    throw new IllegalStateException("Unknown response status : " + resp.getStatus());
   }
 
   /*
@@ -279,7 +278,7 @@ public class ExoUserProvider implements UserProvider {
    * @see org.jivesoftware.openfire.user.UserProvider#isEmailRequired()
    */
   public boolean isEmailRequired() {
-	return true;
+    return true;
   }
 
   /*
@@ -287,7 +286,7 @@ public class ExoUserProvider implements UserProvider {
    * @see org.jivesoftware.openfire.user.UserProvider#isNameRequired()
    */
   public boolean isNameRequired() {
-	return true;
+    return true;
   }
 
   /*
@@ -313,25 +312,20 @@ public class ExoUserProvider implements UserProvider {
       else if ("GET".equalsIgnoreCase(method))
         resp = Utils.doGet(new URL(url), params);
       else
-        throw new IllegalStateException(
-            "Configuration error, only HTTP methods 'POST' or 'GET' are allowed, "
-            + "but found '" + method + "'.");
+        throw new IllegalStateException("Configuration error, only HTTP methods 'POST' or 'GET' are allowed, " + "but found '" + method + "'.");
     } catch (Exception e) {
       e.printStackTrace();
       return null;
     }
     if (resp.getStatus() == HttpStatus.SC_OK) {
       Document d = resp.getResponseDoc();
-      String name = d.getDocumentElement().getElementsByTagName("first-name")
-          .item(0).getTextContent();
-      String email = d.getDocumentElement().getElementsByTagName("email").item(
-          0).getTextContent();
+      String name = d.getDocumentElement().getElementsByTagName("first-name").item(0).getTextContent();
+      String email = d.getDocumentElement().getElementsByTagName("email").item(0).getTextContent();
       return new User(username, name, email, new Date(), new Date());
     } else if (resp.getStatus() == HttpStatus.SC_NOT_FOUND) {
       throw new UserNotFoundException("User '" + username + "' not found!");
     }
-    throw new IllegalStateException("Unknown response status : " +
-        resp.getStatus());
+    throw new IllegalStateException("Unknown response status : " + resp.getStatus());
   }
 
   private List<String> createUserList(Document d) {
@@ -344,51 +338,41 @@ public class ExoUserProvider implements UserProvider {
 
   /*
    * (non-Javadoc)
-   * @see org.jivesoftware.openfire.user.UserProvider#setCreationDate(java.lang.String,
-   *      java.util.Date)
+   * @see org.jivesoftware.openfire.user.UserProvider#setCreationDate(java.lang.String, java.util.Date)
    */
-  public void setCreationDate(String username, Date creationDate)
-      throws UserNotFoundException {
+  public void setCreationDate(String username, Date creationDate) throws UserNotFoundException {
     throw new UnsupportedOperationException();
   }
 
   /*
    * (non-Javadoc)
-   * @see org.jivesoftware.openfire.user.UserProvider#setEmail(java.lang.String,
-   *      java.lang.String)
+   * @see org.jivesoftware.openfire.user.UserProvider#setEmail(java.lang.String, java.lang.String)
    */
-  public void setEmail(String username, String email)
-      throws UserNotFoundException {
+  public void setEmail(String username, String email) throws UserNotFoundException {
     throw new UnsupportedOperationException();
   }
 
   /*
    * (non-Javadoc)
-   * @see org.jivesoftware.openfire.user.UserProvider#setModificationDate(java.lang.String,
-   *      java.util.Date)
+   * @see org.jivesoftware.openfire.user.UserProvider#setModificationDate(java.lang.String, java.util.Date)
    */
-  public void setModificationDate(String username, Date modificationDate)
-      throws UserNotFoundException {
+  public void setModificationDate(String username, Date modificationDate) throws UserNotFoundException {
     throw new UnsupportedOperationException();
   }
 
   /*
    * (non-Javadoc)
-   * @see org.jivesoftware.openfire.user.UserProvider#setName(java.lang.String,
-   *      java.lang.String)
+   * @see org.jivesoftware.openfire.user.UserProvider#setName(java.lang.String, java.lang.String)
    */
-  public void setName(String username, String name)
-      throws UserNotFoundException {
+  public void setName(String username, String name) throws UserNotFoundException {
     throw new UnsupportedOperationException();
   }
 
   /*
    * (non-Javadoc)
-   * @see org.jivesoftware.openfire.user.UserProvider#createUser(java.lang.String,
-   *      java.lang.String, java.lang.String, java.lang.String)
+   * @see org.jivesoftware.openfire.user.UserProvider#createUser(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
    */
-  public User createUser(String username, String password, String name,
-      String email) throws UserAlreadyExistsException {
+  public User createUser(String username, String password, String name, String email) throws UserAlreadyExistsException {
     throw new UnsupportedOperationException();
   }
 

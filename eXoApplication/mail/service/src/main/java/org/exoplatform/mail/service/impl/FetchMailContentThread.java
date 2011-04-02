@@ -30,7 +30,7 @@ import org.exoplatform.mail.service.MimeMessageParser;
 
 public class FetchMailContentThread implements Runnable {
 
-  private DataStorage                                  storage_;
+  private DataStorage                                     storage_;
 
   private String                                          username_;
 
@@ -41,15 +41,10 @@ public class FetchMailContentThread implements Runnable {
   private javax.mail.Folder                               folder_;
 
   private int                                             numberMessage_ = 0;
-  
-  private MailService mailService;
 
-  public FetchMailContentThread(MailService mailService, DataStorage storage,
-                                LinkedHashMap<javax.mail.Message, List<String>> msgMap,
-                                int numberMessage,
-                                javax.mail.Folder folder,
-                                String username,
-                                String accountId) throws Exception {
+  private MailService                                     mailService;
+
+  public FetchMailContentThread(MailService mailService, DataStorage storage, LinkedHashMap<javax.mail.Message, List<String>> msgMap, int numberMessage, javax.mail.Folder folder, String username, String accountId) throws Exception {
     this.mailService = mailService;
     storage_ = storage;
     username_ = username;
@@ -63,7 +58,7 @@ public class FetchMailContentThread implements Runnable {
     try {
       downloadMailContent();
     } catch (Exception e) {
-      //e.printStackTrace();
+      // e.printStackTrace();
     }
   }
 
@@ -71,7 +66,7 @@ public class FetchMailContentThread implements Runnable {
     int j = 0;
     Message msg;
     List<javax.mail.Message> msgList = new ArrayList<javax.mail.Message>(msgMap_.keySet());
-    
+
     if (!folder_.isOpen())
       folder_.open(Folder.READ_WRITE);
     while (j < numberMessage_) {
@@ -82,11 +77,7 @@ public class FetchMailContentThread implements Runnable {
         break;
       }
       System.out.println("save msg to database: " + msg.getSubject());
-      storage_.saveTotalMessage(username_,
-                                accountId_,
-                                MimeMessageParser.getMessageId(msg),
-                                msg,
-                                null);
+      storage_.saveTotalMessage(username_, accountId_, MimeMessageParser.getMessageId(msg), msg, null);
       j++;
     }
   }
@@ -96,7 +87,7 @@ public class FetchMailContentThread implements Runnable {
       if (folder_.isOpen())
         folder_.close(true);
     } catch (Exception e) {
-     // e.printStackTrace();
+      // e.printStackTrace();
     }
   }
 }

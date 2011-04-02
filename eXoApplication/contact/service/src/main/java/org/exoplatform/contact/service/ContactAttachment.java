@@ -35,58 +35,84 @@ import org.exoplatform.services.jcr.RepositoryService;
  * 
  */
 public class ContactAttachment {
-  private String id ;
-  private String fileName ;
-  private String mimeType ;
-  private String workspace ;
-  private byte[] imageBytes ;
-  
+  private String id;
+
+  private String fileName;
+
+  private String mimeType;
+
+  private String workspace;
+
+  private byte[] imageBytes;
+
   public String getDataPath() throws Exception {
-    Node attachmentData ;
-    try{
-      attachmentData = (Node)getSesison().getItem(getId()) ;      
-    }catch (ItemNotFoundException e) {
-      e.printStackTrace() ;
-      return null ;
+    Node attachmentData;
+    try {
+      attachmentData = (Node) getSesison().getItem(getId());
+    } catch (ItemNotFoundException e) {
+      e.printStackTrace();
+      return null;
     }
-    return attachmentData.getPath() ;
+    return attachmentData.getPath();
   }
-  public String getId() { return id ; }
-  public void   setId(String s) { id = s ; }
-  
-  public String getWorkspace() { return workspace ; }
-  public void setWorkspace(String ws) { workspace = ws ; }
-  
-  public String getFileName()  { return fileName ; }
-  public void   setFileName(String s) { fileName = s ; }
-  
-  public String getMimeType() { return mimeType ; }
-  public void setMimeType(String s) { mimeType = s ;}
-  
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String s) {
+    id = s;
+  }
+
+  public String getWorkspace() {
+    return workspace;
+  }
+
+  public void setWorkspace(String ws) {
+    workspace = ws;
+  }
+
+  public String getFileName() {
+    return fileName;
+  }
+
+  public void setFileName(String s) {
+    fileName = s;
+  }
+
+  public String getMimeType() {
+    return mimeType;
+  }
+
+  public void setMimeType(String s) {
+    mimeType = s;
+  }
+
   public void setInputStream(InputStream input) throws Exception {
     if (input != null) {
-      imageBytes = new byte[input.available()] ; 
-      input.read(imageBytes) ;
-    }
-    else imageBytes = null ;
+      imageBytes = new byte[input.available()];
+      input.read(imageBytes);
+    } else
+      imageBytes = null;
   }
-  public InputStream getInputStream() throws Exception { 
-    if(imageBytes != null) return new ByteArrayInputStream(imageBytes) ;  
-    Node attachment ;
-    try{
-      attachment = (Node)getSesison().getItem(getId()) ;      
-    }catch (ItemNotFoundException e) {  
-      return null ;
+
+  public InputStream getInputStream() throws Exception {
+    if (imageBytes != null)
+      return new ByteArrayInputStream(imageBytes);
+    Node attachment;
+    try {
+      attachment = (Node) getSesison().getItem(getId());
+    } catch (ItemNotFoundException e) {
+      return null;
     } catch (PathNotFoundException ex) {
-      return  null;
+      return null;
     }
-    return attachment.getNode("jcr:content").getProperty("jcr:data").getStream() ;
+    return attachment.getNode("jcr:content").getProperty("jcr:data").getStream();
   }
-  
-  private Session getSesison()throws Exception {
-    RepositoryService repoService = (RepositoryService)PortalContainer
-      .getInstance().getComponentInstanceOfType(RepositoryService.class) ;
-    return repoService.getCurrentRepository().getSystemSession(workspace) ;
+
+  private Session getSesison() throws Exception {
+    RepositoryService repoService = (RepositoryService) PortalContainer.getInstance().getComponentInstanceOfType(RepositoryService.class);
+    return repoService.getCurrentRepository().getSystemSession(workspace);
   }
-  
+
 }

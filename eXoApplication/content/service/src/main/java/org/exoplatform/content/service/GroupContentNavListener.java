@@ -17,16 +17,17 @@ import org.exoplatform.services.organization.GroupEventListener;
  */
 public class GroupContentNavListener extends GroupEventListener {
 
-  public GroupContentNavListener() throws Exception {}
-  
-  public void preDelete(Group group) throws Exception {
-    PortalContainer container = PortalContainer.getInstance() ;
-    ContentDAO contentService = (ContentDAO) container.getComponentInstanceOfType(ContentDAO.class) ;
-    
-    String owner = group.getId() ;
-    ContentNavigation content = contentService.get(owner) ;
-    if (content != null) contentService.remove(owner) ;
+  public GroupContentNavListener() throws Exception {
   }
 
-  
+  public void preDelete(Group group) throws Exception {
+    PortalContainer container = PortalContainer.getInstance();
+    ContentDAO contentService = (ContentDAO) container.getComponentInstanceOfType(ContentDAO.class);
+
+    String owner = group.getId();
+    ContentNavigation content = contentService.get(owner);
+    if (content != null)
+      contentService.remove(owner);
+  }
+
 }

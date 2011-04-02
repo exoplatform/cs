@@ -19,14 +19,14 @@ public class UserContentNavListener extends UserEventListener {
 
   public UserContentNavListener() throws Exception {
   }
-  
+
   public void preDelete(User user) throws Exception {
-    PortalContainer container = PortalContainer.getInstance() ;
-    ContentDAO contentService = (ContentDAO) container.getComponentInstanceOfType(ContentDAO.class) ;
-    String owner = user.getUserName() ;
-    ContentNavigation content = contentService.get(owner) ;
-    if (content != null) contentService.remove(owner) ;
+    PortalContainer container = PortalContainer.getInstance();
+    ContentDAO contentService = (ContentDAO) container.getComponentInstanceOfType(ContentDAO.class);
+    String owner = user.getUserName();
+    ContentNavigation content = contentService.get(owner);
+    if (content != null)
+      contentService.remove(owner);
   }
-  
 
 }

@@ -32,19 +32,16 @@ public class ActionListener<T extends UIComponent> extends UIExtensionEventListe
 
   @Override
   protected Map<String, Object> createContext(Event<T> event) throws Exception {
-    // TODO Auto-generated method stub
     return null;
   }
 
   @Override
   protected String getExtensionType() {
-    // TODO Auto-generated method stub
     return null;
   }
 
   @Override
   protected void processEvent(Event<T> event) throws Exception {
-    // TODO Auto-generated method stub
     
   }
 

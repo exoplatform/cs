@@ -15,7 +15,6 @@ public class NewGroupListener extends GroupEventListener {
 
   protected ContactService contactService_;
 
-
   /**
    * 
    * @param calendarService Calendar service geeting from the Portlet Container
@@ -31,10 +30,11 @@ public class NewGroupListener extends GroupEventListener {
     AddressBook addressbook = new AddressBook();
     addressbook.setId(groupId);
     addressbook.setName(group.getGroupName());
-    addressbook.setViewPermissionGroups(new String[] {groupId, groupId + Utils.COLON + Utils.MEMBERSHIP + Utils.MANAGER});
-    addressbook.setEditPermissionGroups(new String[] {groupId + Utils.COLON + Utils.MEMBERSHIP + Utils.MANAGER});
+    addressbook.setViewPermissionGroups(new String[] { groupId, groupId + Utils.COLON + Utils.MEMBERSHIP + Utils.MANAGER });
+    addressbook.setEditPermissionGroups(new String[] { groupId + Utils.COLON + Utils.MEMBERSHIP + Utils.MANAGER });
     contactService_.savePublicAddressBook(addressbook, isNew);
   }
+
   @Override
   public void postDelete(Group group) throws Exception {
 

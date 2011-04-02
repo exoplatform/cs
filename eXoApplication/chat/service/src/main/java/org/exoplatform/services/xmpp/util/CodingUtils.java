@@ -18,7 +18,6 @@ package org.exoplatform.services.xmpp.util;
 
 import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
 
-
 /**
  * Created by The eXo Platform SAS.
  * 
@@ -29,8 +28,9 @@ public class CodingUtils {
 
   public static String encodeToHex(String string) {
     if (string != null)
-     return new String(HexBin.encode(string.getBytes()));
-    else return string;
+      return new String(HexBin.encode(string.getBytes()));
+    else
+      return string;
   }
 
   public static String decodeFromHex(String hexstring) {

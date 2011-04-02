@@ -36,69 +36,101 @@ import org.exoplatform.services.jcr.util.IdGenerator;
  * Sep 28, 2007  
  */
 
-public class Attachment  {
-  private String id ;
-  private String name ;
-  private String mimeType ;
-  private long size ;
-  private  byte[] imageBytes ;
-  private Calendar lastModified ;
-  private String workspace ;
-  private String resourceId ;
+public class Attachment {
+  private String   id;
+
+  private String   name;
+
+  private String   mimeType;
+
+  private long     size;
+
+  private byte[]   imageBytes;
+
+  private Calendar lastModified;
+
+  private String   workspace;
+
+  private String   resourceId;
+
   /**
    * This class use for keep data and infomation about attachments
    * the id will automatic generate when create new object
    */
   public Attachment() {
-    id =  "Attachment" + IdGenerator.generate() ;
+    id = "Attachment" + IdGenerator.generate();
   }
 
-  public String getId() { return id ; }
-  public void setId(String id) { this.id = id ; }
+  public String getId() {
+    return id;
+  }
 
-  public String getMimeType() { return mimeType ; }
-  public void setMimeType(String mimeType_) { this.mimeType = mimeType_ ; }
+  public void setId(String id) {
+    this.id = id;
+  }
 
-  public long getSize() { return size ; }
-  public void setSize(long size_) { this.size = size_ ; }
+  public String getMimeType() {
+    return mimeType;
+  }
 
-  public String getName() { return name ; }
-  public void setName(String name_) { this.name = name_ ; }
-  
+  public void setMimeType(String mimeType_) {
+    this.mimeType = mimeType_;
+  }
+
+  public long getSize() {
+    return size;
+  }
+
+  public void setSize(long size_) {
+    this.size = size_;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name_) {
+    this.name = name_;
+  }
+
   public String getDataPath() throws Exception {
-    Node attachmentData ;
-    try{
-      attachmentData = (Node)getSesison().getItem(getId()) ;      
-    }catch (ItemNotFoundException e) {
-      e.printStackTrace() ;
-      return null ;
+    Node attachmentData;
+    try {
+      attachmentData = (Node) getSesison().getItem(getId());
+    } catch (ItemNotFoundException e) {
+      e.printStackTrace();
+      return null;
     }
-    return attachmentData.getPath() ;
+    return attachmentData.getPath();
   }
-  private Session getSesison()throws Exception {
-    RepositoryService repoService = (RepositoryService)PortalContainer.getInstance().getComponentInstanceOfType(RepositoryService.class) ;
-    return repoService.getCurrentRepository().getSystemSession(workspace) ;
+
+  private Session getSesison() throws Exception {
+    RepositoryService repoService = (RepositoryService) PortalContainer.getInstance().getComponentInstanceOfType(RepositoryService.class);
+    return repoService.getCurrentRepository().getSystemSession(workspace);
   }
+
   public void setInputStream(InputStream input) throws Exception {
     if (input != null) {
-      imageBytes = new byte[input.available()] ; 
-      input.read(imageBytes) ;
-    }
-    else imageBytes = null ;
+      imageBytes = new byte[input.available()];
+      input.read(imageBytes);
+    } else
+      imageBytes = null;
   }
-  public InputStream getInputStream() throws Exception { 
-    if(imageBytes != null) return new ByteArrayInputStream(imageBytes) ;  
-    Node attachment ;
-    try{
-      attachment = (Node)getSesison().getItem(getId()) ;      
-    }catch (ItemNotFoundException e) {  
-      return null ;
+
+  public InputStream getInputStream() throws Exception {
+    if (imageBytes != null)
+      return new ByteArrayInputStream(imageBytes);
+    Node attachment;
+    try {
+      attachment = (Node) getSesison().getItem(getId());
+    } catch (ItemNotFoundException e) {
+      return null;
     } catch (PathNotFoundException ex) {
-      return  null;
+      return null;
     }
-    return attachment.getNode("jcr:content").getProperty("jcr:data").getStream() ;
+    return attachment.getNode("jcr:content").getProperty("jcr:data").getStream();
   }
-  
+
   public void setLastModified(Calendar lastModified) {
     this.lastModified = lastModified;
   }

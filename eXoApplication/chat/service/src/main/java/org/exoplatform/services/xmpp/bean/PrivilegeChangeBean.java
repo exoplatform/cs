@@ -16,7 +16,6 @@
  */
 package org.exoplatform.services.xmpp.bean;
 
-
 /**
  * Created by The eXo Platform SAS.
  * 

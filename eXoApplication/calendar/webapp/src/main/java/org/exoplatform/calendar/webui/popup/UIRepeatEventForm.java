@@ -211,8 +211,7 @@ public class UIRepeatEventForm extends UIForm implements UIPopupComponent {
 
     @Override
     public void execute(Event<UIRepeatEventForm> event) throws Exception {
-      // TODO Auto-generated method stub
-      UIRepeatEventForm uiForm = event.getSource();  
+        UIRepeatEventForm uiForm = event.getSource();  
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction chilPopup =  uiContainer.getChild(UIPopupAction.class) ;
       chilPopup.deActivate() ;
@@ -225,8 +224,7 @@ public class UIRepeatEventForm extends UIForm implements UIPopupComponent {
 
     @Override
     public void execute(Event<UIRepeatEventForm> event) throws Exception {
-      // TODO Auto-generated method stub
-      UIRepeatEventForm uiForm = event.getSource();
+        UIRepeatEventForm uiForm = event.getSource();
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UICalendarPortlet uiPortlet = uiContainer.getAncestorOfType(UICalendarPortlet.class);
       UIPopupAction chilPopup =  uiContainer.getChild(UIPopupAction.class) ;
@@ -445,7 +443,6 @@ public class UIRepeatEventForm extends UIForm implements UIPopupComponent {
    */
   @Override
   public void activate() throws Exception {
-    // TODO Auto-generated method stub
 
   }
 
@@ -454,7 +451,6 @@ public class UIRepeatEventForm extends UIForm implements UIPopupComponent {
    */
   @Override
   public void deActivate() throws Exception {
-    // TODO Auto-generated method stub
 
   }
   

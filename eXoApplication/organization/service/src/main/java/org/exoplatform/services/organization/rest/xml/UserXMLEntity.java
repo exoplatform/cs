@@ -41,7 +41,8 @@ public class UserXMLEntity implements StreamingOutput {
     user_ = user;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
    * @see org.exoplatform.services.rest.transformer.SerializableEntity#writeObject(java.io.OutputStream)
    */
   public void write(OutputStream _out) throws IOException {
@@ -72,5 +73,5 @@ public class UserXMLEntity implements StreamingOutput {
       throw new IOException(e.getMessage());
     }
   }
-    
+
 }

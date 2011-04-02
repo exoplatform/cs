@@ -25,17 +25,17 @@ import org.exoplatform.services.uistate.bean.UIStateDataBean;
  * Jan 25, 2010  
  */
 public interface UIStateSession {
-  
+
   /**
    * 
    * @return the UIStateDataBean
    */
   UIStateDataBean getUIStateData();
-  
+
   /**
    * 
    * @param uiStateData the UIStateDataBean
    */
   void setUIStateData(UIStateDataBean uiStateData);
-  
+
 }

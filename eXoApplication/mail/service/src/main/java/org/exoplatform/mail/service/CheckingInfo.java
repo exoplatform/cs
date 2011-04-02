@@ -16,7 +16,6 @@
  */
 package org.exoplatform.mail.service;
 
-
 /**
  * Created by The eXo Platform SAS
  * Author : Nam Phung
@@ -24,33 +23,48 @@ package org.exoplatform.mail.service;
  * Apr 1, 2008  
  */
 public class CheckingInfo {
-  public static final int START_CHECKMAIL_STATUS = 101;
-  public static final int NO_UPDATE_STATUS = 201;
-  public static final int DOWNLOADING_MAIL_STATUS = 150;
-  public static final int FINISHED_CHECKMAIL_STATUS = 200;
-  public static final int REQUEST_STOP_STATUS = 202;
-  public static final int EXECUTING_FILTER = 203;
-  public static final int CONNECTION_FAILURE = 102 ;
-  public static final int RETRY_PASSWORD = 103 ;
-  public static final int COMMON_ERROR = 104 ;
-  
-  public static final int START_SYNC_FOLDER = 301;
-  public static final int FINISH_SYNC_FOLDER = 302;
-  public static final int FINISHED_SYNC_FOLDER = 303;
+  public static final int    START_CHECKMAIL_STATUS     = 101;
 
-  public static final String START_MSG_KEY = "starting-status".intern();
-  public static final String FETCHING_MSG_KEY = "fetching-mail".intern();
-  public static final String START_SYNC_FOLDER_MSG_KEY = "start-sync-folder".intern();
+  public static final int    NO_UPDATE_STATUS           = 201;
+
+  public static final int    DOWNLOADING_MAIL_STATUS    = 150;
+
+  public static final int    FINISHED_CHECKMAIL_STATUS  = 200;
+
+  public static final int    REQUEST_STOP_STATUS        = 202;
+
+  public static final int    EXECUTING_FILTER           = 203;
+
+  public static final int    CONNECTION_FAILURE         = 102;
+
+  public static final int    RETRY_PASSWORD             = 103;
+
+  public static final int    COMMON_ERROR               = 104;
+
+  public static final int    START_SYNC_FOLDER          = 301;
+
+  public static final int    FINISH_SYNC_FOLDER         = 302;
+
+  public static final int    FINISHED_SYNC_FOLDER       = 303;
+
+  public static final String START_MSG_KEY              = "starting-status".intern();
+
+  public static final String FETCHING_MSG_KEY           = "fetching-mail".intern();
+
+  public static final String START_SYNC_FOLDER_MSG_KEY  = "start-sync-folder".intern();
+
   public static final String FINISH_SYNC_FOLDER_MSG_KEY = "finish-sync-folder".intern();
-  public static final String FINISH_MSG_KEY = "finish-check-mail".intern();
-  public static final String FINISH_BY_INTERUPTED_KEY = "finish-check-mail-by-interrupted".intern();
-  public static final String CONNECTION_FAILURE_KEY = "error-connection-fail".intern();
-  public static final String RETRY_PASSWORD_KEY = "msg-retry-password".intern();
-  public static final String COMMON_ERROR_KEY = "error-common".intern();
-  
-  
-  
-  
+
+  public static final String FINISH_MSG_KEY             = "finish-check-mail".intern();
+
+  public static final String FINISH_BY_INTERUPTED_KEY   = "finish-check-mail-by-interrupted".intern();
+
+  public static final String CONNECTION_FAILURE_KEY     = "error-connection-fail".intern();
+
+  public static final String RETRY_PASSWORD_KEY         = "msg-retry-password".intern();
+
+  public static final String COMMON_ERROR_KEY           = "error-common".intern();
+
   private int                totalMsg_                  = 0;
 
   private int                fetching_                  = 0;
@@ -72,16 +86,16 @@ public class CheckingInfo {
   private int                syncFolderStatus_          = 300;
 
   private StatusInfo         status_                    = new StatusInfo();
-  
-  
-  
-  
-  public int getTotalMsg() {  return totalMsg_ ; } ;
-  public void setTotalMsg(int totalMsg) { 
-    totalMsg_ = totalMsg ; 
-    hasChanged_ = true ;
+
+  public int getTotalMsg() {
+    return totalMsg_;
+  };
+
+  public void setTotalMsg(int totalMsg) {
+    totalMsg_ = totalMsg;
+    hasChanged_ = true;
   }
-  
+
   /**
    * reset values to default.
    */
@@ -98,26 +112,37 @@ public class CheckingInfo {
     syncFolderStatus_ = 300;
     status_ = new StatusInfo();
   }
-  
-  public int getFetching() { return fetching_ ; }
-  public void setFetching(int in) { 
-    fetching_ = in ; 
-    hasChanged_ = true ;
+
+  public int getFetching() {
+    return fetching_;
   }
 
-  public int getSyncFolderStatus() {  return syncFolderStatus_ ; } ;
-  public void setSyncFolderStatus(int syncFolderStatus) { 
-    syncFolderStatus_ = syncFolderStatus ; 
-    hasChanged_ = true ;
+  public void setFetching(int in) {
+    fetching_ = in;
+    hasChanged_ = true;
   }
-  
-  public String getFetchingToFolders() { return fetchingToFolders_; } 
+
+  public int getSyncFolderStatus() {
+    return syncFolderStatus_;
+  };
+
+  public void setSyncFolderStatus(int syncFolderStatus) {
+    syncFolderStatus_ = syncFolderStatus;
+    hasChanged_ = true;
+  }
+
+  public String getFetchingToFolders() {
+    return fetchingToFolders_;
+  }
+
   public void setFetchingToFolders(String fetchingToFolders) {
     fetchingToFolders_ = fetchingToFolders;
   }
-  
-  public String getStatusMsg() { return statusMsg_ ; }
-  
+
+  public String getStatusMsg() {
+    return statusMsg_;
+  }
+
   public void setStatusMsg(String statusMsg) {
     if (statusMsg_ != null && statusMsg_.equals(statusMsg)) {
       return;
@@ -127,23 +152,26 @@ public class CheckingInfo {
     hasChanged_ = true;
 
   }
-  
-  public int getStatusCode() { return statusCode_ ; }
+
+  public int getStatusCode() {
+    return statusCode_;
+  }
 
   public void setStatusCode(int code) {
     synchronized (this) {
       if (statusCode_ != code) {
-        
+
         status_.setPreviousStatus(statusCode_);
-        statusCode_ = code ; 
+        statusCode_ = code;
         status_.setStatus(statusCode_);
         statusMsg_ = generateStatusMsgKey();
         status_.setStatusMsg(statusMsg_);
-        hasChanged_ = true ;
+        hasChanged_ = true;
       }
-  
+
     }
   }
+
   /**
    * assign status as interrupted by user.
    */
@@ -157,6 +185,7 @@ public class CheckingInfo {
       hasChanged_ = true;
     }
   }
+
   /**
    * generate resource bundle following to status code.
    * @return
@@ -173,7 +202,7 @@ public class CheckingInfo {
       return FINISH_SYNC_FOLDER_MSG_KEY;
     case FINISHED_CHECKMAIL_STATUS:
       return FINISH_MSG_KEY;
-    case CONNECTION_FAILURE: 
+    case CONNECTION_FAILURE:
       return CONNECTION_FAILURE_KEY;
     case RETRY_PASSWORD:
       return RETRY_PASSWORD_KEY;
@@ -183,39 +212,43 @@ public class CheckingInfo {
       return "";
     }
   }
-  
-  
-  public boolean hasChanged() { return hasChanged_ ; }
-  public void setHasChanged(boolean b) { hasChanged_ = b ; }
+
+  public boolean hasChanged() {
+    return hasChanged_;
+  }
+
+  public void setHasChanged(boolean b) {
+    hasChanged_ = b;
+  }
+
   /**
    * this function is involved to ask stopping request of user. if returned value is true, 
    * the checking mail job will try to stop.
    * @return
    */
-  public boolean isRequestStop() { return isRequestStop_ ; }
+  public boolean isRequestStop() {
+    return isRequestStop_;
+  }
 
   /**
    * this function sees the statuscode to determine the job is running or not.
    * @return true if the job is running, else return false.
    */
   public boolean isCheckingMailJobRunning() {
-    return statusCode_ != CheckingInfo.FINISHED_CHECKMAIL_STATUS
-    && statusCode_ != CheckingInfo.CONNECTION_FAILURE && statusCode_ != CheckingInfo.RETRY_PASSWORD && 
-    statusCode_ != CheckingInfo.COMMON_ERROR;
+    return statusCode_ != CheckingInfo.FINISHED_CHECKMAIL_STATUS && statusCode_ != CheckingInfo.CONNECTION_FAILURE && statusCode_ != CheckingInfo.RETRY_PASSWORD && statusCode_ != CheckingInfo.COMMON_ERROR;
   }
-  
+
   public void setRequestStop(boolean b) {
     synchronized (this) {
       if (b) {
         if (isCheckingMailJobRunning()) {
           // request to stop checking mail, if the job is running.
           isRequestStop_ = b;
-          
+
           status_.setPreviousStatus(statusCode_);
           statusCode_ = CheckingInfo.REQUEST_STOP_STATUS;
           status_.setStatus(statusCode_);
           hasChanged_ = true;
-          
 
         }
       } else {
@@ -223,26 +256,33 @@ public class CheckingInfo {
       }
     }
   }
-  
-  public String getMsgId() { return msgId_ ; }
-  public void setMsgId(String msgId) { 
-    msgId_ = msgId; 
+
+  public String getMsgId() {
+    return msgId_;
   }
-  
-  public String getRequestingForFolder_() { return requestingForFolder_; }
-  public void setRequestingForFolder_(String str) { requestingForFolder_ = str ;}
-  
+
+  public void setMsgId(String msgId) {
+    msgId_ = msgId;
+  }
+
+  public String getRequestingForFolder_() {
+    return requestingForFolder_;
+  }
+
+  public void setRequestingForFolder_(String str) {
+    requestingForFolder_ = str;
+  }
+
   public StatusInfo getStatus() {
     return status_;
-  } 
-  
+  }
+
   public void setAccountId(String accountId) {
     status_.setAccountId(accountId);
   }
-  
+
   public String getAccountId() {
     return status_.getAccountId();
   }
-  
-  
+
 }

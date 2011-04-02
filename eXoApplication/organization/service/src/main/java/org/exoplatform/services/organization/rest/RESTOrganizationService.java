@@ -19,6 +19,7 @@ package org.exoplatform.services.organization.rest;
 
 //import org.exoplatform.services.rest.Response;
 import javax.ws.rs.core.Response;
+
 /**
  * Created by The eXo Platform SAS .<br>
  * An interface for managing an Organization Service using REST framework
@@ -35,8 +36,7 @@ public interface RESTOrganizationService {
    * @param parentId Id of the parent group
    * @return Response object with HTTP status.
    */
-  Response createGroup(String baseURI, String groupName, String label,
-      String description, String parentId);
+  Response createGroup(String baseURI, String groupName, String label, String description, String parentId);
 
   /**
    * @param username the user name
@@ -44,8 +44,7 @@ public interface RESTOrganizationService {
    * @param type the membership type
    * @return Response object with HTTP status.
    */
-  Response createMembership(String baseURI, String username, String groupId,
-      String type);
+  Response createMembership(String baseURI, String username, String groupId, String type);
 
   /**
    * @param username the user name.
@@ -55,8 +54,7 @@ public interface RESTOrganizationService {
    * @param email the email address.
    * @return Response object with HTTP status.
    */
-  Response createUser(String baseURI, String username, String password,
-      String firstname, String lastname, String email);
+  Response createUser(String baseURI, String username, String password, String firstname, String lastname, String email);
 
   /**
    * @param groupId the ID of the group to delete
@@ -75,7 +73,7 @@ public interface RESTOrganizationService {
    * @return Response object with HTTP status.
    */
   Response deleteUser(String username);
-  
+
   /**
    * @param groupId the ID of the group
    * @param username the user's name
@@ -95,8 +93,7 @@ public interface RESTOrganizationService {
    * @param type
    * @return
    */
-  Response findMemberships(String baseURI, String groupId, String username,
-      String type);
+  Response findMemberships(String baseURI, String groupId, String username, String type);
 
   /**
    * @param username the username.
@@ -107,8 +104,7 @@ public interface RESTOrganizationService {
    * @param toLoginDate
    * @return Returns list of users in the system.
    */
-  Response findUsers(String baseURI, String username, String firstname,
-      String lastname, String email, String fromLoginDate, String toLoginDate);
+  Response findUsers(String baseURI, String username, String firstname, String lastname, String email, String fromLoginDate, String toLoginDate);
 
   /**
    * @param username the username.
@@ -121,9 +117,7 @@ public interface RESTOrganizationService {
    * @param number the number of results from start index to return.
    * @return Returns list of users in the system within the specified range.
    */
-  Response findUsersRange(String baseURI, String username, String firstname,
-      String lastname, String email, String fromLoginDate, String toLoginDate,
-      Integer offset, Integer amount);
+  Response findUsersRange(String baseURI, String username, String firstname, String lastname, String email, String fromLoginDate, String toLoginDate, Integer offset, Integer amount);
 
   /**
    * @param filter
@@ -137,7 +131,7 @@ public interface RESTOrganizationService {
    * @return
    */
   Response getGroup(String baseURI, String groupId);
-  
+
   /**
    * @param parentId
    * @return list of the groups which are related to parent group
@@ -146,7 +140,7 @@ public interface RESTOrganizationService {
 
   /**
    * @return count of the groups
-   */  
+   */
   Response getGroupsCount();
 
   /**
@@ -161,8 +155,7 @@ public interface RESTOrganizationService {
    * @param parentId the parent id
    * @return list of the groups in special range
    */
-  Response getGroupsRange(String baseURI, Integer offset, Integer amount,
-      String parentId);
+  Response getGroupsRange(String baseURI, Integer offset, Integer amount, String parentId);
 
   /**
    * @return list of membership types
@@ -205,8 +198,7 @@ public interface RESTOrganizationService {
    * @return Response object with HTTP status. It points on result of operation.
    *         No useful content is returned.
    */
-  Response updateGroup(String baseURI, String groupId, String name, String label,
-      String description);
+  Response updateGroup(String baseURI, String groupId, String name, String label, String description);
 
   /**
    * Update user data
@@ -219,7 +211,6 @@ public interface RESTOrganizationService {
    * @return Response object with HTTP status. It points on result of operation.
    *         No useful content is returned.
    */
-  Response updateUser(String baseURI, String username, String password,
-      String firstname, String lastname, String email);
+  Response updateUser(String baseURI, String username, String password, String firstname, String lastname, String email);
 
 }

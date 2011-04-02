@@ -28,17 +28,19 @@ import org.quartz.JobDataMap;
  * Sep 30, 2009  
  */
 public class HistoryPeriodJob extends PeriodJob {
-  
-  private JobDataMap jdatamap_ ;
-  
+
+  private JobDataMap jdatamap_;
+
   public HistoryPeriodJob(InitParams params) throws Exception {
     super(params);
-    ExoProperties props =  params.getPropertiesParam("history.info").getProperties() ;
-    jdatamap_ = new JobDataMap() ;
+    ExoProperties props = params.getPropertiesParam("history.info").getProperties();
+    jdatamap_ = new JobDataMap();
     String logBatchSize = props.getProperty("logBatchSize");
     jdatamap_.put("logBatchSize", logBatchSize);
   }
-  
-  public JobDataMap  getJobDataMap() {  return jdatamap_ ;  }
+
+  public JobDataMap getJobDataMap() {
+    return jdatamap_;
+  }
 
 }

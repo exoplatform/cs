@@ -24,25 +24,43 @@ package org.exoplatform.mail.service;
  * 
  */
 public class Group {
-  
-  private String groupName ;
-  private String[] permissions ;
-  private String description ;
-  
+
+  private String   groupName;
+
+  private String[] permissions;
+
+  private String   description;
+
   /**
    * The groupName_ of the contact for ex: friends, ...
    * @return the groupName_ of the group
    */
-  public String getGroupName()  { return groupName ; }
-  public void   setGroupName(String s) { groupName = s ; }
-  
-  public String[] getPermissions() {return permissions ; }
-  public void setPermissions(String[] per) { permissions = per ; }
+  public String getGroupName() {
+    return groupName;
+  }
+
+  public void setGroupName(String s) {
+    groupName = s;
+  }
+
+  public String[] getPermissions() {
+    return permissions;
+  }
+
+  public void setPermissions(String[] per) {
+    permissions = per;
+  }
+
   /**
    * The display description_ of the group
    * @return The group description
    */
-  public String getDescription() { return description ; }
-  public void   setDescription(String s) { description = s ; }
-  
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String s) {
+    description = s;
+  }
+
 }

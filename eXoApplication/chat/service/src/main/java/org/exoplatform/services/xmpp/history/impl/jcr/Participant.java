@@ -75,24 +75,21 @@ public class Participant {
    * 
    */
   public Participant() {
-    
+
   }
 
-  
   /**
    * @param jid the jid
    * @param interlocutorList the interlocutors
    * @param groupChatList the group chats
    */
-  public Participant(String jid,
-                     List<InterlocutorImpl> interlocutorList,
-                     List<InterlocutorImpl> groupChatList) {
+  public Participant(String jid, List<InterlocutorImpl> interlocutorList, List<InterlocutorImpl> groupChatList) {
     this.jid = jid;
     this.interlocutorList = interlocutorList;
     this.groupChatList = groupChatList;
     this.username = StringUtils.parseName(jid);
     this.hexName = CodingUtils.encodeToHex(this.username);
-    
+
   }
 
   /**

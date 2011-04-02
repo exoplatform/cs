@@ -936,8 +936,7 @@ public class UICalendars extends UIForm  {
 
     @Override
     public void execute(Event<UICalendars> event) throws Exception {
-      // TODO Auto-generated method stub
-      UICalendars uiCalendars = event.getSource();
+        UICalendars uiCalendars = event.getSource();
       UICalendarPortlet uiPortlet = uiCalendars.getAncestorOfType(UICalendarPortlet.class);
       UIPopupAction popupAction = uiPortlet.getChild(UIPopupAction.class);
       popupAction.deActivate();
@@ -950,31 +949,30 @@ public class UICalendars extends UIForm  {
   public static class RefreshRemoteCalendarActionListener extends EventListener<UICalendars> {
 
     @Override
-  	public void execute(Event<UICalendars> event) throws Exception {
-  		// TODO Auto-generated method stub
-  		UICalendars uiCalendars = event.getSource();
-  		UICalendarPortlet uiPortlet = uiCalendars.getAncestorOfType(UICalendarPortlet.class);
-  		CalendarService calService = CalendarUtils.getCalendarService() ;
-  		String remoteCalendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-  		String username = CalendarUtils.getCurrentUser();
-  		Calendar calendar = calService.getUserCalendar(username, remoteCalendarId);
-  		try {		
-  			calService.refreshRemoteCalendar(username, remoteCalendarId);
-  			
-  			// activate SynchronizeRemoteCalendarJob
-  			// calService.loadSynchronizeRemoteCalendarJob(username);
-  			
-  			UICalendarContainer uiVContainer = uiPortlet.findFirstComponentOfType(UICalendarContainer.class) ;
-  			event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;      
-  		}
-  		catch (Exception e) {
-  		  e.printStackTrace();
-  			UIApplication uiApp = uiCalendars.getAncestorOfType(UIApplication.class) ;
-  			uiApp.addMessage(new ApplicationMessage("UICalendars.msg.cant-refresh-remote-calendar", new String[] {calendar.getName()}, ApplicationMessage.WARNING)) ;
-  			event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-  		}
-  	}
-	  
+    public void execute(Event<UICalendars> event) throws Exception {
+        UICalendars uiCalendars = event.getSource();
+      UICalendarPortlet uiPortlet = uiCalendars.getAncestorOfType(UICalendarPortlet.class);
+      CalendarService calService = CalendarUtils.getCalendarService() ;
+      String remoteCalendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      String username = CalendarUtils.getCurrentUser();
+      Calendar calendar = calService.getUserCalendar(username, remoteCalendarId);
+      try {    
+        calService.refreshRemoteCalendar(username, remoteCalendarId);
+        
+        // activate SynchronizeRemoteCalendarJob
+        // calService.loadSynchronizeRemoteCalendarJob(username);
+        
+        UICalendarContainer uiVContainer = uiPortlet.findFirstComponentOfType(UICalendarContainer.class) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;      
+      }
+      catch (Exception e) {
+        e.printStackTrace();
+        UIApplication uiApp = uiCalendars.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UICalendars.msg.cant-refresh-remote-calendar", new String[] {calendar.getName()}, ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      }
+    }
+    
   }
   
 }

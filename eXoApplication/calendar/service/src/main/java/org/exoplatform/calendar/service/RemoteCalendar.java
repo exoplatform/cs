@@ -19,7 +19,6 @@ package org.exoplatform.calendar.service;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-
 /**
  * Created by The eXo Platform SAS
  * Author : Vu Duy Tu
@@ -28,19 +27,32 @@ import java.util.GregorianCalendar;
  */
 
 public class RemoteCalendar {
-  private String type;
-  private String username;
-  private String calendarId;
-  private String remoteUrl;
-  private String calendarName;
-  private String description;
-  private String syncPeriod;
-  private String beforeDateSave = "";
-  private String afterDateSave = "";
-  private long beforeDate = 0;
-  private long afterDate = 0;
-  private String remoteUser;
-  private String remotePassword;
+  private String   type;
+
+  private String   username;
+
+  private String   calendarId;
+
+  private String   remoteUrl;
+
+  private String   calendarName;
+
+  private String   description;
+
+  private String   syncPeriod;
+
+  private String   beforeDateSave = "";
+
+  private String   afterDateSave  = "";
+
+  private long     beforeDate     = 0;
+
+  private long     afterDate      = 0;
+
+  private String   remoteUser;
+
+  private String   remotePassword;
+
   private Calendar lastUpdated;
 
   public RemoteCalendar() {
@@ -168,17 +180,17 @@ public class RemoteCalendar {
   public Calendar getAfterTime() {
     return calculateTime(afterDate, false);
   }
-  
+
   private Calendar calculateTime(long time, boolean isBefore) {
     Calendar cal = Calendar.getInstance();
     if (time != 0) {
       cal.setTimeInMillis(cal.getTimeInMillis() + time);
     } else {
-      cal.add(java.util.Calendar.YEAR, (isBefore)?-1:1);
+      cal.add(java.util.Calendar.YEAR, (isBefore) ? -1 : 1);
     }
     return cal;
   }
-  
+
   private long getTimeField(String vls, boolean isBefore) {
     try {
       int vl = Integer.parseInt(vls.substring(0, 1));

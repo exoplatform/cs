@@ -45,12 +45,12 @@ public class FileTransferResponseBean {
    * 
    */
   private String status;
-  
+
   /**
    * 
    */
   private String error;
-  
+
   /**
    * 
    */
@@ -71,10 +71,10 @@ public class FileTransferResponseBean {
     this.status = transfer.getStatus().name();
     this.sender = sender;
     this.receiver = transfer.getPeer();
-    if (transfer.getError() != null){
+    if (transfer.getError() != null) {
       this.error = transfer.getError().name();
       this.errorMessage = transfer.getError().getMessage();
-      
+
     }
   }
 
@@ -181,7 +181,5 @@ public class FileTransferResponseBean {
   public void setErrorMessage(String errorMessage) {
     this.errorMessage = errorMessage;
   }
-  
-  
 
 }

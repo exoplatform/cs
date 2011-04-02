@@ -16,30 +16,11 @@
  */
 package org.exoplatform.calendar.service.impl;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.PropertyType;
-import javax.jcr.Session;
-import javax.jcr.Value;
-import javax.jcr.ValueFactory;
-import javax.jcr.nodetype.NodeType;
-import javax.jcr.nodetype.PropertyDefinition;
-import javax.jcr.query.Query;
-import javax.jcr.query.QueryManager;
-import javax.jcr.query.QueryResult;
-
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarUpdateEventListener;
-import org.exoplatform.calendar.service.CsNodeTypeMapping;
 import org.exoplatform.calendar.service.CsObjectParam;
-import org.exoplatform.calendar.service.CsPropertyMapping;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.jcr.RepositoryService;
-//import org.exoplatform.services.jcr.core.nodetype.ExtendedNodeType;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 /**
  * Created by The eXo Platform SAS
@@ -49,16 +30,18 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
  */
 public class UpdateCalendarVersion extends CalendarUpdateEventListener {
 
-  private CalendarService cservice_ ;
-  private RepositoryService repositorySerivce_ ;
-  CsObjectParam csObj_ ;
-  public UpdateCalendarVersion(CalendarService cservice, InitParams params, RepositoryService repositorySerivce)
-  throws Exception {
+  private CalendarService   cservice_;
+
+  private RepositoryService repositorySerivce_;
+
+  CsObjectParam             csObj_;
+
+  public UpdateCalendarVersion(CalendarService cservice, InitParams params, RepositoryService repositorySerivce) throws Exception {
     cservice_ = cservice;
-    repositorySerivce_ = repositorySerivce ;
-    csObj_ = (CsObjectParam)params.getObjectParam("cs.calendar.update.object").getObject();
+    repositorySerivce_ = repositorySerivce;
+    csObj_ = (CsObjectParam) params.getObjectParam("cs.calendar.update.object").getObject();
   }
-   
+
   @Override
   public void preUpdate() {
   }

@@ -35,13 +35,12 @@ import com.sun.mail.util.LineOutputStream;
  * Jun 18, 2009  
  */
 public class DeliveryStatus {
-  private static boolean debug = false;
-
+  private static boolean      debug = false;
 
   /**
    * The DSN fields for the message.
    */
-  protected InternetHeaders messageDSN;
+  protected InternetHeaders   messageDSN;
 
   /**
    * The DSN fields for each recipient.
@@ -136,8 +135,7 @@ public class DeliveryStatus {
     recipientDSN[recipientDSN.length - 1] = h;
   }
 
-  public void writeTo(OutputStream os)
-  throws IOException, MessagingException {
+  public void writeTo(OutputStream os) throws IOException, MessagingException {
     // see if we already have a LOS
     LineOutputStream los = null;
     if (os instanceof LineOutputStream) {
@@ -154,25 +152,22 @@ public class DeliveryStatus {
     }
   }
 
-  private static void writeInternetHeaders(InternetHeaders h,
-                                           LineOutputStream los) throws IOException {
+  private static void writeInternetHeaders(InternetHeaders h, LineOutputStream los) throws IOException {
     Enumeration e = h.getAllHeaderLines();
     try {
       while (e.hasMoreElements())
-        los.writeln((String)e.nextElement());
+        los.writeln((String) e.nextElement());
     } catch (MessagingException mex) {
       Exception ex = mex.getNextException();
       if (ex instanceof IOException)
-        throw (IOException)ex;
+        throw (IOException) ex;
       else
         throw new IOException("Exception writing headers: " + mex);
     }
   }
 
   public String toString() {
-    return "DeliveryStatus: Reporting-MTA=" +
-    messageDSN.getHeader("Reporting-MTA", null) + ", #Recipients=" +
-    recipientDSN.length;
+    return "DeliveryStatus: Reporting-MTA=" + messageDSN.getHeader("Reporting-MTA", null) + ", #Recipients=" + recipientDSN.length;
   }
 
 }

@@ -36,8 +36,8 @@ import org.jivesoftware.smack.packet.Message;
 public class HistoryUtils {
 
   private static final String XMPP_DELAY_DATETIME_FORMAT = "yyyyMMdd'T'HH:mm:ss";
-  
-  public static HistoricalMessageImpl messageToHistoricalMessage(Message message){
+
+  public static HistoricalMessageImpl messageToHistoricalMessage(Message message) {
     HistoricalMessageImpl historicalMessage = new HistoricalMessageImpl();
     historicalMessage.setId(message.getPacketID());
     historicalMessage.setFrom(message.getFrom());
@@ -46,14 +46,14 @@ public class HistoryUtils {
     historicalMessage.setBody(message.getBody());
     historicalMessage.setReceive(false);
     Date delayedDate = getDelayedDate(message);
-    if(delayedDate != null)
+    if (delayedDate != null)
       historicalMessage.setDateSend(new Date(delayedDate.getTime()));
     else
       historicalMessage.setDateSend(Calendar.getInstance().getTime());
     return historicalMessage;
   }
-  
-  private static Date getDelayedDate(Message message){
+
+  private static Date getDelayedDate(Message message) {
     Document document;
     Date delayedDate = null;
     DateFormat delayedFormatter = new SimpleDateFormat(XMPP_DELAY_DATETIME_FORMAT);

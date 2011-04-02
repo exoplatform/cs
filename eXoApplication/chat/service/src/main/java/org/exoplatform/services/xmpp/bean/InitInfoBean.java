@@ -33,12 +33,12 @@ public class InitInfoBean {
    * 
    */
   private String                  mainServiceName;
-  
+
   /**
    * 
    */
   private Integer                 totalRooms;
-  
+
   /**
    * 
    */
@@ -63,13 +63,11 @@ public class InitInfoBean {
    * 
    */
   private List<ContactBean>       roster;
-  
+
   /**
    * 
    */
-  private ContactBean       myProfile;
-  
-  
+  private ContactBean             myProfile;
 
   /**
    * 
@@ -85,7 +83,7 @@ public class InitInfoBean {
    * 
    */
   private List<FullRoomInfoBean>  joinedRooms;
-  
+
   /**
    * @return the mainServiceName
    */
@@ -169,7 +167,7 @@ public class InitInfoBean {
   public void setRoster(List<ContactBean> roster) {
     this.roster = roster;
   }
-  
+
   public ContactBean getMyProfile() {
     return myProfile;
   }

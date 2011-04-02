@@ -93,22 +93,12 @@ public class TransformUtils {
     return list;
   }
 
-  
-
   public static MessageBean messageToBean(Message message) {
-    return new MessageBean(message.getPacketID(),
-                           message.getFrom(),
-                           message.getTo(),
-                           message.getType().name(),
-                           message.getBody());
+    return new MessageBean(message.getPacketID(), message.getFrom(), message.getTo(), message.getType().name(), message.getBody());
   }
 
   public static MessageBean messageToBean(HistoricalMessage message) {
-    MessageBean messageBean = new MessageBean(message.getId(),
-                                              message.getFrom(),
-                                              message.getTo(),
-                                              message.getType(),
-                                              message.getBody());
+    MessageBean messageBean = new MessageBean(message.getId(), message.getFrom(), message.getTo(), message.getType(), message.getBody());
     messageBean.setDateSend(String.valueOf(message.getDateSend().getTime()));
     return messageBean;
   }
@@ -177,14 +167,13 @@ public class TransformUtils {
     }
     return new SearchResultsBean(list);
   }
-  
-  
-  public static FormBean changeFieldForm(FormBean form, String variable, List<String> values){
+
+  public static FormBean changeFieldForm(FormBean form, String variable, List<String> values) {
     List<FieldBean> list = form.getFields();
     List<FieldBean> lfb = new ArrayList<FieldBean>();
     for (FieldBean fb : list) {
-      if (fb.getVariable() != null){
-        if (fb.getVariable().trim().equals(variable)){
+      if (fb.getVariable() != null) {
+        if (fb.getVariable().trim().equals(variable)) {
           fb.setValues(values);
         }
       }
@@ -194,22 +183,22 @@ public class TransformUtils {
     return form;
   }
 
-  public static Integer getServerTimezoneOffset(){
+  public static Integer getServerTimezoneOffset() {
     Calendar cal = Calendar.getInstance();
     Integer tz = -(cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET)) / (60 * 1000);
     return tz;
   }
-  
-  public static Date convertToServerTime(Date clientDate, Integer clientTimezoneOffset){
-    if(clientTimezoneOffset == null || clientTimezoneOffset == getServerTimezoneOffset())
+
+  public static Date convertToServerTime(Date clientDate, Integer clientTimezoneOffset) {
+    if (clientTimezoneOffset == null || clientTimezoneOffset == getServerTimezoneOffset())
       return clientDate;
     Long gmtTime = clientDate.getTime() + clientTimezoneOffset * (60 * 1000);
     gmtTime -= getServerTimezoneOffset() * (60 * 1000);
     return new Date(gmtTime);
   }
-  
-  public static Date convertToClientTime(Date serverDate, Integer clientTimezoneOffset){
-    if(clientTimezoneOffset == null || clientTimezoneOffset == getServerTimezoneOffset())
+
+  public static Date convertToClientTime(Date serverDate, Integer clientTimezoneOffset) {
+    if (clientTimezoneOffset == null || clientTimezoneOffset == getServerTimezoneOffset())
       return serverDate;
     Long gmtTime = serverDate.getTime() + getServerTimezoneOffset() * (60 * 1000);
     gmtTime -= clientTimezoneOffset * (60 * 1000);

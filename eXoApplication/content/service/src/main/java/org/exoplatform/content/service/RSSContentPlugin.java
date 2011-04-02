@@ -16,7 +16,6 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.content.model.ContentItem;
 import org.exoplatform.content.model.ContentNode;
-import org.exoplatform.services.common.DataBuffer;
 import org.exoplatform.services.common.HttpClientImpl;
 import org.exoplatform.services.rss.parser.DefaultRSSChannel;
 import org.exoplatform.services.rss.parser.DefaultRSSItem;
@@ -34,44 +33,48 @@ public class RSSContentPlugin extends ContentPlugin {
 
   private RSSParser service_;
 
-  public RSSContentPlugin(RSSParser service){
+  public RSSContentPlugin(RSSParser service) {
     super();
-    type ="rss";
+    type = "rss";
     service_ = service;
   }
 
   @SuppressWarnings("unchecked")
   public PageList loadContentMeta(ContentNode node) throws Exception {
-    URL uri = new URL(node.getUrl());     
-    //TODO: tuan.pham CS-2531 get encode from rss file
+    URL uri = new URL(node.getUrl());
+    // TODO: tuan.pham CS-2531 get encode from rss file
     GetMethod get = null;
     HttpClientImpl httpClientService = new HttpClientImpl(uri);
     get = httpClientService.getMethod(uri.getFile());
     get.setFollowRedirects(true);
     int statusCode = httpClientService.getHttpClient().executeMethod(get);
-    if (statusCode != HttpStatus.SC_OK){
-      throw new Exception("Server response code "+statusCode);
+    if (statusCode != HttpStatus.SC_OK) {
+      throw new Exception("Server response code " + statusCode);
     }
     InputStream input = get.getResponseBodyAsStream();
-    DocumentBuilder  docbuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder() ;
-    Document doc = docbuilder.parse(input) ;
-    String encode = doc.getXmlEncoding() ;
-    if (encode == null || encode.trim().length() == 0) encode = "utf-8" ;
-    RSSDocument<DefaultRSSChannel, RSSItem> document = 
-      service_.createDocument(uri, encode, DefaultRSSChannel.class, RSSItem.class);
-    List<RSSItem> list = document.getItems();     
+    DocumentBuilder docbuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+    Document doc = docbuilder.parse(input);
+    String encode = doc.getXmlEncoding();
+    if (encode == null || encode.trim().length() == 0)
+      encode = "utf-8";
+    RSSDocument<DefaultRSSChannel, RSSItem> document = service_.createDocument(uri, encode, DefaultRSSChannel.class, RSSItem.class);
+    List<RSSItem> list = document.getItems();
     return new ContentPageList(list);
-  } 
+  }
 
   static public class RSSItem extends DefaultRSSItem implements ContentItem {
 
-    public RSSItem(){
+    public RSSItem() {
     }
 
-    //@SuppressWarnings("unused")
-    //TODO: dang.tung -> set creator of content
-    public void setCreator(String creator){ super.setCreator(creator) ;}
-    public String getCreator(){return super.getCreator() ;
+    // @SuppressWarnings("unused")
+    // TODO: dang.tung -> set creator of content
+    public void setCreator(String creator) {
+      super.setCreator(creator);
+    }
+
+    public String getCreator() {
+      return super.getCreator();
     }
 
   }

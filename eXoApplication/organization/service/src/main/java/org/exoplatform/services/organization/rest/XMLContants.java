@@ -22,11 +22,13 @@ package org.exoplatform.services.organization.rest;
  * @version $Id: $
  */
 public final class XMLContants {
-  
-  public static final String EXO_NAMESPACE_URL = "http://exoplatform.org/organization/rest";
-  
-  public static final String XLINK_PREFIX = "xlink";
-  public static final String XLINK_HREF = "href";
+
+  public static final String EXO_NAMESPACE_URL   = "http://exoplatform.org/organization/rest";
+
+  public static final String XLINK_PREFIX        = "xlink";
+
+  public static final String XLINK_HREF          = "href";
+
   public static final String XLINK_NAMESPACE_URL = "http://www.w3.org/1999/xlink";
 
 }

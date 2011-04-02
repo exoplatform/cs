@@ -55,35 +55,36 @@ import org.exoplatform.services.organization.UserProfile;
  */
 public class ContactServiceImpl implements ContactService {
 
-  final private static String VCARD = "x-vcard".intern() ;
+  final private static String              VCARD                          = "x-vcard".intern();
 
-  private DataStorage storage_ ;
-  private Map<String, ContactImportExport> contactImportExport_ = new HashMap<String, ContactImportExport>() ;
+  private DataStorage                      storage_;
 
-  public boolean userCanSeeAllGroupAddressBooks = false;
+  private Map<String, ContactImportExport> contactImportExport_           = new HashMap<String, ContactImportExport>();
 
-  public List<String> nonPublicGroups = new ArrayList<String>();
+  public boolean                           userCanSeeAllGroupAddressBooks = false;
 
-  private static final String USERCANSEEALLGROUPADDRESSBOOKS = "UserCanSeeAllGroupAddressBooks".intern();
+  public List<String>                      nonPublicGroups                = new ArrayList<String>();
 
-  private static final String NONPUBLICGROUPS = "NonPublicGroups".intern();
+  private static final String              USERCANSEEALLGROUPADDRESSBOOKS = "UserCanSeeAllGroupAddressBooks".intern();
 
-  private static final String TRUE = "true".intern();
+  private static final String              NONPUBLICGROUPS                = "NonPublicGroups".intern();
 
-  private List<ContactEventListener> listeners_ = new ArrayList<ContactEventListener>(3);
+  private static final String              TRUE                           = "true".intern();
+
+  private List<ContactEventListener>       listeners_                     = new ArrayList<ContactEventListener>(3);
 
   @SuppressWarnings("unchecked")
   public ContactServiceImpl(NodeHierarchyCreator nodeHierarchyCreator, RepositoryService rservice, InitParams initParams) throws Exception {
-    storage_ = new JCRDataStorage(nodeHierarchyCreator, rservice) ;
-    contactImportExport_.put(VCARD, new VCardImportExport(storage_)) ;
-    if(initParams != null){
-      if(initParams.getValuesParam(USERCANSEEALLGROUPADDRESSBOOKS) != null){
+    storage_ = new JCRDataStorage(nodeHierarchyCreator, rservice);
+    contactImportExport_.put(VCARD, new VCardImportExport(storage_));
+    if (initParams != null) {
+      if (initParams.getValuesParam(USERCANSEEALLGROUPADDRESSBOOKS) != null) {
         List values = initParams.getValuesParam(USERCANSEEALLGROUPADDRESSBOOKS).getValues();
-        if(TRUE.equalsIgnoreCase(values.get(0).toString())){
+        if (TRUE.equalsIgnoreCase(values.get(0).toString())) {
           userCanSeeAllGroupAddressBooks = true;
         }
       }
-      if(initParams.getValuesParam(NONPUBLICGROUPS) != null){
+      if (initParams.getValuesParam(NONPUBLICGROUPS) != null) {
         List values = initParams.getValuesParam(NONPUBLICGROUPS).getValues();
         for (Object object : values) {
           nonPublicGroups.add(object.toString());
@@ -92,19 +93,19 @@ public class ContactServiceImpl implements ContactService {
     }
   }
 
-  private List<String> excludeWildCardMatchs(List<String> sourceList , List<String> wildCards) throws Exception {
-    List<String> groupIds = new ArrayList<String>() ;
-    if(sourceList != null && !sourceList.isEmpty()){
+  private List<String> excludeWildCardMatchs(List<String> sourceList, List<String> wildCards) throws Exception {
+    List<String> groupIds = new ArrayList<String>();
+    if (sourceList != null && !sourceList.isEmpty()) {
       for (String object : sourceList) {
-        groupIds.add(object) ;
+        groupIds.add(object);
       }
     }
-    if(wildCards == null || wildCards.isEmpty() || sourceList == null ||sourceList.isEmpty()){
+    if (wildCards == null || wildCards.isEmpty() || sourceList == null || sourceList.isEmpty()) {
       return groupIds;
     }
-    for(String wildCard : wildCards) {
-      for(String s : sourceList){
-        if(FilenameUtils.wildcardMatch(s, wildCard, IOCase.INSENSITIVE)){
+    for (String wildCard : wildCards) {
+      for (String s : sourceList) {
+        if (FilenameUtils.wildcardMatch(s, wildCard, IOCase.INSENSITIVE)) {
           groupIds.remove(s);
         }
       }
@@ -112,24 +113,21 @@ public class ContactServiceImpl implements ContactService {
     return groupIds;
   }
 
-
   public List<String> getPublicAddressBookIdsOfUser(String user) throws Exception {
-    OrganizationService organizationService = 
-      (OrganizationService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class) ;
-    Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(user).toArray() ;
-    List<String> groupIds = new ArrayList<String>() ;
+    OrganizationService organizationService = (OrganizationService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
+    Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(user).toArray();
+    List<String> groupIds = new ArrayList<String>();
     for (Object object : objGroupIds) {
-      groupIds.add(((Group)object).getId()) ;
+      groupIds.add(((Group) object).getId());
     }
     groupIds = excludeWildCardMatchs(groupIds, nonPublicGroups);
-    return groupIds ;
+    return groupIds;
   }
 
-
   public List<String> getAllsPublicAddressBookIds(String user) throws Exception {
-    List<String> publicGroupIds = new ArrayList<String>() ;
-    if(userCanSeeAllGroupAddressBooks){
-      publicGroupIds = storage_.getPublicAddresses(user);     
+    List<String> publicGroupIds = new ArrayList<String>();
+    if (userCanSeeAllGroupAddressBooks) {
+      publicGroupIds = storage_.getPublicAddresses(user);
     } else {
       publicGroupIds = getPublicAddressBookIdsOfUser(user);
     }
@@ -137,57 +135,49 @@ public class ContactServiceImpl implements ContactService {
     return publicGroupIds;
   }
 
-
   public List<Contact> getPersonalContacts(String username) throws Exception {
     return storage_.findAllContactsByOwner(username);
   }
 
-
   public Map<String, String> searchEmails(String username, ContactFilter filter) throws Exception {
-    return storage_.findEmailsByFilter(username, filter) ;
+    return storage_.findEmailsByFilter(username, filter);
   }
 
   public List<String> searchEmailsByFilter(String username, ContactFilter filter) throws Exception {
-    return storage_.searchEmailsByFilter(username, filter) ;
+    return storage_.searchEmailsByFilter(username, filter);
   }
-
 
   public ContactPageList getPersonalContactsByAddressBook(String ownerId, String addressBookId) throws Exception {
     return storage_.findPersonalContactsByAddressBook(ownerId, addressBookId);
   }
 
-
-
   public ContactPageList getPersonalContactsByFilter(String username, ContactFilter filter) throws Exception {
-    return storage_.findContactsByFilter(username, filter, DataStorage.PERSONAL) ;
+    return storage_.findContactsByFilter(username, filter, DataStorage.PERSONAL);
   }
-
 
   public ContactPageList getSharedContactsByFilter(String username, ContactFilter filter) throws Exception {
-    return storage_.findContactsByFilter(username, filter, DataStorage.SHARED) ;
+    return storage_.findContactsByFilter(username, filter, DataStorage.SHARED);
   }
 
-
   public ContactPageList getPublicContactsByFilter(String username, ContactFilter filter) throws Exception {
-    return storage_.findContactsByFilter(username, filter, DataStorage.PUBLIC) ;
-  }  
+    return storage_.findContactsByFilter(username, filter, DataStorage.PUBLIC);
+  }
 
   public List<String> getEmailsByAddressBook(String username, String addressBookId) throws Exception {
     return storage_.findEmailsInPersonalAddressBook(username, addressBookId);
   }
 
-
-
   public Contact getContact(String username, String contactId) throws Exception {
     return storage_.loadPersonalContact(username, contactId);
   }
 
-
   public void saveContact(String username, Contact contact, boolean isNew) throws Exception {
-    storage_.saveContact(username, contact, isNew);   
-    for(ContactEventListener ce : listeners_) {
-      if(isNew) ce.saveContact(username, contact) ;
-      else ce.updateContact(username, contact);
+    storage_.saveContact(username, contact, isNew);
+    for (ContactEventListener ce : listeners_) {
+      if (isNew)
+        ce.saveContact(username, contact);
+      else
+        ce.updateContact(username, contact);
     }
   }
 
@@ -195,25 +185,21 @@ public class ContactServiceImpl implements ContactService {
     return storage_.removeContacts(username, contactIds);
   }
 
-
-  public void moveContacts(String username, List<Contact> contacts, String addressType ) throws Exception {
-    storage_.moveContacts(username, contacts, addressType) ;
+  public void moveContacts(String username, List<Contact> contacts, String addressType) throws Exception {
+    storage_.moveContacts(username, contacts, addressType);
   }
 
-
   public void addUserContactInAddressBook(String userId, String addressBookId) throws Exception {
-    storage_.addUserContactInAddressBook(userId, addressBookId) ;
+    storage_.addUserContactInAddressBook(userId, addressBookId);
   }
 
   public List<AddressBook> getGroups(String username) throws Exception {
     return storage_.findPersonalAddressBooksByOwner(username);
   }
-  
-  
+
   public List<String> getPublicAddresses(String username) throws Exception {
     return storage_.getPublicAddresses(username);
   }
-
 
   public AddressBook getPersonalAddressBook(String username, String addressBookId) throws Exception {
     return storage_.loadPersonalAddressBook(username, addressBookId);
@@ -224,80 +210,76 @@ public class ContactServiceImpl implements ContactService {
   }
 
   public void saveAddressBook(String username, AddressBook group, boolean isNew) throws Exception {
-    storage_.savePersonalOrSharedAddressBook(username, group, isNew);    
-  } 
-
+    storage_.savePersonalOrSharedAddressBook(username, group, isNew);
+  }
 
   public AddressBook removeAddressBook(String username, String addressBookId) throws Exception {
     // step 1 : remove content
     storage_.clearAddressBook(username, addressBookId);
 
     // step 2 : remove address book
-    AddressBook removed =  storage_.removePersonalAddressBook(username, addressBookId);
+    AddressBook removed = storage_.removePersonalAddressBook(username, addressBookId);
 
     return removed;
   }
 
   public void removeUserShareContact(String username, String contactId, String removedUser) throws Exception {
-    storage_.removeUserShareContact(username, contactId, removedUser) ;
+    storage_.removeUserShareContact(username, contactId, removedUser);
   }
 
   public void shareContact(String username, String[] contactIds, List<String> receiveUsers) throws Exception {
-    storage_.shareContact(username, contactIds, receiveUsers) ;
+    storage_.shareContact(username, contactIds, receiveUsers);
   }
+
   public DataPageList getSharedContacts(String username) throws Exception {
-    return storage_.getSharedContacts(username) ;
+    return storage_.getSharedContacts(username);
   }
+
   public void shareAddressBook(String username, String addressBookId, List<String> receiverUsers) throws Exception {
-    storage_.shareAddressBook(username, addressBookId, receiverUsers) ;
+    storage_.shareAddressBook(username, addressBookId, receiverUsers);
   }
 
-
-  public void unshareAddressBook(String owner,
-                                 String addressBookId,
-                                 String unsharedUser) throws Exception {
-    storage_.unshareAddressBook(owner, addressBookId, unsharedUser) ;
+  public void unshareAddressBook(String owner, String addressBookId, String unsharedUser) throws Exception {
+    storage_.unshareAddressBook(owner, addressBookId, unsharedUser);
   }
-
 
   public List<SharedAddressBook> getSharedAddressBooks(String username) throws Exception {
-    return storage_.findSharedAddressBooksByUser(username) ;
+    return storage_.findSharedAddressBooksByUser(username);
   }
 
   public ContactPageList getSharedContactsByAddressBook(String username, SharedAddressBook addressBook) throws Exception {
-    return storage_.getSharedContactsByAddressBook(username, addressBook) ;
+    return storage_.getSharedContactsByAddressBook(username, addressBook);
   }
 
-  public void removeSharedContact(String username, String addressBookId, String contactId) throws Exception { 
-    storage_.removeSharedContact(username, addressBookId, contactId) ;
+  public void removeSharedContact(String username, String addressBookId, String contactId) throws Exception {
+    storage_.removeSharedContact(username, addressBookId, contactId);
   }
 
   public void saveContactToSharedAddressBook(String username, String addressBookId, Contact contact, boolean isNew) throws Exception {
-    storage_.saveContactToSharedAddressBook(username, addressBookId, contact, isNew) ;
-    for(ContactEventListener ce : listeners_) {
-      if(isNew) ce.saveContact(username, contact) ;
-      else ce.updateContact(username, contact);
+    storage_.saveContactToSharedAddressBook(username, addressBookId, contact, isNew);
+    for (ContactEventListener ce : listeners_) {
+      if (isNew)
+        ce.saveContact(username, contact);
+      else
+        ce.updateContact(username, contact);
     }
   }
 
   public Contact getSharedContactAddressBook(String username, String contactId) throws Exception {
-    return storage_.getSharedContactAddressBook(username, contactId) ;
+    return storage_.getSharedContactAddressBook(username, contactId);
   }
 
-  public void saveSharedContact(String username, Contact contact) throws Exception  {
-    storage_.saveSharedContact(username, contact) ;
+  public void saveSharedContact(String username, Contact contact) throws Exception {
+    storage_.saveSharedContact(username, contact);
   }
-
 
   public Contact getSharedContact(String username, String contactId) throws Exception {
-    return storage_.getSharedContact(username, contactId) ;
+    return storage_.getSharedContact(username, contactId);
   }
 
   public Contact getPublicContact(String contactId) throws Exception {
     return storage_.loadPublicContactByUser(contactId);
   }
-
-
 
   public List<Tag> getTags(String username) throws Exception {
     return storage_.getTags(username);
@@ -307,89 +289,77 @@ public class ContactServiceImpl implements ContactService {
     return storage_.getContactPageListByTag(username, tagName);
   }
 
-
-
   public void addTag(String username, List<String> contactIds, List<Tag> tags) throws Exception {
     storage_.addTag(username, contactIds, tags);
   }
-
-
 
   public void addTag(String username, List<String> contactIds, String tagId) throws Exception {
     storage_.addTag(username, contactIds, tagId);
   }
 
-
-
   public Tag removeTag(String username, String tagName) throws Exception {
     return storage_.removeTag(username, tagName);
   }
 
-
   public void updateTag(String username, Tag tag) throws Exception {
-    storage_.updateTag(username, tag) ;
+    storage_.updateTag(username, tag);
   }
-
 
   public void removeContactTag(String username, List<String> contactIds, List<String> tags) throws Exception {
-    storage_.removeContactTag(username, contactIds, tags) ;
+    storage_.removeContactTag(username, contactIds, tags);
   }
-
-
 
   public ContactPageList getPublicContactsByAddressBook(String groupId) throws Exception {
-    return storage_.getPublicContactsByAddressBook(groupId) ;
+    return storage_.getPublicContactsByAddressBook(groupId);
   }
-
 
   public void pasteAddressBook(String username, String srcAddress, String srcType, String destAddress, String destType) throws Exception {
-    storage_.pasteAddressBook(username, srcAddress, srcType, destAddress, destType) ;
+    storage_.pasteAddressBook(username, srcAddress, srcType, destAddress, destType);
   }
 
-
   public List<Contact> pasteContacts(String username, String destAddress, String destType, Map<String, String> contactsMap) throws Exception {
-    return storage_.pasteContacts(username, destAddress, destType, contactsMap) ;
+    return storage_.pasteContacts(username, destAddress, destType, contactsMap);
   }
 
   public ContactImportExport getContactImportExports(String type) {
-    return contactImportExport_.get(type) ;
+    return contactImportExport_.get(type);
   }
 
   public String[] getImportExportType() throws Exception {
-    return contactImportExport_.keySet().toArray(new String[]{}) ;
+    return contactImportExport_.keySet().toArray(new String[] {});
   }
 
   public DataPageList searchContact(String username, ContactFilter filter) throws Exception {
-    return storage_.searchContact(username, filter) ;
+    return storage_.searchContact(username, filter);
   }
 
-
   public AddressBook getSharedAddressBook(String username, String addressBookId) throws Exception {
-    return storage_.getSharedAddressBookById(username, addressBookId) ;
+    return storage_.getSharedAddressBookById(username, addressBookId);
   }
 
   public List<String> getAllEmailBySharedGroup(String username, String addressBookId) throws Exception {
-    return storage_.getAllEmailBySharedGroup(username, addressBookId) ;
+    return storage_.getAllEmailBySharedGroup(username, addressBookId);
   }
 
-  public List<String> getAllEmailByPublicGroup(String username, String groupId) throws Exception { 
-    return storage_.findEmailsInPublicAddressBook(username, groupId) ;
+  public List<String> getAllEmailByPublicGroup(String username, String groupId) throws Exception {
+    return storage_.findEmailsInPublicAddressBook(username, groupId);
   }
-
 
   public void registerNewUser(User user, boolean isNew) throws Exception {
-    storage_.registerNewUser(user, isNew) ;
+    storage_.registerNewUser(user, isNew);
   }
 
   @SuppressWarnings("deprecation")
   public void updateProfile(UserProfile userProfile) throws Exception {
-    Contact contact = storage_.loadPublicContactByUser(userProfile.getUserName()) ;
-    if (contact == null) return; 
+    Contact contact = storage_.loadPublicContactByUser(userProfile.getUserName());
+    if (contact == null)
+      return;
     contact.setNickName(userProfile.getAttribute("user.name.nickName"));
     try {
       Date date = new Date(userProfile.getAttribute("user.bdate"));
       contact.setBirthday(date);
-    } catch (Exception e) { }
+    } catch (Exception e) {
+    }
     contact.setGender(userProfile.getAttribute("user.gender"));
 
     StringBuilder builderNote = new StringBuilder();
@@ -397,12 +367,16 @@ public class ContactServiceImpl implements ContactService {
       builderNote.append(userProfile.getAttribute("user.employer"));
     }
     if (!Utils.isEmpty(userProfile.getAttribute("user.department"))) {
-      if (builderNote.length() == 0) builderNote.append(userProfile.getAttribute("user.department"));
-      else builderNote.append("\n" + userProfile.getAttribute("user.department"));
+      if (builderNote.length() == 0)
+        builderNote.append(userProfile.getAttribute("user.department"));
+      else
+        builderNote.append("\n" + userProfile.getAttribute("user.department"));
     }
     if (!Utils.isEmpty(userProfile.getAttribute("user.language"))) {
-      if (builderNote.length() == 0) builderNote.append(userProfile.getAttribute("user.language"));
-      else builderNote.append("\n" + userProfile.getAttribute("user.language"));
+      if (builderNote.length() == 0)
+        builderNote.append(userProfile.getAttribute("user.language"));
+      else
+        builderNote.append("\n" + userProfile.getAttribute("user.language"));
     }
     contact.setNote(builderNote.toString());
     contact.setJobTitle(userProfile.getAttribute("user.jobtitle"));
@@ -412,8 +386,10 @@ public class ContactServiceImpl implements ContactService {
       builderHomeAddress.append(userProfile.getAttribute("user.home-info.postal.name"));
     }
     if (!Utils.isEmpty(userProfile.getAttribute("user.home-info.postal.street"))) {
-      if (builderHomeAddress.length() == 0) builderHomeAddress.append(userProfile.getAttribute("user.home-info.postal.street"));
-      else builderHomeAddress.append(" " + userProfile.getAttribute("user.home-info.postal.street"));
+      if (builderHomeAddress.length() == 0)
+        builderHomeAddress.append(userProfile.getAttribute("user.home-info.postal.street"));
+      else
+        builderHomeAddress.append(" " + userProfile.getAttribute("user.home-info.postal.street"));
     }
     contact.setHomeAddress(builderHomeAddress.toString());
 
@@ -435,42 +411,42 @@ public class ContactServiceImpl implements ContactService {
     contact.setPersonalSite(userProfile.getAttribute("user.home-info.online.uri"));
 
     ExoContainer container = ExoContainerContext.getCurrentContainer();
-    OrganizationService organizationService = 
-      (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class) ;
+    OrganizationService organizationService = (OrganizationService) container.getComponentInstanceOfType(OrganizationService.class);
     String email = organizationService.getUserHandler().findUserByName(userProfile.getUserName()).getEmail();
     StringBuilder builderEmailAddress = new StringBuilder();
     if (!Utils.isEmpty(email)) {
       builderEmailAddress.append(email);
     }
     if (!Utils.isEmpty(userProfile.getAttribute("user.home-info.online.email"))) {
-      if (builderEmailAddress.length() == 0) builderEmailAddress.append(userProfile.getAttribute("user.home-info.online.email"));
-      else builderEmailAddress.append("," + userProfile.getAttribute("user.home-info.online.email"));
+      if (builderEmailAddress.length() == 0)
+        builderEmailAddress.append(userProfile.getAttribute("user.home-info.online.email"));
+      else
+        builderEmailAddress.append("," + userProfile.getAttribute("user.home-info.online.email"));
     }
     if (!Utils.isEmpty(userProfile.getAttribute("user.business-info.online.email"))) {
-      if (builderEmailAddress.length() == 0) builderEmailAddress.append(userProfile.getAttribute("user.business-info.online.email"));
-      else builderEmailAddress.append("," + userProfile.getAttribute("user.business-info.online.email"));
+      if (builderEmailAddress.length() == 0)
+        builderEmailAddress.append(userProfile.getAttribute("user.business-info.online.email"));
+      else
+        builderEmailAddress.append("," + userProfile.getAttribute("user.business-info.online.email"));
     }
     contact.setEmailAddress(builderEmailAddress.toString());
 
-    Calendar cal = new GregorianCalendar() ;
-    contact.setLastUpdated(cal.getTime()) ;
+    Calendar cal = new GregorianCalendar();
+    contact.setLastUpdated(cal.getTime());
     saveContact(userProfile.getUserName(), contact, false);
 
   }
-
 
   public void addGroupToPersonalContact(String userId, String groupId) throws Exception {
     addUserContactInAddressBook(userId, groupId);
   }
 
-
   public void saveAddress(String username, String emailAddress) throws Exception {
-    storage_.saveAddress(username, emailAddress) ;
+    storage_.saveAddress(username, emailAddress);
   }
 
-
   public Tag getTag(String username, String tagName) throws Exception {
-    return storage_.getTag(username, tagName) ;
+    return storage_.getTag(username, tagName);
   }
 
   public boolean haveEditPermissionOnContact(String username, Contact contact) throws Exception {
@@ -481,7 +457,7 @@ public class ContactServiceImpl implements ContactService {
   public void addListenerPlugin(ContactEventListener listener) throws Exception {
     listeners_.add(listener);
   }
-  
+
   public void savePublicAddressBook(AddressBook addressbook, boolean isNew) throws Exception {
     storage_.savePublicAddressBook(addressbook, isNew);
   }

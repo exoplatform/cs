@@ -42,10 +42,7 @@ public class SubscriptionFilter extends AndFilter {
         Presence presence = (Presence) packet;
         if (presence.getFrom().equals(presence.getTo()))
           return false;
-        if (presence.getType() == Presence.Type.subscribe
-            || presence.getType() == Presence.Type.unsubscribe
-            || presence.getType() == Presence.Type.subscribed
-            || presence.getType() == Presence.Type.unsubscribed)
+        if (presence.getType() == Presence.Type.subscribe || presence.getType() == Presence.Type.unsubscribe || presence.getType() == Presence.Type.subscribed || presence.getType() == Presence.Type.unsubscribed)
           return true;
         return false;
       }

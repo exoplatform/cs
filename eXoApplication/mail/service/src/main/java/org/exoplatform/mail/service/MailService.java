@@ -248,9 +248,7 @@ public interface MailService {
    * @return MessagePageList
    * @throws Exception
    */
-  public MessagePageList getMessagePageListByFolder(String username,
-                                                    String accountId,
-                                                    String folderId) throws Exception;
+  public MessagePageList getMessagePageListByFolder(String username, String accountId, String folderId) throws Exception;
 
   /**
    * Get all tags of account
@@ -304,10 +302,7 @@ public interface MailService {
    * @param message
    * @throws Exception
    */
-  public void removeTagsInMessages(String username,
-                                   String accountId,
-                                   List<Message> messages,
-                                   List<String> tags) throws Exception;
+  public void removeTagsInMessages(String username, String accountId, List<Message> messages, List<String> tags) throws Exception;
 
   /**
    * Find all the message that has the tag , remove the tag from the message and
@@ -400,17 +395,10 @@ public interface MailService {
    * @return true if save message success. false if else         
    * @throws Exception
    */
-  public boolean saveMessage(String username,
-                          Account account,
-                          String targetMsgPath,
-                          Message message,
-                          boolean isNew) throws Exception;
-  //@Deprecated
-  public void saveMessage(String username,
-                          String accountId,
-                          String targetMsgPath,
-                          Message message,
-                          boolean isNew) throws Exception;
+  public boolean saveMessage(String username, Account account, String targetMsgPath, Message message, boolean isNew) throws Exception;
+
+  // @Deprecated
+  public void saveMessage(String username, String accountId, String targetMsgPath, Message message, boolean isNew) throws Exception;
 
   public void saveMessage(String username, String accountId, Message message, boolean isNew) throws Exception;
 
@@ -432,10 +420,7 @@ public interface MailService {
    * @param messageId
    * @throws Exception
    */
-  public void removeMessages(String username,
-                             String accountId,
-                             List<Message> messages,
-                             boolean moveReference) throws Exception;
+  public void removeMessages(String username, String accountId, List<Message> messages, boolean moveReference) throws Exception;
 
   /**
    * Move a list of message from the current folder to the given folder
@@ -447,19 +432,11 @@ public interface MailService {
    * @param msg
    * @throws Exception
    */
-  public List<Message> moveMessages(String username,
-                           String accountId,
-                           List<Message> msgList,
-                           String currentFolderId,
-                           String destFolderId) throws Exception;
-/**
- * Move message(s) to Trash folder*/
-  public List<Message> moveMessages(String username,
-                           String accountId,
-                           List<Message> msgList,
-                           String currentFolderId,
-                           String destFolderId,
-                           boolean updateReference) throws Exception;
+  public List<Message> moveMessages(String username, String accountId, List<Message> msgList, String currentFolderId, String destFolderId) throws Exception;
+
+  /**
+   * Move message(s) to Trash folder*/
+  public List<Message> moveMessages(String username, String accountId, List<Message> msgList, String currentFolderId, String destFolderId, boolean updateReference) throws Exception;
 
   /**
    * Move a message from the current folder to the given folder
@@ -472,11 +449,8 @@ public interface MailService {
    * @return the moved/deleted message, and return null value if that message hasn't moved/deleted
    * @throws Exception
    */
-  public Message moveMessage(String username,
-                          String accountId,
-                          Message msg,
-                          String currentFolderId,
-                          String destFolderId) throws Exception;
+  public Message moveMessage(String username, String accountId, Message msg, String currentFolderId, String destFolderId) throws Exception;
+
   /**
    * Move a message from the current folder to the given folder
    * 
@@ -489,12 +463,7 @@ public interface MailService {
    * @return the moved/deleted message, and return null value if that message hasn't moved/deleted
    * @throws Exception
    */
-  public void moveMessage(String username,
-                          String accountId,
-                          Message msg,
-                          String currentFolderId,
-                          String destFolderId,
-                          boolean updateReference) throws Exception;
+  public void moveMessage(String username, String accountId, Message msg, String currentFolderId, String destFolderId, boolean updateReference) throws Exception;
 
   /**
    * Use smtp to send message with given server configuration
@@ -612,11 +581,7 @@ public interface MailService {
    * @param newSetting
    * @throws Exception
    */
-  public boolean importMessage(String username,
-                               String accountId,
-                               String folderId,
-                               InputStream inputStream,
-                               String type) throws Exception;
+  public boolean importMessage(String username, String accountId, String folderId, InputStream inputStream, String type) throws Exception;
 
   /**
    * Export message from eXo Mail. The exported file can reimport to eXo Mail or
@@ -658,12 +623,7 @@ public interface MailService {
    * @param property
    * @throws Exception
    */
-  public void toggleMessageProperty(String username,
-                                    String accountId,
-                                    List<Message> msgList,
-                                    String folderId,
-                                    String property,
-                                    boolean value) throws Exception;
+  public void toggleMessageProperty(String username, String accountId, List<Message> msgList, String folderId, String property, boolean value) throws Exception;
 
   /**
    * Get path of node, that contains all folders
@@ -736,6 +696,7 @@ public interface MailService {
    * @throws Exception 
    */
   public void addListenerPlugin(ComponentPlugin listener) throws Exception;
+
   /**
    * The function add return receipt message for mail, 
    * when user read the mail, system will ask user to let sender 
@@ -748,110 +709,110 @@ public interface MailService {
    * @throws Exception
    */
   public boolean sendReturnReceipt(String username, String accId, String msgId, ResourceBundle res) throws Exception;
-  
+
   /**
    * Function to get ContinuationService in current context 
    * @return : ContinuationService in current container 
    */
   public ContinuationService getContinuationService();
-  
+
   /**
    * @param continuationService
    */
-    public void setContinuationService(ContinuationService continuationService);
-    
-    /**
-     * update checking mail status for each client using Cometd.
-     * @param userName
-     * @param info
-     */
-    public void updateCheckingMailStatusByCometd(String userName, String accountId, CheckingInfo info);
-    
-    /**
-     * Saving new folder as parent  
-     * @param userName
-     * @param accountId
-     * @param folder*/
-    public boolean saveFolderImapOnline(String userName, String accountId, Folder folder) throws Exception;
-    /**
-     * Saving new folder as child folder  
-     * @param userName
-     * @param accountId
-     * @param parentId
-     * @param folder
-     * */
-    public boolean saveFolderImapOnline(String userName, String accountId, String parentId, Folder folder) throws Exception ;
-    
-    
-    
-    /**
-     * Retrieve attachment from personal document location of user with that given path
-     * @param userName : user id
-     * @param relPath : relative path of file
-     * @return mail service binary attachment 
-     * @throws Exception
-     */
-    public BufferAttachment getAttachmentFromDMS(String userName, String relPath) throws Exception;
-    
-    /**
-     * get info of user to initialize UI selector of DMS.
-     * @param userName
-     * @return array of strings. it contains 3 elements: 1 is repository name, 2 is workspace name, 
-     * 3 is root path.
-     * @throws Exception
-     */
-    public String[] getDMSDataInfo(String userName) throws Exception;
-    
-    /**
-     * Retrieve Node by given relative path 
-     * @param userName : user id
-     * @param relPath  : relative path to node
-     * @return Node object 
-     * @throws Exception
-     */
-    public Node getDMSSelectedNode(String userName, String relPath) throws Exception;
-    
-    /**
-     * delegate or update permission for receiver 
-     * @param sender : single userId , the user who given a delegation to other
-     * @param receiver : single userId, the receiver who receive the delegation
-     * @param accountId : the account will be delegated
-     * @throws Exception
-     */
-    public void delegateAccount(String sender, String receiver, String accountId, String permission) throws Exception ;
-    
-    /**
-     * query all delegated accounts for given user id
-     * @param userId : the user who received delegation
-     * @return list of account object with map of permission e.g : root:read or demo:send
-     * @throws Exception
-     */
-    public List<Account> getDelegatedAccounts(String userId) throws Exception ;
-    
-    /**
-     * get specific delegated account of user by given by accountId 
-     * @param userId : the user who received delegation
-     * @param accountId : specific account id
-     * @return An account object with  map of permission e.g : root:read or demo:send
-     * @throws Exception
-     */
-    public Account getDelegatedAccount(String userId, String accountId) throws Exception ;
-    
-    /**
-     * remove, stop delegate account
-     * @param userId
-     * @param receiver
-     * @param accountId
-     * @throws Exception
-     */
-    public void removeDelegateAccount(String userId,  String receiver, String accountId) throws Exception;
-    
-    public String getCurrentUserName();
+  public void setContinuationService(ContinuationService continuationService);
 
-    public void setCurrentUserName(String username);
+  /**
+   * update checking mail status for each client using Cometd.
+   * @param userName
+   * @param info
+   */
+  public void updateCheckingMailStatusByCometd(String userName, String accountId, CheckingInfo info);
 
-    public String getDelegatorUserName(String currentUserName, String accountId) throws Exception;
-    public void addPlugin(ComponentPlugin plugin) ;
-    public Map<String, MailSettingConfigPlugin> getSettingConfig();
+  /**
+   * Saving new folder as parent  
+   * @param userName
+   * @param accountId
+   * @param folder*/
+  public boolean saveFolderImapOnline(String userName, String accountId, Folder folder) throws Exception;
+
+  /**
+   * Saving new folder as child folder  
+   * @param userName
+   * @param accountId
+   * @param parentId
+   * @param folder
+   * */
+  public boolean saveFolderImapOnline(String userName, String accountId, String parentId, Folder folder) throws Exception;
+
+  /**
+   * Retrieve attachment from personal document location of user with that given path
+   * @param userName : user id
+   * @param relPath : relative path of file
+   * @return mail service binary attachment 
+   * @throws Exception
+   */
+  public BufferAttachment getAttachmentFromDMS(String userName, String relPath) throws Exception;
+
+  /**
+   * get info of user to initialize UI selector of DMS.
+   * @param userName
+   * @return array of strings. it contains 3 elements: 1 is repository name, 2 is workspace name, 
+   * 3 is root path.
+   * @throws Exception
+   */
+  public String[] getDMSDataInfo(String userName) throws Exception;
+
+  /**
+   * Retrieve Node by given relative path 
+   * @param userName : user id
+   * @param relPath  : relative path to node
+   * @return Node object 
+   * @throws Exception
+   */
+  public Node getDMSSelectedNode(String userName, String relPath) throws Exception;
+
+  /**
+   * delegate or update permission for receiver 
+   * @param sender : single userId , the user who given a delegation to other
+   * @param receiver : single userId, the receiver who receive the delegation
+   * @param accountId : the account will be delegated
+   * @throws Exception
+   */
+  public void delegateAccount(String sender, String receiver, String accountId, String permission) throws Exception;
+
+  /**
+   * query all delegated accounts for given user id
+   * @param userId : the user who received delegation
+   * @return list of account object with map of permission e.g : root:read or demo:send
+   * @throws Exception
+   */
+  public List<Account> getDelegatedAccounts(String userId) throws Exception;
+
+  /**
+   * get specific delegated account of user by given by accountId 
+   * @param userId : the user who received delegation
+   * @param accountId : specific account id
+   * @return An account object with  map of permission e.g : root:read or demo:send
+   * @throws Exception
+   */
+  public Account getDelegatedAccount(String userId, String accountId) throws Exception;
+
+  /**
+   * remove, stop delegate account
+   * @param userId
+   * @param receiver
+   * @param accountId
+   * @throws Exception
+   */
+  public void removeDelegateAccount(String userId, String receiver, String accountId) throws Exception;
+
+  public String getCurrentUserName();
+
+  public void setCurrentUserName(String username);
+
+  public String getDelegatorUserName(String currentUserName, String accountId) throws Exception;
+
+  public void addPlugin(ComponentPlugin plugin);
+
+  public Map<String, MailSettingConfigPlugin> getSettingConfig();
 }
-

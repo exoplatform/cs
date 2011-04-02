@@ -1,13 +1,17 @@
-
-
 package org.exoplatform.mail.service.impl;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.Vector;
 
-import javax.activation.*;
-import javax.mail.*;
-import javax.mail.internet.*;
+import javax.activation.DataSource;
+import javax.mail.BodyPart;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.internet.ContentType;
+import javax.mail.internet.InternetHeaders;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 /**
  * A multipart/report message content, as defined in
@@ -52,8 +56,7 @@ public class MultipartReport extends MimeMultipart {
    * Construct a multipart/report object with the specified plain
    * text and delivery status to be returned to the user.
    */
-  public MultipartReport(String text, DeliveryStatus status)
-  throws MessagingException {
+  public MultipartReport(String text, DeliveryStatus status) throws MessagingException {
     super("report");
     ContentType ct = new ContentType(contentType);
     ct.setParameter("report-type", "delivery-status");
@@ -66,13 +69,12 @@ public class MultipartReport extends MimeMultipart {
     setBodyPart(mbp, 1);
     constructed = true;
   }
-  
+
   /**
    * Construct a multipart/report object with the specified plain
    * text and disposition notification to be returned to the user.
    */
-  public MultipartReport(String text, DispositionNotification notification)
-  throws MessagingException {
+  public MultipartReport(String text, DispositionNotification notification) throws MessagingException {
     super("report");
     ContentType ct = new ContentType(contentType);
     ct.setParameter("report-type", "disposition-notification");
@@ -90,8 +92,7 @@ public class MultipartReport extends MimeMultipart {
    * Construct a multipart/report object with the specified plain
    * text, delivery status, and original message to be returned to the user.
    */
-  public MultipartReport(String text, DeliveryStatus status,
-                         MimeMessage msg) throws MessagingException {
+  public MultipartReport(String text, DeliveryStatus status, MimeMessage msg) throws MessagingException {
     this(text, status);
     if (msg != null) {
       MimeBodyPart mbp = new MimeBodyPart();
@@ -104,8 +105,7 @@ public class MultipartReport extends MimeMultipart {
    * Construct a multipart/report object with the specified plain
    * text, disposition notification, and original message to be returned to the user.
    */
-  public MultipartReport(String text, DispositionNotification notification,
-                         MimeMessage msg) throws MessagingException {
+  public MultipartReport(String text, DispositionNotification notification, MimeMessage msg) throws MessagingException {
     this(text, notification);
     if (msg != null) {
       MimeBodyPart mbp = new MimeBodyPart();
@@ -114,14 +114,12 @@ public class MultipartReport extends MimeMultipart {
     }
   }
 
-  
   /**
    * Construct a multipart/report object with the specified plain
    * text, delivery status, and headers from the original message
    * to be returned to the user.
    */
-  public MultipartReport(String text, DeliveryStatus status,
-                         InternetHeaders hdr) throws MessagingException {
+  public MultipartReport(String text, DeliveryStatus status, InternetHeaders hdr) throws MessagingException {
     this(text, status);
     if (hdr != null) {
       MimeBodyPart mbp = new MimeBodyPart();
@@ -129,14 +127,13 @@ public class MultipartReport extends MimeMultipart {
       setBodyPart(mbp, 2);
     }
   }
-  
+
   /**
    * Construct a multipart/report object with the specified plain
    * text, disposition notification, and headers from the original message
    * to be returned to the user.
    */
-  public MultipartReport(String text, DispositionNotification notification,
-                         InternetHeaders hdr) throws MessagingException {
+  public MultipartReport(String text, DispositionNotification notification, InternetHeaders hdr) throws MessagingException {
     this(text, notification);
     if (hdr != null) {
       MimeBodyPart mbp = new MimeBodyPart();
@@ -149,19 +146,14 @@ public class MultipartReport extends MimeMultipart {
    * Constructs a MultipartReport object and its bodyparts from the 
    * given DataSource. <p>
    *
-   * @param	ds	DataSource, can be a MultipartDataSource
+   * @param  ds  DataSource, can be a MultipartDataSource
    */
   public MultipartReport(DataSource ds) throws MessagingException {
     super(ds);
     parse();
     constructed = true;
     /*
-     * Can't fail to construct object because some programs just
-     * want to treat this as a Multipart and examine the parts.
-     *
-	if (getCount() < 2 || getCount() > 3)	// XXX allow extra parts
-	    throw new MessagingException(
-		"Wrong number of parts in multipart/report: " + getCount());
+     * Can't fail to construct object because some programs just want to treat this as a Multipart and examine the parts. if (getCount() < 2 || getCount() > 3) // XXX allow extra parts throw new MessagingException( "Wrong number of parts in multipart/report: " + getCount());
      */
   }
 
@@ -178,13 +170,13 @@ public class MultipartReport extends MimeMultipart {
     try {
       BodyPart bp = getBodyPart(0);
       if (bp.isMimeType("text/plain"))
-        return (String)bp.getContent();
+        return (String) bp.getContent();
       if (bp.isMimeType("multipart/alternative")) {
-        Multipart mp = (Multipart)bp.getContent();
+        Multipart mp = (Multipart) bp.getContent();
         for (int i = 0; i < mp.getCount(); i++) {
           bp = mp.getBodyPart(i);
           if (bp.isMimeType("text/plain"))
-            return (String)bp.getContent();
+            return (String) bp.getContent();
         }
       }
     } catch (IOException ex) {
@@ -207,9 +199,8 @@ public class MultipartReport extends MimeMultipart {
    * Return the body part containing the message to be presented to
    * the user, usually just a text/plain part.
    */
-  public synchronized MimeBodyPart getTextBodyPart()
-  throws MessagingException {
-    return (MimeBodyPart)getBodyPart(0);
+  public synchronized MimeBodyPart getTextBodyPart() throws MessagingException {
+    return (MimeBodyPart) getBodyPart(0);
   }
 
   /**
@@ -219,52 +210,46 @@ public class MultipartReport extends MimeMultipart {
    * text/plain and text/html parts.  Any type is allowed here
    * but these types are most common.
    */
-  public synchronized void setTextBodyPart(MimeBodyPart mbp)
-  throws MessagingException {
+  public synchronized void setTextBodyPart(MimeBodyPart mbp) throws MessagingException {
     setBodyPart(mbp, 0);
   }
 
   /**
    * Get the delivery status associated with this multipart/report.
    */
-  public synchronized DeliveryStatus getDeliveryStatus()
-  throws MessagingException {
+  public synchronized DeliveryStatus getDeliveryStatus() throws MessagingException {
     if (getCount() < 2)
       return null;
     BodyPart bp = getBodyPart(1);
     if (!bp.isMimeType("message/delivery-status"))
       return null;
     try {
-      return (DeliveryStatus)bp.getContent();
+      return (DeliveryStatus) bp.getContent();
     } catch (IOException ex) {
-      throw new MessagingException("IOException getting DeliveryStatus",
-                                   ex);
+      throw new MessagingException("IOException getting DeliveryStatus", ex);
     }
   }
-  
+
   /**
    * Get the disposition notification associated with this multipart/report.
    */
-  public synchronized DispositionNotification getDispositionNotification()
-  throws MessagingException {
+  public synchronized DispositionNotification getDispositionNotification() throws MessagingException {
     if (getCount() < 2)
       return null;
     BodyPart bp = getBodyPart(1);
     if (!bp.isMimeType("message/disposition-notification"))
       return null;
     try {
-      return (DispositionNotification)bp.getContent();
+      return (DispositionNotification) bp.getContent();
     } catch (IOException ex) {
-      throw new MessagingException("IOException getting DispositionNotification",
-                                   ex);
+      throw new MessagingException("IOException getting DispositionNotification", ex);
     }
   }
 
   /**
    * Set the delivery status associated with this multipart/report.
    */
-  public synchronized void setDeliveryStatus(DeliveryStatus status)
-  throws MessagingException {
+  public synchronized void setDeliveryStatus(DeliveryStatus status) throws MessagingException {
     MimeBodyPart mbp = new MimeBodyPart();
     mbp.setContent(status, "message/delivery-status");
     setBodyPart(mbp, 2);
@@ -276,8 +261,7 @@ public class MultipartReport extends MimeMultipart {
   /**
    * Set the disposition notification associated with this multipart/report.
    */
-  public synchronized void setDispositionNotification(DispositionNotification notification)
-  throws MessagingException {
+  public synchronized void setDispositionNotification(DispositionNotification notification) throws MessagingException {
     MimeBodyPart mbp = new MimeBodyPart();
     mbp.setContent(notification, "message/disposition-notification");
     setBodyPart(mbp, 2);
@@ -285,26 +269,23 @@ public class MultipartReport extends MimeMultipart {
     ct.setParameter("report-type", "disposition-notification");
     contentType = ct.toString();
   }
-  
+
   /**
    * Get the original message that is being returned along with this
    * multipart/report.  If no original message is included, null is
    * returned.  In some cases only the headers of the original
    * message will be returned as an object of type MessageHeaders.
    */
-  public synchronized MimeMessage getReturnedMessage()
-  throws MessagingException {
+  public synchronized MimeMessage getReturnedMessage() throws MessagingException {
     if (getCount() < 3)
       return null;
     BodyPart bp = getBodyPart(2);
-    if (!bp.isMimeType("message/rfc822") &&
-        !bp.isMimeType("text/rfc822-headers"))
+    if (!bp.isMimeType("message/rfc822") && !bp.isMimeType("text/rfc822-headers"))
       return null;
     try {
-      return (MimeMessage)bp.getContent();
+      return (MimeMessage) bp.getContent();
     } catch (IOException ex) {
-      throw new MessagingException("IOException getting ReturnedMessage",
-                                   ex);
+      throw new MessagingException("IOException getting ReturnedMessage", ex);
     }
   }
 
@@ -313,10 +294,9 @@ public class MultipartReport extends MimeMultipart {
    * multipart/report.  If msg is null, any previously set
    * returned message or headers is removed.
    */
-  public synchronized void setReturnedMessage(MimeMessage msg)
-  throws MessagingException {
+  public synchronized void setReturnedMessage(MimeMessage msg) throws MessagingException {
     if (msg == null) {
-      BodyPart part = (BodyPart)parts.elementAt(2);
+      BodyPart part = (BodyPart) parts.elementAt(2);
       super.removeBodyPart(2);
       return;
     }
@@ -328,9 +308,8 @@ public class MultipartReport extends MimeMultipart {
     setBodyPart(mbp, 2);
   }
 
-  private synchronized void setBodyPart(BodyPart part, int index) 
-  throws MessagingException {
-    if (parts == null)	// XXX - can never happen?
+  private synchronized void setBodyPart(BodyPart part, int index) throws MessagingException {
+    if (parts == null) // XXX - can never happen?
       parts = new Vector();
 
     if (index < parts.size())
@@ -338,17 +317,15 @@ public class MultipartReport extends MimeMultipart {
     super.addBodyPart(part, index);
   }
 
-
   // Override Multipart methods to preserve integrity of multipart/report.
 
   /**
    * Set the subtype.  Throws MessagingException.
    *
-   * @param	subtype		Subtype
-   * @exception	MessagingException	always; can't change subtype
+   * @param  subtype    Subtype
+   * @exception  MessagingException  always; can't change subtype
    */
-  public synchronized void setSubType(String subtype) 
-  throws MessagingException {
+  public synchronized void setSubType(String subtype) throws MessagingException {
     throw new MessagingException("Can't change subtype of MultipartReport");
   }
 
@@ -356,24 +333,22 @@ public class MultipartReport extends MimeMultipart {
    * Remove the specified part from the multipart message.
    * Not allowed on a multipart/report object.
    *
-   * @param   part	The part to remove
-   * @exception	MessagingException always
+   * @param   part  The part to remove
+   * @exception  MessagingException always
    */
   public boolean removeBodyPart(BodyPart part) throws MessagingException {
-    throw new MessagingException(
-    "Can't remove body parts from multipart/report");
+    throw new MessagingException("Can't remove body parts from multipart/report");
   }
 
   /**
    * Remove the part at specified location (starting from 0).
    * Not allowed on a multipart/report object.
    *
-   * @param   index	Index of the part to remove
-   * @exception	MessagingException	always
+   * @param   index  Index of the part to remove
+   * @exception  MessagingException  always
    */
   public void removeBodyPart(int index) throws MessagingException {
-    throw new MessagingException(
-    "Can't remove body parts from multipart/report");
+    throw new MessagingException("Can't remove body parts from multipart/report");
   }
 
   /**
@@ -381,16 +356,14 @@ public class MultipartReport extends MimeMultipart {
    * Not allowed on a multipart/report object.
    *
    * @param  part  The Part to be appended
-   * @exception       MessagingException	always
+   * @exception       MessagingException  always
    */
-  public synchronized void addBodyPart(BodyPart part) 
-  throws MessagingException {
+  public synchronized void addBodyPart(BodyPart part) throws MessagingException {
     // Once constructor is done, don't allow this anymore.
     if (!constructed)
       super.addBodyPart(part);
     else
-      throw new MessagingException(
-      "Can't add body parts to multipart/report 1");
+      throw new MessagingException("Can't add body parts to multipart/report 1");
   }
 
   /**
@@ -399,11 +372,9 @@ public class MultipartReport extends MimeMultipart {
    *
    * @param  part  The BodyPart to be inserted
    * @param  index Location where to insert the part
-   * @exception       MessagingException	always
+   * @exception       MessagingException  always
    */
-  public synchronized void addBodyPart(BodyPart part, int index) 
-  throws MessagingException {
-    throw new MessagingException(
-    "Can't add body parts to multipart/report 2");
+  public synchronized void addBodyPart(BodyPart part, int index) throws MessagingException {
+    throw new MessagingException("Can't add body parts to multipart/report 2");
   }
 }

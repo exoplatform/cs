@@ -19,8 +19,6 @@ package org.exoplatform.calendar.service;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.commons.httpclient.Credentials;
-
 /**
  * Created by The eXo Platform SAS
  * Author : khiem.dohoang
@@ -28,7 +26,7 @@ import org.apache.commons.httpclient.Credentials;
  * Jan 10, 2011  
  */
 public interface RemoteCalendarService {
-  
+
   /**
    * Check if the remote url is valid, in 2 cases of iCalendar url or CalDav url, with authentication
    * @param url the remote url
@@ -38,8 +36,8 @@ public interface RemoteCalendarService {
    * @return true if remote url is available in case of iCalendar and CalDav access support in case of CalDav
    * @throws Exception
    */
-  boolean isValidRemoteUrl(String url, String type, String remoteUser, String remotePassword) throws IOException,UnsupportedOperationException ;
-  
+  boolean isValidRemoteUrl(String url, String type, String remoteUser, String remotePassword) throws IOException, UnsupportedOperationException;
+
   /**
    * Connect to remote server
    * @param remoteUrl the remote url
@@ -49,16 +47,16 @@ public interface RemoteCalendarService {
    * @return response's input stream
    * @throws Exception
    */
-  InputStream connectToRemoteServer(RemoteCalendar remoteCalendar) throws Exception ;
-  
+  InputStream connectToRemoteServer(RemoteCalendar remoteCalendar) throws Exception;
+
   /**
    * Import iCalendar to local eXo Calendar
    * @param remoteCalendar object content all properties for remote calendar.
    * @return Calendar object
    * @throws Exception
    */
-  Calendar importRemoteCalendar(RemoteCalendar remoteCalendar) throws Exception ;
-    
+  Calendar importRemoteCalendar(RemoteCalendar remoteCalendar) throws Exception;
+
   /**
    * Reload remote calendar
    * @param username
@@ -66,6 +64,6 @@ public interface RemoteCalendarService {
    * @return
    * @throws Exception
    */
-  Calendar refreshRemoteCalendar(String username, String remoteCalendarId) throws Exception ;
-  
+  Calendar refreshRemoteCalendar(String username, String remoteCalendarId) throws Exception;
+
 }

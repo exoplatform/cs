@@ -57,70 +57,70 @@ import org.picocontainer.Startable;
  * @author <a href="mailto:vitaly.parfonov@gmail.com">Vitaly Parfonov</a>
  * @version $Id: $
  */
-public class HistoryImpl implements Startable{
+public class HistoryImpl implements Startable {
 
   /**
    * 
    */
-  private static final String CONVERSATIONS         = "conversations".intern();
+  private static final String CONVERSATIONS            = "conversations".intern();
 
   /**
    * 
    */
-  private static final String PARTICIPANTS          = "participants".intern();
+  private static final String PARTICIPANTS             = "participants".intern();
 
   /**
    * 
    */
-  private static final String PARTICIPANTS_NT       = "lr:participantschat".intern();
+  private static final String PARTICIPANTS_NT          = "lr:participantschat".intern();
 
   /**
    * 
    */
-  private static final String CONVERSATIONS_NT      = "lr:conversations".intern();
+  private static final String CONVERSATIONS_NT         = "lr:conversations".intern();
 
   /**
    * 
    */
-  private static final String HISTORICAL_MESSAGE_NT = "lr:historicalmessage".intern();
+  private static final String HISTORICAL_MESSAGE_NT    = "lr:historicalmessage".intern();
 
   /**
    * 
    */
-  private static final String LR_MESSAGE_DATESEND   = "lr:messagedateSend";
+  private static final String LR_MESSAGE_DATESEND      = "lr:messagedateSend";
 
   /**
    * 
    */
-  private static final String LR_MESSAGE_TO         = "lr:messageto";
+  private static final String LR_MESSAGE_TO            = "lr:messageto";
 
   /**
    * 
    */
-  private static final String LR_MESSAGE_RECIEVE    = "lr:messagereceive";
+  private static final String LR_MESSAGE_RECIEVE       = "lr:messagereceive";
 
   /**
    * 
    */
-  private static final String HISTORY_NT            = "lr:chathistory";
+  private static final String HISTORY_NT               = "lr:chathistory";
 
   /**
    * 
    */
-  private static final String CONFIG_NAME           = "history-conf";
+  private static final String CONFIG_NAME              = "history-conf";
 
   /**
    * 
    */
-  private static final String APPLICATION           = "eXoChat";
+  private static final String APPLICATION              = "eXoChat";
 
   /**
    * 
    */
-  private static final String DEFAULTPRESENCESTATUS_NT             = "lr:defaultpresencestatus".intern();
-  
-  private static final String DEFAULTPRESENCESTATUS                = "defaultpresencestatus".intern();
-  
+  private static final String DEFAULTPRESENCESTATUS_NT = "lr:defaultpresencestatus".intern();
+
+  private static final String DEFAULTPRESENCESTATUS    = "defaultpresencestatus".intern();
+
   /**
    * 
    * */
@@ -143,17 +143,17 @@ public class HistoryImpl implements Startable{
   /**
    * 
    */
-  private Jcrom               jcrom;
-  
+  private Jcrom                    jcrom;
+
   /**
    * Queue that holds the messages to log.
    */
-  private Queue<HistoricalMessage > logQueue = new ConcurrentLinkedQueue<HistoricalMessage >();
-  
-  Log log = ExoLogger.getExoLogger(this.getClass());
-  
+  private Queue<HistoricalMessage> logQueue = new ConcurrentLinkedQueue<HistoricalMessage>();
+
+  Log                              log      = ExoLogger.getExoLogger(this.getClass());
+
   public void start() {
-    try{
+    try {
       Session sysSession = this.repositoryService.getCurrentRepository().getSystemSession(wsName);
       initNodes(sysSession);
       jcrom = new Jcrom();
@@ -161,15 +161,13 @@ public class HistoryImpl implements Startable{
       jcrom.map(Conversation.class);
       jcrom.map(InterlocutorImpl.class);
       jcrom.map(Participant.class);
-      
+
       jcrom.map(PresenceStatus.class);
     } catch (Exception e) {
       e.printStackTrace();
     }
   }
-    
-  
-  
+
   public void stop() {
     logAllMessages();
   }
@@ -182,17 +180,17 @@ public class HistoryImpl implements Startable{
     this.repositoryService = repositoryService;
     historyPath = initParams.getValueParam("path").getValue();
     wsName = initParams.getValueParam("workspace").getValue();
-    
-    if(jcrom == null) jcrom = new Jcrom();
+
+    if (jcrom == null)
+      jcrom = new Jcrom();
   }
-  
+
   /**
    * @param sysSession the session
    * @throws RepositoryException
    * @throws RepositoryConfigurationException
    */
-  private void initNodes(Session sysSession) throws RepositoryException,
-                                            RepositoryConfigurationException {
+  private void initNodes(Session sysSession) throws RepositoryException, RepositoryConfigurationException {
     Node node = sysSession.getRootNode();
     if (!node.hasNode(historyPath)) {
       Node tmpNode;
@@ -209,17 +207,16 @@ public class HistoryImpl implements Startable{
       if (cNode.canAddMixin("exo:privilegeable")) {
         cNode.addMixin("exo:privilegeable");
       }
-      String[] perm = { PermissionType.ADD_NODE, PermissionType.READ, PermissionType.SET_PROPERTY,
-          PermissionType.REMOVE };
+      String[] perm = { PermissionType.ADD_NODE, PermissionType.READ, PermissionType.SET_PROPERTY, PermissionType.REMOVE };
       cNode.setPermission(SystemIdentity.ANY, PermissionType.ALL);
       NodeImpl pNode = (NodeImpl) fNode.addNode(PARTICIPANTS, PARTICIPANTS_NT);
       if (pNode.canAddMixin("exo:privilegeable")) {
         pNode.addMixin("exo:privilegeable");
       }
-    
+
       pNode.setPermission(SystemIdentity.ANY, PermissionType.ALL);
-      
-      //defaul presence status *** initialize [lr:defaultpresencestatus] node type 
+
+      // defaul presence status *** initialize [lr:defaultpresencestatus] node type
       NodeImpl dps = (NodeImpl) fNode.addNode(DEFAULTPRESENCESTATUS, DEFAULTPRESENCESTATUS_NT);
       if (dps.canAddMixin("exo:privilegeable")) {
         dps.addMixin("exo:privilegeable");
@@ -228,54 +225,53 @@ public class HistoryImpl implements Startable{
 
       sysSession.save();
     }
-    
+
     sysSession.logout();
   }
-  
-  public Queue<HistoricalMessage > getLogQueue() {
+
+  public Queue<HistoricalMessage> getLogQueue() {
     return logQueue;
   }
 
   public void logMessage(HistoricalMessage message) {
     // Only log messages that have a body. Otherwise ignore it.
     if (message.getBody() != null) {
-        logQueue.add(message);
+      logQueue.add(message);
     }
   }
-  
+
   /**
    * Logs all the remaining message log entries to the database. Use this method to force
    * saving all the message log entries before the service becomes unavailable.
    */
   private void logAllMessages() {
-	  HistoricalMessage message;
-      SessionProvider provider = SessionProvider.createSystemProvider();
-      while (!logQueue.isEmpty()) {
-        message = logQueue.poll();
-          if (message != null) {
-              this.addHistoricalMessage(message, provider);
-          }
+    HistoricalMessage message;
+    SessionProvider provider = SessionProvider.createSystemProvider();
+    while (!logQueue.isEmpty()) {
+      message = logQueue.poll();
+      if (message != null) {
+        this.addHistoricalMessage(message, provider);
       }
-      provider.close();
+    }
+    provider.close();
   }
-  
+
   /**
    * @return
    * @throws RepositoryException
    * @throws RepositoryConfigurationException
    */
-  public ManageableRepository getRepository() throws RepositoryException,RepositoryConfigurationException{
+  public ManageableRepository getRepository() throws RepositoryException, RepositoryConfigurationException {
     return repositoryService.getCurrentRepository();
   }
-  
+
   /**
    * @return
    */
-  public String getWorkspace(){
-    return wsName; 
+  public String getWorkspace() {
+    return wsName;
   }
-  
-  
+
   /**
    * @param message the message add to history 
    * @param sessionProvider the session provider
@@ -291,35 +287,25 @@ public class HistoryImpl implements Startable{
         Boolean isGroupChat = historicalMessage.getType().equals(Message.Type.groupchat.name());
         Node conversationNode = getConversationsNode(sessionProvider);
         Node participantsNode = getParticipantsNode(sessionProvider);
-        Conversation conversation = getConversation(conversationNode,
-                                                    participantsNode,
-                                                    usernameTo,
-                                                    usernameFrom,
-                                                    isGroupChat,
-                                                    true);
+        Conversation conversation = getConversation(conversationNode, participantsNode, usernameTo, usernameFrom, isGroupChat, true);
         if (conversation != null) {
           conversation.addMessage(historicalMessage);
           conversation.setLastActiveDate(date);
           updateConversation(conversationNode, conversation, usernameTo);
         } else {
           conversationId = CodingUtils.encodeToHex(UUID.randomUUID().toString());
-          createNewConversation(conversationNode,
-                                participantsNode,
-                                conversationId,
-                                date,
-                                historicalMessage);
+          createNewConversation(conversationNode, participantsNode, conversationId, date, historicalMessage);
         }
         conversationNode.getSession().save();
       } catch (Exception e) {
-        //TODO: find why exception happens
-        //e.printStackTrace();
+        // TODO: find why exception happens
+        // e.printStackTrace();
         return false;
       }
     }
     return true;
   }
 
-  
   /**
    * @param usernameTo the receiver username
    * @param usernameFrom the sender username
@@ -327,23 +313,15 @@ public class HistoryImpl implements Startable{
    * @param sessionProvider the session provider
    * @return the list of message 
    */
-  public List<HistoricalMessage> getHistoricalMessages(String usernameTo,
-                                                       String usernameFrom,
-                                                       Boolean isGroupChat,
-                                                       SessionProvider sessionProvider) {
+  public List<HistoricalMessage> getHistoricalMessages(String usernameTo, String usernameFrom, Boolean isGroupChat, SessionProvider sessionProvider) {
     List<HistoricalMessage> list = new ArrayList<HistoricalMessage>();
     try {
       Node conversationsNode = getConversationsNode(sessionProvider);
       Node participantsNode = getParticipantsNode(sessionProvider);
-      Conversation conversation = getConversation(conversationsNode,
-                                                  participantsNode,
-                                                  usernameTo,
-                                                  usernameFrom,
-                                                  isGroupChat,
-                                                  true);
+      Conversation conversation = getConversation(conversationsNode, participantsNode, usernameTo, usernameFrom, isGroupChat, true);
       if (conversation != null) {
         list.addAll(conversation.getMessageList());
-        //Merge new messages from cache
+        // Merge new messages from cache
         list.addAll(getHistoricalMessagesFromCache(usernameTo, usernameFrom, null, null));
         return list;
       }
@@ -353,7 +331,6 @@ public class HistoryImpl implements Startable{
     return list;
   }
 
-  
   /**
    * @param usernameTo the receiver username
    * @param usernameFrom the sender username
@@ -362,29 +339,18 @@ public class HistoryImpl implements Startable{
    * @param sessionProvider the session provider
    * @return the list of message 
    */
-  public List<HistoricalMessage> getHistoricalMessages(String usernameTo,
-                                                       String usernameFrom,
-                                                       Boolean isGroupChat,
-                                                       Date dateFrom,
-                                                       SessionProvider sessionProvider) {
+  public List<HistoricalMessage> getHistoricalMessages(String usernameTo, String usernameFrom, Boolean isGroupChat, Date dateFrom, SessionProvider sessionProvider) {
     List<HistoricalMessage> list = new ArrayList<HistoricalMessage>();
     try {
       Node conversationsNode = getConversationsNode(sessionProvider);
       Node participantsNode = getParticipantsNode(sessionProvider);
-      Conversation conversation = getConversation(conversationsNode,
-                                                  participantsNode,
-                                                  usernameTo,
-                                                  usernameFrom,
-                                                  isGroupChat,
-                                                  true);
+      Conversation conversation = getConversation(conversationsNode, participantsNode, usernameTo, usernameFrom, isGroupChat, true);
       if (conversation != null) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(dateFrom);
         String dateFromStr = ISO8601.format(calendar);
         Node node = conversationsNode.getNode(conversation.getConversationId());
-        String sql = "SELECT * FROM " + HISTORICAL_MESSAGE_NT + " WHERE jcr:path LIKE '"
-            + node.getPath() + "/%' " + " AND " + LR_MESSAGE_DATESEND + " > TIMESTAMP '"
-            + dateFromStr + "' order by " + LR_MESSAGE_DATESEND;
+        String sql = "SELECT * FROM " + HISTORICAL_MESSAGE_NT + " WHERE jcr:path LIKE '" + node.getPath() + "/%' " + " AND " + LR_MESSAGE_DATESEND + " > TIMESTAMP '" + dateFromStr + "' order by " + LR_MESSAGE_DATESEND;
         QueryManager queryManager = node.getSession().getWorkspace().getQueryManager();
         Query query = queryManager.createQuery(sql, Query.SQL);
         QueryResult queryResult = query.execute();
@@ -395,7 +361,7 @@ public class HistoryImpl implements Startable{
           list.add(message);
         }
         conversationsNode.getSession().save();
-        //Merge new messages from cache
+        // Merge new messages from cache
         list.addAll(getHistoricalMessagesFromCache(usernameTo, usernameFrom, dateFrom, null));
         return list;
       }
@@ -415,22 +381,12 @@ public class HistoryImpl implements Startable{
    * @return the list of message 
    * @return
    */
-  public List<HistoricalMessage> getHistoricalMessages(String usernameTo,
-                                                       String usernameFrom,
-                                                       Boolean isGroupChat,
-                                                       Date dateFrom,
-                                                       Date dateTo,
-                                                       SessionProvider sessionProvider) {
+  public List<HistoricalMessage> getHistoricalMessages(String usernameTo, String usernameFrom, Boolean isGroupChat, Date dateFrom, Date dateTo, SessionProvider sessionProvider) {
     List<HistoricalMessage> list = new ArrayList<HistoricalMessage>();
     try {
       Node conversationsNode = getConversationsNode(sessionProvider);
       Node participantsNode = getParticipantsNode(sessionProvider);
-      Conversation conversation = getConversation(conversationsNode,
-                                                  participantsNode,
-                                                  usernameTo,
-                                                  usernameFrom,
-                                                  isGroupChat,
-                                                  false);
+      Conversation conversation = getConversation(conversationsNode, participantsNode, usernameTo, usernameFrom, isGroupChat, false);
       if (conversation != null) {
         Node node = conversationsNode.getNode(conversation.getConversationId());
         Calendar calendar = Calendar.getInstance();
@@ -438,9 +394,7 @@ public class HistoryImpl implements Startable{
         String dateFromStr = ISO8601.format(calendar);
         calendar.setTime(dateTo);
         String dateToStr = ISO8601.format(calendar);
-        String sql = "SELECT * FROM " + HISTORICAL_MESSAGE_NT + " WHERE jcr:path LIKE '"
-            + node.getPath() + "/%' " + " AND " + LR_MESSAGE_DATESEND + " BETWEEN TIMESTAMP '"
-            + dateFromStr + "' AND TIMESTAMP '" + dateToStr + "'";
+        String sql = "SELECT * FROM " + HISTORICAL_MESSAGE_NT + " WHERE jcr:path LIKE '" + node.getPath() + "/%' " + " AND " + LR_MESSAGE_DATESEND + " BETWEEN TIMESTAMP '" + dateFromStr + "' AND TIMESTAMP '" + dateToStr + "'";
         QueryManager queryManager = node.getSession().getWorkspace().getQueryManager();
         Query query = queryManager.createQuery(sql, Query.SQL);
         QueryResult queryResult = query.execute();
@@ -449,7 +403,7 @@ public class HistoryImpl implements Startable{
           Node msgNode = (Node) nodeIterator.next();
           list.add(jcrom.fromNode(HistoricalMessageImpl.class, msgNode));
         }
-        //Merge new messages from cache
+        // Merge new messages from cache
         list.addAll(getHistoricalMessagesFromCache(usernameTo, usernameFrom, dateFrom, dateTo));
         return list;
       }
@@ -458,7 +412,6 @@ public class HistoryImpl implements Startable{
     }
     return list;
   }
-
 
   /**
    * @param participantName the name
@@ -492,8 +445,7 @@ public class HistoryImpl implements Startable{
   public void messageReceive(String messageId, SessionProvider sessionProvider) {
     try {
       Node node = getConversationsNode(sessionProvider);
-      String sql = "SELECT * FROM " + HISTORICAL_MESSAGE_NT + " WHERE jcr:path LIKE '"
-          + node.getPath() + "/%/" + messageId + "'";
+      String sql = "SELECT * FROM " + HISTORICAL_MESSAGE_NT + " WHERE jcr:path LIKE '" + node.getPath() + "/%/" + messageId + "'";
       QueryManager queryManager = node.getSession().getWorkspace().getQueryManager();
       Query query = queryManager.createQuery(sql, Query.SQL);
       QueryResult queryResult = query.execute();
@@ -516,14 +468,11 @@ public class HistoryImpl implements Startable{
    * @param sessionProvider the session provider
    * @return the list of message
    */
-  public List<HistoricalMessage> getNotReciveMessage(String usernameTo,
-                                                     SessionProvider sessionProvider) {
+  public List<HistoricalMessage> getNotReciveMessage(String usernameTo, SessionProvider sessionProvider) {
     List<HistoricalMessage> list = new ArrayList<HistoricalMessage>();
     try {
       Node node = getConversationsNode(sessionProvider);
-      String sql = "SELECT * FROM " + HISTORICAL_MESSAGE_NT + " WHERE jcr:path LIKE '"
-          + node.getPath() + "/%' " + " AND " + LR_MESSAGE_TO + " LIKE '" + usernameTo + "%' AND "
-          + LR_MESSAGE_RECIEVE + " = 'false'";
+      String sql = "SELECT * FROM " + HISTORICAL_MESSAGE_NT + " WHERE jcr:path LIKE '" + node.getPath() + "/%' " + " AND " + LR_MESSAGE_TO + " LIKE '" + usernameTo + "%' AND " + LR_MESSAGE_RECIEVE + " = 'false'";
       QueryManager queryManager = node.getSession().getWorkspace().getQueryManager();
       Query query = queryManager.createQuery(sql, Query.SQL);
       QueryResult queryResult = query.execute();
@@ -539,21 +488,20 @@ public class HistoryImpl implements Startable{
     }
     return list;
   }
-  
-  private List<HistoricalMessage> getHistoricalMessagesFromCache(String usernameTo, String usernameFrom, Date dateFrom, Date dateTo){
-	List<HistoricalMessage> list = new ArrayList<HistoricalMessage>();
-	for(HistoricalMessage msg : logQueue){
-      if(msg.getTo() != null && msg.getFrom() != null){
+
+  private List<HistoricalMessage> getHistoricalMessagesFromCache(String usernameTo, String usernameFrom, Date dateFrom, Date dateTo) {
+    List<HistoricalMessage> list = new ArrayList<HistoricalMessage>();
+    for (HistoricalMessage msg : logQueue) {
+      if (msg.getTo() != null && msg.getFrom() != null) {
         String to = StringUtils.parseName(msg.getTo());
         String from = StringUtils.parseName(msg.getFrom());
         Date sendDate = msg.getDateSend();
-        if(to.equals(usernameTo) && from.equals(usernameFrom) || from.equals(usernameTo) && to.equals(usernameFrom))
-          if((dateFrom == null && dateTo == null) || (dateFrom != null && dateTo == null && sendDate.after(dateFrom)) || 
-        	  (dateFrom != null && dateTo != null && sendDate.after(dateFrom) && sendDate.before(dateTo))) 
+        if (to.equals(usernameTo) && from.equals(usernameFrom) || from.equals(usernameTo) && to.equals(usernameFrom))
+          if ((dateFrom == null && dateTo == null) || (dateFrom != null && dateTo == null && sendDate.after(dateFrom)) || (dateFrom != null && dateTo != null && sendDate.after(dateFrom) && sendDate.before(dateTo)))
             list.add(msg);
       }
     }
-	return list;
+    return list;
   }
 
   /**
@@ -606,12 +554,7 @@ public class HistoryImpl implements Startable{
    * @param withMessages return with messge or not
    * @return the converstion
    */
-  private Conversation getConversation(Node convesationNode,
-                                       Node participantsNode,
-                                       String usernameTo,
-                                       String usernameFrom,
-                                       Boolean isRoom,
-                                       Boolean withMessages) {
+  private Conversation getConversation(Node convesationNode, Node participantsNode, String usernameTo, String usernameFrom, Boolean isRoom, Boolean withMessages) {
     try {
       Participant participant = getParticipant(participantsNode, CodingUtils.encodeToHex(usernameTo));
       String conversationId = null;
@@ -650,11 +593,7 @@ public class HistoryImpl implements Startable{
    * @param message the message
    * @return the conversation
    */
-  private Conversation createNewConversation(Node conversationsNode,
-                                             Node participantsNode,
-                                             String conversationId,
-                                             Date date,
-                                             HistoricalMessageImpl message) {
+  private Conversation createNewConversation(Node conversationsNode, Node participantsNode, String conversationId, Date date, HistoricalMessageImpl message) {
     String jidTo = message.getTo();
     String jidFrom = message.getFrom();
     Boolean isGroupChat = message.getType().equals(Message.Type.groupchat.name());
@@ -762,8 +701,8 @@ public class HistoryImpl implements Startable{
         node.getSession().save();
       }
     } catch (Exception e) {
-        throw e;
-      //e.printStackTrace();
+      throw e;
+      // e.printStackTrace();
     }
   }
 
@@ -796,19 +735,19 @@ public class HistoryImpl implements Startable{
       return null;
     }
   }
-  
+
   /**
    * Saving user chat status
    * @param provider
    * @param userId
    * @param status
    * **/
-  public void savePresenceStatus(SessionProvider provider, String userId, String status) throws Exception{
+  public void savePresenceStatus(SessionProvider provider, String userId, String status) throws Exception {
     Node dpsNode = getDefaultPresenceStatusNode(provider);
     String hexName = CodingUtils.encodeToHex(userId);
     PresenceStatus presenceStatus = getPresenceStatus(dpsNode, hexName);
-    
-    if(dpsNode == null){ //add new lr:defaultpresencestatus\lr:presencestatus node
+
+    if (dpsNode == null) { // add new lr:defaultpresencestatus\lr:presencestatus node
       try {
         ManageableRepository repository = repositoryService.getCurrentRepository();
         Session session = provider.getSession(wsName, repository);
@@ -816,7 +755,7 @@ public class HistoryImpl implements Startable{
         Node fNode = null;
         Node historyNode = node.getNode(historyPath);
         String[] path = historyPath.split("/");
-        
+
         if (historyNode == null) {
           Node tmpNode;
           for (int i = 0; i < path.length - 1; i++) {
@@ -826,45 +765,45 @@ public class HistoryImpl implements Startable{
               tmpNode = node.addNode(path[i]);
             node = tmpNode;
           }
-         fNode = node.addNode(path[path.length - 1], HISTORY_NT);
-        }else{
+          fNode = node.addNode(path[path.length - 1], HISTORY_NT);
+        } else {
           fNode = historyNode.getNode(path[path.length - 1]);
         }
-        
+
         NodeImpl dps = (NodeImpl) fNode.addNode(DEFAULTPRESENCESTATUS, DEFAULTPRESENCESTATUS_NT);
         if (dps.canAddMixin("exo:privilegeable")) {
           dps.addMixin("exo:privilegeable");
         }
         dps.setPermission(SystemIdentity.ANY, PermissionType.ALL);
         presenceStatus = new PresenceStatus(userId, status);
-        //presenceStatus.setStatus(status);
-       // String presenceStatusPath = historyPath + "/" + DEFAULTPRESENCESTATUS;
-      //  if(!dps.getPath().equals(presenceStatusPath)) presenceStatus.setPath(presenceStatusPath);
-        
+        // presenceStatus.setStatus(status);
+        // String presenceStatusPath = historyPath + "/" + DEFAULTPRESENCESTATUS;
+        // if(!dps.getPath().equals(presenceStatusPath)) presenceStatus.setPath(presenceStatusPath);
+
         addPresenceStatus(dps, presenceStatus);
-        
+
         session.save();
         session.logout();
       } catch (Exception e) {
         log.error("Could not add a new node for [lr:defaultpresecestatus] node type: " + e.getMessage());
       }
-    }else { //update lr:status property
-      if(presenceStatus == null){
+    } else { // update lr:status property
+      if (presenceStatus == null) {
         presenceStatus = new PresenceStatus(userId, status);
-        //presenceStatus.setStatus(status);
+        // presenceStatus.setStatus(status);
         addPresenceStatus(dpsNode, presenceStatus);
-      }else{
-        if(presenceStatus.getHexName().equals(hexName)){
+      } else {
+        if (presenceStatus.getHexName().equals(hexName)) {
           Node presenceStatusNode = null;
           presenceStatus.setStatus(status);
           try {
-            if(dpsNode.hasNode(presenceStatus.getHexName())){
+            if (dpsNode.hasNode(presenceStatus.getHexName())) {
               presenceStatusNode = dpsNode.getNode(presenceStatus.getHexName());
               jcrom.updateNode(presenceStatusNode, presenceStatus);
               dpsNode.getSession().save();
             }
-           } catch (Exception e) {
-             log.error("Could not update [lr:presencestatus] node: " + e.getMessage());
+          } catch (Exception e) {
+            log.error("Could not update [lr:presencestatus] node: " + e.getMessage());
           }
         }
       }
@@ -874,18 +813,17 @@ public class HistoryImpl implements Startable{
   /**
    * Getting user chat status 
    * */
-  public String getPresenceStatusHistory(SessionProvider provider, String userId){
+  public String getPresenceStatusHistory(SessionProvider provider, String userId) {
     Node dpsNode = getDefaultPresenceStatusNode(provider);
     String hexName = CodingUtils.encodeToHex(userId);
     PresenceStatus ps = getPresenceStatus(dpsNode, hexName);
-    if(ps != null) {
+    if (ps != null) {
       return ps.getStatus();
     }
     return null;
   }
-  
-  
-  private void addPresenceStatus(Node dpsNode, PresenceStatus presenceStatus){
+
+  private void addPresenceStatus(Node dpsNode, PresenceStatus presenceStatus) {
     try {
       jcrom.addNode(dpsNode, presenceStatus);
       dpsNode.getSession().save();
@@ -893,37 +831,38 @@ public class HistoryImpl implements Startable{
       log.error("Could not add new a node to [lr:presencestatus] node type: " + e.getMessage());
     }
   }
+
   /**
    * Getting presence status from Node 
    * */
-  public PresenceStatus getPresenceStatus(Node dpsNode, String hexName){
+  public PresenceStatus getPresenceStatus(Node dpsNode, String hexName) {
     PresenceStatus presenceStatus = null;
     try {
-      if(dpsNode.hasNode(hexName)){
+      if (dpsNode.hasNode(hexName)) {
         Node presenceStatusNode = dpsNode.getNode(hexName);
-        presenceStatus  = jcrom.fromNode(PresenceStatus.class, presenceStatusNode);  
+        presenceStatus = jcrom.fromNode(PresenceStatus.class, presenceStatusNode);
       }
-    }catch (Exception e) {
+    } catch (Exception e) {
       log.error("Getting a PresenceStatus fail: " + e.getMessage(), e.getCause());
     }
-    
+
     return presenceStatus;
   }
-  
+
   /**
    * Getting exist user chat status node 
    * */
-  private Node getDefaultPresenceStatusNode(SessionProvider sessionProvider){
+  private Node getDefaultPresenceStatusNode(SessionProvider sessionProvider) {
     Node defaultPresenceStatusNode = null;
     try {
       ManageableRepository repository = repositoryService.getCurrentRepository();
       Session session = sessionProvider.getSession(wsName, repository);
       Node root = session.getRootNode();
-      defaultPresenceStatusNode = root.getNode(historyPath + "/" + DEFAULTPRESENCESTATUS) ;
+      defaultPresenceStatusNode = root.getNode(historyPath + "/" + DEFAULTPRESENCESTATUS);
     } catch (Exception e) {
       log.error("Default Presence status node is not exist:  " + e.getMessage());
-    }    
+    }
     return defaultPresenceStatusNode;
   }
-  
+
 }

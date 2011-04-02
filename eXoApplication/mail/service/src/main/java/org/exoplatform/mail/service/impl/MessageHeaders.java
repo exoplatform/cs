@@ -1,13 +1,13 @@
-
-
-
 package org.exoplatform.mail.service.impl;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
-import javax.activation.*;
-import javax.mail.*;
-import javax.mail.internet.*;
+import javax.activation.DataHandler;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.internet.InternetHeaders;
+import javax.mail.internet.MimeMessage;
 
 /**
  * A special MimeMessage object that contains only message headers,
@@ -19,14 +19,14 @@ public class MessageHeaders extends MimeMessage {
    * Construct a MessageHeaders object.
    */
   public MessageHeaders() throws MessagingException {
-    super((Session)null);
+    super((Session) null);
     content = new byte[0];
   }
 
   /**
    * Constructs a MessageHeaders object from the given InputStream.
    *
-   * @param	is	InputStream
+   * @param  is  InputStream
    */
   public MessageHeaders(InputStream is) throws MessagingException {
     super(null, is);
@@ -36,10 +36,10 @@ public class MessageHeaders extends MimeMessage {
   /**
    * Constructs a MessageHeaders object using the given InternetHeaders.
    *
-   * @param	headers	InternetHeaders to use
+   * @param  headers  InternetHeaders to use
    */
   public MessageHeaders(InternetHeaders headers) throws MessagingException {
-    super((Session)null);
+    super((Session) null);
     this.headers = headers;
     content = new byte[0];
   }
@@ -63,7 +63,7 @@ public class MessageHeaders extends MimeMessage {
   /**
    * Can't set any content for a MessageHeaders object.
    *
-   * @exception	MessagingException	always
+   * @exception  MessagingException  always
    */
   public void setDataHandler(DataHandler dh) throws MessagingException {
     throw new MessagingException("Can't set content for MessageHeaders");

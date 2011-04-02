@@ -20,14 +20,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
-
 /**
  * Author : Huu-Dung Kieu
  *          huu-dung.kieu@bull.be
  * 16 oct. 07  
  */
 public interface ContactImportExport {
-  
+
   /**
    * this method allow import contacts in form of input stream to a address book
    * @param username userId of current user
@@ -35,10 +34,8 @@ public interface ContactImportExport {
    * @param groupId id of address book that user wants to import contacts to
    * @throws Exception
    */
-  public void importContact(String username, InputStream input, String groupId) throws Exception ;
-  
-  
-  
+  public void importContact(String username, InputStream input, String groupId) throws Exception;
+
   /**
    * this method allow export contacts in form of output stream
    * @return output stream contains contacts information
@@ -46,8 +43,8 @@ public interface ContactImportExport {
    * @param contacts list contacts that user wants to export
    * @throws Exception
    */
-  public OutputStream exportContact(String username, List<Contact> contacts) throws Exception ;
-  
+  public OutputStream exportContact(String username, List<Contact> contacts) throws Exception;
+
   /**
    * 
     this method allow export contacts in some address books in form of output stream
@@ -56,5 +53,5 @@ public interface ContactImportExport {
    * @return output stream contains contacts information
    * @throws Exception
    */
-  public OutputStream exportContact(String username, String[] addressBookIds) throws Exception ;
+  public OutputStream exportContact(String username, String[] addressBookIds) throws Exception;
 }

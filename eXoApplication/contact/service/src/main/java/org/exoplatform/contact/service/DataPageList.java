@@ -26,48 +26,59 @@ import java.util.List;
  * @since July 25, 2007
  */
 public class DataPageList extends JCRPageList {
-  
-  private List<Contact> contactList_ = null ;
-  private boolean isQuery_ = false ;
-  private String value_ ;
-  
-  public DataPageList(List<Contact> contactList, long pageSize, String value, boolean isQuery ) throws Exception {
-    super(pageSize) ;
-    contactList_ = contactList ;
-    Collections.sort(contactList_, new FullNameComparator()) ;
-    value_ = value ;
-    isQuery_ = isQuery ;
-    setAvailablePage(contactList_.size()) ;
+
+  private List<Contact> contactList_ = null;
+
+  private boolean       isQuery_     = false;
+
+  private String        value_;
+
+  public DataPageList(List<Contact> contactList, long pageSize, String value, boolean isQuery) throws Exception {
+    super(pageSize);
+    contactList_ = contactList;
+    Collections.sort(contactList_, new FullNameComparator());
+    value_ = value;
+    isQuery_ = isQuery;
+    setAvailablePage(contactList_.size());
   }
-  
+
   protected void populateCurrentPage(long page, String username) throws Exception {
-    setAvailablePage(contactList_.size()) ;
-    //Node currentNode ;
-    long pageSize = getPageSize() ;
-    long position = 0 ;
-    if(page == 1) position = 0;
+    setAvailablePage(contactList_.size());
+    // Node currentNode ;
+    long pageSize = getPageSize();
+    long position = 0;
+    if (page == 1)
+      position = 0;
     else {
-      position = (page-1) * pageSize ;
-      //contactList_.skip(position) ;
+      position = (page - 1) * pageSize;
+      // contactList_.skip(position) ;
     }
-    currentListPage_ = new ArrayList<Contact>() ;
-    Long objPos = position ; 
-    if(position + pageSize > contactList_.size()) {
-      currentListPage_ = contactList_.subList(objPos.intValue(), contactList_.size()) ;
-    }else {
-      Long objPageSize = pageSize ; 
-      currentListPage_ = contactList_.subList(objPos.intValue(), objPos.intValue() + objPageSize.intValue() ) ;
+    currentListPage_ = new ArrayList<Contact>();
+    Long objPos = position;
+    if (position + pageSize > contactList_.size()) {
+      currentListPage_ = contactList_.subList(objPos.intValue(), contactList_.size());
+    } else {
+      Long objPageSize = pageSize;
+      currentListPage_ = contactList_.subList(objPos.intValue(), objPos.intValue() + objPageSize.intValue());
     }
   }
-	@Override
-	public List<Contact> getAll() throws Exception { return contactList_; }
-	public void setList(List<Contact> contacts) { contactList_ = contacts ; }
+
+  @Override
+  public List<Contact> getAll() throws Exception {
+    return contactList_;
+  }
+
+  public void setList(List<Contact> contacts) {
+    contactList_ = contacts;
+  }
+
   static public class FullNameComparator implements Comparator {
     public int compare(Object o1, Object o2) throws ClassCastException {
-      String name1 = ((Contact) o1).getFullName() ;
-      String name2 = ((Contact) o2).getFullName() ;
-      if (Utils.isEmpty(name1) || (Utils.isEmpty(name2))) return 0;
-      return name1.compareTo(name2) ;
+      String name1 = ((Contact) o1).getFullName();
+      String name2 = ((Contact) o2).getFullName();
+      if (Utils.isEmpty(name1) || (Utils.isEmpty(name2)))
+        return 0;
+      return name1.compareTo(name2);
     }
   }
 }

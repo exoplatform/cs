@@ -35,33 +35,32 @@ public class PresenceStatus {
   /**
    * assigned by userId***/
   @JcrName
-  private String                  hexName;                                            
+  private String hexName;
 
   @JcrPath
-  private String                  path;
-  
+  private String path;
+
   /**
    * set/get [lr:status] node property**/
-  
-  @JcrProperty(name = "lr:status")
-  private String                  status;
 
-  
+  @JcrProperty(name = "lr:status")
+  private String status;
+
   @JcrProperty(name = "lr:userid")
-  private String                  userId;
-  
-  public PresenceStatus(){
-    //nothing
+  private String userId;
+
+  public PresenceStatus() {
+    // nothing
   }
-  
+
   /**
    * userId be encode to Hex code by CodingUtils.encode() method***/
-  public PresenceStatus(String userId, String status){
+  public PresenceStatus(String userId, String status) {
     this.userId = userId;
     this.status = status;
     this.hexName = CodingUtils.encodeToHex(userId);
   }
-  
+
   public String getStatus() {
     return status;
   }
@@ -69,11 +68,11 @@ public class PresenceStatus {
   public void setStatus(String status) {
     this.status = status;
   }
-  
+
   public String getUserId() {
     return userId;
   }
-  
+
   public void setUserId(String userId) {
     this.userId = userId;
   }
@@ -85,7 +84,7 @@ public class PresenceStatus {
   public void setPath(String path) {
     this.path = path;
   }
-  
+
   public String getHexName() {
     return hexName;
   }

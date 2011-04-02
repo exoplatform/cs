@@ -30,7 +30,7 @@ public interface UserInfoService {
    * @return
    */
   OrganizationService getOrganizationService();
-  
+
   /**
    * @param userID the user id
    * @return the information about user
@@ -43,5 +43,5 @@ public interface UserInfoService {
    * @return the password of user
    */
   String providePassword(String userID);
-  
+
 }

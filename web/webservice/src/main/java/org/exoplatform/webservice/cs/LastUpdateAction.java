@@ -34,7 +34,6 @@ import org.exoplatform.services.jcr.impl.core.PropertyImpl;
 public class LastUpdateAction implements Action {
 
   public boolean execute(Context context) throws Exception {
-    // TODO Auto-generated method stub
     try {
       Node node = (Node)context.get("currentItem");
       if(!node.isNodeType("exo:datetime")){

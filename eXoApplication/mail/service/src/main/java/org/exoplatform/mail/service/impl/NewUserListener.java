@@ -34,86 +34,98 @@ import org.exoplatform.services.organization.UserEventListener;
  *
  */
 public class NewUserListener extends UserEventListener {
-  private MailService mservice_ ;
+  private MailService          mservice_;
 
-  final static public String FD_INBOX = "Inbox".intern();
-  final static public String FD_DRAFTS = "Drafts".intern() ;
-  final static public String FD_SENT = "Sent".intern() ;
-  final static public String FD_SPAM = "Spam".intern() ;
-  final static public String FD_TRASH = "Trash".intern() ;
-  final static public String[] defaultFolders_ =  {FD_INBOX ,FD_DRAFTS, FD_SENT, FD_SPAM, FD_TRASH} ;
+  final static public String   FD_INBOX        = "Inbox".intern();
 
-  String protocol;
-  boolean isSSL;
-  String incomingHost;
-  String incomingPort;
-  String incomingFolder;
-  String outgoingHost;
-  String outgoingPort;
+  final static public String   FD_DRAFTS       = "Drafts".intern();
+
+  final static public String   FD_SENT         = "Sent".intern();
+
+  final static public String   FD_SPAM         = "Spam".intern();
+
+  final static public String   FD_TRASH        = "Trash".intern();
+
+  final static public String[] defaultFolders_ = { FD_INBOX, FD_DRAFTS, FD_SENT, FD_SPAM, FD_TRASH };
+
+  String                       protocol;
+
+  boolean                      isSSL;
+
+  String                       incomingHost;
+
+  String                       incomingPort;
+
+  String                       incomingFolder;
+
+  String                       outgoingHost;
+
+  String                       outgoingPort;
 
   public NewUserListener(MailService mservice, InitParams params) throws Exception {
-    mservice_ = mservice ;
+    mservice_ = mservice;
 
     // parameters defined in the plugin configuration
-    protocol       = params.getValueParam("protocol").getValue() ;
-    String ssl     = params.getValueParam("ssl").getValue() ;
-    isSSL          = (ssl != null) && ssl.equalsIgnoreCase("true");
-    incomingHost   = params.getValueParam("incomingServer").getValue() ;
-    incomingPort   = params.getValueParam("incomingPort").getValue() ;
-    incomingFolder = params.getValueParam("incomingFolder").getValue() ;
-    outgoingHost   = params.getValueParam("outgoingServer").getValue() ;
-    outgoingPort   = params.getValueParam("outgoingPort").getValue() ;
+    protocol = params.getValueParam("protocol").getValue();
+    String ssl = params.getValueParam("ssl").getValue();
+    isSSL = (ssl != null) && ssl.equalsIgnoreCase("true");
+    incomingHost = params.getValueParam("incomingServer").getValue();
+    incomingPort = params.getValueParam("incomingPort").getValue();
+    incomingFolder = params.getValueParam("incomingFolder").getValue();
+    outgoingHost = params.getValueParam("outgoingServer").getValue();
+    outgoingPort = params.getValueParam("outgoingPort").getValue();
   }
 
   public void postSave(User user, boolean isNew) throws Exception {
-    if(!isNew) return ;
-    String fullName     = user.getFullName();
-    String email        = user.getEmail();
+    if (!isNew)
+      return;
+    String fullName = user.getFullName();
+    String email = user.getEmail();
     // Once eXo is connected to LDAP users, the password will be correct !!!
-    String password     = user.getPassword();
+    String password = user.getPassword();
 
     Account acc = new Account();
 
     String incomingUserName = email;
 
-    acc.setLabel(fullName) ;
-    acc.setDescription("") ;
-    acc.setUserDisplayName(fullName) ;
-    acc.setEmailAddress(email) ;
-    acc.setEmailReplyAddress(email) ;
-    acc.setSignature("") ;
-    acc.setIncomingUser(incomingUserName); 
+    acc.setLabel(fullName);
+    acc.setDescription("");
+    acc.setUserDisplayName(fullName);
+    acc.setEmailAddress(email);
+    acc.setEmailReplyAddress(email);
+    acc.setSignature("");
+    acc.setIncomingUser(incomingUserName);
     acc.setIncomingPassword(password);
-    acc.setIsSavePassword(true) ;
+    acc.setIsSavePassword(true);
     acc.setIncomingHost(incomingHost);
-    acc.setIncomingPort(incomingPort);  
-    acc.setProtocol(protocol);  
+    acc.setIncomingPort(incomingPort);
+    acc.setProtocol(protocol);
     acc.setIncomingSsl(isSSL);
-    acc.setIncomingFolder(incomingFolder) ;
+    acc.setIncomingFolder(incomingFolder);
     acc.setServerProperty(Utils.SVR_SMTP_USER, incomingUserName);
     acc.setOutgoingHost(outgoingHost);
     acc.setOutgoingPort(outgoingPort);
 
     String username = user.getUserName();
-    String accId    = acc.getId();
+    String accId = acc.getId();
     String folderId = null;
-    Folder folder   = null;
+    Folder folder = null;
     try {
       mservice_.createAccount(username, acc);
-      for(String folderName : defaultFolders_) {
+      for (String folderName : defaultFolders_) {
         folderId = Utils.generateFID(accId, folderName, false);
-        folder = mservice_.getFolder(username, accId, folderId) ;
-        if(folder == null) {
-          folder = new Folder() ;
+        folder = mservice_.getFolder(username, accId, folderId);
+        if (folder == null) {
+          folder = new Folder();
           folder.setId(folderId);
-          folder.setName(folderName) ;
-          folder.setPersonalFolder(false) ;
-          mservice_.saveFolder(username, accId, folder) ;
+          folder.setName(folderName);
+          folder.setPersonalFolder(false);
+          mservice_.saveFolder(username, accId, folder);
         }
       }
     } catch (Exception e) {
-      e.printStackTrace() ;
-    } 
+      e.printStackTrace();
+    }
   }
 
 }

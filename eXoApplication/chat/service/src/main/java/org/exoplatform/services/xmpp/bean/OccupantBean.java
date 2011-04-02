@@ -25,13 +25,13 @@ package org.exoplatform.services.xmpp.bean;
 public class OccupantBean {
 
   private String affiliation;
-  
+
   private String role;
-  
+
   private String jid;
-  
+
   private String nick;
-  
+
   private String fullName;
 
   public String getAffiliation() {
@@ -73,7 +73,5 @@ public class OccupantBean {
   public void setFullName(String fullName) {
     this.fullName = fullName;
   }
-  
-  
-  
+
 }

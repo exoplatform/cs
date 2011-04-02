@@ -25,25 +25,48 @@ import org.exoplatform.services.jcr.util.IdGenerator;
  * Jul 11, 2007  
  */
 public class CalendarCategory {
-  private String id ;
-  private String name ;
-  private String description ;
-  private boolean isDataInit = false ;
+  private String  id;
+
+  private String  name;
+
+  private String  description;
+
+  private boolean isDataInit = false;
 
   public CalendarCategory() {
-    id = "CalendarCategory" + IdGenerator.generate() ;
+    id = "CalendarCategory" + IdGenerator.generate();
   }
-  
-  public String getId() { return id ; }
-  public void setId(String id) { this.id = id ; }
-  
-  public String getName() { return name ; }
-  public void setName(String name) { this.name = name ; }
 
-  public String getDescription() { return description ; }
-  public void setDescription(String description) { this.description = description ; }
+  public String getId() {
+    return id;
+  }
 
-	public void setDataInit(boolean isDataInit) {	this.isDataInit = isDataInit ; }
-	public boolean isDataInit() {	return isDataInit ;	}
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public void setDataInit(boolean isDataInit) {
+    this.isDataInit = isDataInit;
+  }
+
+  public boolean isDataInit() {
+    return isDataInit;
+  }
 
 }

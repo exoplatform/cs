@@ -24,12 +24,12 @@ import org.exoplatform.container.component.BaseComponentPlugin;
  *          phunghainam@gmail.com
  * Dec 1, 2008  
  */
-public class MailUpdateStorageEventListener extends BaseComponentPlugin{
-  
+public class MailUpdateStorageEventListener extends BaseComponentPlugin {
+
   public void preUpdate() {
     System.out.println("======>>> preUpdate");
   }
-  
+
   public void postUpdate() {
     System.out.println("======>>> postUpdate");
   }

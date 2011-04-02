@@ -34,39 +34,38 @@ public class FileTransferRequestBean {
   /**
    * 
    */
-  private String    uuid;
+  private String uuid;
 
   /**
    * 
    */
-  private String    description;
+  private String description;
 
   /**
    * 
    */
-  private String    filename;
+  private String filename;
 
   /**
    * 
    */
-  private long      fileSize;
+  private long   fileSize;
 
   /**
    * 
    */
-  private String    mimeType;
+  private String mimeType;
 
   /**
    * 
    */
-  private String    requestor;
-  
+  private String requestor;
+
   /**
    * 
    */
-  private int       responseTimeout; 
-  
-  
+  private int    responseTimeout;
+
   /**
    * @param fileTransferRequest the fileTransferRequestBean
    * @param uuid the id
@@ -79,7 +78,7 @@ public class FileTransferRequestBean {
     this.mimeType = fileTransferRequest.getMimeType();
     this.requestor = fileTransferRequest.getRequestor();
     this.responseTimeout = OutgoingFileTransfer.getResponseTimeout();
-    
+
   }
 
   /**
@@ -185,7 +184,5 @@ public class FileTransferRequestBean {
   public void setResponseTimeout(int responseTimeout) {
     this.responseTimeout = responseTimeout;
   }
-  
-  
 
 }

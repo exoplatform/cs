@@ -36,10 +36,12 @@ import org.quartz.JobDetail;
 
 public interface CalendarService {
 
-  final public static String                  ICALENDAR             = "ICalendar(.ics)".intern();
-  final public static String                  EXPORTEDCSV           = "ExportedCsv(.csv)".intern();
-  final public static String                  CALDAV                = "CalDAV".intern();
-  
+  final public static String ICALENDAR   = "ICalendar(.ics)".intern();
+
+  final public static String EXPORTEDCSV = "ExportedCsv(.csv)".intern();
+
+  final public static String CALDAV      = "CalDAV".intern();
+
   /**
    * The method gets all calendar category of current user from data base
    * @param username current user name
@@ -47,7 +49,7 @@ public interface CalendarService {
    * @throws Exception
    * @see CalendarCategory
    */
-  public List<CalendarCategory> getCategories(String username) throws Exception ;
+  public List<CalendarCategory> getCategories(String username) throws Exception;
 
   /**
    * The method gets all groups of private calendar, and each GroupCalendar contains List of Calendar object
@@ -58,7 +60,7 @@ public interface CalendarService {
    * @throws Exception
    * @see GroupCalendarData
    */
-  public List<GroupCalendarData> getCalendarCategories(String username, boolean isShowAll) throws Exception ;
+  public List<GroupCalendarData> getCalendarCategories(String username, boolean isShowAll) throws Exception;
 
   /**
    * The method gets the calendar category by given id
@@ -68,7 +70,7 @@ public interface CalendarService {
    * @throws Exception
    * @see CalendarCategory
    */
-  public CalendarCategory getCalendarCategory(String username, String calendarCategoryId) throws Exception ;
+  public CalendarCategory getCalendarCategory(String username, String calendarCategoryId) throws Exception;
 
   /**
    * Save details of category for a user
@@ -77,7 +79,7 @@ public interface CalendarService {
    * @param isNew the boolean value to point out that add new category or update
    * @throws Exception
    */
-  public void saveCalendarCategory(String username, CalendarCategory calendarCategory, boolean isNew) throws Exception ; 
+  public void saveCalendarCategory(String username, CalendarCategory calendarCategory, boolean isNew) throws Exception;
 
   /**
    * The method used for removing one category by id
@@ -87,7 +89,7 @@ public interface CalendarService {
    * @throws Exception
    * @see CalendarCategory
    */
-  public CalendarCategory removeCalendarCategory(String username, String calendarCategoryId) throws Exception ;
+  public CalendarCategory removeCalendarCategory(String username, String calendarCategoryId) throws Exception;
 
   /**
    * The method get private calendar by given calendarId, and all calendar related to this category will be removed
@@ -97,7 +99,7 @@ public interface CalendarService {
    * @throws Exception
    * @see Calendar
    */
-  public Calendar getUserCalendar(String username, String calendarId) throws Exception ;
+  public Calendar getUserCalendar(String username, String calendarId) throws Exception;
 
   /**
    * The method queries all private calendars of current user
@@ -108,7 +110,7 @@ public interface CalendarService {
    * @throws Exception
    * @see Calendar
    */
-  public List<Calendar> getUserCalendars(String username, boolean isShowAll) throws Exception ;
+  public List<Calendar> getUserCalendars(String username, boolean isShowAll) throws Exception;
 
   /**
    * The method look up all private calendars by given category id
@@ -118,7 +120,7 @@ public interface CalendarService {
    * @throws Exception
    * @see Calendar
    */
-  public List<Calendar> getUserCalendarsByCategory(String username, String calendarCategoryId) throws Exception ;
+  public List<Calendar> getUserCalendarsByCategory(String username, String calendarCategoryId) throws Exception;
 
   /**
    * The method saves private calendar infomations in to data base
@@ -127,7 +129,7 @@ public interface CalendarService {
    * @param isNew Boolean value to know add new calendar or update infomations only
    * @throws Exception
    */
-  public void saveUserCalendar(String username, Calendar calendar, boolean isNew) throws Exception ;
+  public void saveUserCalendar(String username, Calendar calendar, boolean isNew) throws Exception;
 
   /**
    * Remove private calendar by given id, all events and tasks belong to this calendar will be removed
@@ -136,7 +138,7 @@ public interface CalendarService {
    * @return
    * @throws Exception
    */
-  public Calendar removeUserCalendar(String username, String calendarId) throws Exception ;
+  public Calendar removeUserCalendar(String username, String calendarId) throws Exception;
 
   /**
    * The method save all infomations about shared calendar, it will be updated original calendar
@@ -144,7 +146,7 @@ public interface CalendarService {
    * @param calendar the oject contants infomations
    * @throws Exception
    */
-  public void saveSharedCalendar(String username, Calendar calendar) throws Exception ;
+  public void saveSharedCalendar(String username, Calendar calendar) throws Exception;
 
   /**
    * The method  gets all calendar of a group user, we called it is group calendar
@@ -154,7 +156,7 @@ public interface CalendarService {
    * @throws Exception
    * @see Calendar
    */
-  public Calendar getGroupCalendar(String calendarId) throws Exception ;  
+  public Calendar getGroupCalendar(String calendarId) throws Exception;
 
   /**
    * The method  gets all the group calendar data of current user and list of calendars belong to that group
@@ -166,13 +168,14 @@ public interface CalendarService {
    * @throws Exception
    * @see GroupCalendarData
    */
-  public List<GroupCalendarData> getGroupCalendars(String[] groupIds, boolean isShowAll, String username) throws Exception ;  
+  public List<GroupCalendarData> getGroupCalendars(String[] groupIds, boolean isShowAll, String username) throws Exception;
 
   /**
    * @deprecated
    * @see #savePublicCalendar(Calendar calendar, boolean isNew)
    */
-  public void savePublicCalendar(Calendar calendar, boolean isNew, String username) throws Exception ;  
+  public void savePublicCalendar(Calendar calendar, boolean isNew, String username) throws Exception;
+
   /**
   * The method save calendar to public area (group calendar)
   * @param calendar
@@ -180,7 +183,7 @@ public interface CalendarService {
   * @param username current user name(or user id)
   * @throws Exception
   */
-  public void savePublicCalendar(Calendar calendar, boolean isNew) throws Exception ;  
+  public void savePublicCalendar(Calendar calendar, boolean isNew) throws Exception;
 
   /**
    * Remove the group calendar form data base, every events, tasks inside this calendar will be removed too
@@ -188,7 +191,7 @@ public interface CalendarService {
    * @return
    * @throws Exception
    */
-  public Calendar removePublicCalendar(String calendarId) throws Exception ;
+  public Calendar removePublicCalendar(String calendarId) throws Exception;
 
   /**
    * The method gets all categories of event
@@ -197,7 +200,7 @@ public interface CalendarService {
    * @throws Exception
    * @see EventCategory
    */
-  public List<EventCategory> getEventCategories(String username) throws Exception ;
+  public List<EventCategory> getEventCategories(String username) throws Exception;
 
   /**
    * Save event category to data base, every user will have their own category to classify events, and it will use unique name in data base
@@ -207,7 +210,7 @@ public interface CalendarService {
    * @param isNew
    * @throws Exception
    */
-  public void saveEventCategory(String username, EventCategory eventCategory, boolean isNew) throws Exception ;
+  public void saveEventCategory(String username, EventCategory eventCategory, boolean isNew) throws Exception;
 
   /**
    * Remove event category, all events and tasks belong to this category will be destroyed
@@ -215,7 +218,7 @@ public interface CalendarService {
    * @param eventCategoryName The unique name of category
    * @throws Exception
    */
-  public void removeEventCategory(String username, String eventCategoryName) throws Exception ;  
+  public void removeEventCategory(String username, String eventCategoryName) throws Exception;
 
   /**
    * The method gets category of event by given id
@@ -226,8 +229,8 @@ public interface CalendarService {
    * @throws Exception
    * @see EventCategory
    */
-  public EventCategory getEventCategory(String username, String eventCategoryId) throws Exception ;
-  
+  public EventCategory getEventCategory(String username, String eventCategoryId) throws Exception;
+
   /**
    * The method gets category of event by given id
    * @param userSession The session of current logedin user
@@ -237,9 +240,7 @@ public interface CalendarService {
    * @throws Exception
    * @see EventCategory
    */
-  public EventCategory getEventCategoryByName(String username, String eventCategoryName) throws Exception ;
-  
-  
+  public EventCategory getEventCategoryByName(String username, String eventCategoryName) throws Exception;
 
   /**
    * The method gets list events and tasks of given private calendar ids 
@@ -249,7 +250,7 @@ public interface CalendarService {
    * @return List of events and tasks
    * @throws Exception
    */
-  public List<CalendarEvent> getUserEventByCalendar(String username, List<String> calendarIds) throws Exception ;
+  public List<CalendarEvent> getUserEventByCalendar(String username, List<String> calendarIds) throws Exception;
 
   /**
    * The method gets all events and tasks by given conditions in event query
@@ -260,7 +261,7 @@ public interface CalendarService {
    * @throws Exception
    * @see CalendarEvent
    */
-  public List<CalendarEvent> getUserEvents(String username, EventQuery eventQuery) throws Exception ;
+  public List<CalendarEvent> getUserEvents(String username, EventQuery eventQuery) throws Exception;
 
   /**
    * Get a personal event for a given owner
@@ -269,8 +270,8 @@ public interface CalendarService {
    * @return CalendarEvent in the personal events of owner 
    * @throws Exception 
    */
-  public CalendarEvent getEvent(String username, String eventId) throws Exception ;  
-  
+  public CalendarEvent getEvent(String username, String eventId) throws Exception;
+
   /**
    * The method save infomation to an event or a task by given private calendar id to data
    * @param username current user name(or user id)
@@ -279,7 +280,7 @@ public interface CalendarService {
    * @param isNew boolean value, is update or add new event
    * @throws Exception
    */
-  public void saveUserEvent(String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception ;
+  public void saveUserEvent(String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception;
 
   /**
    * Remove given event or task in private calendar with calendar id, all attachments and reminders will be removed
@@ -289,8 +290,8 @@ public interface CalendarService {
    * @return
    * @throws Exception
    */
-  public CalendarEvent removeUserEvent(String username, String calendarId, String eventId) throws Exception ;
-  
+  public CalendarEvent removeUserEvent(String username, String calendarId, String eventId) throws Exception;
+
   /**
    * Get a group event from eventID
    * @param eventId
@@ -298,7 +299,7 @@ public interface CalendarService {
    * @throws Exception
    */
   public CalendarEvent getGroupEvent(String eventId) throws Exception;
-  
+
   /**
    * The method gets event or task form group calendar by given calendar id
    * @param calendarId given calendar id
@@ -307,7 +308,7 @@ public interface CalendarService {
    * @throws Exception
    * @see CalendarEvent
    */
-  public CalendarEvent getGroupEvent(String calendarId, String eventId) throws Exception ;
+  public CalendarEvent getGroupEvent(String calendarId, String eventId) throws Exception;
 
   /**
    * The method gets events and tasks by given public calendar ids  
@@ -316,7 +317,7 @@ public interface CalendarService {
    * @throws Exception
    * @see CalendarEvent
    */
-  public List<CalendarEvent> getGroupEventByCalendar(List<String> calendarIds) throws Exception ;
+  public List<CalendarEvent> getGroupEventByCalendar(List<String> calendarIds) throws Exception;
 
   /**
    * The method gets events and tasks by given event query
@@ -325,7 +326,8 @@ public interface CalendarService {
    * @throws Exception
    * @see CalendarEvent
    */
-  public List<CalendarEvent> getPublicEvents(EventQuery eventQuery) throws Exception ;
+  public List<CalendarEvent> getPublicEvents(EventQuery eventQuery) throws Exception;
+
   /**
    * Save event or task by given group calendar id
    * @param calendarId given calendar id
@@ -333,7 +335,7 @@ public interface CalendarService {
    * @param isNew boolean value to check update or add new event
    * @throws Exception
    */
-  public void savePublicEvent(String calendarId, CalendarEvent event, boolean isNew) throws Exception ;
+  public void savePublicEvent(String calendarId, CalendarEvent event, boolean isNew) throws Exception;
 
   /**
    * Remove event or task, all attachments and reminders item will be removed
@@ -342,7 +344,7 @@ public interface CalendarService {
    * @return
    * @throws Exception
    */
-  public CalendarEvent removePublicEvent(String calendarId, String eventId) throws Exception ;
+  public CalendarEvent removePublicEvent(String calendarId, String eventId) throws Exception;
 
   /**
    * This menthod stores individual setting of each user, with setting you can configue many things like Default view
@@ -351,7 +353,7 @@ public interface CalendarService {
    * @param setting Obicject containts infomations about setting
    * @throws Exception
    */
-  public void saveCalendarSetting(String username, CalendarSetting setting) throws Exception ;
+  public void saveCalendarSetting(String username, CalendarSetting setting) throws Exception;
 
   /**
    * This method gets infomations of current user's setting
@@ -360,7 +362,7 @@ public interface CalendarService {
    * @throws Exception
    * @see CalendarSetting
    */
-  public CalendarSetting getCalendarSetting(String username) throws Exception ;
+  public CalendarSetting getCalendarSetting(String username) throws Exception;
 
   /**
    * The method  gets Import/Export implement class to import or export ics,csv
@@ -368,14 +370,14 @@ public interface CalendarService {
    * @return CalendarImportExport
    * @see CalendarImportExport
    */
-  public CalendarImportExport getCalendarImportExports(String type) ;
+  public CalendarImportExport getCalendarImportExports(String type);
 
   /**
    * The method gets types of data will be imported and exported
    * @return types of inport/export
    * @throws Exception
    */
-  public String[] getExportImportType() throws Exception ;
+  public String[] getExportImportType() throws Exception;
 
   /**
    * The menthod uses to make url to contants links to subcribe calendar folows RSS stand
@@ -386,7 +388,7 @@ public interface CalendarService {
    * @throws Exception
    * @see RssData
    */
-  public int generateRss(String username, LinkedHashMap<String, Calendar> calendars, RssData rssData) throws Exception ;
+  public int generateRss(String username, LinkedHashMap<String, Calendar> calendars, RssData rssData) throws Exception;
 
   /**
    * The menthod uses to make url to contants links to subcribe calendar folows RSS stand
@@ -397,9 +399,8 @@ public interface CalendarService {
    * @throws Exception
    * @see RssData
    */
-  public int generateRss(String username, List<String> calendarIds, RssData rssData) throws Exception ;
-  
-  
+  public int generateRss(String username, List<String> calendarIds, RssData rssData) throws Exception;
+
   /**
    * It gets data form server and show the url to view contents of RSS
    * @param systemSession Sessesion to access the public data
@@ -408,7 +409,7 @@ public interface CalendarService {
    * @throws Exception
    * @see FeedData
    */
-  public List<FeedData> getFeeds(String username) throws Exception  ;
+  public List<FeedData> getFeeds(String username) throws Exception;
 
   /**
    * The method return root of rss data store area
@@ -416,7 +417,7 @@ public interface CalendarService {
    * @return
    * @throws Exception
    */
-  public Node getRssHome(String username) throws Exception ;
+  public Node getRssHome(String username) throws Exception;
 
   /**
    * The method query events and tasks form given coditions, the coditions know by set value for eventquery
@@ -428,7 +429,7 @@ public interface CalendarService {
    * @throws Exception
    * @see EventPageList
    */
-  public EventPageList searchEvent(String username, EventQuery eventQuery, String[] publicCalendarIds)throws Exception ;
+  public EventPageList searchEvent(String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception;
 
   /**
    * The method query all events, tasks and mark to hightlight the date have events or tasks 
@@ -439,7 +440,7 @@ public interface CalendarService {
    * @return
    * @throws Exception
    */
-  public Map<Integer, String > searchHightLightEvent(String username, EventQuery eventQuery, String[] publicCalendarIds)throws Exception ; 
+  public Map<Integer, String> searchHightLightEvent(String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception;
 
   /**
    * The method share the private calendar to other user, it can share for one or many users
@@ -449,7 +450,7 @@ public interface CalendarService {
    * @param receiverUsers List receive user username or id
    * @throws Exception
    */
-  public void shareCalendar(String username, String calendarId, List<String> receiverUsers) throws Exception ;
+  public void shareCalendar(String username, String calendarId, List<String> receiverUsers) throws Exception;
 
   /**
    * The method gets all shared calendars of the current user
@@ -460,7 +461,7 @@ public interface CalendarService {
    * @throws Exception
    * @see GroupCalendarData
    */
-  public GroupCalendarData getSharedCalendars(String username, boolean isShowAll) throws Exception ;
+  public GroupCalendarData getSharedCalendars(String username, boolean isShowAll) throws Exception;
 
   /**
    * The method selects all the events and tasks by given conditions, it includes events of private, public and share calendars
@@ -471,15 +472,15 @@ public interface CalendarService {
    * @throws Exception
    * @see CalendarEvent
    */
-  public List<CalendarEvent> getEvents(String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception ;
-  
+  public List<CalendarEvent> getEvents(String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception;
+
   /**
    * Removed shared calendar, but not the orloginal calendar
    * @param username current user name(or user id)
    * @param calendarId given calendar id
    * @throws Exception
    */
-  public void removeSharedCalendar(String username, String calendarId) throws Exception  ;
+  public void removeSharedCalendar(String username, String calendarId) throws Exception;
 
   /**
    * Add event to shared calendar, mean add event to orloginal calendar too
@@ -489,7 +490,7 @@ public interface CalendarService {
    * @param isNew boolean value to check that add new or update event
    * @throws Exception
    */
-  public void saveEventToSharedCalendar(String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception  ;
+  public void saveEventToSharedCalendar(String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception;
 
   /**
    * The method  will check the time free or busy of the user, it depents on events and tasks of this user 
@@ -499,7 +500,7 @@ public interface CalendarService {
    * @throws Exception 
    * @see EventQuery
    */
-  public Map<String, String> checkFreeBusy(EventQuery eventQuery) throws Exception  ;
+  public Map<String, String> checkFreeBusy(EventQuery eventQuery) throws Exception;
 
   /**
    * The method genarete links to access calendar throw WEBDAV, it will require user name and password when access
@@ -509,7 +510,7 @@ public interface CalendarService {
    * @return
    * @throws Exception
    */
-  public int generateCalDav(String username, LinkedHashMap<String, Calendar> calendars, RssData rssData) throws Exception ;
+  public int generateCalDav(String username, LinkedHashMap<String, Calendar> calendars, RssData rssData) throws Exception;
 
   /**
    * The method genarete links to access calendar throw WEBDAV, it will require user name and password when access
@@ -519,8 +520,8 @@ public interface CalendarService {
    * @return
    * @throws Exce
    */
-  public int generateCalDav(String username, List<String> calendarIds, RssData rssData) throws Exception ;
-  
+  public int generateCalDav(String username, List<String> calendarIds, RssData rssData) throws Exception;
+
   /**
    * The method removes the events or tasks form shared calendar, orloginal item will be removed
    * @param username current user name(or user id)
@@ -528,7 +529,7 @@ public interface CalendarService {
    * @param eventId given event id
    * @throws Exception
    */
-  public void removeSharedEvent(String username, String calendarId, String eventId) throws Exception ;
+  public void removeSharedEvent(String username, String calendarId, String eventId) throws Exception;
 
   /**
    * The method  move and save events form private calendars share calendars public calendars each other
@@ -540,7 +541,7 @@ public interface CalendarService {
    * @param username current user name(or user id)
    * @throws Exception
    */
-  public void moveEvent(String formCalendar, String toCalendar, String formType, String toType, List<CalendarEvent> calEvents, String username) throws Exception ;
+  public void moveEvent(String formCalendar, String toCalendar, String formType, String toType, List<CalendarEvent> calEvents, String username) throws Exception;
 
   /**
    * The method calls when the user use exomail product only, when user receives an invitation (in the same data system), the user will 
@@ -553,38 +554,38 @@ public interface CalendarService {
    * @param answer The answer of the receive user 
    * @throws Exception
    */
-  public void confirmInvitation(String fromUserId, String toUserId,int calType,String calendarId, String eventId, int answer) throws Exception ;
-  
-  public void confirmInvitation(String fromUserId, String confirmingEmail, String confirmingUser, int calType,String calendarId, String eventId, int answer) throws Exception ;
-  
-  public void addListenerPlugin(CalendarUpdateEventListener listener) throws Exception ;
-  
-  public void addEventListenerPlugin(CalendarEventListener listener) throws Exception ;
-  
+  public void confirmInvitation(String fromUserId, String toUserId, int calType, String calendarId, String eventId, int answer) throws Exception;
+
+  public void confirmInvitation(String fromUserId, String confirmingEmail, String confirmingUser, int calType, String calendarId, String eventId, int answer) throws Exception;
+
+  public void addListenerPlugin(CalendarUpdateEventListener listener) throws Exception;
+
+  public void addEventListenerPlugin(CalendarEventListener listener) throws Exception;
+
   /**
    * The method update exited rss data when calendar has been changed
    * @param usename 
    * @param calendarId calendar id
    * Added from 1.3
-   */  
-  public void updateRss(String usename, String calendarId, CalendarImportExport imp) throws Exception ;
-  
-  public void updateRss(String usename, String calendarId, CalendarImportExport imp, int number) throws Exception ;
-  
+   */
+  public void updateRss(String usename, String calendarId, CalendarImportExport imp) throws Exception;
+
+  public void updateRss(String usename, String calendarId, CalendarImportExport imp, int number) throws Exception;
+
   /**
    * The method update exited rss data when calendar has been changed
    * @param usename 
    * @param calendarId calendar id
    * Added from 1.3
-   */  
-  public void updateCalDav(String usename, String calendarId, CalendarImportExport imp) throws Exception ;
-  
-  public void updateCalDav(String usename, String calendarId, CalendarImportExport imp, int number) throws Exception ;
-  
+   */
+  public void updateCalDav(String usename, String calendarId, CalendarImportExport imp) throws Exception;
+
+  public void updateCalDav(String usename, String calendarId, CalendarImportExport imp, int number) throws Exception;
+
   public int getTypeOfCalendar(String userName, String calendarId) throws Exception;
-  
-  public List<CalendarEvent> getSharedEventByCalendars(String username, List<String> calendarIds) throws Exception ;
-  
+
+  public List<CalendarEvent> getSharedEventByCalendars(String username, List<String> calendarIds) throws Exception;
+
   /**
    * Get a shared event of user from user name, id of shared calendar, id of shared event
    * @param username username
@@ -593,14 +594,14 @@ public interface CalendarService {
    * @return the CalendarEvent object
    * @throws Exception
    */
-  public CalendarEvent getSharedEvent(String username, String calendarId, String eventId) throws Exception ;
-  
+  public CalendarEvent getSharedEvent(String username, String calendarId, String eventId) throws Exception;
+
   public void removeFeedData(String username, String title);
-  
+
   public ResourceBundle getResourceBundle() throws Exception;
 
   public void initNewUser(String userName, CalendarSetting defaultCalendarSetting) throws Exception;
-  
+
   /**
    * assign a user as delegator for a group task.
    * @param taskId
@@ -609,7 +610,7 @@ public interface CalendarService {
    * @throws Exception
    */
   public void assignGroupTask(String taskId, String calendarId, String assignee) throws Exception;
-  
+
   /**
    * set status value of a group task.
    * @param taskId
@@ -618,7 +619,7 @@ public interface CalendarService {
    * @throws Exception
    */
   public void setGroupTaskStatus(String taskId, String calendarId, String status) throws Exception;
-  
+
   /**
    * Check if the calendar with given calendarId is a remote calendar
    * @param username the owner of calendar
@@ -627,7 +628,7 @@ public interface CalendarService {
    * @throws Exception
    */
   public boolean isRemoteCalendar(String username, String calendarId) throws Exception;
-  
+
   /**
    * Check if the remote url is valid, in 2 cases of iCalendar url or CalDav url, with authentication
    * @param url the remote url
@@ -637,15 +638,15 @@ public interface CalendarService {
    * @return true if remote url is available in case of iCalendar and CalDav access support in case of CalDav
    * @throws Exception
    */
-  boolean isValidRemoteUrl(String url, String type, String remoteUser, String remotePassword) throws Exception ;
-  
+  boolean isValidRemoteUrl(String url, String type, String remoteUser, String remotePassword) throws Exception;
+
   /**
    * Import an online .ics or through CalDav access to local calendar
    * @param remoteCalendar object content all properties for remote calendar.
    * @param credentials
    * @throws Exception
    */
-  public Calendar importRemoteCalendar(RemoteCalendar remoteCalendar) throws Exception ;
+  public Calendar importRemoteCalendar(RemoteCalendar remoteCalendar) throws Exception;
 
   /**
    * Reload remote calendar data
@@ -655,43 +656,43 @@ public interface CalendarService {
    * @throws Exception
    */
   public Calendar refreshRemoteCalendar(String username, String remoteCalendarId) throws Exception;
-  
+
   /**
    * @param remoteCalendar object content all properties for remote calendar.
    * @return
    * @throws Exception
    */
   public Calendar updateRemoteCalendarInfo(RemoteCalendar remoteCalendar) throws Exception;
-  
+
   /**
    * @param owner the owner of this calendar
    * @param calendarId the Id of calendar
    * @return RemoteCalendar
    * @throws Exception
    */
-  public RemoteCalendar getRemoteCalendar(String owner, String calendarId) throws Exception ;
-  
+  public RemoteCalendar getRemoteCalendar(String owner, String calendarId) throws Exception;
+
   /**
    * Get the RemoteCalendarService object
    * @return
    * @throws Exception
    */
   public RemoteCalendarService getRemoteCalendarService() throws Exception;
-  
+
   public Calendar getRemoteCalendar(String owner, String remoteUrl, String remoteType) throws Exception;
-  
+
   public int getRemoteCalendarCount(String username) throws Exception;
-  
+
   public String getCalDavResourceHref(String username, String calendarId, String eventId) throws Exception;
-  
+
   public String getCalDavResourceEtag(String username, String calendarId, String eventId) throws Exception;
-  
-  public void loadSynchronizeRemoteCalendarJob(String username) throws Exception ;
-  
-  public JobDetail findSynchronizeRemoteCalendarJob(JobSchedulerService schedulerService, String username) throws Exception ;
-    
+
+  public void loadSynchronizeRemoteCalendarJob(String username) throws Exception;
+
+  public JobDetail findSynchronizeRemoteCalendarJob(JobSchedulerService schedulerService, String username) throws Exception;
+
   public void stopSynchronizeRemoteCalendarJob(String username) throws Exception;
-  
+
   /**
    * Get all virtual occurrences from an original recurrence event  in a period of time <br/>
    * The result will be depended on the recurrence rule, the start date of recurrence event and the period of time to view.
@@ -701,8 +702,8 @@ public interface CalendarService {
    * @return the map of CalendarEvent object, each entry will contains an occurrence event object with recurrence-id as the key
    * @throws Exception
    */
-  public Map<String,CalendarEvent> getOccurrenceEvents(CalendarEvent recurEvent, java.util.Calendar from, java.util.Calendar to, String timezone) throws Exception;
-  
+  public Map<String, CalendarEvent> getOccurrenceEvents(CalendarEvent recurEvent, java.util.Calendar from, java.util.Calendar to, String timezone) throws Exception;
+
   /**
    * Get all original recurrence events of an user in period of time
    * @param username the owner of recurrence event
@@ -712,7 +713,7 @@ public interface CalendarService {
    * @throws Exception
    */
   public List<CalendarEvent> getOriginalRecurrenceEvents(String username, java.util.Calendar from, java.util.Calendar to, String[] publicCalendarIds) throws Exception;
-    
+
   /**
    * Update an occurrence event, there are two cases: if this occurrence is virtual occurrence, convert it to exception, <br />
    * if this occurrence is exception, update it as a normal event
@@ -724,8 +725,8 @@ public interface CalendarService {
    * @param username
    * @throws Exception
    */
-  public void updateOccurrenceEvent(String fromCalendar, String toCalendar, String fromType, String toType, List<CalendarEvent> calEvents, String username) throws Exception ; 
-  
+  public void updateOccurrenceEvent(String fromCalendar, String toCalendar, String fromType, String toType, List<CalendarEvent> calEvents, String username) throws Exception;
+
   /**
    * Get all exception occurrences from a original recurrence event, the exception event always belong to same calendar with original recurrence event
    * @param username the owner of this recurrence event
@@ -734,7 +735,7 @@ public interface CalendarService {
    * @throws Exception
    */
   public List<CalendarEvent> getExceptionEvents(String username, CalendarEvent recurEvent) throws Exception;
-  
+
   /**
    * Remove only an occurrence instance from recurrence series, this function will get the original event node of the occurrence
    * and then put the recurrence id of the need-to-delete occurrence to excludeId list of original node.
@@ -743,7 +744,7 @@ public interface CalendarService {
    * @throws Exception
    */
   public void removeOccurrenceInstance(String username, CalendarEvent occurrence) throws Exception;
-  
+
   /**
    * Remove all occurrence from an recurrence series. It will delete the original event of recurrence series. <br/>
    * All exception occurrences of this series still exist and will be treated as a normal event
@@ -752,7 +753,7 @@ public interface CalendarService {
    * @throws Exception
    */
   public void removeRecurrenceSeries(String username, CalendarEvent originalEvent) throws Exception;
-  
+
   /**
    * Update recurrence series from an occurrence, this function is only called if the occurrence event is not changed the from date property. <br/>
    * In other way, if the occurrence event move to another date, it will be updated as a 'exception' occurrence and not affects to series
@@ -764,8 +765,8 @@ public interface CalendarService {
    * @param username owner of recurrence event, in case of private and shared calendar
    * @throws Exception
    */
-  public void updateRecurrenceSeries(String fromCalendar, String toCalendar, String fromType, String toType, CalendarEvent occurrence, String username) throws Exception ;
- 
+  public void updateRecurrenceSeries(String fromCalendar, String toCalendar, String fromType, String toType, CalendarEvent occurrence, String username) throws Exception;
+
   /**
    * Find all days of month or year that have event/task to highlight from all personal, shared and public calendar of an user <br/>
    * This function is much same like searchHightLightEvent() function but it only counts for recurrence event
@@ -776,5 +777,5 @@ public interface CalendarService {
    * @return 
    * @throws Exception
    */
-  public Map<Integer, String> searchHighlightRecurrenceEvent(String username, EventQuery eventQuery, String[] publicCalendarIds, String timezone) throws Exception ;
+  public Map<Integer, String> searchHighlightRecurrenceEvent(String username, EventQuery eventQuery, String[] publicCalendarIds, String timezone) throws Exception;
 }

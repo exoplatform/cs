@@ -25,23 +25,41 @@ import java.io.InputStream;
  * Jul 11, 2007  
  */
 public class FeedData {
-  private String title ;
-  private String url ;
-  private byte[] content = null ;
-  
-  public String getFeed() { return title ; }
-  public String getTitle() { return title ; }
-  public void setTitle(String title) { this.title = title ; }
-  
-  public String getUrl() { return url ; }
-  public void setUrl(String url) { this.url = url ; }
-  
-  public void setContent(InputStream input) throws Exception{
-    if (input != null) {
-      content = new byte[input.available()] ; 
-      input.read(content) ;
-    }
-    else content = null ;
+  private String title;
+
+  private String url;
+
+  private byte[] content = null;
+
+  public String getFeed() {
+    return title;
   }
-  public byte[] getContent() { return content ; }
+
+  public String getTitle() {
+    return title;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
+  public String getUrl() {
+    return url;
+  }
+
+  public void setUrl(String url) {
+    this.url = url;
+  }
+
+  public void setContent(InputStream input) throws Exception {
+    if (input != null) {
+      content = new byte[input.available()];
+      input.read(content);
+    } else
+      content = null;
+  }
+
+  public byte[] getContent() {
+    return content;
+  }
 }

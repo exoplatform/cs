@@ -28,18 +28,24 @@ import org.exoplatform.services.organization.UserEventListener;
  * Nov 23, 2007 3:09:21 PM
  */
 public class NewUserListener extends UserEventListener {
-  private ContactService cservice_ ;
-  public static String DEFAULTGROUP = "default".intern() ;
-  public static String ADDRESSESGROUP = "addresses".intern() ;
-  public static String ADDRESSESGROUPNAME = "collected-email-adresses".intern() ;
-  public static String DEFAULTGROUPNAME = "My contacts".intern() ;
-  public static String DEFAULTGROUPDES = "Default address book".intern() ;
+  private ContactService cservice_;
+
+  public static String   DEFAULTGROUP       = "default".intern();
+
+  public static String   ADDRESSESGROUP     = "addresses".intern();
+
+  public static String   ADDRESSESGROUPNAME = "collected-email-adresses".intern();
+
+  public static String   DEFAULTGROUPNAME   = "My contacts".intern();
+
+  public static String   DEFAULTGROUPDES    = "Default address book".intern();
+
   public NewUserListener(ContactService cservice, NodeHierarchyCreator nodeHierarchyCreator) throws Exception {
-    cservice_ = cservice ;	
+    cservice_ = cservice;
   }
 
   public void postSave(User user, boolean isNew) throws Exception {
-    cservice_.registerNewUser(user, isNew) ;    
+    cservice_.registerNewUser(user, isNew);
   }
 
   public void preDelete(User user) throws Exception {

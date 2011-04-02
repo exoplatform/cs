@@ -16,7 +16,6 @@
  */
 package org.exoplatform.services.xmpp.util;
 
-
 /**
  * Created by The eXo Platform SAS.
  * 
@@ -24,12 +23,11 @@ package org.exoplatform.services.xmpp.util;
  * @version $Id: $
  */
 public class CheckUtils {
- 
 
   /**
    * 
    */
-  private static final String[] disableChars = {" ", "\"", "&", "'", "/", ":", "<", ">", "@"};
+  private static final String[] disableChars = { " ", "\"", "&", "'", "/", ":", "<", ">", "@" };
 
   // * U+0020 (" ")
   // * U+0022 (")
@@ -59,8 +57,6 @@ public class CheckUtils {
   public static String notAllowedCharacters() {
     return arrayToString(disableChars, ",");
   }
-
-  
 
   /**
    * Convert an array of strings to one string.

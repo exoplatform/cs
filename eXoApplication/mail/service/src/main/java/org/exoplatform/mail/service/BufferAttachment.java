@@ -18,9 +18,6 @@ package org.exoplatform.mail.service;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-//import org.exoplatform.download.DownloadResource;
-//import org.exoplatform.download.DownloadService;
-//import org.exoplatform.container.PortalContainer;
 
 /**
  * Created by The eXo Platform SARL
@@ -28,20 +25,22 @@ import java.io.InputStream;
  *          hung.nguyen@exoplatform.com
  * Jul 9, 2007
  */
-public class BufferAttachment extends Attachment{
-  //private InputStream inputStream;
-  byte[] bytes = null ;
-  public InputStream getInputStream()throws Exception{
-    /*DownloadService downloadService = (DownloadService)PortalContainer.getComponent(DownloadService.class) ;
-    DownloadResource downloadResource = downloadService.getDownloadResource(getId()) ;
-    downloadResource.getInputStream() ;*/
-    return new ByteArrayInputStream(bytes) ; 
+public class BufferAttachment extends Attachment {
+  // private InputStream inputStream;
+  byte[] bytes = null;
+
+  public InputStream getInputStream() throws Exception {
+    /*
+     * DownloadService downloadService = (DownloadService)PortalContainer.getComponent(DownloadService.class) ; DownloadResource downloadResource = downloadService.getDownloadResource(getId()) ; downloadResource.getInputStream() ;
+     */
+    return new ByteArrayInputStream(bytes);
   }
-  public void setInputStream(InputStream is) throws Exception { 
-    //inputStream = is ; 
-    bytes = new byte[is.available()] ; 
-    is.read(bytes) ;
+
+  public void setInputStream(InputStream is) throws Exception {
+    // inputStream = is ;
+    bytes = new byte[is.available()];
+    is.read(bytes);
     this.setSize(bytes.length);
   }
-  
+
 }

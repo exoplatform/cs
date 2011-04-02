@@ -56,13 +56,13 @@ public class CheckMailJob implements Job, InterruptableJob {
 
   public void execute(JobExecutionContext context) throws JobExecutionException {
     PortalContainer container = getPortalContainer(context);
-    //MailService mailService = getMailService();
+    // MailService mailService = getMailService();
     MailService mailService = (MailService) container.getComponentInstanceOfType(MailService.class);
     if (mailService.getContinuationService() == null) {
       ContinuationService continuationService = (ContinuationService) container.getComponentInstanceOfType(ContinuationService.class);
       mailService.setContinuationService(continuationService);
     }
-    
+
     JobDetail jobDetail = context.getJobDetail();
     JobDataMap dataMap = jobDetail.getJobDataMap();
     username = dataMap.getString(USERNAME);
@@ -83,21 +83,20 @@ public class CheckMailJob implements Job, InterruptableJob {
       } catch (Exception e1) {
         log.error(e1);
       }
-      if (info != null) {        
+      if (info != null) {
         info.setStatusCode(CheckingInfo.CONNECTION_FAILURE);
         mailService.updateCheckingMailStatusByCometd(username, accountId, info);
       }
-      
+
     } finally {
       if (log.isDebugEnabled()) {
-        log.debug("\n\n####  Checking mail of " + context.getJobDetail().getName() + " finished ");        
+        log.debug("\n\n####  Checking mail of " + context.getJobDetail().getName() + " finished ");
       }
     }
   }
 
   private MailService getMailService() {
-    MailService mailService = (MailService) PortalContainer.getInstance()
-                                                           .getComponentInstanceOfType(MailService.class);
+    MailService mailService = (MailService) PortalContainer.getInstance().getComponentInstanceOfType(MailService.class);
     return mailService;
   }
 
@@ -116,11 +115,15 @@ public class CheckMailJob implements Job, InterruptableJob {
     System.out.println("\n\n######### CALLED INTERRUPT!\n\n");
     getMailService().stopCheckMail(username, accountId);
   }
+
   public static PortalContainer getPortalContainer(JobExecutionContext context) {
-    if(context == null) return null;
+    if (context == null)
+      return null;
     String portalName = context.getJobDetail().getGroup();
-    if(portalName == null) return null;
-    if(portalName.indexOf(":") > 0) portalName = portalName.substring(0, portalName.indexOf(":"));
+    if (portalName == null)
+      return null;
+    if (portalName.indexOf(":") > 0)
+      portalName = portalName.substring(0, portalName.indexOf(":"));
     return RootContainer.getInstance().getPortalContainer(portalName);
   }
 

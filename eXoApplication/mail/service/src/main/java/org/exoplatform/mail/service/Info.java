@@ -23,44 +23,103 @@ package org.exoplatform.mail.service;
  * Feb 18, 2009  
  */
 public class Info {
-  private String id_; 
-  private String accountId_; 
+  private String id_;
+
+  private String accountId_;
+
   private String from_;
+
   private String to_;
+
   private String subject_;
+
   private String date_;
+
   private String size_;
+
   private String folders_;
+
   private String isRead_;
+
   private String priority_;
-  
-  public String getMsgId() { return id_; }
-  public void setMsgId(String id) { id_ = id; }
-  
-  public String getAccountId() { return accountId_; }
-  public void setAccountId(String accountId) { accountId_ = accountId; }
-  
-  public String getFrom() { return from_; }
-  public void setFrom(String from) { from_ = from; }
-  
-  public String getTo() { return to_; }
-  public void setTo(String to) { to_ = to; }
-  
-  public String getSubject() { return subject_; }
-  public void setSubject(String subject) { subject_ = subject; }
-  
-  public String getDate() {return date_; }
-  public void setDate(String date) { date_ = date; }
-  
-  public String getSize() { return size_; }
-  public void setSize(String size) { size_ = size; }
-  
-  public String getPriority() { return priority_; }
-  public void setPriority(String priority) { priority_ = priority; }
-  
-  public String getIsRead() { return isRead_; }
-  public void setIsRead(boolean isRead) { isRead_ = String.valueOf(isRead); }
-  
-  public String getFolders() { return folders_; }
-  public void setFolders(String folders) { folders_ = folders; }
+
+  public String getMsgId() {
+    return id_;
+  }
+
+  public void setMsgId(String id) {
+    id_ = id;
+  }
+
+  public String getAccountId() {
+    return accountId_;
+  }
+
+  public void setAccountId(String accountId) {
+    accountId_ = accountId;
+  }
+
+  public String getFrom() {
+    return from_;
+  }
+
+  public void setFrom(String from) {
+    from_ = from;
+  }
+
+  public String getTo() {
+    return to_;
+  }
+
+  public void setTo(String to) {
+    to_ = to;
+  }
+
+  public String getSubject() {
+    return subject_;
+  }
+
+  public void setSubject(String subject) {
+    subject_ = subject;
+  }
+
+  public String getDate() {
+    return date_;
+  }
+
+  public void setDate(String date) {
+    date_ = date;
+  }
+
+  public String getSize() {
+    return size_;
+  }
+
+  public void setSize(String size) {
+    size_ = size;
+  }
+
+  public String getPriority() {
+    return priority_;
+  }
+
+  public void setPriority(String priority) {
+    priority_ = priority;
+  }
+
+  public String getIsRead() {
+    return isRead_;
+  }
+
+  public void setIsRead(boolean isRead) {
+    isRead_ = String.valueOf(isRead);
+  }
+
+  public String getFolders() {
+    return folders_;
+  }
+
+  public void setFolders(String folders) {
+    folders_ = folders;
+  }
 }

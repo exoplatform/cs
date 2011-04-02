@@ -102,8 +102,7 @@ public class XMPPMessenger {
   /**
    * 
    */
-  private static ConnectionConfiguration connectionConfiguration    = new ConnectionConfiguration(DEFAULT_HOST,
-                                                                                                  DEFAULT_PORT);
+  private static ConnectionConfiguration connectionConfiguration    = new ConnectionConfiguration(DEFAULT_HOST, DEFAULT_PORT);
 
   /**
    * 
@@ -120,29 +119,23 @@ public class XMPPMessenger {
     PropertiesParam pparams = params.getPropertiesParam("openfire-connection-conf");
     if (pparams != null) {
       String host = (pparams.getProperty(HOST) != null) ? pparams.getProperty(HOST) : DEFAULT_HOST;
-      int port = (pparams.getProperty(PORT) != null) ? Integer.valueOf(pparams.getProperty(PORT))
-                                                    : DEFAULT_PORT;
+      int port = (pparams.getProperty(PORT) != null) ? Integer.valueOf(pparams.getProperty(PORT)) : DEFAULT_PORT;
       connectionConfiguration = new ConnectionConfiguration(host, port);
     } else {
       LOGGER.info("Connection params to XMPP server is null." + "Use default configuration.");
     }
     pparams = params.getPropertiesParam("alive-checker-conf");
     if (pparams != null) {
-      disconnect_time = (pparams.getProperty("disconnect") != null) ? Integer.parseInt(pparams.getProperty("disconnect"))
-                                                                   : DEFAULT_DISCONNECT_TIME;
-      close_session_time = (pparams.getProperty("close") != null) ? Long.parseLong(pparams.getProperty("close"))
-                                                                 : DEFAULT_CLOSE_SESSION_TIME;
+      disconnect_time = (pparams.getProperty("disconnect") != null) ? Integer.parseInt(pparams.getProperty("disconnect")) : DEFAULT_DISCONNECT_TIME;
+      close_session_time = (pparams.getProperty("close") != null) ? Long.parseLong(pparams.getProperty("close")) : DEFAULT_CLOSE_SESSION_TIME;
     } else {
-      LOGGER.info("Connection params to alive-checker-conf server is null."
-          + "Use default configuration.");
+      LOGGER.info("Connection params to alive-checker-conf server is null." + "Use default configuration.");
     }
     pparams = params.getPropertiesParam("send-file");
     if (pparams != null) {
-      file_send_timeout = (pparams.getProperty("timeout") != null) ? Integer.parseInt(pparams.getProperty("timeout"))
-                                                                  : OutgoingFileTransfer.getResponseTimeout();
+      file_send_timeout = (pparams.getProperty("timeout") != null) ? Integer.parseInt(pparams.getProperty("timeout")) : OutgoingFileTransfer.getResponseTimeout();
     } else {
-      LOGGER.info("Connection params to alive-checker-conf server is null."
-          + "Use default configuration.");
+      LOGGER.info("Connection params to alive-checker-conf server is null." + "Use default configuration.");
     }
     OutgoingFileTransfer.setResponseTimeout(file_send_timeout);
   }
@@ -175,35 +168,22 @@ public class XMPPMessenger {
    * @param password the password.
    * @throws XMPPException the XMPPException
    */
-  public synchronized void login(String username,
-                                 String password,
-                                 UserInfoService userInfoService,
-                                 ContinuationServiceDelegate delegate,
-                                 HistoryImpl history,
-                                 ResourceBundle rb) throws XMPPException {
+  public synchronized void login(String username, String password, UserInfoService userInfoService, ContinuationServiceDelegate delegate, HistoryImpl history, ResourceBundle rb) throws XMPPException {
     try {
       XMPPSession session = sessions_.get(username);
-      if (session != null && session.getConnection().isConnected()
-          && session.getConnection().isAuthenticated()) {
+      if (session != null && session.getConnection().isConnected() && session.getConnection().isAuthenticated()) {
         if (LOGGER.isDebugEnabled())
           LOGGER.warn("Client has one opened session!");
         // throw new XMPPException("Client has one opened session!");
       } else {
-        XMPPSessionImpl sessionImpl = new XMPPSessionImpl(username,
-                                                          password,
-                                                          userInfoService,
-                                                          delegate,
-                                                          history,
-                                                          rb);
+        XMPPSessionImpl sessionImpl = new XMPPSessionImpl(username, password, userInfoService, delegate, history, rb);
         sessions_.put(username, sessionImpl);
       }
     } catch (XMPPException e) {
       if (LOGGER.isDebugEnabled()) {
-        LOGGER.error("Can't create XMPP session for user '" + username
-            + "'. Chat Server is not accessible . Please check configuration of the client and server.");
+        LOGGER.error("Can't create XMPP session for user '" + username + "'. Chat Server is not accessible . Please check configuration of the client and server.");
       }
-      throw new XMPPException(new XMPPError(XMPPError.Condition.remote_server_not_found,
-                                            "Error login: Openfire server isn't started"));
+      throw new XMPPException(new XMPPError(XMPPError.Condition.remote_server_not_found, "Error login: Openfire server isn't started"));
     }
 
   }

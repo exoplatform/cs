@@ -39,163 +39,131 @@ import org.quartz.TriggerListener;
 public class FakeJobSchedulerServiceImpl implements JobSchedulerService {
 
   public void addCronJob(JobInfo jinfo, String exp) throws Exception {
-    // TODO Auto-generated method stub
-    
+
   }
 
   public void addCronJob(JobInfo jinfo, String exp, JobDataMap jdatamap) throws Exception {
-    // TODO Auto-generated method stub
-    
+
   }
 
   public void addGlobalJobListener(ComponentPlugin plugin) throws Exception {
-    // TODO Auto-generated method stub
-    
+
   }
 
   public void addGlobalTriggerListener(ComponentPlugin plugin) throws Exception {
-    // TODO Auto-generated method stub
-    
+
   }
 
   public void addJob(JobInfo jinfo, Date date) throws Exception {
-    // TODO Auto-generated method stub
-    
+
   }
 
   public void addJobListener(ComponentPlugin plugin) throws Exception {
-    // TODO Auto-generated method stub
-    
+
   }
 
   public void addPeriodJob(JobInfo jinfo, PeriodInfo pinfo) throws Exception {
-    // TODO Auto-generated method stub
-    
+
   }
 
   public void addPeriodJob(JobInfo jinfo, PeriodInfo pinfo, JobDataMap jdatamap) throws Exception {
-    // TODO Auto-generated method stub
-    
+
   }
 
   public void addTriggerListener(ComponentPlugin plugin) throws Exception {
-    // TODO Auto-generated method stub
-    
+
   }
 
   public void executeJob(String jname, String jgroup, JobDataMap jdatamap) throws Exception {
-    // TODO Auto-generated method stub
-    
+
   }
 
   public List getAllExcutingJobs() throws Exception {
-    // TODO Auto-generated method stub
     return null;
   }
 
   public List getAllGlobalJobListener() throws Exception {
-    // TODO Auto-generated method stub
     return null;
   }
 
   public List getAllGlobalTriggerListener() throws Exception {
-    // TODO Auto-generated method stub
     return null;
   }
 
   public List getAllJobListener() throws Exception {
-    // TODO Auto-generated method stub
     return null;
   }
 
   public List getAllJobs() throws Exception {
-    // TODO Auto-generated method stub
     return null;
   }
 
   public List getAllTriggerListener() throws Exception {
-    // TODO Auto-generated method stub
     return null;
   }
 
   public JobListener getGlobalJobListener(String name) throws Exception {
-    // TODO Auto-generated method stub
     return null;
   }
 
   public TriggerListener getGlobalTriggerListener(String name) throws Exception {
-    // TODO Auto-generated method stub
     return null;
   }
 
   public JobDetail getJob(JobInfo jobInfo) throws Exception {
-    // TODO Auto-generated method stub
     return null;
   }
 
   public JobListener getJobListener(String name) throws Exception {
-    // TODO Auto-generated method stub
     return null;
   }
 
   public TriggerListener getTriggerListener(String name) throws Exception {
-    // TODO Auto-generated method stub
     return null;
   }
 
   public int getTriggerState(String triggerName, String triggerGroup) throws Exception {
-    // TODO Auto-generated method stub
     return 0;
   }
 
   public Trigger[] getTriggersOfJob(String jobName, String groupName) throws Exception {
-    // TODO Auto-generated method stub
     return null;
   }
 
   public void pauseJob(String jobName, String groupName) throws Exception {
-    // TODO Auto-generated method stub
-    
+
   }
 
   public void queueTask(Task task) {
-    // TODO Auto-generated method stub
-    
+
   }
 
   public boolean removeGlobaTriggerListener(String name) throws Exception {
-    // TODO Auto-generated method stub
     return false;
   }
 
   public boolean removeGlobalJobListener(String name) throws Exception {
-    // TODO Auto-generated method stub
     return false;
   }
 
   public boolean removeJob(JobInfo jinfo) throws Exception {
-    // TODO Auto-generated method stub
     return false;
   }
 
   public boolean removeJobListener(String name) throws Exception {
-    // TODO Auto-generated method stub
     return false;
   }
 
   public boolean removeTriggerListener(String name) throws Exception {
-    // TODO Auto-generated method stub
     return false;
   }
 
   public Date rescheduleJob(String triggerName, String groupName, Trigger newTrigger) throws Exception {
-    // TODO Auto-generated method stub
     return null;
   }
 
   public void resumeJob(String jobName, String groupName) throws Exception {
-    // TODO Auto-generated method stub
-    
+
   }
 
 }

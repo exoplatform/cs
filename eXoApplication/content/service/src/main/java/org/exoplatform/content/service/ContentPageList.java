@@ -17,27 +17,31 @@ import org.exoplatform.content.model.ContentItem;
  * Aug 7, 2006  
  */
 public class ContentPageList<T extends ContentItem> extends PageList {
-  
-  private List<T> items_ ;
-  
-  public ContentPageList(List<T> items){
+
+  private List<T> items_;
+
+  public ContentPageList(List<T> items) {
     super(10);
     items_ = items;
     setAvailablePage(items.size());
   }
-  
-  public List<T> getItems() { return items_ ; }
-  
-  public void populateCurrentPage(int page) throws Exception   {
-    int idx = (page-1)*getPageSize();
+
+  public List<T> getItems() {
+    return items_;
+  }
+
+  public void populateCurrentPage(int page) throws Exception {
+    int idx = (page - 1) * getPageSize();
     List<ContentItem> list = new ArrayList<ContentItem>(page);
-    while(idx < Math.min(page*getPageSize(), getAvailable())){
+    while (idx < Math.min(page * getPageSize(), getAvailable())) {
       list.add(items_.get(idx));
       idx++;
     }
     currentListPage_ = list;
   }
-  
-  public List<?> getAll(){ return null; }
-  
+
+  public List<?> getAll() {
+    return null;
+  }
+
 }

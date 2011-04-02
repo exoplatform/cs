@@ -37,21 +37,21 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 public interface DataStorage {
 
   final public static String USERS_PATH = "usersPath".intern();
-  
+
   /**
    * Get the public Calendar application storage
    * @return the node that is on top of Calendar application public storage
    * @throws Exception
    */
   public Node getPublicCalendarServiceHome() throws Exception;
-  
+
   /**
    * Get the shared Calendar application storage
    * @return the node that is on top of Calendar application shared storage
    * @throws Exception
    */
   public Node getSharedCalendarHome() throws Exception;
-  
+
   /**
    * 
    * @return
@@ -66,14 +66,14 @@ public interface DataStorage {
    * @throws Exception
    */
   public Node getUserCalendarServiceHome(String username) throws Exception;
-  
+
   /**
    * Get the home node of all public calendars under public Calendar storage
    * @return Node object represents the home node of all public calendars
    * @throws Exception
    */
   public Node getPublicCalendarHome() throws Exception;
-  
+
   /**
    * Get the home node of user calendars under user calendar data storage
    * @param username
@@ -151,9 +151,7 @@ public interface DataStorage {
    * @return the list of GroupCalendarData objects
    * @throws Exception
    */
-  public List<GroupCalendarData> getGroupCalendars(String[] groupIds,
-                                                   boolean isShowAll,
-                                                   String username) throws Exception;
+  public List<GroupCalendarData> getGroupCalendars(String[] groupIds, boolean isShowAll, String username) throws Exception;
 
   /**
    * Save a public calendar
@@ -171,7 +169,7 @@ public interface DataStorage {
    * @throws Exception
    */
   public Calendar removeGroupCalendar(String calendarId) throws Exception;
-  
+
   /**
    * 
    * @param defaultFilterCalendars
@@ -181,10 +179,7 @@ public interface DataStorage {
    * @return Calendar object
    * @throws Exception
    */
-  public Calendar getCalendar(String[] defaultFilterCalendars,
-                              String username,
-                              Node calNode,
-                              boolean isShowAll) throws Exception;
+  public Calendar getCalendar(String[] defaultFilterCalendars, String username, Node calNode, boolean isShowAll) throws Exception;
 
   /**
    * 
@@ -220,7 +215,7 @@ public interface DataStorage {
    * @throws Exception
    */
   public void saveCalendarCategory(String username, CalendarCategory calendarCategory, boolean isNew) throws Exception;
-  
+
   /**
    * Remove a calendar category
    * @param username
@@ -229,7 +224,7 @@ public interface DataStorage {
    * @throws Exception
    */
   public CalendarCategory removeCalendarCategory(String username, String calendarCategoryId) throws Exception;
-  
+
   /**
    * Get calendar category from a JCR node
    * @param calCategoryNode
@@ -238,8 +233,8 @@ public interface DataStorage {
    */
   public CalendarCategory getCalendarCategory(Node calCategoryNode) throws Exception;
 
-  //Event Category APIs
-  
+  // Event Category APIs
+
   /**
    * Get all event categories of a user
    * @param username
@@ -255,9 +250,7 @@ public interface DataStorage {
    * @param isNew
    * @throws Exception
    */
-  public void saveEventCategory(String username,
-                                EventCategory eventCategory,
-                                boolean isNew) throws Exception;
+  public void saveEventCategory(String username, EventCategory eventCategory, boolean isNew) throws Exception;
 
   /**
    * Remove a user event category
@@ -266,7 +259,7 @@ public interface DataStorage {
    * @throws Exception
    */
   public void removeEventCategory(String username, String eventCategoryName) throws Exception;
-  
+
   /**
    * Get a event category from node
    * @param eventCatNode
@@ -283,7 +276,7 @@ public interface DataStorage {
    * @throws Exception
    */
   public EventCategory getEventCategory(String username, String eventCategoryName) throws Exception;
-  
+
   /**
    * Get a user event from calendarId and eventId
    * @param username
@@ -374,7 +367,7 @@ public interface DataStorage {
    * @throws Exception
    */
   public void removeReminder(Node eventNode) throws Exception;
-  
+
   /**
    * Get a group event with given eventId
    * @param eventId 
@@ -537,10 +530,7 @@ public interface DataStorage {
    * @return
    * @throws Exception
    */
-  public int generateCalDav(String username,
-                            LinkedHashMap<String, Calendar> calendars,
-                            RssData rssData,
-                            CalendarImportExport importExport) throws Exception;
+  public int generateCalDav(String username, LinkedHashMap<String, Calendar> calendars, RssData rssData, CalendarImportExport importExport) throws Exception;
 
   /**
    * @param username
@@ -548,7 +538,7 @@ public interface DataStorage {
    * @throws Exception
    */
   public void removeFeed(String username, String calendarId) throws Exception;
-  
+
   /**
    * @param username
    * @return
@@ -564,10 +554,7 @@ public interface DataStorage {
    * @return
    * @throws Exception
    */
-  public int generateRss(String username,
-                         List<String> calendarIds,
-                         RssData rssData,
-                         CalendarImportExport importExport) throws Exception;
+  public int generateRss(String username, List<String> calendarIds, RssData rssData, CalendarImportExport importExport) throws Exception;
 
   /**
    * @param username
@@ -577,10 +564,7 @@ public interface DataStorage {
    * @return
    * @throws Exception
    */
-  public int generateRss(String username,
-                         LinkedHashMap<String, Calendar> calendars,
-                         RssData rssData,
-                         CalendarImportExport importExport) throws Exception;
+  public int generateRss(String username, LinkedHashMap<String, Calendar> calendars, RssData rssData, CalendarImportExport importExport) throws Exception;
 
   /**
    * @param username
@@ -624,10 +608,7 @@ public interface DataStorage {
    * @return
    * @throws Exception
    */
-  public int generateCalDav(String username,
-                            List<String> calendarIds,
-                            RssData rssData,
-                            CalendarImportExport importExport) throws Exception;
+  public int generateCalDav(String username, List<String> calendarIds, RssData rssData, CalendarImportExport importExport) throws Exception;
 
   /**
    * @param portalName
@@ -638,11 +619,7 @@ public interface DataStorage {
    * @return
    * @throws Exception
    */
-  public String getEntryUrl(String portalName,
-                            String wsName,
-                            String username,
-                            String path,
-                            String baseUrl) throws Exception;
+  public String getEntryUrl(String portalName, String wsName, String username, String path, String baseUrl) throws Exception;
 
   /**
    * @param username
@@ -651,9 +628,7 @@ public interface DataStorage {
    * @return
    * @throws Exception
    */
-  public EventPageList searchEvent(String username,
-                                   EventQuery eventQuery,
-                                   String[] publicCalendarIds) throws Exception;
+  public EventPageList searchEvent(String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception;
 
   /**
    * @param username
@@ -662,9 +637,7 @@ public interface DataStorage {
    * @return
    * @throws Exception
    */
-  public Map<Integer, String> searchHightLightEvent(String username,
-                                                    EventQuery eventQuery,
-                                                    String[] publicCalendarIds) throws Exception;
+  public Map<Integer, String> searchHightLightEvent(String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception;
 
   /**
    * @param data
@@ -675,11 +648,7 @@ public interface DataStorage {
    * @return
    * @throws Exception
    */
-  public Map<Integer, String> updateMap(Map<Integer, String> data,
-                                        NodeIterator it,
-                                        java.util.Calendar fromDate,
-                                        java.util.Calendar toDate,
-                                        String[] filterCalIds) throws Exception;
+  public Map<Integer, String> updateMap(Map<Integer, String> data, NodeIterator it, java.util.Calendar fromDate, java.util.Calendar toDate, String[] filterCalIds) throws Exception;
 
   /**
    * Shared a calendar to list of users
@@ -741,10 +710,7 @@ public interface DataStorage {
    * @param isNew
    * @throws Exception
    */
-  public void saveEventToSharedCalendar(String username,
-                                        String calendarId,
-                                        CalendarEvent event,
-                                        boolean isNew) throws Exception;
+  public void saveEventToSharedCalendar(String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception;
 
   /**
    * Get the permission to edit of user on the calendar
@@ -762,9 +728,7 @@ public interface DataStorage {
    * @return
    * @throws Exception
    */
-  public List<CalendarEvent> getEvents(String username,
-                                       EventQuery eventQuery,
-                                       String[] publicCalendarIds) throws Exception;
+  public List<CalendarEvent> getEvents(String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception;
 
   /**
    * @param eventQuery
@@ -791,12 +755,7 @@ public interface DataStorage {
    * @param username
    * @throws Exception
    */
-  public void moveEvent(String formCalendar,
-                        String toCalendar,
-                        String fromType,
-                        String toType,
-                        List<CalendarEvent> calEvents,
-                        String username) throws Exception;
+  public void moveEvent(String formCalendar, String toCalendar, String fromType, String toType, List<CalendarEvent> calEvents, String username) throws Exception;
 
   /**
    * @param fromUserId
@@ -807,12 +766,7 @@ public interface DataStorage {
    * @param answer
    * @throws Exception
    */
-  public void confirmInvitation(String fromUserId,
-                                String toUserId,
-                                int calType,
-                                String calendarId,
-                                String eventId,
-                                int answer) throws Exception;
+  public void confirmInvitation(String fromUserId, String toUserId, int calType, String calendarId, String eventId, int answer) throws Exception;
 
   /**
    * @param fromUserId
@@ -824,13 +778,7 @@ public interface DataStorage {
    * @param answer
    * @throws Exception
    */
-  public void confirmInvitation(String fromUserId,
-                                String confirmingEmail,
-                                String confirmingUser,
-                                int calType,
-                                String calendarId,
-                                String eventId,
-                                int answer) throws Exception;
+  public void confirmInvitation(String fromUserId, String confirmingEmail, String confirmingUser, int calType, String calendarId, String eventId, int answer) throws Exception;
 
   /**
    * @param userName
@@ -860,13 +808,12 @@ public interface DataStorage {
 
   public Node getNodeByPath(String nodePath, SessionProvider sessionProvider) throws Exception;
 
-  public Session getSession(SessionProvider sprovider) throws Exception; 
-  
-  public void autoShareCalendar(List<String> groupsOfUser, String reciever) throws Exception ;
+  public Session getSession(SessionProvider sprovider) throws Exception;
 
-  public void autoRemoveShareCalendar(String groupId, String username) throws Exception ;
-  
-  
+  public void autoShareCalendar(List<String> groupsOfUser, String reciever) throws Exception;
+
+  public void autoRemoveShareCalendar(String groupId, String username) throws Exception;
+
   /**
    * Check if a calendar is a remote calendar by checking mixin type of calendar node
    * @param username owner of this calendar
@@ -874,27 +821,26 @@ public interface DataStorage {
    * @return true if calendar node has mixin type exo:remoteCalendar, false if otherwise
    * @throws Exception
    */
-  public boolean isRemoteCalendar(String username, String calendarId) throws Exception ;
-  
-  
+  public boolean isRemoteCalendar(String username, String calendarId) throws Exception;
+
   /**
    * Update information about remote calendar
    * @param remoteCalendar object content all properties for remote calendar.
    * @return
    * @throws Exception
    */
-  public Calendar updateRemoteCalendarInfo(RemoteCalendar remoteCalendar) throws Exception ;
-  
-  
+  public Calendar updateRemoteCalendarInfo(RemoteCalendar remoteCalendar) throws Exception;
+
   /**
    * Create a new eXo calendar with mixin type 'exo:remoteCalendar' to store data from remote calendar, this method also creates a 'Remote' category
    * @param remoteCalendar object content all properties for remote calendar.
    * @return Calendar object
    * @throws Exception
    */
-  public Calendar createRemoteCalendar(RemoteCalendar remoteCalendar) throws Exception ;
-  
+  public Calendar createRemoteCalendar(RemoteCalendar remoteCalendar) throws Exception;
+
   public void setRemoteEvent(String username, String calendarId, String eventId, String href, String etag) throws Exception;
+
   /**
    * @param username
    * @param calendarId
@@ -902,12 +848,12 @@ public interface DataStorage {
    * @throws Exception
    */
   public void setRemoteCalendarLastUpdated(String username, String calendarId, java.util.Calendar timeGMT) throws Exception;
-  
+
   public Calendar getRemoteCalendar(String username, String remoteUrl, String remoteType) throws Exception;
-  
-  public int getRemoteCalendarCount(String username) throws Exception ;
-  
+
+  public int getRemoteCalendarCount(String username) throws Exception;
+
   public void setCalDavResourceHref(String username, String calendarId, String eventId, String href) throws Exception;
-  
+
   public void setCalDavResourceEtag(String username, String calendarId, String eventId, String etag) throws Exception;
 }

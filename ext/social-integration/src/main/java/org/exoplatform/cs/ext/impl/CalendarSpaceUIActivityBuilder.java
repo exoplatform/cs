@@ -8,8 +8,7 @@ public class CalendarSpaceUIActivityBuilder extends BaseUIActivityBuilder {
 
   @Override
   protected void extendUIActivity(BaseUIActivity uiActivity, ExoSocialActivity activity) {
-    // TODO Auto-generated method stub
-    
+
   }
 
 }

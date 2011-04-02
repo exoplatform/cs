@@ -17,7 +17,6 @@
 package org.exoplatform.calendar.webui.popup;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +25,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.commons.utils.LazyPageList;
-import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.MembershipHandler;

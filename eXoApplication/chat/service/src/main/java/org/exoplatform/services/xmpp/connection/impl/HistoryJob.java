@@ -41,47 +41,47 @@ import org.quartz.JobExecutionException;
 public class HistoryJob implements Job {
 
   private static Log log = ExoLogger.getLogger("job.ChatRecordsJob");
-  
+
   public void execute(JobExecutionContext context) throws JobExecutionException {
     PortalContainer container = getPortalContainer(context);
-    if(container == null) return;
+    if (container == null)
+      return;
     ExoContainer oldContainer = ExoContainerContext.getCurrentContainer();
     ExoContainerContext.setCurrentContainer(container);
     SessionProvider provider = SessionProvider.createSystemProvider();
     try {
       JobDataMap jdatamap = context.getJobDetail().getJobDataMap();
       int logBatchSize = Integer.parseInt(jdatamap.getString("logBatchSize"));
-      HistoryImpl historyImpl = (HistoryImpl)container.getComponentInstanceOfType(HistoryImpl.class);
-      
+      HistoryImpl historyImpl = (HistoryImpl) container.getComponentInstanceOfType(HistoryImpl.class);
+
       HistoricalMessage message;
       boolean success;
       Queue<HistoricalMessage> logQueue = historyImpl.getLogQueue();
       for (int index = 0; index <= logBatchSize && !logQueue.isEmpty(); index++) {
         message = logQueue.poll();
         if (message != null) {
-            success = historyImpl.addHistoricalMessage(message, provider);
-            if (!success) {
-                logQueue.add(message);
-            }
+          success = historyImpl.addHistoricalMessage(message, provider);
+          if (!success) {
+            logQueue.add(message);
+          }
         }
       }
     } catch (Exception e) {
       log.error("An exception happened when saving chat message", e);
-    }
-    finally {
+    } finally {
       provider.close(); // release sessions
       ExoContainerContext.setCurrentContainer(oldContainer);
     }
-    
+
   }
-  
-  private static PortalContainer getPortalContainer(JobExecutionContext context){
-    if(context == null)
+
+  private static PortalContainer getPortalContainer(JobExecutionContext context) {
+    if (context == null)
       return null;
     String portalName = context.getJobDetail().getGroup();
-    if(portalName == null)
+    if (portalName == null)
       return null;
-    if(portalName.indexOf(":")>0)
+    if (portalName.indexOf(":") > 0)
       portalName = portalName.substring(0, portalName.indexOf(":"));
     return RootContainer.getInstance().getPortalContainer(portalName);
   }

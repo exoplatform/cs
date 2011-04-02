@@ -16,50 +16,86 @@ import java.util.Date;
  *                   polymorphism="explicit"
  */
 public class ContentData {
-  
-  private String data ;
-  
-  protected String id_ ;
-  protected String type_ ;
-  protected String owner_ ;
-  protected Date createdDate_ ;
-  protected Date modifiedDate_ ;
-  
-  public ContentData() {}
+
+  private String   data;
+
+  protected String id_;
+
+  protected String type_;
+
+  protected String owner_;
+
+  protected Date   createdDate_;
+
+  protected Date   modifiedDate_;
+
+  public ContentData() {
+  }
+
   /**
    * @hibernate.property length="65535" type="org.exoplatform.services.database.impl.TextClobType"
    **/
-  public String getData() throws Exception {  return data ; }
-  public void  setData(String s) throws Exception {  data = s ; }
-  
+  public String getData() throws Exception {
+    return data;
+  }
+
+  public void setData(String s) throws Exception {
+    data = s;
+  }
+
   /**
    * @hibernate.id  generator-class="assigned" unsaved-value="null"
    ***/
-  public String   getId() { return id_ ; }
-  public void     setId(String id) { id_ = id ; }
-  
+  public String getId() {
+    return id_;
+  }
+
+  public void setId(String id) {
+    id_ = id;
+  }
+
   /**
    * @hibernate.property
    ***/
-  public String   getDataType() { return type_ ; }
-  public void     setDataType(String name) { type_ = name ; }
-  
+  public String getDataType() {
+    return type_;
+  }
+
+  public void setDataType(String name) {
+    type_ = name;
+  }
+
   /**
    * @hibernate.property
    ***/
-  public String   getOwner() { return owner_ ; }
-  public void     setOwner(String owner) { owner_ = owner ; }
-  
+  public String getOwner() {
+    return owner_;
+  }
+
+  public void setOwner(String owner) {
+    owner_ = owner;
+  }
+
   /**
    * @hibernate.property
    ***/
-  public Date getCreatedDate() { return createdDate_ ; }
-  public void   setCreatedDate(Date date) { createdDate_ = date ; }
-  
+  public Date getCreatedDate() {
+    return createdDate_;
+  }
+
+  public void setCreatedDate(Date date) {
+    createdDate_ = date;
+  }
+
   /**
    * @hibernate.property
    ***/
-  public Date getModifiedDate() { return modifiedDate_ ; }
-  public void   setModifiedDate(Date date) { modifiedDate_ = date ; }
-  
+  public Date getModifiedDate() {
+    return modifiedDate_;
+  }
+
+  public void setModifiedDate(Date date) {
+    modifiedDate_ = date;
+  }
+
 }

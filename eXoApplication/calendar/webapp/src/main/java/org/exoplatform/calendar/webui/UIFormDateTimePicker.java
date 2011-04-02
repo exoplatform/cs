@@ -18,7 +18,6 @@ package org.exoplatform.calendar.webui;
 
 import java.io.Writer;
 import java.text.DateFormat;
-import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

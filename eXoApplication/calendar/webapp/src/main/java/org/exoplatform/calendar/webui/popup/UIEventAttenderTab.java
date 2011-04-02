@@ -115,16 +115,16 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
   }
   
   private DateFormat getSimpleFormatDate() throws Exception {
-  	CalendarSetting calSetting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
+    CalendarSetting calSetting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-  	return new SimpleDateFormat(calSetting.getDateFormat(),context.getParentAppRequestContext().getLocale());
+    return new SimpleDateFormat(calSetting.getDateFormat(),context.getParentAppRequestContext().getLocale());
   }
 
   protected String[] getParticipants() { return parMap_.keySet().toArray(new String[]{}) ; } 
 
   protected String getDateValue() throws Exception  {
-  	DateFormat dateFormat = getSimpleFormatDate();
-  	dateFormat.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
+    DateFormat dateFormat = getSimpleFormatDate();
+    dateFormat.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
     return dateFormat.format(calendar_.getTime()) ;
   }
   protected void moveNextDay() throws Exception{
@@ -132,7 +132,7 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
     StringBuilder values = new StringBuilder(); 
     for(String par : parMap_.keySet()) {
       if(values != null && values.length() > 0) values.append(CalendarUtils.BREAK_LINE) ;
-      values.append(par) ;    	
+      values.append(par) ;      
     }
     parMap_.clear() ;
     updateParticipants(values.toString()) ;
@@ -142,7 +142,7 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
     StringBuilder values = new StringBuilder(); 
     for(String par : parMap_.keySet()) {
       if(values != null && values.length() > 0) values.append(CalendarUtils.BREAK_LINE) ;
-      values.append(par) ;    	
+      values.append(par) ;      
     }
     parMap_.clear() ;
     updateParticipants(values.toString()) ;

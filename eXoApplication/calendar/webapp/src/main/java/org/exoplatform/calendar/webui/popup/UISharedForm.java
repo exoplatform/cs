@@ -55,18 +55,18 @@ import org.exoplatform.webui.organization.account.UIUserSelector;
  * Aus 01, 2007 2:48:18 PM 
  */
 @ComponentConfigs({
-	@ComponentConfig(
-	    lifecycle = UIFormLifecycle.class,
-	    template = "system:/groovy/webui/form/UIForm.gtmpl",
-	    events = {
-	      @EventConfig(listeners = UISharedForm.SaveActionListener.class),    
-	      @EventConfig(listeners = UISharedForm.SelectPermissionActionListener.class, phase = Phase.DECODE),
-	      @EventConfig(listeners = UISharedForm.SelectGroupActionListener.class, phase = Phase.DECODE),
-	      @EventConfig(listeners = UISharedForm.CancelActionListener.class)
-	    }
-	),
-	@ComponentConfig(
-		id = "UIPopupWindowUserSelect",
+  @ComponentConfig(
+      lifecycle = UIFormLifecycle.class,
+      template = "system:/groovy/webui/form/UIForm.gtmpl",
+      events = {
+        @EventConfig(listeners = UISharedForm.SaveActionListener.class),    
+        @EventConfig(listeners = UISharedForm.SelectPermissionActionListener.class, phase = Phase.DECODE),
+        @EventConfig(listeners = UISharedForm.SelectGroupActionListener.class, phase = Phase.DECODE),
+        @EventConfig(listeners = UISharedForm.CancelActionListener.class)
+      }
+  ),
+  @ComponentConfig(
+    id = "UIPopupWindowUserSelect",
         type = UIPopupWindow.class,
         template =  "system:/groovy/webui/core/UIPopupWindow.gtmpl",
         events = {
@@ -74,7 +74,7 @@ import org.exoplatform.webui.organization.account.UIUserSelector;
           @EventConfig(listeners = UISharedForm.AddActionListener.class, name = "Add", phase = Phase.DECODE),
           @EventConfig(listeners = UISharedForm.CloseActionListener.class, name = "Close", phase = Phase.DECODE)
         }
-	)
+  )
 })
 public class UISharedForm extends UIForm implements UIPopupComponent, UISelector{
   final public static String SPECIALCHARACTER[] = {CalendarUtils.SEMICOLON,CalendarUtils.SLASH,CalendarUtils.BACKSLASH,"'","|",">","<","\"", "?", "!", "@", "#", "$", "%","^","&","*"} ;
@@ -164,7 +164,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
   public void deActivate() throws Exception {}
 
   public String cleanValue(String values) throws Exception{
-	  String[] tmpArr = values.split(",");
+    String[] tmpArr = values.split(",");
       List<String> list = Arrays.asList(tmpArr);
       java.util.Set<String> set = new java.util.HashSet<String>(list);
       String[] result = new String[set.size()];
@@ -174,7 +174,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
           data += "," + s;
       }
       data = data.substring(1);
-	  return data;
+    return data;
   }
 
   public void updateSelect(String selectField, String value) throws Exception {

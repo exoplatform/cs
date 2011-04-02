@@ -32,11 +32,13 @@ import org.exoplatform.services.organization.Membership;
  * @version $Id: $
  */
 public class MembershipListXMLEntity implements StreamingOutput {
-  
+
   private final Collection<Membership> memberships_;
-  private final String baseURI_; 
-  private String username_;
-  
+
+  private final String                 baseURI_;
+
+  private String                       username_;
+
   public MembershipListXMLEntity(Collection<Membership> memberships, String baseURI) {
     memberships_ = memberships;
     baseURI_ = baseURI;
@@ -61,8 +63,7 @@ public class MembershipListXMLEntity implements StreamingOutput {
         xsw.writeAttribute("user-name", username_);
       for (Membership m : memberships_) {
         xsw.writeStartElement("membership");
-        xsw.writeAttribute(XMLContants.XLINK_NAMESPACE_URL, XMLContants.XLINK_HREF,
-            baseURI_ + "/organization/membership/" + m.getId() + "/?output=xml&command=info");
+        xsw.writeAttribute(XMLContants.XLINK_NAMESPACE_URL, XMLContants.XLINK_HREF, baseURI_ + "/organization/membership/" + m.getId() + "/?output=xml&command=info");
         xsw.writeStartElement("id");
         xsw.writeCharacters(m.getId());
         xsw.writeEndElement();
@@ -88,4 +89,3 @@ public class MembershipListXMLEntity implements StreamingOutput {
   }
 
 }
-

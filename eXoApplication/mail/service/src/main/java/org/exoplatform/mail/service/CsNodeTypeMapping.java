@@ -26,32 +26,42 @@ import java.util.List;
  * Dec 3, 2008  
  */
 public class CsNodeTypeMapping {
-  private String nodeTypeName ;
+  private String                  nodeTypeName;
 
-  private List<CsPropertyMapping> addedProperties = new ArrayList<CsPropertyMapping>() ;
-  private List<CsPropertyMapping> removedProperties = new ArrayList<CsPropertyMapping>() ;
-  private List<CsPropertyMapping> updatedProperties = new ArrayList<CsPropertyMapping>() ;
+  private List<CsPropertyMapping> addedProperties   = new ArrayList<CsPropertyMapping>();
+
+  private List<CsPropertyMapping> removedProperties = new ArrayList<CsPropertyMapping>();
+
+  private List<CsPropertyMapping> updatedProperties = new ArrayList<CsPropertyMapping>();
+
   public void setAddedProperties(List<CsPropertyMapping> addedProperties) {
     this.addedProperties = addedProperties;
   }
+
   public List<CsPropertyMapping> getAddedProperties() {
     return addedProperties;
   }
+
   public void setRemovedProperties(List<CsPropertyMapping> removeProperties) {
     this.removedProperties = removeProperties;
   }
+
   public List<CsPropertyMapping> getRemovedProperties() {
     return removedProperties;
   }
+
   public void setUpdatedProperties(List<CsPropertyMapping> updatedProperties) {
     this.updatedProperties = updatedProperties;
   }
+
   public List<CsPropertyMapping> getUpdatedProperties() {
     return updatedProperties;
   }
+
   public void setNodeTypeName(String nodeTypeName) {
     this.nodeTypeName = nodeTypeName;
   }
+
   public String getNodeTypeName() {
     return nodeTypeName;
   }

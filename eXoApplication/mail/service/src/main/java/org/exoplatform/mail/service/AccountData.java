@@ -26,28 +26,50 @@ import java.util.List;
  * 
  */
 public class AccountData {
-  private Account account ;
-  private List<Folder> defaultFolders ;
-  private List<Folder> userFolders ;  
-  private List<Tag> tags ;
-  
-  
-  public Account getAccount() { return account ; }
-  public void setAccount( Account acc) { this.account = acc ; }
-  
+  private Account      account;
+
+  private List<Folder> defaultFolders;
+
+  private List<Folder> userFolders;
+
+  private List<Tag>    tags;
+
+  public Account getAccount() {
+    return account;
+  }
+
+  public void setAccount(Account acc) {
+    this.account = acc;
+  }
+
   /**
    * @return Return a list of the default folder: Inbox, Sent, Draft, Spam and Trash
    */
-  public List<Folder> getDefaultFolder() { return defaultFolders ; }
-  public void setDefaultFolder(List<Folder> folders) { defaultFolders = folders ; }
-  
+  public List<Folder> getDefaultFolder() {
+    return defaultFolders;
+  }
+
+  public void setDefaultFolder(List<Folder> folders) {
+    defaultFolders = folders;
+  }
+
   /**
    * @return Return a list of the folder that is created by the user
    */
-  public List<Folder> getUserFolder() { return userFolders ; }
-  public void setUserFolder(List<Folder> folders) { userFolders = folders ; }
-  
-  public List<Tag> getTags() { return tags ; }
-  public void setTags(List<Tag> tg) { tags = tg ; }
-  
+  public List<Folder> getUserFolder() {
+    return userFolders;
+  }
+
+  public void setUserFolder(List<Folder> folders) {
+    userFolders = folders;
+  }
+
+  public List<Tag> getTags() {
+    return tags;
+  }
+
+  public void setTags(List<Tag> tg) {
+    tags = tg;
+  }
+
 }

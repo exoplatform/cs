@@ -27,33 +27,33 @@ public class CometdChannels {
   /**
    * 
    */
-  public final static String MESSAGE       = "/eXo/Application/Chat/message";
+  public final static String MESSAGE           = "/eXo/Application/Chat/message";
 
   /**
    * 
    */
-  public static final String PRESENCE      = "/eXo/Application/Chat/presence";
+  public static final String PRESENCE          = "/eXo/Application/Chat/presence";
 
   /**
    * 
    */
-  public static final String GROUP_CHAT    = "/eXo/Application/Chat/groupchat";
+  public static final String GROUP_CHAT        = "/eXo/Application/Chat/groupchat";
 
   /**
    * 
    */
-  public static final String ROSTER        = "/eXo/Application/Chat/roster";
+  public static final String ROSTER            = "/eXo/Application/Chat/roster";
 
   /**
    * 
    */
-  public static final String SUBSCRIPTION  = "/eXo/Application/Chat/subscription";
+  public static final String SUBSCRIPTION      = "/eXo/Application/Chat/subscription";
 
   /**
    * 
    */
-  public static final String FILE_EXCHANGE = "/eXo/Application/Chat/FileExchange";
-  
+  public static final String FILE_EXCHANGE     = "/eXo/Application/Chat/FileExchange";
+
   /**
    * 
    */

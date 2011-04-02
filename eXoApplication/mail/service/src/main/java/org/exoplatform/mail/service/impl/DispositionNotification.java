@@ -16,13 +16,15 @@
  */
 package org.exoplatform.mail.service.impl;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Enumeration;
 
-import javax.mail.*;
-import javax.mail.internet.*;
+import javax.mail.MessagingException;
+import javax.mail.internet.InternetHeaders;
 
-import com.sun.mail.util.LineOutputStream;  // XXX
+import com.sun.mail.util.LineOutputStream;
 
 /**
  * Created by The eXo Platform SAS
@@ -31,8 +33,8 @@ import com.sun.mail.util.LineOutputStream;  // XXX
  * Jun 25, 2009  
  */
 public class DispositionNotification {
-  
-  private static boolean debug = false;
+
+  private static boolean    debug = false;
 
   /**
    * The disposition notification content fields.
@@ -53,7 +55,7 @@ public class DispositionNotification {
   public DispositionNotification(InputStream is) throws MessagingException, IOException {
     notifications = new InternetHeaders(is);
     if (debug)
-        System.out.println("MDN: got notification content");
+      System.out.println("MDN: got notification content");
   }
 
   /**
@@ -92,11 +94,11 @@ public class DispositionNotification {
     // see if we already have a LOS
     LineOutputStream los = null;
     if (os instanceof LineOutputStream) {
-        los = (LineOutputStream) os;
+      los = (LineOutputStream) os;
     } else {
-        los = new LineOutputStream(os);
+      los = new LineOutputStream(os);
     }
-    
+
     writeInternetHeaders(notifications, los);
     los.writeln();
   }
@@ -104,20 +106,19 @@ public class DispositionNotification {
   private static void writeInternetHeaders(InternetHeaders h, LineOutputStream los) throws IOException {
     Enumeration e = h.getAllHeaderLines();
     try {
-        while (e.hasMoreElements())
-      los.writeln((String)e.nextElement());
+      while (e.hasMoreElements())
+        los.writeln((String) e.nextElement());
     } catch (MessagingException mex) {
-        Exception ex = mex.getNextException();
-        if (ex instanceof IOException)
-      throw (IOException)ex;
-        else
-      throw new IOException("Exception writing headers: " + mex);
+      Exception ex = mex.getNextException();
+      if (ex instanceof IOException)
+        throw (IOException) ex;
+      else
+        throw new IOException("Exception writing headers: " + mex);
     }
   }
 
   public String toString() {
-    return "DispositionNotification: Reporting-UA=" +
-    notifications.getHeader("Reporting-UA", null);
+    return "DispositionNotification: Reporting-UA=" + notifications.getHeader("Reporting-UA", null);
   }
 
 }

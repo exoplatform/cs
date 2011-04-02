@@ -25,12 +25,12 @@ import org.exoplatform.calendar.service.CalendarEvent;
  * Jan 4, 2011  
  */
 public class SingleEvent {
-	private CalendarEvent info ;	
-	
-	public CalendarEvent getInfo() {
-	  return info;
-	}	
-	public void setInfo(CalendarEvent info) {
-	  this.info = info;
-	}	
+  private CalendarEvent info ;  
+  
+  public CalendarEvent getInfo() {
+    return info;
+  }  
+  public void setInfo(CalendarEvent info) {
+    this.info = info;
+  }  
 }

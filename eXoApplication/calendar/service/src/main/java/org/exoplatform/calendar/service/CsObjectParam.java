@@ -26,7 +26,7 @@ import java.util.List;
  * Dec 3, 2008  
  */
 public class CsObjectParam {
-  private List<CsNodeTypeMapping> nodeTypes = new ArrayList<CsNodeTypeMapping>() ;
+  private List<CsNodeTypeMapping> nodeTypes = new ArrayList<CsNodeTypeMapping>();
 
   public void setNodeTypes(List<CsNodeTypeMapping> nodeTypes) {
     this.nodeTypes = nodeTypes;

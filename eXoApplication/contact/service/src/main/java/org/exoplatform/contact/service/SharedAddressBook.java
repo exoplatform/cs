@@ -23,32 +23,61 @@ package org.exoplatform.contact.service;
  * Jul 11, 2007  
  */
 public class SharedAddressBook {
-  private String name ;
-  private String id ;
-  private String sharedUserId ;
-  
+  private String   name;
+
+  private String   id;
+
+  private String   sharedUserId;
+
   // add to show/hide actions in rightClick popup
-  private String[] editPermissionUsers ;
-  private String[] editPermissionGroups ;
-  
+  private String[] editPermissionUsers;
+
+  private String[] editPermissionGroups;
+
   public SharedAddressBook(String name, String id, String sharedUserId) throws Exception {
-    this.name = name ;
-    this.id = id ;
-    this.sharedUserId = sharedUserId ;
+    this.name = name;
+    this.id = id;
+    this.sharedUserId = sharedUserId;
   }
-  public String getName() { return name ; }
-  public void setName(String name) { this.name = name ; }
-  
-	public void setId(String id) { this.id = id ; }
-	public String getId() { return id ; }
-	
-	public void setSharedUserId(String sharedUserId) { this.sharedUserId = sharedUserId ;}
-	public String getSharedUserId() { return sharedUserId ;}
-  
-  public String[] getEditPermissionUsers() { return editPermissionUsers ; }
-  public void setEditPermissionUsers(String[] editPermission) { this.editPermissionUsers = editPermission ; }
-  
-  public String[] getEditPermissionGroups() { return editPermissionGroups ; }
-  public void setEditPermissionGroups(String[] editPermission) { this.editPermissionGroups = editPermission ; }
-  
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  public String getId() {
+    return id;
+  }
+
+  public void setSharedUserId(String sharedUserId) {
+    this.sharedUserId = sharedUserId;
+  }
+
+  public String getSharedUserId() {
+    return sharedUserId;
+  }
+
+  public String[] getEditPermissionUsers() {
+    return editPermissionUsers;
+  }
+
+  public void setEditPermissionUsers(String[] editPermission) {
+    this.editPermissionUsers = editPermission;
+  }
+
+  public String[] getEditPermissionGroups() {
+    return editPermissionGroups;
+  }
+
+  public void setEditPermissionGroups(String[] editPermission) {
+    this.editPermissionGroups = editPermission;
+  }
+
 }

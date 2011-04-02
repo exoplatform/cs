@@ -214,7 +214,7 @@ public class UIAccountWizardStep3 extends UIFormInputSet implements WizardStep{
     return getUIStringInput(FIELD_OUTGOINGPORT).getValue() ;
   }
   protected boolean getOutgoingSsl() {
-	return  getUIFormCheckBoxInput(FIELD_OUTGOING_SSL).isChecked(); 
+  return  getUIFormCheckBoxInput(FIELD_OUTGOING_SSL).isChecked(); 
   }
   protected void setOutgoingPort(String value) {
     getUIStringInput(FIELD_OUTGOINGPORT).setValue(value) ;
@@ -226,7 +226,7 @@ public class UIAccountWizardStep3 extends UIFormInputSet implements WizardStep{
     getUIFormCheckBoxInput(FIELD_USESSL).setChecked(value) ;
   }
   protected void setOutgoingSsl(boolean value) {
-	getUIFormCheckBoxInput(FIELD_OUTGOING_SSL).setChecked(value) ;
+  getUIFormCheckBoxInput(FIELD_OUTGOING_SSL).setChecked(value) ;
   }
   protected String getStoreFolder() {
     return getUIStringInput(FIELD_STOREFOLDER).getValue() ;

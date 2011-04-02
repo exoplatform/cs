@@ -25,16 +25,19 @@ import org.exoplatform.services.jcr.util.IdGenerator;
  * Jan 21, 2011  
  */
 public class AccountDelegation {
- 
-  private String accountName;
-  private String accountId;
-  private String delegatedUserName;
-  private boolean isFull = false;
+
+  private String  accountName;
+
+  private String  accountId;
+
+  private String  delegatedUserName;
+
+  private boolean isFull     = false;
+
   private boolean isReadOnly = true;
-  
-  private String id;
-  
-  
+
+  private String  id;
+
   public boolean isFull() {
     return isFull;
   }
@@ -54,17 +57,15 @@ public class AccountDelegation {
   public AccountDelegation() {
     id = IdGenerator.generate();
   }
-  public AccountDelegation(String accountId, String accname, String delegateuser, boolean isFull){
+
+  public AccountDelegation(String accountId, String accname, String delegateuser, boolean isFull) {
     id = IdGenerator.generate();
     this.accountId = accountId;
     this.accountName = accname;
     this.delegatedUserName = delegateuser;
     this.isFull = isFull;
   }
-  
-  
-  
-  
+
   public String getId() {
     return id;
   }
@@ -81,7 +82,6 @@ public class AccountDelegation {
     this.accountName = accountName;
   }
 
- 
   public String getDelegatedUserName() {
     return delegatedUserName;
   }
@@ -90,11 +90,10 @@ public class AccountDelegation {
     this.delegatedUserName = delegatedUserName;
   }
 
-   
   public boolean getIsFull() {
     return isFull;
   }
-  
+
   public boolean getIsReadOnly() {
     return isReadOnly;
   }

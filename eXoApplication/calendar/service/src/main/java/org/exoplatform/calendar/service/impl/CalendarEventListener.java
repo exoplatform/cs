@@ -30,16 +30,12 @@ public class CalendarEventListener extends BaseComponentPlugin implements EventL
 
   @Override
   public void savePublicEvent(CalendarEvent event, String calendarId) {
-    // TODO Auto-generated method stub
-    
+
   }
 
   @Override
   public void updatePublicEvent(CalendarEvent event, String calendarId) {
-    // TODO Auto-generated method stub
-    
+
   }
-
-
 
 }

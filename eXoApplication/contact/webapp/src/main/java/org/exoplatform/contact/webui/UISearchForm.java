@@ -16,11 +16,11 @@
  */
 package org.exoplatform.contact.webui;
 
-import org.exoplatform.contact.webui.popup.UIAdvancedSearchForm;
-import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.DataPageList;
+import org.exoplatform.contact.webui.popup.UIAdvancedSearchForm;
+import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;

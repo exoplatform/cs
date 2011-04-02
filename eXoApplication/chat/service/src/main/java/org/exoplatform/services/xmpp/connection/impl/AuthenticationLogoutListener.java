@@ -17,7 +17,6 @@
 package org.exoplatform.services.xmpp.connection.impl;
 
 import org.exoplatform.container.ExoContainer;
-
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
@@ -37,7 +36,7 @@ import org.exoplatform.services.xmpp.connection.XMPPSession;
 public class AuthenticationLogoutListener extends Listener<ConversationRegistry, ConversationState> {
 
   protected static final Log log = ExoLogger.getLogger("chat.AuthenticationLogoutListener");
-  
+
   @Override
   public void onEvent(Event<ConversationRegistry, ConversationState> event) throws Exception {
     XMPPMessenger messenger = null;
@@ -45,24 +44,23 @@ public class AuthenticationLogoutListener extends Listener<ConversationRegistry,
     try {
       ExoContainer container = ExoContainerContext.getCurrentContainer();
       messenger = (XMPPMessenger) container.getComponentInstanceOfType(XMPPMessenger.class);
-      //Saving presence status
-      DefaultPresenceStatus dps = (DefaultPresenceStatus)container.getComponentInstance(DefaultPresenceStatus.class);
-      if(messenger != null){
-        userId = event.getData().getIdentity().getUserId() ;
+      // Saving presence status
+      DefaultPresenceStatus dps = (DefaultPresenceStatus) container.getComponentInstance(DefaultPresenceStatus.class);
+      if (messenger != null) {
+        userId = event.getData().getIdentity().getUserId();
         XMPPSession session = messenger.getSession(userId);
-        if (session != null){
-          if(dps != null && userId != null && !userId.equals("")){
-            dps.savePresenceStatus(userId, session.getPresenceStatus_());  
-          } else   {
-            log.error("Can not save user chat status"); 
+        if (session != null) {
+          if (dps != null && userId != null && !userId.equals("")) {
+            dps.savePresenceStatus(userId, session.getPresenceStatus_());
+          } else {
+            log.error("Can not save user chat status");
           }
-          session.removeAllTransport();  
-        } 
+          session.removeAllTransport();
+        }
       }
     } catch (Exception e) {
       log.error(e.getMessage());
-    }
-    finally {
+    } finally {
       if ((userId != null) && (messenger != null)) {
         messenger.logout(userId);
       }

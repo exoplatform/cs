@@ -28,13 +28,14 @@ import org.exoplatform.services.organization.UserProfileEventListener;
  * Jan 20, 2010 3:09:21 PM
  */
 public class UpdateUserProfileListener extends UserProfileEventListener {
-  private ContactService cservice_ ;
+  private ContactService cservice_;
+
   public UpdateUserProfileListener(ContactService cservice, NodeHierarchyCreator nodeHierarchyCreator) throws Exception {
-    cservice_ = cservice ;
+    cservice_ = cservice;
   }
-  public void postSave(UserProfile userProfile, boolean isNew) throws Exception
-  {
+
+  public void postSave(UserProfile userProfile, boolean isNew) throws Exception {
     cservice_.updateProfile(userProfile);
   }
-  
+
 }

@@ -16,8 +16,6 @@
  */
 package org.exoplatform.services.xmpp.connection.impl;
 
-import java.util.Map;
-
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.listener.Event;
@@ -41,34 +39,33 @@ import org.exoplatform.ws.frameworks.cometd.transport.ContinuationServiceDelegat
 public class AuthenticationLoginListener extends Listener<ConversationRegistry, ConversationState> {
 
   protected static final Log log = ExoLogger.getLogger("chat.AuthenticationLoginListener");
-  
+
   @Override
   public void onEvent(Event<ConversationRegistry, ConversationState> event) throws Exception {
     try {
       ExoContainer container = ExoContainerContext.getCurrentContainer();
       XMPPMessenger messenger = (XMPPMessenger) container.getComponentInstanceOfType(XMPPMessenger.class);
-      RESTXMPPService restXmppService = (RESTXMPPService)container.getComponentInstanceOfType(RESTXMPPService.class);
+      RESTXMPPService restXmppService = (RESTXMPPService) container.getComponentInstanceOfType(RESTXMPPService.class);
 
-      DefaultPresenceStatus dps = (DefaultPresenceStatus)container.getComponentInstance(DefaultPresenceStatus.class);
-      if(messenger != null && restXmppService != null){
-        String userId = event.getData().getIdentity().getUserId() ;
+      DefaultPresenceStatus dps = (DefaultPresenceStatus) container.getComponentInstance(DefaultPresenceStatus.class);
+      if (messenger != null && restXmppService != null) {
+        String userId = event.getData().getIdentity().getUserId();
         UserInfoService organization = (UserInfoService) container.getComponentInstanceOfType(UserInfoService.class);
-        /*String password = organization.getOrganizationService()
-                                      .getUserHandler()
-                                      .findUserByName(userId)
-                                      .getPassword();*/
+        /*
+         * String password = organization.getOrganizationService() .getUserHandler() .findUserByName(userId) .getPassword();
+         */
         ConversationState.setCurrent(event.getData());
         String password = organization.providePassword(userId);
         ContinuationServiceDelegate delegate = (ContinuationServiceDelegate) container.getComponentInstanceOfType(ContinuationServiceDelegate.class);
         HistoryImpl history = (HistoryImpl) container.getComponentInstanceOfType(HistoryImpl.class);
-        /*if(status != null){
-          Map<String, String> stmap = status.getPreviousStatus();
-        }*/
-        
-        messenger.login(userId, password, organization, delegate, history,restXmppService.loadResourceBundle());
+        /*
+         * if(status != null){ Map<String, String> stmap = status.getPreviousStatus(); }
+         */
+
+        messenger.login(userId, password, organization, delegate, history, restXmppService.loadResourceBundle());
       }
-    } catch (Exception e){
-      if(log.isDebugEnabled())
+    } catch (Exception e) {
+      if (log.isDebugEnabled())
         log.debug(e.getMessage());
     }
   }

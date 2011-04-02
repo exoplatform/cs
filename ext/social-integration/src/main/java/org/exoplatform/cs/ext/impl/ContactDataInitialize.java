@@ -35,7 +35,6 @@ import org.exoplatform.social.core.space.impl.SpaceServiceImpl;
 import org.exoplatform.social.core.space.model.Space;
 import org.exoplatform.social.core.space.spi.SpaceLifeCycleEvent;
 
-
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
@@ -44,19 +43,18 @@ import org.exoplatform.social.core.space.spi.SpaceLifeCycleEvent;
  */
 public class ContactDataInitialize extends SpaceListenerPlugin {
 
-  private static final Log log = ExoLogger.getLogger(ContactDataInitialize.class);
-  
+  private static final Log   log                   = ExoLogger.getLogger(ContactDataInitialize.class);
+
   public static final String ADDRESSBOOK_ID_PREFIX = "ContactGroupInSpace".intern();
-  
-  private final InitParams params;
-  
+
+  private final InitParams   params;
+
   public ContactDataInitialize(InitParams params) {
     this.params = params;
   }
-  
+
   @Override
   public void applicationActivated(SpaceLifeCycleEvent event) {
-    // TODO Auto-generated method stub
 
   }
 
@@ -68,37 +66,34 @@ public class ContactDataInitialize extends SpaceListenerPlugin {
     } catch (Exception e) {
       // do nothing here. It means that initparam is not configured.
     }
-    
+
     if (!portletName.equals(event.getSource())) {
       /*
-       * this function is called only if Contact Portlet is added to Social Space.
-       * Hence, if the application added to space do not have the name as configured, we will do nothing.
+       * this function is called only if Contact Portlet is added to Social Space. Hence, if the application added to space do not have the name as configured, we will do nothing.
        */
       return;
     }
-    
-    
+
     try {
       String firstMem = null;
       Space space = event.getSpace();
 
-      /* --- start organization service ---*/
-      PortalContainer manager = PortalContainer.getInstance() ;
-      OrganizationService oService = (OrganizationService)ExoContainerContext
-      .getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
-      ((ComponentRequestLifecycle)oService).startRequest(manager);
+      /* --- start organization service --- */
+      PortalContainer manager = PortalContainer.getInstance();
+      OrganizationService oService = (OrganizationService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
+      ((ComponentRequestLifecycle) oService).startRequest(manager);
       /* --- end --- */
       List<String> receivedUsers = new ArrayList<String>();
-      for(User u : oService.getUserHandler().findUsersByGroup(space.getGroupId()).getAll())  {
-        Membership m = oService.getMembershipHandler().findMembershipByUserGroupAndType(u.getUserName(), space.getGroupId(),SpaceServiceImpl.MANAGER);
-        if(m != null && firstMem == null) {
+      for (User u : oService.getUserHandler().findUsersByGroup(space.getGroupId()).getAll()) {
+        Membership m = oService.getMembershipHandler().findMembershipByUserGroupAndType(u.getUserName(), space.getGroupId(), SpaceServiceImpl.MANAGER);
+        if (m != null && firstMem == null) {
           firstMem = u.getUserName();
         } else {
           receivedUsers.add(u.getUserName());
         }
       }
       /* --- stop organization service --- */
-      ((ComponentRequestLifecycle)oService).endRequest(manager);
+      ((ComponentRequestLifecycle) oService).endRequest(manager);
       /* --- end --- */
 
       ContactService contactService = (ContactService) PortalContainer.getComponent(ContactService.class);
@@ -115,8 +110,8 @@ public class ContactDataInitialize extends SpaceListenerPlugin {
         book.setId(addrBookId);
         book.setName(space.getName() + " [sharing for Space]");
         book.setDescription("AddressBook for Social Space: " + space.getName());
-        book.setEditPermissionGroups(new String[]{space.getGroupId()});
-        book.setViewPermissionGroups(new String[] {space.getGroupId()});
+        book.setEditPermissionGroups(new String[] { space.getGroupId() });
+        book.setViewPermissionGroups(new String[] { space.getGroupId() });
         contactService.saveAddressBook(firstMem, book, true);
         contactService.shareAddressBook(firstMem, addrBookId, receivedUsers);
       }
@@ -131,43 +126,36 @@ public class ContactDataInitialize extends SpaceListenerPlugin {
 
   @Override
   public void applicationRemoved(SpaceLifeCycleEvent event) {
-    // TODO Auto-generated method stub
 
   }
 
   @Override
   public void grantedLead(SpaceLifeCycleEvent event) {
-    // TODO Auto-generated method stub
 
   }
 
   @Override
   public void joined(SpaceLifeCycleEvent event) {
-    // TODO Auto-generated method stub
 
   }
 
   @Override
   public void left(SpaceLifeCycleEvent event) {
-    // TODO Auto-generated method stub
 
   }
 
   @Override
   public void revokedLead(SpaceLifeCycleEvent event) {
-    // TODO Auto-generated method stub
 
   }
 
   @Override
   public void spaceCreated(SpaceLifeCycleEvent event) {
-    // TODO Auto-generated method stub
 
   }
 
   @Override
   public void spaceRemoved(SpaceLifeCycleEvent event) {
-    // TODO Auto-generated method stub
 
   }
 

@@ -265,5 +265,4 @@ public class HostedRoomBean {
     this.isPersistent = isPersistent;
   }
 
-  
 }

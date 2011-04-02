@@ -27,95 +27,168 @@ import java.util.TimeZone;
  * Jul 16, 2007  
  */
 public class CalendarSetting {
-  //view types
-  public static String DAY_VIEW = "0" ;
-  public static String WEEK_VIEW = "1" ;
-  public static String MONTH_VIEW = "2" ;
-  public static String YEAR_VIEW = "3" ;
-  public static String LIST_VIEW = "4" ;
-  public static String SCHEDULE_VIEW = "5" ;
-  public static String WORKING_VIEW = "6" ;
+  // view types
+  public static String     DAY_VIEW              = "0";
+
+  public static String     WEEK_VIEW             = "1";
+
+  public static String     MONTH_VIEW            = "2";
+
+  public static String     YEAR_VIEW             = "3";
+
+  public static String     LIST_VIEW             = "4";
+
+  public static String     SCHEDULE_VIEW         = "5";
+
+  public static String     WORKING_VIEW          = "6";
+
   /**
    * default value for one moving of event, task on UI. used when drag and drop. 
    */
   public final static long DEFAULT_TIME_INTERVAL = 30;
-  
-  // time weekStartOn types
-  public static String SUNDAY = "1" ;
-  public static String MONDAY = "2" ;
-  public static String TUESDAY = "3" ;
-  public static String WENDNESDAY = "4" ;
-  public static String THURSDAY = "5" ;
-  public static String FRIDAY = "6" ;
-  public static String SATURDAY = "7" ;
-  public static String ACTION_ALWAYS = "always" ;
-  public static String ACTION_NEVER = "never" ;
-  public static String ACTION_ASK = "ask" ;
-  public static String ACTION_BYSETTING = "setting" ;
 
-  private String viewType ;
-  private long timeInterval ;
-  private String weekStartOn ;
-  private String dateFormat ;
-  private String timeFormat ;
-  private String location ;
-  private String timeZone ;
-  private String baseURL ;
-  private boolean isShowWorkingTime = true ; 
-  private String workingTimeBegin ;
-  private String workingTimeEnd  ;
-  
-  private String[] sharedCalendarsColors ;
-  private String[] filterPrivateCalendars ;
-  private String[] filterPublicCalendars ;
-  private String[] filterSharedCalendars ;
-  
-  private String sendOption;
-  
-  
-  
+  // time weekStartOn types
+  public static String     SUNDAY                = "1";
+
+  public static String     MONDAY                = "2";
+
+  public static String     TUESDAY               = "3";
+
+  public static String     WENDNESDAY            = "4";
+
+  public static String     THURSDAY              = "5";
+
+  public static String     FRIDAY                = "6";
+
+  public static String     SATURDAY              = "7";
+
+  public static String     ACTION_ALWAYS         = "always";
+
+  public static String     ACTION_NEVER          = "never";
+
+  public static String     ACTION_ASK            = "ask";
+
+  public static String     ACTION_BYSETTING      = "setting";
+
+  private String           viewType;
+
+  private long             timeInterval;
+
+  private String           weekStartOn;
+
+  private String           dateFormat;
+
+  private String           timeFormat;
+
+  private String           location;
+
+  private String           timeZone;
+
+  private String           baseURL;
+
+  private boolean          isShowWorkingTime     = true;
+
+  private String           workingTimeBegin;
+
+  private String           workingTimeEnd;
+
+  private String[]         sharedCalendarsColors;
+
+  private String[]         filterPrivateCalendars;
+
+  private String[]         filterPublicCalendars;
+
+  private String[]         filterSharedCalendars;
+
+  private String           sendOption;
+
   public CalendarSetting() {
-    viewType = WORKING_VIEW ;
+    viewType = WORKING_VIEW;
     timeInterval = DEFAULT_TIME_INTERVAL;
-    weekStartOn = String.valueOf(Calendar.SUNDAY) ; 
-    dateFormat = "MM/dd/yyyy" ;
-    timeFormat = "hh:mm a" ;
-    isShowWorkingTime = true ;
-    timeZone = TimeZone.getDefault().getID() ;
-    location = Locale.getDefault().getISO3Country() ;
-    filterPrivateCalendars = new String[]{} ;
-    filterPublicCalendars = new String[]{} ;
-    filterSharedCalendars = new String[]{} ;
-    sharedCalendarsColors = new String[]{} ;
-    sendOption = ACTION_ASK ;
+    weekStartOn = String.valueOf(Calendar.SUNDAY);
+    dateFormat = "MM/dd/yyyy";
+    timeFormat = "hh:mm a";
+    isShowWorkingTime = true;
+    timeZone = TimeZone.getDefault().getID();
+    location = Locale.getDefault().getISO3Country();
+    filterPrivateCalendars = new String[] {};
+    filterPublicCalendars = new String[] {};
+    filterSharedCalendars = new String[] {};
+    sharedCalendarsColors = new String[] {};
+    sendOption = ACTION_ASK;
   }
 
-  public void setViewType(String viewType) { this.viewType = viewType ; }
-  public String getViewType() { return viewType ; }
+  public void setViewType(String viewType) {
+    this.viewType = viewType;
+  }
 
-  public void setTimeInterval(long timeInterval) { this.timeInterval = timeInterval ; }
-  public long getTimeInterval() { return timeInterval ; }
+  public String getViewType() {
+    return viewType;
+  }
 
-  public void setWeekStartOn(String weekStartOn) { this.weekStartOn = weekStartOn ; }
-  public String getWeekStartOn() { return weekStartOn ; }
+  public void setTimeInterval(long timeInterval) {
+    this.timeInterval = timeInterval;
+  }
 
-  public void setDateFormat(String dFormat) {dateFormat = dFormat ; }
-  public String getDateFormat() { return dateFormat ; }
+  public long getTimeInterval() {
+    return timeInterval;
+  }
 
-  public void setTimeFormat(String timeFormat) { this.timeFormat = timeFormat ; }
-  public String getTimeFormat() { return timeFormat ; }
+  public void setWeekStartOn(String weekStartOn) {
+    this.weekStartOn = weekStartOn;
+  }
 
-  public void setLocation(String location) { this.location = location ; }
-  public String getLocation() { return location ; }
+  public String getWeekStartOn() {
+    return weekStartOn;
+  }
 
-  public void setBaseURL(String url) { this.baseURL = url ; }
-  public String getBaseURL() { return baseURL ; }
+  public void setDateFormat(String dFormat) {
+    dateFormat = dFormat;
+  }
 
-  public void setFilterPrivateCalendars(String[] defaultCalendars) { this.filterPrivateCalendars = defaultCalendars ; }
-  public String[] getFilterPrivateCalendars() { return filterPrivateCalendars ; }
+  public String getDateFormat() {
+    return dateFormat;
+  }
 
-  public void setFilterPublicCalendars(String[] defaultCalendars) { this.filterPublicCalendars = defaultCalendars ; }
-  public String[] getFilterPublicCalendars() { return filterPublicCalendars ; }
+  public void setTimeFormat(String timeFormat) {
+    this.timeFormat = timeFormat;
+  }
+
+  public String getTimeFormat() {
+    return timeFormat;
+  }
+
+  public void setLocation(String location) {
+    this.location = location;
+  }
+
+  public String getLocation() {
+    return location;
+  }
+
+  public void setBaseURL(String url) {
+    this.baseURL = url;
+  }
+
+  public String getBaseURL() {
+    return baseURL;
+  }
+
+  public void setFilterPrivateCalendars(String[] defaultCalendars) {
+    this.filterPrivateCalendars = defaultCalendars;
+  }
+
+  public String[] getFilterPrivateCalendars() {
+    return filterPrivateCalendars;
+  }
+
+  public void setFilterPublicCalendars(String[] defaultCalendars) {
+    this.filterPublicCalendars = defaultCalendars;
+  }
+
+  public String[] getFilterPublicCalendars() {
+    return filterPublicCalendars;
+  }
 
   public void setShowWorkingTime(boolean isShowWorkingTime) {
     this.isShowWorkingTime = isShowWorkingTime;
@@ -156,19 +229,20 @@ public class CalendarSetting {
   public String[] getSharedCalendarsColors() {
     return sharedCalendarsColors;
   }
+
   public void setFilterSharedCalendars(String[] sharedCalendars) {
-    filterSharedCalendars = sharedCalendars ;
+    filterSharedCalendars = sharedCalendars;
   }
+
   public String[] getFilterSharedCalendars() {
-    return filterSharedCalendars ;
+    return filterSharedCalendars;
   }
-  
-  public void setSendOption(String option){
-    sendOption=option;
+
+  public void setSendOption(String option) {
+    sendOption = option;
   }
-  
-  public String getSendOption(){
+
+  public String getSendOption() {
     return sendOption;
   }
 }
-

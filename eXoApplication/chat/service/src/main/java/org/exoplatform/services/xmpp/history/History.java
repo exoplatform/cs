@@ -36,9 +36,7 @@ public interface History {
    * @param isGroupChat true if group chat
    * @return the list of message
    */
-  List<HistoricalMessage> getHistoricalMessages(String jidTo,
-                                                       String jidFrom,
-                                                       Boolean isGroupChat);
+  List<HistoricalMessage> getHistoricalMessages(String jidTo, String jidFrom, Boolean isGroupChat);
 
   /**
    * messages from conversation after dateFrom.
@@ -48,10 +46,7 @@ public interface History {
    * @param dateFrom the date
    * @return the list of message
    */
-  List<HistoricalMessage> getHistoricalMessages(String jidTo,
-                                                       String jidFrom,
-                                                       Boolean isGroupChat,
-                                                       Date dateFrom);
+  List<HistoricalMessage> getHistoricalMessages(String jidTo, String jidFrom, Boolean isGroupChat, Date dateFrom);
 
   /**
    * messages between dateFrom and dateTo.
@@ -62,11 +57,7 @@ public interface History {
    * @param dateTo
    * @return
    */
-  List<HistoricalMessage> getHistoricalMessages(String jidTo,
-                                                       String jidFrom,
-                                                       Boolean isGroupChat,
-                                                       Date dateFrom,
-                                                       Date dateTo);
+  List<HistoricalMessage> getHistoricalMessages(String jidTo, String jidFrom, Boolean isGroupChat, Date dateFrom, Date dateTo);
 
   /**
    * @param historicalMessage

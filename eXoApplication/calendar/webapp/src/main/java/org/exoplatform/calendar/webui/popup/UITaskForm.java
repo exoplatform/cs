@@ -78,10 +78,10 @@ import org.exoplatform.webui.organization.account.UIUserSelector;
  *          tuan.pham@exoplatform.com
  */
 @ComponentConfigs({
-	@ComponentConfig(
-	        lifecycle = UIFormLifecycle.class,
-	        template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", 
-	        events = {
+  @ComponentConfig(
+          lifecycle = UIFormLifecycle.class,
+          template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", 
+          events = {
             @EventConfig(listeners = UITaskForm.SaveActionListener.class),
             @EventConfig(listeners = UITaskForm.AddCategoryActionListener.class, phase = Phase.DECODE),
             @EventConfig(listeners = UITaskForm.AddEmailAddressActionListener.class, phase = Phase.DECODE),
@@ -92,10 +92,10 @@ import org.exoplatform.webui.organization.account.UIUserSelector;
             @EventConfig(listeners = UITaskForm.CancelActionListener.class, phase = Phase.DECODE),
             @EventConfig(listeners = UITaskForm.RemoveEmailActionListener.class, phase = Phase.DECODE),
             @EventConfig(listeners = UITaskForm.SelectTabActionListener.class, phase = Phase.DECODE)
-	        }
-	),
-	@ComponentConfig(
-			id = "UIPopupWindowUserSelectTaskForm",
+          }
+  ),
+  @ComponentConfig(
+      id = "UIPopupWindowUserSelectTaskForm",
             type = UIPopupWindow.class,
             template =  "system:/groovy/webui/core/UIPopupWindow.gtmpl",
             events = {
@@ -103,7 +103,7 @@ import org.exoplatform.webui.organization.account.UIUserSelector;
               @EventConfig(listeners = UITaskForm.AddActionListener.class, name = "Add", phase = Phase.DECODE),
               @EventConfig(listeners = UITaskForm.CloseActionListener.class, name = "Close", phase = Phase.DECODE)
             }
-	)
+  )
 
 
 })
@@ -707,7 +707,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   }
 
   public String cleanValue(String values) throws Exception{
-	  String[] tmpArr = values.split(",");
+    String[] tmpArr = values.split(",");
       List<String> list = Arrays.asList(tmpArr);
       java.util.Set<String> set = new java.util.HashSet<String>(list);
       String[] result = new String[set.size()];
@@ -717,7 +717,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
           data += "," + s;
       }
       data = data.substring(1);
-	  return data;
+    return data;
   }
 public Attachment getAttachment(String attId) {
     UITaskDetailTab uiDetailTab = getChildById(TAB_TASKDETAIL) ;
@@ -821,11 +821,11 @@ public Attachment getAttachment(String attId) {
 
   static  public class SelectUserActionListener extends EventListener<UITaskForm> {
     public void execute(Event<UITaskForm> event) throws Exception {
-    	UITaskForm uiForm = event.getSource() ;
-    	String value = uiForm.getEventDelegation() ;
-    	uiForm.setEventDelegation(value) ;
-    	UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-    	UIPopupWindow uiPopupWindow = uiPopupContainer.getChild(UIPopupWindow.class) ;
+      UITaskForm uiForm = event.getSource() ;
+      String value = uiForm.getEventDelegation() ;
+      uiForm.setEventDelegation(value) ;
+      UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+      UIPopupWindow uiPopupWindow = uiPopupContainer.getChild(UIPopupWindow.class) ;
         if(uiPopupWindow == null)uiPopupWindow = uiPopupContainer.addChild(UIPopupWindow.class, "UIPopupWindowUserSelectTaskForm", "UIPopupWindowUserSelectTaskForm") ;
         UIUserSelector uiUserSelector = uiPopupContainer.createUIComponent(UIUserSelector.class, null, null) ;
         uiUserSelector.setShowSearch(true);

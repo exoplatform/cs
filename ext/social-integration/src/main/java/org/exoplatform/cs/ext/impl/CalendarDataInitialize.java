@@ -16,8 +16,6 @@
  */
 package org.exoplatform.cs.ext.impl;
 
-
-
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.container.PortalContainer;
@@ -28,7 +26,6 @@ import org.exoplatform.social.core.space.SpaceListenerPlugin;
 import org.exoplatform.social.core.space.model.Space;
 import org.exoplatform.social.core.space.spi.SpaceLifeCycleEvent;
 
-
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
@@ -37,24 +34,30 @@ import org.exoplatform.social.core.space.spi.SpaceLifeCycleEvent;
  */
 public class CalendarDataInitialize extends SpaceListenerPlugin {
 
-  private static final Log log = ExoLogger.getLogger(CalendarDataInitialize.class);
-  public static final String ANY = "*.*".intern();
-  public static final String SLASH_COLON = "/:".intern() ;
-  public static final String SLASH = "/".intern();
-  public static final String COLON = ":".intern() ;
-  public static final String SPLITER = "://".intern();
-  public static final String PUBLIC_TYPE = "2".intern();
+  private static final Log   log                = ExoLogger.getLogger(CalendarDataInitialize.class);
+
+  public static final String ANY                = "*.*".intern();
+
+  public static final String SLASH_COLON        = "/:".intern();
+
+  public static final String SLASH              = "/".intern();
+
+  public static final String COLON              = ":".intern();
+
+  public static final String SPLITER            = "://".intern();
+
+  public static final String PUBLIC_TYPE        = "2".intern();
+
   public static final String CALENDAR_ID_PREFIX = "CalendarInSpace";
-  
-  private final InitParams params;
-  
+
+  private final InitParams   params;
+
   public CalendarDataInitialize(InitParams params) {
     this.params = params;
   }
-  
+
   @Override
   public void applicationActivated(SpaceLifeCycleEvent event) {
-    // TODO Auto-generated method stub
 
   }
 
@@ -66,15 +69,14 @@ public class CalendarDataInitialize extends SpaceListenerPlugin {
     } catch (Exception e) {
       // do nothing here. It means that initparam is not configured.
     }
-    
+
     if (!portletName.equals(event.getSource())) {
       /*
-       * this function is called only if Calendar Portlet is added to Social Space.
-       * Hence, if the application added to space do not have the name as configured, we will be out now.
+       * this function is called only if Calendar Portlet is added to Social Space. Hence, if the application added to space do not have the name as configured, we will be out now.
        */
       return;
     }
-    
+
     try {
       Space space = event.getSpace();
       CalendarService calService = (CalendarService) PortalContainer.getInstance().getComponentInstanceOfType(CalendarService.class);
@@ -86,64 +88,57 @@ public class CalendarDataInitialize extends SpaceListenerPlugin {
       } catch (Exception pfe) {
         // do nothing here. this case occurs because desired calendar is not exist.
       }
-      if(calendar == null) {
+      if (calendar == null) {
         calendar = new Calendar();
-      calendar.setId(calendarId);
-      calendar.setPublic(false) ;
-      calendar.setGroups((new String[]{space.getGroupId()}));
-      calendar.setName(space.getName()) ;
-      calendar.setEditPermission(new String[]{space.getGroupId()+ SLASH_COLON + ANY}) ;
-      calendar.setCalendarOwner(username) ;
-      calService.savePublicCalendar(calendar, true, username);
-      }        
-    }catch (Exception e) {
+        calendar.setId(calendarId);
+        calendar.setPublic(false);
+        calendar.setGroups((new String[] { space.getGroupId() }));
+        calendar.setName(space.getName());
+        calendar.setEditPermission(new String[] { space.getGroupId() + SLASH_COLON + ANY });
+        calendar.setCalendarOwner(username);
+        calService.savePublicCalendar(calendar, true, username);
+      }
+    } catch (Exception e) {
       log.error(e.getMessage());
     }
   }
 
   @Override
-public void applicationDeactivated(SpaceLifeCycleEvent event) {
+  public void applicationDeactivated(SpaceLifeCycleEvent event) {
   }
 
   @Override
   public void applicationRemoved(SpaceLifeCycleEvent event) {
-    // TODO Auto-generated method stub
 
   }
 
   @Override
   public void grantedLead(SpaceLifeCycleEvent event) {
-    // TODO Auto-generated method stub
 
   }
 
   @Override
   public void joined(SpaceLifeCycleEvent event) {
-    // TODO Auto-generated method stub
 
   }
 
   @Override
   public void left(SpaceLifeCycleEvent event) {
-    // TODO Auto-generated method stub
 
   }
 
   @Override
   public void revokedLead(SpaceLifeCycleEvent event) {
-    // TODO Auto-generated method stub
 
   }
 
   @Override
   public void spaceCreated(SpaceLifeCycleEvent event) {
-    // TODO Auto-generated method stub
 
   }
 
   @Override
   public void spaceRemoved(SpaceLifeCycleEvent event) {
-    // TODO Auto-generated method stub
 
   }
 

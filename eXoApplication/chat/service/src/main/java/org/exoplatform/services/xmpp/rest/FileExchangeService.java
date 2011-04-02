@@ -54,20 +54,20 @@ import org.exoplatform.services.xmpp.connection.impl.XMPPSessionImpl;
 @Path("/fileexchange")
 public class FileExchangeService implements ResourceContainer {
 
-  private final Log log = ExoLogger.getLogger(FileExchangeService.class.getName());
-  
-  private String tmpDir = null;
-  
-  public FileExchangeService(InitParams initParams){
-    if(initParams != null && initParams.getValueParam("tmpdir") != null)
+  private final Log log    = ExoLogger.getLogger(FileExchangeService.class.getName());
+
+  private String    tmpDir = null;
+
+  public FileExchangeService(InitParams initParams) {
+    if (initParams != null && initParams.getValueParam("tmpdir") != null)
       tmpDir = initParams.getValueParam("tmpdir").getValue();
-    if(tmpDir == null){
+    if (tmpDir == null) {
       if (log.isDebugEnabled())
         log.debug("Tmp dir is not set, default " + System.getProperty("java.io.tmpdir"));
       tmpDir = System.getProperty("java.io.tmpdir");
     }
   }
-  
+
   @POST
   public Response upload() throws IOException {
     EnvironmentContext env = EnvironmentContext.getCurrent();
@@ -93,8 +93,8 @@ public class FileExchangeService implements ResourceContainer {
           String fileType = fileItem.getContentType();
           if (session != null) {
             if (fileName != null) {
-              //TODO Check this for compatible or not
-              //It's necessary because IE posts full path of uploaded files
+              // TODO Check this for compatible or not
+              // It's necessary because IE posts full path of uploaded files
               fileName = FilenameUtils.getName(fileName);
               fileType = FilenameUtils.getExtension(fileName);
               File file = new File(tmpDir);
@@ -132,7 +132,7 @@ public class FileExchangeService implements ResourceContainer {
         }
       } catch (Exception e) {
         if (log.isDebugEnabled())
-         e.printStackTrace();
+          e.printStackTrace();
         return Response.status(HTTPStatus.BAD_REQUEST).entity(e.getMessage()).build();
       }
     }

@@ -45,61 +45,65 @@ import org.exoplatform.services.xmpp.connection.impl.XMPPMessenger;
 
 @Path("/uistateservice")
 public class UIStateService implements ResourceContainer {
-  private static final Log log = ExoLogger.getLogger("cs.chat.uistateservice");
+  private static final Log          log = ExoLogger.getLogger("cs.chat.uistateservice");
+
   private static final CacheControl cc;
-  
+
   static {
-  //TODO: to find the reason why UIStateService loaded before ResourceBinder
-  RuntimeDelegate.setInstance(new RuntimeDelegateImpl());
+    // TODO: to find the reason why UIStateService loaded before ResourceBinder
+    RuntimeDelegate.setInstance(new RuntimeDelegateImpl());
     cc = new CacheControl();
     cc.setNoCache(true);
     cc.setNoStore(true);
 
   }
-  
+
   /**
    * 
    */
   public UIStateService() {
   }
-  
-  @POST 
+
+  @POST
   @Path("/save/{username}/{unreadMessageCnt}")
   @Produces(MediaType.APPLICATION_JSON)
   public Response saveState(@PathParam("username") String userName, @PathParam("unreadMessageCnt") String unreadMessageCnt, UIStateDataBean stateData) throws Exception {
     try {
       ExoContainer container = ExoContainerContext.getCurrentContainer();
       XMPPMessenger messenger = (XMPPMessenger) container.getComponentInstanceOfType(XMPPMessenger.class);
-      if(messenger != null){
+      if (messenger != null) {
         UIStateSession uiSession = messenger.getUISateSession(userName);
         stateData = (stateData != null) ? stateData : new UIStateDataBean();
         uiSession.setUIStateData(stateData);
       }
     } catch (Exception e) {
-      if (log.isDebugEnabled()) log.debug("saving UI state failed for user: " + userName, e);
+      if (log.isDebugEnabled())
+        log.debug("saving UI state failed for user: " + userName, e);
       return Response.serverError().cacheControl(cc).build();
     }
     UIStateDataBean stateDataBean = new UIStateDataBean("null");
     stateDataBean.setUnreadMessageCnt(unreadMessageCnt);
     return Response.ok(stateDataBean, MediaType.APPLICATION_JSON).cacheControl(cc).build();
   }
-  
+
   @GET
   @Path("/get/{username}/")
   @Produces(MediaType.APPLICATION_JSON)
-  public Response getState(@PathParam("username") String userName) throws Exception {  
+  public Response getState(@PathParam("username") String userName) throws Exception {
     try {
       ExoContainer container = ExoContainerContext.getCurrentContainer();
       XMPPMessenger messenger = (XMPPMessenger) container.getComponentInstanceOfType(XMPPMessenger.class);
-      if(messenger != null){
+      if (messenger != null) {
         UIStateSession uiSession = messenger.getUISateSession(userName);
         UIStateDataBean uiStateData = uiSession.getUIStateData();
-//        uiStateData = (uiStateData != null) ? uiStateData : new UIStateDataBean();;
-        if (uiStateData == null || uiStateData.getData() == null) return Response.noContent().cacheControl(cc).build();
+        // uiStateData = (uiStateData != null) ? uiStateData : new UIStateDataBean();;
+        if (uiStateData == null || uiStateData.getData() == null)
+          return Response.noContent().cacheControl(cc).build();
         return Response.ok(uiStateData, MediaType.APPLICATION_JSON).cacheControl(cc).build();
       }
-    } catch (Exception e){
-      if (log.isDebugEnabled()) log.debug("Getting UIStage failed for user: " + userName, e);
+    } catch (Exception e) {
+      if (log.isDebugEnabled())
+        log.debug("Getting UIStage failed for user: " + userName, e);
     }
     return Response.serverError().cacheControl(cc).build();
   }

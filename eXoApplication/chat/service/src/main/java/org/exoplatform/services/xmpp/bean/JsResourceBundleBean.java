@@ -33,5 +33,5 @@ public class JsResourceBundleBean {
   public void setScript(String script) {
     this.script = script;
   }
-  
+
 }

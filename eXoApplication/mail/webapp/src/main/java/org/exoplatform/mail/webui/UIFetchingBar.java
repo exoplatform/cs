@@ -44,13 +44,13 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
   lifecycle = UIFormLifecycle.class, 
   template =  "app:/templates/mail/webui/UIFetchingBar.gtmpl",
   events = {
-	@EventConfig(listeners = UIFetchingBar.RefreshActionListener.class),
-	@EventConfig(listeners = UIFetchingBar.UpdateListActionListener.class),
+  @EventConfig(listeners = UIFetchingBar.RefreshActionListener.class),
+  @EventConfig(listeners = UIFetchingBar.UpdateListActionListener.class),
   @EventConfig(listeners = UIFetchingBar.UpdateFolderActionListener.class)
   }
 )
 public class UIFetchingBar extends UIForm {
-	
+  
   private boolean isShown_ = false;
   private MailService mailService ;
   private StatusInfo statusInfo;
@@ -59,7 +59,7 @@ public class UIFetchingBar extends UIForm {
     mailService = MailUtils.getMailService();
     
   }
-	
+  
   public StatusInfo loadStatusInfo() {
     UIMailPortlet mailportlet = this.getAncestorOfType(UIMailPortlet.class);
     
@@ -150,16 +150,16 @@ public class UIFetchingBar extends UIForm {
   public void setIsShown(boolean b) { isShown_ = b; }
   
   public boolean isUpdate() throws Exception {
-  	UIMessageList uiMsgList = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UIMessageList.class);
-  	if(uiMsgList.getMessagePageList() != null) {
-  	  if (uiMsgList.getMessagePageList().getCurrentPage() > 1 
-  			|| uiMsgList.getMessagePageList().getAvailablePage() > 1) {
-  	    return false;
-  	  }
-  	} 
-  	return true;
+    UIMessageList uiMsgList = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UIMessageList.class);
+    if(uiMsgList.getMessagePageList() != null) {
+      if (uiMsgList.getMessagePageList().getCurrentPage() > 1 
+        || uiMsgList.getMessagePageList().getAvailablePage() > 1) {
+        return false;
+      }
+    } 
+    return true;
   }
-	
+  
   static public class RefreshActionListener extends EventListener<UIFetchingBar> {
     public void execute(Event<UIFetchingBar> event) throws Exception {
       UIFetchingBar uiFetchingBar = event.getSource();
@@ -187,8 +187,8 @@ public class UIFetchingBar extends UIForm {
       folderContainer.setIsChecking(false);
       event.getRequestContext().addUIComponentToUpdateByAjax(folderContainer);
     }
-  }	
-	
+  }  
+  
   static public class UpdateListActionListener extends EventListener<UIFetchingBar> {
     public void execute(Event<UIFetchingBar> event) throws Exception {
       UIFetchingBar uiFetchingBar = event.getSource();

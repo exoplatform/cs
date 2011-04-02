@@ -22,8 +22,9 @@ package org.exoplatform.contact.service;
  *          exo@exoplatform.com
  * Jul 30, 2010  
  */
-public interface ContactLifeCycle{
+public interface ContactLifeCycle {
   public void saveContact(String username, Contact contact);
+
   public void updateContact(String username, Contact contact);
 
 }

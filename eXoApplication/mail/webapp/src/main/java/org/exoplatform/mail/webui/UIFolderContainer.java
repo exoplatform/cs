@@ -357,10 +357,10 @@ public class UIFolderContainer extends UIContainer {
   static public class MoveToTrashActionListener extends EventListener<UIFolderContainer> {
     public void execute(Event<UIFolderContainer> event) throws Exception {
       UIFolderContainer uiFolderContainer = event.getSource() ;
-      String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;		  
+      String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;      
       UIMailPortlet uiPortlet = uiFolderContainer.getAncestorOfType(UIMailPortlet.class) ;
       UIFolderContainer uiFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class) ;
-      UIMessageArea uiMsgArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class) ;	
+      UIMessageArea uiMsgArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class) ;  
       UIMessageList uiMsgList = uiMsgArea.getChild(UIMessageList.class) ;
       UIMessagePreview uiMsgPreview = uiMsgArea.getChild(UIMessagePreview.class) ;
       String username = uiPortlet.getCurrentUser() ;
@@ -373,7 +373,7 @@ public class UIFolderContainer extends UIContainer {
       List<Message> msgList = mailSrv.getMessagesByFolder(username, accountId, folderId) ;
       boolean containPreview = false ;
       Message msgPre = uiMsgPreview.getMessage() ;
-      String trashFolderId = Utils.generateFID(accountId, Utils.FD_TRASH, false) ;     		 
+      String trashFolderId = Utils.generateFID(accountId, Utils.FD_TRASH, false) ;          
       List<Message> successes = new ArrayList<Message>();
       successes = mailSrv.moveMessages(username, accountId, msgList, folderId, trashFolderId, false) ;
       for (Message msg : msgList) {

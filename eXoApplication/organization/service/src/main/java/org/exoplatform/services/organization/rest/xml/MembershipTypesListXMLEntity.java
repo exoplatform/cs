@@ -32,9 +32,9 @@ import org.exoplatform.services.organization.MembershipType;
  * @version $Id: $
  */
 public class MembershipTypesListXMLEntity implements StreamingOutput {
-  
+
   private final Collection<MembershipType> membershipTypes_;
-  
+
   public MembershipTypesListXMLEntity(Collection<MembershipType> membershipTypes) {
     membershipTypes_ = membershipTypes;
   }
@@ -69,4 +69,3 @@ public class MembershipTypesListXMLEntity implements StreamingOutput {
   }
 
 }
-

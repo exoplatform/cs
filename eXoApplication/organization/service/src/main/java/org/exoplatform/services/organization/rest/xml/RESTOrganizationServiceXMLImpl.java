@@ -38,7 +38,6 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.rest.RESTOrganizationServiceAbstractImpl;
-import org.exoplatform.services.organization.rest.json.UserBean;
 import org.exoplatform.services.rest.resource.ResourceContainer;
 
 /**
@@ -50,8 +49,7 @@ import org.exoplatform.services.rest.resource.ResourceContainer;
 
 // For Openfire Service
 @Path("/organization/xml/")
-public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstractImpl implements
-    ResourceContainer {
+public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstractImpl implements ResourceContainer {
 
   protected final static String XML_CONTENT_TYPE = "text/xml";
 
@@ -62,14 +60,8 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
   @SuppressWarnings("unchecked")
   @GET
   @Path("/user/find-all/")
-  //@OutputTransformer(SerializableTransformer.class)
-  public Response findUsers(@Context UriInfo uriInfo,
-                            @QueryParam("username") String username,
-                            @QueryParam("firstname") String firstname,
-                            @QueryParam("lastname") String lastname,
-                            @QueryParam("email") String email,
-                            @QueryParam("fromLoginDate") String fromLoginDate,
-                            @QueryParam("toLogindate") String toLoginDate) {
+  // @OutputTransformer(SerializableTransformer.class)
+  public Response findUsers(@Context UriInfo uriInfo, @QueryParam("username") String username, @QueryParam("firstname") String firstname, @QueryParam("lastname") String lastname, @QueryParam("email") String email, @QueryParam("fromLoginDate") String fromLoginDate, @QueryParam("toLogindate") String toLoginDate) {
     try {
       // TODO : now returned all founded user need be carefully then using
       // wildcard (*)
@@ -100,27 +92,17 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
       }
       return Response.ok(new UserListXMLEntity(list, uriInfo.getBaseUri().getPath()), XML_CONTENT_TYPE).build();
     } catch (Exception e) {
-    	e.printStackTrace();
+      e.printStackTrace();
       LOGGER.error("Thrown exception : " + e);
-      return Response.status(HTTPStatus.INTERNAL_ERROR)
-                             .entity("Thrown exception : " + e)
-                             .build();
+      return Response.status(HTTPStatus.INTERNAL_ERROR).entity("Thrown exception : " + e).build();
     }
   }
 
   @SuppressWarnings("unchecked")
   @GET
   @Path("/user/find-all/{from}/{num}/")
-  //@OutputTransformer(SerializableTransformer.class)
-  public Response findUsersRange(@Context UriInfo uriInfo,
-                                 @QueryParam("username") String username,
-                                 @QueryParam("firstname") String firstname,
-                                 @QueryParam("lastname") String lastname,
-                                 @QueryParam("email") String email,
-                                 @QueryParam("fromLoginDate") String fromLoginDate,
-                                 @QueryParam("toLogindate") String toLoginDate,
-                                 @PathParam("from") Integer from,
-                                 @PathParam("num") Integer numResult) {
+  // @OutputTransformer(SerializableTransformer.class)
+  public Response findUsersRange(@Context UriInfo uriInfo, @QueryParam("username") String username, @QueryParam("firstname") String firstname, @QueryParam("lastname") String lastname, @QueryParam("email") String email, @QueryParam("fromLoginDate") String fromLoginDate, @QueryParam("toLogindate") String toLoginDate, @PathParam("from") Integer from, @PathParam("num") Integer numResult) {
     try {
       Query query = new Query();
       query.setUserName(username);
@@ -148,11 +130,9 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
       list = pageList.getPage(page);
       return Response.ok(new UserListXMLEntity(list, uriInfo.getBaseUri().getPath()), XML_CONTENT_TYPE).build();
     } catch (Exception e) {
-    	e.printStackTrace();
+      e.printStackTrace();
       LOGGER.error("Thrown exception : " + e);
-      return Response.status(HTTPStatus.INTERNAL_ERROR)
-                             .entity("Thrown exception : " + e)
-                             .build();
+      return Response.status(HTTPStatus.INTERNAL_ERROR).entity("Thrown exception : " + e).build();
     }
   }
 
@@ -162,10 +142,8 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
   @SuppressWarnings("unchecked")
   @GET
   @Path("/user/view-range/{from}/{num}/")
-  //@OutputTransformer(SerializableTransformer.class)
-  public Response getUsersRange(@Context UriInfo uriInfo,
-                                @PathParam("from") Integer from,
-                                @PathParam("num") Integer numResult) {
+  // @OutputTransformer(SerializableTransformer.class)
+  public Response getUsersRange(@Context UriInfo uriInfo, @PathParam("from") Integer from, @PathParam("num") Integer numResult) {
     try {
       List<User> list = new ArrayList<User>();
       PageList pageList = userHandler.getUserPageList(numResult);
@@ -180,9 +158,7 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
     } catch (Exception e) {
       e.printStackTrace();
       LOGGER.error("Thrown exception : " + e);
-      return Response.status(HTTPStatus.INTERNAL_ERROR)
-                             .entity("Thrown exception : " + e)
-                             .build();
+      return Response.status(HTTPStatus.INTERNAL_ERROR).entity("Thrown exception : " + e).build();
     }
   }
 
@@ -191,17 +167,15 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
    */
   @GET
   @Path("/user/count/")
-  //@OutputTransformer(SerializableTransformer.class)
+  // @OutputTransformer(SerializableTransformer.class)
   public Response getUsersCount() {
     try {
       int number = userHandler.getUserPageList(20).getAvailable();
       return Response.ok(new CountXMLEntity(number, "users"), XML_CONTENT_TYPE).build();
     } catch (Exception e) {
-    	e.printStackTrace();
+      e.printStackTrace();
       LOGGER.error("Thrown exception : " + e);
-      return Response.status(HTTPStatus.INTERNAL_ERROR)
-                             .entity("Thrown exception : " + e)
-                             .build();
+      return Response.status(HTTPStatus.INTERNAL_ERROR).entity("Thrown exception : " + e).build();
     }
   }
 
@@ -210,36 +184,31 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
    */
   @GET
   @Path("/user/info/{username}/")
-  //@OutputTransformer(SerializableTransformer.class)
+  // @OutputTransformer(SerializableTransformer.class)
   public Response getUser(@PathParam("username") String username) {
     try {
       User user = userHandler.findUserByName(username);
       if (user == null) {
-        return Response.status(HTTPStatus.NOT_FOUND).entity("User '" + username
-            + "' not found.").build();
+        return Response.status(HTTPStatus.NOT_FOUND).entity("User '" + username + "' not found.").build();
       }
       return Response.ok(new UserXMLEntity(user), XML_CONTENT_TYPE).build();
     } catch (Exception e) {
-    	e.printStackTrace();
+      e.printStackTrace();
       LOGGER.error("Thrown exception : " + e);
-      return Response.status(HTTPStatus.INTERNAL_ERROR)
-                             .entity("Thrown exception : " + e)
-                             .build();
+      return Response.status(HTTPStatus.INTERNAL_ERROR).entity("Thrown exception : " + e).build();
     }
   }
 
   @SuppressWarnings("unchecked")
   @GET
   @Path("/group/info/{groupId}/")
-  //@OutputTransformer(SerializableTransformer.class)
-  public Response getGroup(@Context UriInfo uriInfo,
-                           @PathParam("groupId") String groupId) {
+  // @OutputTransformer(SerializableTransformer.class)
+  public Response getGroup(@Context UriInfo uriInfo, @PathParam("groupId") String groupId) {
     try {
       groupId = (groupId.startsWith("/")) ? groupId : "/" + groupId;
       Group group = groupHandler.findGroupById(groupId);
       if (group == null) {
-        return Response.status(HTTPStatus.NOT_FOUND).entity("Group '" + groupId
-            + "' not found.").build();
+        return Response.status(HTTPStatus.NOT_FOUND).entity("Group '" + groupId + "' not found.").build();
       }
 
       List<User> members = new ArrayList<User>();
@@ -248,31 +217,26 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
       for (int i = 1; i <= pages; i++) {
         members.addAll(pageList.getPage(i));
       }
-      return Response.ok(new GroupXMLEntity(group, members, uriInfo.getBaseUri().getPath()), XML_CONTENT_TYPE)
-                             .build();
+      return Response.ok(new GroupXMLEntity(group, members, uriInfo.getBaseUri().getPath()), XML_CONTENT_TYPE).build();
     } catch (Exception e) {
       e.printStackTrace();
       LOGGER.error("Thrown exception : " + e);
-      return Response.status(HTTPStatus.INTERNAL_ERROR)
-                             .entity("Thrown exception : " + e)
-                             .build();
+      return Response.status(HTTPStatus.INTERNAL_ERROR).entity("Thrown exception : " + e).build();
     }
   }
 
   @SuppressWarnings("unchecked")
   @GET
   @Path("/group/view-all/")
-  //@OutputTransformer(SerializableTransformer.class)
-  public Response getGroups(@Context UriInfo uriInfo,
-                            @QueryParam("parentId") String parentId) {
+  // @OutputTransformer(SerializableTransformer.class)
+  public Response getGroups(@Context UriInfo uriInfo, @QueryParam("parentId") String parentId) {
     try {
       Collection<Group> groups = null;
       if (parentId != null && parentId.length() > 0) {
         parentId = (parentId.startsWith("/")) ? parentId : "/" + parentId;
         Group parent = groupHandler.findGroupById(parentId);
         if (parent == null) {
-          return Response.status(HTTPStatus.NOT_FOUND).entity("Parent '"
-              + parentId + "' not found.").build();
+          return Response.status(HTTPStatus.NOT_FOUND).entity("Parent '" + parentId + "' not found.").build();
         }
         groups = groupHandler.findGroups(parent);
       } else {
@@ -280,27 +244,23 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
       }
       return Response.ok(new GroupListXMLEntity(groups, uriInfo.getBaseUri().getPath()), XML_CONTENT_TYPE).build();
     } catch (Exception e) {
-    	e.printStackTrace();
+      e.printStackTrace();
       LOGGER.error("Thrown exception : " + e);
-      return Response.status(HTTPStatus.INTERNAL_ERROR)
-                             .entity("Thrown exception : " + e)
-                             .build();
+      return Response.status(HTTPStatus.INTERNAL_ERROR).entity("Thrown exception : " + e).build();
     }
   }
 
   @GET
   @Path("/group/count/")
-  //@OutputTransformer(SerializableTransformer.class)
+  // @OutputTransformer(SerializableTransformer.class)
   public Response getGroupsCount() {
     try {
       int number = groupHandler.getAllGroups().size();
       return Response.ok(new CountXMLEntity(number, "groups"), XML_CONTENT_TYPE).build();
     } catch (Exception e) {
-    	e.printStackTrace();
+      e.printStackTrace();
       LOGGER.error("Thrown exception : " + e);
-      return Response.status(HTTPStatus.INTERNAL_ERROR)
-                             .entity("Thrown exception : " + e)
-                             .build();
+      return Response.status(HTTPStatus.INTERNAL_ERROR).entity("Thrown exception : " + e).build();
     }
   }
 
@@ -309,43 +269,35 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
   @SuppressWarnings("unchecked")
   @GET
   @Path("/group/groups-for-user/")
-  //@OutputTransformer(SerializableTransformer.class)
-  public Response getGroupsOfUser(@Context UriInfo uriInfo,
-                                  @QueryParam("username") String username) {
+  // @OutputTransformer(SerializableTransformer.class)
+  public Response getGroupsOfUser(@Context UriInfo uriInfo, @QueryParam("username") String username) {
     try {
       if (userHandler.findUserByName(username) == null) {
-        return Response.status(HTTPStatus.NOT_FOUND).entity("User '" + username
-            + "' not found.").build();
+        return Response.status(HTTPStatus.NOT_FOUND).entity("User '" + username + "' not found.").build();
       }
       Collection<Group> groups = groupHandler.findGroupsOfUser(username);
 
       return Response.ok(new GroupListXMLEntity(groups, uriInfo.getBaseUri().getPath()), XML_CONTENT_TYPE).build();
 
     } catch (Exception e) {
-    	e.printStackTrace();
+      e.printStackTrace();
       LOGGER.error("Thrown exception : " + e);
-      return Response.status(HTTPStatus.INTERNAL_ERROR)
-                             .entity("Thrown exception : " + e)
-                             .build();
+      return Response.status(HTTPStatus.INTERNAL_ERROR).entity("Thrown exception : " + e).build();
     }
   }
 
   @SuppressWarnings("unchecked")
   @GET
   @Path("/group/view-from-to/{from}/{to}/")
-  //@OutputTransformer(SerializableTransformer.class)
-  public Response getGroupsRange(@Context UriInfo uriInfo,
-                                 @PathParam("from") Integer offset,
-                                 @PathParam("to") Integer amount,
-                                 @QueryParam("parentId") String parentId) {
+  // @OutputTransformer(SerializableTransformer.class)
+  public Response getGroupsRange(@Context UriInfo uriInfo, @PathParam("from") Integer offset, @PathParam("to") Integer amount, @QueryParam("parentId") String parentId) {
     try {
       Collection<Group> groups = null;
       if (parentId != null && parentId.length() > 0) {
         parentId = (parentId.startsWith("/")) ? parentId : "/" + parentId;
         Group parent = groupHandler.findGroupById(parentId);
         if (parent == null) {
-          return Response.status(HTTPStatus.NOT_FOUND).entity("Parent '"
-              + parentId + "' not found.").build();
+          return Response.status(HTTPStatus.NOT_FOUND).entity("Parent '" + parentId + "' not found.").build();
         }
         groups = groupHandler.findGroups(parent);
       } else {
@@ -355,15 +307,12 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
       Integer amount_ = amount;
       if (amount > groups.size())
         amount_ = groups.size();
-      return Response.ok(new GroupListXMLEntity(new ArrayList<Group>(groups).subList(offset,amount_),
-                                                        uriInfo.getBaseUri().getPath()),XML_CONTENT_TYPE).build();
+      return Response.ok(new GroupListXMLEntity(new ArrayList<Group>(groups).subList(offset, amount_), uriInfo.getBaseUri().getPath()), XML_CONTENT_TYPE).build();
 
     } catch (Exception e) {
-    	e.printStackTrace();
+      e.printStackTrace();
       LOGGER.error("Thrown exception : " + e);
-      return Response.status(HTTPStatus.INTERNAL_ERROR)
-                             .entity("Thrown exception : " + e)
-                             .build();
+      return Response.status(HTTPStatus.INTERNAL_ERROR).entity("Thrown exception : " + e).build();
     }
   }
 

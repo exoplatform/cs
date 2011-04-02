@@ -28,7 +28,6 @@ import javax.xml.stream.XMLStreamWriter;
 
 import org.exoplatform.services.organization.User;
 
-
 /**
  * @author <a href="mailto:vitalka_p@ukr.net">Vitaly Parfonov</a>
  * @version $Id: $
@@ -36,19 +35,21 @@ import org.exoplatform.services.organization.User;
 public final class UserListXMLEntity implements StreamingOutput {
 
   private final List<User> userList_;
-  private final String baseURI_;
-  private int prevFrom_ = -1;
-  private int nextFrom_ = -1;
-  private int range_ = -1;
-  
+
+  private final String     baseURI_;
+
+  private int              prevFrom_ = -1;
+
+  private int              nextFrom_ = -1;
+
+  private int              range_    = -1;
 
   public UserListXMLEntity(List<User> userList, String baseURI) {
     userList_ = userList;
     baseURI_ = baseURI;
   }
 
-  public UserListXMLEntity(List<User> userList, String baseURI,
-      int prevFrom, int nextFrom, int range) {
+  public UserListXMLEntity(List<User> userList, String baseURI, int prevFrom, int nextFrom, int range) {
     userList_ = userList;
     baseURI_ = baseURI;
     prevFrom_ = prevFrom;
@@ -58,7 +59,6 @@ public final class UserListXMLEntity implements StreamingOutput {
 
   /*
    * (non-Javadoc)
-   * 
    * @see org.exoplatform.services.rest.transformer.SerializableEntity#writeObject(java.io.OutputStream)
    */
   public void write(OutputStream out) throws IOException {
@@ -72,8 +72,7 @@ public final class UserListXMLEntity implements StreamingOutput {
       xsw.writeNamespace(XMLContants.XLINK_PREFIX, XMLContants.XLINK_NAMESPACE_URL);
       for (User u : userList_) {
         xsw.writeStartElement("user");
-        xsw.writeAttribute(XMLContants.XLINK_NAMESPACE_URL, XMLContants.XLINK_HREF,
-            baseURI_ + "/organization/user/" /*+ u.getUserName()*/
+        xsw.writeAttribute(XMLContants.XLINK_NAMESPACE_URL, XMLContants.XLINK_HREF, baseURI_ + "/organization/user/" /* + u.getUserName() */
             + "?output=xml&command=info");
         xsw.writeStartElement("name");
         xsw.writeCharacters(u.getUserName());
@@ -89,20 +88,16 @@ public final class UserListXMLEntity implements StreamingOutput {
         xsw.writeEndElement();
         xsw.writeEndElement();
       }
-      // If requested list with start index and range then prepare 
-      // link for previews and next request. 
+      // If requested list with start index and range then prepare
+      // link for previews and next request.
       if (prevFrom_ >= 0) {
         xsw.writeStartElement("prev-range");
-        xsw.writeAttribute(XMLContants.XLINK_NAMESPACE_URL, XMLContants.XLINK_HREF,
-            baseURI_ + "/user/" + prevFrom_ + "/"  + range_
-            + "/?output=xml&command=view-range");
+        xsw.writeAttribute(XMLContants.XLINK_NAMESPACE_URL, XMLContants.XLINK_HREF, baseURI_ + "/user/" + prevFrom_ + "/" + range_ + "/?output=xml&command=view-range");
         xsw.writeEndElement();
       }
       if (nextFrom_ > 0) {
         xsw.writeStartElement("next-range");
-        xsw.writeAttribute(XMLContants.XLINK_NAMESPACE_URL, XMLContants.XLINK_HREF,
-            baseURI_ + "/user/" + nextFrom_ + "/"  + range_
-            + "/?output=xml&command=view-range");
+        xsw.writeAttribute(XMLContants.XLINK_NAMESPACE_URL, XMLContants.XLINK_HREF, baseURI_ + "/user/" + nextFrom_ + "/" + range_ + "/?output=xml&command=view-range");
         xsw.writeEndElement();
       }
       xsw.writeEndElement();
@@ -113,5 +108,5 @@ public final class UserListXMLEntity implements StreamingOutput {
       throw new IOException(e.getMessage());
     }
   }
-  
+
 }

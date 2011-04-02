@@ -39,8 +39,6 @@ import javax.ws.rs.core.UriInfo;
 
 import org.exoplatform.common.http.HTTPStatus;
 import org.exoplatform.commons.utils.PageList;
-import org.exoplatform.container.PortalContainer;
-import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
@@ -54,24 +52,23 @@ import org.exoplatform.services.rest.resource.ResourceContainer;
  * @version $Id:$
  */
 
-//For chat application 
+// For chat application
 
 @Path("/organization/json/")
-public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbstractImpl implements
-    ResourceContainer {
+public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbstractImpl implements ResourceContainer {
 
-  protected final static String JSON_CONTENT_TYPE = "application/json";
+  protected final static String     JSON_CONTENT_TYPE = "application/json";
 
-  private final static String   ASCENDING         = "ascending";
+  private final static String       ASCENDING         = "ascending";
 
-  private final static String   DESCENDING        = "descending";
+  private final static String       DESCENDING        = "descending";
 
-  private final static String   USERNAME          = "username";
+  private final static String       USERNAME          = "username";
 
-  private final static String   FIRSTNAME         = "firstname";
+  private final static String       FIRSTNAME         = "firstname";
 
-  private final static String   LASTNAME          = "lastname";
-  
+  private final static String       LASTNAME          = "lastname";
+
   private static final CacheControl cc;
   static {
     cc = new CacheControl();
@@ -84,9 +81,6 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
     super(organizationService);
   }
 
-  
-  
-  
   /**
    * {@inheritDoc}
    */
@@ -94,15 +88,9 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
   @GET
   @Path("/user/find-all/")
   @Produces(MediaType.APPLICATION_JSON)
-  public Response findUsers(@Context UriInfo uriInfo,
-                            @QueryParam("username") String username,
-                            @QueryParam("firstname") String firstname,
-                            @QueryParam("lastname") String lastname,
-                            @QueryParam("email") String email,
-                            @QueryParam("fromLoginDate") String fromLoginDate,
-                            @QueryParam("toLogindate") String toLoginDate) {
+  public Response findUsers(@Context UriInfo uriInfo, @QueryParam("username") String username, @QueryParam("firstname") String firstname, @QueryParam("lastname") String lastname, @QueryParam("email") String email, @QueryParam("fromLoginDate") String fromLoginDate, @QueryParam("toLogindate") String toLoginDate) {
     try {
-    //TODO : now returned all founded user need be carefully then using wildcard (*)
+      // TODO : now returned all founded user need be carefully then using wildcard (*)
       Query query = new Query();
       query.setUserName(username);
       query.setFirstName(firstname);
@@ -123,7 +111,7 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
         }
       }
       PageList pageList = organizationService_.getUserHandler().findUsers(query);
-      
+
       List<User> list = new ArrayList<User>();
       int pages = pageList.getAvailablePage();
       for (int i = 1; i <= pages; i++) {
@@ -136,16 +124,12 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
       }
       UserListBean user_list = new UserListBean(listBean);
       return Response.ok(user_list, JSON_CONTENT_TYPE).cacheControl(cc).build();
-     
+
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
-      return Response.status(HTTPStatus.INTERNAL_ERROR)
-                             .entity("Thrown exception : " + e)
-                             .build();
+      return Response.status(HTTPStatus.INTERNAL_ERROR).entity("Thrown exception : " + e).build();
     }
   }
-
-  
 
   /**
    * @param baseURI
@@ -160,60 +144,29 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
   @GET
   @Path("/user/find-user-in-range/")
   @Produces(MediaType.APPLICATION_JSON)
-  public Response findUsersRange(@Context UriInfo uriInfo,
-                                 @QueryParam("question") String question,
-                                 @QueryParam("from") Integer from,
-                                 @QueryParam("to") Integer to,
-                                 @QueryParam("sort-order") String sortOrder,
-                                 @QueryParam("sort-field") String sortField) {
-    try {      
-      /*MultiUserChatManager m = XMPPSessionImpl.multiUserChatManager ;
-      for (MultiUserChat multiUserChat : m.getAll()) {
-        if (multiUserChat.getRoom().contains(roomName)) {
-          try {
-            Iterator<String> it = multiUserChat.getConfigurationForm().getField("muc#roomconfig_allowinvites").getValues()  ;
-            if (!it.next().equals("1")) {
-              it = multiUserChat.getConfigurationForm().getField("muc#roomconfig_roomowners").getValues()  ;
-              if (!it.next().contains(username)) {
-                if (RESTXMPPService.rb != null) {
-                  return Response.status(HTTPStatus.UNAUTHORIZED)
-                    .entity(RESTXMPPService.rb.getString("chat.message.unauthorized"))
-                    .build();
-                }                
-              }
-            }
-            break ;
-          } catch (Exception e) {
-            return Response.status(HTTPStatus.UNAUTHORIZED)
-              .entity(RESTXMPPService.rb.getString("chat.message.unauthorized"))
-              .build();  
-          }          
-        }
-      }*/
+  public Response findUsersRange(@Context UriInfo uriInfo, @QueryParam("question") String question, @QueryParam("from") Integer from, @QueryParam("to") Integer to, @QueryParam("sort-order") String sortOrder, @QueryParam("sort-field") String sortField) {
+    try {
+      /*
+       * MultiUserChatManager m = XMPPSessionImpl.multiUserChatManager ; for (MultiUserChat multiUserChat : m.getAll()) { if (multiUserChat.getRoom().contains(roomName)) { try { Iterator<String> it = multiUserChat.getConfigurationForm().getField("muc#roomconfig_allowinvites").getValues() ; if (!it.next().equals("1")) { it =
+       * multiUserChat.getConfigurationForm().getField("muc#roomconfig_roomowners").getValues() ; if (!it.next().contains(username)) { if (RESTXMPPService.rb != null) { return Response.status(HTTPStatus.UNAUTHORIZED) .entity(RESTXMPPService.rb.getString("chat.message.unauthorized")) .build(); } } } break ; } catch (Exception e) { return Response.status(HTTPStatus.UNAUTHORIZED)
+       * .entity(RESTXMPPService.rb.getString("chat.message.unauthorized")) .build(); } } }
+       */
       List<User> temp = new ArrayList<User>();
       Comparator<User> comparator = getComparator(sortField, sortOrder);
       if (comparator == null) {
-        LOGGER.error("You set wrong parameters fo sorting! sort-order = [" + ASCENDING + ", "
-            + DESCENDING + "], " + "sort-field = [" + USERNAME + ", " + LASTNAME + ", " + FIRSTNAME
-            + "]. You set sort-field = " + sortField + " sort-order = " + sortOrder);
-        return Response.status(HTTPStatus.BAD_REQUEST)
-                               .entity("You set wrong parameters fo sorting! sort-order = ["
-                                   + ASCENDING + ", " + DESCENDING + "], " + "sort-field = ["
-                                   + USERNAME + ", " + LASTNAME + ", " + FIRSTNAME
-                                   + "]. You set sort-field = " + sortField + " sort-order = "
-                                   + sortOrder)
-                               .build();
+        LOGGER.error("You set wrong parameters fo sorting! sort-order = [" + ASCENDING + ", " + DESCENDING + "], " + "sort-field = [" + USERNAME + ", " + LASTNAME + ", " + FIRSTNAME + "]. You set sort-field = " + sortField + " sort-order = " + sortOrder);
+        return Response.status(HTTPStatus.BAD_REQUEST).entity("You set wrong parameters fo sorting! sort-order = [" + ASCENDING + ", " + DESCENDING + "], " + "sort-field = [" + USERNAME + ", " + LASTNAME + ", " + FIRSTNAME + "]. You set sort-field = " + sortField + " sort-order = " + sortOrder).build();
       }
       SortedSet<User> users = new TreeSet<User>(comparator);
       int numResult = to - from;
-      if (numResult <= 0) 
-        return Response.noContent().cacheControl(cc).build(); 
+      if (numResult <= 0)
+        return Response.noContent().cacheControl(cc).build();
       Query query = new Query();
       query.setUserName(question);
       PageList pageList = userHandler.findUsers(query);
       int totalUsers = 0;
       Iterator<User> i = null;
-      if("*".equals(question.trim())){
+      if ("*".equals(question.trim())) {
         pageList.setPageSize(numResult);
         int page = from / numResult + 1;
         temp = pageList.getPage(page);
@@ -223,15 +176,14 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
         }
         totalUsers = pageList.getAvailable();
         i = users.iterator();
-      }
-      else {
-      //For CS-2662 and CS-3032
+      } else {
+        // For CS-2662 and CS-3032
         temp = pageList.getAll();
         for (User user : temp) {
           if (!users.contains(user))
             users.add(user);
         }
-        
+
         query = new Query();
         query.setFirstName(question);
         pageList = userHandler.findUsers(query);
@@ -249,39 +201,37 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
           if (!users.contains(user))
             users.add(user);
         }
-        
+
         totalUsers = users.size();
-        
+
         List<User> list = new ArrayList<User>();
         list.addAll(users);
         int page = from / numResult + 1;
         int f = (page - 1) * numResult;
         int t = page * numResult;
-        if(t > totalUsers) t = totalUsers;
-        list =  list.subList(f, t);
-        
+        if (t > totalUsers)
+          t = totalUsers;
+        list = list.subList(f, t);
+
         i = list.iterator();
       }
-            
+
       List<UserBean> uList = new ArrayList<UserBean>();
       while (i.hasNext()) {
         User user = (User) i.next();
         uList.add(new UserBean(user));
       }
       UserListBean user_list = new UserListBean(uList);
-      //user_list.setTotalUser(userHandler.getUserPageList(20).getAvailable());
+      // user_list.setTotalUser(userHandler.getUserPageList(20).getAvailable());
       user_list.setTotalUser(totalUsers);
       return Response.ok(user_list, JSON_CONTENT_TYPE).cacheControl(cc).build();
     } catch (Exception e) {
       e.printStackTrace();
       LOGGER.error("Thrown exception : " + e);
-      return Response.status(HTTPStatus.INTERNAL_ERROR)
-                             .entity("Thrown exception : " + e)
-                             .build();
+      return Response.status(HTTPStatus.INTERNAL_ERROR).entity("Thrown exception : " + e).build();
     }
   }
 
-  
   /**
    * {@inheritDoc}
    */
@@ -292,16 +242,13 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
     try {
       User user = userHandler.findUserByName(username);
       if (user == null) {
-        return Response.status(HTTPStatus.NOT_FOUND).entity("User '" + username
-            + "' not found.").build();
+        return Response.status(HTTPStatus.NOT_FOUND).entity("User '" + username + "' not found.").build();
       }
       return Response.ok(user).cacheControl(cc).build();
 
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
-      return Response.status(HTTPStatus.INTERNAL_ERROR)
-                             .entity("Thrown exception : " + e)
-                             .build();
+      return Response.status(HTTPStatus.INTERNAL_ERROR).entity("Thrown exception : " + e).build();
     }
   }
 
@@ -327,15 +274,11 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
       return Response.ok(new CountBean(number), JSON_CONTENT_TYPE).cacheControl(cc).build();
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
-      return Response.status(HTTPStatus.INTERNAL_ERROR)
-                             .entity("Thrown exception : " + e)
-                             .build();
+      return Response.status(HTTPStatus.INTERNAL_ERROR).entity("Thrown exception : " + e).build();
     }
   }
 
-//  
-
-
+  //  
 
   /**
    * @author vetal

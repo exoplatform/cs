@@ -102,7 +102,7 @@ public class CalendarWebservice implements ResourceContainer{
                                   String calendarId, @PathParam("type")
                                   String type) throws Exception {
     //StringBuffer buffer = new StringBuffer();
-	EventData eventData = new EventData();
+  EventData eventData = new EventData();
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
@@ -121,20 +121,20 @@ public class CalendarWebservice implements ResourceContainer{
         cal = calService.getGroupCalendar(calendarId) ;
         // cs-4429: fix for group calendar permission
         if(Utils.canEdit(oService, cal.getEditPermission(), username)) {
-        	eventData.setPermission(true);
+          eventData.setPermission(true);
         } 
       } else if(Utils.SHARED_TYPE == Integer.parseInt(type)) {
         if(calService.getSharedCalendars(username, true) != null) {
           cal = calService.getSharedCalendars(username, true).getCalendarById(calendarId) ;
           if(Utils.canEdit(null, Utils.getEditPerUsers(cal), username)) {
-        	  eventData.setPermission(true);
+            eventData.setPermission(true);
           }  
         } 
       }  
     } catch (Exception e) {
       //e.printStackTrace() ;
       //buffer = new StringBuffer("{ERROR:500 " + e + "}") ;
-    	eventData.setPermission(false);
+      eventData.setPermission(false);
     } 
     return Response.ok(eventData, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
   }
@@ -476,60 +476,60 @@ public class CalendarWebservice implements ResourceContainer{
   @RolesAllowed("users")
   @Path("/updatestatus/{taskid}")
   public Response updateStatus(@PathParam("taskid")
-                                String taskid) throws Exception {	  
-	  CacheControl cacheControl = new CacheControl();
-	  cacheControl.setNoCache(true);
-	  cacheControl.setNoStore(true);
-	  try{
-	  CalendarService calService = (CalendarService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
-	  String username = ConversationState.getCurrent().getIdentity().getUserId();
-	  CalendarEvent task = calService.getEvent(username, taskid);
-	  String calendarId = task.getCalendarId();
-	  task.setEventState(CalendarEvent.COMPLETED);
-	  calService.saveUserEvent(username, calendarId, task, false);
-	  return Response.ok("true", MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
-	  } catch(Exception e){
-		  return Response.status(HTTPStatus.INTERNAL_ERROR).cacheControl(cacheControl).build();
-	  }
+                                String taskid) throws Exception {    
+    CacheControl cacheControl = new CacheControl();
+    cacheControl.setNoCache(true);
+    cacheControl.setNoStore(true);
+    try{
+    CalendarService calService = (CalendarService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+    String username = ConversationState.getCurrent().getIdentity().getUserId();
+    CalendarEvent task = calService.getEvent(username, taskid);
+    String calendarId = task.getCalendarId();
+    task.setEventState(CalendarEvent.COMPLETED);
+    calService.saveUserEvent(username, calendarId, task, false);
+    return Response.ok("true", MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
+    } catch(Exception e){
+      return Response.status(HTTPStatus.INTERNAL_ERROR).cacheControl(cacheControl).build();
+    }
   }
   @GET
   @RolesAllowed("users")
   @Path("/getcalendars")
   public Response getCalendars() throws Exception{
-	  CacheControl cacheControl = new CacheControl();
-	  cacheControl.setNoCache(true);
-	  cacheControl.setNoStore(true);
-	  try{		  
-		  CalendarService calService = (CalendarService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
-		  String username = ConversationState.getCurrent().getIdentity().getUserId();
-		  List<Calendar> calList = calService.getUserCalendars(username, true);
-		  EventData data = new EventData();
-		  data.setCalendars(calList);
-		  return Response.ok(data, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
-	  }catch(Exception e){
-		  return Response.status(HTTPStatus.INTERNAL_ERROR).cacheControl(cacheControl).build();
-	  }
+    CacheControl cacheControl = new CacheControl();
+    cacheControl.setNoCache(true);
+    cacheControl.setNoStore(true);
+    try{      
+      CalendarService calService = (CalendarService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+      String username = ConversationState.getCurrent().getIdentity().getUserId();
+      List<Calendar> calList = calService.getUserCalendars(username, true);
+      EventData data = new EventData();
+      data.setCalendars(calList);
+      return Response.ok(data, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
+    }catch(Exception e){
+      return Response.status(HTTPStatus.INTERNAL_ERROR).cacheControl(cacheControl).build();
+    }
   }
   
   @GET
   @RolesAllowed("users")
   @Path("/getevent/{eventid}")
   public Response getEvent(@PathParam("eventid") String eventid) throws Exception{
-	  CacheControl cacheControl = new CacheControl();
-	  cacheControl.setNoCache(true);
-	  cacheControl.setNoStore(true);
-	  try{		  
-		  CalendarService calService = (CalendarService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
-		  String username = ConversationState.getCurrent().getIdentity().getUserId();
-		  CalendarEvent calEvent = calService.getEvent(username, eventid);
-		  if(!calEvent.getAttachment().isEmpty()) calEvent.setAttachment(null);
-		  SingleEvent data = new SingleEvent();
-		  data.setInfo(calEvent);
-		  //data.setCalendars(calList);
-		  return Response.ok(data, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
-	  }catch(Exception e){
-		  return Response.status(HTTPStatus.INTERNAL_ERROR).cacheControl(cacheControl).build();
-	  }
+    CacheControl cacheControl = new CacheControl();
+    cacheControl.setNoCache(true);
+    cacheControl.setNoStore(true);
+    try{      
+      CalendarService calService = (CalendarService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+      String username = ConversationState.getCurrent().getIdentity().getUserId();
+      CalendarEvent calEvent = calService.getEvent(username, eventid);
+      if(!calEvent.getAttachment().isEmpty()) calEvent.setAttachment(null);
+      SingleEvent data = new SingleEvent();
+      data.setInfo(calEvent);
+      //data.setCalendars(calList);
+      return Response.ok(data, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
+    }catch(Exception e){
+      return Response.status(HTTPStatus.INTERNAL_ERROR).cacheControl(cacheControl).build();
+    }
   }
   
   @GET

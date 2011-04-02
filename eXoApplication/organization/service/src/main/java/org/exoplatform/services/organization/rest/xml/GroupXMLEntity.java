@@ -38,11 +38,11 @@ import org.exoplatform.services.organization.User;
 
 public class GroupXMLEntity implements StreamingOutput {
 
-  private final List<User>    userList_;
+  private final List<User> userList_;
 
-  private final Group            group_;
+  private final Group      group_;
 
-  private final String           baseURI_;
+  private final String     baseURI_;
 
   public GroupXMLEntity(Group group, List<User> userList, String baseURI) {
     userList_ = userList;
@@ -52,7 +52,6 @@ public class GroupXMLEntity implements StreamingOutput {
 
   /*
    * (non-Javadoc)
-   * 
    * @see org.exoplatform.services.rest.transformer.SerializableEntity#writeObject(java.io.OutputStream)
    */
   public void write(OutputStream out) throws IOException {
@@ -64,8 +63,7 @@ public class GroupXMLEntity implements StreamingOutput {
       xsw.writeStartElement("group");
       xsw.writeDefaultNamespace(XMLContants.EXO_NAMESPACE_URL);
       xsw.writeNamespace(XMLContants.XLINK_PREFIX, XMLContants.XLINK_NAMESPACE_URL);
-      xsw.writeAttribute(XMLContants.XLINK_NAMESPACE_URL, XMLContants.XLINK_HREF, baseURI_
-          + "/organization/group/" + "?output=xml&command=info&groupId=" + group_.getId().replaceFirst("/", ""));
+      xsw.writeAttribute(XMLContants.XLINK_NAMESPACE_URL, XMLContants.XLINK_HREF, baseURI_ + "/organization/group/" + "?output=xml&command=info&groupId=" + group_.getId().replaceFirst("/", ""));
       xsw.writeStartElement("id");
       xsw.writeCharacters(group_.getId());
       xsw.writeEndElement();
@@ -82,11 +80,9 @@ public class GroupXMLEntity implements StreamingOutput {
       xsw.writeNamespace(XMLContants.XLINK_PREFIX, XMLContants.XLINK_NAMESPACE_URL);
       for (User user : userList_) {
         xsw.writeStartElement("user");
-        xsw.writeAttribute(XMLContants.XLINK_NAMESPACE_URL, XMLContants.XLINK_HREF, baseURI_
-            + "/organization/user/" /*
-                                                                 * +
-                                                                 * u.getUserName()
-                                                                 */
+        xsw.writeAttribute(XMLContants.XLINK_NAMESPACE_URL, XMLContants.XLINK_HREF, baseURI_ + "/organization/user/" /*
+                                                                                                                      * + u.getUserName()
+                                                                                                                      */
             + "?output=xml&command=info");
         xsw.writeCharacters(user.getUserName());
         xsw.writeEndElement();

@@ -17,7 +17,6 @@
 package org.exoplatform.calendar.webui;
 
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;

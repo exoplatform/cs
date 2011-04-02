@@ -55,10 +55,7 @@ public interface XMPPSession {
    * @param autoLogin not working now
    * @return true if successfully
    */
-  boolean addTransport(Transport transport,
-                       String remoteUser,
-                       String remotePassword,
-                       boolean autoLogin);
+  boolean addTransport(Transport transport, String remoteUser, String remotePassword, boolean autoLogin);
 
   /**
    * Add new buddy to roster.
@@ -305,11 +302,7 @@ public interface XMPPSession {
    * @param searchService the SearchService name.
    * @return the list of users which match for searching string.
    */
-  ReportedData searchUser(String search,
-                          boolean byUsername,
-                          boolean byName,
-                          boolean byEmail,
-                          String searchService) throws XMPPException;
+  ReportedData searchUser(String search, boolean byUsername, boolean byName, boolean byEmail, String searchService) throws XMPPException;
 
   /**
    * Send message.
@@ -372,9 +365,7 @@ public interface XMPPSession {
    * @param isGroupChat  is the group chat
    * @return list of historyMessages
    */
-  List<HistoricalMessage> getAllHistory(String usernameto,
-                                               String usernamefrom,
-                                               boolean isGroupChat);
+  List<HistoricalMessage> getAllHistory(String usernameto, String usernamefrom, boolean isGroupChat);
 
   /**
    * Get history between two date.
@@ -386,11 +377,7 @@ public interface XMPPSession {
    * @param dateTo the end
    * @return list of historyMessages
    */
-  List<HistoricalMessage> getHistoryBetweenDate(String usernameto,
-                                                       String usernamefrom,
-                                                       boolean isGroupChat,
-                                                       Date dateFrom,
-                                                       Date dateTo);
+  List<HistoricalMessage> getHistoryBetweenDate(String usernameto, String usernamefrom, boolean isGroupChat, Date dateFrom, Date dateTo);
 
   /**
    * Get history between the date and current time.
@@ -401,10 +388,7 @@ public interface XMPPSession {
    * @param dateFrom the begin
    * @return list of historyMessages
    */
-  List<HistoricalMessage> getHistoryFromDateToNow(String usernameto,
-                                                         String usernamefrom,
-                                                         boolean isGroupChat,
-                                                         Date dateFrom);
+  List<HistoricalMessage> getHistoryFromDateToNow(String usernameto, String usernamefrom, boolean isGroupChat, Date dateFrom);
 
   /**
    * Get all interlocutors of user.
@@ -478,14 +462,13 @@ public interface XMPPSession {
    * @throws XMPPException the XMPPException
    */
   void changeNickname(String room, String nickname) throws XMPPException;
-  
+
   RoomInfo getRoomInfo(String room) throws XMPPException;
 
   void addFullUserNames(String userName, String fullUserName);
-  
-  
+
   public String getPresenceStatus_();
-  
+
   public void setPresenceStatus_(String status);
-  
+
 }

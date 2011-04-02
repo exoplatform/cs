@@ -31,44 +31,52 @@ import java.util.Iterator;
  */
 public class MembershipListBean {
   private Collection<?> memberships;
-  private String username;
-  public MembershipListBean(){}
-  public MembershipListBean(String username, Collection<?> memberships){
+
+  private String        username;
+
+  public MembershipListBean() {
+  }
+
+  public MembershipListBean(String username, Collection<?> memberships) {
     setUsername(username);
     setMemberships(memberships);
   }
+
   public Collection<?> getMemberships() {
     return memberships;
   }
+
   public void setMemberships(Collection<?> memberships) {
     this.memberships = memberships;
   }
+
   public String getUsername() {
     return username;
   }
+
   public void setUsername(String username) {
     this.username = username;
   }
-  
+
   @Override
   public boolean equals(Object obj) {
-    if(obj == null)
+    if (obj == null)
       return false;
-    if(obj == this)
+    if (obj == this)
       return true;
-    if(this.hashCode() == obj.hashCode())
+    if (this.hashCode() == obj.hashCode())
       return true;
-    if(obj instanceof MembershipListBean){
-      MembershipListBean bean = (MembershipListBean)obj;
-      if( ! username.equals( bean.username )  )
+    if (obj instanceof MembershipListBean) {
+      MembershipListBean bean = (MembershipListBean) obj;
+      if (!username.equals(bean.username))
         return false;
-      if( memberships.size() == bean.memberships.size() ){
+      if (memberships.size() == bean.memberships.size()) {
         Iterator<?> it_1 = memberships.iterator();
         Iterator<?> it_2 = memberships.iterator();
-        while(it_1.hasNext()){
+        while (it_1.hasNext()) {
           Object m_obj1 = it_1.next();
           Object m_obj2 = it_2.next();
-          if(! m_obj1.equals(m_obj2))
+          if (!m_obj1.equals(m_obj2))
             return false;
         }
         return true;
@@ -76,18 +84,19 @@ public class MembershipListBean {
     }
     return false;
   }
-  
+
   private int h_ = 0;
+
   @Override
   public int hashCode() {
-    if( h_ == 0){
+    if (h_ == 0) {
       h_ = username.hashCode();
       Iterator<?> i = memberships.iterator();
-      while(i.hasNext()){
+      while (i.hasNext()) {
         h_ = h_ + i.next().hashCode();
       }
     }
     return h_;
   }
-  
+
 }

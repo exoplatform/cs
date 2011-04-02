@@ -18,7 +18,6 @@ package org.exoplatform.calendar.service;
 
 import org.exoplatform.services.jcr.util.IdGenerator;
 
-
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen Quang
@@ -26,25 +25,46 @@ import org.exoplatform.services.jcr.util.IdGenerator;
  * Jul 11, 2007  
  */
 public class EventCategory {
-  private String id ;
-  private String name ;
-  private String description ;
-  private boolean isDataInit = false ;
-  
-  public EventCategory() {
-    id = "eventCategory" + IdGenerator.generate() ;
-  }
-  public String getName() { return name ; }
-  public void   setName(String name) { this.name = name ; }
+  private String  id;
 
-  public String getDescription() { return description ; }
-  public void   setDescription(String description) { this.description = description ; }
-  
-	public void setDataInit(boolean isDataInit) { this.isDataInit = isDataInit ; }
-	public boolean isDataInit() {	return isDataInit ;	}
+  private String  name;
+
+  private String  description;
+
+  private boolean isDataInit = false;
+
+  public EventCategory() {
+    id = "eventCategory" + IdGenerator.generate();
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public void setDataInit(boolean isDataInit) {
+    this.isDataInit = isDataInit;
+  }
+
+  public boolean isDataInit() {
+    return isDataInit;
+  }
+
   public void setId(String id) {
     this.id = id;
   }
+
   public String getId() {
     return id;
   }

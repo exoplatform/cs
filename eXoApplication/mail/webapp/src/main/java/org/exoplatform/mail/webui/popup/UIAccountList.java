@@ -17,7 +17,6 @@
 package org.exoplatform.mail.webui.popup;
 
 import java.util.ArrayList;
-
 import java.util.List;
 
 import org.exoplatform.commons.utils.LazyPageList;

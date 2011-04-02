@@ -65,5 +65,4 @@ public class FileTransferEventBean {
     this.fileTransportResponses = fileTransportResponses;
   }
 
-  
 }

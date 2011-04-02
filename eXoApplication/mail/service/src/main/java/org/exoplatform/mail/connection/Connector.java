@@ -31,26 +31,27 @@ import org.exoplatform.mail.service.Message;
 public interface Connector {
 
   public void openStore(Account account) throws Exception;
-  
+
   public javax.mail.Folder createFolder(Folder folder) throws Exception;
-  
+
   public javax.mail.Folder createFolder(Folder parentFolder, Folder folder) throws Exception;
-  
+
   public Folder renameFolder(String newName, Folder folder) throws Exception;
-  
+
   public boolean deleteFolder(Folder folder) throws Exception;
-  
+
   public int emptyFolder(Folder folder) throws Exception;
-  
+
   public List<Message> createMessage(List<Message> msgs, Folder folder) throws Exception;
-  
+
   public boolean deleteMessage(List<Message> msgs, Folder folder) throws Exception;
-  
+
   /**
    * Move message(s) between folders.
    * Return a list of deleted/moved messages
    * */
   public List<Message> moveMessage(List<Message> msgs, Folder currentFolder, Folder desFolder) throws Exception;
+
   /**
    * mark the message is read/unread or stared/not started
    * @param isRead is read if true, is unread if false. Else if is null, method is going to set stared/not stared

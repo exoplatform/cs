@@ -50,10 +50,10 @@ public class FormBean {
   /**
    * 
    */
-  private List<String>    members = new ArrayList<String>();
+  private List<String>    members   = new ArrayList<String>();
 
   private List<String>    fullNames = new ArrayList<String>();
-  
+
   /**
    * @return the fields
    */
@@ -137,5 +137,5 @@ public class FormBean {
   public void setFullNames(List<String> list) {
     this.fullNames = list;
   }
-  
+
 }

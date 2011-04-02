@@ -21,88 +21,98 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.exoplatform.commons.exception.ExoMessageException;
+
 /**
  * @author Tuan Nguyen (tuan08@users.sourceforge.net)
  * @since Oct 21, 2004
  * @version $Id: PageList.java,v 1.2 2004/10/25 03:36:58 tuan08 Exp $
  */
 abstract public class JCRPageList {
-  //final static public PageList EMPTY_LIST = new ObjectPageList(new ArrayList(), 10) ;
-  
-  private long pageSize_ ;
-  protected long available_ = 0;
-  protected long availablePage_  = 1;
-  protected long currentPage_ = 1 ;
-  protected LinkedHashMap<String, Message> currentListPage_ ;
-  
+  // final static public PageList EMPTY_LIST = new ObjectPageList(new ArrayList(), 10) ;
+
+  private long                             pageSize_;
+
+  protected long                           available_     = 0;
+
+  protected long                           availablePage_ = 1;
+
+  protected long                           currentPage_   = 1;
+
+  protected LinkedHashMap<String, Message> currentListPage_;
+
   public JCRPageList(long pageSize) {
-    pageSize_ = pageSize ;
+    pageSize_ = pageSize;
   }
-  
-  public long getPageSize() { return pageSize_  ; }
+
+  public long getPageSize() {
+    return pageSize_;
+  }
+
   public void setPageSize(long pageSize) {
-    pageSize_ = pageSize ;
-    setAvailablePage(available_) ;
+    pageSize_ = pageSize;
+    setAvailablePage(available_);
   }
-  
-  public long getCurrentPage() { return currentPage_ ; }
-  public long getAvailable() { return available_ ; }
-  
-  public long getAvailablePage() { return availablePage_ ; }
-  
+
+  public long getCurrentPage() {
+    return currentPage_;
+  }
+
+  public long getAvailable() {
+    return available_;
+  }
+
+  public long getAvailablePage() {
+    return availablePage_;
+  }
+
   public List<Message> currentPage(String username) throws Exception {
-    if(currentListPage_ == null) {
-      populateCurrentPage(currentPage_, username) ;
+    if (currentListPage_ == null) {
+      populateCurrentPage(currentPage_, username);
     }
-    return new ArrayList<Message>(currentListPage_.values()) ;
+    return new ArrayList<Message>(currentListPage_.values());
   }
-  
-  abstract protected void populateCurrentPage(long page, String username) throws Exception   ;
-  
-  public List<Message> getPage(long page, String username) throws Exception   {
+
+  abstract protected void populateCurrentPage(long page, String username) throws Exception;
+
+  public List<Message> getPage(long page, String username) throws Exception {
     List<Message> clp = new ArrayList<Message>();
     try {
-      checkAndSetPage(page) ;
-      populateCurrentPage(page, username) ;
-      clp = new ArrayList<Message>(currentListPage_.values()) ;
-      if (clp == null) return new ArrayList<Message>(); 
-    } catch(Exception e) {
+      checkAndSetPage(page);
+      populateCurrentPage(page, username);
+      clp = new ArrayList<Message>(currentListPage_.values());
+      if (clp == null)
+        return new ArrayList<Message>();
+    } catch (Exception e) {
       return new ArrayList<Message>();
-    } 
+    }
     return clp;
   }
-  
-  abstract public List<Message> getAll() throws Exception  ;
-  
-  public void checkAndSetPage(long page) throws Exception  {
-    if(page < 1 || page > availablePage_) {
-      Object[] args = { Long.toString(page), Long.toString(availablePage_) } ;
-      throw new ExoMessageException("PageList.page-out-of-range", args) ;
+
+  abstract public List<Message> getAll() throws Exception;
+
+  public void checkAndSetPage(long page) throws Exception {
+    if (page < 1 || page > availablePage_) {
+      Object[] args = { Long.toString(page), Long.toString(availablePage_) };
+      throw new ExoMessageException("PageList.page-out-of-range", args);
     }
-    currentPage_ =  page ;
+    currentPage_ = page;
   }
-  
+
   protected void setAvailablePage(long available) {
-    available_ = available ;
-    if (available == 0)  {
-      availablePage_ = 1 ; 
-      currentPage_ =  1 ;
+    available_ = available;
+    if (available == 0) {
+      availablePage_ = 1;
+      currentPage_ = 1;
     } else {
-      long pages = available / pageSize_ ;
-      if ( available % pageSize_ > 0) pages++ ;
-      availablePage_ = pages ;
-      //currentPage_ =  1 ;
+      long pages = available / pageSize_;
+      if (available % pageSize_ > 0)
+        pages++;
+      availablePage_ = pages;
+      // currentPage_ = 1 ;
     }
   }
-  
- 
-  /*public long getFrom() { 
-    return (currentPage_ - 1) * pageSize_ ; 
-  }
-  
-  public long getTo() { 
-    long to = currentPage_  * pageSize_ ; 
-    if (to > available_ ) to = available_ ;
-    return to ;
-  }*/
+
+  /*
+   * public long getFrom() { return (currentPage_ - 1) * pageSize_ ; } public long getTo() { long to = currentPage_ * pageSize_ ; if (to > available_ ) to = available_ ; return to ; }
+   */
 }

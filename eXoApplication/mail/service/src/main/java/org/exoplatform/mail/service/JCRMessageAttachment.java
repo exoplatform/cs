@@ -33,25 +33,30 @@ import org.exoplatform.services.jcr.RepositoryService;
  * 
  * TODO: wrong location, rename to JCRMessageAttachment
  */
-public class JCRMessageAttachment extends Attachment{
-  private String workspace ;
-  
-  public String getWorkspace() { return workspace ; }
-  public void setWorkspace(String ws) { workspace = ws ; }
-  
+public class JCRMessageAttachment extends Attachment {
+  private String workspace;
+
+  public String getWorkspace() {
+    return workspace;
+  }
+
+  public void setWorkspace(String ws) {
+    workspace = ws;
+  }
+
   @Override
   public InputStream getInputStream() throws Exception {
-    Node attachment ;
-    try{
-      attachment = (Node)getSesison().getItem(getId()) ;      
-    }catch (ItemNotFoundException e) {
-      return null ;
+    Node attachment;
+    try {
+      attachment = (Node) getSesison().getItem(getId());
+    } catch (ItemNotFoundException e) {
+      return null;
     }
-    return attachment.getNode("jcr:content").getProperty("jcr:data").getStream() ;
+    return attachment.getNode("jcr:content").getProperty("jcr:data").getStream();
   }
-  
-  private Session getSesison()throws Exception {
-    RepositoryService repoService = (RepositoryService)PortalContainer.getInstance().getComponentInstanceOfType(RepositoryService.class) ;
-    return repoService.getCurrentRepository().getSystemSession(workspace) ;
+
+  private Session getSesison() throws Exception {
+    RepositoryService repoService = (RepositoryService) PortalContainer.getInstance().getComponentInstanceOfType(RepositoryService.class);
+    return repoService.getCurrentRepository().getSystemSession(workspace);
   }
 }

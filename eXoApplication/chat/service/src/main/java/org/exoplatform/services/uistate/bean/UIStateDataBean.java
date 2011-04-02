@@ -25,16 +25,16 @@ package org.exoplatform.services.uistate.bean;
 
 public class UIStateDataBean {
   private String data;
-  
+
   private String unreadMessageCnt;
-  
+
   /**
    * 
    */
   public UIStateDataBean() {
     // TODO Auto-generated constructor stub
   }
-  
+
   /**
    * 
    */
@@ -62,7 +62,7 @@ public class UIStateDataBean {
    * @return
    */
   public String getUnreadMessageCnt() {
-	return unreadMessageCnt;
+    return unreadMessageCnt;
   }
 
   /**
@@ -70,7 +70,7 @@ public class UIStateDataBean {
    * @param unreadMessageCnt
    */
   public void setUnreadMessageCnt(String unreadMessageCnt) {
-	this.unreadMessageCnt = unreadMessageCnt;
+    this.unreadMessageCnt = unreadMessageCnt;
   }
-  
+
 }

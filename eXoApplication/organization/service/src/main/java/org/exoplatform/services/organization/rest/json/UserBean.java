@@ -29,13 +29,20 @@ public class UserBean {
   /**
    * Class logger.
    */
-  private Date createdDate;
+  private Date   createdDate;
+
   private String email;
+
   private String firstName;
+
   private String fullName;
-  private Date lastLoginTime;
+
+  private Date   lastLoginTime;
+
   private String lastName;
+
   private String organizationId;
+
   private String userName;
 
   public UserBean(User user) {

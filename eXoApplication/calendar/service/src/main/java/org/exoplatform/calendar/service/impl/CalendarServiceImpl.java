@@ -27,7 +27,6 @@ import java.util.ResourceBundle;
 import javax.jcr.ItemExistsException;
 import javax.jcr.Node;
 
-import org.apache.commons.httpclient.Credentials;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -67,21 +66,27 @@ import org.quartz.JobDetail;
  */
 public class CalendarServiceImpl implements CalendarService, Startable {
 
-  private ResourceBundle rb_;
-  private ResourceBundleService rbs_ ;
+  private ResourceBundle                      rb_;
+
+  private ResourceBundleService               rbs_;
+
   private JCRDataStorage                      storage_;
+
   private Map<String, CalendarImportExport>   calendarImportExport_ = new LinkedHashMap<String, CalendarImportExport>();
+
   protected List<CalendarUpdateEventListener> listeners_            = new ArrayList<CalendarUpdateEventListener>(3);
-  protected List<CalendarEventListener> eventListeners_ = new ArrayList<CalendarEventListener>(3);
-  private RemoteCalendarService remoteCalendarService;
-  
-  public CalendarServiceImpl(InitParams params,NodeHierarchyCreator nodeHierarchyCreator, RepositoryService reposervice, ResourceBundleService rbs) throws Exception {
+
+  protected List<CalendarEventListener>       eventListeners_       = new ArrayList<CalendarEventListener>(3);
+
+  private RemoteCalendarService               remoteCalendarService;
+
+  public CalendarServiceImpl(InitParams params, NodeHierarchyCreator nodeHierarchyCreator, RepositoryService reposervice, ResourceBundleService rbs) throws Exception {
     storage_ = new JCRDataStorage(nodeHierarchyCreator, reposervice);
     calendarImportExport_.put(CalendarService.ICALENDAR, new ICalendarImportExport(storage_));
     calendarImportExport_.put(CalendarService.EXPORTEDCSV, new CsvImportExport(storage_));
     remoteCalendarService = new RemoteCalendarServiceImpl(storage_);
     rbs_ = rbs;
-    ExoProperties props =  params.getPropertiesParam("eventNumber.info").getProperties() ;
+    ExoProperties props = params.getPropertiesParam("eventNumber.info").getProperties();
     String eventNumber = props.getProperty("eventNumber");
     Utils.EVENT_NUMBER = Integer.parseInt(eventNumber);
   }
@@ -133,10 +138,10 @@ public class CalendarServiceImpl implements CalendarService, Startable {
    */
   public List<Calendar> getUserCalendars(String username, boolean isShowAll) throws Exception {
     try {
-      rb_ = rbs_.getResourceBundle(Utils.RESOURCEBUNDLE_NAME, Locale.getDefault()) ;
+      rb_ = rbs_.getResourceBundle(Utils.RESOURCEBUNDLE_NAME, Locale.getDefault());
     } catch (MissingResourceException e) {
-      //e.printStackTrace(); 
-    }    
+      // e.printStackTrace();
+    }
     return storage_.getUserCalendars(username, isShowAll);
   }
 
@@ -171,9 +176,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   /**
    * {@inheritDoc}
    */
-  public List<GroupCalendarData> getGroupCalendars(String[] groupIds,
-                                                   boolean isShowAll,
-                                                   String username) throws Exception {
+  public List<GroupCalendarData> getGroupCalendars(String[] groupIds, boolean isShowAll, String username) throws Exception {
     return storage_.getGroupCalendars(groupIds, isShowAll, username);
   }
 
@@ -183,7 +186,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   public void savePublicCalendar(Calendar calendar, boolean isNew, String username) throws Exception {
     storage_.savePublicCalendar(calendar, isNew, username);
   }
-  
+
   public void savePublicCalendar(Calendar calendar, boolean isNew) throws Exception {
     storage_.savePublicCalendar(calendar, isNew, null);
   }
@@ -205,21 +208,17 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   /**
    * {@inheritDoc}
    */
-  public void saveEventCategory(String username,
-                                EventCategory eventCategory,
-                                boolean isNew) throws Exception {
+  public void saveEventCategory(String username, EventCategory eventCategory, boolean isNew) throws Exception {
     EventCategory ev = getEventCategoryByName(username, eventCategory.getName());
-    if (ev != null && (isNew || !ev.getId().equals(eventCategory.getId()))) throw new ItemExistsException(); 
+    if (ev != null && (isNew || !ev.getId().equals(eventCategory.getId())))
+      throw new ItemExistsException();
     storage_.saveEventCategory(username, eventCategory, isNew);
   }
 
   /**
    * {@inheritDoc}
    */
-  public void saveEventCategory(String username,
-                                EventCategory eventCategory,
-                                String[] values,
-                                boolean isNew) throws Exception {
+  public void saveEventCategory(String username, EventCategory eventCategory, String[] values, boolean isNew) throws Exception {
     saveEventCategory(username, eventCategory, isNew);
   }
 
@@ -245,7 +244,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   }
 
   public CalendarEvent getEvent(String username, String eventId) throws Exception {
-    return storage_.getEvent(username, eventId) ;
+    return storage_.getEvent(username, eventId);
   }
 
   /**
@@ -261,7 +260,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   public CalendarEvent removeUserEvent(String username, String calendarId, String eventId) throws Exception {
     return storage_.removeUserEvent(username, calendarId, eventId);
   }
-  
+
   /**
    * {@inheritDoc}
    */
@@ -295,9 +294,11 @@ public class CalendarServiceImpl implements CalendarService, Startable {
    */
   public void savePublicEvent(String calendarId, CalendarEvent event, boolean isNew) throws Exception {
     storage_.savePublicEvent(calendarId, event, isNew);
-    for(CalendarEventListener cel : eventListeners_) {
-      if(isNew) cel.savePublicEvent(event, calendarId);
-      else cel.updatePublicEvent(event, calendarId);
+    for (CalendarEventListener cel : eventListeners_) {
+      if (isNew)
+        cel.savePublicEvent(event, calendarId);
+      else
+        cel.updatePublicEvent(event, calendarId);
     }
   }
 
@@ -340,20 +341,14 @@ public class CalendarServiceImpl implements CalendarService, Startable {
    * {@inheritDoc}
    */
   public int generateRss(String username, LinkedHashMap<String, Calendar> calendars, RssData rssData) throws Exception {
-    return storage_.generateRss(username,
-                                calendars,
-                                rssData,
-                                calendarImportExport_.get(CalendarService.ICALENDAR));
+    return storage_.generateRss(username, calendars, rssData, calendarImportExport_.get(CalendarService.ICALENDAR));
   }
 
   /**
    * {@inheritDoc}
    */
   public int generateCalDav(String username, LinkedHashMap<String, Calendar> calendars, RssData rssData) throws Exception {
-    return storage_.generateCalDav(username,
-                                   calendars,
-                                   rssData,
-                                   calendarImportExport_.get(CalendarService.ICALENDAR));
+    return storage_.generateCalDav(username, calendars, rssData, calendarImportExport_.get(CalendarService.ICALENDAR));
   }
 
   /**
@@ -387,9 +382,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   /**
    * {@inheritDoc}
    */
-  public Map<Integer, String> searchHightLightEvent(String username,
-                                                    EventQuery eventQuery,
-                                                    String[] publicCalendarIds) throws Exception {
+  public Map<Integer, String> searchHightLightEvent(String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception {
     return storage_.searchHightLightEvent(username, eventQuery, publicCalendarIds);
   }
 
@@ -410,9 +403,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   /**
    * {@inheritDoc}
    */
-  public List<CalendarEvent> getEvents(String username,
-                                       EventQuery eventQuery,
-                                       String[] publicCalendarIds) throws Exception {
+  public List<CalendarEvent> getEvents(String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception {
     return storage_.getEvents(username, eventQuery, publicCalendarIds);
   }
 
@@ -426,10 +417,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   /**
    * {@inheritDoc}
    */
-  public void saveEventToSharedCalendar(String username,
-                                        String calendarId,
-                                        CalendarEvent event,
-                                        boolean isNew) throws Exception {
+  public void saveEventToSharedCalendar(String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception {
     storage_.saveEventToSharedCalendar(username, calendarId, event, isNew);
   }
 
@@ -457,16 +445,9 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   /**
    * {@inheritDoc}
    */
-  public void moveEvent(String fromCalendar,
-                        String toCalendar,
-                        String fromType,
-                        String toType,
-                        List<CalendarEvent> calEvents,
-                        String username) throws Exception {
+  public void moveEvent(String fromCalendar, String toCalendar, String fromType, String toType, List<CalendarEvent> calEvents, String username) throws Exception {
     storage_.moveEvent(fromCalendar, toCalendar, fromType, toType, calEvents, username);
-    if (fromType.equalsIgnoreCase(toType)
-        && toType.equalsIgnoreCase(String.valueOf(Calendar.TYPE_PUBLIC))
-        && fromCalendar.equalsIgnoreCase(toCalendar)) {
+    if (fromType.equalsIgnoreCase(toType) && toType.equalsIgnoreCase(String.valueOf(Calendar.TYPE_PUBLIC)) && fromCalendar.equalsIgnoreCase(toCalendar)) {
       for (CalendarEventListener cel : eventListeners_) {
         for (CalendarEvent event : calEvents)
           cel.updatePublicEvent(event, toCalendar);
@@ -478,25 +459,14 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   /**
    * {@inheritDoc}
    */
-  public void confirmInvitation(String fromUserId,
-                                String toUserId,
-                                int calType,
-                                String calendarId,
-                                String eventId,
-                                int answer) throws Exception {
+  public void confirmInvitation(String fromUserId, String toUserId, int calType, String calendarId, String eventId, int answer) throws Exception {
     storage_.confirmInvitation(fromUserId, toUserId, calType, calendarId, eventId, answer);
   }
 
   /**
    * {@inheritDoc}
    */
-  public void confirmInvitation(String fromUserId,
-                                String confirmingEmail,
-                                String confirmingUser,
-                                int calType,
-                                String calendarId,
-                                String eventId,
-                                int answer) throws Exception {
+  public void confirmInvitation(String fromUserId, String confirmingEmail, String confirmingUser, int calType, String calendarId, String eventId, int answer) throws Exception {
     storage_.confirmInvitation(fromUserId, confirmingEmail, confirmingUser, calType, calendarId, eventId, answer);
   }
 
@@ -506,9 +476,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     }
   }
 
-
   public void stop() {
-    // TODO Auto-generated method stub
   }
 
   /**
@@ -519,20 +487,20 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   }
 
   public void updateCalDav(String usename, String calendarId, CalendarImportExport imp) throws Exception {
-    storage_.updateCalDav(usename, calendarId, imp) ;
+    storage_.updateCalDav(usename, calendarId, imp);
   }
 
   public void updateCalDav(String usename, String calendarId, CalendarImportExport imp, int number) throws Exception {
-    storage_.updateCalDav(usename, calendarId, imp, number) ;
+    storage_.updateCalDav(usename, calendarId, imp, number);
   }
 
   public void updateRss(String usename, String calendarId, CalendarImportExport imp) throws Exception {
-    storage_.updateRss(usename, calendarId, imp) ;
+    storage_.updateRss(usename, calendarId, imp);
 
   }
 
   public void updateRss(String usename, String calendarId, CalendarImportExport imp, int number) throws Exception {
-    storage_.updateRss(usename, calendarId, imp, number) ;
+    storage_.updateRss(usename, calendarId, imp, number);
   }
 
   public int getTypeOfCalendar(String userName, String calendarId) throws Exception {
@@ -540,11 +508,11 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   }
 
   public int generateCalDav(String username, List<String> calendarIds, RssData rssData) throws Exception {
-    return storage_.generateCalDav(username,calendarIds, rssData, calendarImportExport_.get(CalendarService.ICALENDAR));
+    return storage_.generateCalDav(username, calendarIds, rssData, calendarImportExport_.get(CalendarService.ICALENDAR));
   }
 
   public int generateRss(String username, List<String> calendarIds, RssData rssData) throws Exception {
-    return storage_.generateRss(username,calendarIds, rssData, calendarImportExport_.get(CalendarService.ICALENDAR));
+    return storage_.generateRss(username, calendarIds, rssData, calendarImportExport_.get(CalendarService.ICALENDAR));
   }
 
   public ResourceBundle getResourceBundle() throws Exception {
@@ -552,25 +520,28 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   }
 
   public EventCategory getEventCategoryByName(String username, String eventCategoryName) throws Exception {
-    ResourceBundle rb = null ;
-    try { 
-      rb = rbs_.getResourceBundle(Utils.RESOURCEBUNDLE_NAME, Locale.getDefault()) ;
+    ResourceBundle rb = null;
+    try {
+      rb = rbs_.getResourceBundle(Utils.RESOURCEBUNDLE_NAME, Locale.getDefault());
     } catch (MissingResourceException e) {
-      //TODO the fist time load 
+      // TODO the fist time load
     }
     for (EventCategory ev : storage_.getEventCategories(username)) {
-      if(ev.getName().equalsIgnoreCase(eventCategoryName)) {
-        return ev ;
+      if (ev.getName().equalsIgnoreCase(eventCategoryName)) {
+        return ev;
       } else if (rb != null) {
         try {
-          if (eventCategoryName.equalsIgnoreCase(rb.getString("UICalendarView.label."+ev.getId()))) return ev ;
-        } catch (MissingResourceException e) { }
+          if (eventCategoryName.equalsIgnoreCase(rb.getString("UICalendarView.label." + ev.getId())))
+            return ev;
+        } catch (MissingResourceException e) {
+        }
       }
     }
-    return null ;
+    return null;
   }
+
   public List<CalendarEvent> getSharedEventByCalendars(String username, List<String> calendarIds) throws Exception {
-    return storage_.getSharedEventByCalendars(username,calendarIds) ;
+    return storage_.getSharedEventByCalendars(username, calendarIds);
   }
 
   public void removeFeedData(String username, String title) {
@@ -580,7 +551,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   public void initNewUser(String userName, CalendarSetting defaultCalendarSetting_) throws Exception {
     EventCategory eventCategory = new EventCategory();
     eventCategory.setDataInit(true);
-    for (int id = 0; id < NewUserListener.defaultEventCategoryId.length; id ++) {
+    for (int id = 0; id < NewUserListener.defaultEventCategoryId.length; id++) {
       eventCategory.setId(NewUserListener.defaultEventCategoryId[id]);
       eventCategory.setName(NewUserListener.defaultEventCategoryName[id]);
       saveEventCategory(userName, eventCategory, true);
@@ -590,33 +561,32 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     CalendarCategory calCategory = new CalendarCategory();
     calCategory.setId(NewUserListener.DEFAULT_CALENDAR_CATEGORYID);
     calCategory.setName(NewUserListener.DEFAULT_CALENDAR_CATEGORYNAME);
-    calCategory.setDataInit(true) ;
-    saveCalendarCategory(userName,	calCategory, true);
+    calCategory.setDataInit(true);
+    saveCalendarCategory(userName, calCategory, true);
 
     // save default calendar
     Calendar cal = new Calendar();
     cal.setId(Utils.getDefaultCalendarId(userName));
     cal.setName(NewUserListener.DEFAULT_CALENDAR_NAME);
     cal.setCategoryId(calCategory.getId());
-    cal.setDataInit(true) ;
-    cal.setCalendarOwner(userName) ;
-    if(defaultCalendarSetting_ != null) {
-      if(defaultCalendarSetting_.getLocation() != null)
-        cal.setLocale(defaultCalendarSetting_.getLocation()) ;
-      if(defaultCalendarSetting_.getTimeZone() != null)
-        cal.setTimeZone(defaultCalendarSetting_.getTimeZone()) ;
+    cal.setDataInit(true);
+    cal.setCalendarOwner(userName);
+    if (defaultCalendarSetting_ != null) {
+      if (defaultCalendarSetting_.getLocation() != null)
+        cal.setLocale(defaultCalendarSetting_.getLocation());
+      if (defaultCalendarSetting_.getTimeZone() != null)
+        cal.setTimeZone(defaultCalendarSetting_.getTimeZone());
     }
-    saveUserCalendar(userName, cal,	true);
+    saveUserCalendar(userName, cal, true);
 
-    if(defaultCalendarSetting_ != null) {
-      saveCalendarSetting(userName, defaultCalendarSetting_) ;
+    if (defaultCalendarSetting_ != null) {
+      saveCalendarSetting(userName, defaultCalendarSetting_);
     }
-    OrganizationService organizationService = 
-      (OrganizationService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class) ;
-    Object[] groupsOfUser = organizationService.getGroupHandler().findGroupsOfUser(userName).toArray() ;
+    OrganizationService organizationService = (OrganizationService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
+    Object[] groupsOfUser = organizationService.getGroupHandler().findGroupsOfUser(userName).toArray();
     List<String> groups = new ArrayList<String>();
     for (Object object : groupsOfUser) {
-      String groupId = ((Group)object).getId() ;
+      String groupId = ((Group) object).getId();
       groups.add(groupId);
     }
     storage_.autoShareCalendar(groups, userName);
@@ -624,20 +594,20 @@ public class CalendarServiceImpl implements CalendarService, Startable {
 
   @Override
   public void addEventListenerPlugin(CalendarEventListener listener) throws Exception {
-    eventListeners_.add(listener);    
+    eventListeners_.add(listener);
   }
 
   @Override
   public void assignGroupTask(String taskId, String calendarId, String assignee) throws Exception {
     storage_.assignGroupTask(taskId, calendarId, assignee);
-    
+
   }
 
   @Override
   public void setGroupTaskStatus(String taskId, String calendarId, String status) throws Exception {
     storage_.setGroupTaskStatus(taskId, calendarId, status);
   }
-  
+
   /**
    * {@inheritDoc}
    */
@@ -653,7 +623,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   public boolean isValidRemoteUrl(String url, String type, String remoteUser, String remotePassword) throws Exception {
     return remoteCalendarService.isValidRemoteUrl(url, type, remoteUser, remotePassword);
   }
-  
+
   /**
    * {@inheritDoc}
    */
@@ -661,15 +631,14 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   public Calendar updateRemoteCalendarInfo(RemoteCalendar remoteCalendar) throws Exception {
     return storage_.updateRemoteCalendarInfo(remoteCalendar);
   }
-  
 
   /**
    * {@inheritDoc}
    */
   public Calendar refreshRemoteCalendar(String username, String remoteCalendarId) throws Exception {
-	  return remoteCalendarService.refreshRemoteCalendar(username, remoteCalendarId);
+    return remoteCalendarService.refreshRemoteCalendar(username, remoteCalendarId);
   }
-  
+
   /**
    * {@inheritDoc}
    */
@@ -677,7 +646,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   public Calendar importRemoteCalendar(RemoteCalendar remoteCalendar) throws Exception {
     return remoteCalendarService.importRemoteCalendar(remoteCalendar);
   }
-  
+
   /**
    * {@inheritDoc}
    */
@@ -685,6 +654,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   public RemoteCalendar getRemoteCalendar(String owner, String calendarId) throws Exception {
     return storage_.getRemoteCalendar(owner, calendarId);
   }
+
   /**
    * {@inheritDoc}
    */
@@ -696,30 +666,29 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   public Calendar getRemoteCalendar(String owner, String remoteUrl, String remoteType) throws Exception {
     return storage_.getRemoteCalendar(owner, remoteUrl, remoteType);
   }
-  
+
   public String getCalDavResourceHref(String username, String calendarId, String eventId) throws Exception {
     Node eventNode = storage_.getUserCalendarHome(username).getNode(calendarId).getNode(eventId);
     return eventNode.getProperty(Utils.EXO_CALDAV_HREF).getString();
   }
-  
+
   public String getCalDavResourceEtag(String username, String calendarId, String eventId) throws Exception {
     Node eventNode = storage_.getUserCalendarHome(username).getNode(calendarId).getNode(eventId);
     return eventNode.getProperty(Utils.EXO_CALDAV_ETAG).getString();
   }
-  
+
   public void setCalDavResourceHref(String username, String calendarId, String eventId, String href) throws Exception {
     storage_.setCalDavResourceHref(username, calendarId, eventId, href);
   }
-  
+
   public void setCalDavResourceEtag(String username, String calendarId, String eventId, String etag) throws Exception {
     storage_.setCalDavResourceEtag(username, calendarId, eventId, etag);
   }
-  
+
   // load synchronize remote calendar job with period
   public void loadSynchronizeRemoteCalendarJob(String username) throws Exception {
-    ExoContainer container = ExoContainerContext.getCurrentContainer() ;
-    JobSchedulerService schedulerService = 
-      (JobSchedulerService)container.getComponentInstanceOfType(JobSchedulerService.class) ;    
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    JobSchedulerService schedulerService = (JobSchedulerService) container.getComponentInstanceOfType(JobSchedulerService.class);
     JobInfo info = SynchronizeRemoteCalendarJob.getJobInfo(username);
     JobDetail job = findSynchronizeRemoteCalendarJob(schedulerService, username);
     if (job == null) {
@@ -727,19 +696,18 @@ public class CalendarServiceImpl implements CalendarService, Startable {
       jobData.put(SynchronizeRemoteCalendarJob.USERNAME, username);
       PeriodInfo periodInfo = new PeriodInfo(null, null, 0, 5 * 60 * 1000);
       schedulerService.addPeriodJob(info, periodInfo, jobData);
-    }   
+    }
   }
-  
+
   public void stopSynchronizeRemoteCalendarJob(String username) throws Exception {
     JobInfo info = SynchronizeRemoteCalendarJob.getJobInfo(username);
-    ExoContainer container = ExoContainerContext.getCurrentContainer() ;
-    JobSchedulerService schedulerService = 
-      (JobSchedulerService)container.getComponentInstanceOfType(JobSchedulerService.class) ;
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    JobSchedulerService schedulerService = (JobSchedulerService) container.getComponentInstanceOfType(JobSchedulerService.class);
     schedulerService.removeJob(info);
     schedulerService.removeJobListener(info.getJobName());
     schedulerService.removeTriggerListener(info.getJobName());
   }
-  
+
   public JobDetail findSynchronizeRemoteCalendarJob(JobSchedulerService schedulerService, String username) throws Exception {
     // find synchronize job
     List<Object> list = schedulerService.getAllJobs();
@@ -751,31 +719,26 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     }
     return null;
   }
-  
+
   public int getRemoteCalendarCount(String username) throws Exception {
     return storage_.getRemoteCalendarCount(username);
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
    * @see org.exoplatform.calendar.service.CalendarService#getOccurrenceEvents(org.exoplatform.calendar.service.CalendarEvent, java.util.Calendar, java.util.Calendar)
    */
   @Override
-  public Map<String,CalendarEvent> getOccurrenceEvents(CalendarEvent recurEvent,
-                                                 java.util.Calendar from,
-                                                 java.util.Calendar to, String timezone) throws Exception {
+  public Map<String, CalendarEvent> getOccurrenceEvents(CalendarEvent recurEvent, java.util.Calendar from, java.util.Calendar to, String timezone) throws Exception {
     return storage_.getOccurrenceEvents(recurEvent, from, to, timezone);
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
    * @see org.exoplatform.calendar.service.CalendarService#updateOccurrenceEvent(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.util.List, java.lang.String)
    */
   @Override
-  public void updateOccurrenceEvent(String fromCalendar,
-                                    String toCalendar,
-                                    String fromType,
-                                    String toType,
-                                    List<CalendarEvent> calEvents,
-                                    String username) throws Exception {
+  public void updateOccurrenceEvent(String fromCalendar, String toCalendar, String fromType, String toType, List<CalendarEvent> calEvents, String username) throws Exception {
     storage_.updateOccurrenceEvent(fromCalendar, toCalendar, fromType, toType, calEvents, username);
   }
 
@@ -784,7 +747,8 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     return storage_.getOriginalRecurrenceEvents(username, from, to, publicCalendarIds);
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
    * @see org.exoplatform.calendar.service.CalendarService#getExceptionEvents(org.exoplatform.calendar.service.CalendarEvent)
    */
   @Override
@@ -792,7 +756,8 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     return storage_.getExceptionEvents(username, recurEvent);
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
    * @see org.exoplatform.calendar.service.CalendarService#removeRecurrenceSeries(java.lang.String, org.exoplatform.calendar.service.CalendarEvent)
    */
   @Override
@@ -800,20 +765,17 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     storage_.removeRecurrenceSeries(username, originalEvent);
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
    * @see org.exoplatform.calendar.service.CalendarService#updateRecurrenceSeries(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.util.List, java.lang.String)
    */
   @Override
-  public void updateRecurrenceSeries(String fromCalendar,
-                                     String toCalendar,
-                                     String fromType,
-                                     String toType,
-                                     CalendarEvent occurrence,
-                                     String username) throws Exception {
+  public void updateRecurrenceSeries(String fromCalendar, String toCalendar, String fromType, String toType, CalendarEvent occurrence, String username) throws Exception {
     storage_.updateRecurrenceSeries(fromCalendar, toCalendar, fromType, toType, occurrence, username);
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
    * @see org.exoplatform.calendar.service.CalendarService#getSharedEvent(java.lang.String, java.lang.String, java.lang.String)
    */
   @Override
@@ -821,7 +783,8 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     return storage_.getSharedEvent(username, calendarId, eventId);
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
    * @see org.exoplatform.calendar.service.CalendarService#removeOccurrenceInstance(java.lang.String, org.exoplatform.calendar.service.CalendarEvent)
    */
   @Override
@@ -830,12 +793,8 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   }
 
   @Override
-  public Map<Integer, String> searchHighlightRecurrenceEvent(String username,
-                                                             EventQuery eventQuery,
-                                                             String[] publicCalendarIds,
-                                                             String timezone) throws Exception {
+  public Map<Integer, String> searchHighlightRecurrenceEvent(String username, EventQuery eventQuery, String[] publicCalendarIds, String timezone) throws Exception {
     return storage_.searchHighlightRecurrenceEvent(username, eventQuery, publicCalendarIds, timezone);
   }
-  
 
 }

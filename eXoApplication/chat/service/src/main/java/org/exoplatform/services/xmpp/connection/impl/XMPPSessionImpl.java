@@ -62,7 +62,6 @@ import org.exoplatform.services.xmpp.bean.KickedBannedBean;
 import org.exoplatform.services.xmpp.bean.MUCPacketBean;
 import org.exoplatform.services.xmpp.bean.MessageBean;
 import org.exoplatform.services.xmpp.bean.OccupantBean;
-import org.exoplatform.services.xmpp.bean.OccupantsBean;
 import org.exoplatform.services.xmpp.bean.PresenceBean;
 import org.exoplatform.services.xmpp.bean.PrivilegeChangeBean;
 import org.exoplatform.services.xmpp.bean.SubjectChangeBean;
@@ -138,7 +137,7 @@ import org.jivesoftware.smackx.search.UserSearchManager;
  * @version $Id: $
  */
 
-public class XMPPSessionImpl implements XMPPSession , UIStateSession{
+public class XMPPSessionImpl implements XMPPSession, UIStateSession {
 
   // public enum XMPPEvents {
   // NEW_MESSAGE, NEW_SUBCRIPTION, CHANGE_PRESENCE, CHANGE_ROSTER, MUC_EVENT
@@ -176,7 +175,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
   /**
    * 
    */
-  private FileTransferManager         fileTransferManager;
+  private FileTransferManager               fileTransferManager;
 
   /**
    * Logger.
@@ -196,47 +195,42 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
   /**
    * 
    */
-  private  UIStateDataBean             uiStateData_;
-  
+  private UIStateDataBean                   uiStateData_;
+
   /**
    * 
    */
   private final ContinuationServiceDelegate delegate_;
-  
-  /**
-   * 
-   */
-  private final ResourceBundle rb_;
-  
-  /**
-   * 
-   */
-  private final static String   DESCENDING        = "desc";
 
-  private final static String   ASCENDING         = "asc";
-  
-  private static ArrayList<OccupantBean> beanList = null; 
-  
-  private final DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
-  
-  
+  /**
+   * 
+   */
+  private final ResourceBundle              rb_;
+
+  /**
+   * 
+   */
+  private final static String               DESCENDING             = "desc";
+
+  private final static String               ASCENDING              = "asc";
+
+  private static ArrayList<OccupantBean>    beanList               = null;
+
+  private final DateFormat                  dateFormat             = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
+
   /**
    * It's value not from spec. I add it myself for sending real JID of room to UI client.
    */
-  private final static String   ROOM_JID_VALUE    = "muc#roomconfig_roomjid";
-  
-  private String status_ = DefaultPresenceStatus.DEFAULT_STATUS;
+  private final static String               ROOM_JID_VALUE         = "muc#roomconfig_roomjid";
 
-  protected XMPPSessionImpl(String username,
-                            String password,
-                            final UserInfoService organization,
-                            final ContinuationServiceDelegate delegate,
-                            final HistoryImpl history,
-                            final ResourceBundle rb) throws XMPPException {
-	// 17/06/2010 add start
-	if (beanList == null) beanList = new ArrayList<OccupantBean>();
-	// 17/06/2010 add end  
-	
+  private String                            status_                = DefaultPresenceStatus.DEFAULT_STATUS;
+
+  protected XMPPSessionImpl(String username, String password, final UserInfoService organization, final ContinuationServiceDelegate delegate, final HistoryImpl history, final ResourceBundle rb) throws XMPPException {
+    // 17/06/2010 add start
+    if (beanList == null)
+      beanList = new ArrayList<OccupantBean>();
+    // 17/06/2010 add end
+
     XMPPConnection.DEBUG_ENABLED = true;
     this.delegate_ = delegate;
     this.history_ = history;
@@ -268,15 +262,16 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
             eventsBean.addFileEvent(bean);
             eventsBean.setEventId(Packet.nextID());
             try {
-              List<ContactBean> list2 = new ArrayList<ContactBean>() ;
+              List<ContactBean> list2 = new ArrayList<ContactBean>();
               for (ContactBean b : eventsBean.getRoster()) {
-                UserInfo info = getUserInfo(b.getUser().split("@")[0]) ;
-                b.setFullName(info.getFirstName() + " " + info.getLastName()) ;
-                list2.add(b) ;
+                UserInfo info = getUserInfo(b.getUser().split("@")[0]);
+                b.setFullName(info.getFirstName() + " " + info.getLastName());
+                list2.add(b);
               }
-              eventsBean.setRoster(list2) ;
-            } catch (Exception e) { }
-            
+              eventsBean.setRoster(list2);
+            } catch (Exception e) {
+            }
+
             JsonValue json = generatorImpl.createJsonObject(eventsBean);
             delegate_.sendMessage(username_, CometdChannels.FILE_EXCHANGE, json.toString(), null);
             if (log.isDebugEnabled())
@@ -292,38 +287,39 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
         public void processPacket(Packet packet) {
           try {
             JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
-            if(packet.getPacketID() == null)
+            if (packet.getPacketID() == null)
               packet.setPacketID(CodingUtils.encodeToHex(UUID.randomUUID().toString()));
             HistoricalMessage historyMsg = HistoryUtils.messageToHistoricalMessage((Message) packet);
             MessageBean message = TransformUtils.messageToBean(historyMsg);
-            /*history.addHistoricalMessage(HistoryUtils.messageToHistoricalMessage((Message) packet),
-                                         sessionProvider);*/
-            //Fix for CS-3246: contact list in public room is empty in special case
-            //Because persistence operations are massive -> much delay time -> bug ->to solve by using cache
+            /*
+             * history.addHistoricalMessage(HistoryUtils.messageToHistoricalMessage((Message) packet), sessionProvider);
+             */
+            // Fix for CS-3246: contact list in public room is empty in special case
+            // Because persistence operations are massive -> much delay time -> bug ->to solve by using cache
             history_.logMessage(historyMsg);
             EventsBean eventsBean = new EventsBean();
             eventsBean.addMessage(message);
             eventsBean.setEventId(Packet.nextID());
             try {
-              List<ContactBean> list = new ArrayList<ContactBean>() ;
+              List<ContactBean> list = new ArrayList<ContactBean>();
               for (ContactBean b : eventsBean.getRoster()) {
-                UserInfo info = getUserInfo(b.getUser().split("@")[0]) ;
-                b.setFullName(info.getFirstName() + " " + info.getLastName()) ;
-                list.add(b) ;
+                UserInfo info = getUserInfo(b.getUser().split("@")[0]);
+                b.setFullName(info.getFirstName() + " " + info.getLastName());
+                list.add(b);
               }
-              eventsBean.setRoster(list) ;
+              eventsBean.setRoster(list);
             } catch (Exception e) {
               if (log.isDebugEnabled())
                 e.printStackTrace();
             }
-            
+
             JsonValue json = generatorImpl.createJsonObject(eventsBean);
             delegate_.sendMessage(username_, CometdChannels.MESSAGE, json.toString(), null);
             if (log.isDebugEnabled())
               log.debug(json.toString());
           } catch (Exception e) {
-            //if (log.isDebugEnabled())
-              e.printStackTrace();
+            // if (log.isDebugEnabled())
+            e.printStackTrace();
           }
         }
       }, msgFilter);
@@ -338,24 +334,25 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
             UserInfo userInfo = getUserInfo(subscription.getFrom().split("@")[0]);
             subscription.setFromName(userInfo.getFirstName() + " " + userInfo.getLastName());
             eventsBean.addSubscription(subscription);
-            if (subscription.getType().equals(Type.subscribed.name())){
+            if (subscription.getType().equals(Type.subscribed.name())) {
               Presence presence = connection_.getRoster().getPresence(packet.getFrom());
               eventsBean.addPresence(TransformUtils.presenceToBean(presence));
             }
             eventsBean.setEventId(Packet.nextID());
             try {
-              List<ContactBean> list = new ArrayList<ContactBean>() ;
+              List<ContactBean> list = new ArrayList<ContactBean>();
               for (ContactBean b : eventsBean.getRoster()) {
-                UserInfo info = getUserInfo(b.getUser().split("@")[0]) ;
-                b.setFullName(info.getFirstName() + " " + info.getLastName()) ;
-                list.add(b) ;
+                UserInfo info = getUserInfo(b.getUser().split("@")[0]);
+                b.setFullName(info.getFirstName() + " " + info.getLastName());
+                list.add(b);
               }
-              eventsBean.setRoster(list) ;
-            } catch (Exception e) { }
-            
+              eventsBean.setRoster(list);
+            } catch (Exception e) {
+            }
+
             JsonValue json = generatorImpl.createJsonObject(eventsBean);
             delegate_.sendMessage(username_, CometdChannels.SUBSCRIPTION, json.toString(), null);
-           } catch (Exception e) {
+          } catch (Exception e) {
             if (log.isDebugEnabled())
               e.printStackTrace();
           }
@@ -363,20 +360,11 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
       }, subFilter);
 
       MultiUserChat.addInvitationListener(connection_, new InvitationListener() {
-        public void invitationReceived(XMPPConnection conn,
-                                       String room,
-                                       String inviter,
-                                       String reason,
-                                       String password,
-                                       Message message) {
+        public void invitationReceived(XMPPConnection conn, String room, String inviter, String reason, String password, Message message) {
           try {
             MUCPacketBean bean = new MUCPacketBean();
             bean.setAction(MUCConstants.Action.INVITE);
-            bean.setInvite(new InviteBean(inviter,
-                                          TransformUtils.messageToBean(message),
-                                          password,
-                                          reason,
-                                          room));
+            bean.setInvite(new InviteBean(inviter, TransformUtils.messageToBean(message), password, reason, room));
             bean.setIsRoomPasswordProtect(isPasswordRequired(room));
             bean.setRoom(room);
             sendGroupChatEvent(bean);
@@ -387,70 +375,69 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
 
         }
       });
-      
+
       ErrorMessageFilter errorMessageFilter = new ErrorMessageFilter();
-      connection_.addPacketListener(new PacketListener(){
+      connection_.addPacketListener(new PacketListener() {
         public void processPacket(Packet packet) {
           try {
-            final Message message = (Message)packet;       
-            String errorMessage = "";                                                                                       
-            if (message.getError().getCode() == 403 && message.getSubject() != null) {                                          
-                errorMessage = rb_.getString("chat.message.subject.change.error");                                                   
-            }                                                                                                                   
-            else if (message.getError().getCode() == 403) {                                                          
-               errorMessage = rb_.getString("chat.message.forbidden.error");
-               MUCUser packetExtension = (MUCUser) packet.getExtension("x",  "http://jabber.org/protocol/muc#user"); 
-               if (packetExtension != null){
-                 Invite invite = packetExtension.getInvite();
-                 if (invite != null){
-                   errorMessage = rb_.getString("chat.message.room.invite.forbidden.error");
-                   Object values []  = { invite.getTo(), message.getFrom() }; 
-                   errorMessage = MessageFormat.format(errorMessage, values);
-                 }
-               }
-             }
+            final Message message = (Message) packet;
+            String errorMessage = "";
+            if (message.getError().getCode() == 403 && message.getSubject() != null) {
+              errorMessage = rb_.getString("chat.message.subject.change.error");
+            } else if (message.getError().getCode() == 403) {
+              errorMessage = rb_.getString("chat.message.forbidden.error");
+              MUCUser packetExtension = (MUCUser) packet.getExtension("x", "http://jabber.org/protocol/muc#user");
+              if (packetExtension != null) {
+                Invite invite = packetExtension.getInvite();
+                if (invite != null) {
+                  errorMessage = rb_.getString("chat.message.room.invite.forbidden.error");
+                  Object values[] = { invite.getTo(), message.getFrom() };
+                  errorMessage = MessageFormat.format(errorMessage, values);
+                }
+              }
+            }
             JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
             String id = CodingUtils.encodeToHex(UUID.randomUUID().toString());
-            MessageBean messageBean = new MessageBean(id,message.getFrom(),message.getTo(),message.getType().name(),errorMessage);
+            MessageBean messageBean = new MessageBean(id, message.getFrom(), message.getTo(), message.getType().name(), errorMessage);
             messageBean.setDateSend(Calendar.getInstance().getTime().toString());
             EventsBean eventsBean = new EventsBean();
             eventsBean.addMessage(messageBean);
             eventsBean.setEventId(Packet.nextID());
             try {
-              List<ContactBean> list = new ArrayList<ContactBean>() ;
+              List<ContactBean> list = new ArrayList<ContactBean>();
               for (ContactBean b : eventsBean.getRoster()) {
-                UserInfo info = getUserInfo(b.getUser().split("@")[0]) ;
-                b.setFullName(info.getFirstName() + " " + info.getLastName()) ;
-                list.add(b) ;
+                UserInfo info = getUserInfo(b.getUser().split("@")[0]);
+                b.setFullName(info.getFirstName() + " " + info.getLastName());
+                list.add(b);
               }
-              eventsBean.setRoster(list) ;
-            } catch (Exception e) { 
+              eventsBean.setRoster(list);
+            } catch (Exception e) {
               if (log.isDebugEnabled())
                 e.printStackTrace();
             }
-            
+
             JsonValue json = generatorImpl.createJsonObject(eventsBean);
             delegate_.sendMessage(username_, CometdChannels.MESSAGE, json.toString(), null);
             if (log.isDebugEnabled())
               log.debug(json.toString());
           } catch (Exception e) {
-            //if (log.isDebugEnabled())
-              e.printStackTrace();
+            // if (log.isDebugEnabled())
+            e.printStackTrace();
           }
-         }
-      },errorMessageFilter);
+        }
+      }, errorMessageFilter);
 
-      //For CS-2908
+      // For CS-2908
       PacketFilter discoverInfoFilter = new PacketTypeFilter(DiscoverInfo.class);
       connection_.addPacketWriterInterceptor(new PacketInterceptor() {
         public void interceptPacket(Packet packet) {
-          DiscoverInfo discoverInfo = (DiscoverInfo)packet;
-          if(discoverInfo != null && discoverInfo.getType() == IQ.Type.RESULT){
+          DiscoverInfo discoverInfo = (DiscoverInfo) packet;
+          if (discoverInfo != null && discoverInfo.getType() == IQ.Type.RESULT) {
             Iterator<Identity> it = discoverInfo.getIdentities();
-            if(it.hasNext()){
+            if (it.hasNext()) {
               Identity id = it.next();
-              if(id.getCategory().equalsIgnoreCase("client")){
-                if(!discoverInfo.containsFeature("http://jabber.org/protocol/si/profile/file-transfer")){
+              if (id.getCategory().equalsIgnoreCase("client")) {
+                if (!discoverInfo.containsFeature("http://jabber.org/protocol/si/profile/file-transfer")) {
                   discoverInfo.addFeature("http://jabber.org/protocol/xhtml-im");
                   discoverInfo.addFeature("http://jabber.org/protocol/muc");
                   discoverInfo.addFeature("http://jabber.org/protocol/si/profile/file-transfer");
@@ -459,11 +446,11 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
                   discoverInfo.addFeature("http://jabber.org/protocol/ibb");
                 }
               }
-            }           
-          }         
+            }
+          }
         }
       }, discoverInfoFilter);
-      
+
       connection_.getRoster().addRosterListener(new RosterListener() {
         public void entriesAdded(java.util.Collection<String> arg0) {
           try {
@@ -471,17 +458,18 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
             EventsBean eventsBean = new EventsBean();
             eventsBean.setRoster(TransformUtils.rosterToRosterBean(connection_.getRoster()));
             eventsBean.setEventId(Packet.nextID());
-            
+
             try {
-              List<ContactBean> list = new ArrayList<ContactBean>() ;
+              List<ContactBean> list = new ArrayList<ContactBean>();
               for (ContactBean b : eventsBean.getRoster()) {
-                UserInfo info = getUserInfo(b.getUser().split("@")[0]) ;
-                b.setFullName(info.getFirstName() + " " + info.getLastName()) ;
-                list.add(b) ;
+                UserInfo info = getUserInfo(b.getUser().split("@")[0]);
+                b.setFullName(info.getFirstName() + " " + info.getLastName());
+                list.add(b);
               }
-              eventsBean.setRoster(list) ;
-            } catch (Exception e) { }
-            
+              eventsBean.setRoster(list);
+            } catch (Exception e) {
+            }
+
             JsonValue json = generatorImpl.createJsonObject(eventsBean);
             delegate_.sendMessage(username_, CometdChannels.ROSTER, json.toString(), null);
             if (log.isDebugEnabled())
@@ -498,17 +486,18 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
             EventsBean eventsBean = new EventsBean();
             eventsBean.setRoster(TransformUtils.rosterToRosterBean(connection_.getRoster()));
             eventsBean.setEventId(Packet.nextID());
-            
+
             try {
-              List<ContactBean> list = new ArrayList<ContactBean>() ;
+              List<ContactBean> list = new ArrayList<ContactBean>();
               for (ContactBean b : eventsBean.getRoster()) {
-                UserInfo info = getUserInfo(b.getUser().split("@")[0]) ;
-                b.setFullName(info.getFirstName() + " " + info.getLastName()) ;
-                list.add(b) ;
+                UserInfo info = getUserInfo(b.getUser().split("@")[0]);
+                b.setFullName(info.getFirstName() + " " + info.getLastName());
+                list.add(b);
               }
-              eventsBean.setRoster(list) ;
-            } catch (Exception e) { }
-            
+              eventsBean.setRoster(list);
+            } catch (Exception e) {
+            }
+
             JsonValue json = generatorImpl.createJsonObject(eventsBean);
             delegate_.sendMessage(username_, CometdChannels.ROSTER, json.toString(), null);
             if (log.isDebugEnabled())
@@ -521,24 +510,23 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
 
         public void entriesUpdated(java.util.Collection<String> arg0) {
           try {
-            
-            
+
             JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
             EventsBean eventsBean = new EventsBean();
             eventsBean.setRoster(TransformUtils.rosterToRosterBean(connection_.getRoster()));
             eventsBean.setEventId(Packet.nextID());
-            
+
             try {
-              List<ContactBean> list = new ArrayList<ContactBean>() ;
+              List<ContactBean> list = new ArrayList<ContactBean>();
               for (ContactBean b : eventsBean.getRoster()) {
-                UserInfo info = getUserInfo(b.getUser().split("@")[0]) ;
-                b.setFullName(info.getFirstName() + " " + info.getLastName()) ;
-                list.add(b) ;
+                UserInfo info = getUserInfo(b.getUser().split("@")[0]);
+                b.setFullName(info.getFirstName() + " " + info.getLastName());
+                list.add(b);
               }
-              eventsBean.setRoster(list) ;
-            } catch (Exception e) { }
-            
-            
+              eventsBean.setRoster(list);
+            } catch (Exception e) {
+            }
+
             JsonValue json = generatorImpl.createJsonObject(eventsBean);
             delegate_.sendMessage(username_, CometdChannels.ROSTER, json.toString(), null);
             if (log.isDebugEnabled())
@@ -556,14 +544,15 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
             eventsBean.addPresence(TransformUtils.presenceToBean(presence));
             eventsBean.setEventId(Packet.nextID());
             try {
-              List<ContactBean> list = new ArrayList<ContactBean>() ;
+              List<ContactBean> list = new ArrayList<ContactBean>();
               for (ContactBean b : eventsBean.getRoster()) {
-                UserInfo info = getUserInfo(b.getUser().split("@")[0]) ;
-                b.setFullName(info.getFirstName() + " " + info.getLastName()) ;
-                list.add(b) ;
+                UserInfo info = getUserInfo(b.getUser().split("@")[0]);
+                b.setFullName(info.getFirstName() + " " + info.getLastName());
+                list.add(b);
               }
-              eventsBean.setRoster(list) ;
-            } catch (Exception e) { }
+              eventsBean.setRoster(list);
+            } catch (Exception e) {
+            }
             JsonValue json = generatorImpl.createJsonObject(eventsBean);
             delegate_.sendMessage(username_, CometdChannels.PRESENCE, json.toString(), null);
             if (log.isDebugEnabled())
@@ -576,7 +565,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
       });
 
       sessionProvider = new SessionProvider(ConversationState.getCurrent());
-      //for keeping session in cache 
+      // for keeping session in cache
       sessionProvider.getSession(history_.getWorkspace(), history_.getRepository());
 
     } catch (XMPPException e) {
@@ -588,30 +577,21 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
     } catch (RepositoryException e) {
       if (log.isDebugEnabled())
         e.printStackTrace();
-    } catch (RepositoryConfigurationException  e) {
+    } catch (RepositoryConfigurationException e) {
       if (log.isDebugEnabled())
         e.printStackTrace();
     }
     if (log.isDebugEnabled())
       log.debug("finish initialize for the user:'" + username + "'.");
   }
-  
-  
-  
 
   /**
    * {@inheritDoc}
    */
-  public boolean addTransport(Transport transport,
-                              String remoteUser,
-                              String remotePassword,
-                              boolean autoLogin) {
+  public boolean addTransport(Transport transport, String remoteUser, String remotePassword, boolean autoLogin) {
     if (!isTransportAvailable(transport) && isTransportSupported(transport)) {
       try {
-        XMPPConnectionUtils.registerUser(connection_,
-                                         transport.getServiceName(),
-                                         remoteUser,
-                                         remotePassword);
+        XMPPConnectionUtils.registerUser(connection_, transport.getServiceName(), remoteUser, remotePassword);
       } catch (XMPPException e) {
         e.printStackTrace();
         return false;
@@ -709,9 +689,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
   /**
    * {@inheritDoc}
    */
-  public List<HistoricalMessage> getAllHistory(String usernameto,
-                                               String usernamefrom,
-                                               boolean isGroupChat) {
+  public List<HistoricalMessage> getAllHistory(String usernameto, String usernamefrom, boolean isGroupChat) {
     return history_.getHistoricalMessages(usernameto, usernamefrom, isGroupChat, sessionProvider);
   }
 
@@ -737,32 +715,16 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
   /**
    * {@inheritDoc}
    */
-  public List<HistoricalMessage> getHistoryBetweenDate(String usernameto,
-                                                       String usernamefrom,
-                                                       boolean isGroupChat,
-                                                       Date dateFrom,
-                                                       Date dateTo) {
-    return history_.getHistoricalMessages(usernameto,
-                                         usernamefrom,
-                                         isGroupChat,
-                                         dateFrom,
-                                         dateTo,
-                                         sessionProvider);
+  public List<HistoricalMessage> getHistoryBetweenDate(String usernameto, String usernamefrom, boolean isGroupChat, Date dateFrom, Date dateTo) {
+    return history_.getHistoricalMessages(usernameto, usernamefrom, isGroupChat, dateFrom, dateTo, sessionProvider);
 
   }
 
   /**
    * {@inheritDoc}
    */
-  public List<HistoricalMessage> getHistoryFromDateToNow(String usernameto,
-                                                         String usernamefrom,
-                                                         boolean isGroupChat,
-                                                         Date dateFrom) {
-    return history_.getHistoricalMessages(usernameto,
-                                         usernamefrom,
-                                         isGroupChat,
-                                         dateFrom,
-                                         sessionProvider);
+  public List<HistoricalMessage> getHistoryFromDateToNow(String usernameto, String usernamefrom, boolean isGroupChat, Date dateFrom) {
+    return history_.getHistoricalMessages(usernameto, usernamefrom, isGroupChat, dateFrom, sessionProvider);
   }
 
   /**
@@ -809,8 +771,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
    * {@inheritDoc}
    */
   public List<String> getSearchServices() {
-    DiscoverItems discoverItems = XMPPConnectionUtils.getDiscoverItems(connection_,
-                                                                       connection_.getServiceName());
+    DiscoverItems discoverItems = XMPPConnectionUtils.getDiscoverItems(connection_, connection_.getServiceName());
     Iterator<Item> iterator = discoverItems.getItems();
     List<String> services = new ArrayList<String>();
     ServiceDiscoveryManager discoveryManager = ServiceDiscoveryManager.getInstanceFor(connection_);
@@ -828,7 +789,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
     }
     return services;
   }
-  
+
   public UIStateDataBean getUIStateData() {
     return uiStateData_;
   }
@@ -918,11 +879,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
   /**
    * {@inheritDoc}
    */
-  public ReportedData searchUser(String search,
-                                 boolean byUsername,
-                                 boolean byName,
-                                 boolean byEmail,
-                                 String searchService) throws XMPPException {
+  public ReportedData searchUser(String search, boolean byUsername, boolean byName, boolean byEmail, String searchService) throws XMPPException {
     // TODO: search form
     // Probably: change to ask about search form for each search.
     // In this case it will not necessary to check form - it will be impossible
@@ -1062,7 +1019,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
     sendGroupChatEvent(bean);
     Form form = chat.getConfigurationForm();
     // Tricks, add one more field to configuration form for sending real JID to UI client
-    form = addRoomIDField(form, chat.getRoom());  
+    form = addRoomIDField(form, chat.getRoom());
     return TransformUtils.formToFormBean(form);
   }
 
@@ -1074,7 +1031,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
     if (chat != null) {
       Form form = chat.getConfigurationForm();
       if (form != null) {
-        
+
         // Tricks, add one more field to configuration form for sending real JID to UI client
         form = addRoomIDField(form, chat.getRoom());
         FormBean formBean = TransformUtils.formToFormBean(form);
@@ -1083,21 +1040,20 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
         Iterator<String> occupants = chat.getOccupants();
         while (occupants.hasNext()) {
           String occ = (String) occupants.next();
-          String jid = chat.getOccupant(occ).getJid() ;
+          String jid = chat.getOccupant(occ).getJid();
           users.add(jid);
-          UserInfo info = getUserInfo(jid.split("@")[0]) ;
-          fullNames.add(info.getFirstName() + " " + info.getLastName()) ;
+          UserInfo info = getUserInfo(jid.split("@")[0]);
+          fullNames.add(info.getFirstName() + " " + info.getLastName());
         }
         formBean.setMembers(users);
-        formBean.setFullNames(fullNames) ;
+        formBean.setFullNames(fullNames);
         return formBean;
       }
     }
     return null;
   }
-  
-  
-  private Form addRoomIDField(Form form, String roomJID){
+
+  private Form addRoomIDField(Form form, String roomJID) {
     FormField formField = new FormField(ROOM_JID_VALUE);
     formField.addValue(roomJID);
     formField.setDescription("A fully qualified xmpp ID, e.g. roomName@service");
@@ -1106,6 +1062,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
     form.addField(formField);
     return form;
   }
+
   /**
    * {@inheritDoc}
    */
@@ -1153,7 +1110,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
       Form answerform = chat.getConfigurationForm().createAnswerForm();
       if (configRoom.getRoomname() != null)
         answerform.setAnswer("muc#roomconfig_roomname", configRoom.getRoomname());
-      else 
+      else
         answerform.setDefaultAnswer("muc#roomconfig_roomname");
       if (configRoom.getRoomdesc() != null)
         answerform.setAnswer("muc#roomconfig_roomdesc", configRoom.getRoomdesc());
@@ -1196,8 +1153,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
       else
         answerform.setDefaultAnswer("muc#roomconfig_allowinvites");
       if (configRoom.getPasswordprotectedroom() != null)
-        answerform.setAnswer("muc#roomconfig_passwordprotectedroom",
-                             configRoom.getPasswordprotectedroom());
+        answerform.setAnswer("muc#roomconfig_passwordprotectedroom", configRoom.getPasswordprotectedroom());
       else
         answerform.setDefaultAnswer("muc#roomconfig_passwordprotectedroom");
       if (configRoom.getRoomsecret() != null)
@@ -1255,35 +1211,36 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
     return false;
   }
 
-  //17/06/2010 add start
+  // 17/06/2010 add start
   @Override
   public void addFullUserNames(String userName, String fullUserName) {
-	OccupantBean bean = new OccupantBean();
-	bean.setFullName(fullUserName);
-	bean.setNick(userName);
-	beanList.add(bean);
+    OccupantBean bean = new OccupantBean();
+    bean.setFullName(fullUserName);
+    bean.setNick(userName);
+    beanList.add(bean);
   }
-  //17/06/2010 add end
-  
+
+  // 17/06/2010 add end
+
   /**
    * {@inheritDoc}
    */
   public void joinRoom(String room, String nickname, String password) throws XMPPException {
-	// 17/06/2010 add start
-	JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
+    // 17/06/2010 add start
+    JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
 
-	FullRoomInfoBean infoBean = new FullRoomInfoBean();
-	infoBean.setOccupants(beanList);
-	  
-	try {
-		JsonValue json = generatorImpl.createJsonObject(infoBean);
-		for(OccupantBean bean : beanList) {
-			delegate_.sendMessage(bean.getNick(), CometdChannels.FULLNAME_EXCHANGE, json.toString(), null);
-		}
-	} catch (JsonException e) {
-	}
-	// 17/06/2010 add end  
-      
+    FullRoomInfoBean infoBean = new FullRoomInfoBean();
+    infoBean.setOccupants(beanList);
+
+    try {
+      JsonValue json = generatorImpl.createJsonObject(infoBean);
+      for (OccupantBean bean : beanList) {
+        delegate_.sendMessage(bean.getNick(), CometdChannels.FULLNAME_EXCHANGE, json.toString(), null);
+      }
+    } catch (JsonException e) {
+    }
+    // 17/06/2010 add end
+
     if (nickname == null)
       nickname = username_;
     MultiUserChat chat = getMultiUserChat(room);
@@ -1300,9 +1257,8 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
         chat.join(nickname);
     }
   }
-  
-  
-  public InitInfoBean getRooms(Integer from, Integer to, String sort) throws XMPPException{
+
+  public InitInfoBean getRooms(Integer from, Integer to, String sort) throws XMPPException {
     Collection<String> collectionMUCService = MultiUserChat.getServiceNames(connection_);
     String mucService = collectionMUCService.toArray()[0].toString();
     List<HostedRoom> hr = new ArrayList<HostedRoom>();
@@ -1315,9 +1271,9 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
       sort = ASCENDING;
     if (sort.equalsIgnoreCase(DESCENDING))
       Collections.sort(hr, new RoomNameComparatorDesc());
-    else 
+    else
       Collections.sort(hr, new RoomNameComparatorAsc());
-    
+
     if (from == null || from < 0 || from > hr.size())
       from = 0;
     if (to == null || from > to || to < 0 || to > hr.size())
@@ -1338,27 +1294,26 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
     infoBean.setTotalRooms(hostedRoomsAll.size());
     return infoBean;
   }
-  
-  private class RoomNameComparatorAsc implements Comparator<HostedRoom>{
+
+  private class RoomNameComparatorAsc implements Comparator<HostedRoom> {
     public int compare(HostedRoom room1, HostedRoom room2) {
       if (room1.getName().length() == room2.getName().length()) {
         return room1.getName().compareTo(room2.getName());
       } else {
-        return room1.getName().length() > room2.getName().length()?1:-1;
+        return room1.getName().length() > room2.getName().length() ? 1 : -1;
       }
     }
   }
-  
-  private class RoomNameComparatorDesc implements Comparator<HostedRoom>{
+
+  private class RoomNameComparatorDesc implements Comparator<HostedRoom> {
     public int compare(HostedRoom room1, HostedRoom room2) {
       if (room1.getName().length() == room2.getName().length()) {
         return room2.getName().compareTo(room1.getName());
       } else {
-        return room2.getName().length() > room1.getName().length()?1:-1;
+        return room2.getName().length() > room1.getName().length() ? 1 : -1;
       }
     }
   }
-  
 
   /**
    * {@inheritDoc}
@@ -1425,10 +1380,10 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
       }
       FullRoomInfoBean infoBean = new FullRoomInfoBean(occupants, roomInfo);
       return infoBean;
-    } 
+    }
     return null;
   }
-  
+
   public RoomInfo getRoomInfo(String room) throws XMPPException {
     String roomJID = validateRoomJID(room);
     return MultiUserChat.getRoomInfo(connection_, roomJID);
@@ -1485,8 +1440,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
       } else if (command.equals(MUCConstants.Manage.REVOKE)) {
         chat.revokeModerator(nickname);
       } else {
-        throw (new XMPPException("Wrong command must be: '" + MUCConstants.Manage.GRANT + "' or '"
-            + MUCConstants.Manage.REVOKE + "'"));
+        throw (new XMPPException("Wrong command must be: '" + MUCConstants.Manage.GRANT + "' or '" + MUCConstants.Manage.REVOKE + "'"));
       }
     } else if (role.equals(MUCConstants.Role.PARTICIPANT)) {
       if (command.equals(MUCConstants.Manage.GRANT)) {
@@ -1494,12 +1448,10 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
       } else if (command.equals(MUCConstants.Manage.REVOKE)) {
         chat.revokeVoice(nickname);
       } else {
-        throw (new XMPPException("Wrong command must be: '" + MUCConstants.Manage.GRANT + "' or '"
-            + MUCConstants.Manage.REVOKE + "'"));
+        throw (new XMPPException("Wrong command must be: '" + MUCConstants.Manage.GRANT + "' or '" + MUCConstants.Manage.REVOKE + "'"));
       }
     } else {
-      throw (new XMPPException("Wrong role must be: '" + MUCConstants.Role.MODERATOR + "' or '"
-          + MUCConstants.Role.PARTICIPANT + "'"));
+      throw (new XMPPException("Wrong role must be: '" + MUCConstants.Role.MODERATOR + "' or '" + MUCConstants.Role.PARTICIPANT + "'"));
     }
   }
 
@@ -1568,8 +1520,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
         } else if (command.equals(MUCConstants.Manage.REVOKE)) {
           chat.revokeAdmin(jid);
         } else {
-          throw (new XMPPException("Wrong command must be: '" + MUCConstants.Manage.GRANT
-              + "' or '" + MUCConstants.Manage.REVOKE + "'"));
+          throw (new XMPPException("Wrong command must be: '" + MUCConstants.Manage.GRANT + "' or '" + MUCConstants.Manage.REVOKE + "'"));
         }
       } else if (affiliation.equals(MUCConstants.Affiliation.MEMBER)) {
         if (command.equals(MUCConstants.Manage.GRANT)) {
@@ -1577,8 +1528,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
         } else if (command.equals(MUCConstants.Manage.REVOKE)) {
           chat.revokeMembership(jid);
         } else {
-          throw (new XMPPException("Wrong command must be: '" + MUCConstants.Manage.GRANT
-              + "' or '" + MUCConstants.Manage.REVOKE + "'"));
+          throw (new XMPPException("Wrong command must be: '" + MUCConstants.Manage.GRANT + "' or '" + MUCConstants.Manage.REVOKE + "'"));
         }
       } else if (affiliation.equals(MUCConstants.Affiliation.OWNER)) {
         if (command.equals(MUCConstants.Manage.GRANT)) {
@@ -1586,13 +1536,10 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
         } else if (command.equals(MUCConstants.Manage.REVOKE)) {
           chat.revokeOwnership(jid);
         } else {
-          throw (new XMPPException("Wrong command must be: '" + MUCConstants.Manage.GRANT
-              + "' or '" + MUCConstants.Manage.REVOKE + "'"));
+          throw (new XMPPException("Wrong command must be: '" + MUCConstants.Manage.GRANT + "' or '" + MUCConstants.Manage.REVOKE + "'"));
         }
       } else {
-        throw (new XMPPException("Wrong affiliation must be: '" + MUCConstants.Affiliation.OWNER
-            + ", '" + MUCConstants.Affiliation.ADMIN + "' or '" + MUCConstants.Affiliation.MEMBER
-            + "'"));
+        throw (new XMPPException("Wrong affiliation must be: '" + MUCConstants.Affiliation.OWNER + ", '" + MUCConstants.Affiliation.ADMIN + "' or '" + MUCConstants.Affiliation.MEMBER + "'"));
       }
     }
   }
@@ -1611,28 +1558,27 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
    * @param description the description
    * @param isRoom true if file send to the group chat
    */
-  public void sendFile(String requestor, String path, String description, boolean isRoom) throws Exception{
-      if (!isRoom) {
-        contFileTransfers = 1;
-        String fullJID = connection_.getRoster().getPresence(requestor + "@"
-            + connection_.getServiceName()).getFrom();
-        sendFile(fullJID, path, description);
-      } else {
-        MultiUserChat chat = getMultiUserChat(requestor);
-        Iterator<String> occ = chat.getOccupants();
-        List<String> reqs = new ArrayList<String>();
-        while (occ.hasNext()) {
-          String user = (String) occ.next();
-          String jid = chat.getOccupant(user).getJid();
-          if (!jid.split("@")[0].equals(username_)) {
-            reqs.add(jid);
-          }
-        }
-        contFileTransfers = reqs.size();
-        for (String jid : reqs) {
-          sendFile(jid, path, description);
+  public void sendFile(String requestor, String path, String description, boolean isRoom) throws Exception {
+    if (!isRoom) {
+      contFileTransfers = 1;
+      String fullJID = connection_.getRoster().getPresence(requestor + "@" + connection_.getServiceName()).getFrom();
+      sendFile(fullJID, path, description);
+    } else {
+      MultiUserChat chat = getMultiUserChat(requestor);
+      Iterator<String> occ = chat.getOccupants();
+      List<String> reqs = new ArrayList<String>();
+      while (occ.hasNext()) {
+        String user = (String) occ.next();
+        String jid = chat.getOccupant(user).getJid();
+        if (!jid.split("@")[0].equals(username_)) {
+          reqs.add(jid);
         }
       }
+      contFileTransfers = reqs.size();
+      for (String jid : reqs) {
+        sendFile(jid, path, description);
+      }
+    }
   }
 
   /**
@@ -1640,7 +1586,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
    * @param path the apth
    * @param description the description
    */
-  private void sendFile(String fullJID, String path, String description) throws Exception{
+  private void sendFile(String fullJID, String path, String description) throws Exception {
     // Create the file transfer manager
     FileTransferManager manager = new FileTransferManager(connection_);
     // Create the outgoing file transfer
@@ -1701,15 +1647,14 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
         while (!transfer.isDone()) {
           Thread.sleep(1000);
         }
-        //when sending file for an user who isn't in the contact list (CS-3989), an error is return with null message, so
-        //statements in the following comments create a NullPointerException Exception and it forbid the error message
-        //returned to client. So don't call OutgoingFileTransfer.getError().getMessage() in this situation.
-        /*if (transfer.getStatus().equals(Status.error)) {
-          log.error("ERROR!!! " + transfer.getError().getMessage());
-        }*/
+        // when sending file for an user who isn't in the contact list (CS-3989), an error is return with null message, so
+        // statements in the following comments create a NullPointerException Exception and it forbid the error message
+        // returned to client. So don't call OutgoingFileTransfer.getError().getMessage() in this situation.
+        /*
+         * if (transfer.getStatus().equals(Status.error)) { log.error("ERROR!!! " + transfer.getError().getMessage()); }
+         */
         JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
-        FileTransferResponseBean responseBean = new FileTransferResponseBean(transfer,
-                                                                             connection_.getUser());
+        FileTransferResponseBean responseBean = new FileTransferResponseBean(transfer, connection_.getUser());
         List<FileTransferResponseBean> list = new ArrayList<FileTransferResponseBean>();
         list.add(responseBean);
         FileTransferEventBean bean = new FileTransferEventBean();
@@ -1717,18 +1662,18 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
         EventsBean eventsBean = new EventsBean();
         eventsBean.addFileEvent(bean);
         eventsBean.setEventId(Packet.nextID());
-        
 
         try {
-          List<ContactBean> list2 = new ArrayList<ContactBean>() ;
+          List<ContactBean> list2 = new ArrayList<ContactBean>();
           for (ContactBean b : eventsBean.getRoster()) {
-            UserInfo info = getUserInfo(b.getUser().split("@")[0]) ;
-            b.setFullName(info.getFirstName() + " " + info.getLastName()) ;
-            list2.add(b) ;
+            UserInfo info = getUserInfo(b.getUser().split("@")[0]);
+            b.setFullName(info.getFirstName() + " " + info.getLastName());
+            list2.add(b);
           }
-          eventsBean.setRoster(list2) ;
-        } catch (Exception e) { }
-        
+          eventsBean.setRoster(list2);
+        } catch (Exception e) {
+        }
+
         JsonValue json = generatorImpl.createJsonObject(eventsBean);
         delegate_.sendMessage(username_, "/eXo/Application/Chat/FileExchange", json.toString(), null);
         contFileTransfers--;
@@ -1750,8 +1695,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
   private void addListeners(final MultiUserChat chat) {
     chat.addInvitationRejectionListener(new InvitationRejectionListener() {
       public void invitationDeclined(String invitee, String reason) {
-        
-        
+
         MUCPacketBean bean = new MUCPacketBean();
         bean.setAction(MUCConstants.Action.DECLINE);
         bean.setDecline(new DeclineBean(invitee, reason));
@@ -1795,9 +1739,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
         super.ownershipGranted(participant);
         MUCPacketBean bean = new MUCPacketBean();
         bean.setAction(MUCConstants.Action.AFFILIATE_CHANGE);
-        bean.setAffiliate(new PrivilegeChangeBean(MUCConstants.Affiliation.OWNER,
-                                                  MUCConstants.Manage.GRANTED,
-                                                  participant));
+        bean.setAffiliate(new PrivilegeChangeBean(MUCConstants.Affiliation.OWNER, MUCConstants.Manage.GRANTED, participant));
         bean.setRoom(chat.getRoom());
         sendGroupChatEvent(bean);
       }
@@ -1806,9 +1748,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
         super.ownershipRevoked(participant);
         MUCPacketBean bean = new MUCPacketBean();
         bean.setAction(MUCConstants.Action.AFFILIATE_CHANGE);
-        bean.setAffiliate(new PrivilegeChangeBean(MUCConstants.Affiliation.OWNER,
-                                                  MUCConstants.Manage.REVOKED,
-                                                  participant));
+        bean.setAffiliate(new PrivilegeChangeBean(MUCConstants.Affiliation.OWNER, MUCConstants.Manage.REVOKED, participant));
         bean.setRoom(chat.getRoom());
         sendGroupChatEvent(bean);
       }
@@ -1817,9 +1757,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
         super.adminGranted(participant);
         MUCPacketBean bean = new MUCPacketBean();
         bean.setAction(MUCConstants.Action.AFFILIATE_CHANGE);
-        bean.setAffiliate(new PrivilegeChangeBean(MUCConstants.Affiliation.ADMIN,
-                                                  MUCConstants.Manage.GRANTED,
-                                                  participant));
+        bean.setAffiliate(new PrivilegeChangeBean(MUCConstants.Affiliation.ADMIN, MUCConstants.Manage.GRANTED, participant));
         bean.setRoom(chat.getRoom());
         sendGroupChatEvent(bean);
       }
@@ -1828,9 +1766,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
         super.adminRevoked(participant);
         MUCPacketBean bean = new MUCPacketBean();
         bean.setAction(MUCConstants.Action.AFFILIATE_CHANGE);
-        bean.setAffiliate(new PrivilegeChangeBean(MUCConstants.Affiliation.ADMIN,
-                                                  MUCConstants.Manage.REVOKED,
-                                                  participant));
+        bean.setAffiliate(new PrivilegeChangeBean(MUCConstants.Affiliation.ADMIN, MUCConstants.Manage.REVOKED, participant));
         bean.setRoom(chat.getRoom());
         sendGroupChatEvent(bean);
       }
@@ -1839,9 +1775,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
         super.membershipGranted(participant);
         MUCPacketBean bean = new MUCPacketBean();
         bean.setAction(MUCConstants.Action.AFFILIATE_CHANGE);
-        bean.setAffiliate(new PrivilegeChangeBean(MUCConstants.Affiliation.MEMBER,
-                                                  MUCConstants.Manage.GRANTED,
-                                                  participant));
+        bean.setAffiliate(new PrivilegeChangeBean(MUCConstants.Affiliation.MEMBER, MUCConstants.Manage.GRANTED, participant));
         bean.setRoom(chat.getRoom());
         sendGroupChatEvent(bean);
       }
@@ -1850,9 +1784,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
         super.membershipRevoked(participant);
         MUCPacketBean bean = new MUCPacketBean();
         bean.setAction(MUCConstants.Action.AFFILIATE_CHANGE);
-        bean.setAffiliate(new PrivilegeChangeBean(MUCConstants.Affiliation.MEMBER,
-                                                  MUCConstants.Manage.REVOKED,
-                                                  participant));
+        bean.setAffiliate(new PrivilegeChangeBean(MUCConstants.Affiliation.MEMBER, MUCConstants.Manage.REVOKED, participant));
         bean.setRoom(chat.getRoom());
         sendGroupChatEvent(bean);
       }
@@ -1861,9 +1793,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
         super.moderatorGranted(participant);
         MUCPacketBean bean = new MUCPacketBean();
         bean.setAction(MUCConstants.Action.ROLE_CHANGE);
-        bean.setRole(new PrivilegeChangeBean(MUCConstants.Role.MODERATOR,
-                                             MUCConstants.Manage.GRANTED,
-                                             participant));
+        bean.setRole(new PrivilegeChangeBean(MUCConstants.Role.MODERATOR, MUCConstants.Manage.GRANTED, participant));
         bean.setRoom(chat.getRoom());
         sendGroupChatEvent(bean);
       }
@@ -1872,9 +1802,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
         super.moderatorRevoked(participant);
         MUCPacketBean bean = new MUCPacketBean();
         bean.setAction(MUCConstants.Action.ROLE_CHANGE);
-        bean.setRole(new PrivilegeChangeBean(MUCConstants.Role.MODERATOR,
-                                             MUCConstants.Manage.REVOKED,
-                                             participant));
+        bean.setRole(new PrivilegeChangeBean(MUCConstants.Role.MODERATOR, MUCConstants.Manage.REVOKED, participant));
         bean.setRoom(chat.getRoom());
         sendGroupChatEvent(bean);
       }
@@ -1883,9 +1811,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
         super.voiceGranted(participant);
         MUCPacketBean bean = new MUCPacketBean();
         bean.setAction(MUCConstants.Action.ROLE_CHANGE);
-        bean.setRole(new PrivilegeChangeBean(MUCConstants.Role.VISITOR,
-                                             MUCConstants.Manage.GRANTED,
-                                             participant));
+        bean.setRole(new PrivilegeChangeBean(MUCConstants.Role.VISITOR, MUCConstants.Manage.GRANTED, participant));
         bean.setRoom(chat.getRoom());
         sendGroupChatEvent(bean);
       }
@@ -1894,9 +1820,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
         super.voiceRevoked(participant);
         MUCPacketBean bean = new MUCPacketBean();
         bean.setAction(MUCConstants.Action.ROLE_CHANGE);
-        bean.setRole(new PrivilegeChangeBean(MUCConstants.Role.VISITOR,
-                                             MUCConstants.Manage.REVOKED,
-                                             participant));
+        bean.setRole(new PrivilegeChangeBean(MUCConstants.Role.VISITOR, MUCConstants.Manage.REVOKED, participant));
         bean.setRoom(chat.getRoom());
         sendGroupChatEvent(bean);
       }
@@ -1955,9 +1879,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
         super.ownershipGranted();
         MUCPacketBean bean = new MUCPacketBean();
         bean.setAction(MUCConstants.Action.YOU_AFFILIATE_CHANGE);
-        bean.setAffiliate(new PrivilegeChangeBean(MUCConstants.Affiliation.OWNER,
-                                                  MUCConstants.Manage.GRANTED,
-                                                  null));
+        bean.setAffiliate(new PrivilegeChangeBean(MUCConstants.Affiliation.OWNER, MUCConstants.Manage.GRANTED, null));
         bean.setRoom(chat.getRoom());
         sendGroupChatEvent(bean);
       }
@@ -1966,9 +1888,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
         super.ownershipRevoked();
         MUCPacketBean bean = new MUCPacketBean();
         bean.setAction(MUCConstants.Action.YOU_AFFILIATE_CHANGE);
-        bean.setAffiliate(new PrivilegeChangeBean(MUCConstants.Affiliation.OWNER,
-                                                  MUCConstants.Manage.REVOKED,
-                                                  null));
+        bean.setAffiliate(new PrivilegeChangeBean(MUCConstants.Affiliation.OWNER, MUCConstants.Manage.REVOKED, null));
         bean.setRoom(chat.getRoom());
         sendGroupChatEvent(bean);
       }
@@ -1977,9 +1897,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
         super.adminGranted();
         MUCPacketBean bean = new MUCPacketBean();
         bean.setAction(MUCConstants.Action.YOU_AFFILIATE_CHANGE);
-        bean.setAffiliate(new PrivilegeChangeBean(MUCConstants.Affiliation.ADMIN,
-                                                  MUCConstants.Manage.GRANTED,
-                                                  null));
+        bean.setAffiliate(new PrivilegeChangeBean(MUCConstants.Affiliation.ADMIN, MUCConstants.Manage.GRANTED, null));
         bean.setRoom(chat.getRoom());
         sendGroupChatEvent(bean);
       }
@@ -1988,9 +1906,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
         super.adminRevoked();
         MUCPacketBean bean = new MUCPacketBean();
         bean.setAction(MUCConstants.Action.YOU_AFFILIATE_CHANGE);
-        bean.setAffiliate(new PrivilegeChangeBean(MUCConstants.Affiliation.ADMIN,
-                                                  MUCConstants.Manage.REVOKED,
-                                                  null));
+        bean.setAffiliate(new PrivilegeChangeBean(MUCConstants.Affiliation.ADMIN, MUCConstants.Manage.REVOKED, null));
         bean.setRoom(chat.getRoom());
         sendGroupChatEvent(bean);
       }
@@ -1999,9 +1915,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
         super.membershipGranted();
         MUCPacketBean bean = new MUCPacketBean();
         bean.setAction(MUCConstants.Action.YOU_AFFILIATE_CHANGE);
-        bean.setAffiliate(new PrivilegeChangeBean(MUCConstants.Affiliation.MEMBER,
-                                                  MUCConstants.Manage.GRANTED,
-                                                  null));
+        bean.setAffiliate(new PrivilegeChangeBean(MUCConstants.Affiliation.MEMBER, MUCConstants.Manage.GRANTED, null));
         bean.setRoom(chat.getRoom());
         sendGroupChatEvent(bean);
       }
@@ -2010,9 +1924,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
         super.membershipRevoked();
         MUCPacketBean bean = new MUCPacketBean();
         bean.setAction(MUCConstants.Action.YOU_AFFILIATE_CHANGE);
-        bean.setAffiliate(new PrivilegeChangeBean(MUCConstants.Affiliation.MEMBER,
-                                                  MUCConstants.Manage.REVOKED,
-                                                  null));
+        bean.setAffiliate(new PrivilegeChangeBean(MUCConstants.Affiliation.MEMBER, MUCConstants.Manage.REVOKED, null));
         bean.setRoom(chat.getRoom());
         sendGroupChatEvent(bean);
       }
@@ -2021,9 +1933,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
         super.moderatorGranted();
         MUCPacketBean bean = new MUCPacketBean();
         bean.setAction(MUCConstants.Action.YOU_ROLE_CHANGE);
-        bean.setRole(new PrivilegeChangeBean(MUCConstants.Role.MODERATOR,
-                                             MUCConstants.Manage.GRANTED,
-                                             null));
+        bean.setRole(new PrivilegeChangeBean(MUCConstants.Role.MODERATOR, MUCConstants.Manage.GRANTED, null));
         bean.setRoom(chat.getRoom());
         sendGroupChatEvent(bean);
       }
@@ -2032,9 +1942,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
         super.moderatorRevoked();
         MUCPacketBean bean = new MUCPacketBean();
         bean.setAction(MUCConstants.Action.YOU_ROLE_CHANGE);
-        bean.setRole(new PrivilegeChangeBean(MUCConstants.Role.MODERATOR,
-                                             MUCConstants.Manage.REVOKED,
-                                             null));
+        bean.setRole(new PrivilegeChangeBean(MUCConstants.Role.MODERATOR, MUCConstants.Manage.REVOKED, null));
         bean.setRoom(chat.getRoom());
         sendGroupChatEvent(bean);
       }
@@ -2043,9 +1951,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
         super.voiceGranted();
         MUCPacketBean bean = new MUCPacketBean();
         bean.setAction(MUCConstants.Action.YOU_ROLE_CHANGE);
-        bean.setRole(new PrivilegeChangeBean(MUCConstants.Role.VISITOR,
-                                             MUCConstants.Manage.GRANTED,
-                                             null));
+        bean.setRole(new PrivilegeChangeBean(MUCConstants.Role.VISITOR, MUCConstants.Manage.GRANTED, null));
         bean.setRoom(chat.getRoom());
         sendGroupChatEvent(bean);
       }
@@ -2054,9 +1960,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
         super.voiceRevoked();
         MUCPacketBean bean = new MUCPacketBean();
         bean.setAction(MUCConstants.Action.YOU_ROLE_CHANGE);
-        bean.setRole(new PrivilegeChangeBean(MUCConstants.Role.VISITOR,
-                                             MUCConstants.Manage.REVOKED,
-                                             null));
+        bean.setRole(new PrivilegeChangeBean(MUCConstants.Role.VISITOR, MUCConstants.Manage.REVOKED, null));
         bean.setRoom(chat.getRoom());
         sendGroupChatEvent(bean);
       }
@@ -2081,9 +1985,9 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
     });
 
   }
-  
-  public void sendErrorMessage(String msg, String sender){
-    try{ 
+
+  public void sendErrorMessage(String msg, String sender) {
+    try {
       JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
       String id = CodingUtils.encodeToHex(UUID.randomUUID().toString());
       MessageBean messageBean = new MessageBean();
@@ -2096,19 +2000,20 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
       EventsBean eventsBean = new EventsBean();
       eventsBean.addMessage(messageBean);
       eventsBean.setEventId(Packet.nextID());
-      
+
       try {
-        List<ContactBean> list = new ArrayList<ContactBean>() ;
+        List<ContactBean> list = new ArrayList<ContactBean>();
         for (ContactBean b : eventsBean.getRoster()) {
-          UserInfo info = getUserInfo(b.getUser().split("@")[0]) ;
-          b.setFullName(info.getFirstName() + " " + info.getLastName()) ;
-          list.add(b) ;
+          UserInfo info = getUserInfo(b.getUser().split("@")[0]);
+          b.setFullName(info.getFirstName() + " " + info.getLastName());
+          list.add(b);
         }
-        eventsBean.setRoster(list) ;
-      } catch (Exception e) { }
+        eventsBean.setRoster(list);
+      } catch (Exception e) {
+      }
       JsonValue json = generatorImpl.createJsonObject(eventsBean);
       delegate_.sendMessage(username_, CometdChannels.MESSAGE, json.toString(), null);
-    }catch (Exception e) {
+    } catch (Exception e) {
       e.printStackTrace();
     }
   }
@@ -2122,51 +2027,31 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
     try {
       JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
       EventsBean eventsBean = new EventsBean();
-      eventsBean.addMUCEvent(bean); 
+      eventsBean.addMUCEvent(bean);
       try {
-        List<ContactBean> list = new ArrayList<ContactBean>() ;
+        List<ContactBean> list = new ArrayList<ContactBean>();
         for (ContactBean b : eventsBean.getRoster()) {
-          UserInfo info = getUserInfo(b.getUser().split("@")[0]) ;
-          b.setFullName(info.getFirstName() + " " + info.getLastName()) ;
-          list.add(b) ;
-        }  
-        eventsBean.setRoster(list) ;
-      } catch (Exception e) {}
-      
-      JsonValue json = generatorImpl.createJsonObject(eventsBean);
-/*
-      String strReturn = json.toString() ;
-      try {
-        StringBuilder builder = new StringBuilder(strReturn) ;
-        int indexOfOccu = builder.indexOf("occupants\":") ;
-        if (indexOfOccu == -1) throw new Exception() ;
-        int addPo = 0;
-        
-        while (true) {
-          int jid = builder.toString().indexOf("jid", indexOfOccu) ;
-          if (jid == -1) break ;
-          addPo = builder.toString().indexOf("}", jid) ;
-          if (addPo == -1) break ;
-          String strJid = builder.substring(builder.toString().indexOf(":\"", jid) + 2, builder.toString().indexOf("\",", jid)) ;
-          UserInfo info = getUserInfo(strJid.split("@")[0]) ;
-          String insertStr = ",\"fullName\":\"" +  info.getFirstName() + " " + info.getLastName() + "\"" ;
-          if (builder.toString().indexOf("]", indexOfOccu) < (addPo + insertStr.length() + 1)) break ;
-          else indexOfOccu = addPo;
-
+          UserInfo info = getUserInfo(b.getUser().split("@")[0]);
+          b.setFullName(info.getFirstName() + " " + info.getLastName());
+          list.add(b);
         }
-        delegate.sendMessage(username_, CometdChannels.GROUP_CHAT, builder.toString(), null);
+        eventsBean.setRoster(list);
       } catch (Exception e) {
-        e.printStackTrace() ; 
-        delegate.sendMessage(username_, CometdChannels.GROUP_CHAT, strReturn, null);
-      }  
-      */
+      }
+
+      JsonValue json = generatorImpl.createJsonObject(eventsBean);
+      /*
+       * String strReturn = json.toString() ; try { StringBuilder builder = new StringBuilder(strReturn) ; int indexOfOccu = builder.indexOf("occupants\":") ; if (indexOfOccu == -1) throw new Exception() ; int addPo = 0; while (true) { int jid = builder.toString().indexOf("jid", indexOfOccu) ; if (jid == -1) break ; addPo = builder.toString().indexOf("}", jid) ; if (addPo == -1) break ; String
+       * strJid = builder.substring(builder.toString().indexOf(":\"", jid) + 2, builder.toString().indexOf("\",", jid)) ; UserInfo info = getUserInfo(strJid.split("@")[0]) ; String insertStr = ",\"fullName\":\"" + info.getFirstName() + " " + info.getLastName() + "\"" ; if (builder.toString().indexOf("]", indexOfOccu) < (addPo + insertStr.length() + 1)) break ; else indexOfOccu = addPo; }
+       * delegate.sendMessage(username_, CometdChannels.GROUP_CHAT, builder.toString(), null); } catch (Exception e) { e.printStackTrace() ; delegate.sendMessage(username_, CometdChannels.GROUP_CHAT, strReturn, null); }
+       */
       delegate_.sendMessage(username_, CometdChannels.GROUP_CHAT, json.toString(), null);
     } catch (Exception e) {
       e.printStackTrace();
     }
   }
-  
-  private String validateRoomJID(String room){
+
+  private String validateRoomJID(String room) {
     String roomJID = new String();
     try {
       if (room.contains("@"))
@@ -2175,7 +2060,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
         String mucService = MultiUserChat.getServiceNames(connection_).toArray()[0].toString();
         roomJID = room + "@" + mucService;
       }
-    }catch (Exception e) {
+    } catch (Exception e) {
       if (log.isDebugEnabled())
         e.printStackTrace();
     }
@@ -2183,7 +2068,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
   }
 
   /**
-   * set/get presence status***/  
+   * set/get presence status***/
   public String getPresenceStatus_() {
     return status_;
   }
@@ -2191,5 +2076,5 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
   public void setPresenceStatus_(String status) {
     status_ = status;
   }
-  
+
 }

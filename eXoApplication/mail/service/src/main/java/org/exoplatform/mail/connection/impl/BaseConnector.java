@@ -36,14 +36,14 @@ import com.sun.mail.util.MailSSLSocketFactory;
  */
 public abstract class BaseConnector implements Connector {
   protected Store store_;
-  
+
   public Session getSession(Account account, MailSSLSocketFactory sslSocket) throws Exception {
     Properties props = System.getProperties();
     String socketFactoryClass = "javax.net.SocketFactory";
     if (account.isIncomingSsl() && sslSocket != null) {
-      
+
       props.put(Utils.IMAP_SSL_FACTORY, sslSocket);
-      if(account.getSecureAuthsIncoming().equalsIgnoreCase(Utils.STARTTLS))
+      if (account.getSecureAuthsIncoming().equalsIgnoreCase(Utils.STARTTLS))
         props.put(Utils.IMAP_SSL_STARTTLS_ENABLE, true);
       else
         props.put(Utils.MAIL_IMAP_SSL_ENABLE, "true");

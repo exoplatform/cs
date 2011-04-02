@@ -25,8 +25,6 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.TimeZone;
 
-import org.apache.commons.httpclient.Credentials;
-import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
@@ -184,13 +182,11 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
   
   @Override
   public void activate() throws Exception {
-    // TODO Auto-generated method stub
 
   }
 
   @Override
   public void deActivate() throws Exception {
-    // TODO Auto-generated method stub
 
   }
   
@@ -294,8 +290,8 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
             return;
           }
         } else {
-        	remoteCalendar.setRemoteUser(uiform.getRemoteUser());
-        	remoteCalendar.setRemotePassword(uiform.getRemotePassword());
+          remoteCalendar.setRemoteUser(uiform.getRemoteUser());
+          remoteCalendar.setRemotePassword(uiform.getRemotePassword());
           if(CalendarUtils.isEmpty(remoteCalendar.getRemoteUser())) {
             // pop-up error message: require remote username
             uiApp.addMessage(new ApplicationMessage("UIRemoteCalendar.msg.remote-user-name-required", null, ApplicationMessage.WARNING));
@@ -332,7 +328,7 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
           // access to remote calendar
           eXoCalendar = calService.importRemoteCalendar(remoteCalendar);
         } else {
-        	remoteCalendar.setCalendarId(uiform.calendarId_) ;
+          remoteCalendar.setCalendarId(uiform.calendarId_) ;
           // update remote calendar info
           eXoCalendar = calService.updateRemoteCalendarInfo(remoteCalendar);
           // refresh calendar

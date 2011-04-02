@@ -16,7 +16,6 @@
  */
 package org.exoplatform.contact.webui.popup;
 
-import org.exoplatform.contact.webui.popup.UIPopupComponent;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;

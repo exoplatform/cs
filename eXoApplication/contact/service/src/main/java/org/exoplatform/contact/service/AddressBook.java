@@ -25,36 +25,78 @@ import org.exoplatform.services.jcr.util.IdGenerator;
  * Feb 24, 2009  
  */
 public class AddressBook {
-  private String id ;
-  private String name ;
-  private String description ;
-  private String[] editPermissionUsers ;
-  private String[] viewPermissionUsers ;
-  
-  private String[] editPermissionGroups ;
-  private String[] viewPermissionGroups ;
-  
-  public AddressBook() { id = "ContactGroup" + IdGenerator.generate() ; }
-  
-  public String getId()  { return id ; }
-  public void   setId(String s) { id = s ; }
-  
-  public String getName()  { return name ; }
-  public void   setName(String s) { name = s ; }
-  
-  public String getDescription() { return description ; }
-  public void setDescription(String s) { description = s ;}
-  
-  public String[] getEditPermissionUsers() { return editPermissionUsers ; }
-  public void setEditPermissionUsers(String[] editPermission) { this.editPermissionUsers = editPermission ; }
-  
-  public String[] getViewPermissionUsers() { return viewPermissionUsers ; }
-  public void setViewPermissionUsers(String[] viewPermission) { this.viewPermissionUsers = viewPermission ; }
+  private String   id;
 
-  //-------------------------------
-  public String[] getEditPermissionGroups() { return editPermissionGroups ; }
-  public void setEditPermissionGroups(String[] editPermission) { this.editPermissionGroups = editPermission ; }
-  
-  public String[] getViewPermissionGroups() { return viewPermissionGroups ; }
-  public void setViewPermissionGroups(String[] viewPermission) { this.viewPermissionGroups = viewPermission ; }
+  private String   name;
+
+  private String   description;
+
+  private String[] editPermissionUsers;
+
+  private String[] viewPermissionUsers;
+
+  private String[] editPermissionGroups;
+
+  private String[] viewPermissionGroups;
+
+  public AddressBook() {
+    id = "ContactGroup" + IdGenerator.generate();
+  }
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String s) {
+    id = s;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String s) {
+    name = s;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String s) {
+    description = s;
+  }
+
+  public String[] getEditPermissionUsers() {
+    return editPermissionUsers;
+  }
+
+  public void setEditPermissionUsers(String[] editPermission) {
+    this.editPermissionUsers = editPermission;
+  }
+
+  public String[] getViewPermissionUsers() {
+    return viewPermissionUsers;
+  }
+
+  public void setViewPermissionUsers(String[] viewPermission) {
+    this.viewPermissionUsers = viewPermission;
+  }
+
+  // -------------------------------
+  public String[] getEditPermissionGroups() {
+    return editPermissionGroups;
+  }
+
+  public void setEditPermissionGroups(String[] editPermission) {
+    this.editPermissionGroups = editPermission;
+  }
+
+  public String[] getViewPermissionGroups() {
+    return viewPermissionGroups;
+  }
+
+  public void setViewPermissionGroups(String[] viewPermission) {
+    this.viewPermissionGroups = viewPermission;
+  }
 }

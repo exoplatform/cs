@@ -35,15 +35,12 @@ import org.exoplatform.mail.service.MessagePageList;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIPopupMessages;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
-import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 import org.mortbay.cometd.AbstractBayeux;
@@ -194,13 +191,13 @@ public class UIMailPortlet extends UIPortletApplication {
     ContinuationService continuation = getApplicationComponent(ContinuationService.class) ;
     try {
         return continuation.getUserToken(this.getRemoteUser());
-	  } catch (Exception e) {
-		  System.out.println("\n\n can not get UserToken");
-		  return "" ;
-	  }
+    } catch (Exception e) {
+      System.out.println("\n\n can not get UserToken");
+      return "" ;
+    }
   }
-  public String getRestContextName(){	  
-	  return PortalContainer.getInstance().getRestContextName();
+  public String getRestContextName(){    
+    return PortalContainer.getInstance().getRestContextName();
   }
   
   protected String getCometdContextName() {

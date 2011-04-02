@@ -46,24 +46,26 @@ import org.quartz.JobExecutionException;
 
 public class ReminderJob implements Job {
   private static Log log_ = ExoLogger.getLogger("cs.calendar.job");
+
   public void execute(JobExecutionContext context) throws JobExecutionException {
     PortalContainer container = Utils.getPortalContainer(context);
-    if(container == null) return;
+    if (container == null)
+      return;
     ExoContainer oldContainer = ExoContainerContext.getCurrentContainer();
     ExoContainerContext.setCurrentContainer(container);
     SessionProvider provider = SessionProvider.createSystemProvider();
     try {
-      MailService mailService = 
-        (MailService) container.getComponentInstanceOfType(MailService.class);
-      if (log_.isDebugEnabled()) log_.debug("Calendar email reminder service");
-      java.util.Calendar fromCalendar = GregorianCalendar.getInstance() ;  
+      MailService mailService = (MailService) container.getComponentInstanceOfType(MailService.class);
+      if (log_.isDebugEnabled())
+        log_.debug("Calendar email reminder service");
+      java.util.Calendar fromCalendar = GregorianCalendar.getInstance();
       JobDataMap jdatamap = context.getJobDetail().getJobDataMap();
       Node calendarHome = getPublicServiceHome(provider);
-      if(calendarHome == null) return ;
+      if (calendarHome == null)
+        return;
       StringBuffer path = new StringBuffer(getReminderPath(fromCalendar, provider));
       path.append("//element(*,exo:reminder)");
-      path.append("[@exo:remindDateTime <= xs:dateTime('"	+ ISO8601.format(fromCalendar)
-                  + "') and @exo:isOver = 'false' and @exo:reminderType = 'email' ]");
+      path.append("[@exo:remindDateTime <= xs:dateTime('" + ISO8601.format(fromCalendar) + "') and @exo:isOver = 'false' and @exo:reminderType = 'email' ]");
       QueryManager queryManager = getSession(provider).getWorkspace().getQueryManager();
       Query query = queryManager.createQuery(path.toString(), Query.XPATH);
       QueryResult results = query.execute();
@@ -72,51 +74,54 @@ public class ReminderJob implements Job {
       Node reminder;
       while (iter.hasNext()) {
         reminder = iter.nextNode();
-        boolean isRepeat = reminder.getProperty(Utils.EXO_IS_REPEAT).getBoolean() ;
-        long fromTime = reminder.getProperty(Utils.EXO_FROM_DATE_TIME).getDate().getTimeInMillis() ;
-        long remindTime = reminder.getProperty(Utils.EXO_REMINDER_DATE).getDate().getTimeInMillis() ;
-        long interval = reminder.getProperty(Utils.EXO_TIME_INTERVAL).getLong() * 60 * 1000 ;
-        String to = reminder.getProperty(Utils.EXO_EMAIL).getString();				
+        boolean isRepeat = reminder.getProperty(Utils.EXO_IS_REPEAT).getBoolean();
+        long fromTime = reminder.getProperty(Utils.EXO_FROM_DATE_TIME).getDate().getTimeInMillis();
+        long remindTime = reminder.getProperty(Utils.EXO_REMINDER_DATE).getDate().getTimeInMillis();
+        long interval = reminder.getProperty(Utils.EXO_TIME_INTERVAL).getLong() * 60 * 1000;
+        String to = reminder.getProperty(Utils.EXO_EMAIL).getString();
         if (to != null && to.length() > 0) {
           message = new Message();
-          message.setMimeType(MediaType.TEXT_HTML) ;
+          message.setMimeType(MediaType.TEXT_HTML);
           message.setTo(to);
           message.setSubject("[reminder] eXo calendar notify mail !");
           message.setBody(reminder.getProperty(Utils.EXO_DESCRIPTION).getString());
-          message.setFrom(jdatamap.getString("account")) ;
-          if(isRepeat) {
+          message.setFrom(jdatamap.getString("account"));
+          if (isRepeat) {
             if (fromCalendar.getTimeInMillis() >= fromTime) {
-              reminder.setProperty(Utils.EXO_IS_OVER, true) ;
-            }else {
-              if((remindTime + interval) > fromTime) {
-                reminder.setProperty(Utils.EXO_IS_OVER, true) ;
-              }else {
-                java.util.Calendar cal = new GregorianCalendar() ;
-                cal.setTimeInMillis(remindTime + interval) ;
-                reminder.setProperty(Utils.EXO_REMINDER_DATE, cal) ;
-                reminder.setProperty(Utils.EXO_IS_OVER, false) ;
+              reminder.setProperty(Utils.EXO_IS_OVER, true);
+            } else {
+              if ((remindTime + interval) > fromTime) {
+                reminder.setProperty(Utils.EXO_IS_OVER, true);
+              } else {
+                java.util.Calendar cal = new GregorianCalendar();
+                cal.setTimeInMillis(remindTime + interval);
+                reminder.setProperty(Utils.EXO_REMINDER_DATE, cal);
+                reminder.setProperty(Utils.EXO_IS_OVER, false);
               }
             }
-          }else {
-            reminder.setProperty(Utils.EXO_IS_OVER, true) ;
+          } else {
+            reminder.setProperty(Utils.EXO_IS_OVER, true);
           }
-          reminder.save() ;
+          reminder.save();
           mailService.sendMessage(message);
         }
-      }  
+      }
     } catch (RepositoryException e) {
-      if (log_.isDebugEnabled()) log_.debug("Data base not ready !");
-    } catch (Exception e){
-      e.printStackTrace() ;
-      if (log_.isDebugEnabled()) log_.debug(e.toString());
+      if (log_.isDebugEnabled())
+        log_.debug("Data base not ready !");
+    } catch (Exception e) {
+      e.printStackTrace();
+      if (log_.isDebugEnabled())
+        log_.debug(e.toString());
     } finally {
-      provider.close() ;
+      provider.close();
       ExoContainerContext.setCurrentContainer(oldContainer);
     }
-    if (log_.isDebugEnabled()) log_.debug("File plan job done");
+    if (log_.isDebugEnabled())
+      log_.debug("File plan job done");
   }
-  private String getReminderPath(java.util.Calendar fromCalendar, SessionProvider provider)
-  throws Exception {
+
+  private String getReminderPath(java.util.Calendar fromCalendar, SessionProvider provider) throws Exception {
     String year = "Y" + String.valueOf(fromCalendar.get(java.util.Calendar.YEAR));
     String month = "M" + String.valueOf(fromCalendar.get(java.util.Calendar.MONTH) + 1);
     String day = "D" + String.valueOf(fromCalendar.get(java.util.Calendar.DATE));
@@ -124,21 +129,22 @@ public class ReminderJob implements Job {
     path.append(getPublicServiceHome(provider).getPath());
     path.append(Utils.SLASH).append(year).append(Utils.SLASH).append(month).append(Utils.SLASH).append(day);
     path.append(Utils.SLASH).append(Utils.CALENDAR_REMINDER);
-    return path.toString(); 
-  }
-  private Node getPublicServiceHome(SessionProvider provider) throws Exception {
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
-    NodeHierarchyCreator nodeHierarchyCreator  = (NodeHierarchyCreator) container
-    .getComponentInstanceOfType(NodeHierarchyCreator.class);
-    Node publicApp = nodeHierarchyCreator.getPublicApplicationNode(provider) ;
-    if(publicApp != null && publicApp.hasNode(Utils.CALENDAR_APP)) return publicApp.getNode(Utils.CALENDAR_APP) ;
-    return null ;		
+    return path.toString();
   }
 
-  private Session getSession(SessionProvider sprovider) throws Exception{
+  private Node getPublicServiceHome(SessionProvider provider) throws Exception {
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    NodeHierarchyCreator nodeHierarchyCreator = (NodeHierarchyCreator) container.getComponentInstanceOfType(NodeHierarchyCreator.class);
+    Node publicApp = nodeHierarchyCreator.getPublicApplicationNode(provider);
+    if (publicApp != null && publicApp.hasNode(Utils.CALENDAR_APP))
+      return publicApp.getNode(Utils.CALENDAR_APP);
+    return null;
+  }
+
+  private Session getSession(SessionProvider sprovider) throws Exception {
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     RepositoryService repositoryService = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
-    ManageableRepository currentRepo = repositoryService.getCurrentRepository() ;
-    return sprovider.getSession(currentRepo.getConfiguration().getDefaultWorkspaceName(), currentRepo) ;
+    ManageableRepository currentRepo = repositoryService.getCurrentRepository();
+    return sprovider.getSession(currentRepo.getConfiguration().getDefaultWorkspaceName(), currentRepo);
   }
 }

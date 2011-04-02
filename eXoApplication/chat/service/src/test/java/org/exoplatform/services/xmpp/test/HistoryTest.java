@@ -47,12 +47,8 @@ import org.jivesoftware.smack.packet.Message;
  * @author <a href="mailto:vitaly.parfonov@gmail.com">Vitaly Parfonov</a>
  * @version $Id: $
  */
-@ConfiguredBy({
-  @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
-  @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.organization-configuration.xml"),
-  @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.cs.eXoApplication.chat.service.test-configuration.xml"),
-  @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration2.xml")
-})
+@ConfiguredBy( { @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"), @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.organization-configuration.xml"), @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.cs.eXoApplication.chat.service.test-configuration.xml"),
+    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration2.xml") })
 public class HistoryTest extends AbstractKernelTest {
 
   protected SessionImpl          session;
@@ -62,7 +58,7 @@ public class HistoryTest extends AbstractKernelTest {
   protected RepositoryService    repositoryService;
 
   protected PortalContainer      container;
-  
+
   private HistoryImpl            historyImpl;
 
   private SessionProviderService spService;
@@ -70,8 +66,7 @@ public class HistoryTest extends AbstractKernelTest {
   public void setUp() throws Exception {
     container = PortalContainer.getInstance();
     if (System.getProperty("java.security.auth.login.config") == null)
-      System.setProperty("java.security.auth.login.config",
-                         "src/test/java/conf/login.conf");
+      System.setProperty("java.security.auth.login.config", "src/test/java/conf/login.conf");
     Identity identity = new Identity("root");
     ConversationState state = new ConversationState(identity);
     ConversationState.setCurrent(state);
@@ -96,8 +91,7 @@ public class HistoryTest extends AbstractKernelTest {
     System.out.println("----------------------------------------------------------");
     dumpMessage(message);
     System.out.println("----------------------------------------------------------");
-    historyImpl.addHistoricalMessage(HistoryUtils.messageToHistoricalMessage(message),
-                                     sessionProviderService.getSessionProvider(null));
+    historyImpl.addHistoricalMessage(HistoryUtils.messageToHistoricalMessage(message), sessionProviderService.getSessionProvider(null));
     message = new Message("marry@localhost", Message.Type.chat);
     message.setBody("how are you?");
     message.setFrom("root@localhost");
@@ -105,8 +99,7 @@ public class HistoryTest extends AbstractKernelTest {
     System.out.println("----------------------------------------------------------");
     dumpMessage(message);
     System.out.println("--------------------------------------------------");
-    historyImpl.addHistoricalMessage(HistoryUtils.messageToHistoricalMessage(message),
-                                     sessionProviderService.getSessionProvider(null));
+    historyImpl.addHistoricalMessage(HistoryUtils.messageToHistoricalMessage(message), sessionProviderService.getSessionProvider(null));
   }
 
   public void testGetMessages() {
@@ -115,10 +108,7 @@ public class HistoryTest extends AbstractKernelTest {
     System.out.println("==========================================================");
     assertNotNull(container);
     ThreadLocalSessionProviderService sessionProviderService = (ThreadLocalSessionProviderService) container.getComponentInstanceOfType(ThreadLocalSessionProviderService.class);
-    List<HistoricalMessage> list = historyImpl.getHistoricalMessages("root",
-                                                                     "marry",
-                                                                     false,
-                                                                     sessionProviderService.getSessionProvider(null));
+    List<HistoricalMessage> list = historyImpl.getHistoricalMessages("root", "marry", false, sessionProviderService.getSessionProvider(null));
     int i = 1;
     for (HistoricalMessage historicalMessage : list) {
       HistoricalMessageImpl historicalMessageImpl = (HistoricalMessageImpl) historicalMessage;
@@ -138,11 +128,7 @@ public class HistoryTest extends AbstractKernelTest {
       Long long1 = Calendar.getInstance().getTimeInMillis() - 600000; // 10 min
       Date dateFrom = new Date(long1);
       System.out.println("\n           date from: " + dateFrom);
-      List<HistoricalMessage> list = historyImpl.getHistoricalMessages("root",
-                                                                       "marry",
-                                                                       true,
-                                                                       dateFrom,
-                                                                       sessionProviderService.getSessionProvider(null));
+      List<HistoricalMessage> list = historyImpl.getHistoricalMessages("root", "marry", true, dateFrom, sessionProviderService.getSessionProvider(null));
       int i = 1;
       for (HistoricalMessage historicalMessage : list) {
         HistoricalMessageImpl historicalMessageImpl = (HistoricalMessageImpl) historicalMessage;
@@ -153,11 +139,7 @@ public class HistoryTest extends AbstractKernelTest {
       long1 = Calendar.getInstance().getTimeInMillis() + 600000;
       dateFrom = new Date(long1);
       System.out.println("\n            date from: " + dateFrom);
-      list = historyImpl.getHistoricalMessages("root",
-                                               "marry",
-                                               true,
-                                               dateFrom,
-                                               sessionProviderService.getSessionProvider(null));
+      list = historyImpl.getHistoricalMessages("root", "marry", true, dateFrom, sessionProviderService.getSessionProvider(null));
       for (HistoricalMessage historicalMessage : list) {
         HistoricalMessageImpl historicalMessageImpl = (HistoricalMessageImpl) historicalMessage;
         System.out.println("\nMessage " + i++);
@@ -175,8 +157,7 @@ public class HistoryTest extends AbstractKernelTest {
     System.out.println("==========================================================");
     assertNotNull(container);
     ThreadLocalSessionProviderService sessionProviderService = (ThreadLocalSessionProviderService) container.getComponentInstanceOfType(ThreadLocalSessionProviderService.class);
-    List<Interlocutor> list = historyImpl.getInterlocutors("root",
-                                                           sessionProviderService.getSessionProvider(null));
+    List<Interlocutor> list = historyImpl.getInterlocutors("root", sessionProviderService.getSessionProvider(null));
     System.out.println("---- User root ");
     for (Interlocutor interlocutor : list) {
       InterlocutorImpl interlocutorImpl = (InterlocutorImpl) interlocutor;

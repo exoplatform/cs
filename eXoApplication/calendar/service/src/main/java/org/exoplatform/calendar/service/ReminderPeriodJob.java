@@ -26,11 +26,15 @@ import org.quartz.JobDataMap;
  *          hung.nguyen@exoplatform.com
  * nov 29, 2007
  */
-public class ReminderPeriodJob extends  PeriodJob {
-  private JobDataMap jdatamap_ ;
+public class ReminderPeriodJob extends PeriodJob {
+  private JobDataMap jdatamap_;
+
   public ReminderPeriodJob(InitParams params) throws Exception {
-    super(params) ;
-    jdatamap_ = new JobDataMap() ;
- }
-  public JobDataMap  getJobDataMap() {  return jdatamap_ ;  }
+    super(params);
+    jdatamap_ = new JobDataMap();
+  }
+
+  public JobDataMap getJobDataMap() {
+    return jdatamap_;
+  }
 }

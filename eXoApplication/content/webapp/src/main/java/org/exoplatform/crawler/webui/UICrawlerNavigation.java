@@ -27,9 +27,9 @@ public class UICrawlerNavigation  extends UIContainer {
 
   private String tabName_ ;
   public UICrawlerNavigation() throws Exception {
-  	addChild(UIListArticles.class, null, null);
-  	addChild(UICrawlerManageSources.class, null, null).setRendered(false);
-  	addChild(UICrawlerMonitoring.class, null, null).setRendered(false);
+    addChild(UIListArticles.class, null, null);
+    addChild(UICrawlerManageSources.class, null, null).setRendered(false);
+    addChild(UICrawlerMonitoring.class, null, null).setRendered(false);
   }
   
   public String getTabName() { return tabName_ ; }

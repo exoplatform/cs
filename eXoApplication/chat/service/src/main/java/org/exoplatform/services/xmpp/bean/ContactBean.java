@@ -56,8 +56,8 @@ public class ContactBean {
    */
   private PresenceBean presence;
 
-  
-  private String fullName ;
+  private String       fullName;
+
   /**
    * @return the groups
    */
@@ -142,8 +142,6 @@ public class ContactBean {
     this.presence = presence;
   }
 
-  
-  
   //
   public String getFullName() {
     return fullName;
@@ -152,5 +150,5 @@ public class ContactBean {
   public void setFullName(String s) {
     fullName = s;
   }
-  
+
 }

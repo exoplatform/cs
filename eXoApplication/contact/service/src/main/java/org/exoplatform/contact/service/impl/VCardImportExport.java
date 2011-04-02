@@ -57,7 +57,6 @@ import org.exoplatform.contact.service.DataStorage;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.Utils;
 import org.exoplatform.container.PortalContainer;
-//import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 import org.exoplatform.ws.frameworks.json.impl.JsonGeneratorImpl;
 import org.exoplatform.ws.frameworks.json.value.JsonValue;
@@ -66,82 +65,93 @@ import org.exoplatform.ws.frameworks.json.value.JsonValue;
  * Author : Huu-Dung Kieu huu-dung.kieu@bull.be 16 oct. 07
  */
 public class VCardImportExport implements ContactImportExport {
-  private static String          eXoGender   = "EXO-GENDER";
-  private static String          eXoExoId    = "EXO-EXOID";
-  private static String          eXoAolId    = "EXO-AOLID";
-  private static String          eXoGoogleId = "EXO-GOOGLEID";
-  private static String          eXoIcqId    = "EXO-ICQID";
-  private static String          eXoIcrId    = "EXO-ICRID";
-  private static String          eXoSkypeId  = "EXO-SKYPEID";
-  private static String          eXoMsnId    = "EXO-MSNID";
-  private static String          eXoYahooId  = "EXO-YAHOOID";
-  private static int             maxLength = 150 ;
-  
-  private static String ENCODING = "UTF-8";
-  private DataStorage storage_ ;
-  
-  public VCardImportExport (DataStorage storage) throws Exception{
-    storage_ = storage ;
+  private static String eXoGender   = "EXO-GENDER";
+
+  private static String eXoExoId    = "EXO-EXOID";
+
+  private static String eXoAolId    = "EXO-AOLID";
+
+  private static String eXoGoogleId = "EXO-GOOGLEID";
+
+  private static String eXoIcqId    = "EXO-ICQID";
+
+  private static String eXoIcrId    = "EXO-ICRID";
+
+  private static String eXoSkypeId  = "EXO-SKYPEID";
+
+  private static String eXoMsnId    = "EXO-MSNID";
+
+  private static String eXoYahooId  = "EXO-YAHOOID";
+
+  private static int    maxLength   = 150;
+
+  private static String ENCODING    = "UTF-8";
+
+  private DataStorage   storage_;
+
+  public VCardImportExport(DataStorage storage) throws Exception {
+    storage_ = storage;
   }
-  
- 
+
   public OutputStream exportContact(String username, String[] addressBookIds) throws Exception {
-    List<Contact> contactList = new ArrayList<Contact>() ;
-    List<String> privateAddress = new ArrayList<String> () ;
-    List<String> publicAddress = new ArrayList<String> () ;
-    for(String address : addressBookIds){
-      Node contactGroupHome = storage_.getPersonalAddressBooksHome(username) ;
+    List<Contact> contactList = new ArrayList<Contact>();
+    List<String> privateAddress = new ArrayList<String>();
+    List<String> publicAddress = new ArrayList<String>();
+    for (String address : addressBookIds) {
+      Node contactGroupHome = storage_.getPersonalAddressBooksHome(username);
       Node publicContactGroupHome = storage_.getPublicContactsHome();
       try {
-      if(contactGroupHome.hasNode(address)) {
-        privateAddress.add(address) ;
-      } else if (publicContactGroupHome.hasNode(address)){
-        publicAddress.add(address) ;
-      } else {
-        String[] array = address.split(DataStorage.HYPHEN) ;
-        if(array.length == 2) {
-            ContactPageList pageList = storage_.getSharedContactsByAddressBook(
-              username, new SharedAddressBook(null, array[0], array[1])) ;
-          if (pageList.getAvailable() + contactList.size() > Utils.limitExport) throw new ArrayIndexOutOfBoundsException() ;
-            contactList.addAll(pageList.getAll()) ;
-        }         
+        if (contactGroupHome.hasNode(address)) {
+          privateAddress.add(address);
+        } else if (publicContactGroupHome.hasNode(address)) {
+          publicAddress.add(address);
+        } else {
+          String[] array = address.split(DataStorage.HYPHEN);
+          if (array.length == 2) {
+            ContactPageList pageList = storage_.getSharedContactsByAddressBook(username, new SharedAddressBook(null, array[0], array[1]));
+            if (pageList.getAvailable() + contactList.size() > Utils.limitExport)
+              throw new ArrayIndexOutOfBoundsException();
+            contactList.addAll(pageList.getAll());
+          }
+        }
+      } catch (RepositoryException re) {
+        publicAddress.add(address);
       }
-      } catch(RepositoryException re) {
-      publicAddress.add(address) ;
-      }     
     }
-    if(privateAddress.size() > 0) {
-      ContactFilter filter = new ContactFilter() ;
-      filter.setCategories(privateAddress.toArray(new String[]{})) ;
-      ContactPageList pageList = storage_.findContactsByFilter(username, filter, DataStorage.PERSONAL) ;
-      if (pageList.getAvailable() + contactList.size() >= Utils.limitExport) throw new ArrayIndexOutOfBoundsException() ;
-      contactList.addAll(pageList.getAll()) ;
+    if (privateAddress.size() > 0) {
+      ContactFilter filter = new ContactFilter();
+      filter.setCategories(privateAddress.toArray(new String[] {}));
+      ContactPageList pageList = storage_.findContactsByFilter(username, filter, DataStorage.PERSONAL);
+      if (pageList.getAvailable() + contactList.size() >= Utils.limitExport)
+        throw new ArrayIndexOutOfBoundsException();
+      contactList.addAll(pageList.getAll());
     }
-    if(publicAddress.size() > 0) {
-      ContactFilter filter = new ContactFilter() ;
-      filter.setCategories(publicAddress.toArray(new String[]{})) ;
-      ContactPageList pageList = storage_.findContactsByFilter(username, filter, DataStorage.PUBLIC) ;
-      if (pageList.getAvailable() + contactList.size() >= Utils.limitExport) throw new ArrayIndexOutOfBoundsException() ;
-      contactList.addAll(pageList.getAll()) ;
+    if (publicAddress.size() > 0) {
+      ContactFilter filter = new ContactFilter();
+      filter.setCategories(publicAddress.toArray(new String[] {}));
+      ContactPageList pageList = storage_.findContactsByFilter(username, filter, DataStorage.PUBLIC);
+      if (pageList.getAvailable() + contactList.size() >= Utils.limitExport)
+        throw new ArrayIndexOutOfBoundsException();
+      contactList.addAll(pageList.getAll());
     }
-    if(contactList.size() > 0) {
-      return exportContact(username, contactList) ;
+    if (contactList.size() > 0) {
+      return exportContact(username, contactList);
     }
-    return null; 
+    return null;
   }
-  
+
   public OutputStream exportContact(String username, List<Contact> contacts) throws Exception {
     ContactIOFactory ciof = Pim.getContactIOFactory();
     ContactModelFactory cmf = Pim.getContactModelFactory();
     ContactMarshaller marshaller = ciof.createContactMarshaller();
-    
+
     // if needed, we'll change or remove the encoding
     marshaller.setEncoding(ENCODING);
 
     // converting eXo contacts to Pim contacts
     net.wimpi.pim.contact.model.Contact[] pimContacts = new net.wimpi.pim.contact.model.Contact[contacts.size()];
-    int i = 0 ;
-    for (Contact contact : contacts) {    
+    int i = 0;
+    for (Contact contact : contacts) {
       pimContacts[i] = cmf.createContact();
       // converting now from an eXo contact to PimContact
 
@@ -150,7 +160,7 @@ public class VCardImportExport implements ContactImportExport {
       pid.setFormattedName(nullToEmptyString(contact.getFullName()));
       pid.setFirstname(nullToEmptyString(contact.getFirstName()).replaceAll(";", "_"));
       pid.setLastname(nullToEmptyString(contact.getLastName()).replaceAll(";", "_"));
-      
+
       String firstName = contact.getFirstName();
       if ((firstName != null) && !firstName.equals("")) {
         StringTokenizer tokens = new StringTokenizer(firstName, ",", false);
@@ -168,7 +178,7 @@ public class VCardImportExport implements ContactImportExport {
         pid.addNickname("");
 
       pid.setBirthDate(contact.getBirthday());
-      
+
       Image photo = cmf.createImage();
       ContactAttachment attachment = contact.getAttachment();
       if (attachment != null) {
@@ -209,10 +219,10 @@ public class VCardImportExport implements ContactImportExport {
       pimContacts[i].setCommunications(comm);
 
       // email address
-      
-      String strEmail = Utils.listToString(contact.getEmailAddresses()) ;
+
+      String strEmail = Utils.listToString(contact.getEmailAddresses());
       if (strEmail != null) {
-        EmailAddress email ;
+        EmailAddress email;
         StringTokenizer tokens = new StringTokenizer(strEmail, ";", false);
         while (tokens.hasMoreTokens()) {
           email = cmf.createEmailAddress();
@@ -220,7 +230,6 @@ public class VCardImportExport implements ContactImportExport {
           comm.addEmailAddress(email);
         }
       }
-      
 
       // phone numbers
       addPhoneNumber(cmf, comm, contact.getMobilePhone(), false, false, true);
@@ -263,7 +272,7 @@ public class VCardImportExport implements ContactImportExport {
       pimContacts[i].setNote(contact.getNote());
 
       pimContacts[i].setCurrentRevisionDate(contact.getLastUpdated());
-      i++ ;
+      i++;
     }
 
     // The OutputStream that will be returned
@@ -272,7 +281,7 @@ public class VCardImportExport implements ContactImportExport {
 
     return out;
   }
-  
+
   public void importContact(String username, InputStream input, String groupId) throws Exception {
     ContactIOFactory ciof = Pim.getContactIOFactory();
     ContactUnmarshaller unmarshaller = ciof.createContactUnmarshaller();
@@ -290,52 +299,56 @@ public class VCardImportExport implements ContactImportExport {
     unmarshaller.setStrict(false);
     unmarshaller.setEncoding(ENCODING);
 
-    net.wimpi.pim.contact.model.Contact[] pimContacts = unmarshaller.unmarshallContacts(input);    
-    if (pimContacts == null || pimContacts.length == 0) throw new Exception() ;
-    if (pimContacts.length > Utils.limitExport) throw new IndexOutOfBoundsException() ;
-    
-    Reminder re = new Reminder() ;
+    net.wimpi.pim.contact.model.Contact[] pimContacts = unmarshaller.unmarshallContacts(input);
+    if (pimContacts == null || pimContacts.length == 0)
+      throw new Exception();
+    if (pimContacts.length > Utils.limitExport)
+      throw new IndexOutOfBoundsException();
+
+    Reminder re = new Reminder();
     JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
-    re.setSummary("Importing..") ;
-    re.setDescription("Imported") ;
-    re.setReminderOwner(username) ;
-    re.setReminderType(Reminder.TYPE_POPUP) ;
-    re.setFromDateTime(new Date()) ;
-    ContinuationService continuation = getContinuationService() ;
-    
+    re.setSummary("Importing..");
+    re.setDescription("Imported");
+    re.setReminderOwner(username);
+    re.setReminderType(Reminder.TYPE_POPUP);
+    re.setFromDateTime(new Date());
+    ContinuationService continuation = getContinuationService();
+
     for (int index = 0; index < pimContacts.length; index++) {
       Contact contact = new Contact();
       PersonalIdentity identity = pimContacts[index].getPersonalIdentity();
-      String additionName = null ;
+      String additionName = null;
       try {
         additionName = identity.getAdditionalName(0);
       } catch (IndexOutOfBoundsException e) {
-        additionName = "" ;
+        additionName = "";
       }
       String fullName = nullToEmptyString(identity.getFormattedName());
       contact.setFullName(fullName);
       String lastName = identity.getLastname();
       String firstName = identity.getFirstname();
-      
+
       // add 26-8
       if (fullName == null || fullName.length() == 0) {
-        fullName = firstName + " " + lastName ;
-        contact.setFullName(fullName) ;
+        fullName = firstName + " " + lastName;
+        contact.setFullName(fullName);
       }
       int indexComma = fullName.indexOf(";");
       if (indexComma >= 0) {
-        int indexSpace = fullName.indexOf(" ") ;
-        firstName = fullName.substring(0, indexSpace).trim() ;
-        contact.setFirstName(firstName) ;
-        lastName = fullName.substring(indexSpace, fullName.length()).trim() ;
-      } else if (firstName != null && firstName.length() > 0){
-        if (firstName.trim().equals(additionName.trim())) contact.setFirstName(firstName) ;
-        else contact.setFirstName(firstName + " " + additionName);
+        int indexSpace = fullName.indexOf(" ");
+        firstName = fullName.substring(0, indexSpace).trim();
+        contact.setFirstName(firstName);
+        lastName = fullName.substring(indexSpace, fullName.length()).trim();
+      } else if (firstName != null && firstName.length() > 0) {
+        if (firstName.trim().equals(additionName.trim()))
+          contact.setFirstName(firstName);
+        else
+          contact.setFirstName(firstName + " " + additionName);
       }
-       
-      contact.setLastName(lastName); 
-      
-      int size = identity.getAdditionalNameCount();      
+
+      contact.setLastName(lastName);
+
+      int size = identity.getAdditionalNameCount();
       String nickName = "";
       size = identity.getNicknameCount();
       for (int i = 0; i < size; i++) {
@@ -364,7 +377,7 @@ public class VCardImportExport implements ContactImportExport {
       OrganizationalIdentity orgid = pimContacts[index].getOrganizationalIdentity();
       if (orgid != null)
         contact.setJobTitle(orgid.getTitle());
-        
+
       // addresses iterator
       for (Iterator iters = pimContacts[index].getAddresses(); iters.hasNext();) {
         Address addr = (Address) iters.next();
@@ -398,7 +411,7 @@ public class VCardImportExport implements ContactImportExport {
         for (Iterator iters = communication.getPhoneNumbers(); iters.hasNext();) {
           PhoneNumber phone = (PhoneNumber) iters.next();
           if (phone.isHome() && phone.isFax()) {
-            homeFax = phone.getNumber();            
+            homeFax = phone.getNumber();
           } else if (phone.isHome() && phone.isVoice()) {
             if (homePhone1 == null)
               homePhone1 = phone.getNumber();
@@ -420,10 +433,11 @@ public class VCardImportExport implements ContactImportExport {
               homePhone2 = phone.getNumber();
           }
         }
-//      add to fix bug cs-1478
+        // add to fix bug cs-1478
         for (Iterator iters = communication.getPhoneNumbers(); iters.hasNext();) {
           PhoneNumber phone = (PhoneNumber) iters.next();
-          if (phone.isHome() || phone.isWork() || phone.isCellular()) continue ;
+          if (phone.isHome() || phone.isWork() || phone.isCellular())
+            continue;
           if (homePhone1 == null)
             homePhone1 = phone.getNumber();
           else if (homePhone2 == null)
@@ -434,7 +448,7 @@ public class VCardImportExport implements ContactImportExport {
             workPhone2 = phone.getNumber();
         }
         String emailAddress = "";
-        for (Iterator iters = communication.getEmailAddresses() ; iters.hasNext();) {
+        for (Iterator iters = communication.getEmailAddresses(); iters.hasNext();) {
           EmailAddress email = (EmailAddress) iters.next();
           if (!emailAddress.equals(""))
             emailAddress += "; ";
@@ -465,8 +479,7 @@ public class VCardImportExport implements ContactImportExport {
         contact.setWorkFax(workFax);
 
       contact.setPersonalSite(pimContacts[index].getURL());
-      if ((pimContacts[index].getOrganizationalIdentity() != null)
-          && (pimContacts[index].getOrganizationalIdentity().getOrganization() != null))
+      if ((pimContacts[index].getOrganizationalIdentity() != null) && (pimContacts[index].getOrganizationalIdentity().getOrganization() != null))
         contact.setWebPage(pimContacts[index].getOrganizationalIdentity().getOrganization().getURL());
 
       Extensions extensions = pimContacts[index].getExtensions();
@@ -510,9 +523,9 @@ public class VCardImportExport implements ContactImportExport {
       }
       if (pimContacts[index].getNote() != null)
         contact.setNote(pimContacts[index].getNote().replaceAll("\\\\n", "\n"));
-      
+
       Date revisionDate = pimContacts[index].getCurrentRevisionDate();
-      
+
       if (revisionDate != null)
         contact.setLastUpdated(revisionDate);
 
@@ -520,16 +533,16 @@ public class VCardImportExport implements ContactImportExport {
       // Now we have the contact object
       // Then store it to JCR storage
       // ////////////////////////////////
-      
+
       if (groupId.contains(DataStorage.HYPHEN)) {
-        String newGroupId = groupId.replace(DataStorage.HYPHEN, "") ;
-        contact.setAddressBookIds(new String[] { newGroupId }) ;
-        storage_.saveContactToSharedAddressBook(username, newGroupId, contact, true) ;
+        String newGroupId = groupId.replace(DataStorage.HYPHEN, "");
+        contact.setAddressBookIds(new String[] { newGroupId });
+        storage_.saveContactToSharedAddressBook(username, newGroupId, contact, true);
       } else {
-        contact.setAddressBookIds(new String[] { groupId }) ;
+        contact.setAddressBookIds(new String[] { groupId });
         storage_.saveContact(username, contact, true);
       }
-      re.setSummary(String.valueOf(index + 1) + " contacts imported ...") ;
+      re.setSummary(String.valueOf(index + 1) + " contacts imported ...");
       JsonValue json = generatorImpl.createJsonObject(re);
       continuation.sendMessage(username, "/eXo/Application/Contact/messages", json, re.toString());
     }
@@ -540,9 +553,8 @@ public class VCardImportExport implements ContactImportExport {
     return continuation;
 
   }
-  
-  private void addPhoneNumber(ContactModelFactory cmf, Communications comm, String number,
-      boolean isHome, boolean isFax, boolean isCellular) {
+
+  private void addPhoneNumber(ContactModelFactory cmf, Communications comm, String number, boolean isHome, boolean isFax, boolean isCellular) {
     if ((number != null) && !number.equals("")) {
       PhoneNumber phone = cmf.createPhoneNumber();
       phone.setNumber(number);
@@ -563,29 +575,27 @@ public class VCardImportExport implements ContactImportExport {
     }
   }
 
-  private void addExtension(Extensions extensions, String eXoKey, String eXoValue)
-      throws versitException {
+  private void addExtension(Extensions extensions, String eXoKey, String eXoValue) throws versitException {
     SimpleExtension ext = new SimpleExtension(eXoKey);
     ext.addValue(eXoValue);
     extensions.add(ext);
     // add the handler, so the marshalling will work
     if (!ItemHandlerManager.getReference().hasHandler(ext.getIdentifier()))
-      ItemHandlerManager.getReference().addExtensionHandler(ext.getIdentifier(),
-          new GenericExtensionItemHandler(ext));
+      ItemHandlerManager.getReference().addExtensionHandler(ext.getIdentifier(), new GenericExtensionItemHandler(ext));
   }
 
   private void addExtensionHandler(String eXoKey) throws versitException {
     SimpleExtension ext = new SimpleExtension(eXoKey);
     // add the handler, so the marshalling will work
     if (!ItemHandlerManager.getReference().hasHandler(ext.getIdentifier())) {
-      ItemHandlerManager.getReference().addExtensionHandler(ext.getIdentifier(),
-          new GenericExtensionItemHandler(ext));
+      ItemHandlerManager.getReference().addExtensionHandler(ext.getIdentifier(), new GenericExtensionItemHandler(ext));
 
     }
   }
-  
+
   private String nullToEmptyString(String s) {
-    if (s == null) s = "";
+    if (s == null)
+      s = "";
     return s;
   }
 }

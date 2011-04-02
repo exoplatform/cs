@@ -45,7 +45,7 @@ public abstract class AbstractResourceTest extends BaseTest {
                                    MultivaluedMap<String, String> headers,
                                    byte[] data,
                                    ContainerResponseWriter writer) throws Exception {
-	RequestLifeCycle.begin(container);
+  RequestLifeCycle.begin(container);
     if (headers == null)
       headers = new MultivaluedMapImpl();
 

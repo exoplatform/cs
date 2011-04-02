@@ -105,20 +105,29 @@ import org.w3c.dom.Element;
  */
 public class RemoteCalendarServiceImpl implements RemoteCalendarService {
 
-  private static final Namespace CALDAV_NAMESPACE = Namespace.getNamespace("C", "urn:ietf:params:xml:ns:caldav");
-  private static final String CALDAV_XML_CALENDAR_MULTIGET = "calendar-multiget";
-  private static final String CALDAV_XML_CALENDAR_QUERY = "calendar-query";
-  private static final String CALDAV_XML_CALENDAR_DATA = "calendar-data";
-  private static final String CALDAV_XML_FILTER = "filter";
-  private static final String CALDAV_XML_COMP_FILTER = "comp-filter";
-  private static final String CALDAV_XML_TIME_RANGE = "time-range";
-  private static final String CALDAV_XML_START = "start";
-  private static final String CALDAV_XML_END = "end";
-  private static final String CALDAV_XML_COMP_FILTER_NAME = "name";
+  private static final Namespace CALDAV_NAMESPACE             = Namespace.getNamespace("C", "urn:ietf:params:xml:ns:caldav");
 
-  private static final Log logger = ExoLogger.getLogger("cs.calendar.service.remote");
+  private static final String    CALDAV_XML_CALENDAR_MULTIGET = "calendar-multiget";
 
-  private JCRDataStorage storage_;
+  private static final String    CALDAV_XML_CALENDAR_QUERY    = "calendar-query";
+
+  private static final String    CALDAV_XML_CALENDAR_DATA     = "calendar-data";
+
+  private static final String    CALDAV_XML_FILTER            = "filter";
+
+  private static final String    CALDAV_XML_COMP_FILTER       = "comp-filter";
+
+  private static final String    CALDAV_XML_TIME_RANGE        = "time-range";
+
+  private static final String    CALDAV_XML_START             = "start";
+
+  private static final String    CALDAV_XML_END               = "end";
+
+  private static final String    CALDAV_XML_COMP_FILTER_NAME  = "name";
+
+  private static final Log       logger                       = ExoLogger.getLogger("cs.calendar.service.remote");
+
+  private JCRDataStorage         storage_;
 
   public RemoteCalendarServiceImpl(JCRDataStorage storage) {
     this.storage_ = storage;
@@ -186,10 +195,12 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
         return false;
       }
     } catch (MalformedURLException e) {
-      if (logger.isDebugEnabled()) logger.debug(e.getMessage(), e);
+      if (logger.isDebugEnabled())
+        logger.debug(e.getMessage(), e);
       throw new IOException("URL is invalid. Maybe no legal protocol or URl could not be parsed");
     } catch (IOException e) {
-      if (logger.isDebugEnabled()) logger.debug(e.getMessage(), e);
+      if (logger.isDebugEnabled())
+        logger.debug(e.getMessage(), e);
       throw new IOException("Error occurs when connecting to remote server");
     }
   }
@@ -218,7 +229,7 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
             importCaldavEvent(remoteCalendar.getUsername(), eXoCalendar.getId(), null, iCalEvent, href, etag.getValue().toString(), true);
             storage_.setRemoteCalendarLastUpdated(remoteCalendar.getUsername(), eXoCalendar.getId(), Utils.getGreenwichMeanTime());
           } catch (Exception e) {
-            if(logger.isDebugEnabled()) {
+            if (logger.isDebugEnabled()) {
               logger.debug("Exception occurs when import calendar component " + href + ". Skip this component.", e);
             }
             continue;
@@ -244,20 +255,21 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
       List<String> calendarIds = new ArrayList<String>();
       calendarIds.add(remoteCalendarId);
       EventQuery eventQuery = new EventQuery();
-      eventQuery.setCalendarId(new String[]{remoteCalendarId});
+      eventQuery.setCalendarId(new String[] { remoteCalendarId });
       eventQuery.setFromDate(remoteCalendar.getBeforeTime());
       eventQuery.setToDate(remoteCalendar.getAfterTime());
       List<CalendarEvent> events = storage_.getUserEvents(username, eventQuery);
       if (events != null && events.size() > 0) {
         for (CalendarEvent event : events) {
-          if (Utils.isExceptionOccurrence(event)) continue;
+          if (Utils.isExceptionOccurrence(event))
+            continue;
           else if (Utils.isRepeatEvent(event)) {
             storage_.removeRecurrenceSeries(username, event);
-          } 
-          else storage_.removeUserEvent(username, remoteCalendarId, event.getId());
+          } else
+            storage_.removeUserEvent(username, remoteCalendarId, event.getId());
         }
       }
-      
+
       Calendar eXoCalendar = storage_.getUserCalendar(username, remoteCalendarId);
       InputStream icalInputStream = connectToRemoteServer(remoteCalendar);
       CalendarService calService = (CalendarService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
@@ -286,19 +298,19 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
     HttpClient client = getRemoteClient(remoteCalendar);
     return doCalendarQuery(client, remoteCalendar.getRemoteUrl(), remoteCalendar.getBeforeTime(), remoteCalendar.getAfterTime());
   }
-  
-  
+
   public net.fortuna.ical4j.model.Calendar getCalDavResource(RemoteCalendar remoteCalendar, String href) throws Exception {
     HttpClient client = getRemoteClient(remoteCalendar);
     CalendarBuilder builder = new CalendarBuilder();
     // Enable relaxed-unfolding to allow ical4j parses "folding" line follows iCalendar specification
     CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_UNFOLDING, true);
-    
+
     try {
-      MultiStatus multiStatus = doCalendarMultiGet(client, remoteCalendar.getRemoteUrl(), new String[] {href});
-      if (multiStatus == null) return null;
+      MultiStatus multiStatus = doCalendarMultiGet(client, remoteCalendar.getRemoteUrl(), new String[] { href });
+      if (multiStatus == null)
+        return null;
       MultiStatusResponse multiRes = multiStatus.getResponses()[0];
-      DavPropertySet propSet =  multiRes.getProperties(DavServletResponse.SC_OK);
+      DavPropertySet propSet = multiRes.getProperties(DavServletResponse.SC_OK);
       DavProperty calendarData = propSet.get(CALDAV_XML_CALENDAR_DATA, CALDAV_NAMESPACE);
       return builder.build(new StringReader(calendarData.getValue().toString()));
     } catch (Exception e) {
@@ -323,8 +335,9 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
   public Map<String, String> getEntityTags(HttpClient client, String uri, java.util.Calendar from, java.util.Calendar to) throws Exception {
     Map<String, String> etags = new HashMap<String, String>();
     ReportMethod report = makeCalDavQueryReport(uri, from, to);
-    if (report == null) return null;
-    
+    if (report == null)
+      return null;
+
     try {
       client.executeMethod(report);
       MultiStatus multiStatus = report.getResponseBodyAsMultiStatus();
@@ -339,12 +352,11 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
       }
 
       return etags;
-    } 
-    catch (Exception e) {
-      if (logger.isDebugEnabled()) logger.debug("Exception occurs when querying entity tags from CalDav server", e);
+    } catch (Exception e) {
+      if (logger.isDebugEnabled())
+        logger.debug("Exception occurs when querying entity tags from CalDav server", e);
       return null;
-    }
-    finally {
+    } finally {
       if (report != null) {
         report.releaseConnection();
       }
@@ -364,7 +376,7 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
   public Calendar synchronizeWithCalDavServer(RemoteCalendar remoteCalendar) throws Exception {
     String username = remoteCalendar.getUsername();
     String remoteCalendarId = remoteCalendar.getCalendarId();
-    
+
     if (!storage_.isRemoteCalendar(username, remoteCalendarId)) {
       return null;
     }
@@ -398,7 +410,8 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
     Map<String, String> events = new HashMap<String, String>();
     while (it.hasNext()) {
       CalendarEvent event = it.next();
-      if (Utils.isExceptionOccurrence(event)) continue;
+      if (Utils.isExceptionOccurrence(event))
+        continue;
       events.put(calService.getCalDavResourceHref(username, remoteCalendarId, event.getId()), event.getId());
     }
 
@@ -551,13 +564,15 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
    */
   public MultiStatus doCalendarQuery(HttpClient client, String uri, java.util.Calendar from, java.util.Calendar to) throws Exception {
     ReportMethod report = makeCalDavQueryReport(uri, from, to);
-    if (report == null) return null;
+    if (report == null)
+      return null;
     try {
       client.executeMethod(report);
       MultiStatus multiStatus = report.getResponseBodyAsMultiStatus();
       return multiStatus;
     } catch (Exception e) {
-      if (logger.isDebugEnabled()) logger.debug("Exception occurs when querying calendar events from CalDav server", e);
+      if (logger.isDebugEnabled())
+        logger.debug("Exception occurs when querying calendar events from CalDav server", e);
       return null;
     } finally {
       if (report != null) {
@@ -565,31 +580,30 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
       }
     }
   }
-  
-  
+
   public void importCaldavEvent(String username, String calendarId, String eventId, net.fortuna.ical4j.model.Calendar iCalendar, String href, String etag, Boolean isNew) throws Exception {
-    CalendarService  calService = (CalendarService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
-    if(calService == null) {
+    CalendarService calService = (CalendarService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+    if (calService == null) {
       calService = (CalendarService) PortalContainer.getInstance().getComponentInstanceOfType(CalendarService.class);
     }
-    
-    Map<String, VFreeBusy> vFreeBusyData = new HashMap<String, VFreeBusy>() ;
-    Map<String, VAlarm> vAlarmData = new HashMap<String, VAlarm>() ;
-    
+
+    Map<String, VFreeBusy> vFreeBusyData = new HashMap<String, VFreeBusy>();
+    Map<String, VAlarm> vAlarmData = new HashMap<String, VAlarm>();
+
     SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
     format.setTimeZone(TimeZone.getTimeZone("GMT"));
-    
+
     CalendarEvent original = null;
     List<CalendarEvent> exceptions = new ArrayList<CalendarEvent>();
-    
+
     // import calendar components
-    ComponentList componentList = iCalendar.getComponents() ;
-    CalendarEvent exoEvent ;
-    
+    ComponentList componentList = iCalendar.getComponents();
+    CalendarEvent exoEvent;
+
     if (!isNew) {
       exoEvent = storage_.getEvent(username, eventId);
       exoEvent.setCalType(String.valueOf(Calendar.TYPE_PRIVATE));
-      
+
       if (Utils.isRepeatEvent(exoEvent)) {
         List<CalendarEvent> oldExceptions = storage_.getExceptionEvents(username, exoEvent);
         if (oldExceptions != null && oldExceptions.size() > 0) {
@@ -599,49 +613,54 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
         }
       }
     }
-    
-    for(Object obj : componentList) {
-      if(obj instanceof VEvent) {
-        VEvent event = (VEvent)obj ;   
-        if(!event.getAlarms().isEmpty()) {
+
+    for (Object obj : componentList) {
+      if (obj instanceof VEvent) {
+        VEvent event = (VEvent) obj;
+        if (!event.getAlarms().isEmpty()) {
           for (Object o : event.getAlarms()) {
             if (o instanceof VAlarm) {
-              VAlarm va = (VAlarm)o;
-              vAlarmData.put(event.getUid().getValue() + ":" + va.getProperty(Property.ACTION).getName(), va) ;
+              VAlarm va = (VAlarm) o;
+              vAlarmData.put(event.getUid().getValue() + ":" + va.getProperty(Property.ACTION).getName(), va);
             }
           }
         }
       }
-      if(obj instanceof VFreeBusy) vFreeBusyData.put(((VFreeBusy)obj).getUid().getValue(), (VFreeBusy)obj) ;
+      if (obj instanceof VFreeBusy)
+        vFreeBusyData.put(((VFreeBusy) obj).getUid().getValue(), (VFreeBusy) obj);
     }
-    
+
     for (Object obj : componentList) {
       if (obj instanceof VEvent) {
-        VEvent event = (VEvent)obj ;   
-        if (isNew) exoEvent = new CalendarEvent();
-        else exoEvent = storage_.getUserEvent(username, calendarId, eventId);
+        VEvent event = (VEvent) obj;
+        if (isNew)
+          exoEvent = new CalendarEvent();
+        else
+          exoEvent = storage_.getUserEvent(username, calendarId, eventId);
         exoEvent = generateEvent(event, exoEvent, username, calendarId);
 
-        String sValue = "" ;
-        String eValue = "" ;
-        if(event.getStartDate() != null) {
-          sValue = event.getStartDate().getValue() ;
-          exoEvent.setFromDateTime(event.getStartDate().getDate()) ;
+        String sValue = "";
+        String eValue = "";
+        if (event.getStartDate() != null) {
+          sValue = event.getStartDate().getValue();
+          exoEvent.setFromDateTime(event.getStartDate().getDate());
         }
-        if(event.getEndDate() != null) {
-          eValue = event.getEndDate().getValue() ;
-          exoEvent.setToDateTime(event.getEndDate().getDate()) ;
+        if (event.getEndDate() != null) {
+          eValue = event.getEndDate().getValue();
+          exoEvent.setToDateTime(event.getEndDate().getDate());
         }
-        if (sValue.length() == 8 && eValue.length() == 8 ) {
-          exoEvent.setToDateTime(new Date(event.getEndDate().getDate().getTime() -1)) ;
+        if (sValue.length() == 8 && eValue.length() == 8) {
+          exoEvent.setToDateTime(new Date(event.getEndDate().getDate().getTime() - 1));
         }
-        if (sValue.length() > 8 && eValue.length() > 8 ) {         
-          if("0000".equals(sValue.substring(9,13)) && "0000".equals(eValue.substring(9,13)) ) {
-            exoEvent.setToDateTime(new Date(event.getEndDate().getDate().getTime() -1)) ;
+        if (sValue.length() > 8 && eValue.length() > 8) {
+          if ("0000".equals(sValue.substring(9, 13)) && "0000".equals(eValue.substring(9, 13))) {
+            exoEvent.setToDateTime(new Date(event.getEndDate().getDate().getTime() - 1));
           }
         }
-        if (event.getLocation() != null) exoEvent.setLocation(event.getLocation().getValue()) ;
-        if (event.getPriority() != null) exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())] ) ;
+        if (event.getLocation() != null)
+          exoEvent.setLocation(event.getLocation().getValue());
+        if (event.getPriority() != null)
+          exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())]);
         exoEvent = setEventAttachment(event, exoEvent);
         if (event.getProperty(Property.RECURRENCE_ID) != null) {
           RecurrenceId recurId = (RecurrenceId) event.getProperty(Property.RECURRENCE_ID);
@@ -660,17 +679,15 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
             excludeId.add(exoEvent.getRecurrenceId());
             original.setExcludeId(excludeId.toArray(new String[0]));
             storage_.saveUserEvent(username, calendarId, original, false);
-          }
-          else {
+          } else {
             exceptions.add(exoEvent);
           }
           storage_.saveOccurrenceEvent(username, calendarId, exoEvent, true);
-        }
-        else {
+        } else {
           if (event.getProperty(Property.RRULE) != null && event.getProperty(Property.RECURRENCE_ID) == null) {
             exoEvent = calculateEvent(event, exoEvent);
-            original = exoEvent;  
-              
+            original = exoEvent;
+
             List<String> excludeIds = new ArrayList<String>();
             PropertyList exdates = event.getProperties(Property.EXDATE);
             if (exdates != null && exdates.size() > 0) {
@@ -680,7 +697,7 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
                 }
               }
             }
-              
+
             if (exceptions != null && exceptions.size() > 0) {
               for (CalendarEvent exception : exceptions) {
                 excludeIds.add(exception.getRecurrenceId());
@@ -688,7 +705,7 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
             }
             exoEvent.setExcludeId(excludeIds.toArray(new String[0]));
             storage_.saveUserEvent(username, calendarId, exoEvent, isNew);
-            
+
             String uuid = storage_.getUserCalendarHome(username).getNode(calendarId).getNode(exoEvent.getId()).getUUID();
             if (exceptions != null && exceptions.size() > 0) {
               for (CalendarEvent exception : exceptions) {
@@ -696,107 +713,118 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
                 storage_.saveOccurrenceEvent(username, calendarId, exception, false);
               }
             }
-          }
-          else {
+          } else {
             storage_.saveUserEvent(username, calendarId, exoEvent, isNew);
           }
         }
         storage_.setRemoteEvent(username, calendarId, exoEvent.getId(), href, etag);
       }
-      
+
       else if (obj instanceof VToDo) {
-        VToDo event = (VToDo)obj ;
-        exoEvent = new CalendarEvent() ;
+        VToDo event = (VToDo) obj;
+        exoEvent = new CalendarEvent();
         if (event.getProperty(Property.CATEGORIES) != null) {
-          EventCategory evCate = new EventCategory() ;
-          evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim()) ;
+          EventCategory evCate = new EventCategory();
+          evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim());
           try {
-            calService.saveEventCategory(username, evCate, true) ;
-          } catch(ItemExistsException e){ 
+            calService.saveEventCategory(username, evCate, true);
+          } catch (ItemExistsException e) {
             evCate = calService.getEventCategoryByName(username, evCate.getName());
           } catch (Exception e) {
             if (logger.isDebugEnabled()) {
               logger.debug("Exception occurs when saving new event category '" + evCate.getName() + "' for CalDav event: " + event.getUid(), e);
             }
           }
-          exoEvent.setEventCategoryName(evCate.getName()) ;
-        } 
-        exoEvent.setCalType(String.valueOf(Calendar.TYPE_PRIVATE)) ;
-        exoEvent.setCalendarId(calendarId) ;
-        if (event.getSummary() != null) exoEvent.setSummary(event.getSummary().getValue()) ;
-        if (event.getDescription() != null) exoEvent.setDescription(event.getDescription().getValue()) ;
-        if (event.getStatus() != null) exoEvent.setStatus(event.getStatus().getValue()) ;
-        exoEvent.setEventType(CalendarEvent.TYPE_TASK) ;
-        if (event.getStartDate() != null) exoEvent.setFromDateTime(event.getStartDate().getDate()) ;
-        if (event.getDue() != null) exoEvent.setToDateTime(event.getDue().getDate()) ;
-        if (event.getLocation() != null) exoEvent.setLocation(event.getLocation().getValue()) ;
-        if (event.getPriority() != null) exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())] ) ;
-        if (vFreeBusyData.get(event.getUid().getValue()) != null) {
-          exoEvent.setStatus(CalendarEvent.ST_BUSY) ;
+          exoEvent.setEventCategoryName(evCate.getName());
         }
-        if(event.getProperty(Utils.X_STATUS) != null) {
-          exoEvent.setEventState(event.getProperty(Utils.X_STATUS).getValue()) ;
+        exoEvent.setCalType(String.valueOf(Calendar.TYPE_PRIVATE));
+        exoEvent.setCalendarId(calendarId);
+        if (event.getSummary() != null)
+          exoEvent.setSummary(event.getSummary().getValue());
+        if (event.getDescription() != null)
+          exoEvent.setDescription(event.getDescription().getValue());
+        if (event.getStatus() != null)
+          exoEvent.setStatus(event.getStatus().getValue());
+        exoEvent.setEventType(CalendarEvent.TYPE_TASK);
+        if (event.getStartDate() != null)
+          exoEvent.setFromDateTime(event.getStartDate().getDate());
+        if (event.getDue() != null)
+          exoEvent.setToDateTime(event.getDue().getDate());
+        if (event.getLocation() != null)
+          exoEvent.setLocation(event.getLocation().getValue());
+        if (event.getPriority() != null)
+          exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())]);
+        if (vFreeBusyData.get(event.getUid().getValue()) != null) {
+          exoEvent.setStatus(CalendarEvent.ST_BUSY);
+        }
+        if (event.getProperty(Utils.X_STATUS) != null) {
+          exoEvent.setEventState(event.getProperty(Utils.X_STATUS).getValue());
         }
         exoEvent = setTaskAttachment(event, exoEvent);
-        storage_.saveUserEvent(username, calendarId, exoEvent, isNew) ;
+        storage_.saveUserEvent(username, calendarId, exoEvent, isNew);
         storage_.setRemoteEvent(username, calendarId, exoEvent.getId(), href, etag);
       }
     }
   }
-  
-  public static CalendarEvent generateEvent(VEvent event, CalendarEvent exoEvent,String username, String calendarId) throws Exception {
+
+  public static CalendarEvent generateEvent(VEvent event, CalendarEvent exoEvent, String username, String calendarId) throws Exception {
     CalendarService calService = (CalendarService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
-    if(event.getProperty(Property.CATEGORIES) != null) {
-      EventCategory evCate = new EventCategory() ;
-      evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim()) ;
+    if (event.getProperty(Property.CATEGORIES) != null) {
+      EventCategory evCate = new EventCategory();
+      evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim());
       try {
-        calService.saveEventCategory(username, evCate, true) ;
-      } catch(ItemExistsException e) { 
+        calService.saveEventCategory(username, evCate, true);
+      } catch (ItemExistsException e) {
         evCate = calService.getEventCategoryByName(username, evCate.getName());
       } catch (Exception e) {
         if (logger.isDebugEnabled()) {
           logger.debug("Exception occurs when saving new event category '" + evCate.getName() + "' for iCalendar component: " + event.getUid(), e);
         }
       }
-      exoEvent.setEventCategoryId(evCate.getId()) ;
-      exoEvent.setEventCategoryName(evCate.getName()) ;
-    } 
-    exoEvent.setCalType(String.valueOf(Calendar.TYPE_PRIVATE)) ;
-    exoEvent.setCalendarId(calendarId) ;
-    if(event.getSummary() != null) exoEvent.setSummary(event.getSummary().getValue()) ;
-    if(event.getDescription() != null) exoEvent.setDescription(event.getDescription().getValue()) ;
-    if(event.getStatus() != null) exoEvent.setStatus(event.getStatus().getValue()) ;
-    exoEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
+      exoEvent.setEventCategoryId(evCate.getId());
+      exoEvent.setEventCategoryName(evCate.getName());
+    }
+    exoEvent.setCalType(String.valueOf(Calendar.TYPE_PRIVATE));
+    exoEvent.setCalendarId(calendarId);
+    if (event.getSummary() != null)
+      exoEvent.setSummary(event.getSummary().getValue());
+    if (event.getDescription() != null)
+      exoEvent.setDescription(event.getDescription().getValue());
+    if (event.getStatus() != null)
+      exoEvent.setStatus(event.getStatus().getValue());
+    exoEvent.setEventType(CalendarEvent.TYPE_EVENT);
     return exoEvent;
   }
-  
+
   public static CalendarEvent setEventAttachment(VEvent event, CalendarEvent exoEvent) throws Exception {
-    if(event.getProperty(Utils.X_STATUS) != null) {
-      exoEvent.setEventState(event.getProperty(Utils.X_STATUS).getValue()) ;
+    if (event.getProperty(Utils.X_STATUS) != null) {
+      exoEvent.setEventState(event.getProperty(Utils.X_STATUS).getValue());
     }
-    if(event.getClassification() != null) exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue())) ;
-    PropertyList attendees = event.getProperties(Property.ATTENDEE) ;
-    if(!attendees.isEmpty()) {
-      String[] invitation = new String[attendees.size()] ;
-      for(int i = 0; i < attendees.size(); i ++) {
-        invitation[i] = ((Attendee)attendees.get(i)).getValue() ;
+    if (event.getClassification() != null)
+      exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue()));
+    PropertyList attendees = event.getProperties(Property.ATTENDEE);
+    if (!attendees.isEmpty()) {
+      String[] invitation = new String[attendees.size()];
+      for (int i = 0; i < attendees.size(); i++) {
+        invitation[i] = ((Attendee) attendees.get(i)).getValue();
       }
-      exoEvent.setInvitation(invitation) ;
+      exoEvent.setInvitation(invitation);
     }
     try {
-      PropertyList dataList = event.getProperties(Property.ATTACH) ;
-      List<Attachment> attachments = new ArrayList<Attachment>() ;
-      for(Object o : dataList) {
-        Attach a = (Attach)o ;
-        Attachment att = new Attachment() ;
-        att.setName(a.getParameter(Parameter.CN).getValue())  ;
-        att.setMimeType(a.getParameter(Parameter.FMTTYPE).getValue()) ;
-        InputStream in = new ByteArrayInputStream(a.getBinary()) ;
+      PropertyList dataList = event.getProperties(Property.ATTACH);
+      List<Attachment> attachments = new ArrayList<Attachment>();
+      for (Object o : dataList) {
+        Attach a = (Attach) o;
+        Attachment att = new Attachment();
+        att.setName(a.getParameter(Parameter.CN).getValue());
+        att.setMimeType(a.getParameter(Parameter.FMTTYPE).getValue());
+        InputStream in = new ByteArrayInputStream(a.getBinary());
         att.setSize(in.available());
-        att.setInputStream(in) ;
-        attachments.add(att) ;
+        att.setInputStream(in);
+        attachments.add(att);
       }
-      if(!attachments.isEmpty()) exoEvent.setAttachment(attachments) ;
+      if (!attachments.isEmpty())
+        exoEvent.setAttachment(attachments);
     } catch (Exception e) {
       if (logger.isDebugEnabled()) {
         logger.debug("Exception occurs when importing attachments for iCalendar component: " + event.getUid(), e);
@@ -804,31 +832,33 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
     }
     return exoEvent;
   }
-  
+
   public static CalendarEvent setTaskAttachment(VToDo task, CalendarEvent exoEvent) throws Exception {
-    if(task.getClassification() != null) exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(task.getClassification().getValue())) ;
-    PropertyList attendees = task.getProperties(Property.ATTENDEE) ;
-    if(!attendees.isEmpty()) {
-      String[] invitation = new String[attendees.size()] ;
-      for(int i = 0; i < attendees.size(); i ++) {
-        invitation[i] = ((Attendee)attendees.get(i)).getValue() ;
+    if (task.getClassification() != null)
+      exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(task.getClassification().getValue()));
+    PropertyList attendees = task.getProperties(Property.ATTENDEE);
+    if (!attendees.isEmpty()) {
+      String[] invitation = new String[attendees.size()];
+      for (int i = 0; i < attendees.size(); i++) {
+        invitation[i] = ((Attendee) attendees.get(i)).getValue();
       }
-      exoEvent.setInvitation(invitation) ;
+      exoEvent.setInvitation(invitation);
     }
     try {
-      PropertyList dataList = task.getProperties(Property.ATTACH) ;
-      List<Attachment> attachments = new ArrayList<Attachment>() ;
-      for(Object o : dataList) {
-        Attach a = (Attach)o ;
-        Attachment att = new Attachment() ;
-        att.setName(a.getParameter(Parameter.CN).getValue())  ;
-        att.setMimeType(a.getParameter(Parameter.FMTTYPE).getValue()) ;
-        InputStream in = new ByteArrayInputStream(a.getBinary()) ;
+      PropertyList dataList = task.getProperties(Property.ATTACH);
+      List<Attachment> attachments = new ArrayList<Attachment>();
+      for (Object o : dataList) {
+        Attach a = (Attach) o;
+        Attachment att = new Attachment();
+        att.setName(a.getParameter(Parameter.CN).getValue());
+        att.setMimeType(a.getParameter(Parameter.FMTTYPE).getValue());
+        InputStream in = new ByteArrayInputStream(a.getBinary());
         att.setSize(in.available());
-        att.setInputStream(in) ;
-        attachments.add(att) ;
+        att.setInputStream(in);
+        attachments.add(att);
       }
-      if(!attachments.isEmpty()) exoEvent.setAttachment(attachments) ;
+      if (!attachments.isEmpty())
+        exoEvent.setAttachment(attachments);
     } catch (Exception e) {
       if (logger.isDebugEnabled()) {
         logger.debug("Exception occurs when importing attachments for iCalendar component: " + task.getUid(), e);
@@ -836,22 +866,22 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
     }
     return exoEvent;
   }
-  
-  public static CalendarEvent calculateEvent( VEvent event, CalendarEvent exoEvent) throws Exception {
+
+  public static CalendarEvent calculateEvent(VEvent event, CalendarEvent exoEvent) throws Exception {
     RRule rrule = (RRule) event.getProperty(Property.RRULE);
     Recur recur = rrule.getRecur();
     String repeatType = recur.getFrequency();
     int interval = recur.getInterval();
-    if (interval < 1) interval = 1;
+    if (interval < 1)
+      interval = 1;
     int count = recur.getCount();
     net.fortuna.ical4j.model.Date until = recur.getUntil();
-              
+
     exoEvent.setRepeatInterval(interval);
     if (count > 0) {
       exoEvent.setRepeatCount(count);
       exoEvent.setRepeatUntilDate(null);
-    }
-    else {
+    } else {
       if (until != null) {
         Date repeatUntil = new Date(until.getTime());
         exoEvent.setRepeatUntilDate(repeatUntil);
@@ -862,8 +892,10 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
       }
     }
 
-    if (Recur.DAILY.equals(repeatType)) exoEvent.setRepeatType(CalendarEvent.RP_DAILY);
-    else if (Recur.YEARLY.equals(repeatType)) exoEvent.setRepeatType(CalendarEvent.RP_YEARLY);
+    if (Recur.DAILY.equals(repeatType))
+      exoEvent.setRepeatType(CalendarEvent.RP_DAILY);
+    else if (Recur.YEARLY.equals(repeatType))
+      exoEvent.setRepeatType(CalendarEvent.RP_YEARLY);
     else {
       if (Recur.WEEKLY.equals(repeatType)) {
         exoEvent.setRepeatType(CalendarEvent.RP_WEEKLY);
@@ -874,8 +906,10 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
             WeekDay weekDay = (WeekDay) weekDays.get(i);
             String day = weekDay.getDay();
             int offset = weekDay.getOffset();
-            if (offset != 0) byDays[i] = String.valueOf(offset) + day;
-            else byDays[i] = day;
+            if (offset != 0)
+              byDays[i] = String.valueOf(offset) + day;
+            else
+              byDays[i] = day;
           }
           exoEvent.setRepeatByDay(byDays);
         } else {
@@ -892,8 +926,10 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
               weekDay = (WeekDay) weekDays.get(i);
               String day = weekDay.getDay();
               int offset = weekDay.getOffset();
-              if (offset != 0) byDays[i] = String.valueOf(offset) + day;
-              else byDays[i] = day;
+              if (offset != 0)
+                byDays[i] = String.valueOf(offset) + day;
+              else
+                byDays[i] = day;
             }
             exoEvent.setRepeatByDay(byDays);
             exoEvent.setRepeatByMonthDay(null);
@@ -912,10 +948,10 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
         }
       }
     }
-    
+
     return exoEvent;
   }
-  
+
   /**
    * Get the HttpClient object to prepare for the connection with remote server
    * @param remoteCalendar holds information about remote server
@@ -939,7 +975,7 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
     }
     return client;
   }
-  
+
   /**
    * Make the new REPORT method object to query calendar component on CalDav server
    * @param uri the URI to the calendar collection on server 
@@ -990,7 +1026,8 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
       report = new ReportMethod(uri, reportInfo);
       return report;
     } catch (Exception e) {
-      if (logger.isDebugEnabled()) logger.debug("Cannot build report method for CalDav query",e);
+      if (logger.isDebugEnabled())
+        logger.debug("Cannot build report method for CalDav query", e);
       return null;
     }
   }

@@ -33,15 +33,19 @@ import org.jivesoftware.util.JiveGlobals;
  * @version $Id: $
  */
 public class ExoAuthProvider implements AuthProvider {
-  
-  private static final String AUTHENTICATION_URL = "eXo.provider.exoAuthProvider.authenticationURL";
-  private static final String AUTHENTICATION_METHOD = "eXo.provider.exoAuthProvider.authenticationMethod";
-  private static final String AUTHENTICATION_PARAMS = "eXo.provider.exoAuthProvider.authenticationParams";
+
+  private static final String       AUTHENTICATION_URL    = "eXo.provider.exoAuthProvider.authenticationURL";
+
+  private static final String       AUTHENTICATION_METHOD = "eXo.provider.exoAuthProvider.authenticationMethod";
+
+  private static final String       AUTHENTICATION_PARAMS = "eXo.provider.exoAuthProvider.authenticationParams";
 
   // URL for authentication users.
-  private final String authURL_;
+  private final String              authURL_;
+
   // HTTP method for authentication users.
-  private final String authMethod_;
+  private final String              authMethod_;
+
   // Query parameters.
   private final Map<String, String> authParams_;
 
@@ -54,48 +58,40 @@ public class ExoAuthProvider implements AuthProvider {
 
   /*
    * (non-Javadoc)
-   * @see org.jivesoftware.openfire.auth.AuthProvider#authenticate(java.lang.String,
-   *      java.lang.String)
+   * @see org.jivesoftware.openfire.auth.AuthProvider#authenticate(java.lang.String, java.lang.String)
    */
-  public void authenticate(String user, String pass)
-      throws UnauthorizedException {
-//    System.out.println(">>>>>>>>>>>>>>> plain text authenticate");
+  public void authenticate(String user, String pass) throws UnauthorizedException {
+    // System.out.println(">>>>>>>>>>>>>>> plain text authenticate");
     String url = authURL_;
     String method = authMethod_;
     HashMap<String, String> params = new HashMap<String, String>(authParams_);
     params.put("username", user);
     params.put("password", pass);
     Response resp = null;
-    
+
     try {
       if ("POST".equalsIgnoreCase(method))
         resp = Utils.doPost(new URL(url), params);
       else if ("GET".equalsIgnoreCase(method))
         resp = Utils.doGet(new URL(url), params);
       else
-        throw new UnauthorizedException("Authentication filed : "
-            + "Configuration error, only HTTP methods 'POST' or 'GET' allowed, "
-            + "but found '" + authMethod_ + "'.");
+        throw new UnauthorizedException("Authentication filed : " + "Configuration error, only HTTP methods 'POST' or 'GET' allowed, " + "but found '" + authMethod_ + "'.");
     } catch (Exception e) {
       e.printStackTrace();
       throw new UnauthorizedException("Authentication filed : " + e);
     }
     if (resp.getStatus() != HttpStatus.SC_OK) {
-      throw new UnauthorizedException("Authentication filed for user "
-          + user
-          + ". Returned status : " + resp.getStatus());
+      throw new UnauthorizedException("Authentication filed for user " + user + ". Returned status : " + resp.getStatus());
     }
   }
 
   /*
    * (non-Javadoc)
-   * @see org.jivesoftware.openfire.auth.AuthProvider#authenticate(java.lang.String,
-   *      java.lang.String, java.lang.String)
+   * @see org.jivesoftware.openfire.auth.AuthProvider#authenticate(java.lang.String, java.lang.String, java.lang.String)
    */
-  public void authenticate(String user, String token, String digest)
-      throws UnauthorizedException {
-//    System.out.println(">>>>>>>>>>>>>>> digest authenticate");
-//    System.out.println(user + "\n" + token + "\n" + digest);
+  public void authenticate(String user, String token, String digest) throws UnauthorizedException {
+    // System.out.println(">>>>>>>>>>>>>>> digest authenticate");
+    // System.out.println(user + "\n" + token + "\n" + digest);
     throw new UnsupportedOperationException();
   }
 
@@ -103,8 +99,7 @@ public class ExoAuthProvider implements AuthProvider {
    * (non-Javadoc)
    * @see org.jivesoftware.openfire.auth.AuthProvider#getPassword(java.lang.String)
    */
-  public String getPassword(String arg0) throws UserNotFoundException,
-      UnsupportedOperationException {
+  public String getPassword(String arg0) throws UserNotFoundException, UnsupportedOperationException {
     throw new UnsupportedOperationException();
   }
 
@@ -126,11 +121,9 @@ public class ExoAuthProvider implements AuthProvider {
 
   /*
    * (non-Javadoc)
-   * @see org.jivesoftware.openfire.auth.AuthProvider#setPassword(java.lang.String,
-   *      java.lang.String)
+   * @see org.jivesoftware.openfire.auth.AuthProvider#setPassword(java.lang.String, java.lang.String)
    */
-  public void setPassword(String user, String pass)
-      throws UserNotFoundException, UnsupportedOperationException {
+  public void setPassword(String user, String pass) throws UserNotFoundException, UnsupportedOperationException {
     throw new UnsupportedOperationException();
   }
 

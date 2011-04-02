@@ -26,7 +26,6 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Locale;
-import java.util.Random;
 
 import javax.mail.Flags;
 import javax.mail.Header;
@@ -44,87 +43,88 @@ import org.exoplatform.services.log.Log;
  */
 public class MimeMessageParser {
   private static final Log logger = ExoLogger.getLogger("cs.mail.service");
-  
+
   public static Calendar getReceivedDate(javax.mail.Message msg) throws Exception {
-    Calendar gc = GregorianCalendar.getInstance() ;
+    Calendar gc = GregorianCalendar.getInstance();
     Date date = msg.getReceivedDate();
     if (date != null) {
-      gc.setTime(date) ;
+      gc.setTime(date);
     } else {
-      gc.setTime(getDateHeader(msg)) ;
+      gc.setTime(getDateHeader(msg));
     }
-    return gc ;
+    return gc;
   }
-  
-  
+
   private static Date getDateHeader(javax.mail.Message msg) throws MessagingException {
     Date today = new Date();
     String[] received = msg.getHeader("received");
-    if(received != null) { 
+    if (received != null) {
       for (int i = 0; i < received.length; i++) {
         String dateStr = null;
         try {
           dateStr = getDateString(received[i]);
-          if(dateStr != null) {
+          if (dateStr != null) {
             Date msgDate = parseDate(dateStr);
-            if(!msgDate.after(today)) return msgDate;
+            if (!msgDate.after(today))
+              return msgDate;
           }
-        } catch(ParseException ex) { 
+        } catch (ParseException ex) {
           // exception
-        } 
+        }
       }
     }
-    
+
     String[] dateHeader = msg.getHeader("date");
-    if(dateHeader != null) {
+    if (dateHeader != null) {
       String dateStr = dateHeader[0];
       try {
         Date msgDate = parseDate(dateStr);
-        if(!msgDate.after(today)) return msgDate;
-      } catch(ParseException ex) {
+        if (!msgDate.after(today))
+          return msgDate;
+      } catch (ParseException ex) {
         // exception
       }
     }
 
     return today;
   }
-  
+
   private static String getDateString(String text) {
     String[] daysInDate = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
     int startIndex = -1;
     for (int i = 0; i < daysInDate.length; i++) {
       startIndex = text.lastIndexOf(daysInDate[i]);
-      if(startIndex != -1)
+      if (startIndex != -1)
         break;
     }
-    if(startIndex == -1) {
+    if (startIndex == -1) {
       return null;
     }
 
     return text.substring(startIndex);
   }
-       
+
   private static Date parseDate(String dateStr) throws ParseException {
     dateStr = dateStr.replaceAll("\r\n", "");
-    SimpleDateFormat dateFormat ; 
+    SimpleDateFormat dateFormat;
     try {
-      dateFormat = new SimpleDateFormat("EEE, d MMM yy HH:mm:ss Z", Locale.ENGLISH) ;
+      dateFormat = new SimpleDateFormat("EEE, d MMM yy HH:mm:ss Z", Locale.ENGLISH);
       return dateFormat.parse(dateStr);
-    } catch(ParseException e) {
+    } catch (ParseException e) {
       try {
-        dateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z", Locale.ENGLISH) ;
+        dateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
         return dateFormat.parse(dateStr);
-      } catch(ParseException ex) {
+      } catch (ParseException ex) {
         try {
-          dateFormat = new SimpleDateFormat("d MMM yyyy HH:mm:ss Z", Locale.ENGLISH) ;
+          dateFormat = new SimpleDateFormat("d MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
           return dateFormat.parse(dateStr);
-        } catch(ParseException exx) {
+        } catch (ParseException exx) {
           try {
-            dateFormat = new SimpleDateFormat("EEE, d MMM yy HH:mm:ss", Locale.ENGLISH) ;
-            return dateFormat.parse(dateStr.substring(0,dateStr.lastIndexOf(":") + 2));
-          } catch(ParseException exxx) {
-            System.out.println(" [WARNING] Cannot parse date time from message: " + dateStr) ;
-            return null ;
+            dateFormat = new SimpleDateFormat("EEE, d MMM yy HH:mm:ss", Locale.ENGLISH);
+            return dateFormat.parse(dateStr.substring(0, dateStr.lastIndexOf(":") + 2));
+          } catch (ParseException exxx) {
+            System.out.println(" [WARNING] Cannot parse date time from message: " + dateStr);
+            return null;
           }
         }
       }
@@ -132,43 +132,44 @@ public class MimeMessageParser {
   }
 
   public static long getPriority(javax.mail.Message message) throws MessagingException {
-      MimeMessage msg = (MimeMessage)message;
-      String xpriority = msg.getHeader("Importance", null);
-      if (xpriority != null) {
-        xpriority = xpriority.toLowerCase();
-        if (xpriority.indexOf("high") == 0) {
-          return Utils.PRIORITY_HIGH ;
-        } else if (xpriority.indexOf( "low" ) == 0) {
-          return Utils.PRIORITY_LOW ;
-        } else {
-          return Utils.PRIORITY_NORMAL ;
-        }
+    MimeMessage msg = (MimeMessage) message;
+    String xpriority = msg.getHeader("Importance", null);
+    if (xpriority != null) {
+      xpriority = xpriority.toLowerCase();
+      if (xpriority.indexOf("high") == 0) {
+        return Utils.PRIORITY_HIGH;
+      } else if (xpriority.indexOf("low") == 0) {
+        return Utils.PRIORITY_LOW;
+      } else {
+        return Utils.PRIORITY_NORMAL;
       }
-      // X Standard: X-Priority: (highest) 1 | 2 | 3 | 4 | 5 (lowest)
-      xpriority = msg.getHeader("X-Priority", null) ;
-      if ( xpriority != null ) {
-        xpriority = xpriority.toLowerCase();
-        if (xpriority.indexOf("1") == 0 || xpriority.indexOf( "2" ) == 0) {
-          return Utils.PRIORITY_HIGH;
-        } else if (xpriority.indexOf("4") == 0 || xpriority.indexOf( "5" ) == 0) {
-          return Utils.PRIORITY_LOW;
-        } else {
-          return Utils.PRIORITY_NORMAL ;
-        }
+    }
+    // X Standard: X-Priority: (highest) 1 | 2 | 3 | 4 | 5 (lowest)
+    xpriority = msg.getHeader("X-Priority", null);
+    if (xpriority != null) {
+      xpriority = xpriority.toLowerCase();
+      if (xpriority.indexOf("1") == 0 || xpriority.indexOf("2") == 0) {
+        return Utils.PRIORITY_HIGH;
+      } else if (xpriority.indexOf("4") == 0 || xpriority.indexOf("5") == 0) {
+        return Utils.PRIORITY_LOW;
+      } else {
+        return Utils.PRIORITY_NORMAL;
       }
-      return Utils.PRIORITY_NORMAL ;
+    }
+    return Utils.PRIORITY_NORMAL;
   }
-  
+
   public static String getMessageId(javax.mail.Message message) throws Exception {
-    String[] msgIdHeaders ;
+    String[] msgIdHeaders;
     try {
       msgIdHeaders = message.getHeader("Message-ID");
-      if (msgIdHeaders != null && msgIdHeaders[0]!= null)
-        return msgIdHeaders[0] ;
-    } catch(Exception e) { }
-    return "" ;
+      if (msgIdHeaders != null && msgIdHeaders[0] != null)
+        return msgIdHeaders[0];
+    } catch (Exception e) {
+    }
+    return "";
   }
-  
+
   // TODO : khdung
   // I implemented a new getMessageId that returns a MD5 string based on all headers of the message.
   // The purpose is to replace the previous getMessageId ... to better remove duplicate mails (and
@@ -178,31 +179,35 @@ public class MimeMessageParser {
    */
   public static String getMD5MsgId(javax.mail.Message msg) throws Exception {
     // first construct a key by joining all headers
-    String key = ""; Enumeration enu = null;
+    String key = "";
+    Enumeration enu = null;
     long t1 = System.currentTimeMillis();
-    if(msg != null)
-      enu = msg.getAllHeaders() ;
-    if(enu != null){
+    if (msg != null)
+      enu = msg.getAllHeaders();
+    if (enu != null) {
       while (enu.hasMoreElements()) {
-        Header header = (Header)enu.nextElement() ;
-        key += header.getValue() ;
-      }  
+        Header header = (Header) enu.nextElement();
+        key += header.getValue();
+      }
     }
-    if(key.equals("")) key = String.valueOf(t1);
+    if (key.equals(""))
+      key = String.valueOf(t1);
     String md5 = getMD5(key);
     long t2 = System.currentTimeMillis();
-    //TODO : change the log level later
+    // TODO : change the log level later
     // just to have an idea about how this method slows down the checking mail
-    logger.error("getMD5MsgId spending time : " + (t2-t1) + "ms");
+    logger.error("getMD5MsgId spending time : " + (t2 - t1) + "ms");
     return md5;
   }
- 
-  public static String getMsgUID(){
+
+  public static String getMsgUID() {
     long t1 = System.currentTimeMillis();
-    if(t1 < Long.MAX_VALUE) return String.valueOf(t1);
-    else return String.valueOf(t1 - Long.MAX_VALUE);
+    if (t1 < Long.MAX_VALUE)
+      return String.valueOf(t1);
+    else
+      return String.valueOf(t1 - Long.MAX_VALUE);
   }
-  
+
   /**
    * separated getMD5 method ... for a general use.
    * @param s
@@ -219,51 +224,55 @@ public class MimeMessageParser {
     }
     return s;
   }
-  
+
   public static String getInReplyToHeader(javax.mail.Message message) throws Exception {
-    String[] inReplyToHeaders = message.getHeader("In-Reply-To") ;
+    String[] inReplyToHeaders = message.getHeader("In-Reply-To");
     if (inReplyToHeaders != null && inReplyToHeaders[0] != null)
       return inReplyToHeaders[0];
-    return "" ;
+    return "";
   }
-  
+
   public static String[] getReferencesHeader(javax.mail.Message message) throws Exception {
-    String[] references = message.getHeader("References") ;
-    return references ;
+    String[] references = message.getHeader("References");
+    return references;
   }
-  
+
   public static String[] getInvitationHeader(javax.mail.Message message) throws Exception {
     String[] exoInvitationHeaders = message.getHeader("X-Exo-Invitation");
-    if (exoInvitationHeaders != null) return exoInvitationHeaders ;
-    return null ;
+    if (exoInvitationHeaders != null)
+      return exoInvitationHeaders;
+    return null;
   }
-  
+
   public static boolean isSeenMessage(javax.mail.Message message) throws Exception {
     Flags.Flag[] sf = message.getFlags().getSystemFlags();
     for (int i = 0; i < sf.length; i++) {
-      if (sf[i] == Flags.Flag.SEEN) return true;
+      if (sf[i] == Flags.Flag.SEEN)
+        return true;
     }
     return false;
   }
-  
+
   public static boolean isAnsweredMessage(javax.mail.Message message) throws Exception {
     Flags flags = message.getFlags();
     Flags.Flag[] sf = flags.getSystemFlags();
     for (int i = 0; i < sf.length; i++) {
-      if (sf[i] == Flags.Flag.ANSWERED) return true;
+      if (sf[i] == Flags.Flag.ANSWERED)
+        return true;
     }
     return false;
   }
-  
+
   public static boolean isExistHeader(javax.mail.Message message, String header) throws Exception {
-    String[] headers = message.getHeader(header) ;
+    String[] headers = message.getHeader(header);
     return (headers != null);
   }
-  
+
   public static boolean requestReturnReceipt(javax.mail.Message message) throws Exception {
     boolean requestReturnReceipt = false;
     // need to emprove
-    if (!isSeenMessage(message) && isExistHeader(message, "Disposition-Notification-To")) requestReturnReceipt = true;
+    if (!isSeenMessage(message) && isExistHeader(message, "Disposition-Notification-To"))
+      requestReturnReceipt = true;
     return requestReturnReceipt;
   }
 }

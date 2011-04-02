@@ -62,8 +62,6 @@ public class EventsBean {
    */
   private List<FileTransferEventBean> fileEvents;
 
-    
-
   /**
    * 
    */

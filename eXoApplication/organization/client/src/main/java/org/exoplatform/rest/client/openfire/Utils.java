@@ -42,27 +42,22 @@ import org.w3c.dom.Document;
 
 class Utils {
 
-  static String getBaseURL(){
+  static String getBaseURL() {
     String serverBaseURL = JiveGlobals.getXMLProperty("eXo.env.serverBaseURL");
     serverBaseURL = (serverBaseURL != null) ? serverBaseURL : new String("http://localhost:8080/");
     serverBaseURL = serverBaseURL.endsWith("/") ? serverBaseURL : serverBaseURL + "/";
     String restContext = JiveGlobals.getXMLProperty("eXo.env.restContextName");
     restContext = (restContext != null) ? restContext : new String("rest");
-    //If "eXo.env.restContextName" system property exists, it will override value from Openfire.xml 
+    // If "eXo.env.restContextName" system property exists, it will override value from Openfire.xml
     restContext = (System.getProperty("eXo.env.restContextName") != null) ? System.getProperty("eXo.env.restContextName") : restContext;
     return (serverBaseURL + restContext);
   }
-  
-  private static UsernamePasswordCredentials usernamePasswordCredentials
-    = new UsernamePasswordCredentials(
-      JiveGlobals.getXMLProperty("provider.authorizedUser.name"),
-      JiveGlobals.getXMLProperty("provider.authorizedUser.password"));
+
+  private static UsernamePasswordCredentials usernamePasswordCredentials = new UsernamePasswordCredentials(JiveGlobals.getXMLProperty("provider.authorizedUser.name"), JiveGlobals.getXMLProperty("provider.authorizedUser.password"));
 
   static Response doGet(URL url) throws HttpException, IOException {
     HttpClient httpClient = new HttpClient();
-    httpClient.getState().setCredentials(
-        new AuthScope(url.getHost(), url.getPort()),
-        usernamePasswordCredentials);
+    httpClient.getState().setCredentials(new AuthScope(url.getHost(), url.getPort()), usernamePasswordCredentials);
     GetMethod get = new GetMethod(url.toString());
     get.setDoAuthentication(true);
     int status = httpClient.executeMethod(get);
@@ -70,8 +65,7 @@ class Utils {
     try {
       if (get.getResponseBody().length > 0) {
         // if response has body
-        resDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-            .parse(get.getResponseBodyAsStream());
+        resDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(get.getResponseBodyAsStream());
       }
     } catch (Exception e) {
       throw new HttpException("XML parsing error : " + e);
@@ -83,9 +77,7 @@ class Utils {
 
   static Response doPost(URL url) throws HttpException, IOException {
     HttpClient httpClient = new HttpClient();
-    httpClient.getState().setCredentials(
-        new AuthScope(url.getHost(), url.getPort()),
-        usernamePasswordCredentials);
+    httpClient.getState().setCredentials(new AuthScope(url.getHost(), url.getPort()), usernamePasswordCredentials);
     PostMethod post = new PostMethod(url.toString());
     post.setDoAuthentication(true);
     int status = httpClient.executeMethod(post);
@@ -93,8 +85,7 @@ class Utils {
     try {
       if (post.getResponseBody().length > 0) {
         // if response has body
-        resDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-            .parse(post.getResponseBodyAsStream());
+        resDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(post.getResponseBodyAsStream());
       }
     } catch (Exception e) {
       throw new HttpException("XML parsing error : " + e);
@@ -104,17 +95,14 @@ class Utils {
     return new Response(status, resDoc);
   }
 
-  static Response doGet(URL url, HashMap<String, String> params)
-      throws HttpException, IOException {
+  static Response doGet(URL url, HashMap<String, String> params) throws HttpException, IOException {
     if (params == null || params.size() == 0)
       return doGet(url);
     HttpClient httpClient = new HttpClient();
-    httpClient.getState().setCredentials(
-        new AuthScope(url.getHost(), url.getPort()),
-        usernamePasswordCredentials);
+    httpClient.getState().setCredentials(new AuthScope(url.getHost(), url.getPort()), usernamePasswordCredentials);
     String _url = url.toString();
     Set<String> key_set = params.keySet();
-    _url += (key_set.size() > 0) ? "?" : ""; 
+    _url += (key_set.size() > 0) ? "?" : "";
     for (String key : key_set)
       _url += (key + "=" + params.get(key));
     GetMethod get = new GetMethod(_url);
@@ -124,8 +112,7 @@ class Utils {
     try {
       if (get.getResponseBody().length > 0) {
         // if response has body
-        resDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-            .parse(get.getResponseBodyAsStream());
+        resDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(get.getResponseBodyAsStream());
       }
     } catch (Exception e) {
       throw new HttpException("XML parsing error : " + e);
@@ -135,18 +122,15 @@ class Utils {
     return new Response(status, resDoc);
   }
 
-  static Response doPost(URL url, HashMap<String, String> params)
-      throws HttpException, IOException {
+  static Response doPost(URL url, HashMap<String, String> params) throws HttpException, IOException {
     if (params == null || params.size() == 0)
       return doPost(url);
     HttpClient httpClient = new HttpClient();
-    httpClient.getState().setCredentials(
-        new AuthScope(url.getHost(), url.getPort()),
-        usernamePasswordCredentials);
+    httpClient.getState().setCredentials(new AuthScope(url.getHost(), url.getPort()), usernamePasswordCredentials);
     PostMethod post = new PostMethod(url.toString());
     post.setDoAuthentication(true);
     Set<String> key_set = params.keySet();
-    for (String key : key_set){
+    for (String key : key_set) {
       post.setParameter(key, params.get(key));
     }
     int status = httpClient.executeMethod(post);
@@ -154,8 +138,7 @@ class Utils {
     try {
       if (post.getResponseBody().length > 0) {
         // if response has body
-        resDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-            .parse(post.getResponseBodyAsStream());
+        resDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(post.getResponseBodyAsStream());
       }
     } catch (Exception e) {
       throw new HttpException("XML parsing error : " + e);
@@ -164,7 +147,7 @@ class Utils {
     }
     return new Response(status, resDoc);
   }
-  
+
   static Map<String, String> parseQuery(List<String> l) {
     Map<String, String> m = new HashMap<String, String>();
     if (l != null && l.size() > 0) {
@@ -179,17 +162,21 @@ class Utils {
     }
     return m;
   }
-  
+
   static class Response {
-    private final int status_;
+    private final int      status_;
+
     private final Document d_;
+
     public Response(int status, Document d) {
       status_ = status;
       d_ = d;
     }
+
     public int getStatus() {
       return status_;
     }
+
     public Document getResponseDoc() {
       return d_;
     }

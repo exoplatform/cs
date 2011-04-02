@@ -33,12 +33,12 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormRadioBoxInput;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.URLValidator;
-import org.exoplatform.webui.event.Event.Phase;
 
 /**
  * Created by The eXo Platform SAS
@@ -69,13 +69,11 @@ public class UISubscribeForm extends UIForm implements UIPopupComponent {
 
   @Override
   public void activate() throws Exception {
-    // TODO Auto-generated method stub
 
   }
 
   @Override
   public void deActivate() throws Exception {
-    // TODO Auto-generated method stub
 
   }
   
@@ -113,8 +111,7 @@ public class UISubscribeForm extends UIForm implements UIPopupComponent {
   
   public static class CancelActionListener extends EventListener<UISubscribeForm> {
     public void execute(Event<UISubscribeForm> event) throws Exception {
-      // TODO Auto-generated method stub
-      UISubscribeForm uiform = event.getSource();
+        UISubscribeForm uiform = event.getSource();
       UICalendarPortlet calendarPortlet = uiform.getAncestorOfType(UICalendarPortlet.class) ;
       calendarPortlet.cancelAction();
     }

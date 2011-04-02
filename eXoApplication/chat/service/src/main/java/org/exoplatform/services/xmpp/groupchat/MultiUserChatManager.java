@@ -35,7 +35,6 @@ public class MultiUserChatManager {
    */
   private Map<String, MultiUserChat> chatMap = new HashMap<String, MultiUserChat>();
 
-
   /**
    * Add chat to map.
    * 
@@ -44,7 +43,7 @@ public class MultiUserChatManager {
   public void addMultiUserChat(MultiUserChat chat) {
     chatMap.put(chat.getRoom(), chat);
   }
-  
+
   /**
    * Remove chat from map.
    * 

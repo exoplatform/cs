@@ -35,12 +35,10 @@ public class UIPopupActionContainer extends UIContainer implements UIPopupCompon
     uiPopupAction.getChild(UIPopupWindow.class).setId("UIChildPopupWindow") ;
   }
   public void activate() throws Exception {
-    // TODO Auto-generated method stub
     
   }
 
   public void deActivate() throws Exception {
-    // TODO Auto-generated method stub
     
   }
   public UIComponent setId(String id) {

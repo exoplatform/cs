@@ -20,8 +20,6 @@ package org.exoplatform.services.organization.rest.json;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.exoplatform.services.organization.User;
-
 /**
  * Created by The eXo Platform SARL
  * Author : Volodymyr Krasnikov
@@ -30,9 +28,11 @@ import org.exoplatform.services.organization.User;
 
 public class UserListBean {
   private Collection<UserBean> users;
-  private Integer totalUser;
 
-  public UserListBean() {}
+  private Integer              totalUser;
+
+  public UserListBean() {
+  }
 
   public UserListBean(Collection<UserBean> userList) {
     this.users = userList;
@@ -45,32 +45,32 @@ public class UserListBean {
   public void setUsers(Collection<UserBean> userList) {
     this.users = userList;
   }
-  
+
   public void setTotalUser(Integer totalUser) {
     this.totalUser = totalUser;
   }
-  
+
   public Integer getTotalUser() {
     return totalUser;
   }
-  
+
   @Override
   public boolean equals(Object obj) {
-    if(obj == null)
+    if (obj == null)
       return false;
-    if(obj == this)
+    if (obj == this)
       return true;
-    if(this.hashCode() == obj.hashCode())
+    if (this.hashCode() == obj.hashCode())
       return true;
-    if(obj instanceof UserListBean){
-      UserListBean bean = (UserListBean)obj;
-      if( users.size() == bean.users.size() ){
+    if (obj instanceof UserListBean) {
+      UserListBean bean = (UserListBean) obj;
+      if (users.size() == bean.users.size()) {
         Iterator<?> it_1 = users.iterator();
         Iterator<?> it_2 = users.iterator();
-        while(it_1.hasNext()){
+        while (it_1.hasNext()) {
           Object m_obj1 = it_1.next();
           Object m_obj2 = it_2.next();
-          if(! m_obj1.equals(m_obj2))
+          if (!m_obj1.equals(m_obj2))
             return false;
         }
         return true;
@@ -78,17 +78,18 @@ public class UserListBean {
     }
     return false;
   }
-  
+
   private int h_ = 0;
+
   @Override
   public int hashCode() {
-    if( h_ == 0){
+    if (h_ == 0) {
       Iterator<?> i = users.iterator();
-      while(i.hasNext()){
+      while (i.hasNext()) {
         h_ = h_ + i.next().hashCode();
       }
     }
     return h_;
   }
-  
+
 }

@@ -49,7 +49,7 @@ import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.DataStorage;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.cs.common.webui.UIPopupAction;
-import org.exoplatform.cs.common.webui.UIPopupActionContainer ;
+import org.exoplatform.cs.common.webui.UIPopupActionContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.service.Account;

@@ -25,17 +25,29 @@ import java.util.List;
  * Jul 11, 2007  
  */
 public class GroupContactData {
-  private String name ;
-  private List<Contact> contacts ;
-  
-  public GroupContactData(String name, List<Contact> contacts) throws Exception {
-    this.name = name ;
-    this.contacts = contacts ;
-  }
-  public String getName() { return name ; }
-  public void setName(String name) { this.name = name ; }
+  private String        name;
 
-  public List<Contact> getContacts() { return contacts ; }
-  public void setContacts(List<Contact> contacts) { this.contacts = contacts ; }
+  private List<Contact> contacts;
+
+  public GroupContactData(String name, List<Contact> contacts) throws Exception {
+    this.name = name;
+    this.contacts = contacts;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public List<Contact> getContacts() {
+    return contacts;
+  }
+
+  public void setContacts(List<Contact> contacts) {
+    this.contacts = contacts;
+  }
 
 }

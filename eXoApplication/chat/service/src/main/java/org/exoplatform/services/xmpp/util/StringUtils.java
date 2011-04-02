@@ -18,7 +18,6 @@ package org.exoplatform.services.xmpp.util;
 
 import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
 
-
 /**
  * Created by The eXo Platform SAS.
  * 

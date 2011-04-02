@@ -22,7 +22,6 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.container.StandaloneContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -40,51 +39,57 @@ import org.exoplatform.test.BasicTestCase;
  */
 public abstract class BaseMailTestCase extends BasicTestCase {
 
-  protected static final Log log = ExoLogger.getLogger("cs.mail.service.test");
+  protected static final Log            log                    = ExoLogger.getLogger("cs.mail.service.test");
 
-  protected static RepositoryService   repositoryService;
-  protected static PortalContainer container;
-  
-  protected final static String REPO_NAME = "repository".intern();
-  protected final static String SYSTEM_WS = "system".intern();
-  protected final static String COLLABORATION_WS = "collaboration".intern();
-  protected static Node root_ = null;
-  protected SessionProvider sessionProvider;
+  protected static RepositoryService    repositoryService;
+
+  protected static PortalContainer      container;
+
+  protected final static String         REPO_NAME              = "repository".intern();
+
+  protected final static String         SYSTEM_WS              = "system".intern();
+
+  protected final static String         COLLABORATION_WS       = "collaboration".intern();
+
+  protected static Node                 root_                  = null;
+
+  protected SessionProvider             sessionProvider;
+
   private static SessionProviderService sessionProviderService = null;
-  
+
   static {
     // we do this in static to save a few cycles
     initContainer();
     initJCR();
   }
 
-
-  
-  public BaseMailTestCase() throws Exception {    
+  public BaseMailTestCase() throws Exception {
   }
-  
+
   public void setUp() throws Exception {
     startSystemSession();
   }
-  
+
   public void tearDown() throws Exception {
 
   }
+
   protected void startSystemSession() {
-    sessionProvider = sessionProviderService.getSystemSessionProvider(null) ;
+    sessionProvider = sessionProviderService.getSystemSessionProvider(null);
   }
+
   protected void startSessionAs(String user) {
     Identity identity = new Identity(user);
     ConversationState state = new ConversationState(identity);
     sessionProviderService.setSessionProvider(null, new SessionProvider(state));
     sessionProvider = sessionProviderService.getSessionProvider(null);
   }
+
   protected void endSession() {
     sessionProviderService.removeSessionProvider(null);
     startSystemSession();
   }
-  
-  
+
   /**
    * All elements of a list should be contained in the expected array of String
    * @param message
@@ -93,49 +98,48 @@ public abstract class BaseMailTestCase extends BasicTestCase {
    */
   public static void assertContainsAll(String message, List<String> expected, List<String> actual) {
     assertEquals(message, expected.size(), actual.size());
-    assertTrue(message,expected.containsAll(actual));
-  } 
-  
+    assertTrue(message, expected.containsAll(actual));
+  }
+
   /**
    * Assertion method on string arrays
    * @param message
    * @param expected
    * @param actual
    */
-  public static void assertEquals(String message, String []expected, String []actual) {
+  public static void assertEquals(String message, String[] expected, String[] actual) {
     assertEquals(message, expected.length, actual.length);
     for (int i = 0; i < expected.length; i++) {
       assertEquals(message, expected[i], actual[i]);
     }
   }
+
   private static void initContainer() {
     try {
       String containerConf = BaseMailTestCase.class.getResource("/conf/portal/test-configuration.xml").toString();
-      //System.out.println("\n\n containerConf" + containerConf);
-      //StandaloneContainer.addConfigurationURL(containerConf);
-      container = PortalContainer.getInstance();   
+      // System.out.println("\n\n containerConf" + containerConf);
+      // StandaloneContainer.addConfigurationURL(containerConf);
+      container = PortalContainer.getInstance();
       String loginConf = Thread.currentThread().getContextClassLoader().getResource("conf/portal/login.conf").toString();
-      
+
       if (System.getProperty("java.security.auth.login.config") == null)
         System.setProperty("java.security.auth.login.config", loginConf);
-    }
-    catch (Exception e) {
-      throw new RuntimeException("Failed to initialize standalone container: " + e.getMessage(),e);
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to initialize standalone container: " + e.getMessage(), e);
     }
   }
 
   private static void initJCR() {
     try {
-    repositoryService = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
-    
-    // Initialize datas
-    Session session = repositoryService.getRepository(REPO_NAME).getSystemSession(COLLABORATION_WS);
-    root_ = session.getRootNode();   
-    sessionProviderService = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class) ;   
-    }
-    catch (Exception e) {
-      throw new RuntimeException("Failed to initialize JCR: " + e.getMessage(),e);
+      repositoryService = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
+
+      // Initialize datas
+      Session session = repositoryService.getRepository(REPO_NAME).getSystemSession(COLLABORATION_WS);
+      root_ = session.getRootNode();
+      sessionProviderService = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to initialize JCR: " + e.getMessage(), e);
     }
   }
-  
+
 }

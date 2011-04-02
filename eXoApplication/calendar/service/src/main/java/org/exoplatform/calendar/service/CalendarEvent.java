@@ -18,6 +18,7 @@ package org.exoplatform.calendar.service;
 
 import java.util.Date;
 import java.util.List;
+
 import org.exoplatform.services.jcr.util.IdGenerator;
 
 /**
@@ -28,116 +29,175 @@ import org.exoplatform.services.jcr.util.IdGenerator;
  */
 public class CalendarEvent {
 
-  final public static String TYPE_EVENT = "Event".intern() ;
-  final public static String TYPE_TASK = "Task".intern() ;
-  final public static String TYPE_JOURNAL = "Journal".intern() ;
+  final public static String   TYPE_EVENT      = "Event".intern();
 
-  final public static String TENTATIVE = "tentative".intern() ;
-  final public static String CONFIRMED = "confirmed".intern() ;
-  final public static String CANCELLED = "canceled".intern() ;
+  final public static String   TYPE_TASK       = "Task".intern();
 
-  final public static String NEEDS_ACTION = "needs-action".intern() ;
-  final public static String COMPLETED = "completed".intern() ;
-  final public static String IN_PROCESS = "in-process".intern() ;
+  final public static String   TYPE_JOURNAL    = "Journal".intern();
 
-  final public static String PRIORITY_NONE = "none".intern() ;
-  final public static String PRIORITY_LOW = "low".intern() ;
-  final public static String PRIORITY_NORMAL = "normal".intern() ;
-  final public static String PRIORITY_HIGH = "high".intern() ;
+  final public static String   TENTATIVE       = "tentative".intern();
 
-  final public static String[] PRIORITY = {PRIORITY_NONE, PRIORITY_HIGH, PRIORITY_NORMAL, PRIORITY_LOW} ;
+  final public static String   CONFIRMED       = "confirmed".intern();
 
-  final public static String DRAFT = "draft".intern() ;
-  final public static String FINAL = "final".intern() ;
+  final public static String   CANCELLED       = "canceled".intern();
 
-  final public static String[] EVENT_STATUS = {TENTATIVE, CONFIRMED, CANCELLED} ;
-  final public static String[] TASK_STATUS = {NEEDS_ACTION, IN_PROCESS, COMPLETED, CANCELLED} ;
-  final public static String[] JOURNAL_STATUS = {DRAFT, FINAL, CANCELLED} ;
+  final public static String   NEEDS_ACTION    = "needs-action".intern();
 
-  final public static String IS_PUBLIC = "public".intern() ;
-  final public static String IS_PRIVATE = "private".intern() ;
-  final public static String ST_AVAILABLE = "available".intern() ;
-  final public static String ST_BUSY = "busy".intern() ;
-  final public static String ST_OUTSIDE = "outside".intern() ;
+  final public static String   COMPLETED       = "completed".intern();
 
-  final public static String RP_NOREPEAT = "norepeat".intern() ;
-  final public static String RP_DAILY = "daily".intern() ;
-  final public static String RP_WEEKLY = "weekly".intern() ;
-  final public static String RP_MONTHLY = "monthly".intern() ;
-  final public static String RP_YEARLY = "yearly".intern() ;
-  final public static String RP_WEEKEND = "weekend".intern() ;
-  final public static String RP_WORKINGDAYS = "workingdays".intern() ;
-  
-  final public static String[] RP_WEEKLY_BYDAY = {"MO", "TU", "WE", "TH", "FR", "SA", "SU"}; 
-  
-  final public static String[] REPEATTYPES = {RP_NOREPEAT, RP_DAILY, RP_WEEKLY, RP_MONTHLY, RP_YEARLY} ;
+  final public static String   IN_PROCESS      = "in-process".intern();
 
-  private String id ;
-  private String summary ;
-  private String location ;
-  private String description ;
-  private String eventCategoryId ;
-  private String eventCategoryName ;
-  private String calendarId ;
-  private String repeatType ;
-  private Date fromDateTime ;
-  private Date toDateTime ;
-  private Date completedDateTime ;
-  private String taskDelegator  ;
-  private String sendOption = CalendarSetting.ACTION_BYSETTING ;
-  private String message;
-  private String[] participantStatus ;
-  private Date lastUpdatedTime;
-  
+  final public static String   PRIORITY_NONE   = "none".intern();
+
+  final public static String   PRIORITY_LOW    = "low".intern();
+
+  final public static String   PRIORITY_NORMAL = "normal".intern();
+
+  final public static String   PRIORITY_HIGH   = "high".intern();
+
+  final public static String[] PRIORITY        = { PRIORITY_NONE, PRIORITY_HIGH, PRIORITY_NORMAL, PRIORITY_LOW };
+
+  final public static String   DRAFT           = "draft".intern();
+
+  final public static String   FINAL           = "final".intern();
+
+  final public static String[] EVENT_STATUS    = { TENTATIVE, CONFIRMED, CANCELLED };
+
+  final public static String[] TASK_STATUS     = { NEEDS_ACTION, IN_PROCESS, COMPLETED, CANCELLED };
+
+  final public static String[] JOURNAL_STATUS  = { DRAFT, FINAL, CANCELLED };
+
+  final public static String   IS_PUBLIC       = "public".intern();
+
+  final public static String   IS_PRIVATE      = "private".intern();
+
+  final public static String   ST_AVAILABLE    = "available".intern();
+
+  final public static String   ST_BUSY         = "busy".intern();
+
+  final public static String   ST_OUTSIDE      = "outside".intern();
+
+  final public static String   RP_NOREPEAT     = "norepeat".intern();
+
+  final public static String   RP_DAILY        = "daily".intern();
+
+  final public static String   RP_WEEKLY       = "weekly".intern();
+
+  final public static String   RP_MONTHLY      = "monthly".intern();
+
+  final public static String   RP_YEARLY       = "yearly".intern();
+
+  final public static String   RP_WEEKEND      = "weekend".intern();
+
+  final public static String   RP_WORKINGDAYS  = "workingdays".intern();
+
+  final public static String[] RP_WEEKLY_BYDAY = { "MO", "TU", "WE", "TH", "FR", "SA", "SU" };
+
+  final public static String[] REPEATTYPES     = { RP_NOREPEAT, RP_DAILY, RP_WEEKLY, RP_MONTHLY, RP_YEARLY };
+
+  private String               id;
+
+  private String               summary;
+
+  private String               location;
+
+  private String               description;
+
+  private String               eventCategoryId;
+
+  private String               eventCategoryName;
+
+  private String               calendarId;
+
+  private String               repeatType;
+
+  private Date                 fromDateTime;
+
+  private Date                 toDateTime;
+
+  private Date                 completedDateTime;
+
+  private String               taskDelegator;
+
+  private String               sendOption      = CalendarSetting.ACTION_BYSETTING;
+
+  private String               message;
+
+  private String[]             participantStatus;
+
+  private Date                 lastUpdatedTime;
+
   // properties for exo:repeatCalendarEvent mixin type
-  private String recurrenceId;
-  private Boolean isExceptionOccurrence;
-  private String[] excludeId;
-  private String originalReference;
-  
-  private Date repeatUntilDate;
-  private long repeatCount;
-  private long repeatInterval;
-  private long[] repeatBySecond;
-  private long[] repeatByMinute;
-  private long[] repeatByHour;
-  private String[] repeatByDay;
-  private long[] repeatByMonthDay;
-  private long[] repeatByYearDay;
-  private long[] repeatByWeekNo;
-  private long[] repeatByMonth;
-  private long[] repeatBySetPos;
-  private String repeatWkst;
+  private String               recurrenceId;
+
+  private Boolean              isExceptionOccurrence;
+
+  private String[]             excludeId;
+
+  private String               originalReference;
+
+  private Date                 repeatUntilDate;
+
+  private long                 repeatCount;
+
+  private long                 repeatInterval;
+
+  private long[]               repeatBySecond;
+
+  private long[]               repeatByMinute;
+
+  private long[]               repeatByHour;
+
+  private String[]             repeatByDay;
+
+  private long[]               repeatByMonthDay;
+
+  private long[]               repeatByYearDay;
+
+  private long[]               repeatByWeekNo;
+
+  private long[]               repeatByMonth;
+
+  private long[]               repeatBySetPos;
+
+  private String               repeatWkst;
 
   /**
    * Types: TYPE_EVENT, TYPE_TASK, TYPE_JOURNAL
-   */ 
-  private String eventType = TYPE_EVENT ;
+   */
+  private String               eventType       = TYPE_EVENT;
 
   /**
    * Values: LOW, NORMAL, HIGHT
    */
-  private String priority ;
+  private String               priority;
 
-  private boolean isPrivate = true ;
-  private String eventState = ST_BUSY;
+  private boolean              isPrivate       = true;
+
+  private String               eventState      = ST_BUSY;
+
   /**
    *Status:
    *-for event: TENTATIVE, CONFIRMED, CANCELLED. 
    *-for task:  NEEDS-ACTION, COMPLETED, IN-PROCESS, CANCELLED
    *-for journal: DRAFT, FINAL, CANCELLED
    */
-  private String status = ""; 
-  
-  private String calType = "0";
-  private String[] invitation ;
-  private String[] participant ;
-  private List<Reminder> reminders ;
-  private List<Attachment> attachment ;
+  private String               status          = "";
+
+  private String               calType         = "0";
+
+  private String[]             invitation;
+
+  private String[]             participant;
+
+  private List<Reminder>       reminders;
+
+  private List<Attachment>     attachment;
+
   public CalendarEvent() {
-    id = "Event" + IdGenerator.generate() ;
+    id = "Event" + IdGenerator.generate();
   }
-  
+
   // copy constructor
   public CalendarEvent(CalendarEvent event) {
     this.id = event.id;
@@ -161,7 +221,7 @@ public class CalendarEvent {
     this.setParticipantStatus(event.getParticipantStatus());
     this.setReminders(event.getReminders());
     this.setPriority(event.getPriority());
-    //this.setLastUpdatedTime(event.getLastUpdatedTime());
+    // this.setLastUpdatedTime(event.getLastUpdatedTime());
     this.setRepeatUntilDate(event.getRepeatUntilDate());
     this.setRepeatCount(event.getRepeatCount());
     this.setRepeatInterval(event.getRepeatInterval());
@@ -169,53 +229,133 @@ public class CalendarEvent {
     this.setRepeatByMonthDay(event.getRepeatByMonthDay());
   }
 
-  public String getId() { return id; }
-  public void   setId(String id) { this.id = id ;}
+  public String getId() {
+    return id;
+  }
 
-  public String getSummary() { return summary; }
-  public void   setSummary(String sum) { this.summary = sum; }
+  public void setId(String id) {
+    this.id = id;
+  }
 
-  public String getDescription() { return description; }
-  public void   setDescription(String description) { this.description = description; }
+  public String getSummary() {
+    return summary;
+  }
 
-  public boolean isPrivate() { return isPrivate; }
-  public void    setPrivate(boolean isPrivate) { this.isPrivate = isPrivate; }
+  public void setSummary(String sum) {
+    this.summary = sum;
+  }
 
-  public String getEventCategoryId() { return eventCategoryId; }
-  public void   setEventCategoryId(String eventCategoryId) { this.eventCategoryId = eventCategoryId;}
+  public String getDescription() {
+    return description;
+  }
 
-  public String getCalendarId() { return calendarId; }
-  public void   setCalendarId(String calendarId) { this.calendarId = calendarId; }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-  public Date getFromDateTime() { return fromDateTime ; }
-  public void setFromDateTime(Date fromDateTime) { this.fromDateTime = fromDateTime; }
+  public boolean isPrivate() {
+    return isPrivate;
+  }
 
-  public Date getToDateTime() { return toDateTime; }
-  public void setToDateTime(Date toDateTime) { this.toDateTime = toDateTime; }
+  public void setPrivate(boolean isPrivate) {
+    this.isPrivate = isPrivate;
+  }
 
-  public Date getCompletedDateTime() { return completedDateTime; }
-  public void setCompletedDateTime(Date completedDateTime) { this.completedDateTime = completedDateTime; }
+  public String getEventCategoryId() {
+    return eventCategoryId;
+  }
 
-  public String getLocation() { return location; }
-  public void   setLocation(String location) { this.location = location; }
+  public void setEventCategoryId(String eventCategoryId) {
+    this.eventCategoryId = eventCategoryId;
+  }
 
-  public String getEventState() { return eventState; }
-  public void   setEventState(String eventState) { this.eventState = eventState; }
+  public String getCalendarId() {
+    return calendarId;
+  }
 
-  public String getStatus() { return status; }
-  public void   setStatus(String status) { this.status = status; }
+  public void setCalendarId(String calendarId) {
+    this.calendarId = calendarId;
+  }
 
-  public String getEventType() { return eventType ; }
-  public void   setEventType(String eventType) { this.eventType = eventType ; }
+  public Date getFromDateTime() {
+    return fromDateTime;
+  }
 
-  public String getPriority() { return priority ; }
-  public void   setPriority(String priority) { this.priority = priority ; }
+  public void setFromDateTime(Date fromDateTime) {
+    this.fromDateTime = fromDateTime;
+  }
 
-  public String[] getInvitation() { return invitation; }
-  public void     setInvitation(String[] invitation) { this.invitation = invitation; }
+  public Date getToDateTime() {
+    return toDateTime;
+  }
 
-  public List<Reminder> getReminders() { return reminders ; }
-  public void setReminders(List<Reminder> rm) { this.reminders = rm ; }
+  public void setToDateTime(Date toDateTime) {
+    this.toDateTime = toDateTime;
+  }
+
+  public Date getCompletedDateTime() {
+    return completedDateTime;
+  }
+
+  public void setCompletedDateTime(Date completedDateTime) {
+    this.completedDateTime = completedDateTime;
+  }
+
+  public String getLocation() {
+    return location;
+  }
+
+  public void setLocation(String location) {
+    this.location = location;
+  }
+
+  public String getEventState() {
+    return eventState;
+  }
+
+  public void setEventState(String eventState) {
+    this.eventState = eventState;
+  }
+
+  public String getStatus() {
+    return status;
+  }
+
+  public void setStatus(String status) {
+    this.status = status;
+  }
+
+  public String getEventType() {
+    return eventType;
+  }
+
+  public void setEventType(String eventType) {
+    this.eventType = eventType;
+  }
+
+  public String getPriority() {
+    return priority;
+  }
+
+  public void setPriority(String priority) {
+    this.priority = priority;
+  }
+
+  public String[] getInvitation() {
+    return invitation;
+  }
+
+  public void setInvitation(String[] invitation) {
+    this.invitation = invitation;
+  }
+
+  public List<Reminder> getReminders() {
+    return reminders;
+  }
+
+  public void setReminders(List<Reminder> rm) {
+    this.reminders = rm;
+  }
 
   public void setRepeatType(String repeatType) {
     this.repeatType = repeatType;
@@ -225,8 +365,13 @@ public class CalendarEvent {
     return repeatType;
   }
 
-  public List<Attachment> getAttachment() {return attachment ;}
-  public void setAttachment(List<Attachment> list) {attachment = list ;}
+  public List<Attachment> getAttachment() {
+    return attachment;
+  }
+
+  public void setAttachment(List<Attachment> list) {
+    attachment = list;
+  }
 
   public void setParticipant(String[] participant) {
     this.participant = participant;
@@ -235,7 +380,7 @@ public class CalendarEvent {
   public String[] getParticipant() {
     return participant;
   }
-  
+
   public String[] getParticipantStatus() {
     return participantStatus;
   }
@@ -275,14 +420,16 @@ public class CalendarEvent {
   public String getSendOption() {
     return sendOption;
   }
+
   public String getMessage() {
     return message;
   }
 
   public void setMessage(String message) {
-    if(message != null)
+    if (message != null)
       this.message = message;
-    else this.message = new String();
+    else
+      this.message = new String();
   }
 
   public Date getLastUpdatedTime() {
@@ -404,7 +551,7 @@ public class CalendarEvent {
   public long[] getRepeatBySecond() {
     return repeatBySecond;
   }
-  
+
   /**
    * @return the repeatByMinute
    */
@@ -530,5 +677,5 @@ public class CalendarEvent {
   public String[] getRepeatByDay() {
     return repeatByDay;
   }
-    
+
 }

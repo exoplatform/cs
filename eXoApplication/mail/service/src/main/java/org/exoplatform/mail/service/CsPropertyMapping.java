@@ -23,25 +23,33 @@ package org.exoplatform.mail.service;
  * Dec 3, 2008  
  */
 public class CsPropertyMapping {
-private String propertyName  ;
-private String replaceName  ;
-private String defaultValue  ;
-public void setPropertyName(String propertyName) {
-  this.propertyName = propertyName;
-}
-public String getPropertyName() {
-  return propertyName;
-}
-public void setDefaultValue(String defaultValue) {
-  this.defaultValue = defaultValue;
-}
-public String getDefaultValue() {
-  return defaultValue;
-}
-public void setReplaceName(String replaceName) {
-  this.replaceName = replaceName;
-}
-public String getReplaceName() {
-  return replaceName;
-}
+  private String propertyName;
+
+  private String replaceName;
+
+  private String defaultValue;
+
+  public void setPropertyName(String propertyName) {
+    this.propertyName = propertyName;
+  }
+
+  public String getPropertyName() {
+    return propertyName;
+  }
+
+  public void setDefaultValue(String defaultValue) {
+    this.defaultValue = defaultValue;
+  }
+
+  public String getDefaultValue() {
+    return defaultValue;
+  }
+
+  public void setReplaceName(String replaceName) {
+    this.replaceName = replaceName;
+  }
+
+  public String getReplaceName() {
+    return replaceName;
+  }
 }

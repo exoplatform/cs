@@ -34,24 +34,22 @@ import org.exoplatform.services.jcr.impl.core.PropertyImpl;
 public class LastUpdateAction implements Action {
 
   public boolean execute(Context context) throws Exception {
-    // TODO Auto-generated method stub
     try {
-      Node node = (Node)context.get("currentItem");
-      if(!node.isNodeType("exo:datetime")){
-        if(node.canAddMixin("exo:datetime")) {
-          node.addMixin("exo:datetime");            
+      Node node = (Node) context.get("currentItem");
+      if (!node.isNodeType("exo:datetime")) {
+        if (node.canAddMixin("exo:datetime")) {
+          node.addMixin("exo:datetime");
         }
-        node.setProperty("exo:dateCreated",new GregorianCalendar());
-        node.setProperty("exo:dateModified",new GregorianCalendar());  
-      }
-      else
-        node.setProperty("exo:dateModified",new GregorianCalendar());  
-    } catch (ClassCastException e){
-      PropertyImpl property = (PropertyImpl)context.get("currentItem");
-      NodeImpl parent = (NodeImpl)property.getParent();
-      if(!parent.isNodeType("exo:calendarEvent"))
+        node.setProperty("exo:dateCreated", new GregorianCalendar());
+        node.setProperty("exo:dateModified", new GregorianCalendar());
+      } else
+        node.setProperty("exo:dateModified", new GregorianCalendar());
+    } catch (ClassCastException e) {
+      PropertyImpl property = (PropertyImpl) context.get("currentItem");
+      NodeImpl parent = (NodeImpl) property.getParent();
+      if (!parent.isNodeType("exo:calendarEvent"))
         throw new Exception("incoming node is not exo:calendarEvent");
-      parent.setProperty("exo:dateModified",new GregorianCalendar());
+      parent.setProperty("exo:dateModified", new GregorianCalendar());
     }
     return false;
   }

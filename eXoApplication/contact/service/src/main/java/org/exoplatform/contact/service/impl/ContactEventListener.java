@@ -30,14 +30,12 @@ public class ContactEventListener extends BaseComponentPlugin implements Contact
 
   @Override
   public void saveContact(String username, Contact contact) {
-    // TODO Auto-generated method stub
-    
+
   }
 
   @Override
   public void updateContact(String username, Contact contact) {
-    // TODO Auto-generated method stub
-    
+
   }
 
 }

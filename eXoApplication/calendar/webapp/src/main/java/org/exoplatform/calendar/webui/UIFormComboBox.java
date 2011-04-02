@@ -143,7 +143,7 @@ public class UIFormComboBox extends UIFormInputBase<String>  {
   }
   
   public void processRender(WebuiRequestContext context) throws Exception {
-	String parentId = ((UIComponent) this.getParent()).getId();
+  String parentId = ((UIComponent) this.getParent()).getId();
     context.getJavascriptManager().addJavascript("eXo.calendar.UICombobox.init('" + parentId+ "','" + getId() + "');") ;  
     Writer w =  context.getWriter() ;
     String options = "[";

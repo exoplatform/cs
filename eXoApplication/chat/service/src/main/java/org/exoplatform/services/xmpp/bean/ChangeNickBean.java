@@ -22,7 +22,7 @@ package org.exoplatform.services.xmpp.bean;
  * @version $Id: $
  */
 public class ChangeNickBean {
-  
+
   /**
    * 
    */

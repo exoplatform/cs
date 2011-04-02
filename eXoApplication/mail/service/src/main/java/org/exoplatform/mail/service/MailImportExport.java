@@ -20,15 +20,14 @@ import java.io.OutputStream;
 
 import javax.mail.internet.MimeMessage;
 
-
-
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen
  *          hung.nguyen@exoplatform.com
  * Jul 2, 2007  
  */
-public interface MailImportExport {  
+public interface MailImportExport {
   public boolean importMessage(String username, String accountId, String folderId, MimeMessage mimeMessage, long[] msgUID) throws Exception;
-  public OutputStream exportMessage(String username, String accountId,Message message) throws Exception;
+
+  public OutputStream exportMessage(String username, String accountId, Message message) throws Exception;
 }

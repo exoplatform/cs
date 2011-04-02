@@ -113,10 +113,7 @@ public class XMPPConnectionUtils {
    * @param password - password for remote IM service (Yahoo, ICQ, etc).
    * @throws XMPPException - XMPPException.
    */
-  public static void registerUser(XMPPConnection connection,
-                                  String serviceName,
-                                  String username,
-                                  String password) throws XMPPException {
+  public static void registerUser(XMPPConnection connection, String serviceName, String username, String password) throws XMPPException {
 
     Registration registration = new Registration();
     registration.setType(IQ.Type.SET);
@@ -227,15 +224,9 @@ public class XMPPConnectionUtils {
 
     public String toXML() {
       StringBuffer sb = new StringBuffer();
-      sb.append("<")
-      .append(getElementName())
-      .append(" xmlns=\"")
-      .append(getNamespace())
-      .append("\"/>");
+      sb.append("<").append(getElementName()).append(" xmlns=\"").append(getNamespace()).append("\"/>");
       return sb.toString();
     }
   }
-
-
 
 }

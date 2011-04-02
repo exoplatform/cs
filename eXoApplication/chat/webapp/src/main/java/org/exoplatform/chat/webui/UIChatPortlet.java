@@ -57,12 +57,12 @@ public class UIChatPortlet extends UIPortletApplication {
   }
   
   public String getUserToken() {
-	  try {
-	        return this.getContinuationService().getUserToken(this.getRemoteUser());
-		  } catch (Exception e) {
-			  System.out.println("\n\n can not get UserToken");
-			  return "" ;
-		  }
+    try {
+          return this.getContinuationService().getUserToken(this.getRemoteUser());
+      } catch (Exception e) {
+        System.out.println("\n\n can not get UserToken");
+        return "" ;
+      }
   }
   
   protected ContinuationService getContinuationService() {

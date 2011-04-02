@@ -18,9 +18,8 @@ package org.exoplatform.webservice.cs.bean;
 
 import java.util.List;
 
-import org.exoplatform.calendar.service.CalendarEvent;
-
 import org.exoplatform.calendar.service.Calendar;
+import org.exoplatform.calendar.service.CalendarEvent;
 
 /**
  * Created by The eXo Platform SAS
@@ -29,34 +28,34 @@ import org.exoplatform.calendar.service.Calendar;
  * June 24, 2010  
  */
 public class EventData {
-	private List<CalendarEvent> info ;
-	private String userTimezoneOffset;
-	private Boolean isEdit;
-	private List<Calendar> calendars;
-	
-	public List<CalendarEvent> getInfo() {
-	  return info;
-	}	
-	public void setInfo(List<CalendarEvent> info) {
-	  this.info = info;
-	} 
-	public void setUserTimezoneOffset(String timezoneOffset) {
-		this.userTimezoneOffset = timezoneOffset;
-	}
-	public String getUserTimezoneOffset() {
-		return this.userTimezoneOffset;
-	}	
-	public void setPermission(Boolean isEdit) {
-		this.isEdit = isEdit;
-	}
-	public Boolean getPermission() {
-		return this.isEdit;
-	}
-	public List<Calendar> getCalendars() {
-	  return calendars;
-	}
-	
-	public void setCalendars(List<Calendar> calendars) {
-	  this.calendars = calendars;
-	}	
+  private List<CalendarEvent> info ;
+  private String userTimezoneOffset;
+  private Boolean isEdit;
+  private List<Calendar> calendars;
+  
+  public List<CalendarEvent> getInfo() {
+    return info;
+  }  
+  public void setInfo(List<CalendarEvent> info) {
+    this.info = info;
+  } 
+  public void setUserTimezoneOffset(String timezoneOffset) {
+    this.userTimezoneOffset = timezoneOffset;
+  }
+  public String getUserTimezoneOffset() {
+    return this.userTimezoneOffset;
+  }  
+  public void setPermission(Boolean isEdit) {
+    this.isEdit = isEdit;
+  }
+  public Boolean getPermission() {
+    return this.isEdit;
+  }
+  public List<Calendar> getCalendars() {
+    return calendars;
+  }
+  
+  public void setCalendars(List<Calendar> calendars) {
+    this.calendars = calendars;
+  }  
 }

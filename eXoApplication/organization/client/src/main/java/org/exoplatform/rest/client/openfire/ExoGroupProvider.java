@@ -44,58 +44,78 @@ import org.xmpp.packet.JID;
  */
 public class ExoGroupProvider implements GroupProvider {
 
-  private static final String GROUPS_COUNT_URL = "eXo.provider.exoGroupProvider.groupsCountURL";
-  private static final String GROUPS_COUNT_METHOD = "eXo.provider.exoGroupProvider.groupsCountMethod";
-  private static final String GROUPS_COUNT_PARAMS = "eXo.provider.exoGroupProvider.groupsCountParams";
+  private static final String       GROUPS_COUNT_URL          = "eXo.provider.exoGroupProvider.groupsCountURL";
 
-  private static final String GET_GROUPS_ALL_URL = "eXo.provider.exoGroupProvider.getGroupsAllURL";
-  private static final String GET_GROUPS_ALL_METHOD = "eXo.provider.exoGroupProvider.getGroupsAllMethod";
-  private static final String GET_GROUPS_ALL_PARAMS = "eXo.provider.exoGroupProvider.getGroupsAllParams";
+  private static final String       GROUPS_COUNT_METHOD       = "eXo.provider.exoGroupProvider.groupsCountMethod";
 
-  private static final String GET_GROUPS_RANGE_URL = "eXo.provider.exoGroupProvider.getGroupsRangeURL";
-  private static final String GET_GROUPS_RANGE_METHOD = "eXo.provider.exoGroupProvider.getGroupsRangeMethod";
-  private static final String GET_GROUPS_RANGE_PARAMS = "eXo.provider.exoGroupProvider.getGroupsRangeParams";
+  private static final String       GROUPS_COUNT_PARAMS       = "eXo.provider.exoGroupProvider.groupsCountParams";
 
-  private static final String GET_GROUPS_FORUSER_URL = "eXo.provider.exoGroupProvider.getGroupsForUserURL";
-  private static final String GET_GROUPS_FORUSER_METHOD = "eXo.provider.exoGroupProvider.getGroupsForUserMethod";
-  private static final String GET_GROUPS_FORUSER_PARAMS = "eXo.provider.exoGroupProvider.getGroupsForUserParams";
+  private static final String       GET_GROUPS_ALL_URL        = "eXo.provider.exoGroupProvider.getGroupsAllURL";
 
-  private static final String GROUP_INFO_URL = "eXo.provider.exoGroupProvider.groupInfoURL";
-  private static final String GROUP_INFO_METHOD = "eXo.provider.exoGroupProvider.groupInfoMethod";
-  private static final String GROUP_INFO_PARAMS = "eXo.provider.exoGroupProvider.groupInfoParams";
+  private static final String       GET_GROUPS_ALL_METHOD     = "eXo.provider.exoGroupProvider.getGroupsAllMethod";
+
+  private static final String       GET_GROUPS_ALL_PARAMS     = "eXo.provider.exoGroupProvider.getGroupsAllParams";
+
+  private static final String       GET_GROUPS_RANGE_URL      = "eXo.provider.exoGroupProvider.getGroupsRangeURL";
+
+  private static final String       GET_GROUPS_RANGE_METHOD   = "eXo.provider.exoGroupProvider.getGroupsRangeMethod";
+
+  private static final String       GET_GROUPS_RANGE_PARAMS   = "eXo.provider.exoGroupProvider.getGroupsRangeParams";
+
+  private static final String       GET_GROUPS_FORUSER_URL    = "eXo.provider.exoGroupProvider.getGroupsForUserURL";
+
+  private static final String       GET_GROUPS_FORUSER_METHOD = "eXo.provider.exoGroupProvider.getGroupsForUserMethod";
+
+  private static final String       GET_GROUPS_FORUSER_PARAMS = "eXo.provider.exoGroupProvider.getGroupsForUserParams";
+
+  private static final String       GROUP_INFO_URL            = "eXo.provider.exoGroupProvider.groupInfoURL";
+
+  private static final String       GROUP_INFO_METHOD         = "eXo.provider.exoGroupProvider.groupInfoMethod";
+
+  private static final String       GROUP_INFO_PARAMS         = "eXo.provider.exoGroupProvider.groupInfoParams";
 
   // URL for getting information about specified group.
-  private final String groupInfoURL_;
+  private final String              groupInfoURL_;
+
   // HTTP method for getting information about specified group.
-  private final String groupInfoMethod_;
+  private final String              groupInfoMethod_;
+
   // Query parameters
   private final Map<String, String> groupInfoParams_;
 
   // URL for getting list of groups.
-  private final String getGroupsAllURL_;
+  private final String              getGroupsAllURL_;
+
   // HTTP method for getting list of groups.
-  private final String getGroupsAllMethod_;
+  private final String              getGroupsAllMethod_;
+
   // Query parameters
   private final Map<String, String> getGroupsAllParams_;
 
   // URL for getting list of groups.
-  private final String getGroupsRangeURL_;
+  private final String              getGroupsRangeURL_;
+
   // HTTP method for getting list of groups.
-  private final String getGroupsRangeMethod_;
+  private final String              getGroupsRangeMethod_;
+
   // Query parameters
   private final Map<String, String> getGroupsRangeParams_;
 
   // URL for getting list of groups.
-  private final String getGroupsForUserURL_;
+  private final String              getGroupsForUserURL_;
+
   // HTTP method for getting list of groups.
-  private final String getGroupsForUserMethod_;
+  private final String              getGroupsForUserMethod_;
+
   // Query parameters
   private final Map<String, String> getGroupsForUserParams_;
 
   // URL for getting total number of groups.
-  private final String groupsCountURL_;
+  private final String              groupsCountURL_;
+
   // HTTP method for getting total number of groups.
-  private final String groupsCountMethod_;
+  private final String              groupsCountMethod_;
+
   // Query parameters
   private final Map<String, String> groupsCountParams_;
 
@@ -103,33 +123,27 @@ public class ExoGroupProvider implements GroupProvider {
     String t = JiveGlobals.getXMLProperty(GROUP_INFO_URL);
     groupInfoURL_ = Utils.getBaseURL() + (t.endsWith("/") ? t : t + "/");
     groupInfoMethod_ = JiveGlobals.getXMLProperty(GROUP_INFO_METHOD);
-    groupInfoParams_ = Utils.parseQuery(JiveGlobals
-        .getXMLProperties(GROUP_INFO_PARAMS));
+    groupInfoParams_ = Utils.parseQuery(JiveGlobals.getXMLProperties(GROUP_INFO_PARAMS));
 
     t = JiveGlobals.getXMLProperty(GET_GROUPS_ALL_URL);
     getGroupsAllURL_ = Utils.getBaseURL() + (t.endsWith("/") ? t : t + "/");
     getGroupsAllMethod_ = JiveGlobals.getXMLProperty(GET_GROUPS_ALL_METHOD);
-    getGroupsAllParams_ = Utils.parseQuery(JiveGlobals
-        .getXMLProperties(GET_GROUPS_ALL_PARAMS));
+    getGroupsAllParams_ = Utils.parseQuery(JiveGlobals.getXMLProperties(GET_GROUPS_ALL_PARAMS));
 
     t = JiveGlobals.getXMLProperty(GET_GROUPS_RANGE_URL);
     getGroupsRangeURL_ = Utils.getBaseURL() + (t.endsWith("/") ? t : t + "/");
     getGroupsRangeMethod_ = JiveGlobals.getXMLProperty(GET_GROUPS_RANGE_METHOD);
-    getGroupsRangeParams_ = Utils.parseQuery(JiveGlobals
-        .getXMLProperties(GET_GROUPS_RANGE_PARAMS));
+    getGroupsRangeParams_ = Utils.parseQuery(JiveGlobals.getXMLProperties(GET_GROUPS_RANGE_PARAMS));
 
     t = JiveGlobals.getXMLProperty(GROUPS_COUNT_URL);
     groupsCountURL_ = Utils.getBaseURL() + (t.endsWith("/") ? t : t + "/");
     groupsCountMethod_ = JiveGlobals.getXMLProperty(GROUPS_COUNT_METHOD);
-    groupsCountParams_ = Utils.parseQuery(JiveGlobals
-        .getXMLProperties(GROUPS_COUNT_PARAMS));
+    groupsCountParams_ = Utils.parseQuery(JiveGlobals.getXMLProperties(GROUPS_COUNT_PARAMS));
 
     t = JiveGlobals.getXMLProperty(GET_GROUPS_FORUSER_URL);
     getGroupsForUserURL_ = Utils.getBaseURL() + (t.endsWith("/") ? t : t + "/");
-    getGroupsForUserMethod_ = JiveGlobals
-        .getXMLProperty(GET_GROUPS_FORUSER_METHOD);
-    getGroupsForUserParams_ = Utils.parseQuery(JiveGlobals
-        .getXMLProperties(GET_GROUPS_FORUSER_PARAMS));
+    getGroupsForUserMethod_ = JiveGlobals.getXMLProperty(GET_GROUPS_FORUSER_METHOD);
+    getGroupsForUserParams_ = Utils.parseQuery(JiveGlobals.getXMLProperties(GET_GROUPS_FORUSER_PARAMS));
   }
 
   /*
@@ -139,8 +153,7 @@ public class ExoGroupProvider implements GroupProvider {
   public Group getGroup(String group) throws GroupNotFoundException {
     String url = groupInfoURL_;
     String method = groupInfoMethod_;
-    HashMap<String, String> params = new HashMap<String, String>(
-        groupInfoParams_);
+    HashMap<String, String> params = new HashMap<String, String>(groupInfoParams_);
     Response resp = null;
     url += group + "/";
     try {
@@ -149,9 +162,7 @@ public class ExoGroupProvider implements GroupProvider {
       } else if ("GET".equalsIgnoreCase(method)) {
         resp = Utils.doGet(new URL(url), params);
       } else
-        throw new IllegalStateException(
-            "Configuration error, only HTTP methods 'POST' or 'GET' are allowed, " +
-                "but found '" + method + "'.");
+        throw new IllegalStateException("Configuration error, only HTTP methods 'POST' or 'GET' are allowed, " + "but found '" + method + "'.");
 
     } catch (Exception e) {
       e.printStackTrace();
@@ -159,8 +170,7 @@ public class ExoGroupProvider implements GroupProvider {
     }
     if (resp.getStatus() == HttpStatus.SC_OK) {
       Document d = resp.getResponseDoc();
-      String description = d.getDocumentElement().getElementsByTagName(
-          "description").item(0).getTextContent();
+      String description = d.getDocumentElement().getElementsByTagName("description").item(0).getTextContent();
       NodeList t = d.getDocumentElement().getElementsByTagName("member");
       List<JID> members = new ArrayList<JID>();
       for (int i = 0; i < t.getLength(); i++)
@@ -172,8 +182,7 @@ public class ExoGroupProvider implements GroupProvider {
     } else if (resp.getStatus() == HttpStatus.SC_NOT_FOUND) {
       throw new GroupNotFoundException();
     }
-    throw new IllegalStateException("Unknown response status : " +
-        resp.getStatus());
+    throw new IllegalStateException("Unknown response status : " + resp.getStatus());
   }
 
   /*
@@ -183,8 +192,7 @@ public class ExoGroupProvider implements GroupProvider {
   public int getGroupCount() {
     String url = groupsCountURL_;
     String method = groupsCountMethod_;
-    HashMap<String, String> params = new HashMap<String, String>(
-        groupsCountParams_);
+    HashMap<String, String> params = new HashMap<String, String>(groupsCountParams_);
     Response resp = null;
     try {
       if ("POST".equalsIgnoreCase(method))
@@ -192,21 +200,17 @@ public class ExoGroupProvider implements GroupProvider {
       else if ("GET".equalsIgnoreCase(method))
         resp = Utils.doGet(new URL(url), params);
       else
-        throw new IllegalStateException(
-            "Configuration error, only HTTP methods 'POST' or 'GET' are allowed, " +
-                "but found '" + method + "'.");
+        throw new IllegalStateException("Configuration error, only HTTP methods 'POST' or 'GET' are allowed, " + "but found '" + method + "'.");
     } catch (Exception e) {
       e.printStackTrace();
       return -1;
     }
     if (resp.getStatus() == HttpStatus.SC_OK) {
       Document d = resp.getResponseDoc();
-      Integer count = Integer.valueOf(d.getDocumentElement()
-          .getElementsByTagName("number").item(0).getTextContent());
+      Integer count = Integer.valueOf(d.getDocumentElement().getElementsByTagName("number").item(0).getTextContent());
       return count - 1; // Do not include root node
     }
-    throw new IllegalStateException("Unknown response status : " +
-        resp.getStatus());
+    throw new IllegalStateException("Unknown response status : " + resp.getStatus());
   }
 
   /*
@@ -216,8 +220,7 @@ public class ExoGroupProvider implements GroupProvider {
   public Collection<String> getGroupNames() {
     String url = getGroupsAllURL_;
     String method = getGroupsAllMethod_;
-    HashMap<String, String> params = new HashMap<String, String>(
-        getGroupsAllParams_);
+    HashMap<String, String> params = new HashMap<String, String>(getGroupsAllParams_);
     return getGroupNames(url, method, params);
   }
 
@@ -228,8 +231,7 @@ public class ExoGroupProvider implements GroupProvider {
   public Collection<String> getGroupNames(int startIndex, int numResults) {
     String url = getGroupsRangeURL_;
     String method = getGroupsRangeMethod_;
-    HashMap<String, String> params = new HashMap<String, String>(
-        getGroupsRangeParams_);
+    HashMap<String, String> params = new HashMap<String, String>(getGroupsRangeParams_);
     url += startIndex + "/" + (startIndex + numResults);
     return getGroupNames(url, method, params);
   }
@@ -241,19 +243,18 @@ public class ExoGroupProvider implements GroupProvider {
   public Collection<String> getGroupNames(JID user) {
     String url = getGroupsForUserURL_;
     String method = getGroupsForUserMethod_;
-    HashMap<String, String> params = new HashMap<String, String>(
-        getGroupsForUserParams_);
+    HashMap<String, String> params = new HashMap<String, String>(getGroupsForUserParams_);
     params.put("username", user.getNode());
     return getGroupNames(url, method, params);
   }
-  
+
   /*
    * (non-Javadoc)
    * @see org.jivesoftware.openfire.group.GroupProvider#getSharedGroupsNames()
    */
   public Collection<String> getSharedGroupsNames() {
-	// search is not supported
-	return Collections.emptyList();
+    // search is not supported
+    return Collections.emptyList();
   }
 
   /*
@@ -267,8 +268,7 @@ public class ExoGroupProvider implements GroupProvider {
 
   /*
    * (non-Javadoc)
-   * @see org.jivesoftware.openfire.group.GroupProvider#search(java.lang.String,
-   *      int, int)
+   * @see org.jivesoftware.openfire.group.GroupProvider#search(java.lang.String, int, int)
    */
   public Collection<String> search(String query, int startIndex, int numResults) {
     // search is not supported
@@ -291,8 +291,7 @@ public class ExoGroupProvider implements GroupProvider {
     return false;
   }
 
-  private Collection<String> getGroupNames(String url, String method,
-      HashMap<String, String> params) {
+  private Collection<String> getGroupNames(String url, String method, HashMap<String, String> params) {
     Response resp = null;
     try {
       if ("POST".equalsIgnoreCase(method))
@@ -300,9 +299,7 @@ public class ExoGroupProvider implements GroupProvider {
       else if ("GET".equalsIgnoreCase(method))
         resp = Utils.doGet(new URL(url), params);
       else
-        throw new IllegalStateException(
-            "Configuration error, only HTTP methods 'POST' or 'GET' are allowed, " +
-                "but found '" + method + "'.");
+        throw new IllegalStateException("Configuration error, only HTTP methods 'POST' or 'GET' are allowed, " + "but found '" + method + "'.");
     } catch (Exception e) {
       e.printStackTrace();
       return null;
@@ -310,8 +307,7 @@ public class ExoGroupProvider implements GroupProvider {
     if (resp.getStatus() == HttpStatus.SC_OK) {
       return createGroupList(resp.getResponseDoc());
     }
-    throw new IllegalStateException("Unknown response status : " +
-        resp.getStatus());
+    throw new IllegalStateException("Unknown response status : " + resp.getStatus());
   }
 
   /**
@@ -351,9 +347,7 @@ public class ExoGroupProvider implements GroupProvider {
       } else if ("GET".equalsIgnoreCase(method)) {
         resp = Utils.doGet(new URL(url), params);
       } else
-        throw new IllegalStateException(
-            "Configuration error, only HTTP methods 'POST' or 'GET' are allowed, " +
-                "but found '" + method + "'.");
+        throw new IllegalStateException("Configuration error, only HTTP methods 'POST' or 'GET' are allowed, " + "but found '" + method + "'.");
 
     } catch (Exception e) {
       e.printStackTrace();
@@ -382,18 +376,15 @@ public class ExoGroupProvider implements GroupProvider {
     } else if (resp.getStatus() == HttpStatus.SC_NOT_FOUND) {
       throw new IllegalStateException("Group not found");
     }
-    throw new IllegalStateException("Unknown response status : " +
-        resp.getStatus());
+    throw new IllegalStateException("Unknown response status : " + resp.getStatus());
 
   }
 
   /*
    * (non-Javadoc)
-   * @see org.jivesoftware.openfire.group.GroupProvider#addMember(java.lang.String,
-   *      org.xmpp.packet.JID, boolean)
+   * @see org.jivesoftware.openfire.group.GroupProvider#addMember(java.lang.String, org.xmpp.packet.JID, boolean)
    */
-  public void addMember(String groupName, JID user, boolean administrator)
-      throws UnsupportedOperationException {
+  public void addMember(String groupName, JID user, boolean administrator) throws UnsupportedOperationException {
     throw new UnsupportedOperationException();
   }
 
@@ -401,8 +392,7 @@ public class ExoGroupProvider implements GroupProvider {
    * (non-Javadoc)
    * @see org.jivesoftware.openfire.group.GroupProvider#createGroup(java.lang.String)
    */
-  public Group createGroup(String name) throws UnsupportedOperationException,
-      GroupAlreadyExistsException {
+  public Group createGroup(String name) throws UnsupportedOperationException, GroupAlreadyExistsException {
     throw new UnsupportedOperationException();
   }
 
@@ -416,41 +406,33 @@ public class ExoGroupProvider implements GroupProvider {
 
   /*
    * (non-Javadoc)
-   * @see org.jivesoftware.openfire.group.GroupProvider#deleteMember(java.lang.String,
-   *      org.xmpp.packet.JID)
+   * @see org.jivesoftware.openfire.group.GroupProvider#deleteMember(java.lang.String, org.xmpp.packet.JID)
    */
-  public void deleteMember(String groupName, JID user)
-      throws UnsupportedOperationException {
+  public void deleteMember(String groupName, JID user) throws UnsupportedOperationException {
     throw new UnsupportedOperationException();
   }
 
   /*
    * (non-Javadoc)
-   * @see org.jivesoftware.openfire.group.GroupProvider#setDescription(java.lang.String,
-   *      java.lang.String)
+   * @see org.jivesoftware.openfire.group.GroupProvider#setDescription(java.lang.String, java.lang.String)
    */
-  public void setDescription(String name, String description)
-      throws GroupNotFoundException {
+  public void setDescription(String name, String description) throws GroupNotFoundException {
     throw new UnsupportedOperationException();
   }
 
   /*
    * (non-Javadoc)
-   * @see org.jivesoftware.openfire.group.GroupProvider#setName(java.lang.String,
-   *      java.lang.String)
+   * @see org.jivesoftware.openfire.group.GroupProvider#setName(java.lang.String, java.lang.String)
    */
-  public void setName(String oldName, String newName)
-      throws UnsupportedOperationException, GroupAlreadyExistsException {
+  public void setName(String oldName, String newName) throws UnsupportedOperationException, GroupAlreadyExistsException {
     throw new UnsupportedOperationException();
   }
 
   /*
    * (non-Javadoc)
-   * @see org.jivesoftware.openfire.group.GroupProvider#updateMember(java.lang.String,
-   *      org.xmpp.packet.JID, boolean)
+   * @see org.jivesoftware.openfire.group.GroupProvider#updateMember(java.lang.String, org.xmpp.packet.JID, boolean)
    */
-  public void updateMember(String groupName, JID user, boolean administrator)
-      throws UnsupportedOperationException {
+  public void updateMember(String groupName, JID user, boolean administrator) throws UnsupportedOperationException {
     throw new UnsupportedOperationException();
   }
 

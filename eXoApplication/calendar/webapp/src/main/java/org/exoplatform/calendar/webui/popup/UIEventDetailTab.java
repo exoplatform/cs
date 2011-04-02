@@ -200,6 +200,6 @@ public class UIEventDetailTab extends UIFormInputWithActions {
     return findComponentById(id) ;
   }
   public UIFormSelectBoxWithGroups getUIFormSelectBoxGroup(String id) {
-  	return findComponentById(id) ;
+    return findComponentById(id) ;
   }
 }

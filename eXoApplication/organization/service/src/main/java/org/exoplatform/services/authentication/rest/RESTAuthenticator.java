@@ -18,11 +18,9 @@
 package org.exoplatform.services.authentication.rest;
 
 import javax.security.auth.login.LoginContext;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 import org.exoplatform.common.http.HTTPStatus;
@@ -37,7 +35,8 @@ import org.exoplatform.services.security.jaas.BasicCallbackHandler;
 @Path("/organization/authenticate")
 public class RESTAuthenticator implements ResourceContainer {
 
-  public RESTAuthenticator() {}
+  public RESTAuthenticator() {
+  }
 
   /**
    * Check if the username and the password of an user is valid.
@@ -46,38 +45,32 @@ public class RESTAuthenticator implements ResourceContainer {
    */
   @POST
   @Path("/authenticate/")
-  public Response authenticate(
-	@FormParam("username") String username,
-	@FormParam("password") String password) {
+  public Response authenticate(@FormParam("username") String username, @FormParam("password") String password) {
     try {
-      LoginContext loginContext = new LoginContext(ExoContainerContext.getCurrentContainer().getContext().getRealmName(),
-          new BasicCallbackHandler(username, password.toCharArray()));
+      LoginContext loginContext = new LoginContext(ExoContainerContext.getCurrentContainer().getContext().getRealmName(), new BasicCallbackHandler(username, password.toCharArray()));
       loginContext.login();
       loginContext.logout();
       return Response.ok().build();
     } catch (Exception e) {
       e.printStackTrace();
-      return Response.status(HTTPStatus.FORBIDDEN).entity(e.getMessage())
-          .build();
+      return Response.status(HTTPStatus.FORBIDDEN).entity(e.getMessage()).build();
     }
   }
-  
-  
-//  @POST
-//  @Path("/organization/authenticate/")
-//  public Response isUserLogedIn(@QueryParam("username") String userId ){
-//    IdentityRegistry identityRegistry = (IdentityRegistry) getContainer().getComponentInstanceOfType(
-//        IdentityRegistry.class);
-//    if (identityRegistry.getIdentity(userId) != null)
-//      return Response.ok().build();
-//
-//    return Response.withStatus(HTTPStatus.FORBIDDEN).build();
-//
-//  }
-//
-//  private static ExoContainer getContainer() {
-//    return ExoContainerContext.getCurrentContainer();
-//  }
 
+  // @POST
+  // @Path("/organization/authenticate/")
+  // public Response isUserLogedIn(@QueryParam("username") String userId ){
+  // IdentityRegistry identityRegistry = (IdentityRegistry) getContainer().getComponentInstanceOfType(
+  // IdentityRegistry.class);
+  // if (identityRegistry.getIdentity(userId) != null)
+  // return Response.ok().build();
+  //
+  // return Response.withStatus(HTTPStatus.FORBIDDEN).build();
+  //
+  // }
+  //
+  // private static ExoContainer getContainer() {
+  // return ExoContainerContext.getCurrentContainer();
+  // }
 
 }

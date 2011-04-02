@@ -54,14 +54,14 @@ public interface DataStorage {
    * @throws Exception
    */
   public Node getContactUserDataHome(String username) throws Exception;
-  
+
   /**
    * Get the public Contact application storage
    * @return JCR Node
    * @throws Exception
    */
   public Node getContactApplicationDataHome() throws Exception;
-  
+
   /**
    * Get the home node of user contacts under user contact application storage
    * @param username
@@ -69,7 +69,7 @@ public interface DataStorage {
    * @throws Exception
    */
   public Node getPersonalContactsHome(String username) throws Exception;
-  
+
   /**
    * Get the home node of user address books under user contact application storage
    * @param username
@@ -77,14 +77,14 @@ public interface DataStorage {
    * @throws Exception
    */
   public Node getPersonalAddressBooksHome(String username) throws Exception;
-  
+
   /**
    * Get the home node of public contacts under public Contact application storage  
    * @return JCR Node
    * @throws Exception
    */
   public Node getPublicContactsHome() throws Exception;
-  
+
   /**
    * Get the home node of user tags under user contact application storage
    * @param username
@@ -92,7 +92,7 @@ public interface DataStorage {
    * @throws Exception
    */
   public Node getTagsHome(String username) throws Exception;
-  
+
   /**
    * get the node that holds references to all address books shared to a given user.
    * @param userId
@@ -116,7 +116,7 @@ public interface DataStorage {
    * @throws Exception
    */
   public Contact loadPublicContactByUser(String userId) throws Exception;
-  
+
   /**
    * Get all contacts of a user
    * @param username
@@ -160,8 +160,7 @@ public interface DataStorage {
    * @throws AddressBookNotFoundException
    * @throws Exception
    */
-  public List<String> findEmailsByAddressBook(String username, String addressBookId) throws AddressBookNotFoundException,
-                                                                                    Exception;
+  public List<String> findEmailsByAddressBook(String username, String addressBookId) throws AddressBookNotFoundException, Exception;
 
   /**
    * Get type of the address book
@@ -222,7 +221,7 @@ public interface DataStorage {
    * @throws Exception
    */
   public AddressBook loadPersonalAddressBook(String username, String groupId) throws Exception;
-  
+
   public AddressBook loadPublicAddressBook(String username, String groupId) throws Exception;
 
   /**
@@ -259,7 +258,7 @@ public interface DataStorage {
    * @throws Exception
    */
   public void moveContacts(String username, List<Contact> contacts, String addressType) throws Exception;
- 
+
   /**
    * Get personal contacts by group
    * @param username
@@ -302,9 +301,7 @@ public interface DataStorage {
    * @param isNew
    * @throws Exception
    */
-  public void savePersonalOrSharedAddressBook(String username,
-                                              AddressBook addressbook,
-                                              boolean isNew) throws Exception;
+  public void savePersonalOrSharedAddressBook(String username, AddressBook addressbook, boolean isNew) throws Exception;
 
   /**
    * @param username
@@ -385,10 +382,7 @@ public interface DataStorage {
    * @param isNew
    * @throws Exception
    */
-  public void saveContactToSharedAddressBook(String username,
-                                             String addressBookId,
-                                             Contact contact,
-                                             boolean isNew) throws Exception;
+  public void saveContactToSharedAddressBook(String username, String addressBookId, Contact contact, boolean isNew) throws Exception;
 
   /**
    * @param username
@@ -404,8 +398,7 @@ public interface DataStorage {
    * @return
    * @throws Exception
    */
-  public ContactPageList getSharedContactsByAddressBook(String username,
-                                                        SharedAddressBook addressBook) throws Exception;
+  public ContactPageList getSharedContactsByAddressBook(String username, SharedAddressBook addressBook) throws Exception;
 
   /**
    * @param groupId
@@ -420,14 +413,13 @@ public interface DataStorage {
    * @throws Exception
    */
   public List<GroupContactData> getPublicContacts(String[] groupIds) throws Exception;
-  
+
   /**
    * @param groupIds
    * @return
    * @throws Exception
    */
   public List<String> getPublicAddressBookContacts(String[] groupIds) throws Exception;
-
 
   /**
    * @param groupId
@@ -542,14 +534,14 @@ public interface DataStorage {
    * @throws Exception
    */
   public Map<String, String> findEmailsByFilter(String username, ContactFilter filter) throws Exception;
-  
+
   /**
    * @param username
    * @param filter
    * @return
    * @throws Exception
    */
-  public List<String> searchEmailsByFilter(String username, ContactFilter filter)throws Exception;
+  public List<String> searchEmailsByFilter(String username, ContactFilter filter) throws Exception;
 
   /**
    * @param emails
@@ -566,8 +558,8 @@ public interface DataStorage {
    * @param destType
    * @throws Exception
    */
-  public void copyNodes(String username,Node srcHomeNode, NodeIterator iter, String destAddress, String destType ) throws Exception;
-  
+  public void copyNodes(String username, Node srcHomeNode, NodeIterator iter, String destAddress, String destType) throws Exception;
+
   /**
    * @param username
    * @param srcAddress
@@ -576,11 +568,7 @@ public interface DataStorage {
    * @param destType
    * @throws Exception
    */
-  public void pasteAddressBook(String username,
-                               String srcAddress,
-                               String srcType,
-                               String destAddress,
-                               String destType) throws Exception;
+  public void pasteAddressBook(String username, String srcAddress, String srcType, String destAddress, String destType) throws Exception;
 
   /**
    * @param username
@@ -590,10 +578,7 @@ public interface DataStorage {
    * @return
    * @throws Exception
    */
-  public List<Contact> pasteContacts(String username,
-                                     String destAddress,
-                                     String destType,
-                                     Map<String, String> contactsMap) throws Exception;
+  public List<Contact> pasteContacts(String username, String destAddress, String destType, Map<String, String> contactsMap) throws Exception;
 
   /**
    * @param contactHomeNode
@@ -603,10 +588,7 @@ public interface DataStorage {
    * @return
    * @throws Exception
    */
-  public Node saveCopyContact(Node contactHomeNode,
-                              Contact contact,
-                              String destAddress,
-                              String destType) throws Exception;
+  public Node saveCopyContact(Node contactHomeNode, Contact contact, String destAddress, String destType) throws Exception;
 
   /**
    * @param user
@@ -675,9 +657,11 @@ public interface DataStorage {
    * @throws Exception
    */
   public Session getSession(SessionProvider sprovider) throws Exception;
- 
-  public enum AddressBookType {Personal, Shared, Public};
-  
+
+  public enum AddressBookType {
+    Personal, Shared, Public
+  };
+
   /**
    * Get home node of share data under user Contact application storage
    * @param user
@@ -685,8 +669,8 @@ public interface DataStorage {
    * @throws Exception
    */
   public Node getSharedContactsHome(String user) throws Exception;
-  
-  public List<String> getPublicAddresses(String username) throws Exception ;
-  
-  public void savePublicAddressBook(AddressBook addressbook, boolean isNew) throws Exception ;
+
+  public List<String> getPublicAddresses(String username) throws Exception;
+
+  public void savePublicAddressBook(AddressBook addressbook, boolean isNew) throws Exception;
 }

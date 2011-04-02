@@ -28,36 +28,40 @@ import java.util.Iterator;
 
 public class MembershipTypesListBean {
   private Collection<?> membershipTypes;
+
   public MembershipTypesListBean() {
-  
+
   }
+
   public MembershipTypesListBean(Collection<?> membershipTypes) {
     this.membershipTypes = membershipTypes;
   }
+
   public Collection<?> getMembershipTypes() {
     return membershipTypes;
   }
+
   public void setMembershipTypes(Collection<?> membershipTypes) {
     this.membershipTypes = membershipTypes;
   }
-  
+
   @Override
   public boolean equals(Object obj) {
-    if(obj == null)
+    if (obj == null)
       return false;
-    if(obj == this)
+    if (obj == this)
       return true;
-    if(this.hashCode() == obj.hashCode())
+    if (this.hashCode() == obj.hashCode())
       return true;
-    if(obj instanceof MembershipTypesListBean){
-      MembershipTypesListBean bean = (MembershipTypesListBean)obj;
-      if( membershipTypes.size() == bean.membershipTypes.size() ){
+    if (obj instanceof MembershipTypesListBean) {
+      MembershipTypesListBean bean = (MembershipTypesListBean) obj;
+      if (membershipTypes.size() == bean.membershipTypes.size()) {
         Iterator<?> it_1 = membershipTypes.iterator();
         Iterator<?> it_2 = membershipTypes.iterator();
-        while(it_1.hasNext()){
+        while (it_1.hasNext()) {
           Object m_obj1 = it_1.next();
           Object m_obj2 = it_2.next();
-          if(! m_obj1.equals(m_obj2))
+          if (!m_obj1.equals(m_obj2))
             return false;
         }
         return true;
@@ -65,17 +69,18 @@ public class MembershipTypesListBean {
     }
     return false;
   }
-  
+
   private int h_ = 0;
+
   @Override
   public int hashCode() {
-    if( h_ == 0){
+    if (h_ == 0) {
       Iterator<?> i = membershipTypes.iterator();
-      while(i.hasNext()){
+      while (i.hasNext()) {
         h_ = h_ + i.next().hashCode();
       }
     }
     return h_;
   }
-  
+
 }

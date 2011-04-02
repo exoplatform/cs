@@ -37,7 +37,8 @@ import org.exoplatform.services.organization.Group;
 public class GroupListXMLEntity implements StreamingOutput {
 
   private final Collection<Group> groupList_;
-  private final String baseURI_;
+
+  private final String            baseURI_;
 
   public GroupListXMLEntity(Collection<Group> groupList, String baseURI) {
     groupList_ = groupList;
@@ -46,7 +47,6 @@ public class GroupListXMLEntity implements StreamingOutput {
 
   /*
    * (non-Javadoc)
-   * 
    * @see org.exoplatform.services.rest.transformer.SerializableEntity#writeObject(java.io.OutputStream)
    */
   public void write(OutputStream _out) throws IOException {
@@ -60,9 +60,7 @@ public class GroupListXMLEntity implements StreamingOutput {
       xsw.writeNamespace(XMLContants.XLINK_PREFIX, XMLContants.XLINK_NAMESPACE_URL);
       for (Group g : groupList_) {
         xsw.writeStartElement("group");
-        xsw.writeAttribute(XMLContants.XLINK_NAMESPACE_URL,
-            XMLContants.XLINK_HREF, baseURI_  + "/organization/group/"
-            + "?output=xml&groupId=" + g.getId().replaceFirst("/", "") + "&command=info");
+        xsw.writeAttribute(XMLContants.XLINK_NAMESPACE_URL, XMLContants.XLINK_HREF, baseURI_ + "/organization/group/" + "?output=xml&groupId=" + g.getId().replaceFirst("/", "") + "&command=info");
         xsw.writeAttribute("groupId", g.getId());
         xsw.writeCharacters(g.getGroupName());
         xsw.writeEndElement();

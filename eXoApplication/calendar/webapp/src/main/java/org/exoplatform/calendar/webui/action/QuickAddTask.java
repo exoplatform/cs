@@ -39,8 +39,7 @@ public class QuickAddTask extends UIComponent {
 
   static public class AddActionListener extends ActionListener<QuickAddTask> {
     protected void processEvent(Event<QuickAddTask> event) throws Exception {
-      // TODO Auto-generated method stub
-      
+        
     }
   }
 

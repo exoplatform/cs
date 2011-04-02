@@ -25,9 +25,10 @@ package org.exoplatform.services.organization.rest.json;
 
 public class CountBean {
   private int count;
-  
-  public CountBean() {}
-  
+
+  public CountBean() {
+  }
+
   public CountBean(int count) {
     super();
     this.count = count;
@@ -40,15 +41,15 @@ public class CountBean {
   public void setCount(int count) {
     this.count = count;
   }
-  
+
   @Override
   public boolean equals(Object obj) {
-    if(obj == null)
+    if (obj == null)
       return false;
-    if(obj instanceof CountBean){
-      return count == ((CountBean)obj).getCount();
+    if (obj instanceof CountBean) {
+      return count == ((CountBean) obj).getCount();
     }
     return super.equals(obj);
   }
-  
+
 }
