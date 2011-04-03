@@ -290,7 +290,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       MessageFilter filter = new MessageFilter("Search");
       filter.setAccountId(accountId);
       String selectedFolderId = uiSearchForm.getSelectedFolder();
-      if (selectedFolderId != null && selectedFolderId != "") {
+      if (!Utils.isEmptyField(selectedFolderId)) {
         filter.setFolder(new String[] {folder});
       }
       filter.setTo(to);

@@ -375,7 +375,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       UIFormStringInput uiInput = uiSharedTab.getUIStringInput(UISharedTab.FIELD_USER);
       String currentValues = uiInput.getValue();
       String values = uiUserSelector.getSelectedUsers();
-      if(!CalendarUtils.isEmpty(currentValues) && currentValues != "null") values += ","+ currentValues; 
+      if(!CalendarUtils.isEmpty(currentValues) && !currentValues.equals("null")) values += ","+ currentValues; 
       values = uiShareForm.cleanValue(values);
       uiInput.setValue(values);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer);

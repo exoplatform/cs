@@ -192,7 +192,6 @@ public class UIMailPortlet extends UIPortletApplication {
     try {
         return continuation.getUserToken(this.getRemoteUser());
     } catch (Exception e) {
-      System.out.println("\n\n can not get UserToken");
       return "" ;
     }
   }

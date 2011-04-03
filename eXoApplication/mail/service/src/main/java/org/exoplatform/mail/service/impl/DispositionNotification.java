@@ -24,6 +24,9 @@ import java.util.Enumeration;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetHeaders;
 
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
+
 import com.sun.mail.util.LineOutputStream;
 
 /**
@@ -33,7 +36,7 @@ import com.sun.mail.util.LineOutputStream;
  * Jun 25, 2009  
  */
 public class DispositionNotification {
-
+  private Log log = ExoLogger.getLogger(this.getClass());
   private static boolean    debug = false;
 
   /**
@@ -55,7 +58,7 @@ public class DispositionNotification {
   public DispositionNotification(InputStream is) throws MessagingException, IOException {
     notifications = new InternetHeaders(is);
     if (debug)
-      System.out.println("MDN: got notification content");
+      log.info("MDN: got notification content");
   }
 
   /**

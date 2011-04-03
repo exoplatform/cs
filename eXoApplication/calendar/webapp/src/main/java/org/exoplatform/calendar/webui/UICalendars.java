@@ -47,6 +47,8 @@ import org.exoplatform.calendar.webui.popup.UIPopupContainer;
 import org.exoplatform.calendar.webui.popup.UIQuickAddEvent;
 import org.exoplatform.calendar.webui.popup.UIRemoteCalendar;
 import org.exoplatform.calendar.webui.popup.UISubscribeForm;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -95,6 +97,7 @@ import org.exoplatform.webui.form.ext.UIFormColorPicker.Colors;
 )
 
 public class UICalendars extends UIForm  {
+  private Log log = ExoLogger.getLogger(this.getClass());
   public static String CALENDARID = "calendarid".intern() ;
   public static String CALTYPE = "calType".intern() ;
   public static String CALNAME = "calName".intern() ;
@@ -113,7 +116,6 @@ public class UICalendars extends UIForm  {
     try {
       return super.getLabel(key) ;
     } catch (Exception e) {
-      e.printStackTrace() ;
       return key ;
     }
   }
@@ -744,7 +746,7 @@ public class UICalendars extends UIForm  {
         try {
           calendar = calService.getGroupCalendar(selectedCalendarId) ;
         } catch (PathNotFoundException e) {
-          System.out.println("\n\n calendar has been removed !");
+          uiComponent.log.debug("\n\n calendar has been removed !");
         }
       }  
       if(calendar == null) {

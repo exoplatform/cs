@@ -27,9 +27,11 @@ import org.exoplatform.mail.service.CheckingInfo;
 import org.exoplatform.mail.service.DataStorage;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MimeMessageParser;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 
 public class FetchMailContentThread implements Runnable {
-
+  private Log log = ExoLogger.getLogger(this.getClass());
   private DataStorage                                     storage_;
 
   private String                                          username_;
@@ -73,10 +75,10 @@ public class FetchMailContentThread implements Runnable {
       CheckingInfo info = mailService.getCheckingInfo(username_, accountId_);
       msg = msgList.get(j);
       if (info.isRequestStop()) {
-        System.out.println("stop update message at " + msg.getSubject());
+        log.info("stop update message at " + msg.getSubject());
         break;
       }
-      System.out.println("save msg to database: " + msg.getSubject());
+      log.info("save msg to database: " + msg.getSubject());
       storage_.saveTotalMessage(username_, accountId_, MimeMessageParser.getMessageId(msg), msg, null);
       j++;
     }

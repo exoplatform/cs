@@ -23,6 +23,8 @@ import javax.portlet.PortletRequest;
 import org.exoplatform.chatbar.Utils;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -43,6 +45,7 @@ import org.mortbay.cometd.continuation.EXoContinuationBayeux;
                  lifecycle = UIApplicationLifecycle.class
 )
 public class UIChatBarPortlet extends UIPortletApplication {
+  private Log log = ExoLogger.getLogger(this.getClass());
   private String windowId; 
 
   protected static final String VIEWMODE_TEMP = "app:/templates/chatbar/webui/UIChatBarPortlet.gtmpl" ;
@@ -83,7 +86,7 @@ public class UIChatBarPortlet extends UIPortletApplication {
     try {
       return this.getContinuationService().getUserToken(this.getRemoteUser());
     } catch (Exception e) {
-      System.out.println("\n\n can not get UserToken");
+      log.info("\n\n can not get UserToken");
       return "" ;
     }
   }

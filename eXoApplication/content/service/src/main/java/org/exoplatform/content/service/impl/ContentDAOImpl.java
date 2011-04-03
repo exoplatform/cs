@@ -81,7 +81,7 @@ public class ContentDAOImpl extends BaseContentService implements ContentDAO {
   public void create(final ContentNavigation navigation) throws Exception {
     SessionProvider sessionProvider = SessionProvider.createSystemProvider();
     Node appNode = nodeCreator_.getPublicApplicationNode(sessionProvider);
-    if (navigation.getOwner() != "anonymous") {
+    if (!navigation.getOwner().equals("anonymous")) {
       appNode = createApplicationNode(sessionProvider, navigation.getOwner());
     }
     ContentData data = new ContentData();
@@ -96,7 +96,7 @@ public class ContentDAOImpl extends BaseContentService implements ContentDAO {
   public void save(ContentNavigation navigation) throws Exception {
     SessionProvider sessionProvider = SessionProvider.createSystemProvider();
     Node appNode = nodeCreator_.getPublicApplicationNode(sessionProvider);
-    if (navigation.getOwner() != "anonymous") {
+    if (!navigation.getOwner().equals("anonymous")) {
       appNode = getApplicationNode(sessionProvider, navigation.getOwner());
     }
     if (appNode == null) {

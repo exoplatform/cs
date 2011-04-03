@@ -1,4 +1,3 @@
-
 /**
  * 
  */
@@ -60,14 +59,9 @@ public class MailWebservice implements ResourceContainer {
   private static final Log log = ExoLogger.getLogger("cs.mail.webservice");
   // TODO need to organize code, don't keep html content here !
   
-  private OrganizationService organizationService;
   public MailWebservice() {
     
   } 
-  public MailWebservice(OrganizationService organizationService) {
-    this.organizationService = organizationService;
-  }
-  
   @GET
   @Path("/checkmail/{username}/{accountId}/{folderId}/")
   public Response checkMail(@PathParam("username") String userName,
@@ -386,7 +380,7 @@ public class MailWebservice implements ResourceContainer {
     }
     SaslClient sasl = Sasl.createSaslClient(mechs, username, proto, host, null, null);
     if(sasl != null)
-      System.out.println(sasl.getMechanismName());
+      log.info(sasl.getMechanismName());
     
     if(mechs != null && mechs.length>0){
       for(String mech : mechs){

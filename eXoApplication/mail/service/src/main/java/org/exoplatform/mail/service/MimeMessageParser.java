@@ -123,7 +123,7 @@ public class MimeMessageParser {
             dateFormat = new SimpleDateFormat("EEE, d MMM yy HH:mm:ss", Locale.ENGLISH);
             return dateFormat.parse(dateStr.substring(0, dateStr.lastIndexOf(":") + 2));
           } catch (ParseException exxx) {
-            System.out.println(" [WARNING] Cannot parse date time from message: " + dateStr);
+            logger.warn("Cannot parse date time from message: " + dateStr);
             return null;
           }
         }

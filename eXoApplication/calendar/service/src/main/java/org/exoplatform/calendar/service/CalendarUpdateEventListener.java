@@ -27,11 +27,9 @@ import org.exoplatform.container.component.BaseComponentPlugin;
 public class CalendarUpdateEventListener extends BaseComponentPlugin implements EventLifeCycle {
 
   public void preUpdate() {
-    System.out.println("\n\n pre update");
   }
 
   public void postUpdate() {
-    System.out.println("\n\n post update");
   }
 
   @Override

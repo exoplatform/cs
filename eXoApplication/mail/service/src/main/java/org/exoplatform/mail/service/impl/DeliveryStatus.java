@@ -26,6 +26,9 @@ import java.util.Vector;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetHeaders;
 
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
+
 import com.sun.mail.util.LineOutputStream;
 
 /**
@@ -35,6 +38,7 @@ import com.sun.mail.util.LineOutputStream;
  * Jun 18, 2009  
  */
 public class DeliveryStatus {
+  private Log log = ExoLogger.getLogger(this.getClass());
   private static boolean      debug = false;
 
   /**
@@ -63,21 +67,21 @@ public class DeliveryStatus {
   public DeliveryStatus(InputStream is) throws MessagingException, IOException {
     messageDSN = new InternetHeaders(is);
     if (debug)
-      System.out.println("DSN: got messageDSN");
+      log.info("DSN: got messageDSN");
     Vector v = new Vector();
     try {
       while (is.available() > 0) {
         InternetHeaders h = new InternetHeaders(is);
         if (debug)
-          System.out.println("DSN: got recipientDSN");
+          log.info("DSN: got recipientDSN");
         v.addElement(h);
       }
     } catch (EOFException ex) {
       if (debug)
-        System.out.println("DSN: got EOFException");
+        log.info("DSN: got EOFException");
     }
     if (debug)
-      System.out.println("DSN: recipientDSN size " + v.size());
+      log.info("DSN: recipientDSN size " + v.size());
     recipientDSN = new InternetHeaders[v.size()];
     v.copyInto(recipientDSN);
   }

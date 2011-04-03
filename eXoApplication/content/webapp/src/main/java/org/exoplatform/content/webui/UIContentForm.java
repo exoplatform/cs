@@ -138,7 +138,6 @@ public class UIContentForm extends UIForm {
     @SuppressWarnings("unchecked")
     public void validate(UIFormInput uiInput) throws Exception {
       String s = (String)uiInput.getValue();
-      //      System.out.println(" \n\n\nTest url: " + s);
       if(s == null || s.trim().length() == 0) { return; }
       s=s.trim();
       if (!s.startsWith("http://") && !s.startsWith("shttp://")){ 

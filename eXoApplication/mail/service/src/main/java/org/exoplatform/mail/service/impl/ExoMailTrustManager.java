@@ -38,6 +38,7 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
 import org.exoplatform.commons.exception.ExoException;
+import org.exoplatform.mail.service.Utils;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 
@@ -54,10 +55,6 @@ public class ExoMailTrustManager implements X509TrustManager {
   private X509TrustManager         trustManager;
 
   public static final String       PATH_CERTS_FILE      = System.getProperty("java.home") + File.separatorChar + "lib" + File.separatorChar + "security";
-
-  // private static final String PASSWORD_CERT_FILE = "changeit";
-
-  // private static final String EXO_CACERT_FILE = "exocacert";
 
   private String                   pathCertFile;
 
@@ -174,11 +171,11 @@ public class ExoMailTrustManager implements X509TrustManager {
     try {
       FileOutputStream fos = null;
       X509Certificate x509 = (X509Certificate) certs[0];
-      if (alias == "" || alias == null)
+      if (Utils.isEmptyField(alias))
         alias = x509.getSubjectDN().toString().split(",")[0].split("=")[1];
-      if (alias == "" || alias == null)
+      if (Utils.isEmptyField(alias))
         alias = x509.getSubjectX500Principal().toString().split(",")[0].split("=")[1];
-      if (alias == "" || alias == null)
+      if (Utils.isEmptyField(alias))
         alias = UUID.randomUUID().toString();
 
       if (isStoreCertPermanent) {

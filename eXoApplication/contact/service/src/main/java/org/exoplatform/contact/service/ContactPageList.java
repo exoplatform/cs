@@ -98,8 +98,13 @@ public class ContactPageList extends JCRPageList {
 
     // cs- 1017
     /*
-     * if (iter_ == null) { Session session = getJCRSession(username); try { if (isQuery_) { QueryManager qm = session.getWorkspace().getQueryManager(); Query query = qm.createQuery(value_, Query.XPATH); QueryResult result = query.execute(); iter_ = result.getNodes(); } else { Node node = (Node) session.getItem(value_); iter_ = node.getNodes(); } } finally { session.logout(); } session.logout(); }
-     * setAvailablePage(iter_.getSize()); Node currentNode; long pageSize = getPageSize(); long position = 0; if (page == 1) position = 0; else { position = (page - 1) * pageSize; if (pageReturn == page) { try { iter_.skip(position - 1); } catch (Exception e) { System.out.println("\n iter exception"); } } else { iter_.skip(position); } }
+     * if (iter_ == null) { Session session = getJCRSession(username); try { if (isQuery_) { QueryManager qm =
+     * session.getWorkspace().getQueryManager(); Query query = qm.createQuery(value_, Query.XPATH); QueryResult result =
+     * query.execute(); iter_ = result.getNodes(); } else { Node node = (Node) session.getItem(value_); iter_ = node.getNodes(); }
+     * } finally { session.logout(); } session.logout(); } setAvailablePage(iter_.getSize()); Node currentNode; long pageSize =
+     * getPageSize(); long position = 0; if (page == 1) position = 0; else { position = (page - 1) * pageSize; if (pageReturn ==
+     * page) { try { iter_.skip(position - 1); } catch (Exception e) { System.out.println("\n iter exception"); } } else {
+     * iter_.skip(position); } }
      */
 
     // boolean containDefault = false;
@@ -110,7 +115,8 @@ public class ContactPageList extends JCRPageList {
         if (currentNode.isNodeType("exo:contact")) {
           Contact contact = Utils.getContact(currentNode, contactType_);
           /*
-           * if (contact.getId().equalsIgnoreCase(username_) && (contactType_.equals(JCRDataStorage.PERSONAL))) { if (page > 1) { i--; continue; } currentListPage_.add(0, contact); containDefault = true; } else
+           * if (contact.getId().equalsIgnoreCase(username_) && (contactType_.equals(JCRDataStorage.PERSONAL))) { if (page > 1) {
+           * i--; continue; } currentListPage_.add(0, contact); containDefault = true; } else
            */
           currentListPage_.add(contact);
         }
@@ -120,8 +126,12 @@ public class ContactPageList extends JCRPageList {
     }
     // add to take default contact to first of list
     /*
-     * if (page == 1 && !containDefault && contactType_.equals(JCRDataStorage.PERSONAL) && value_.contains(NewUserListener.DEFAULTGROUP + username_) && iter_ != null) { iter_.skip(0); while (iter_.hasNext()) { Node defaultNode = iter_.nextNode(); if (defaultNode.getProperty("exo:id").getString().equals(username_)) { Contact defaultContact = getContact(defaultNode, contactType_); if
-     * (iter_.getSize() % pageSize == 0) pageReturn = iter_.getSize() / pageSize; else pageReturn = iter_.getSize() / pageSize + 1; currentListPage_.remove(currentListPage_.size() - 1); currentListPage_.add(0, defaultContact); break; } } }
+     * if (page == 1 && !containDefault && contactType_.equals(JCRDataStorage.PERSONAL) &&
+     * value_.contains(NewUserListener.DEFAULTGROUP + username_) && iter_ != null) { iter_.skip(0); while (iter_.hasNext()) { Node
+     * defaultNode = iter_.nextNode(); if (defaultNode.getProperty("exo:id").getString().equals(username_)) { Contact
+     * defaultContact = getContact(defaultNode, contactType_); if (iter_.getSize() % pageSize == 0) pageReturn = iter_.getSize() /
+     * pageSize; else pageReturn = iter_.getSize() / pageSize + 1; currentListPage_.remove(currentListPage_.size() - 1);
+     * currentListPage_.add(0, defaultContact); break; } } }
      */
     iter_ = null;
   }
@@ -129,7 +139,10 @@ public class ContactPageList extends JCRPageList {
   @Override
   public List<Contact> getAll() throws Exception {
     /*
-     * if (iter_ == null) { Session session = getJCRSession(username_); if (isQuery_) { QueryManager qm = session.getWorkspace().getQueryManager(); Query query = qm.createQuery(value_, Query.XPATH); QueryResult result = query.execute(); iter_ = result.getNodes(); } else { Node node = (Node) session.getItem(value_); iter_ = node.getNodes(); } session.logout(); }
+     * if (iter_ == null) { Session session = getJCRSession(username_); if (isQuery_) { QueryManager qm =
+     * session.getWorkspace().getQueryManager(); Query query = qm.createQuery(value_, Query.XPATH); QueryResult result =
+     * query.execute(); iter_ = result.getNodes(); } else { Node node = (Node) session.getItem(value_); iter_ = node.getNodes(); }
+     * session.logout(); }
      */
     Session session = getJCRSession(username_);
     try {
@@ -150,7 +163,10 @@ public class ContactPageList extends JCRPageList {
 
   public Map<String, String> getEmails() throws Exception {
     /*
-     * if (iter_ == null) { Session session = getJCRSession(username_); if (isQuery_) { QueryManager qm = session.getWorkspace().getQueryManager(); Query query = qm.createQuery(value_, Query.XPATH); QueryResult result = query.execute(); iter_ = result.getNodes(); } else { Node node = (Node) session.getItem(value_); iter_ = node.getNodes(); } session.logout(); }
+     * if (iter_ == null) { Session session = getJCRSession(username_); if (isQuery_) { QueryManager qm =
+     * session.getWorkspace().getQueryManager(); Query query = qm.createQuery(value_, Query.XPATH); QueryResult result =
+     * query.execute(); iter_ = result.getNodes(); } else { Node node = (Node) session.getItem(value_); iter_ = node.getNodes(); }
+     * session.logout(); }
      */
     Session session = getJCRSession(username_);
     try {

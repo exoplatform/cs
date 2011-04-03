@@ -31,6 +31,8 @@ import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.impl.core.RepositoryImpl;
 import org.exoplatform.services.jcr.impl.core.SessionImpl;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.security.Identity;
 import org.exoplatform.services.xmpp.history.HistoricalMessage;
@@ -50,7 +52,7 @@ import org.jivesoftware.smack.packet.Message;
 @ConfiguredBy( { @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"), @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.organization-configuration.xml"), @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.cs.eXoApplication.chat.service.test-configuration.xml"),
     @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration2.xml") })
 public class HistoryTest extends AbstractKernelTest {
-
+  private Log log = ExoLogger.getLogger(this.getClass());
   protected SessionImpl          session;
 
   protected RepositoryImpl       repository;
@@ -79,71 +81,71 @@ public class HistoryTest extends AbstractKernelTest {
   }
 
   public void testSaveMessage() {
-    System.out.println("==========================================================");
-    System.out.println("Testing save message to history");
-    System.out.println("==========================================================");
+    log.info("==========================================================");
+    log.info("Testing save message to history");
+    log.info("==========================================================");
     assertNotNull(container);
     ThreadLocalSessionProviderService sessionProviderService = (ThreadLocalSessionProviderService) container.getComponentInstanceOfType(ThreadLocalSessionProviderService.class);
     Message message = new Message("root@localhost", Message.Type.chat);
     message.setBody("hello");
     message.setFrom("marry@localhost");
-    System.out.println("Initial message:");
-    System.out.println("----------------------------------------------------------");
+    log.info("Initial message:");
+    log.info("----------------------------------------------------------");
     dumpMessage(message);
-    System.out.println("----------------------------------------------------------");
+    log.info("----------------------------------------------------------");
     historyImpl.addHistoricalMessage(HistoryUtils.messageToHistoricalMessage(message), sessionProviderService.getSessionProvider(null));
     message = new Message("marry@localhost", Message.Type.chat);
     message.setBody("how are you?");
     message.setFrom("root@localhost");
-    System.out.println("Initial message:");
-    System.out.println("----------------------------------------------------------");
+    log.info("Initial message:");
+    log.info("----------------------------------------------------------");
     dumpMessage(message);
-    System.out.println("--------------------------------------------------");
+    log.info("--------------------------------------------------");
     historyImpl.addHistoricalMessage(HistoryUtils.messageToHistoricalMessage(message), sessionProviderService.getSessionProvider(null));
   }
 
   public void testGetMessages() {
-    System.out.println("==========================================================");
-    System.out.println("Testing geting all messages from history");
-    System.out.println("==========================================================");
+    log.info("==========================================================");
+    log.info("Testing geting all messages from history");
+    log.info("==========================================================");
     assertNotNull(container);
     ThreadLocalSessionProviderService sessionProviderService = (ThreadLocalSessionProviderService) container.getComponentInstanceOfType(ThreadLocalSessionProviderService.class);
     List<HistoricalMessage> list = historyImpl.getHistoricalMessages("root", "marry", false, sessionProviderService.getSessionProvider(null));
     int i = 1;
     for (HistoricalMessage historicalMessage : list) {
       HistoricalMessageImpl historicalMessageImpl = (HistoricalMessageImpl) historicalMessage;
-      System.out.println("\nMessage " + i++);
-      System.out.println("---------------------------------------------------------");
+      log.info("\nMessage " + i++);
+      log.info("---------------------------------------------------------");
       dumpMessage(historicalMessageImpl);
     }
   }
 
   public void testGetMessagesByDate() {
-    System.out.println("==========================================================");
-    System.out.println("Testing geting messages from history by date ");
-    System.out.println("==========================================================");
+    log.info("==========================================================");
+    log.info("Testing geting messages from history by date ");
+    log.info("==========================================================");
     assertNotNull(container);
     try {
       ThreadLocalSessionProviderService sessionProviderService = (ThreadLocalSessionProviderService) container.getComponentInstanceOfType(ThreadLocalSessionProviderService.class);
       Long long1 = Calendar.getInstance().getTimeInMillis() - 600000; // 10 min
       Date dateFrom = new Date(long1);
-      System.out.println("\n           date from: " + dateFrom);
+      log.info("\n           date from: " + dateFrom);
       List<HistoricalMessage> list = historyImpl.getHistoricalMessages("root", "marry", true, dateFrom, sessionProviderService.getSessionProvider(null));
       int i = 1;
       for (HistoricalMessage historicalMessage : list) {
         HistoricalMessageImpl historicalMessageImpl = (HistoricalMessageImpl) historicalMessage;
-        System.out.println("\nMessage " + i++);
-        System.out.println("---------------------------------------------------------");
+        log.info("\nMessage " + i++);
+        log.info("---------------------------------------------------------");
         dumpMessage(historicalMessageImpl);
       }
       long1 = Calendar.getInstance().getTimeInMillis() + 600000;
       dateFrom = new Date(long1);
-      System.out.println("\n            date from: " + dateFrom);
+      log.info("\n            date from: " + dateFrom);
       list = historyImpl.getHistoricalMessages("root", "marry", true, dateFrom, sessionProviderService.getSessionProvider(null));
       for (HistoricalMessage historicalMessage : list) {
         HistoricalMessageImpl historicalMessageImpl = (HistoricalMessageImpl) historicalMessage;
-        System.out.println("\nMessage " + i++);
-        System.out.println("---------------------------------------------------------");
+        log.info("\nMessage " + i++);
+        log.info("---------------------------------------------------------");
         dumpMessage(historicalMessageImpl);
       }
     } catch (Exception e) {
@@ -152,44 +154,44 @@ public class HistoryTest extends AbstractKernelTest {
   }
 
   public void testGetInterlocutors() {
-    System.out.println("==========================================================");
-    System.out.println("Testing geting interlocutors ");
-    System.out.println("==========================================================");
+    log.info("==========================================================");
+    log.info("Testing geting interlocutors ");
+    log.info("==========================================================");
     assertNotNull(container);
     ThreadLocalSessionProviderService sessionProviderService = (ThreadLocalSessionProviderService) container.getComponentInstanceOfType(ThreadLocalSessionProviderService.class);
     List<Interlocutor> list = historyImpl.getInterlocutors("root", sessionProviderService.getSessionProvider(null));
-    System.out.println("---- User root ");
+    log.info("---- User root ");
     for (Interlocutor interlocutor : list) {
       InterlocutorImpl interlocutorImpl = (InterlocutorImpl) interlocutor;
-      System.out.println("Name: " + interlocutorImpl.getInterlocutorName());
-      System.out.println("Conversation id: " + interlocutorImpl.getConversationId());
-      System.out.println("Path in repository: " + interlocutorImpl.getPath());
+      log.info("Name: " + interlocutorImpl.getInterlocutorName());
+      log.info("Conversation id: " + interlocutorImpl.getConversationId());
+      log.info("Path in repository: " + interlocutorImpl.getPath());
     }
     list = historyImpl.getInterlocutors("marry", sessionProviderService.getSessionProvider(null));
-    System.out.println("---- User marry ");
+    log.info("---- User marry ");
     for (Interlocutor interlocutor : list) {
       InterlocutorImpl interlocutorImpl = (InterlocutorImpl) interlocutor;
-      System.out.println("Name: " + interlocutorImpl.getInterlocutorName());
-      System.out.println("Conversation id:" + interlocutorImpl.getConversationId());
-      System.out.println("Path in repository:" + interlocutorImpl.getPath());
+      log.info("Name: " + interlocutorImpl.getInterlocutorName());
+      log.info("Conversation id:" + interlocutorImpl.getConversationId());
+      log.info("Path in repository:" + interlocutorImpl.getPath());
     }
   }
 
   private void dumpMessage(HistoricalMessageImpl historicalMessageImpl) {
-    System.out.println("From: " + historicalMessageImpl.getFrom());
-    System.out.println("To:  " + historicalMessageImpl.getTo());
-    System.out.println("Type: " + historicalMessageImpl.getType());
-    System.out.println("Body: " + historicalMessageImpl.getBody());
-    System.out.println("Date send: " + historicalMessageImpl.getDateSend());
-    System.out.println("Recieve: " + historicalMessageImpl.getReceive());
-    System.out.println("Path in repository: " + historicalMessageImpl.getPath());
+    log.info("From: " + historicalMessageImpl.getFrom());
+    log.info("To:  " + historicalMessageImpl.getTo());
+    log.info("Type: " + historicalMessageImpl.getType());
+    log.info("Body: " + historicalMessageImpl.getBody());
+    log.info("Date send: " + historicalMessageImpl.getDateSend());
+    log.info("Recieve: " + historicalMessageImpl.getReceive());
+    log.info("Path in repository: " + historicalMessageImpl.getPath());
   }
 
   private void dumpMessage(Message message) {
-    System.out.println("From: " + message.getFrom());
-    System.out.println("To:  " + message.getTo());
-    System.out.println("Type: " + message.getType().name());
-    System.out.println("Body: " + message.getBody());
+    log.info("From: " + message.getFrom());
+    log.info("To:  " + message.getTo());
+    log.info("Type: " + message.getType().name());
+    log.info("Body: " + message.getBody());
   }
 
   protected void tearDown() throws Exception {

@@ -140,7 +140,7 @@ public class UITagContainer extends UIForm {
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class)
                                   .getSelectedValue();
-      if (accountId != null && accountId != ""){
+      if (!Utils.isEmptyField(accountId)){
         tagList = mailService.getTags(username, accountId);
       }  
     } catch (Exception e) {

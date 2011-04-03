@@ -27,10 +27,8 @@ import org.exoplatform.container.component.BaseComponentPlugin;
 public class MailUpdateStorageEventListener extends BaseComponentPlugin {
 
   public void preUpdate() {
-    System.out.println("======>>> preUpdate");
   }
 
   public void postUpdate() {
-    System.out.println("======>>> postUpdate");
   }
 }

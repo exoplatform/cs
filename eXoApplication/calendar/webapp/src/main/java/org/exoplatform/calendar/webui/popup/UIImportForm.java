@@ -35,6 +35,8 @@ import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UICalendars;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
@@ -79,7 +81,7 @@ import org.exoplatform.webui.form.validator.SpecialCharacterValidator;
                  }
 )
 public class UIImportForm extends UIForm implements UIPopupComponent, UISelector{
-
+  private Log log = ExoLogger.getLogger(this.getClass());
   final public static String DISPLAY_NAME = "displayName" ;
   final public static String DESCRIPTION = "description" ;
   final public static String CATEGORY = "category" ;
@@ -179,7 +181,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
         options.add(new SelectItemOption<String>(c.getName(), c.getId())) ;
       }
     } catch (Exception e) {
-      e.printStackTrace() ;
+      log.debug("Failed to get private calendars.", e);
     }
     return options ;
   }
@@ -242,7 +244,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
       getUIStringInput(LOCALE).setRendered(true);
       getChild(UIFormColorPicker.class).setRendered(true);
     } else {
-      System.out.println("Wrong flag(" +flag+ ") only UPDATE_EXIST(1) or ADD_NEW(0) accept ");
+      log.warn("Wrong flag(" +flag+ ") only UPDATE_EXIST(1) or ADD_NEW(0) accept ");
     }
   }
 
@@ -492,7 +494,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
   static  public class OnChangeActionListener extends EventListener<UIImportForm> {
     public void execute(Event<UIImportForm> event) throws Exception {
       UIImportForm uiImportForm = event.getSource();
-      System.out.println("Goes here on change");
+      uiImportForm.log.info("Goes here on change");
       String groupType = uiImportForm.getSelectedTypeGroup();
       if(!CalendarUtils.isEmpty(groupType)&& groupType.equals(CalendarUtils.PUBLIC_TYPE))
         uiImportForm.getUIStringInput(PERMISSION).setRendered(true);

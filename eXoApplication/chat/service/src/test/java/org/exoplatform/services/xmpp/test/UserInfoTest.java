@@ -21,6 +21,8 @@ import org.exoplatform.component.test.ConfigurationUnit;
 import org.exoplatform.component.test.ConfiguredBy;
 import org.exoplatform.component.test.ContainerScope;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.xmpp.userinfo.OrganizationUserInfoServiceImpl;
 import org.exoplatform.services.xmpp.userinfo.UserInfo;
@@ -34,7 +36,7 @@ import org.exoplatform.services.xmpp.userinfo.UserInfo;
 @ConfiguredBy( { @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"), @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.organization-configuration.xml"), @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.cs.eXoApplication.chat.service.test-configuration.xml"),
     @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration2.xml") })
 public class UserInfoTest extends AbstractKernelTest {
-
+  private Log log = ExoLogger.getLogger(this.getClass());
   private OrganizationUserInfoServiceImpl infoServiceImpl;
 
   protected void setUp() throws Exception {
@@ -47,16 +49,16 @@ public class UserInfoTest extends AbstractKernelTest {
   }
 
   public void testGetUserInfo() {
-    System.out.println("==========================================================");
-    System.out.println("Testing geting userinfo from OrgService");
-    System.out.println("==========================================================");
+    log.info("==========================================================");
+    log.info("Testing geting userinfo from OrgService");
+    log.info("==========================================================");
     UserInfo info = infoServiceImpl.getUserInfo("root");
-    System.out.println("Username: " + info.getUserName());
-    System.out.println("FirstName: " + info.getFirstName());
-    System.out.println("LastName: " + info.getLastName());
-    System.out.println("Organization: " + info.getOrganization());
-    // System.out.println("Unit: " + info.getUnit());
-    System.out.println("eMail: " + info.getEMail());
+    log.info("Username: " + info.getUserName());
+    log.info("FirstName: " + info.getFirstName());
+    log.info("LastName: " + info.getLastName());
+    log.info("Organization: " + info.getOrganization());
+    // log.info("Unit: " + info.getUnit());
+    log.info("eMail: " + info.getEMail());
   }
 
   protected void tearDown() throws Exception {

@@ -34,6 +34,8 @@ import org.exoplatform.calendar.webui.popup.UIPopupContainer;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.social.core.space.model.Space;
 import org.exoplatform.social.core.space.spi.SpaceService;
@@ -61,6 +63,7 @@ import org.mortbay.cometd.continuation.EXoContinuationBayeux;
     template = "app:/templates/calendar/webui/UICalendarPortlet.gtmpl"
 )
 public class UICalendarPortlet extends UIPortletApplication {
+  private Log log = ExoLogger.getLogger(this.getClass());
   public UICalendarPortlet() throws Exception {
     UIActionBar uiActionBar = addChild(UIActionBar.class, null, null) ;
     uiActionBar.setCurrentView(UICalendarViewContainer.TYPES[Integer.parseInt(getCalendarSetting().getViewType())]) ;
@@ -107,7 +110,7 @@ public class UICalendarPortlet extends UIPortletApplication {
     try {
         return continuation.getUserToken(this.getRemoteUser());
     } catch (Exception e) {
-      System.out.println("\n\n can not get UserToken");
+      log.debug("\n\n can not get UserToken", e);
       return "" ;
     }
   }

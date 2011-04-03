@@ -102,7 +102,7 @@ public class JCRDataStorage implements DataStorage {
 
   final private static String  SHARED_PROP            = "exo:sharedId".intern();
 
-  private static final Log     log                    = ExoLogger.getLogger("cs.contact.service");
+  private static Log           log                    = ExoLogger.getLogger(JCRDataStorage.class);
 
   private NodeHierarchyCreator nodeHierarchyCreator_;
 
@@ -480,7 +480,7 @@ public class JCRDataStorage implements DataStorage {
       } else if (addressType.equals(SHARED)) {
         // CS-2389
         if (!haveEditPermissionOnAddressBook(username, contact.getAddressBookIds()[0]) || (contact.getContactType().equals(SHARED) && !haveEditPermissionOnContact(username, contact))) {
-          System.out.println("\n Do not have edit permission. \n");
+          log.info("\n Do not have edit permission. \n");
           throw new Exception();
         }
         saveContactToSharedAddressBook(username, contact.getAddressBookIds()[0], contact, true);
@@ -556,7 +556,7 @@ public class JCRDataStorage implements DataStorage {
 
             // CS-2389
             if (!haveEditPermissionOnAddressBook(username, addressbook.getId())) {
-              System.out.println("\n Do not have edit permission. \n");
+              log.info("\n Do not have edit permission. \n");
               throw new Exception();
             }
             groupNode = addressBook;
@@ -822,7 +822,7 @@ public class JCRDataStorage implements DataStorage {
   public void removeSharedContact(String username, String addressBookId, String contactId) throws Exception {
     // CS-2389
     if (!haveEditPermissionOnAddressBook(username, addressBookId)) {
-      System.out.println("\n Do not have edit permission. \n");
+      log.info("\n Do not have edit permission. \n");
       throw new Exception();
     }
     Node sharedAddressBookMock = getSharedAddressBooksHome(username);
@@ -894,7 +894,7 @@ public class JCRDataStorage implements DataStorage {
         if (contactNode.getName().equals(contact.getId())) {
           // CS-2389
           if (!haveEditPermissionOnAddressBook(username, contact.getAddressBookIds()[0]) && !haveEditPermissionOnContact(username, contact)) {
-            System.out.println("\n Do not have edit permission. \n");
+            log.info("\n Do not have edit permission. \n");
             throw new Exception();
           }
 
@@ -923,7 +923,7 @@ public class JCRDataStorage implements DataStorage {
       if (addressBook.getName().equals(addressBookId)) {
         // CS-2389
         if (!haveEditPermissionOnAddressBook(username, addressBookId) && !haveEditPermissionOnContact(username, contact)) {
-          System.out.println("\n Do not have edit permission. \n");
+          log.info("\n Do not have edit permission. \n");
           throw new Exception();
         }
 
@@ -2252,12 +2252,6 @@ public class JCRDataStorage implements DataStorage {
       return contactApplicationDataHome;
     }
   }
-
-  /*
-   * public void makePublicAddresses() throws Exception { Node appNode = getContactApplicationDataHome(); if (appNode.hasNode(GROUP_ADDRESS_BOOKS)) return; System.out.println("\n\n make \n\n"); Node addressHome = appNode.addNode(GROUP_ADDRESS_BOOKS); appNode.getSession().save(); ExoContainer container = ExoContainerContext.getCurrentContainer(); OrganizationService organizationService =
-   * (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class) ; Object[] groupsOfUser = organizationService.getGroupHandler().getAllGroups().toArray(); for (Object object : groupsOfUser) { Group group = (Group)object; String groupId = Utils.encodeGroupId(group.getId()) ; Node groupNode = addressHome.addNode(groupId, "exo:contactGroup"); groupNode.setProperty("exo:id",
-   * groupId); groupNode.setProperty("exo:name", group.getGroupName()); groupNode.setProperty("exo:viewPermissionGroups", new String [] { Utils.decodeGroupId(groupId) }) ; groupNode.setProperty("exo:editPermissionGroups", new String [] {"/platform/administrators"}); } addressHome.getSession().save(); }
-   */
 
   @Override
   public Node getContactUserDataHome(String username) throws Exception {

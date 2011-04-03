@@ -846,7 +846,7 @@ public Attachment getAttachment(String attId) {
       UIFormStringInput uiInput = uiTaskDetailTab.getUIStringInput(UITaskDetailTab.FIELD_DELEGATION);
       String currentValues = uiInput.getValue();
       String values = uiUserSelector.getSelectedUsers();
-      if(!CalendarUtils.isEmpty(currentValues) && currentValues != "null") values += ","+ currentValues;
+      if(!CalendarUtils.isEmpty(currentValues) && !currentValues.equals("null")) values += ","+ currentValues;
       values = uiTaskForm.cleanValue(values);
       uiInput.setValue(values);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer);

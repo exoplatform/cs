@@ -25,6 +25,7 @@ import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.cs.common.webui.UIPopupComponent;
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -87,7 +88,7 @@ public class UIAddressSearchForm extends UIForm implements UIPopupComponent {
     List<Contact> contacts = new ArrayList<Contact>();
     ContactService contactSrv = getApplicationComponent(ContactService.class);
     String username = Util.getPortalRequestContext().getRemoteUser();   
-    if (groupId == null || groupId == "") {
+    if (Utils.isEmptyField(groupId)) {
       contacts = contactSrv.getPersonalContacts(username);
     } else {
       contacts = contactSrv.getPersonalContactsByAddressBook(username, groupId).getAll();

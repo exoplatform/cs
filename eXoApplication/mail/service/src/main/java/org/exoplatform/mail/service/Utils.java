@@ -569,7 +569,7 @@ public class Utils {
   public static String getPersonal(InternetAddress address) throws Exception {
     String personal = "";
     if (address != null) {
-      if (address.getPersonal() != null && address.getPersonal() != "") {
+      if (!isEmptyField(address.getPersonal())) {
         personal = address.getPersonal();
       } else {
         personal = address.getAddress();
@@ -607,7 +607,7 @@ public class Utils {
   }
 
   public static InternetAddress[] getInternetAddress(String addressList) throws Exception {
-    if (addressList == null || addressList == "")
+    if (isEmptyField(addressList))
       return new InternetAddress[1];
     try {
       return InternetAddress.parse(addressList);

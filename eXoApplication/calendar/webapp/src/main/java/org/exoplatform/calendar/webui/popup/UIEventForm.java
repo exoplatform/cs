@@ -63,6 +63,8 @@ import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.upload.UploadService;
@@ -141,6 +143,7 @@ import org.exoplatform.webui.organization.account.UIUserSelector;
 }
 )
 public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISelector{
+  private Log log = ExoLogger.getLogger(this.getClass());
   final public static String TAB_EVENTDETAIL = "eventDetail".intern() ;
   final public static String TAB_EVENTREMINDER = "eventReminder".intern() ;
   final public static String TAB_EVENTSHARE = "eventShare".intern() ;
@@ -237,8 +240,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     try {
       return super.getLabel(id) ;
     } catch (Exception e) {
-      System.out.println("Can not find " + getId() + ".label." + id);
-      //e.printStackTrace() ;
+      log.warn("Can not find " + getId() + ".label." + id);
       return id ;
     }
   }

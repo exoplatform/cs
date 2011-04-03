@@ -1566,7 +1566,7 @@ public class UIMessageList extends UIForm {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
         }
       } catch (Exception e) {
-        System.out.println("\n\n error when export");
+        log.debug("\n\n error when export", e);
       }
     }
   }

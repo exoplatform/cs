@@ -1954,7 +1954,7 @@ public class JCRDataStorage implements DataStorage {
         storeXML(feedXML, rssHomeNode, rssData);
         rssHomeNode.getSession().save();
       } else {
-        System.out.println("No data to make caldav!");
+        log.info("No data to make caldav!");
         return -1;
       }
     } catch (Exception e) {
@@ -2155,7 +2155,7 @@ public class JCRDataStorage implements DataStorage {
         storeXML(feedXML, rssHomeNode, rssData);
         rssHomeNode.getSession().save();
       } else {
-        System.out.println("No data to make rss!");
+        log.info("No data to make rss!");
         return -1;
       }
     } catch (Exception e) {
@@ -2211,7 +2211,7 @@ public class JCRDataStorage implements DataStorage {
         storeXML(feedXML, rssHomeNode, rssData);
         rssHomeNode.getSession().save();
       } else {
-        System.out.println("No data to make rss!");
+        log.info("No data to make rss!");
         return -1;
       }
     } catch (Exception e) {
@@ -2397,7 +2397,7 @@ public class JCRDataStorage implements DataStorage {
         storeXML(feedXML, rssHomeNode, rssData);
         rssHomeNode.getSession().save();
       } else {
-        System.out.println("No data to make caldav!");
+        log.info("No data to make caldav!");
         return -1;
       }
 

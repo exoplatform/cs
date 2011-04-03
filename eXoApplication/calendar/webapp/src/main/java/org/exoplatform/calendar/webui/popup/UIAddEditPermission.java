@@ -32,6 +32,8 @@ import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
@@ -59,6 +61,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 )
 
 public class UIAddEditPermission extends UIContainer implements UIPopupComponent {
+  protected Log log = ExoLogger.getLogger(this.getClass());
   public static String[]  BEAN_FIELD = {"viewPermission","editPermission"} ;
   private static String[] ACTION = {"Edit", "Delete"} ;
 
@@ -99,7 +102,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
         try {
           editPerm = res.getString(label);
         } catch (Exception e) {
-          System.out.println("Can not find " + label);
+          log.warn("Can not find resource bundle key: " + label);
         }
         dataRow.add(new data(username,  editPerm)) ;
       }

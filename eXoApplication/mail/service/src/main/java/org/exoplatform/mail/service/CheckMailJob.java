@@ -112,7 +112,6 @@ public class CheckMailJob implements Job, InterruptableJob {
   }
 
   public void interrupt() throws UnableToInterruptJobException {
-    System.out.println("\n\n######### CALLED INTERRUPT!\n\n");
     getMailService().stopCheckMail(username, accountId);
   }
 

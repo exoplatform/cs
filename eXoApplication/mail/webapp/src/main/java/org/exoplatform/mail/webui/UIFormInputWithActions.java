@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.form.UIForm;
@@ -38,7 +40,7 @@ import org.exoplatform.webui.form.UIFormInputSet;
  */
 
 public class UIFormInputWithActions extends UIFormInputSet {
-
+  private Log log = ExoLogger.getLogger(this.getClass());
   Map<String, List<ActionData>> actionField = new HashMap<String, List<ActionData>> () ;
   public UIFormInputWithActions(String id) {
     super.setId(id) ;
@@ -83,7 +85,7 @@ public class UIFormInputWithActions extends UIFormInputSet {
             actionLabel = uiForm.getLabel(res, "action." + action.getActionName())  ;
           }catch(MissingResourceException ex) {
             actionLabel = action.getActionName() ;
-            System.out.println("\n Key: '"+uiForm.getId()+".label.action." + action.getActionName() + "' not found");
+            log.warn("\n Key: '"+uiForm.getId()+".label.action." + action.getActionName() + "' not found");
           }
           String actionLink ;
           if(action.getActionParameter() != null) {

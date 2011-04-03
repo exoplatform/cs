@@ -30,9 +30,14 @@ import org.mortbay.cometd.AbstractBayeux;
 import org.mortbay.cometd.continuation.EXoContinuationBayeux;
 
 /**
- * Author : Nguyen Quang Hung hung.nguyen@exoplatform.com Aug 01, 2007
+ * Author : Nguyen Quang Hung 
+ *          hung.nguyen@exoplatform.com 
+ * Aug 01, 2007
  */
-@ComponentConfig(lifecycle = UIApplicationLifecycle.class, template = "app:/templates/contact/webui/UIContactPortlet.gtmpl")
+@ComponentConfig(
+    lifecycle = UIApplicationLifecycle.class, 
+    template = "app:/templates/contact/webui/UIContactPortlet.gtmpl"
+)
 public class UIContactPortlet extends UIPortletApplication {
 
   public UIContactPortlet() throws Exception {
@@ -72,7 +77,6 @@ public class UIContactPortlet extends UIPortletApplication {
     try {
       return continuation.getUserToken(ContactUtils.getCurrentUser());
     } catch (Exception e) {
-      System.out.println("\n\n can not get UserToken");
       return "";
     }
   }

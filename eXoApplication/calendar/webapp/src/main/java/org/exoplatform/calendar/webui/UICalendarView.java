@@ -1373,7 +1373,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
             try {
               calendar = calService.getGroupCalendar(selectedCalendarId) ;
             } catch (PathNotFoundException e) {
-              System.out.println("\n\n calendar has been removed !");
+              uiComponent.log.debug("\n\n calendar has been removed !");
             }
           }  
           if(calendar == null) {
