@@ -649,19 +649,7 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
           eValue = event.getEndDate().getValue();
           exoEvent.setToDateTime(event.getEndDate().getDate());
         }
-        if (sValue.length() == 8 && eValue.length() == 8) {
-          exoEvent.setToDateTime(new Date(event.getEndDate().getDate().getTime() - 1));
-        }
-        if (sValue.length() > 8 && eValue.length() > 8) {
-          if ("0000".equals(sValue.substring(9, 13)) && "0000".equals(eValue.substring(9, 13))) {
-            exoEvent.setToDateTime(new Date(event.getEndDate().getDate().getTime() - 1));
-          }
-        }
-        if (event.getLocation() != null)
-          exoEvent.setLocation(event.getLocation().getValue());
-        if (event.getPriority() != null)
-          exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())]);
-        exoEvent = setEventAttachment(event, exoEvent);
+        exoEvent = setEventAttachment(event, exoEvent, eValue, sValue);
         if (event.getProperty(Property.RECURRENCE_ID) != null) {
           RecurrenceId recurId = (RecurrenceId) event.getProperty(Property.RECURRENCE_ID);
           exoEvent.setRecurrenceId(format.format(new Date(recurId.getDate().getTime())));
@@ -722,51 +710,22 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
 
       else if (obj instanceof VToDo) {
         VToDo event = (VToDo) obj;
-        exoEvent = new CalendarEvent();
-        if (event.getProperty(Property.CATEGORIES) != null) {
-          EventCategory evCate = new EventCategory();
-          evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim());
-          try {
-            calService.saveEventCategory(username, evCate, true);
-          } catch (ItemExistsException e) {
-            evCate = calService.getEventCategoryByName(username, evCate.getName());
-          } catch (Exception e) {
-            if (logger.isDebugEnabled()) {
-              logger.debug("Exception occurs when saving new event category '" + evCate.getName() + "' for CalDav event: " + event.getUid(), e);
-            }
-          }
-          exoEvent.setEventCategoryName(evCate.getName());
-        }
-        exoEvent.setCalType(String.valueOf(Calendar.TYPE_PRIVATE));
-        exoEvent.setCalendarId(calendarId);
-        if (event.getSummary() != null)
-          exoEvent.setSummary(event.getSummary().getValue());
-        if (event.getDescription() != null)
-          exoEvent.setDescription(event.getDescription().getValue());
-        if (event.getStatus() != null)
-          exoEvent.setStatus(event.getStatus().getValue());
-        exoEvent.setEventType(CalendarEvent.TYPE_TASK);
-        if (event.getStartDate() != null)
-          exoEvent.setFromDateTime(event.getStartDate().getDate());
-        if (event.getDue() != null)
-          exoEvent.setToDateTime(event.getDue().getDate());
-        if (event.getLocation() != null)
-          exoEvent.setLocation(event.getLocation().getValue());
-        if (event.getPriority() != null)
-          exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())]);
-        if (vFreeBusyData.get(event.getUid().getValue()) != null) {
-          exoEvent.setStatus(CalendarEvent.ST_BUSY);
-        }
+        exoEvent = new CalendarEvent();   
         if (event.getProperty(Utils.X_STATUS) != null) {
           exoEvent.setEventState(event.getProperty(Utils.X_STATUS).getValue());
         }
-        exoEvent = setTaskAttachment(event, exoEvent);
+        exoEvent = setTaskAttachment(event, exoEvent,username,calendarId,vFreeBusyData);
         storage_.saveUserEvent(username, calendarId, exoEvent, isNew);
         storage_.setRemoteEvent(username, calendarId, exoEvent.getId(), href, etag);
       }
     }
   }
 
+  public static CalendarEvent gennerateEvent(VEvent event, CalendarEvent exoEvent) throws Exception {
+    
+    return exoEvent;
+  }
+  
   public static CalendarEvent generateEvent(VEvent event, CalendarEvent exoEvent, String username, String calendarId) throws Exception {
     CalendarService calService = (CalendarService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
     if (event.getProperty(Property.CATEGORIES) != null) {
@@ -796,7 +755,20 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
     return exoEvent;
   }
 
-  public static CalendarEvent setEventAttachment(VEvent event, CalendarEvent exoEvent) throws Exception {
+  public static CalendarEvent setEventAttachment(VEvent event, CalendarEvent exoEvent,String eValue, String sValue) throws Exception {
+    if (sValue.length() == 8 && eValue.length() == 8) {
+      exoEvent.setToDateTime(new Date(event.getEndDate().getDate().getTime() - 1));
+    }
+    if (sValue.length() > 8 && eValue.length() > 8) {
+      if ("0000".equals(sValue.substring(9, 13)) && "0000".equals(eValue.substring(9, 13))) {
+        exoEvent.setToDateTime(new Date(event.getEndDate().getDate().getTime() - 1));
+      }
+    }
+    if (event.getLocation() != null)
+      exoEvent.setLocation(event.getLocation().getValue());
+    if (event.getPriority() != null)
+      exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())]);
+    
     if (event.getProperty(Utils.X_STATUS) != null) {
       exoEvent.setEventState(event.getProperty(Utils.X_STATUS).getValue());
     }
@@ -812,17 +784,7 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
     }
     try {
       PropertyList dataList = event.getProperties(Property.ATTACH);
-      List<Attachment> attachments = new ArrayList<Attachment>();
-      for (Object o : dataList) {
-        Attach a = (Attach) o;
-        Attachment att = new Attachment();
-        att.setName(a.getParameter(Parameter.CN).getValue());
-        att.setMimeType(a.getParameter(Parameter.FMTTYPE).getValue());
-        InputStream in = new ByteArrayInputStream(a.getBinary());
-        att.setSize(in.available());
-        att.setInputStream(in);
-        attachments.add(att);
-      }
+      List<Attachment> attachments = calculateAtt(dataList);
       if (!attachments.isEmpty())
         exoEvent.setAttachment(attachments);
     } catch (Exception e) {
@@ -833,7 +795,44 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
     return exoEvent;
   }
 
-  public static CalendarEvent setTaskAttachment(VToDo task, CalendarEvent exoEvent) throws Exception {
+  public static CalendarEvent setTaskAttachment(VToDo task,CalendarEvent exoEvent,String username,String calendarId,Map<String,VFreeBusy> vFreeBusyData) throws Exception {
+    CalendarService calService = (CalendarService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+    exoEvent = new CalendarEvent();
+    if (task.getProperty(Property.CATEGORIES) != null) {
+      EventCategory evCate = new EventCategory();
+      evCate.setName(task.getProperty(Property.CATEGORIES).getValue().trim());
+      try {
+        calService.saveEventCategory(username, evCate, true);
+      } catch (ItemExistsException e) {
+        evCate = calService.getEventCategoryByName(username, evCate.getName());
+      } catch (Exception e) {
+        if (logger.isDebugEnabled()) {
+          logger.debug("Exception occurs when saving new event category '" + evCate.getName() + "' for CalDav event: " + task.getUid(), e);
+        }
+      }
+      exoEvent.setEventCategoryId(evCate.getId());
+      exoEvent.setEventCategoryName(evCate.getName());
+    }
+    exoEvent.setCalType(String.valueOf(Calendar.TYPE_PRIVATE));
+    exoEvent.setCalendarId(calendarId);
+    if (task.getSummary() != null)
+      exoEvent.setSummary(task.getSummary().getValue());
+    if (task.getDescription() != null)
+      exoEvent.setDescription(task.getDescription().getValue());
+    if (task.getStatus() != null)
+      exoEvent.setStatus(task.getStatus().getValue());
+    exoEvent.setEventType(CalendarEvent.TYPE_TASK);
+    if (task.getStartDate() != null)
+      exoEvent.setFromDateTime(task.getStartDate().getDate());
+    if (task.getDue() != null)
+      exoEvent.setToDateTime(task.getDue().getDate());
+    if (task.getLocation() != null)
+      exoEvent.setLocation(task.getLocation().getValue());
+    if (task.getPriority() != null)
+      exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(task.getPriority().getValue())]);
+    if (vFreeBusyData.get(task.getUid().getValue()) != null) {
+      exoEvent.setStatus(CalendarEvent.ST_BUSY);
+    }
     if (task.getClassification() != null)
       exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(task.getClassification().getValue()));
     PropertyList attendees = task.getProperties(Property.ATTENDEE);
@@ -846,17 +845,7 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
     }
     try {
       PropertyList dataList = task.getProperties(Property.ATTACH);
-      List<Attachment> attachments = new ArrayList<Attachment>();
-      for (Object o : dataList) {
-        Attach a = (Attach) o;
-        Attachment att = new Attachment();
-        att.setName(a.getParameter(Parameter.CN).getValue());
-        att.setMimeType(a.getParameter(Parameter.FMTTYPE).getValue());
-        InputStream in = new ByteArrayInputStream(a.getBinary());
-        att.setSize(in.available());
-        att.setInputStream(in);
-        attachments.add(att);
-      }
+      List<Attachment> attachments = calculateAtt(dataList);
       if (!attachments.isEmpty())
         exoEvent.setAttachment(attachments);
     } catch (Exception e) {
@@ -865,6 +854,21 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
       }
     }
     return exoEvent;
+  }
+  
+  private static List<Attachment> calculateAtt(PropertyList dataList) throws Exception {
+    List<Attachment> attachments = new ArrayList<Attachment>();
+    for (Object o : dataList) {
+      Attach a = (Attach) o;
+      Attachment att = new Attachment();
+      att.setName(a.getParameter(Parameter.CN).getValue());
+      att.setMimeType(a.getParameter(Parameter.FMTTYPE).getValue());
+      InputStream in = new ByteArrayInputStream(a.getBinary());
+      att.setSize(in.available());
+      att.setInputStream(in);
+      attachments.add(att);
+    }
+    return attachments;
   }
 
   public static CalendarEvent calculateEvent(VEvent event, CalendarEvent exoEvent) throws Exception {

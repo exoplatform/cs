@@ -30,7 +30,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.TimeZone;
 
-import javax.jcr.ItemExistsException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 
@@ -85,7 +84,6 @@ import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.CalendarService;
-import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.service.Utils;
@@ -547,19 +545,10 @@ public class ICalendarImportExport implements CalendarImportExport {
           if (sValue.length() == 8 && eValue.length() == 8) {
             exoEvent.setToDateTime(new Date(event.getEndDate().getDate().getTime() - 1));
           }
-          if (sValue.length() > 8 && eValue.length() > 8) {
-            if ("0000".equals(sValue.substring(9, 13)) && "0000".equals(eValue.substring(9, 13))) {
-              exoEvent.setToDateTime(new Date(event.getEndDate().getDate().getTime() - 1));
-            }
-          }
-          if (event.getLocation() != null)
-            exoEvent.setLocation(event.getLocation().getValue());
-          if (event.getPriority() != null)
-            exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())]);
           if (vFreeBusyData.get(event.getUid().getValue()) != null) {
             exoEvent.setEventState(CalendarEvent.ST_BUSY);
           }
-          exoEvent = RemoteCalendarServiceImpl.setEventAttachment(event, exoEvent);
+          exoEvent = RemoteCalendarServiceImpl.setEventAttachment(event, exoEvent,eValue,sValue);
 
           if (event.getProperty(Property.RECURRENCE_ID) != null) {
             RecurrenceId recurId = (RecurrenceId) event.getProperty(Property.RECURRENCE_ID);
@@ -656,41 +645,7 @@ public class ICalendarImportExport implements CalendarImportExport {
         VToDo event = (VToDo) obj;
         exoEvent = new CalendarEvent();
         try {
-          if (event.getProperty(Property.CATEGORIES) != null) {
-            EventCategory evCate = new EventCategory();
-            evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim());
-            try {
-              calService.saveEventCategory(username, evCate, true);
-            } catch (ItemExistsException e) {
-              evCate = calService.getEventCategoryByName(username, evCate.getName());
-            } catch (Exception e) {
-              e.printStackTrace();
-            }
-            exoEvent.setEventCategoryId(evCate.getId());
-            exoEvent.setEventCategoryName(evCate.getName());
-          }
-          exoEvent.setCalType(String.valueOf(Calendar.TYPE_PRIVATE));
-          exoEvent.setCalendarId(calendarId);
-          if (event.getSummary() != null)
-            exoEvent.setSummary(event.getSummary().getValue());
-          if (event.getDescription() != null)
-            exoEvent.setDescription(event.getDescription().getValue());
-          if (event.getStatus() != null)
-            exoEvent.setStatus(event.getStatus().getValue());
-          exoEvent.setEventType(CalendarEvent.TYPE_TASK);
-          if (event.getStartDate() != null)
-            exoEvent.setFromDateTime(event.getStartDate().getDate());
-          if (event.getDue() != null)
-            exoEvent.setToDateTime(event.getDue().getDate());
-          if (event.getLocation() != null)
-            exoEvent.setLocation(event.getLocation().getValue());
-          if (event.getPriority() != null)
-            exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())]);
-          if (vFreeBusyData.get(event.getUid().getValue()) != null) {
-            exoEvent.setStatus(CalendarEvent.ST_BUSY);
-          }
-          exoEvent = RemoteCalendarServiceImpl.setTaskAttachment(event, exoEvent);
-
+          exoEvent = RemoteCalendarServiceImpl.setTaskAttachment(event, exoEvent,username,calendarId,vFreeBusyData);
           switch (storage_.getTypeOfCalendar(username, calendarId)) {
           case Utils.PRIVATE_TYPE:
             calService.saveUserEvent(username, calendarId, exoEvent, true);
