@@ -77,6 +77,7 @@ import org.exoplatform.services.xmpp.history.impl.jcr.HistoryImpl;
 import org.exoplatform.services.xmpp.userinfo.UserInfo;
 import org.exoplatform.services.xmpp.userinfo.UserInfoService;
 import org.exoplatform.services.xmpp.util.CometdChannels;
+import org.exoplatform.services.xmpp.util.HistoryUtils;
 import org.exoplatform.services.xmpp.util.MUCConstants;
 import org.exoplatform.services.xmpp.util.PresenceUtil;
 import org.exoplatform.services.xmpp.util.SearchFormFields;
@@ -290,9 +291,11 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
         public void processPacket(Packet packet) {
           try {
             JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
-            packet.setPacketID(CodingUtils.encodeToHex(UUID.randomUUID().toString()));
-            MessageBean message = TransformUtils.messageToBean((Message) packet);
-            message.setDateSend(String.valueOf(new Date().getTime()));
+            if(packet.getPacketID() == null) {
+              packet.setPacketID(CodingUtils.encodeToHex(UUID.randomUUID().toString()));
+            }
+            HistoricalMessage historyMsg = HistoryUtils.messageToHistoricalMessage((Message) packet);
+            MessageBean message = TransformUtils.messageToBean(historyMsg);
             /*history.addHistoricalMessage(HistoryUtils.messageToHistoricalMessage((Message) packet),
                                          sessionProvider);*/
             //Fix for CS-3246: contact list in public room is empty in special case
