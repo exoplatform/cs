@@ -35,7 +35,8 @@ import org.exoplatform.webui.form.validator.Validator;
   template =  "system:/groovy/webui/form/UIFormWithTitle.gtmpl",
   events = {
     @EventConfig(listeners = UIContentForm.SaveActionListener.class ),
-    @EventConfig(listeners = UIContentForm.CancelActionListener.class,  phase = Phase.DECODE)
+    @EventConfig(listeners = UIContentForm.CancelActionListener.class,  phase = Phase.DECODE),
+    @EventConfig(listeners = UIContentForm.OnChangeActionListener.class, phase = Phase.DECODE)
   }
 )
 public class UIContentForm extends UIForm {  
@@ -45,6 +46,9 @@ public class UIContentForm extends UIForm {
   final static public String FIELD_LABEL = "label" ;
   final static public String FIELD_DESCRIPTION = "description" ;
   final static public String FIELD_TYPE = "type" ;
+  
+  public static final String TYPE_RSS = "rss";
+  public static final String TYPE_DESC = "desc";
   
   private ContentNode contentNode ;
   
@@ -58,12 +62,14 @@ public class UIContentForm extends UIForm {
     }
     addUIFormInput(new UIFormStringInput(FIELD_ID, FIELD_ID, null).addValidator(MandatoryValidator.class));
     addUIFormInput(new UIFormStringInput(FIELD_URL, FIELD_URL, null).
-                   addValidator(URLValidator.class));
+                   addValidator(URLValidator.class).addValidator(MandatoryValidator.class));
     addUIFormInput(new UIFormStringInput(FIELD_LABEL, FIELD_LABEL, null).addValidator(MandatoryValidator.class).
                    addValidator(StringLengthValidator.class, 1, 20));
-    addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION, FIELD_DESCRIPTION, null)).
-    addUIFormInput(new UIFormSelectBox(FIELD_TYPE, FIELD_TYPE, option_).
-                   addValidator(MandatoryValidator.class));
+    addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION, FIELD_DESCRIPTION, null));
+    UIFormSelectBox uiTypes = new UIFormSelectBox(FIELD_TYPE, FIELD_TYPE, option_);
+    uiTypes.addValidator(MandatoryValidator.class);
+    uiTypes.setOnChange("OnChange");
+    addUIFormInput(uiTypes);
   }
   
   public void setContentNode(ContentNode node) throws Exception { 
@@ -71,6 +77,11 @@ public class UIContentForm extends UIForm {
     if(node != null) {
       invokeGetBindingBean(node) ;
       getUIStringInput(FIELD_ID).setEditable(false) ;
+      if (TYPE_DESC.equals(getUIFormSelectBox(FIELD_TYPE).getValue())) {
+        getUIStringInput(FIELD_URL).setRendered(false);
+      } else {
+        getUIStringInput(FIELD_URL).setRendered(true);
+      }
       return ;
     }
     getUIStringInput(FIELD_ID).setEditable(true).setValue(null) ;
@@ -154,6 +165,23 @@ public class UIContentForm extends UIForm {
       else uiWorkingArea.setRenderedChild(UIDetailContent.class) ; 
       //----------------------------
     }
+  }
+  
+  public static class OnChangeActionListener extends EventListener<UIContentForm> {
+
+    @Override
+    public void execute(Event<UIContentForm> event) throws Exception {
+      UIContentForm uiForm = event.getSource();
+      if (TYPE_DESC.equals(uiForm.getUIFormSelectBox(FIELD_TYPE).getValue())) {
+        uiForm.getUIStringInput(FIELD_URL).setRendered(false);
+      } else {
+        uiForm.getUIStringInput(FIELD_URL).setRendered(true);
+      }
+    }
+  }
+  
+  public String[] getActions() {
+    return new String[] {"Save", "Cancel"};
   }
   
   static public class URLValidator implements Validator {
