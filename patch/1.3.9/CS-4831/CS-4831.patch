@@ -1,0 +1,13 @@
+Index: eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_fr.properties
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_fr.properties	(revision 67805)
++++ eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_fr.properties	(working copy)
+@@ -65,6 +65,8 @@
+ UIAddEditPermission.header.action=Actions
+ UIAddEditPermission.label.true=Oui
+ UIAddEditPermission.label.false=Non
++UIAddEditPermission.action.title.Edit=Editer
++UIAddEditPermission.action.title.Delete=Supprimer
+ 
+ UIPopupWindowUserSelect.title.UIUserSelector=Selecteur d'utilisateur
+ UIPopupWindowUserSelectEventForm.title.UIUserSelector=Selecteur d'utilisateur
