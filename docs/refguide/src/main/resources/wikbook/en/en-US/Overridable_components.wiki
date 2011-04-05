@@ -7,31 +7,30 @@ h1. ContentDAO {anchor:id=CSref.ExtensionPoints.ContentDAO}
 You can find the configuration file at _WEB-INF/cs-extension/cs/content/content-service-configuration.xml_ with the declaration as below:
 
 {code:xml}
- <component>
-    <key>org.exoplatform.content.service.ContentDAO</key>
-    <type>org.exoplatform.content.service.impl.ContentDAOImpl</type>     
-  </component>
-
+<component>
+  <key>org.exoplatform.content.service.ContentDAO</key>
+  <type>org.exoplatform.content.service.impl.ContentDAOImpl</type>
+</component>
 {code}
 The example below is an example of plugin configuration:
 
 {code:xml}
-<external-component-plugins> 
-       <target-component>org.exoplatform.content.service.ContentDAO</target-component>  
-	   <component-plugin>
-	      <name>rssreader.listener</name>
-	      <set-method>addPlugin</set-method>
-	      <type>org.exoplatform.content.service.RSSContentPlugin</type>
-	      <description>rss reader plugin</description>     
-	    </component-plugin>
-	    
-	    <component-plugin>
-	      <name>description.listener</name>
-	      <set-method>addPlugin</set-method>
-	      <type>org.exoplatform.content.service.DescriptionPlugin</type>
-	      <description>Description plugin</description>     
-	    </component-plugin>
-    </external-component-plugins>  
+<external-component-plugins>
+  <target-component>org.exoplatform.content.service.ContentDAO</target-component>
+  <component-plugin>
+    <name>rssreader.listener</name>
+    <set-method>addPlugin</set-method>
+    <type>org.exoplatform.content.service.RSSContentPlugin</type>
+    <description>rss reader plugin</description>
+  </component-plugin>
+
+  <component-plugin>
+    <name>description.listener</name>
+    <set-method>addPlugin</set-method>
+    <type>org.exoplatform.content.service.DescriptionPlugin</type>
+    <description>Description plugin</description>
+  </component-plugin>
+</external-component-plugins> 
 {code}
 
 
@@ -44,13 +43,13 @@ See the following example:
 
 {code:xml}
 <external-component-plugins>
-    <target-component>org.exoplatform.contact.service.ContactService</target-component>
-    <component-plugin>
-      <name>ContactEventListener</name>
-      <set-method>addListenerPlugin</set-method>
-      <type>org.exoplatform.cs.ext.impl.ContactSpaceActivityPublisher</type>
-    </component-plugin>
-  </external-component-plugins>
+  <target-component>org.exoplatform.contact.service.ContactService</target-component>
+  <component-plugin>
+    <name>ContactEventListener</name>
+    <set-method>addListenerPlugin</set-method>
+    <type>org.exoplatform.cs.ext.impl.ContactSpaceActivityPublisher</type>
+  </component-plugin>
+</external-component-plugins> 
 {code}
 
 Details:
@@ -73,17 +72,15 @@ You can find the configuration file of this component at:  _ext/social-integrati
 
 See the following example:
 {code:xml}
- <external-component-plugins>
-    <target-component>org.exoplatform.calendar.service.CalendarService</target-component>
-    <component-plugin>
-      <name>CalendarEventListener</name>
-      <set-method>addEventListenerPlugin</set-method>
-      <type>org.exoplatform.cs.ext.impl.CalendarSpaceActivityPublisher</type>      
-    </component-plugin>
-  </external-component-plugins>
+<external-component-plugins>
+  <target-component>org.exoplatform.calendar.service.CalendarService</target-component>
+  <component-plugin>
+    <name>CalendarEventListener</name>
+    <set-method>addEventListenerPlugin</set-method>
+    <type>org.exoplatform.cs.ext.impl.CalendarSpaceActivityPublisher</type>
+  </component-plugin>
+</external-component-plugins>
 {code}
 
 Details:
 {{CalendarSpaceActivityPublisher}} implements {{EventLifeCycle}}. It writes activities in the space activity stream when events or tasks are added/modified.
-
-

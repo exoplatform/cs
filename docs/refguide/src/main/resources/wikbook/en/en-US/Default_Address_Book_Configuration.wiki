@@ -16,7 +16,7 @@ The following information will explain details of  eXo AdressBook configuration.
 
 When cs-plugins-configuration.xml file is executed, the component-plugin named *contact.new.user.event.listener* will be referred to org.exoplatform.contact.service.impl.NewUserListener to create Users for Contact correspondingly to the Users existing in the Organization database. Users for Contact are saved in eXo JCR.
 
-{code}
+{code:language=xml}
 ......
 <component-plugin>
      <name>contact.new.user.event.listener</name>

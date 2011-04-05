@@ -53,51 +53,45 @@ h2. Portlet preferences {anchor:id=CSref.Portlets.ChatbarPortletPreference}
 The Chatbar Portlet consists of some preferences as in the following sample code:
  
 {code:xml}
+
 <portlet-preferences>
-    
-            
-			<preference>
-				<name>showMailLink</name>
-				<value>true</value> <!--true/false -->
-				<read-only>false</read-only>
-			</preference>
+  <preference>
+    <name>showMailLink</name>
+    <value>true</value> <!--true/false -->
+    <read-only>false</read-only>
+  </preference>
 
-			<preference>
-				<name>showCalendarLink</name>
-				<value>true</value> <!--true/false -->
-				<read-only>false</read-only>
-			</preference>
-
-			<preference>
-				<name>showContactLink</name>
-				<value>true</value> <!--true/false -->
-				<read-only>false</read-only>
-			</preference>
-			
-			<preference>
-				<name>mailUrl</name>
-				<value>portal/private/intranet/mail</value> <!--String page name-->
-				<read-only>false</read-only>
-			</preference>
-			
-			<preference>
-				<name>calendarUrl</name>
-				<value>portal/private/intranet/calendar</value> <!--String page name -->
-				<read-only>false</read-only>
-			</preference>
-			
-			<preference>
-				<name>contactUrl</name>
-				<value>portal/private/intranet/contact</value> <!--String page name-->
-				<read-only>false</read-only>
-			</preference>
-			
-			<preference>
-				<name>info</name>
-				<value>info</value> <!--this is only the key to get the resource bundle the full key : UIConfigForm.label.info -->
-				<read-only>true</read-only>
-			</preference>
-	</portlet-preferences>
+  <preference>
+    <name>showCalendarLink</name>
+    <value>true</value> <!--true/false -->
+    <read-only>false</read-only>
+  </preference>
+  <preference>
+    <name>showContactLink</name>
+    <value>true</value> <!--true/false -->
+    <read-only>false</read-only>
+  </preference>
+  <preference>
+    <name>mailUrl</name>
+    <value>portal/private/intranet/mail</value> <!--String page name -->
+    <read-only>false</read-only>
+  </preference>
+  <preference>
+    <name>calendarUrl</name>
+    <value>portal/private/intranet/calendar</value> <!--String page name -->
+    <read-only>false</read-only>
+  </preference>
+  <preference>
+    <name>contactUrl</name>
+    <value>portal/private/intranet/contact</value> <!--String page name -->
+    <read-only>false</read-only>
+  </preference>
+  <preference>
+    <name>info</name>
+    <value>info</value> <!--this is only the key to get the resource bundle the full key : UIConfigForm.label.info -->
+    <read-only>true</read-only>
+  </preference>
+</portlet-preferences>
 {code}
 
 || Preference Name     || Possible Values || Default Values|| Description ||

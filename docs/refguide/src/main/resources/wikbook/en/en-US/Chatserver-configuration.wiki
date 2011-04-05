@@ -18,9 +18,9 @@ The Openfire server has a single configuration file called openfire.xml and loca
 {code:xml}
 <prop>
   <name>
-                <is>
-                    <blah>value</blah>
-                </is>
+    <is>
+      <blah>value</blah>
+    </is>
   </name>
 </prop>
 {code}

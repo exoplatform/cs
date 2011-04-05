@@ -33,7 +33,7 @@ This function resizes a pane of a layout.
 * *Example*
 To install the pane resizing, you must configure as the below:
 
-{code}
+{code:language=html}
 <div class="VerticalResizeReadingPane" id="ResizeReadingPane" style="border-left:1px solid #C0C0C0; float:left" onmousedown="eXo.mail.VerticalSpliter.doResize(event, this);">
 {code}
 
@@ -54,7 +54,7 @@ Utils.prototype.getKeynum = function(event)
 * *Example*
 To know if user presses Enter key or Escape key or not, do the following example:
 
-{code}
+{code:language=javascript}
  document.onkeypress = function(){
         var keyNum = eXo.core.Keyboard.getKeynum(evt);
         switch(keyNum){
@@ -70,7 +70,7 @@ h3. Utils.getElementByClass
 It is a utility DOM used to get HTML element under the CSS  class selector.
 
 * *Prototype*
-{code}
+{code:language=javascript}
 Utils.prototype.getElementByClass = function(parentNode,clazz)
 {code}
 
@@ -82,7 +82,7 @@ Utils.prototype.getElementByClass = function(parentNode,clazz)
 
 * *Example*
 To find a _div_ having class _Child3_, do the following example:
-{code}
+{code:language=html}
 <div id="parent">
         <div class="child1">Child 1</div>
         <div class="child2">Child 2</div>
@@ -102,7 +102,7 @@ h3. Utils.swapClass
 It is used to exchange the current class selector with a different class selector passed as a parameter.
 
 * *Prototype*
-{code}
+{code:language=javascript}
 Utils.prototype.swapClass = function(obj,newClass)
 {code}
 
@@ -114,7 +114,7 @@ Utils.prototype.swapClass = function(obj,newClass)
 
 * *Example*
 If you want to higlight all the links on a document, when a user hovers on them, do the following example:
-{code}
+{code:language=javascript}
  window.onload = function(){
         var links = document.getElementsByTagName("a");
         var i = links.length;
@@ -134,7 +134,7 @@ h3. Utils.getScrollTop
 Gets scrollTop property of HTML element
 
 * *Prototype*
-{code}
+{code:language=javascript}
 Utils.prototype.getScrollTop = function(obj)
 {code}
 
@@ -148,7 +148,7 @@ Utils.prototype.getScrollTop = function(obj)
 
 * *Example*
 To know the Scrolltop property of all links on a document, do the following example:
-{code}
+{code:language=javascript}
  window.onload = function(){
         var links = document.getElementsByTagName("a");
         var i = links.length;
@@ -180,7 +180,7 @@ Gets scrollLeft property of HTML element
 
 * *Example*
 To know the ScrollLeft property of all links on a document, do the following example:
-{code}
+{code:language=javascript}
  window.onload = function(){
         var links = document.getElementsByTagName("a");
         var i = links.length;
@@ -210,7 +210,7 @@ Utils.prototype.getScrollbarWidth = function()
 
 * *Example*
 To get the Scrollbar width of a window browser, do the following example:
-{code}
+{code:language=javascript}
 window.onload = function(){
 	alert(eXo.cs.Utils.getScrollbarWidth());
 }
@@ -220,7 +220,7 @@ h3. Utils.getElementWidth
 * *Description*
 To get the width of the element.
 * *Prototype*
-{code}
+{code:language=javascript}
 Utils.prototype.getElementWidth = function(obj)
 {code}
 
@@ -235,7 +235,7 @@ Utils.prototype.getElementWidth = function(obj)
 * *Example*
 
 To know the element width of all links on a document, do the following example:
-{code}
+{code:language=javascript}
  window.onload = function(){
         var links = document.getElementsByTagName("a");
         var i = links.length;
@@ -256,7 +256,7 @@ h3. DateTimeFormater.format
 * *Description*
 It is a class that helps to format the dates and times according to a user-specified mask.
 * *Prototype*
-{code}
+{code:language=javascript}
 DateTimeFormater.prototype.format = function (date, mask, utc)
 {code}
 
@@ -269,7 +269,7 @@ DateTimeFormater.prototype.format = function (date, mask, utc)
 
 * *Example*
  Here are some examples of how this method can be used:
-{code}
+{code:language=javascript}
 var now = new Date();
 
 eXo.cs.DateTimeFormater.format(now,"m/dd/yy");
@@ -288,7 +288,7 @@ h3. UIContextMenu.init
 To initialize the configuration for UIContextMenu.
 
 * *Prototype*
-{code}
+{code:language=javascript}
 UIContextMenu.prototype.init = function(conf)
 {code}
 
@@ -305,7 +305,7 @@ h3. UIContextMenu.attach
 To add a context menu for a application.
 
 * *Prototype*
-{code}
+{code:language=javascript}
 UIContextMenu.prototype.attach = function(classNames, menuId)
 {code}
 
@@ -319,7 +319,7 @@ UIContextMenu.prototype.attach = function(classNames, menuId)
 * *Example*
 The following example shows how to install the context menu in the Calendar application. The installation is executed when this application is loaded.
 
-{code}
+{code:language=javascript}
  UICalendarPortlet.prototype.initContextMenu = function(compid){
     var UIContextMenu = eXo.webui.UIContextMenu;
     UIContextMenu.portletName = this.portletName;
@@ -353,7 +353,7 @@ Highlighter.prototype.start = function(evt)
 
 * *Example*
 The following example is about the installation of Dragging Selection on the month view of Calendar application.
-{code}
+{code:language=javascript}
 GUIMan.prototype.initHighlighter = function() {
   for(var i=0 ; i<this.tableData.length; i++) { //this.tableData is 2D array having cells.
     var row = this.tableData[i];
@@ -369,7 +369,7 @@ h2. Reminder.init
 * *Description*
 It is used to remind users about upcoming events/ tasks, depending on the user's settings.
 * *Prototype*
-{code}
+{code:language=javascript}
 Reminder.prototype.init = function(eXoUser, eXoToken, cometdContextName)
 {code}
 
@@ -393,7 +393,7 @@ h2. UICalendarDragDrop.dndTrigger
 * *Description*
 It is used to drag and drop an event/ task from a cell into another cell.
 * *Prototype*
-{code}
+{code:language=javascript}
 UICalendarDragDrop.prototype.dndTrigger = function(e)
 {code}
 
@@ -405,7 +405,7 @@ UICalendarDragDrop.prototype.dndTrigger = function(e)
 The following example explains the installation of drag and drop an event/ task on the month view of Calendar application.
 
 
-{code}
+{code:language=javascript}
 
 UICalendarDragDrop.prototype.regDnDItem = function() {
   for (var i=0; i<this.events.length; i++) {
@@ -431,7 +431,7 @@ h2. UICalendarPortlet.timeToMin
 * *Description*
 It is used to convert time from milliseconds to minutes
 * *Prototype*
-{code}
+{code:language=javascript}
 UICalendarPortlet.prototype.timeToMin = function(milliseconds)
 {code}
 
@@ -446,7 +446,7 @@ UICalendarPortlet.prototype.timeToMin = function(milliseconds)
 
 * *Example*
 The following example explains how to convert time from seconds into minutes.
-{code}
+{code:language=javascript}
  var d = new Date();
 var time = d.getTime();
 var totalMin = eXo.calendar.UICalendarPortlet.timeToMin(time);
@@ -457,7 +457,7 @@ h2. UICalendarPortlet.minToTime
 It is used to convert time from minutes to string
 
 * *Prototype*
-{code}
+{code:language=javascript}
 UICalendarPortlet.prototype.minToTime = function(min, timeFormat)
 {code}
 
@@ -473,7 +473,7 @@ UICalendarPortlet.prototype.minToTime = function(min, timeFormat)
 
 * *Example*
 See the following example to understand the usage of this method: 
-{code}
+{code:language=javascript}
  var min = 120;
 eXo.calendar.UICalendarPortlet.minToTime(min); // return 02: 00
 {code}
@@ -483,7 +483,7 @@ h2. UICalendarPortlet.dateDiff
 * *Description*
 It defines the duration in the form of day between beginning date and ending date.
 * *Prototype*
-{code}
+{code:language=javascript}
 	UICalendarPortlet.prototype.dateDiff = function(start, end)
 {code}
 
@@ -500,7 +500,7 @@ It defines the duration in the form of day between beginning date and ending dat
 
 * *Example*
 This example explains the usage of this method:
-{code}
+{code:language=javascript}
 eXo.calendar.UICalendarPortlet.dateDiff(1285058892740,1285232672871);// return 2
 {code}
 
@@ -510,7 +510,7 @@ h2. UICalendarPortlet.getYear
 Get full year from date object
 
 * *Prototype*
-{code}
+{code:language=javascript}
 UICalendarPortlet.prototype.getYear = function(date)
 {code}
 
@@ -525,7 +525,7 @@ UICalendarPortlet.prototype.getYear = function(date)
 
 * *Example*
 This example explains the usage of this method:
-{code}
+{code:language=javascript}
 eXo.calendar.UICalendarPortlet.getYear(d); // Return 2010
 {code}
 
@@ -534,7 +534,7 @@ h2. UICalendarPortlet.getDay
 Get day from time in milliseconds
 
 * *Prototype*
-{code}
+{code:language=javascript}
 UICalendarPortlet.prototype.getDay = function(milliseconds)
 {code}
 
@@ -549,7 +549,7 @@ UICalendarPortlet.prototype.getDay = function(milliseconds)
 
 * *Example*
 This example explains the usage of this method: 
-{code}
+{code:language=javascript}
 eXo.calendar.UICalendarPortlet.getDay(1285058892740); // Return 2
 {code}
 
@@ -559,7 +559,7 @@ h2. UICalendarPortlet.getWeekNumber
 Get number of weeks in the current year
 
 * *Prototype*
-{code}
+{code:language=javascript}
 UICalendarPortlet.prototype.getWeekNumber = function(now)
 {code}
 
@@ -575,7 +575,7 @@ UICalendarPortlet.prototype.getWeekNumber = function(now)
 
 * *Example*
 This example explains the usage of this method: 
-{code}
+{code:language=javascript}
 eXo.calendar.UICalendarPortlet.getWeekNumber(1285058892740); // Return 38
 {code}
 
@@ -586,7 +586,7 @@ h2. AutoComplete.init
 It is used to register an auto-complete feature for input.
 
 * *Prototype*
-{code}
+{code:language=javascript}
 AutoComplete.prototype.init = function(ids)
 {code}
 
@@ -614,7 +614,7 @@ h2. UIMailDragDrop.regDnDItem
 It is used to install the drag and drop message function in Mail application.
 
 * *Prototype*
-{code}
+{code:language=javascript}
 UIMailDragDrop.prototype.regDnDItem = function(rootNode)
 {code}
 
@@ -625,7 +625,7 @@ UIMailDragDrop.prototype.regDnDItem = function(rootNode)
 
 * *Example*
 This example is about installing the drap and drop message function in Mail application of eXo Collaboration.
-{code}
+{code:language=javascript}
 UIMailDragDrop.prototype.init = function() {
         var mailNode = document.getElementById("UIMailPortlet");
         this.regDnDItem(mailNode) ;
@@ -638,7 +638,7 @@ h2. UpdateList.init
 To update new messages into the message list in Mail application.
 
 * *Prototype*
-{code}
+{code:language=javascript}
 UpdateList.prototype.init = function(accountId, eXoUser, eXoToken, cometdContextName)
 {code}
 
@@ -652,7 +652,7 @@ UpdateList.prototype.init = function(accountId, eXoUser, eXoToken, cometdContext
 
 * *Example*
 This example is about installing the function of updating mail in Mail application of eXo Collaboration.
-{code}
+{code:language=javascript}
 UIMailDragDrop.prototype.init = function() {
         var mailNode = document.getElementById("UIMailPortlet");
         this.regDnDItem(mailNode) ;
@@ -666,7 +666,7 @@ h2. VerticalSpliter.doResize
 It is used to resize the vertical pane of a layout.
 
 * *Prototype*
-{code}
+{code:language=javascript}
 VerticalSpliter.prototype.doResize = function(e, markerobj, leftAreaObj, rightAreaObj) 
 {code}
 
@@ -681,7 +681,7 @@ VerticalSpliter.prototype.doResize = function(e, markerobj, leftAreaObj, rightAr
 * *Example*
 This example is about installing the function of resizing the vertical pane of the layout.
 
-{code}
+{code:language=html}
 <div class="VerticalResizeReadingPane" id="ResizeReadingPane"  onmousedown="eXo.mail.VerticalSpliter.doResize(event, this);">
 {code}
 
@@ -694,7 +694,7 @@ h2. UIContactAlert.init
 To inform the number of contacts imported to the contact list in the Contact Application of eXo Collaboration.
 
 * *Prototype*
-{code}
+{code:language=javascript}
 UIContactAlert.prototype.init = function(eXoUser, eXoToken, cometdContextName)
 {code}
 
@@ -731,7 +731,7 @@ h2. UIContactDragDrop.dndTrigger
 * *Description*
 It is used to install the function of drag and drop contact items.
 * *Prototype*
-{code}
+{code:language=javascript}
 UIContactDragDrop.prototype.dndTrigger = function(e)
 {code}
 
@@ -747,7 +747,7 @@ UIContactDragDrop.prototype.dndTrigger = function(e)
 * *Example*
 The method _regDnDItem_ illustrate the usage of the method _dndTrigger_ in installing the Contact drag and drop function in Contact application of eXo Collaboration.
 
-{code}
+{code:language=javascript}
 UIContactDragDrop.prototype.regDnDItem = function() {
   // for thumbnail
   var uiContactsNode = document.getElementById('UIContacts') ;
