@@ -22,6 +22,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.exoplatform.contact.CalendarUtils;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.webui.UIContactPortlet;
@@ -214,16 +215,11 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      to = to.replaceAll(";", ",") ;
-      String EMAIL_REGEX = 
-        "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+";
-      for (String email : to.split(",")) {
-        if (!ContactUtils.isEmpty(email) && !email.trim().matches(EMAIL_REGEX)) {
-          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.invalid-email", null, 
-              ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;
-        }
+      to = to.replaceAll(CalendarUtils.SEMICOLON, CalendarUtils.COLON);
+      if (CalendarUtils.isValidEmailAddresses(to)) {
+        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.invalid-email", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
       }
       if (uiForm.isCSMail) {
         UIPopupAction uiChildPopup = uiForm.getAncestorOfType(UIPopupAction.class) ;

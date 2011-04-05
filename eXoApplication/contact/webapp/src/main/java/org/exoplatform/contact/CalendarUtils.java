@@ -27,6 +27,10 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+
+import org.apache.commons.lang.StringUtils;
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
@@ -276,20 +280,25 @@ public class CalendarUtils {
     for(String c : regexpression){ if(name.contains(c)) return false ;}
     return true ;
   }
-  public static boolean isEmailValid(String value) {
-    String emailRegex = "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+\\.[A-Za-z]{2,5}" ;
-    return (value!= null && value.trim().length() > 0 && value.trim().matches(emailRegex)) ;
-  }
-  public static boolean isAllEmailValid(String addressList) {
-    boolean isValid = true ;
-    if(CalendarUtils.isEmpty(addressList)) return false ;
-    for(String s : addressList.split(CalendarUtils.COMMA)) {
-      s = s.trim() ;
-      if(!isEmailValid(s)) isValid = false ;
-      break ;
+
+  public static boolean isValidEmailAddresses(String value) {
+    if (isEmpty(value))
+      return true;
+    value = StringUtils.remove(value, " ");
+    value = StringUtils.replace(value, SEMICOLON, COMMA);
+    try {
+      InternetAddress[] iAdds = InternetAddress.parse(value, true);
+      String emailRegex = "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+\\.[A-Za-z]{2,6}";
+      for (int i = 0; i < iAdds.length; i++) {
+        if (!iAdds[i].getAddress().matches(emailRegex))
+          return false;
+      }
+    } catch (AddressException e) {
+      return false;
     }
-    return isValid  ;
+    return true;
   }
+
   public static Calendar getInstanceTempCalendar() { 
     Calendar  calendar = GregorianCalendar.getInstance() ;
     calendar.setLenient(false) ;
