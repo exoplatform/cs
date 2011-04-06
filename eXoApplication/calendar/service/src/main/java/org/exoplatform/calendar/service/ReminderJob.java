@@ -21,7 +21,6 @@ import java.util.GregorianCalendar;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
-import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
@@ -31,10 +30,7 @@ import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.mail.MailService;
@@ -60,13 +56,13 @@ public class ReminderJob implements Job {
         log_.debug("Calendar email reminder service");
       java.util.Calendar fromCalendar = GregorianCalendar.getInstance();
       JobDataMap jdatamap = context.getJobDetail().getJobDataMap();
-      Node calendarHome = getPublicServiceHome(provider);
+      Node calendarHome = PopupReminderJob.getPublicServiceHome(provider);
       if (calendarHome == null)
         return;
-      StringBuffer path = new StringBuffer(getReminderPath(fromCalendar, provider));
+      StringBuffer path = new StringBuffer(PopupReminderJob.getReminderPath(fromCalendar, provider));
       path.append("//element(*,exo:reminder)");
       path.append("[@exo:remindDateTime <= xs:dateTime('" + ISO8601.format(fromCalendar) + "') and @exo:isOver = 'false' and @exo:reminderType = 'email' ]");
-      QueryManager queryManager = getSession(provider).getWorkspace().getQueryManager();
+      QueryManager queryManager = PopupReminderJob.getSession(provider).getWorkspace().getQueryManager();
       Query query = queryManager.createQuery(path.toString(), Query.XPATH);
       QueryResult results = query.execute();
       NodeIterator iter = results.getNodes();
@@ -121,30 +117,4 @@ public class ReminderJob implements Job {
       log_.debug("File plan job done");
   }
 
-  private String getReminderPath(java.util.Calendar fromCalendar, SessionProvider provider) throws Exception {
-    String year = "Y" + String.valueOf(fromCalendar.get(java.util.Calendar.YEAR));
-    String month = "M" + String.valueOf(fromCalendar.get(java.util.Calendar.MONTH) + 1);
-    String day = "D" + String.valueOf(fromCalendar.get(java.util.Calendar.DATE));
-    StringBuffer path = new StringBuffer("/jcr:root");
-    path.append(getPublicServiceHome(provider).getPath());
-    path.append(Utils.SLASH).append(year).append(Utils.SLASH).append(month).append(Utils.SLASH).append(day);
-    path.append(Utils.SLASH).append(Utils.CALENDAR_REMINDER);
-    return path.toString();
-  }
-
-  private Node getPublicServiceHome(SessionProvider provider) throws Exception {
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
-    NodeHierarchyCreator nodeHierarchyCreator = (NodeHierarchyCreator) container.getComponentInstanceOfType(NodeHierarchyCreator.class);
-    Node publicApp = nodeHierarchyCreator.getPublicApplicationNode(provider);
-    if (publicApp != null && publicApp.hasNode(Utils.CALENDAR_APP))
-      return publicApp.getNode(Utils.CALENDAR_APP);
-    return null;
-  }
-
-  private Session getSession(SessionProvider sprovider) throws Exception {
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
-    RepositoryService repositoryService = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
-    ManageableRepository currentRepo = repositoryService.getCurrentRepository();
-    return sprovider.getSession(currentRepo.getConfiguration().getDefaultWorkspaceName(), currentRepo);
-  }
 }

@@ -137,7 +137,7 @@ public class PopupReminderJob implements Job {
       log_.debug("File plan job done");
   }
 
-  private String getReminderPath(java.util.Calendar fromCalendar, SessionProvider provider) throws Exception {
+  public static String getReminderPath(java.util.Calendar fromCalendar, SessionProvider provider) throws Exception {
     String year = "Y" + String.valueOf(fromCalendar.get(java.util.Calendar.YEAR));
     String month = "M" + String.valueOf(fromCalendar.get(java.util.Calendar.MONTH) + 1);
     String day = "D" + String.valueOf(fromCalendar.get(java.util.Calendar.DATE));
@@ -148,7 +148,7 @@ public class PopupReminderJob implements Job {
     return path.toString();
   }
 
-  private Node getPublicServiceHome(SessionProvider provider) throws Exception {
+  public static Node getPublicServiceHome(SessionProvider provider) throws Exception {
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     NodeHierarchyCreator nodeHierarchyCreator = (NodeHierarchyCreator) container.getComponentInstanceOfType(NodeHierarchyCreator.class);
     Node publicApp = nodeHierarchyCreator.getPublicApplicationNode(provider);
@@ -157,7 +157,7 @@ public class PopupReminderJob implements Job {
     return null;
   }
 
-  private Session getSession(SessionProvider sprovider) throws Exception {
+  public static Session getSession(SessionProvider sprovider) throws Exception {
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     RepositoryService repositoryService = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
     ManageableRepository currentRepo = repositoryService.getCurrentRepository();

@@ -45,9 +45,11 @@ import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
+import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.service.impl.NewUserListener;
+import org.exoplatform.calendar.webui.UICalendars;
 import org.exoplatform.calendar.webui.popup.UIAddressForm.ContactData;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
@@ -973,4 +975,44 @@ public class CalendarUtils {
     }
     return buffer.toString();
   }
+  
+  public static org.exoplatform.calendar.service.Calendar getCalendar(String calType, String calendarId) throws Exception {
+    CalendarService calService = CalendarUtils.getCalendarService() ;
+    String currentUser = CalendarUtils.getCurrentUser() ;
+    org.exoplatform.calendar.service.Calendar calendar = null;
+    if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
+      calendar = calService.getUserCalendar(currentUser, calendarId) ;
+    } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
+      GroupCalendarData gCalendarData = calService.getSharedCalendars(currentUser, true) ;
+      if(gCalendarData != null) calendar = gCalendarData.getCalendarById(calendarId) ;
+    } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
+      calendar = calService.getGroupCalendar(calendarId) ;
+    }
+    return calendar;
+  }
+  
+  public static EventQuery getEventQuery(UICalendars uiCalendars, EventQuery eventQuery) throws Exception {
+    List<String> checkedCals = uiCalendars.getCheckedCalendars() ;  
+    List<String> calendarIds = new ArrayList<String>() ; 
+    for (GroupCalendarData groupCalendarData : uiCalendars.getPrivateCalendars())
+      for (org.exoplatform.calendar.service.Calendar cal : groupCalendarData.getCalendars())
+        if (checkedCals.contains(cal.getId())) calendarIds.add(cal.getId());
+    for (GroupCalendarData calendarData : uiCalendars.getPublicCalendars())
+      for (org.exoplatform.calendar.service.Calendar  calendar : calendarData.getCalendars())
+        if (checkedCals.contains(calendar.getId())) calendarIds.add(calendar.getId());
+    GroupCalendarData shareClas = uiCalendars.getSharedCalendars();
+    if (shareClas != null)
+      for (org.exoplatform.calendar.service.Calendar cal : shareClas.getCalendars())
+        if (checkedCals.contains(cal.getId())) {
+          calendarIds.add(cal.getId());
+        }
+    if (calendarIds.size() > 0)
+      eventQuery.setCalendarId(calendarIds.toArray(new String[] {}));
+    else {
+      eventQuery.setCalendarId(new String[] {"null"});
+    }
+    eventQuery.setOrderBy(new String[] {Utils.EXO_SUMMARY});
+    return eventQuery;
+  }
+  
 }

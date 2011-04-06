@@ -286,8 +286,27 @@ public class UICalendars extends UIForm  {
     CalendarService calService = CalendarUtils.getCalendarService();
     return calService.isRemoteCalendar(username, calendarId);    
   }
-
-
+  
+  private void updateView(UICalendars uiComponent, Event<UICalendars> event) throws Exception {
+    UICalendarPortlet uiPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
+    UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+    if(uiViewContainer.getRenderedChild()  instanceof UIListContainer) {
+      UIListContainer list = (UIListContainer)uiViewContainer.getRenderedChild() ;
+      UIListView uiListView = list.getChild(UIListView.class) ;
+      if(uiListView.isDisplaySearchResult()) {
+        uiListView.setDisplaySearchResult(false) ;
+        uiListView.setCategoryId(null) ;
+        uiListView.refresh() ;
+        uiListView.setLastViewId(null) ;
+        UISearchForm uiSearchForm = uiPortlet.findFirstComponentOfType(UISearchForm.class) ;
+        uiSearchForm.reset() ;
+        UIActionBar uiActionBar = uiPortlet.findFirstComponentOfType(UIActionBar.class) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiSearchForm) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
+      }
+    }  
+  }
+  
   static  public class AddCalendarActionListener extends EventListener<UICalendars> {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;
@@ -348,21 +367,7 @@ public class UICalendars extends UIForm  {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent) ; 
       UICalendarWorkingContainer uiWorkingContainer = uiPortlet.findFirstComponentOfType(UICalendarWorkingContainer.class) ;
       UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
-      if(uiViewContainer.getRenderedChild()  instanceof UIListContainer) {
-        UIListContainer list = (UIListContainer)uiViewContainer.getRenderedChild() ;
-        UIListView uiListView = list.getChild(UIListView.class) ;
-        if(uiListView.isDisplaySearchResult()) {
-          uiListView.setDisplaySearchResult(false) ;
-          uiListView.setCategoryId(null) ;
-          uiListView.refresh() ;
-          uiListView.setLastViewId(null) ;
-          UISearchForm uiSearchForm = uiPortlet.findFirstComponentOfType(UISearchForm.class) ;
-          uiSearchForm.reset() ;
-          UIActionBar uiActionBar = uiPortlet.findFirstComponentOfType(UIActionBar.class) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiSearchForm) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
-        }
-      }
+      uiComponent.updateView(uiComponent, event);
       uiViewContainer.refresh() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
     }
@@ -378,15 +383,7 @@ public class UICalendars extends UIForm  {
       try {
         String calendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
         String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
-        Calendar calendar = null;
-        if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
-          calendar = calService.getUserCalendar(currentUser, calendarId) ;
-        } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
-          GroupCalendarData gCalendarData = calService.getSharedCalendars(currentUser, true) ;
-          if(gCalendarData != null) calendar = gCalendarData.getCalendarById(calendarId) ;
-        } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
-          calendar = calService.getGroupCalendar(calendarId) ;
-        }  
+        Calendar calendar = CalendarUtils.getCalendar(calType, calendarId);
         if(calendar == null) {
           uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -436,7 +433,7 @@ public class UICalendars extends UIForm  {
       }
     }
   }
-
+  
   static  public class AddTaskActionListener extends EventListener<UICalendars> {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;
@@ -450,15 +447,7 @@ public class UICalendars extends UIForm  {
         //String clientTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
         String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
         String categoryId = event.getRequestContext().getRequestParameter("categoryId") ;
-        Calendar calendar = null;
-        if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
-          calendar = calService.getUserCalendar(currentUser, calendarId) ;
-        } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
-          GroupCalendarData gCalendarData = calService.getSharedCalendars(currentUser, true) ;
-          if(gCalendarData != null) calendar = gCalendarData.getCalendarById(calendarId) ;
-        } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
-          calendar = calService.getGroupCalendar(calendarId) ;
-        }  
+        Calendar calendar = CalendarUtils.getCalendar(calType, calendarId);
         if(calendar == null) {
           uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -484,16 +473,16 @@ public class UICalendars extends UIForm  {
           }  
           UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
           popupAction.deActivate() ;
-          UIQuickAddEvent uiQuickAddEvent = popupAction.activate(UIQuickAddEvent.class, 600) ;
-          uiQuickAddEvent.setEvent(false) ;  
-          uiQuickAddEvent.setId("UIQuickAddTask") ;
-          uiQuickAddEvent.init(uiCalendarPortlet.getCalendarSetting(), clientTime, null) ;
-          uiQuickAddEvent.update(calType, null) ;
-          uiQuickAddEvent.setSelectedCalendar(calendarId) ;
+          UIQuickAddEvent uiQuickAddTask = popupAction.activate(UIQuickAddEvent.class, 600) ;
+          uiQuickAddTask.setEvent(false) ;  
+          uiQuickAddTask.setId("UIQuickAddTask") ;
+          uiQuickAddTask.init(uiCalendarPortlet.getCalendarSetting(), clientTime, null) ;
+          uiQuickAddTask.update(calType, null) ;
+          uiQuickAddTask.setSelectedCalendar(calendarId) ;
           if(categoryId != null && categoryId.trim().length() >0 && !categoryId.toLowerCase().equals("null")) {
-            uiQuickAddEvent.setSelectedCategory(categoryId) ;
+            uiQuickAddTask.setSelectedCategory(categoryId) ;
           } else {
-            uiQuickAddEvent.setSelectedCategory("meeting") ;
+            uiQuickAddTask.setSelectedCategory("meeting") ;
           }
           event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
         }
@@ -638,21 +627,7 @@ public class UICalendars extends UIForm  {
       UICalendarPortlet uiPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       uiPortlet.cancelAction() ;
       UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
-      if(uiViewContainer.getRenderedChild()  instanceof UIListContainer) {
-        UIListContainer list = (UIListContainer)uiViewContainer.getRenderedChild() ;
-        UIListView uiListView = list.getChild(UIListView.class) ;
-        if(uiListView.isDisplaySearchResult()) {
-          uiListView.setDisplaySearchResult(false) ;
-          uiListView.setCategoryId(null) ;
-          uiListView.refresh() ;
-          uiListView.setLastViewId(null) ;
-          UISearchForm uiSearchForm = uiPortlet.findFirstComponentOfType(UISearchForm.class) ;
-          uiSearchForm.reset() ;
-          UIActionBar uiActionBar = uiPortlet.findFirstComponentOfType(UIActionBar.class) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiSearchForm) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
-        }
-      }
+      uiComponent.updateView(uiComponent, event);
       CalendarSetting setting = calService.getCalendarSetting(username) ;
       uiViewContainer.refresh() ;
       uiPortlet.setCalendarSetting(setting) ;
@@ -685,21 +660,7 @@ public class UICalendars extends UIForm  {
       UICalendarPortlet uiPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       uiPortlet.cancelAction() ;
       UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
-      if(uiViewContainer.getRenderedChild()  instanceof UIListContainer) {
-        UIListContainer list = (UIListContainer)uiViewContainer.getRenderedChild() ;
-        UIListView uiListView = list.getChild(UIListView.class) ;
-        if(uiListView.isDisplaySearchResult()) {
-          uiListView.setDisplaySearchResult(false) ;
-          uiListView.setCategoryId(null) ;
-          uiListView.refresh() ;
-          uiListView.setLastViewId(null) ;
-          UISearchForm uiSearchForm = uiPortlet.findFirstComponentOfType(UISearchForm.class) ;
-          uiSearchForm.reset() ;
-          UIActionBar uiActionBar = uiPortlet.findFirstComponentOfType(UIActionBar.class) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiSearchForm) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
-        }
-      }
+      uiComponent.updateView(uiComponent, event);
       CalendarSetting setting = calService.getCalendarSetting(username) ;
       uiViewContainer.refresh() ;
       uiPortlet.setCalendarSetting(setting) ;

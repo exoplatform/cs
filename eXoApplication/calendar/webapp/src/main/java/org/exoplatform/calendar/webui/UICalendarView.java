@@ -1001,15 +1001,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
             event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
             return;
           }
-          
-          if(CalendarUtils.PRIVATE_TYPE.equals(calType)) {
-            calendar = calendarService.getUserCalendar(username, calendarId) ;
-          } else if (CalendarUtils.SHARED_TYPE.equals(calType)) {
-            GroupCalendarData calendarData = calendarService.getSharedCalendars(CalendarUtils.getCurrentUser(), true)  ;
-            if(calendarData != null) calendar = calendarData.getCalendarById(calendarId) ;
-          } else if (CalendarUtils.PUBLIC_TYPE.equals(calType)) {
-            calendar = calendarService.getGroupCalendar(calendarId) ;
-          }
+          calendar = CalendarUtils.getCalendar(calType, calendarId);
           if(calendar == null) {
             UIApplication uiApp = uiCalendarView.getAncestorOfType(UIApplication.class) ;
             uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
@@ -1047,8 +1039,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
             UICalendarViewContainer uiContainer = uiCalendarView.getAncestorOfType(UICalendarViewContainer.class) ;
             UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
             uiCalendarView.setLastUpdatedEventId(null) ;
-            // hung.hoang
-            
+
             if(uiContainer.getRenderedChild() instanceof UIListContainer) {
               UIListView uiListView = ((UIListContainer)uiContainer.getRenderedChild()).getChild(UIListView.class) ;
               if (uiListView.isDisplaySearchResult()) {
@@ -1113,28 +1104,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         eventQuery.setFromDate(fromcalendar) ;
         java.util.Calendar tocalendar = uiListView.getEndDay(new GregorianCalendar(uiListView.getCurrentYear(), uiListView.getCurrentMonth(), uiListView.getCurrentDay())) ;
         eventQuery.setToDate(tocalendar) ;
-        
-        UICalendars uiCalendars = uiPortlet.findFirstComponentOfType(UICalendars.class);
-        List<String> checkedCals = uiCalendars.getCheckedCalendars() ;        
-        List<String> calendarIds = new ArrayList<String>() ; 
-        for (GroupCalendarData groupCalendarData : uiCalendars.getPrivateCalendars())
-          for (org.exoplatform.calendar.service.Calendar cal : groupCalendarData.getCalendars())
-            if (checkedCals.contains(cal.getId())) calendarIds.add(cal.getId());
-        for (GroupCalendarData calendarData : uiCalendars.getPublicCalendars())
-          for (org.exoplatform.calendar.service.Calendar  calendar : calendarData.getCalendars())
-            if (checkedCals.contains(calendar.getId())) calendarIds.add(calendar.getId());
-        GroupCalendarData shareClas = uiCalendars.getSharedCalendars();
-        if (shareClas != null)
-          for (org.exoplatform.calendar.service.Calendar cal : shareClas.getCalendars())
-            if (checkedCals.contains(cal.getId())) {
-              calendarIds.add(cal.getId());
-            }
-        if (calendarIds.size() > 0)
-          eventQuery.setCalendarId(calendarIds.toArray(new String[] {}));
-        else {
-          eventQuery.setCalendarId(new String[] {"null"});
-        }
-        eventQuery.setOrderBy(new String[] {Utils.EXO_SUMMARY});
+        eventQuery = CalendarUtils.getEventQuery(uiPortlet.findFirstComponentOfType(UICalendars.class), eventQuery);
         uiListView.setEventQuery(eventQuery);
         uiListView.update(new EventPageListQuery(username, eventQuery.getQueryStatement(), 10)) ;
         uiListView.setShowEventAndTask(false) ;
@@ -1438,21 +1408,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
          String username = CalendarUtils.getCurrentUser() ;
          CalendarService calService = CalendarUtils.getCalendarService() ;
          
-         org.exoplatform.calendar.service.Calendar calendar = null ;
-         if(CalendarUtils.PRIVATE_TYPE.equals(calType)) {
-           calendar = calService.getUserCalendar(username, calendarId) ;
-         } else if (CalendarUtils.SHARED_TYPE.equals(calType)) {
-           GroupCalendarData calendarData = calService.getSharedCalendars(CalendarUtils.getCurrentUser(), true)  ;
-           if(calendarData != null) calendar = calendarData.getCalendarById(calendarId) ;
-         } else if (CalendarUtils.PUBLIC_TYPE.equals(calType)) {
-           calendar = calService.getGroupCalendar(calendarId) ;
-         }
-         
+         org.exoplatform.calendar.service.Calendar calendar = CalendarUtils.getCalendar(calType, calendarId);
          // cs-4429: fix for group calendar permission
-         if((CalendarUtils.SHARED_TYPE.equals(calType) && !CalendarUtils.canEdit(uiCalendarView.getApplicationComponent(
-                   OrganizationService.class), Utils.getEditPerUsers(calendar), CalendarUtils.getCurrentUser())) ||
-            (CalendarUtils.PUBLIC_TYPE.equals(calType) && !CalendarUtils.canEdit(uiCalendarView.getApplicationComponent(
-                   OrganizationService.class), calendar.getEditPermission(), CalendarUtils.getCurrentUser()))) 
+         if(uiCalendarView.isHaveNotPermission(calendar, calType)) 
          {
            UIApplication uiApp = uiCalendarView.getAncestorOfType(UIApplication.class) ;
            uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit-event", null, 1)) ;
@@ -1471,6 +1429,13 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
      }
    }
    
+   private boolean isHaveNotPermission(org.exoplatform.calendar.service.Calendar calendar, String calType) throws Exception {
+     return (CalendarUtils.SHARED_TYPE.equals(calType) && !CalendarUtils.canEdit(getApplicationComponent(
+       OrganizationService.class), Utils.getEditPerUsers(calendar), CalendarUtils.getCurrentUser())) ||
+       (CalendarUtils.PUBLIC_TYPE.equals(calType) && !CalendarUtils.canEdit(getApplicationComponent(
+       OrganizationService.class), calendar.getEditPermission(), CalendarUtils.getCurrentUser()));
+   }
+   
    public static class ConfirmDeleteAllSeries extends EventListener<UICalendarView> {
      public void execute(Event<UICalendarView> event) throws Exception {
        UICalendarView uiCalendarView = event.getSource() ;
@@ -1487,21 +1452,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
          String calendarId = occurrence.getCalendarId();
          CalendarEvent originalEvent = null;
          
-         org.exoplatform.calendar.service.Calendar calendar = null ;
-         if(CalendarUtils.PRIVATE_TYPE.equals(calType)) {
-           calendar = calService.getUserCalendar(username, calendarId) ;
-         } else if (CalendarUtils.SHARED_TYPE.equals(calType)) {
-           GroupCalendarData calendarData = calService.getSharedCalendars(CalendarUtils.getCurrentUser(), true)  ;
-           if(calendarData != null) calendar = calendarData.getCalendarById(calendarId) ;
-         } else if (CalendarUtils.PUBLIC_TYPE.equals(calType)) {
-           calendar = calService.getGroupCalendar(calendarId) ;
-         }
-         
+         org.exoplatform.calendar.service.Calendar calendar = CalendarUtils.getCalendar(calType, calendarId);
          // cs-4429: fix for group calendar permission
-         if((CalendarUtils.SHARED_TYPE.equals(calType) && !CalendarUtils.canEdit(uiCalendarView.getApplicationComponent(
-                   OrganizationService.class), Utils.getEditPerUsers(calendar), CalendarUtils.getCurrentUser())) ||
-            (CalendarUtils.PUBLIC_TYPE.equals(calType) && !CalendarUtils.canEdit(uiCalendarView.getApplicationComponent(
-                   OrganizationService.class), calendar.getEditPermission(), CalendarUtils.getCurrentUser()))) 
+         if(uiCalendarView.isHaveNotPermission(calendar, calType)) 
          {
            UIApplication uiApp = uiCalendarView.getAncestorOfType(UIApplication.class) ;
            uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit-event", null, 1)) ;

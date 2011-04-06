@@ -40,8 +40,6 @@ import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
-import org.exoplatform.calendar.service.EventQuery;
-import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
@@ -49,10 +47,7 @@ import org.exoplatform.calendar.webui.UICalendarView;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UIFormDateTimePicker;
 import org.exoplatform.calendar.webui.UIListContainer;
-import org.exoplatform.calendar.webui.UIListView;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
-import org.exoplatform.calendar.webui.UIPreview;
-import org.exoplatform.calendar.webui.popup.UIAddressForm.ContactData;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadResource;
@@ -1153,22 +1148,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         e.printStackTrace() ;
       }
       for (String s : sbAddress.toString().split(CalendarUtils.COMMA)) {
-        StringBuffer body = new StringBuffer(sbBody.toString());
-        String eXoId = CalendarUtils.isEmpty(eXoIdMap.get(s)) ? "null":eXoIdMap.get(s);
-        body.append("<tr>");
-        body.append("<td style=\"padding: 4px;  text-align: right; vertical-align: top; white-space:nowrap;\">");
-        body.append("Would you like to attend? </td><td> <a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.ACCEPT, invitor, s, eXoId, event) + "\" >Yes</a>" + " - " + "<a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.NOTSURE, invitor, s, eXoId, event) + "\" >Not sure</a>" + " - " + "<a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.DENY, invitor, s, eXoId, event) + "\" >No</a>");
-        body.append("</td></tr>");
-        body.append("<tr>");
-        body.append("<td style=\"padding: 4px;  text-align: right; vertical-align: top; white-space:nowrap;\">");
-        body.append("Would you like to see more details? </td><td><a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.ACCEPT_IMPORT, invitor, s, eXoId, event) + "\" >Import to your eXo Calendar</a> or <a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.JUMP_TO_CALENDAR, invitor, s, eXoId, event) + "\" >Jump to eXo Calendar</a>");
-        body.append("</td></tr>");
-        body.append("</tbody>");
-        body.append("</table>");
-        body.append("</div>") ; 
         Message message = new Message() ;
         message.setSubject(sbSubject.toString()) ;
-        message.setMessageBody(body.toString()) ;
+        message.setMessageBody(getBodyMail(sbBody.toString(), eXoIdMap, s, invitor, event)) ;
         message.setContentType(Utils.MIMETYPE_TEXTHTML) ;
         message.setFrom(user.getEmail()) ;
         message.setMessageTo(s);
@@ -1193,22 +1175,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       }     
       for (String s : sbAddress.toString().split(CalendarUtils.COMMA)) {
         if (CalendarUtils.isEmpty(s)) continue;
-        StringBuffer body = new StringBuffer(sbBody.toString());
-        String eXoId = CalendarUtils.isEmpty(eXoIdMap.get(s)) ? "null":eXoIdMap.get(s);
-        body.append("<tr>");
-        body.append("<td style=\"padding: 4px;  text-align: right; vertical-align: top; white-space:nowrap;\">");
-        body.append("Would you like to attend? </td><td> <a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.ACCEPT, invitor, s, eXoId, event) + "\" >Yes</a>" + " - " + "<a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.NOTSURE, invitor, s, eXoId, event) + "\" >Not sure</a>" + " - " + "<a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.DENY, invitor, s, eXoId, event) + "\" >No</a>");
-        body.append("</td></tr>");
-        body.append("<tr>");
-        body.append("<td style=\"padding: 4px;  text-align: right; vertical-align: top; white-space:nowrap;\">");
-        body.append("Would you like to see more details? </td><td><a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.ACCEPT_IMPORT, invitor, s, eXoId, event) + "\" >Import to your eXo Calendar</a> or <a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.JUMP_TO_CALENDAR, invitor, s, eXoId, event) + "\" >Jump to eXo Calendar</a>");
-        body.append("</td></tr>");
-        body.append("</tbody>");
-        body.append("</table>");
-        body.append("</div>") ; 
         org.exoplatform.services.mail.Message  message = new org.exoplatform.services.mail.Message(); 
         message.setSubject(sbSubject.toString()) ;
-        message.setBody(body.toString()) ;
+        message.setBody(getBodyMail(sbBody.toString(), eXoIdMap, s, invitor, event)) ;
         message.setTo(s) ;
         message.setMimeType(Utils.MIMETYPE_TEXTHTML) ;
         message.setFrom(user.getEmail()) ;
@@ -1230,6 +1199,23 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     contactService.saveAddress(CalendarUtils.getCurrentUser(), sbAddress.toString()) ;
   }
 
+  private String getBodyMail(String sbBody,Map<String, String> eXoIdMap,String s,User invitor,CalendarEvent event) throws Exception {
+    StringBuilder body = new StringBuilder(sbBody.toString());
+    String eXoId = CalendarUtils.isEmpty(eXoIdMap.get(s)) ? "null":eXoIdMap.get(s);
+    body.append("<tr>");
+    body.append("<td style=\"padding: 4px;  text-align: right; vertical-align: top; white-space:nowrap;\">");
+    body.append("Would you like to attend? </td><td> <a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.ACCEPT, invitor, s, eXoId, event) + "\" >Yes</a>" + " - " + "<a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.NOTSURE, invitor, s, eXoId, event) + "\" >Not sure</a>" + " - " + "<a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.DENY, invitor, s, eXoId, event) + "\" >No</a>");
+    body.append("</td></tr>");
+    body.append("<tr>");
+    body.append("<td style=\"padding: 4px;  text-align: right; vertical-align: top; white-space:nowrap;\">");
+    body.append("Would you like to see more details? </td><td><a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.ACCEPT_IMPORT, invitor, s, eXoId, event) + "\" >Import to your eXo Calendar</a> or <a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.JUMP_TO_CALENDAR, invitor, s, eXoId, event) + "\" >Jump to eXo Calendar</a>");
+    body.append("</td></tr>");
+    body.append("</tbody>");
+    body.append("</table>");
+    body.append("</div>") ;
+    return body.toString();
+  }
+  
   protected String getReplyInvitationLink(int answer, User invitor, String invitee, String eXoId, CalendarEvent event) throws Exception{
     String portalURL = CalendarUtils.getServerBaseUrl() + PortalContainer.getCurrentPortalContainerName();
     String restURL = portalURL + "/" + PortalContainer.getCurrentRestContextName();
@@ -1330,16 +1316,7 @@ public Attachment getAttachment(String attId) {
             tempCal.add(java.util.Calendar.MILLISECOND, -1) ;
             to = tempCal.getTime() ;
           }
-
-          Calendar currentCalendar = null ;
-          if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
-            currentCalendar = calService.getUserCalendar(username, calendarId) ; 
-          } else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)) {
-            GroupCalendarData gCalendarData = calService.getSharedCalendars(username, true) ;
-            if( gCalendarData!= null && gCalendarData.getCalendarById(calendarId) != null) currentCalendar = gCalendarData.getCalendarById(calendarId) ;
-          } else  if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)) {
-            currentCalendar = calService.getGroupCalendar(calendarId) ;
-          }
+          Calendar currentCalendar = CalendarUtils.getCalendar(uiForm.calType_, calendarId);
           if(currentCalendar == null) {
             uiPopupAction.deActivate() ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
@@ -1492,32 +1469,7 @@ public Attachment getAttachment(String attId) {
                 if (org.exoplatform.calendar.service.Utils.isExceptionOccurrence(calendarEvent_)) calService.updateOccurrenceEvent(fromCal, toCal, fromType, toType, listEvent, username);
                 else calService.moveEvent(fromCal, toCal, fromType, toType, listEvent, username) ;
               }
-
-              if(calendarView instanceof UIListContainer) {
-                UIListContainer uiListContainer = (UIListContainer)calendarView ;
-                if (uiListContainer.isDisplaySearchResult() && calendarEvent.getAttachment() != null) {
-                  UIPreview uiPreview = uiListContainer.getChild(UIPreview.class) ;
-                  EventQuery eventQuery = new EventQuery() ;
-                  eventQuery.setCalendarId(new String[] {calendarEvent.getCalendarId()}) ;
-                  eventQuery.setEventType(calendarEvent.getEventType()) ;
-                  eventQuery.setCategoryId(new String[] {calendarEvent.getEventCategoryId()}) ;
-
-                  UIListView listView = uiListContainer.getChild(UIListView.class) ;
-                  List<CalendarEvent> list = calService. getEvents(
-                                                                   username, eventQuery, listView.getPublicCalendars()) ;
-                  for (CalendarEvent ev : list) {
-                    if (ev.getId().equals(calendarEvent.getId())) {
-                      if (listView.getDataMap().containsKey(ev.getId())) {
-                        listView.getDataMap().put(ev.getId(), ev) ;
-                        if (uiPreview.getEvent().getId().equals(ev.getId())) {
-                          uiPreview.setEvent(ev) ; 
-                        }
-                      }                        
-                      break ;
-                    }
-                  }                    
-                }
-              }
+              UITaskForm.updateListView(calendarView, calendarEvent, calService, username);
             }
 
             if(calendarView instanceof UIListContainer) {
@@ -1872,24 +1824,7 @@ public Attachment getAttachment(String attId) {
         uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.email-reminder-required", null));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ; 
       } else {
-        UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-        UIPopupAction uiPopupAction  = uiPopupContainer.getChild(UIPopupAction.class) ;
-        UIAddressForm uiAddressForm = uiPopupAction.activate(UIAddressForm.class, 640) ;
-        uiAddressForm.setContactList("") ;
-        String oldAddress = uiForm.getEmailAddress() ;
-        List<ContactData> contacts = uiAddressForm.getContactList() ;
-        if(!CalendarUtils.isEmpty(oldAddress)) {
-          for(String address : oldAddress.split(",")) {
-            for(ContactData c : contacts){
-              if(!CalendarUtils.isEmpty(c.getEmail())) {              
-                if(Arrays.asList(c.getEmail().split(";")).contains(address.trim())) {
-                  if (!uiAddressForm.checkedList_.contains(c.getId())) uiAddressForm.checkedList_.add(c.getId()) ;
-                }
-              }
-            }
-          }
-        }
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+        UITaskForm.showAddressForm(uiForm.getAncestorOfType(UIPopupContainer.class), uiForm.getEmailAddress(), event);
       }
     }
   }
