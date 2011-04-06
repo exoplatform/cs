@@ -225,15 +225,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
         }
       }
     } else {
-      UIMiniCalendar miniCalendar = getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
-      java.util.Calendar cal = CalendarUtils.getInstanceOfCurrentCalendar() ;
-      try {
-        cal.setTimeInMillis(Long.parseLong(formTime)) ;
-      } catch (Exception e) {
-        cal.setTime(miniCalendar.getCurrentCalendar().getTime()) ;
-      }
-      Long beginMinute = (cal.get(java.util.Calendar.MINUTE)/calSetting.getTimeInterval())*calSetting.getTimeInterval() ;
-      cal.set(java.util.Calendar.MINUTE, beginMinute.intValue()) ;
+      java.util.Calendar cal = UIEventForm.getCalendar(this, formTime, calSetting);
       setEventFromDate(cal.getTime(),dateFormat, timeFormat) ;
       cal.add(java.util.Calendar.MINUTE, (int)calSetting.getTimeInterval()*2) ;
       setEventToDate(cal.getTime(),calSetting.getDateFormat(), calSetting.getTimeFormat()) ;
@@ -241,24 +233,9 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     }
   }
 
-  public static List<SelectItemOption<String>> getCategory() throws Exception {
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    List<EventCategory> eventCategories = calendarService.getEventCategories(CalendarUtils.getCurrentUser()) ;
-    for(EventCategory category : eventCategories) {
-      if (category.getId().contains("defaultEventCategoryId") && category.getName().contains("defaultEventCategoryName")) {
-        String newName = CalendarUtils.getResourceBundle("UICalendarView.label." + category.getId());
-        options.add(new SelectItemOption<String>(newName, category.getId())) ;
-      } else {
-        options.add(new SelectItemOption<String>(category.getName(), category.getId())) ;        
-      }
-    }
-    return options ;
-  }
-
   protected void refreshCategory()throws Exception {
     UIFormInputWithActions taskDetailTab = getChildById(TAB_TASKDETAIL) ;
-    taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CATEGORY).setOptions(getCategory()) ;
+    taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CATEGORY).setOptions(CalendarUtils.getCategory()) ;
   }
   protected String getStatus() {
     UITaskDetailTab uiTaskDetailTab = getChildById(TAB_TASKDETAIL) ;
@@ -779,17 +756,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   static  public class DownloadAttachmentActionListener extends EventListener<UITaskForm> {
     public void execute(Event<UITaskForm> event) throws Exception {
       UITaskForm uiForm = event.getSource() ;
-      String attId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      Attachment attach = uiForm.getAttachment(attId) ;
-      if(attach != null) {
-        String mimeType = attach.getMimeType().substring(attach.getMimeType().indexOf("/")+1) ;
-        DownloadResource dresource = new InputStreamDownloadResource(attach.getInputStream(), mimeType);
-        DownloadService dservice = (DownloadService)PortalContainer.getInstance().getComponentInstanceOfType(DownloadService.class);
-        dresource.setDownloadName(attach.getName());
-        String downloadLink = dservice.getDownloadLink(dservice.addDownloadResource(dresource));
-        event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');");
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getChildById(TAB_TASKDETAIL)) ;
-      }
+      UIEventForm.downloadAtt(event, uiForm, false);
     }
   }
   static  public class AddCategoryActionListener extends EventListener<UITaskForm> {

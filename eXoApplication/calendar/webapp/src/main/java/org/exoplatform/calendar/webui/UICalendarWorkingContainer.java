@@ -56,7 +56,7 @@ public class UICalendarWorkingContainer extends UIContainer  {
     UIQuickAddEvent quickAddForm = (UIQuickAddEvent)uiWindowE.getUIComponent();
     if(quickAddForm == null) quickAddForm = createUIComponent(UIQuickAddEvent.class, null, null) ; 
     ((UIFormSelectBoxWithGroups)quickAddForm.getChildById(UIQuickAddEvent.FIELD_CALENDAR)).setOptions(CalendarUtils.getCalendarOption()) ;
-    quickAddForm.getUIFormSelectBox(UIQuickAddEvent.FIELD_CATEGORY).setOptions(UIEventForm.getCategory()) ;
+    quickAddForm.getUIFormSelectBox(UIQuickAddEvent.FIELD_CATEGORY).setOptions(CalendarUtils.getCategory()) ;
     quickAddForm.setEvent(true) ;
     quickAddForm.setId("UIQuickAddEvent") ;
     quickAddForm.init(CalendarUtils.getCalendarService().getCalendarSetting(CalendarUtils.getCurrentUser()), String.valueOf(new Date().getTime()), String.valueOf(new Date().getTime())) ;
@@ -71,7 +71,7 @@ public class UICalendarWorkingContainer extends UIContainer  {
     quickAddTask.setId("UIQuickAddTask") ;
     quickAddTask.init(CalendarUtils.getCalendarService().getCalendarSetting(CalendarUtils.getCurrentUser()),String.valueOf(new Date().getTime()), String.valueOf(new Date().getTime())) ;
     ((UIFormSelectBoxWithGroups)quickAddTask.getChildById(UIQuickAddEvent.FIELD_CALENDAR)).setOptions(CalendarUtils.getCalendarOption()) ;
-    quickAddTask.getUIFormSelectBox(UIQuickAddEvent.FIELD_CATEGORY).setOptions(UIEventForm.getCategory()) ;
+    quickAddTask.getUIFormSelectBox(UIQuickAddEvent.FIELD_CATEGORY).setOptions(CalendarUtils.getCategory()) ;
     uiWindowT.setUIComponent(quickAddTask) ;
     uiWindowT.setWindowSize(540, 0);
   }

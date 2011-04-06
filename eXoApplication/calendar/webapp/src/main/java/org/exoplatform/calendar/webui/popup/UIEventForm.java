@@ -39,7 +39,6 @@ import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
-import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
@@ -76,6 +75,7 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormInputWithActions;
@@ -333,18 +333,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       }      
       attenderTab.calendar_.setTime(eventCalendar.getFromDateTime()) ;
     } else {
-      UIMiniCalendar miniCalendar = getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
-      java.util.Calendar cal = CalendarUtils.getInstanceOfCurrentCalendar() ;
-      try {
-        cal.setTimeInMillis(Long.parseLong(formTime)) ;
-      } catch (Exception e)      {
-        cal.setTime(miniCalendar.getCurrentCalendar().getTime()) ;
-      }
-      Long beginMinute = (cal.get(java.util.Calendar.MINUTE)/calSetting.getTimeInterval())*calSetting.getTimeInterval() ;
-      cal.set(java.util.Calendar.MINUTE, beginMinute.intValue()) ;
+      java.util.Calendar cal = getCalendar(this, formTime, calSetting);
       setEventFromDate(cal.getTime(),calSetting.getDateFormat(), calSetting.getTimeFormat()) ;
-      setEventCheckTime(cal.getTime()) ;
       cal.add(java.util.Calendar.MINUTE, (int)calSetting.getTimeInterval()*2) ;
+      setEventCheckTime(cal.getTime()) ;
       setEventToDate(cal.getTime(),calSetting.getDateFormat(), calSetting.getTimeFormat()) ;
       StringBuffer pars = new StringBuffer(CalendarUtils.getCurrentUser()) ;
 //    TODO cs-839
@@ -356,6 +348,19 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       attenderTab.updateParticipants(pars.toString());
       setRepeatSummary(buildRepeatSummary(null));
     }
+  }
+  
+  public static java.util.Calendar getCalendar(UIForm uiForm,String formTime,CalendarSetting calSetting) {
+    java.util.Calendar cal = CalendarUtils.getInstanceOfCurrentCalendar() ;
+    try {
+      cal.setTimeInMillis(Long.parseLong(formTime)) ;
+    } catch (Exception e) {
+      UIMiniCalendar miniCalendar = uiForm.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
+      cal.setTime(miniCalendar.getCurrentCalendar().getTime()) ;
+    }
+    Long beginMinute = (cal.get(java.util.Calendar.MINUTE)/calSetting.getTimeInterval())*calSetting.getTimeInterval() ;
+    cal.set(java.util.Calendar.MINUTE, beginMinute.intValue()) ;
+    return cal;
   }
   
   private void setEventCheckTime(Date time) {
@@ -376,24 +381,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     return CalendarUtils.getCalendarOption() ;
   }
 
-  public static List<SelectItemOption<String>> getCategory() throws Exception {
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    List<EventCategory> eventCategories = calendarService.getEventCategories(CalendarUtils.getCurrentUser()) ;
-    for(EventCategory category : eventCategories) {
-      if (category.getId().contains("defaultEventCategoryId") && category.getName().contains("defaultEventCategoryName")) {
-        String newName = CalendarUtils.getResourceBundle("UICalendarView.label." + category.getId());
-        options.add(new SelectItemOption<String>(newName, category.getId())) ;
-      } else {
-        options.add(new SelectItemOption<String>(category.getName(), category.getId())) ;        
-      }
-    }
-    return options ;
-  }
-
   protected void refreshCategory()throws Exception {
     UIFormInputWithActions eventDetailTab = getChildById(TAB_EVENTDETAIL) ;
-    eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).setOptions(getCategory()) ;
+    eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).setOptions(CalendarUtils.getCategory()) ;
   }
 
   private List<SelectItemOption<String>> getShareValue() {
@@ -1247,7 +1237,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       data = data.substring(1);
     return data;
   }
-public Attachment getAttachment(String attId) {
+  public Attachment getAttachment(String attId) {
     UIEventDetailTab uiDetailTab = getChildById(TAB_EVENTDETAIL) ;
     for (Attachment att : uiDetailTab.getAttachments()) {
       if(att.getId().equals(attId)) {
@@ -1259,7 +1249,34 @@ public Attachment getAttachment(String attId) {
 
   public List<ParticipantStatus> getParticipantStatusList() {    
     return participantStatusList_;
-}
+  }
+
+
+  public static void downloadAtt(Event<?> event, UIForm uiForm, boolean isEvent) throws Exception {
+    String attId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+    Attachment attach = null;
+    if (isEvent) {
+      UIEventForm uiEventForm = (UIEventForm)uiForm;
+      attach = uiEventForm.getAttachment(attId) ;
+    } else {
+      UITaskForm uiTaskForm = (UITaskForm)uiForm;
+      attach = uiTaskForm.getAttachment(attId);
+    }
+    if(attach != null) {
+      String mimeType = attach.getMimeType().substring(attach.getMimeType().indexOf("/")+1) ;
+      DownloadResource dresource = new InputStreamDownloadResource(attach.getInputStream(), mimeType);
+      DownloadService dservice = (DownloadService)PortalContainer.getInstance().getComponentInstanceOfType(DownloadService.class);
+      dresource.setDownloadName(attach.getName());
+      String downloadLink = dservice.getDownloadLink(dservice.addDownloadResource(dresource));
+      event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');");
+      if (isEvent) {
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getChildById(TAB_EVENTDETAIL)) ;        
+      } else {
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getChildById(UITaskForm.TAB_TASKDETAIL)) ;
+      }
+    }
+  }
+  
 
   
   public void SaveAndNoAsk(Event<UIEventForm> event, boolean isSend, boolean updateSeries)throws Exception {
@@ -1267,7 +1284,6 @@ public Attachment getAttachment(String attId) {
     UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
     UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
     UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
-    UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
     UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
     CalendarSetting calSetting = calendarPortlet.getCalendarSetting() ;
     CalendarService calService = CalendarUtils.getCalendarService() ;
@@ -1531,19 +1547,7 @@ public Attachment getAttachment(String attId) {
                     String[] entry = parSt.split(":");
                     parsUpdated.put(entry[0],STATUS_PENDING);
                   }
-                  Map<String, String> participant = new HashMap<String, String>() ;
-                  for (Entry<String, String> par : parsUpdated.entrySet()) {
-                    participant.put(par.getKey()+":"+par.getValue(),"") ;
-                  }
-                  calendarEvent.setParticipantStatus(participant.keySet().toArray(new String[participant.keySet().size()]));
-                  if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
-                    calService.saveUserEvent(username, calendarId, calendarEvent, false) ;
-                  }else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)){
-                    calService.saveEventToSharedCalendar(username , calendarId, calendarEvent, false) ;
-                  }else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)){
-                    calService.savePublicEvent(calendarId, calendarEvent, false) ;          
-                  }
-
+                  saveEvent(calendarEvent, calService, username, calendarId, parsUpdated);
                 }
                 else {
                   //select new Invitation email
@@ -1584,18 +1588,7 @@ public Attachment getAttachment(String attId) {
                       else
                         parsUpdated.put(entry[0], STATUS_PENDING);
                     }
-                    Map<String, String> participant = new HashMap<String, String>() ;
-                    for (Entry<String, String> par : parsUpdated.entrySet()) {
-                      participant.put(par.getKey()+":"+par.getValue(),"") ;
-                    }
-                    calendarEvent.setParticipantStatus(participant.keySet().toArray(new String[participant.keySet().size()]));
-                    if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
-                      calService.saveUserEvent(username, calendarId, calendarEvent, false) ;
-                    }else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)){
-                      calService.saveEventToSharedCalendar(username , calendarId, calendarEvent, false) ;
-                    }else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)){
-                      calService.savePublicEvent(calendarId, calendarEvent, false) ;          
-                    }
+                    saveEvent(calendarEvent, calService, username, calendarId, parsUpdated);
                  }
                 }
               
@@ -1607,6 +1600,21 @@ public Attachment getAttachment(String attId) {
     UIEventDetailTab uiDetailTab = uiForm.getChildById(TAB_EVENTDETAIL) ;
     for (Attachment att : uiDetailTab.getAttachments()) {
       UIAttachFileForm.removeUploadTemp(uiForm.getApplicationComponent(UploadService.class), att.getResourceId()) ;
+    }
+  }
+  
+  private void saveEvent(CalendarEvent calendarEvent,CalendarService calService,String username,String calendarId,Map<String, String> parsUpdated) throws Exception {
+    Map<String, String> participant = new HashMap<String, String>() ;
+    for (Entry<String, String> par : parsUpdated.entrySet()) {
+      participant.put(par.getKey()+":"+par.getValue(),"") ;
+    }
+    calendarEvent.setParticipantStatus(participant.keySet().toArray(new String[participant.keySet().size()]));
+    if(calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
+      calService.saveUserEvent(username, calendarId, calendarEvent, false) ;
+    }else if(calType_.equals(CalendarUtils.SHARED_TYPE)){
+      calService.saveEventToSharedCalendar(username , calendarId, calendarEvent, false) ;
+    }else if(calType_.equals(CalendarUtils.PUBLIC_TYPE)){
+      calService.savePublicEvent(calendarId, calendarEvent, false) ;          
     }
   }
   
@@ -1860,20 +1868,10 @@ public Attachment getAttachment(String attId) {
   static  public class DownloadAttachmentActionListener extends EventListener<UIEventForm> {
     public void execute(Event<UIEventForm> event) throws Exception {
       UIEventForm uiForm = event.getSource() ;
-      String attId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      Attachment attach = uiForm.getAttachment(attId) ;
-      if(attach != null) {
-        String mimeType = attach.getMimeType().substring(attach.getMimeType().indexOf("/")+1) ;
-        DownloadResource dresource = new InputStreamDownloadResource(attach.getInputStream(), mimeType);
-        DownloadService dservice = (DownloadService)PortalContainer.getInstance().getComponentInstanceOfType(DownloadService.class);
-        dresource.setDownloadName(attach.getName());
-        String downloadLink = dservice.getDownloadLink(dservice.addDownloadResource(dresource));
-        event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');");
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getChildById(TAB_EVENTDETAIL)) ;
-      }
+      downloadAtt(event, uiForm, true);
     }
   }
-
+  
   static  public class AddParticipantActionListener extends EventListener<UIEventForm> {
     public void execute(Event<UIEventForm> event) throws Exception {
       UIEventForm uiForm = event.getSource() ;

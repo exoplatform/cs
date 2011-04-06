@@ -45,6 +45,7 @@ import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
+import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Utils;
@@ -1013,6 +1014,21 @@ public class CalendarUtils {
     }
     eventQuery.setOrderBy(new String[] {Utils.EXO_SUMMARY});
     return eventQuery;
+  }
+  
+  public static List<SelectItemOption<String>> getCategory() throws Exception {
+    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+    CalendarService calendarService = getCalendarService() ;
+    List<EventCategory> eventCategories = calendarService.getEventCategories(getCurrentUser()) ;
+    for(EventCategory category : eventCategories) {
+      if (category.getId().contains("defaultEventCategoryId") && category.getName().contains("defaultEventCategoryName")) {
+        String newName = getResourceBundle("UICalendarView.label." + category.getId());
+        options.add(new SelectItemOption<String>(newName, category.getId())) ;
+      } else {
+        options.add(new SelectItemOption<String>(category.getName(), category.getId())) ;        
+      }
+    }
+    return options ;
   }
   
 }
