@@ -195,7 +195,7 @@ public class EventPageListQuery extends JCRPageList {
 
   private CalendarEvent getEvent(Node eventNode) throws Exception {
     CalendarEvent event = new CalendarEvent();
-    String emptyStr = "";
+    String emptyStr = String.valueOf("");
     if (eventNode.getPath().contains(getPublicServiceHome())) {
       event.setCalType(emptyStr + Utils.PUBLIC_TYPE);
     } else if (eventNode.getPath().contains(getPrivateServiceHome())) {

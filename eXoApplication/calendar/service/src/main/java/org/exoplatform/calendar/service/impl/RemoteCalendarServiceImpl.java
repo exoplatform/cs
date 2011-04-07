@@ -721,11 +721,6 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
     }
   }
 
-  public static CalendarEvent gennerateEvent(VEvent event, CalendarEvent exoEvent) throws Exception {
-    
-    return exoEvent;
-  }
-  
   public static CalendarEvent generateEvent(VEvent event, CalendarEvent exoEvent, String username, String calendarId) throws Exception {
     CalendarService calService = (CalendarService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
     if (event.getProperty(Property.CATEGORIES) != null) {
