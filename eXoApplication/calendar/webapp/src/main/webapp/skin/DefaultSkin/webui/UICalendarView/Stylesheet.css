@@ -10,7 +10,7 @@
 }
 
 .UICalendarViewContainer .ViewTypeSelect .UIPopupCategory {
-  left: 315px;
+  left: 315px;	
   position:absolute;
   top: 22px;
   width: auto;
@@ -28,8 +28,8 @@
 
 .UIDayView .EventAllDay {
   border-left: 1px solid #c7c7c7;
-  background-color: #f6ffe5;
-  height: 22px;
+  background-color: #DFE6F8;
+  height: 28px;
 }
 
 .UIDayView .EventDayContainer {
@@ -238,7 +238,7 @@
 }
 
 .UIWeekView .EventWeekBar .Today a {
-   color:red;
+   color:#0796d2;
 }
 
 .UIWeekView .TdLine {
@@ -318,7 +318,7 @@
 }
 
 .UIWeekView .Today {
-  background: #F4F6FC;
+  background: #DFE6F8;
 }
 
 .UIWeekView .Weekday {
@@ -578,7 +578,7 @@
 }
 
 .UIYearView .CalendarMatchedEventContent {
-  background: #dae2f4;
+  background: #DFE6F8;
   padding: 0px;
 }
 
@@ -1026,7 +1026,7 @@
   padding: 0px 6px;
   line-height: 16px;
   font-weight:bold;
-  background: #ABC7FE none repeat scroll 0%;
+  background: #DFE6F8;
   color : red;
 }
 
@@ -1465,4 +1465,3 @@
   background: url('../background/EventDetailBorder.gif') repeat-x left -20px;
   height: 6px;
 }
-
