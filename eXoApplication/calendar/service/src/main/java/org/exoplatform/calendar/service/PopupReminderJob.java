@@ -61,13 +61,13 @@ public class PopupReminderJob implements Job {
         log_.debug("Calendar popup reminder service");
       java.util.Calendar fromCalendar = GregorianCalendar.getInstance();
       ContinuationService continuation = (ContinuationService) container.getComponentInstanceOfType(ContinuationService.class);
-      Node calendarHome = getPublicServiceHome(provider);
+      Node calendarHome = Utils.getPublicServiceHome(provider);
       if (calendarHome == null)
         return;
       StringBuffer path = new StringBuffer(getReminderPath(fromCalendar, provider));
       path.append("//element(*,exo:reminder)");
       path.append("[@exo:remindDateTime <= xs:dateTime('" + ISO8601.format(fromCalendar) + "') and @exo:isOver = 'false' and @exo:reminderType = 'popup' ]");
-      QueryManager queryManager = getSession(provider).getWorkspace().getQueryManager();
+      QueryManager queryManager = Utils.getSession(provider).getWorkspace().getQueryManager();
       Query query = queryManager.createQuery(path.toString(), Query.XPATH);
       QueryResult results = query.execute();
       NodeIterator iter = results.getNodes();
@@ -142,25 +142,10 @@ public class PopupReminderJob implements Job {
     String month = "M" + String.valueOf(fromCalendar.get(java.util.Calendar.MONTH) + 1);
     String day = "D" + String.valueOf(fromCalendar.get(java.util.Calendar.DATE));
     StringBuffer path = new StringBuffer("/jcr:root");
-    path.append(getPublicServiceHome(provider).getPath());
+    path.append(Utils.getPublicServiceHome(provider).getPath());
     path.append(Utils.SLASH).append(year).append(Utils.SLASH).append(month).append(Utils.SLASH).append(day);
     path.append(Utils.SLASH).append(Utils.CALENDAR_REMINDER);
     return path.toString();
   }
 
-  public static Node getPublicServiceHome(SessionProvider provider) throws Exception {
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
-    NodeHierarchyCreator nodeHierarchyCreator = (NodeHierarchyCreator) container.getComponentInstanceOfType(NodeHierarchyCreator.class);
-    Node publicApp = nodeHierarchyCreator.getPublicApplicationNode(provider);
-    if (publicApp != null && publicApp.hasNode(Utils.CALENDAR_APP))
-      return publicApp.getNode(Utils.CALENDAR_APP);
-    return null;
-  }
-
-  public static Session getSession(SessionProvider sprovider) throws Exception {
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
-    RepositoryService repositoryService = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
-    ManageableRepository currentRepo = repositoryService.getCurrentRepository();
-    return sprovider.getSession(currentRepo.getConfiguration().getDefaultWorkspaceName(), currentRepo);
-  }
 }

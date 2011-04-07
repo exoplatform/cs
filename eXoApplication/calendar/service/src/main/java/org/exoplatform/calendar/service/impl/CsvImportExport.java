@@ -316,7 +316,7 @@ public class CsvImportExport implements CalendarImportExport {
       org.exoplatform.calendar.service.Calendar exoCalendar = new org.exoplatform.calendar.service.Calendar();
       exoCalendar.setName(calendarName);
       exoCalendar.setCalendarColor(org.exoplatform.calendar.service.Calendar.COLORS[new Random().nextInt(org.exoplatform.calendar.service.Calendar.COLORS.length - 1)]);
-      exoCalendar.setDescription("");
+      exoCalendar.setDescription(Utils.EMPTY_STR);
       exoCalendar.setCategoryId(categoryId);
       exoCalendar.setPublic(true);
       exoCalendar.setCalendarOwner(username);

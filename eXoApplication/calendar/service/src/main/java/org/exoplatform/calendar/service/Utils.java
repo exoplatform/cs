@@ -22,10 +22,18 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
 
+import javax.jcr.Node;
+import javax.jcr.Session;
+
 import org.exoplatform.calendar.service.impl.NewUserListener;
+import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer;
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
@@ -305,7 +313,7 @@ public class Utils {
 
   public static final String RSS_EXT                    = ".rss".intern();
 
-  final public static String STATUS_EMPTY               = "".intern();
+  final public static String EMPTY_STR                  = "".intern();
 
   final public static String STATUS_PENDING             = "pending".intern();
 
@@ -473,11 +481,26 @@ public class Utils {
   }
 
   public static boolean isRepeatEvent(CalendarEvent event) throws Exception {
-    return (event.getRepeatType() != null && !CalendarEvent.RP_NOREPEAT.equals(event.getRepeatType()) && Utils.isEmpty(event.getRecurrenceId()));
+    return (event.getRepeatType() != null && !CalendarEvent.RP_NOREPEAT.equals(event.getRepeatType()) && isEmpty(event.getRecurrenceId()));
   }
 
   public static boolean isExceptionOccurrence(CalendarEvent event) throws Exception {
     return ((event.getIsExceptionOccurrence() != null && event.getIsExceptionOccurrence() == true));
   }
 
+  public static Node getPublicServiceHome(SessionProvider provider) throws Exception {
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    NodeHierarchyCreator nodeHierarchyCreator = (NodeHierarchyCreator) container.getComponentInstanceOfType(NodeHierarchyCreator.class);
+    Node publicApp = nodeHierarchyCreator.getPublicApplicationNode(provider);
+    if (publicApp != null && publicApp.hasNode(CALENDAR_APP))
+      return publicApp.getNode(CALENDAR_APP);
+    return null;
+  }
+
+  public static Session getSession(SessionProvider sprovider) throws Exception {
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    RepositoryService repositoryService = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
+    ManageableRepository currentRepo = repositoryService.getCurrentRepository();
+    return sprovider.getSession(currentRepo.getConfiguration().getDefaultWorkspaceName(), currentRepo);
+  }
 }

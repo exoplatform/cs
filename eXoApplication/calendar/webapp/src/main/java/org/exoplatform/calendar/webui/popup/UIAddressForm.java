@@ -87,14 +87,14 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   private List<SelectItemOption<String>> getGroups() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     ContactService contactService = getApplicationComponent(ContactService.class) ;
-    options.add(new SelectItemOption<String>("all", "")) ;
+    options.add(new SelectItemOption<String>("all", org.exoplatform.calendar.service.Utils.EMPTY_STR)) ;
     for( AddressBook cg : contactService.getGroups(CalendarUtils.getCurrentUser())) {
       options.add(new SelectItemOption<String>(cg.getName(), cg.getId())) ;
     }
     List<SharedAddressBook> addressList = contactService
     .getSharedAddressBooks(CalendarUtils.getCurrentUser()) ;
     for(SharedAddressBook sa : addressList) {
-      String name = "" ;
+      String name = org.exoplatform.calendar.service.Utils.EMPTY_STR ;
       if(!CalendarUtils.isEmpty(sa.getSharedUserId())) name = sa.getSharedUserId() + "-" ;
       options.add(new SelectItemOption<String>(name + sa.getName(), sa.getId())) ;
     }

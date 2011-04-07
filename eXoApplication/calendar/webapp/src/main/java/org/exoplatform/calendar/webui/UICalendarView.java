@@ -473,7 +473,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         org.exoplatform.calendar.service.Calendar cal = null ;
         if(CalendarUtils.PUBLIC_TYPE.equals(ce.getCalType())){
           cal = calService.getGroupCalendar(ce.getCalendarId());
-          // cs-4429: fix for group calendar permission
           if(CalendarUtils.canEdit(orService,cal.getEditPermission(), username)) {
             calService.removePublicEvent(ce.getCalendarId(), ce.getId()) ;
           } else {
@@ -498,7 +497,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       for (CalendarEvent ce : events) {
         List<CalendarEvent> list = new ArrayList<CalendarEvent>() ;
         list.add(ce) ;
-        // for occurrence event
         if (!CalendarEvent.RP_NOREPEAT.equals(ce.getRepeatType()) && !CalendarUtils.isEmpty(ce.getRecurrenceId())) {
           calService.updateOccurrenceEvent(ce.getCalendarId(), ce.getCalendarId(), ce.getCalType(), ce.getCalType(), list, username);
         } else {
@@ -871,9 +869,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         // need to get recurrence-id
         String recurId = null;
         if (isOccur) recurId = event.getRequestContext().getRequestParameter(RECURID);
-        
-        // cs-1825
-        //event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
+
         event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent()) ;
         if(uiCalendarView instanceof UIListView ) {
           UIListContainer listContainer = uiCalendarView.getAncestorOfType(UIListContainer.class) ;
@@ -922,7 +918,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
             List<GroupCalendarData> publicData = uiCalendarView.getPublicCalendars(username) ;
             for (GroupCalendarData calendarData : publicData) {
               if(calendarData.getCalendarById(calendarId) != null) {
-                // cs-4429: fix for group calendar permission
                 canEdit = CalendarUtils.canEdit(oSevices, (calendarData.getCalendarById(calendarId)).getEditPermission(), username) ;
                 break ;
               }
@@ -1015,7 +1010,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
               return;
             }
             
-            // cs-4429: fix for group calendar permission
             if((CalendarUtils.SHARED_TYPE.equals(calType) && !CalendarUtils.canEdit(uiCalendarView.getApplicationComponent(
                       OrganizationService.class), Utils.getEditPerUsers(calendar), CalendarUtils.getCurrentUser())) ||
                (CalendarUtils.PUBLIC_TYPE.equals(calType) && !CalendarUtils.canEdit(uiCalendarView.getApplicationComponent(
@@ -1086,8 +1080,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         CalendarSetting setting = calendarService.getCalendarSetting(username) ;
         uiViewContainer.refresh() ;
         uiPortlet.setCalendarSetting(setting) ;
-        
-        //cs-1825
         event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
       }
     }
@@ -1355,7 +1347,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
             if(calType.equals(CalendarUtils.SHARED_TYPE)) {
               canEdit = CalendarUtils.canEdit(null, Utils.getEditPerUsers(calendar), currentUser) ;
             } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
-              // cs-4429: fix for group calendar permission
               canEdit = CalendarUtils.canEdit(CalendarUtils.getOrganizationService(), calendar.getEditPermission(), currentUser) ;
             }
             if(!calType.equals(CalendarUtils.PRIVATE_TYPE) && !canEdit) {
@@ -1409,7 +1400,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
          CalendarService calService = CalendarUtils.getCalendarService() ;
          
          org.exoplatform.calendar.service.Calendar calendar = CalendarUtils.getCalendar(calType, calendarId);
-         // cs-4429: fix for group calendar permission
          if(uiCalendarView.isHaveNotPermission(calendar, calType)) 
          {
            UIApplication uiApp = uiCalendarView.getAncestorOfType(UIApplication.class) ;

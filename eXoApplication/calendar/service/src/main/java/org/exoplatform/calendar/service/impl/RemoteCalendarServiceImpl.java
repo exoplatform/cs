@@ -639,8 +639,8 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
           exoEvent = storage_.getUserEvent(username, calendarId, eventId);
         exoEvent = generateEvent(event, exoEvent, username, calendarId);
 
-        String sValue = "";
-        String eValue = "";
+        String sValue = Utils.EMPTY_STR;
+        String eValue = Utils.EMPTY_STR;
         if (event.getStartDate() != null) {
           sValue = event.getStartDate().getValue();
           exoEvent.setFromDateTime(event.getStartDate().getDate());

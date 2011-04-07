@@ -74,7 +74,7 @@ public class CalendarUIActivity extends BaseUIActivity {
           if (entry.length > 1)
             pars.put(entry[0], entry[1]);
           else
-            pars.put(entry[0], Utils.STATUS_EMPTY);
+            pars.put(entry[0], Utils.EMPTY_STR);
         }
         if (pars.containsKey(user.getUserName())) {
           isInvited = true;

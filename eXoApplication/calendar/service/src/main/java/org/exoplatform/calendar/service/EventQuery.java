@@ -181,7 +181,7 @@ public class EventQuery {
       else
         queryString = new StringBuffer(" select * from " + nodeType + " ");
       if (!Utils.isEmpty(text)) {
-        text.replaceAll("\"", "\\\"").replaceAll("-", "");
+        text.replaceAll("\"", "\\\"").replaceAll("-", Utils.EMPTY_STR);
         queryString.append(" and (" + Utils.EXO_SUMMARY + " like '%" + text + "%'");
         queryString.append(" or " + Utils.EXO_DESCRIPTION + " like '%" + text + "%'");
         queryString.append(" or " + Utils.EXO_LOCATION + " like '%" + text + "%'");

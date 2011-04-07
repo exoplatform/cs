@@ -1403,7 +1403,7 @@ public class JCRDataStorage implements DataStorage {
       if (event.getRecurrenceId() != null)
         eventNode.setProperty(Utils.EXO_RECURRENCE_ID, event.getRecurrenceId());
       else
-        eventNode.setProperty(Utils.EXO_RECURRENCE_ID, "");
+        eventNode.setProperty(Utils.EXO_RECURRENCE_ID, Utils.EMPTY_STR);
 
       if (event.getIsExceptionOccurrence() != null)
         eventNode.setProperty(Utils.EXO_IS_EXCEPTION, event.getIsExceptionOccurrence());
@@ -1515,7 +1515,7 @@ public class JCRDataStorage implements DataStorage {
     summary.append(cal.get(java.util.Calendar.DATE)).append("/");
     summary.append(cal.get(java.util.Calendar.MONTH) + 1).append("/");
 
-    String timezone = "";
+    String timezone = Utils.EMPTY_STR;
     try {
       if (!Utils.isEmpty(reminder.getReminderOwner()))
         timezone = " (" + generateTimeZoneLabel(getCalendarSetting(reminder.getReminderOwner()).getTimeZone()) + ")";
@@ -3200,7 +3200,7 @@ public class JCRDataStorage implements DataStorage {
       }
 
       DateTime ical4jEventFrom = new DateTime(originalEvent.getFromDateTime());
-      VEvent vevent = new VEvent(ical4jEventFrom, "");
+      VEvent vevent = new VEvent(ical4jEventFrom, Utils.EMPTY_STR);
 
       Recur recur = getICalendarRecur(originalEvent);
 
@@ -3840,10 +3840,10 @@ public class JCRDataStorage implements DataStorage {
             if (entry.length > 1)
               pars.put(entry[0], entry[1]);
             else
-              pars.put(entry[0], Utils.STATUS_EMPTY);
+              pars.put(entry[0], Utils.EMPTY_STR);
           }
         }
-        String status = Utils.STATUS_EMPTY;
+        String status = Utils.EMPTY_STR;
         switch (answer) {
         case Utils.DENY:
           status = Utils.STATUS_NO;
@@ -3868,7 +3868,7 @@ public class JCRDataStorage implements DataStorage {
         }
         Map<String, String> participant = new HashMap<String, String>();
         for (Entry<String, String> par : pars.entrySet()) {
-          participant.put(par.getKey() + ":" + par.getValue(), "");
+          participant.put(par.getKey() + ":" + par.getValue(), Utils.EMPTY_STR);
         }
         event.setParticipantStatus(participant.keySet().toArray(new String[participant.keySet().size()]));
         if (Calendar.TYPE_PRIVATE == calType) {
@@ -4380,7 +4380,7 @@ public class JCRDataStorage implements DataStorage {
       int rawOffset = timeZone.getRawOffset() / 60000;
       int hours = rawOffset / 60;
       int minutes = Math.abs(rawOffset) % 60;
-      String hrStr = "";
+      String hrStr = Utils.EMPTY_STR;
       if (Math.abs(hours) < 10) {
         if (hours < 0) {
           hrStr = "-0" + Math.abs(hours);
@@ -4391,7 +4391,7 @@ public class JCRDataStorage implements DataStorage {
         hrStr = Integer.toString(hours);
       }
       String minStr = (minutes < 10) ? ("0" + Integer.toString(minutes)) : Integer.toString(minutes);
-      label = " GMT " + ((timeZone.getRawOffset() >= 0) ? "+" : "") + hrStr + ":" + minStr + " - " + timeZoneID;
+      label = " GMT " + ((timeZone.getRawOffset() >= 0) ? "+" : Utils.EMPTY_STR) + hrStr + ":" + minStr + " - " + timeZoneID;
     }
     return label;
   }

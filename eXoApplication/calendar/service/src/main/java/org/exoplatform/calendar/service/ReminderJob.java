@@ -56,13 +56,13 @@ public class ReminderJob implements Job {
         log_.debug("Calendar email reminder service");
       java.util.Calendar fromCalendar = GregorianCalendar.getInstance();
       JobDataMap jdatamap = context.getJobDetail().getJobDataMap();
-      Node calendarHome = PopupReminderJob.getPublicServiceHome(provider);
+      Node calendarHome = Utils.getPublicServiceHome(provider);
       if (calendarHome == null)
         return;
       StringBuffer path = new StringBuffer(PopupReminderJob.getReminderPath(fromCalendar, provider));
       path.append("//element(*,exo:reminder)");
       path.append("[@exo:remindDateTime <= xs:dateTime('" + ISO8601.format(fromCalendar) + "') and @exo:isOver = 'false' and @exo:reminderType = 'email' ]");
-      QueryManager queryManager = PopupReminderJob.getSession(provider).getWorkspace().getQueryManager();
+      QueryManager queryManager = Utils.getSession(provider).getWorkspace().getQueryManager();
       Query query = queryManager.createQuery(path.toString(), Query.XPATH);
       QueryResult results = query.execute();
       NodeIterator iter = results.getNodes();

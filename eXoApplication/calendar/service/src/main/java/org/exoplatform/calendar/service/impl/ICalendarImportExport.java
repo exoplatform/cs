@@ -526,8 +526,8 @@ public class ICalendarImportExport implements CalendarImportExport {
         try {
           exoEvent = RemoteCalendarServiceImpl.generateEvent(event, exoEvent, username, calendarId);
 
-          String sValue = "";
-          String eValue = "";
+          String sValue = Utils.EMPTY_STR;
+          String eValue = Utils.EMPTY_STR;
           if (event.getStartDate() != null) {
             if (to != null && event.getStartDate().getDate().getTime() > to.getTimeInMillis()) {
               continue;
