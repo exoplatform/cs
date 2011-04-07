@@ -613,40 +613,8 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
             String groupKey = groupIdSelected + CalendarUtils.SLASH_COLON ;
             UIFormInputWithActions sharedTab = uiForm.getChildById(UICalendarForm.INPUT_SHARE) ;
             String typedPerms = sharedTab.getUIStringInput(groupIdSelected + PERMISSION_SUB).getValue();
-            if(!CalendarUtils.isEmpty(typedPerms)) {
-              for(String s : typedPerms.split(CalendarUtils.COMMA)){
-                s = s.trim() ;
-                if(!CalendarUtils.isEmpty(s)) {
-                  List<User> users = orgService.getUserHandler().findUsersByGroup(groupIdSelected).getAll() ;  
-                  boolean isExisted = false ;
-                  for(User u : users) {
-                    if(u.getUserName().equals(s)) {
-                      isExisted = true ;
-                      break ;
-                    }
-                  }
-                  if(isExisted) {             
-                    listPermission.add(groupKey + s) ;
-                  } else {
-                    if(s.equals(CalendarUtils.ANY)) listPermission.add(groupKey + s) ; 
-                    else if(s.indexOf(CalendarUtils.ANY_OF) > -1) {
-                      String typeName = s.substring(s.lastIndexOf(CalendarUtils.DOT)+ 1, s.length()) ;
-                      if(orgService.getMembershipTypeHandler().findMembershipType(typeName) != null) {
-                        listPermission.add(groupKey + s) ;
-                      } else {
-                        uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.name-not-on-group", new Object[]{s,groupKey}, ApplicationMessage.WARNING)) ;
-                        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-                        return ;
-                      } 
-                    } else {
-                      uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.name-not-on-group", new Object[]{s,groupKey}, ApplicationMessage.WARNING)) ;
-                      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-                      return ;
-                    }
-                  }
-                }
-              }
-            }
+            listPermission = getPermissions(listPermission, typedPerms, orgService, groupIdSelected, groupKey, uiApp, event);
+            if (listPermission == null) return;
             Collection<Membership> mbsh = CalendarUtils.getOrganizationService().getMembershipHandler().findMembershipsByUser(username) ;
             if(!listPermission.contains(groupKey + CalendarUtils.getCurrentUser()) 
                 && !CalendarUtils.isMemberShipType(mbsh, typedPerms))
@@ -667,6 +635,46 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       }
     }
   }
+  
+  public static List<String> getPermissions(List<String> listPermission, String typedPerms,OrganizationService orgService,
+                                            String groupIdSelected,String groupKey,UIApplication uiApp,Event<?> event) throws Exception {
+    if(!CalendarUtils.isEmpty(typedPerms)) {
+      for(String s : typedPerms.split(CalendarUtils.COMMA)){
+        s = s.trim() ;
+        if(!CalendarUtils.isEmpty(s)) {
+          List<User> users = orgService.getUserHandler().findUsersByGroup(groupIdSelected).getAll() ;  
+          boolean isExisted = false ;
+          for(User u : users) {
+            if(u.getUserName().equals(s)) {
+              isExisted = true ;
+              break ;
+            }
+          }
+          if(isExisted) {             
+            listPermission.add(groupKey + s) ;
+          } else {
+            if(s.equals(CalendarUtils.ANY)) listPermission.add(groupKey + s) ; 
+            else if(s.indexOf(CalendarUtils.ANY_OF) > -1) {
+              String typeName = s.substring(s.lastIndexOf(CalendarUtils.DOT)+ 1, s.length()) ;
+              if(orgService.getMembershipTypeHandler().findMembershipType(typeName) != null) {
+                listPermission.add(groupKey + s) ;
+              } else {
+                uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.name-not-on-group", new Object[]{s,groupKey}, ApplicationMessage.WARNING)) ;
+                event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                return null;
+              } 
+            } else {
+              uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.name-not-on-group", new Object[]{s,groupKey}, ApplicationMessage.WARNING)) ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              return null;
+            }
+          }
+        }
+      }
+    }
+    return listPermission;
+  }
+  
   static  public class CancelActionListener extends EventListener<UICalendarForm> {
     public void execute(Event<UICalendarForm> event) throws Exception {
       UICalendarForm uiForm = event.getSource() ;

@@ -40,7 +40,6 @@ import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
-import org.exoplatform.services.organization.User;
 import org.exoplatform.upload.UploadResource;
 import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -353,44 +352,12 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
                 }
               }
               calendar.setGroups(selected.toArray((new String[]{})));              
-              List<String> listPermission = new ArrayList<String>() ;
               OrganizationService orgService = CalendarUtils.getOrganizationService() ;
               String groupKey = uiForm.getSelectedIdGroup() + CalendarUtils.SLASH_COLON ;
               String typedPerms = uiForm.getUIStringInput(PERMISSION).getValue();
-              if(!CalendarUtils.isEmpty(typedPerms)) {
-                for(String s : typedPerms.split(CalendarUtils.COMMA)){
-                  s = s.trim() ;
-                  if(!CalendarUtils.isEmpty(s)) {
-                    List<User> users = orgService.getUserHandler().findUsersByGroup(uiForm.getSelectedIdGroup()).getAll() ;  
-                    boolean isExisted = false ;
-                    for(User u : users) {
-                      if(u.getUserName().equals(s)) {
-                        isExisted = true ;
-                        break ;
-                      }
-                    }
-                    if(isExisted) {             
-                      listPermission.add(groupKey + s) ;
-                    } else {
-                      if(s.equals(CalendarUtils.ANY)) listPermission.add(groupKey + s) ; 
-                      else if(s.indexOf(CalendarUtils.ANY_OF) > -1) {
-                        String typeName = s.substring(s.lastIndexOf(CalendarUtils.DOT)+ 1, s.length()) ;
-                        if(orgService.getMembershipTypeHandler().findMembershipType(typeName) != null) {
-                          listPermission.add(groupKey + s) ;
-                        } else {
-                          uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.name-not-on-group", new Object[]{s,groupKey}, ApplicationMessage.WARNING)) ;
-                          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-                          return ;
-                        } 
-                      } else {
-                        uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.name-not-on-group", new Object[]{s,groupKey}, ApplicationMessage.WARNING)) ;
-                        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-                        return ;
-                      }
-                    }
-                  }
-                }
-              }
+              List<String> listPermission = UICalendarForm.getPermissions(new ArrayList<String>(), typedPerms, orgService, uiForm.getSelectedIdGroup(), groupKey, uiApp, event);
+              
+              if (listPermission == null) return;
               Collection<Membership> mbsh = CalendarUtils.getOrganizationService().getMembershipHandler().findMembershipsByUser(username) ;
               if(!listPermission.contains(groupKey + CalendarUtils.getCurrentUser()) 
                   && !CalendarUtils.isMemberShipType(mbsh, typedPerms))

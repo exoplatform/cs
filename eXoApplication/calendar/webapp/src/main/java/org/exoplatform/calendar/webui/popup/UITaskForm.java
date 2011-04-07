@@ -32,7 +32,6 @@ import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
-import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.service.Utils;
@@ -45,10 +44,6 @@ import org.exoplatform.calendar.webui.UIListView;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.calendar.webui.UIPreview;
 import org.exoplatform.calendar.webui.popup.UIAddressForm.ContactData;
-import org.exoplatform.container.PortalContainer;
-import org.exoplatform.download.DownloadResource;
-import org.exoplatform.download.DownloadService;
-import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -368,17 +363,22 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     UITaskDetailTab taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
     UIFormComboBox timeField = taskDetailTab.getUIFormComboBox(UITaskDetailTab.FIELD_FROM_TIME) ;
     UIFormDateTimePicker fromField = taskDetailTab.getChildById(UITaskDetailTab.FIELD_FROM) ;
+    return getBeginDate(getEventAllDate(), dateFormat, fromField.getValue(), timeFormat, timeField.getValue());
+  }
+  
+  public static Date getBeginDate(boolean isAllDate,String dateFormat, String fromField,String timeFormat,String timeField) throws Exception {
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
     Locale locale = context.getParentAppRequestContext().getLocale() ;
-    if(getEventAllDate()) {
+    if(isAllDate) {
       DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
       df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
-      return CalendarUtils.getBeginDay(df.parse(fromField.getValue())).getTime();
+      return CalendarUtils.getBeginDay(df.parse(fromField)).getTime();
     } 
     DateFormat df = new SimpleDateFormat(dateFormat + " "  + timeFormat, locale) ;
     df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
-    return df.parse(fromField.getValue() + " " + timeField.getValue()) ;
+    return df.parse(fromField + " " + timeField) ;
   }
+  
   protected String getTaskFormDateValue () {
     UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
     UIFormDateTimePicker fromField = taskDetailTab.getChildById(UITaskDetailTab.FIELD_FROM) ;
@@ -400,20 +400,24 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
 
   }
 
+  public static Date getToDate(boolean isAllDate,String dateFormat,String toField,String timeFormat,String timeField) throws Exception {
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    Locale locale = context.getParentAppRequestContext().getLocale() ;
+    if(isAllDate) {
+      DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
+      df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
+      return CalendarUtils.getEndDay(df.parse(toField)).getTime();
+    } 
+    DateFormat df = new SimpleDateFormat(dateFormat + " " + timeFormat, locale) ;
+    df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
+    return df.parse(toField + " " + timeField) ;
+  }
+  
   protected Date getTaskToDate(String dateFormat, String timeFormat) throws Exception {
     UITaskDetailTab taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
     UIFormComboBox timeField = taskDetailTab.getUIFormComboBox(UITaskDetailTab.FIELD_TO_TIME) ;
     UIFormDateTimePicker toField = taskDetailTab.getChildById(UITaskDetailTab.FIELD_TO) ;
-    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-    Locale locale = context.getParentAppRequestContext().getLocale() ;
-    if(getEventAllDate()) {
-      DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
-      df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
-      return CalendarUtils.getEndDay(df.parse(toField.getValue())).getTime();
-    } 
-    DateFormat df = new SimpleDateFormat(dateFormat + " " + timeFormat, locale) ;
-    df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
-    return df.parse(toField.getValue() + " " + timeField.getValue()) ;
+    return getToDate(getEventAllDate(), dateFormat, toField.getValue(), timeFormat, timeField.getValue());
   }
   protected String getTaskToDateValue () {
     UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
@@ -682,7 +686,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     return attSize ;
   }
 
-  public String cleanValue(String values) throws Exception{
+  public static String cleanValue(String values) throws Exception{
     String[] tmpArr = values.split(",");
       List<String> list = Arrays.asList(tmpArr);
       java.util.Set<String> set = new java.util.HashSet<String>(list);
@@ -705,9 +709,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     return null;
   }
   
-  public static void showAddressForm(UIPopupContainer uiPopupContainer, String oldAddress, Event<?> event) throws Exception {
-    UIPopupAction uiPopupAction  = uiPopupContainer.getChild(UIPopupAction.class) ;
-    UIAddressForm uiAddressForm = uiPopupAction.activate(UIAddressForm.class, 640) ;
+  public static void showAddressForm(UIAddressForm uiAddressForm, String oldAddress) throws Exception {
     uiAddressForm.setContactList("") ;
     List<ContactData> contacts = uiAddressForm.getContactList() ;
     if(!CalendarUtils.isEmpty(oldAddress)) {
@@ -721,7 +723,6 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
         }
       }
     }
-    event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
   }
 
 
@@ -779,7 +780,10 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
         uiApp.addMessage(new ApplicationMessage("UITaskForm.msg.email-reminder-required", null));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
       } else {
-        showAddressForm(uiForm.getAncestorOfType(UIPopupContainer.class), uiForm.getEmailAddress(), event);
+        UIPopupAction uiPopupAction  = uiForm.getAncestorOfType(UIPopupContainer.class).getChild(UIPopupAction.class) ;
+        UIAddressForm uiAddressForm = uiPopupAction.activate(UIAddressForm.class, 640) ;
+        UITaskForm.showAddressForm(uiAddressForm, uiForm.getEmailAddress());
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       }
     }
   }
@@ -846,7 +850,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       String currentValues = uiInput.getValue();
       String values = uiUserSelector.getSelectedUsers();
       if(!CalendarUtils.isEmpty(currentValues) && !currentValues.equals("null")) values += ","+ currentValues;
-      values = uiTaskForm.cleanValue(values);
+      values = cleanValue(values);
       uiInput.setValue(values);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer);
     }

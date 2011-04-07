@@ -72,7 +72,7 @@ import org.exoplatform.webui.organization.account.UIUserSelector;
         events = {
           @EventConfig(listeners = UIPopupWindow.CloseActionListener.class, name = "ClosePopup")  ,
           @EventConfig(listeners = UISharedForm.AddActionListener.class, name = "Add", phase = Phase.DECODE),
-          @EventConfig(listeners = UISharedForm.CloseActionListener.class, name = "Close", phase = Phase.DECODE)
+          @EventConfig(listeners = UITaskForm.CloseActionListener.class, name = "Close", phase = Phase.DECODE)
         }
   )
 })
@@ -162,20 +162,6 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
   }
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
-
-  public String cleanValue(String values) throws Exception{
-    String[] tmpArr = values.split(",");
-      List<String> list = Arrays.asList(tmpArr);
-      java.util.Set<String> set = new java.util.HashSet<String>(list);
-      String[] result = new String[set.size()];
-      set.toArray(result);
-      String data = "";
-      for (String s : result) {
-          data += "," + s;
-      }
-      data = data.substring(1);
-    return data;
-  }
 
   public void updateSelect(String selectField, String value) throws Exception {
     UISharedTab inputset = getChildById(SHARED_TAB) ;
@@ -376,12 +362,12 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       String currentValues = uiInput.getValue();
       String values = uiUserSelector.getSelectedUsers();
       if(!CalendarUtils.isEmpty(currentValues) && !currentValues.equals("null")) values += ","+ currentValues; 
-      values = uiShareForm.cleanValue(values);
+      values = UITaskForm.cleanValue(values);
       uiInput.setValue(values);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer);
     }
   }
-  
+/*  
   static  public class CloseActionListener extends EventListener<UIUserSelector> {
     public void execute(Event<UIUserSelector> event) throws Exception {
       UIUserSelector uiUseSelector = event.getSource() ;
@@ -392,7 +378,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;  
     }
   }
-  
+  */
   static  public class CancelActionListener extends EventListener<UISharedForm> {
     public void execute(Event<UISharedForm> event) throws Exception {
       UISharedForm uiForm = event.getSource() ;

@@ -297,20 +297,7 @@ public class UIInvitationForm extends UIForm implements UIPopupComponent {
       UIEventForm uiEventForm = uiGrandParentPopup.getChild(UIEventForm.class) ;
       UIAddressForm uiAddressForm = uiPopupAction.activate(UIAddressForm.class,660) ;
       uiAddressForm.actions_ = new String[]{"Add", "Cancel"};
-      uiAddressForm.setContactList("") ;
-      String oldAddress = uiEventForm.getEmailAddress() ;
-      List<ContactData> contacts = uiAddressForm.getContactList() ;
-      if(!CalendarUtils.isEmpty(oldAddress)) {
-        for(String address : oldAddress.split(",")) {
-          for(ContactData c : contacts){
-            if(!CalendarUtils.isEmpty(c.getEmail())) {
-              if(Arrays.asList(c.getEmail().split(";")).contains(address.trim())) {
-                if (!uiAddressForm.checkedList_.contains(c.getId())) uiAddressForm.checkedList_.add(c.getId()) ;
-              }
-            }
-          }
-        }
-      }
+      UITaskForm.showAddressForm(uiAddressForm, uiEventForm.getEmailAddress());
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer) ;  
    }
   }

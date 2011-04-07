@@ -42,7 +42,6 @@ import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
-import org.exoplatform.calendar.webui.UICalendarView;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UIFormDateTimePicker;
 import org.exoplatform.calendar.webui.UIListContainer;
@@ -132,7 +131,7 @@ import org.exoplatform.webui.organization.account.UIUserSelector;
                    events = {
                      @EventConfig(listeners = UIPopupWindow.CloseActionListener.class, name = "ClosePopup")  ,
                      @EventConfig(listeners = UIEventForm.AddActionListener.class, name = "Add", phase = Phase.DECODE),
-                     @EventConfig(listeners = UIEventForm.CloseActionListener.class, name = "Close", phase = Phase.DECODE)
+                     @EventConfig(listeners = UITaskForm.CloseActionListener.class, name = "Close", phase = Phase.DECODE)
                    }
   )
 }
@@ -406,9 +405,25 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
 
-  public void updateSelect(String selectField, String value) throws Exception {
-  } 
+  public void updateSelect(String selectField, String value) throws Exception { } 
 
+  private boolean isReminderValid() throws Exception {
+    if(getEmailReminder()) {
+      if(CalendarUtils.isEmpty(getEmailAddress())) {
+        errorMsg_ = "UIEventForm.msg.event-email-required" ;
+        errorValues = "";
+        return false ; 
+      }
+      else if(!CalendarUtils.isValidEmailAddresses(getEmailAddress())) {
+        errorMsg_ = "UIEventForm.msg.event-email-invalid" ;
+        errorValues = CalendarUtils.invalidEmailAddresses(getEmailAddress()) ;
+        return false ;
+      }
+    } 
+    errorMsg_ = null ;
+    return true ;
+  }
+  
   protected boolean isEventDetailValid(CalendarSetting calendarSetting) throws Exception{
     String dateFormat = calendarSetting.getDateFormat() ;
     String timeFormat = calendarSetting.getTimeFormat() ;
@@ -452,22 +467,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     errorMsg_ = null ;
     return true ;
   }
-  private boolean isReminderValid() throws Exception {
-    if(getEmailReminder()) {
-      if(CalendarUtils.isEmpty(getEmailAddress())) {
-        errorMsg_ = "UIEventForm.msg.event-email-required" ;
-        errorValues = "";
-        return false ; 
-      }
-      else if(!CalendarUtils.isValidEmailAddresses(getEmailAddress())) {
-        errorMsg_ = "UIEventForm.msg.event-email-invalid" ;
-        errorValues = CalendarUtils.invalidEmailAddresses(getEmailAddress()) ;
-        return false ;
-      }
-    } 
-    errorMsg_ = null ;
-    return true ;
-  }
+  
 //TODO cs-839
  private boolean isParticipantValid() throws Exception {
     if(isSendMail() && getMeetingInvitation() == null) {
@@ -524,16 +524,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
       UIFormDateTimePicker fromField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_FROM) ;
       UIFormComboBox timeField = eventDetailTab.getUIFormComboBox(UIEventDetailTab.FIELD_FROM_TIME) ;
-      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-      Locale locale = context.getParentAppRequestContext().getLocale() ;
-      if(getEventAllDate()) {
-        DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
-        df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
-        return CalendarUtils.getBeginDay(df.parse(fromField.getValue())).getTime();
-      } 
-      DateFormat df = new SimpleDateFormat(dateFormat + " " + timeFormat, locale) ;
-      df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
-      return df.parse(fromField.getValue() + " " + timeField.getValue()) ;
+      return UITaskForm.getBeginDate(getEventAllDate(), dateFormat, fromField.getValue(), timeFormat, timeField.getValue());
     } catch (Exception e) {
       return null;
     }
@@ -563,16 +554,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     UIFormDateTimePicker toField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_TO) ;
     UIFormComboBox timeField = eventDetailTab.getUIFormComboBox(UIEventDetailTab.FIELD_TO_TIME) ;
-    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-    Locale locale = context.getParentAppRequestContext().getLocale() ;
-    if(getEventAllDate()) {
-      DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
-      df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
-      return CalendarUtils.getEndDay(df.parse(toField.getValue())).getTime();
-    } 
-    DateFormat df = new SimpleDateFormat(dateFormat + " " + timeFormat, locale) ;
-    df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
-    return df.parse(toField.getValue() + " " + timeField.getValue()) ;
+    return UITaskForm.getToDate(getEventAllDate(), dateFormat, toField.getValue(), timeFormat, timeField.getValue());
   }
   protected void setEventToDate(Date date,String dateFormat, String timeFormat) {
     UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
@@ -1223,20 +1205,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     }     
     return "";
   }
-  
-  public String cleanValue(String values) throws Exception{
-    String[] tmpArr = values.split(",");
-      List<String> list = Arrays.asList(tmpArr);
-      java.util.Set<String> set = new java.util.HashSet<String>(list);
-      String[] result = new String[set.size()];
-      set.toArray(result);
-      String data = "";
-      for (String s : result) {
-          data += "," + s;
-      }
-      data = data.substring(1);
-    return data;
-  }
+
   public Attachment getAttachment(String attId) {
     UIEventDetailTab uiDetailTab = getChildById(TAB_EVENTDETAIL) ;
     for (Attachment att : uiDetailTab.getAttachments()) {
@@ -1832,10 +1801,14 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.email-reminder-required", null));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ; 
       } else {
-        UITaskForm.showAddressForm(uiForm.getAncestorOfType(UIPopupContainer.class), uiForm.getEmailAddress(), event);
+        UIPopupAction uiPopupAction  = uiForm.getAncestorOfType(UIPopupContainer.class).getChild(UIPopupAction.class) ;
+        UIAddressForm uiAddressForm = uiPopupAction.activate(UIAddressForm.class, 640) ;
+        UITaskForm.showAddressForm(uiAddressForm, uiForm.getEmailAddress());
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       }
     }
   }
+  
   static  public class AddAttachmentActionListener extends EventListener<UIEventForm> {
     public void execute(Event<UIEventForm> event) throws Exception {
       UIEventForm uiForm = event.getSource() ;
@@ -1945,17 +1918,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer) ;
     }
   }
-  
-  static  public class CloseActionListener extends EventListener<UIUserSelector> {
-    public void execute(Event<UIUserSelector> event) throws Exception {
-      UIUserSelector uiUseSelector = event.getSource() ;
-      UIPopupWindow uiPoupPopupWindow = uiUseSelector.getParent() ;
-      UIPopupContainer uiContainer = uiPoupPopupWindow.getAncestorOfType(UIPopupContainer.class) ;
-      uiPoupPopupWindow.setUIComponent(null) ;
-      uiPoupPopupWindow.setShow(false) ;      
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;  
-    }
-  }
+
   static  public class MoveNextActionListener extends EventListener<UIEventForm> {
     public void execute(Event<UIEventForm> event) throws Exception {
       UIEventForm uiForm = event.getSource() ;
@@ -2036,7 +1999,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       UIEventForm uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       UICalendarPortlet uiPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
-      UICalendarView uiCalendarView = uiPortlet.findFirstComponentOfType(UICalendarView.class);
       UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiPopupAction = uiPopupContainer.getChild(UIPopupAction.class);
       //TODO cs-764
