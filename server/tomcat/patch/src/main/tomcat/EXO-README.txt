@@ -180,18 +180,6 @@ All those accounts have the default password "gtn".
     * [CS-4370] - "Leave message on server" mail options
     * [CS-4860] - define a service that allowed all settings to be preconfigured by admins and possibly set as not modifiable by users
 
-** Task
-    * [CS-4687] - Release CS 2.2
-    * [CS-4841] - Remove duplication code in eXo CS social integration package
-    * [CS-4843] - Remove code duplications in eXo Mail package trunk
-    * [CS-4844] - Remove code duplications in eXo Contact application trunk
-    * [CS-4850] - Planning meeting and review
-    * [CS-4855] - Upgrade to JCR 1.14-Beta3
-    * [CS-4885] - Remove unnecessary mapping in web.xml of cs extension
-    * [CS-4886] - Remove bad practices which results from basepath of CalendarWebservice
-    * [CS-4889] - Remove all File Tab Characters in CS trunk's code
-    * [CS-4893] - Support PLF 3.0.5 and AIO 1.6.9
-    * [CS-4913] - Align dependencies with EXOGTN 3.2.0 Beta02
 
 
 - 2.2.0-Beta01
@@ -313,26 +301,6 @@ All those accounts have the default password "gtn".
     * [CS-3880] - Permissions on public addressbooks
     * [CS-4339] - Upcoming Events gadget
     * [CS-4685] - [Chat] User gets notification when their contact change status in chat
-
-** Task
-    * [CS-2019] - PageList sanitization
-    * [CS-4302] - Add more secure to web service 
-    * [CS-4395] -  Add plugin to initialize default data when space in social created
-    * [CS-4528] - Upgrade gatein to version 3.1.3-PLF
-    * [CS-4529] - Upgrade JCR and related to version 1.12.4-GA
-    * [CS-4530] - Upgrade ECMS to version 2.1.0-CR03
-    * [CS-4531] - Upgrade commons to 1.0.0-GA
-    * [CS-4532] - Upgrade social to version 1.1.0-CR03
-    * [CS-4538] - Fix missing dependencies used by exobuild
-    * [CS-4544] - remove start and end request for implementing of REST
-    * [CS-4557] - Apply new home page for cs 2.1.1
-    * [CS-4561] - List all scheduler jobs of CS project 
-    * [CS-4564] - clean up node-type definition 
-    * [CS-4697] - Move all components declared in jars in extension
-    * [CS-4707] - Update missing dependency xml-parser
-    * [CS-4729] - Add rss reader application  to default csdemo portal
-    * [CS-4742] - Upgrade to exo.parent 7.1 
-    * [CS-4746] - JBoss EAR packaging for 2.2
 
 
 - 2.1.1 
