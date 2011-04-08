@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2003-2010 eXo Platform SAS.
+ * Copyright (C) 2003-2011 eXo Platform SAS.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
@@ -15,9 +15,9 @@
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  **/
 
-======================================================= 
-    Release Notes - eXo Collaboration - Version 2.1.1.1
-======================================================= 
+============================================================ 
+    Release Notes - eXo Collaboration - Version 2.2.0-Beta02
+============================================================ 
 
 ===============
 1 Introduction
@@ -49,10 +49,11 @@ experience more productive. It offers several ways to to view and organize your 
 
 
     * General
-	 - New home page
-	 - Remove extension portal, faster running server 
-	 - Fix bugs listed bellow 
-	 - Support demo online in integrated version called platform 3.0 here http://platform.demo.exoplatform.org
+	 - Fix bug
+	 - Subscribe to remote calendar
+	 - Calendar repeat option 
+	 - Some improvements and feedbacks added
+	 - Improve integrated with eXo social feature
      
     * Find the latest release notes here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Release+Notes            
           
@@ -66,7 +67,7 @@ Find the latest install guide here : http://wiki.exoplatform.org/xwiki/bin/view/
         Web Browser: IE6, IE7, FF2, FF3 (recommended), Safari.
         JVM: version 1.6.0_0 or higher
         Application Server : tomcat-6.0.20 and up 
-        Building Tools: Maven 2.2.1 and up
+        Building Tools: Maven 3 and up
         openfire server version 3.6.4 for more information visit here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Chat+Configuration
 
 - Collaboration suite quick start guide
@@ -112,7 +113,7 @@ Need to set the JAVA_HOME variable for run Collaboration suite's servers.
 
 * Enter one of the following addresses into your browser address bar:   
    CS demo portal  
-      http://localhost:8080/csdemo
+      http://localhost:8080/
 
 You can log into the portal with the following accounts: root, john, mary, demo.
 All those accounts have the default password "gtn".
@@ -142,6 +143,198 @@ All those accounts have the default password "gtn".
 ===========
 6 CHANGELOG
 ===========
+- 2.2.0-Beta02
+
+** Bug
+    * [CS-4736] - [chatbar] Contact list is not shown after changing status to online
+    * [CS-4737] - [chatbar] user at "Free to chat" can not do some permitted actions
+    * [CS-4762] - Remote Calendar : Repeating events are not imported/synchronized correclty
+    * [CS-4776] - [Rss] french translation for rss reader portlet
+    * [CS-4781] - Calendar- Some UI error on IE 7
+    * [CS-4789] - Contact - View a contact - link of home website is invalid
+    * [CS-4805] - Invalid message display when delete a calendar
+    * [CS-4807] - [PLF] [IE7] Intranet Home page - vertical scroll of Upcoming Events frame
+    * [CS-4816] - [Calendar-IE7] Left pane always hide after refresh browser
+    * [CS-4819] - CS - IE7: Next Week icon is displayed wrong on Title bar
+    * [CS-4820] - Delegated user cannot write mail
+    * [CS-4822] - [PLF] Need to keep the space calendar of new created space as default selected when add event on calendar of space
+    * [CS-4839] - Exception when show month view with event spreads over 2 months view
+    * [CS-4845] - [Calendar] mini calendar and month view is wrong title day of week name
+    * [CS-4846] - Job starts before loading some nodetypes
+    * [CS-4847] - [MAIL] Print message : only the first page is printed
+    * [CS-4854] - "Refresh News" on RSS portlet is not translated in French
+    * [CS-4869] - Offline messages are marked with current date
+    * [CS-4870] - Untraslated labels in sharing calendar
+    * [CS-4872] - Untranslated label in the search of agenda
+    * [CS-4881] - [Calendar] reminder by e mail is display time incorrect
+    * [CS-4903] - [Calendar-event] Can not add new event by select add new event on right click 
+    * [CS-4918] - Can not add a contact with a long mail address in the address book
+
+** Improvement
+    * [CS-2983] - should show warning message when create event with invitation mail but don't enter email address yet
+    * [CS-4824] - Improve repeating event rule
+    * [CS-4865] - CLONE - Do not display left panes of Calendar in spaces
+
+** New Feature
+    * [CS-756] - Subscribe to remote calendar
+    * [CS-4370] - "Leave message on server" mail options
+    * [CS-4860] - define a service that allowed all settings to be preconfigured by admins and possibly set as not modifiable by users
+
+** Task
+    * [CS-4687] - Release CS 2.2
+    * [CS-4841] - Remove duplication code in eXo CS social integration package
+    * [CS-4843] - Remove code duplications in eXo Mail package trunk
+    * [CS-4844] - Remove code duplications in eXo Contact application trunk
+    * [CS-4850] - Planning meeting and review
+    * [CS-4855] - Upgrade to JCR 1.14-Beta3
+    * [CS-4885] - Remove unnecessary mapping in web.xml of cs extension
+    * [CS-4886] - Remove bad practices which results from basepath of CalendarWebservice
+    * [CS-4889] - Remove all File Tab Characters in CS trunk's code
+    * [CS-4893] - Support PLF 3.0.5 and AIO 1.6.9
+    * [CS-4913] - Align dependencies with EXOGTN 3.2.0 Beta02
+
+
+- 2.2.0-Beta01
+
+** Bug
+    * [CS-3839] - Show 2 next room when click on previous/next room
+    * [CS-3859] - Menu is not disappeared when select 'Offline' status
+    * [CS-3862] - Error in the position of pop-up when click on user name
+    * [CS-4166] - Unknown error when copy/paste or cut/paste 1 contact while user does not have edit right
+    * [CS-4182] - Contact list is disappeared after right click
+    * [CS-4213] - Do not show form to add new feed when click on Add button in Calendar Setting form
+    * [CS-4239] - Mail-Number of unread messages is not displayed
+    * [CS-4306] - Calendar "Quick add" bar UI fixes
+    * [CS-4332] - exception when starting server 
+    * [CS-4343] - Yahoo Mail can not receive the attachment from eXo Mail
+    * [CS-4344] - Chat-UI broken when resize the chat pop up
+    * [CS-4346] - [Contact]: Unknown error when add some user/group separated with the first one by some comma ","
+    * [CS-4347] -  [Calendar] Event/Task is moved to out of working pane when move scroll bar of Browser
+    * [CS-4350] - [Contact] Drag and drop contacts of a personal address book from specific tag to shared address book with edit right
+    * [CS-4353] -  Can't Drag and drop contacts from personal address book to a specific tag in tags list
+    * [CS-4355] - Can't Drag and drop contacts from personal address book to shared address book with edit right
+    * [CS-4360] - UI broken when select user for [Task delegation]
+    * [CS-4362] - [Calendar] Displaying time of event is incorrect when set Time interval is greater than 30 minutes
+    * [CS-4363] -  [Mail] has problem when user uses 2 browsers to delete account mail 
+    * [CS-4410] - Can not do some action on the public calendar
+    * [CS-4425] - Mail-Imap- create a filter and apply do not work well
+    * [CS-4436] - Can not run cs with csdemo 
+    * [CS-4442] - initialize application data wrong when adding application to Social Space.
+    * [CS-4450] - Tasks Gadget bug with max height
+    * [CS-4458] -  Scrolling the weeks doesn't change the central view
+    * [CS-4463] - [eXoMail] Write new mail UI is broken
+    * [CS-4465] - event is not shown full when spread in 2 lines in month view.
+    * [CS-4479] - Can't select file which is create in Site Explorer from server to attach in mail when compose new mail
+    * [CS-4487] - [Portal] has exception when delete user
+    * [CS-4488] - openfire deployment uses the hardcoded value eXo.env.dependenciesDir + "/repository" for the location of the local maven repository
+    * [CS-4491] - Can not delete a mail after is moved into other folder
+    * [CS-4494] - CLONE -CS not compatible with Java5
+    * [CS-4514] - Error on sign in with IE8, IE7
+    * [CS-4517] - [Calendar] Add Event form - calendar list is shown invalid
+    * [CS-4519] - IE6 UI problems
+    * [CS-4542] - [Contact] Invalid message display when user have edit permission move a shared contact
+    * [CS-4545] - Can not check mail in specified folder after changing folder.
+    * [CS-4546] - [CS] Still add even sucessfully when input invalid time
+    * [CS-4555] - [CS] Register an account, text validation is not display
+    * [CS-4559] - My task gadget is not properly showed in Chrome
+    * [CS-4563] - My Tasks gadget setting screen does not show the button correctly
+    * [CS-4566] - Calendar right panel does not show after login and can not show by change show hidden option 
+    * [CS-4571] - wrong date time when right click on time table to add event or task
+    * [CS-4572] - Show alert message error when use Switch view mode function with some portlet
+    * [CS-4580] - Build and deploy CS failed with a clean local repository.
+    * [CS-4584] - MyTasks gadget: incorrect url to calendar page
+    * [CS-4589] - Error when reply to all on the new checked message with attachment
+    * [CS-4590] - Can not create an event with attached PDF files
+    * [CS-4597] - Chat- Room is broken on IE7 when F5 in platform
+    * [CS-4617] - Show exception when add new task or even on calender with Reminder by email is checked
+    * [CS-4619] - Mail - can not get mail
+    * [CS-4624] - Show incorrect time when add new event/task
+    * [CS-4629] - [Calendar] Dragging and dropping event in week view responses too slowly.
+    * [CS-4632] - [Chrome] calendar , mail attachments are downloaded with wrong names
+    * [CS-4634] - System files and directories must be hidden
+    * [CS-4635] - Remaining dependency declaration
+    * [CS-4654] - social integration: lost space avatar on activity stream.
+    * [CS-4656] - Can not see attachment in the new arrival file
+    * [CS-4666] - Problem with RSS feed in Calendar
+    * [CS-4669] - Blank display when doing action in Mail
+    * [CS-4689] - undefined field in Calendar RSS form
+    * [CS-4693] - My tasks gadget does not show upcoming tasks 
+    * [CS-4699] - Chat- error when sending file
+    * [CS-4701] - [Smoke_CS_RHEL_02]  message when send mail successfully
+    * [CS-4702] - [Smoke_CS_RHEL_04] Can not add contact on chat on IE7 because Dont show message to confirm when user accept invtation
+    * [CS-4716] - IE 7 - Chat - right click menu on a contact display not well
+    * [CS-4719] - RSS reader does not work because remove of xml-parser 
+    * [CS-4750] - [CS-Mail] Unknown error and exception in console when check mail in special case
+    * [CS-4751] - [CS-Mail] Can not delete a mail in tag
+    * [CS-4754] - Double click to event, selected calendar alway default private
+    * [CS-4759] - [CS]Show message when send email using Pop3
+    * [CS-4763] - Remote calendar : change "Reload" by "Refresh" to refresh a remote calendar
+    * [CS-4784] - Calendar's left panel always disappears after some actions
+    * [CS-4785] - Can't redisplay a hidden calendar
+    * [CS-4793] - IncompatibleClassChangeError when adding a calendar event in space
+    * [CS-4799] - Event rollover does not work with attachment
+    * [CS-4802] - Mail - No alert message in case delegate to invalid user name
+    * [CS-4803] - Mail- Unknown error when add folder by delegated user without full permission
+    * [CS-4804] - Mail - Delegated user with full permission can not tag, move a message
+    * [CS-4811] - Repeating event does not show in month view
+    * [CS-4825] - Delegated user can add folder successfully without Full permission
+
+** Documentation
+    * [CS-4622] - Update CS developer guide for default presence status
+    * [CS-4726] - Update data structure changes from AIO to PLF
+
+** Improvement
+    * [CS-359] - Automatic event adding on event accept
+    * [CS-2673] - safari: some parts of working pane should be not marked when resize event in Week view or Day view or Work week view
+    * [CS-3541] - Default Group calendar names should be "Default"
+    * [CS-3542] - use different default colors for default group calendars
+    * [CS-3881] - Better default calendar settings
+    * [CS-4217] - Always keep mm/dd/yyyy format in Schedule tab when create/edit event
+    * [CS-4405] - show private url of iCalendar
+    * [CS-4457] - Update Icon for attach file from DMS
+    * [CS-4472] - Design new application registry icons for portlets
+    * [CS-4595] - [Mail] check attachments in mail message without get content.
+    * [CS-4612] - Mail: Cannot send/receive email with incoming/outgoing SSL protocol
+    * [CS-4621] - Please automate the creation of the chatserver archive and attach it to the build like for tomcat.
+    * [CS-4636] - We should highlight current week, month when click next/back week/monnth on time board.
+    * [CS-4670] - Make Security Domain configurable
+    * [CS-4671] - Update gadgets
+    * [CS-4673] - http://localhost:8080 should point to the demo portal
+    * [CS-4682] - Improve data structure to store RSS feed in Calendar
+    * [CS-4692] - Hide "collaboration:/exo:applications" and directories 
+    * [CS-4703] - [CHAT] history action button should be integrated
+
+
+** New Feature
+    * [CS-375] - Event details on rollover
+    * [CS-1436] - Email account delegation
+    * [CS-2449] - Last unread mails gadget
+    * [CS-2450] - Tasks Gadget
+    * [CS-3880] - Permissions on public addressbooks
+    * [CS-4339] - Upcoming Events gadget
+    * [CS-4685] - [Chat] User gets notification when their contact change status in chat
+
+** Task
+    * [CS-2019] - PageList sanitization
+    * [CS-4302] - Add more secure to web service 
+    * [CS-4395] -  Add plugin to initialize default data when space in social created
+    * [CS-4528] - Upgrade gatein to version 3.1.3-PLF
+    * [CS-4529] - Upgrade JCR and related to version 1.12.4-GA
+    * [CS-4530] - Upgrade ECMS to version 2.1.0-CR03
+    * [CS-4531] - Upgrade commons to 1.0.0-GA
+    * [CS-4532] - Upgrade social to version 1.1.0-CR03
+    * [CS-4538] - Fix missing dependencies used by exobuild
+    * [CS-4544] - remove start and end request for implementing of REST
+    * [CS-4557] - Apply new home page for cs 2.1.1
+    * [CS-4561] - List all scheduler jobs of CS project 
+    * [CS-4564] - clean up node-type definition 
+    * [CS-4697] - Move all components declared in jars in extension
+    * [CS-4707] - Update missing dependency xml-parser
+    * [CS-4729] - Add rss reader application  to default csdemo portal
+    * [CS-4742] - Upgrade to exo.parent 7.1 
+    * [CS-4746] - JBoss EAR packaging for 2.2
+
+
 - 2.1.1 
 
 ** Bug
