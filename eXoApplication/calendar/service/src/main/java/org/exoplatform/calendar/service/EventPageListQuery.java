@@ -237,18 +237,7 @@ public class EventPageListQuery extends JCRPageList {
     return attachments;
   }
 
-  private Node getReminderFolder(Date fromDate) throws Exception {
-    return null;
-    // CS-3165
-    /*
-     * Node publicApp = getPublicCalendarServiceHome() ; Node dateFolder = getDateFolder(publicApp, fromDate) ; try { return dateFolder.getNode(Utils.CALENDAR_REMINDER) ; } catch (PathNotFoundException pnfe) { try { dateFolder.addNode(Utils.CALENDAR_REMINDER, Utils.NT_UNSTRUCTURED) ; if(dateFolder.isNew()) dateFolder.getSession().save(); else dateFolder.save() ; } catch (Exception e) {
-     * dateFolder.refresh(false); } return dateFolder.getNode(Utils.CALENDAR_REMINDER) ; }
-     */
-  }
-
   public static List<Reminder> getReminders(Node eventNode, Node reminderFolder) throws Exception {
-    if (true)
-      return null;
     List<Reminder> reminders = new ArrayList<Reminder>();
     Date fromDate = eventNode.getProperty(Utils.EXO_FROM_DATE_TIME).getDate().getTime();
     if (reminderFolder == null)
