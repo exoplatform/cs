@@ -84,6 +84,7 @@ public class UIMonthView extends UICalendarView {
     cal.set(Calendar.YEAR, year);
     cal.set(Calendar.MONTH, month);
     cal.set(Calendar.DATE, day);
+    cal.setMinimalDaysInFirstWeek(1);
     return cal.getActualMaximum(java.util.Calendar.WEEK_OF_MONTH) ;
   }
   public void refresh() throws Exception {
