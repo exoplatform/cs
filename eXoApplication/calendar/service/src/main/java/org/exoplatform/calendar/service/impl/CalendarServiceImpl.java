@@ -413,6 +413,10 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   public void removeSharedCalendar(String username, String calendarId) throws Exception {
     storage_.removeSharedCalendar(username, calendarId);
   }
+  
+  public void removeSharedCalendarFolder(String username) throws Exception {
+    storage_.removeSharedCalendarFolder(username);
+  }
 
   /**
    * {@inheritDoc}

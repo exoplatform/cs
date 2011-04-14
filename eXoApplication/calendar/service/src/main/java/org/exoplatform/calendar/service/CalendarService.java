@@ -481,6 +481,13 @@ public interface CalendarService {
    * @throws Exception
    */
   public void removeSharedCalendar(String username, String calendarId) throws Exception;
+  
+  /**
+   * This method removes the shared calendar folder of this user and all references (from shared calendars) to this folder.   
+   * @param username the username
+   * @throws Exception
+   */
+  public void removeSharedCalendarFolder(String username) throws Exception;
 
   /**
    * Add event to shared calendar, mean add event to orloginal calendar too

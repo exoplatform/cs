@@ -3081,7 +3081,7 @@ public class JCRDataStorage implements DataStorage {
       if (calType == Calendar.TYPE_SHARED) {
         calendarHome = getSharedCalendarHome();
         if (calendarHome.hasNode(username)) {
-          PropertyIterator iter = getSharedCalendarHome().getNode(username).getReferences();
+          PropertyIterator iter = calendarHome.getNode(username).getReferences();
           while (iter.hasNext()) {
             Node calendar = iter.nextProperty().getParent();
             if (!recurEvent.getCalendarId().equals(calendar.getProperty(Utils.EXO_ID)))
@@ -4094,6 +4094,52 @@ public class JCRDataStorage implements DataStorage {
       } catch (Exception e) {
         e.printStackTrace();
       }
+    }
+  }
+  
+  public void removeSharedCalendarFolder(String username) throws Exception {
+    Node sharedCalendarHome = getSharedCalendarHome();
+    if (sharedCalendarHome.hasNode(username)) {
+      Node userNode = sharedCalendarHome.getNode(username);
+      String uuid = userNode.getProperty("jcr:uuid").getString();
+      PropertyIterator propIter = userNode.getReferences();
+      while (propIter.hasNext()) {
+        Property prop = propIter.nextProperty();
+        Node calendar = prop.getParent();
+        Value[] sharedIds = prop.getValues();
+        List<Value> newValues = new ArrayList<Value>();
+        for (Value value : sharedIds) {
+          if (!value.getString().equals(uuid)) {
+            newValues.add(value);
+          }
+        }
+        calendar.setProperty(Utils.EXO_SHARED_ID, newValues.toArray(new Value[newValues.size()]));
+        newValues.clear();
+        
+        if (calendar.hasProperty(Utils.EXO_VIEW_PERMISSIONS)) {
+          Value[] viewPerms = calendar.getProperty(Utils.EXO_VIEW_PERMISSIONS).getValues();
+          for (Value v : viewPerms) {
+            if (!username.equals(v.getString())) {
+              newValues.add(v);
+            }
+          }
+          calendar.setProperty(Utils.EXO_VIEW_PERMISSIONS, newValues.toArray(new Value[newValues.size()]));
+          newValues.clear();
+        }
+        
+        if (calendar.hasProperty(Utils.EXO_EDIT_PERMISSIONS)) {
+          Value[] editPerms = calendar.getProperty(Utils.EXO_EDIT_PERMISSIONS).getValues();
+          for (Value v : editPerms) {
+            if (!username.equals(v.getString())) {
+              newValues.add(v);
+            }
+          }
+          calendar.setProperty(Utils.EXO_EDIT_PERMISSIONS, newValues.toArray(new Value[newValues.size()]));
+        }
+        calendar.save();
+      } 
+      userNode.remove();
+      sharedCalendarHome.save();
     }
   }
 

@@ -194,4 +194,16 @@ public class NewUserListener extends UserEventListener {
       LOG.error("Failed to initialize calendar account for " + user.getUserName());
     }
   }
+  
+  @Override
+  public void preDelete(User user) throws Exception {
+    // before delete user from portal, remove shared calendar folder of this user
+    try {
+      cservice_.removeSharedCalendarFolder(user.getUserName());
+    } catch (Exception e) {
+      if (LOG.isWarnEnabled()) {
+        LOG.warn("Exception occurs when trying to remove shared calendar folder of this user: " + user.getUserName(), e);
+      }
+    }
+  }
 }
