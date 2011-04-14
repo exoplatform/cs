@@ -1372,13 +1372,11 @@ public class MailServiceImpl implements MailService, Startable {
         if (!account.isSavePassword()) {
           account.setIncomingPassword("");
           updateAccount(userName, account);
-          logger.debug("Exception while connecting to server : " + e.getMessage());
-          logger.error("Exception while connecting to server : " + e.getMessage());
+          if (logger.isDebugEnabled()) logger.debug("Exception while connecting to server", e);
         }
         if (info != null) {
           // info.setStatusMsg("msg-retry-password");
-          if (logger.isDebugEnabled())
-            info.setStatusCode(CheckingInfo.RETRY_PASSWORD);
+          info.setStatusCode(CheckingInfo.RETRY_PASSWORD);
           updateCheckingMailStatusByCometd(userName, account.getId(), info);
         }
         return null;
