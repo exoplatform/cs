@@ -622,4 +622,11 @@ public class MockCalendarService implements CalendarService{
   public RemoteCalendar getRemoteCalendar(String owner, String calendarId) throws Exception {
     return null;
   }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.calendar.service.CalendarService#removeSharedCalendarFolder(java.lang.String)
+   */
+  @Override
+  public void removeSharedCalendarFolder(String username) throws Exception {
+  }
 }
