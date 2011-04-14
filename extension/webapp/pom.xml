@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.exoplatform.cs</groupId>
     <artifactId>exo.cs.extension</artifactId>
-    <version>2.2.0-Beta2</version>
+    <version>2.2.0-Beta3-SNAPSHOT</version>
   </parent>
   <artifactId>exo.cs.extension.webapp</artifactId>
   <packaging>war</packaging>
