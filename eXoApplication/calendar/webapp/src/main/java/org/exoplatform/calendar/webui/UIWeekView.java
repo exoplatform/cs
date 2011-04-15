@@ -72,8 +72,8 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UIWeekView extends UICalendarView {
 
-  protected Map<String, Map<String, CalendarEvent>> eventData_ = new HashMap<String, Map<String, CalendarEvent>>() ;
-  protected LinkedHashMap<String, CalendarEvent> allWeekData_ = new LinkedHashMap<String,  CalendarEvent>() ;
+  protected Map<String, List<CalendarEvent>> eventData_ = new HashMap<String, List<CalendarEvent>>() ;
+  protected List<CalendarEvent> allDayEvent = new ArrayList<CalendarEvent>();
   protected LinkedHashMap<String, CalendarEvent> dataMap_ = new LinkedHashMap<String,  CalendarEvent>() ;
   protected  List<CalendarEvent> daysData_  = new ArrayList<CalendarEvent>() ;
   protected boolean isShowCustomView_ = false ;
@@ -86,13 +86,13 @@ public class UIWeekView extends UICalendarView {
 
   public void refresh() throws Exception {
     eventData_.clear() ;
-    allWeekData_.clear() ;
+    allDayEvent.clear();
     int i = 0 ;
     Calendar c = getBeginDateOfWeek() ;
     int maxDay = 7 ;
     if(isShowCustomView_) maxDay = 5 ;
     while(i++ <maxDay) {
-      Map<String, CalendarEvent> list = new HashMap<String, CalendarEvent>() ;
+      List<CalendarEvent> list = new ArrayList<CalendarEvent>();
       String key = keyGen(c.get(Calendar.DATE), c.get(Calendar.MONTH), c.get(Calendar.YEAR)) ;
       eventData_.put(key, list) ;
       c.add(Calendar.DATE, 1) ;
@@ -137,7 +137,7 @@ public class UIWeekView extends UICalendarView {
       while(i++ < maxDay) {
         String key = keyGen(c.get(Calendar.DATE), c.get(Calendar.MONTH), c.get(Calendar.YEAR)) ;
         if(isSameDate(c.getTime(), beginEvent) && (isSameDate(c.getTime(), endEvent)) && eventAmount < CalendarUtils.MILISECONS_OF_DAY){
-          eventData_.get(key).put(event.getId(), event) ;
+          eventData_.get(key).add(event) ;
           //dataMap_.put(event.getId(), event) ;
           iter.remove() ;
         }  
@@ -145,8 +145,7 @@ public class UIWeekView extends UICalendarView {
       }
     }
     for( CalendarEvent ce : allEvents) {
-      allWeekData_.put(ce.getId(), ce) ;
-      //dataMap_.put(ce.getId(), ce) ;
+      allDayEvent.add(ce);
     } 
   }
   public java.util.Calendar getBeginDateOfWeek() throws Exception{
@@ -172,16 +171,17 @@ public class UIWeekView extends UICalendarView {
     return getEndDay(temCal) ;
   }
 
-  protected Map<String, Map<String, CalendarEvent>> getEventData() {return eventData_ ;}
+  protected Map<String, List<CalendarEvent>> getEventData() {return eventData_ ;}
 
-  protected LinkedHashMap<String, CalendarEvent>  getEventList() {
-    return allWeekData_ ;
-  }
   public LinkedHashMap<String, CalendarEvent> getDataMap() {
     LinkedHashMap<String, CalendarEvent> dataMap = new LinkedHashMap<String,  CalendarEvent>() ;
-    dataMap.putAll(allWeekData_) ;
-    for(String key :eventData_.keySet()) {
-      dataMap.putAll(eventData_.get(key)) ;
+    for (CalendarEvent ce : allDayEvent) {
+      dataMap.put(ce.getId(), ce);
+    }
+    for(String key : eventData_.keySet()) {
+      for(CalendarEvent ce : eventData_.get(key)) {
+        dataMap.put(ce.getId(), ce);
+      }
     }
     return dataMap ;
   }
@@ -299,9 +299,21 @@ public class UIWeekView extends UICalendarView {
       String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
       String startTime = event.getRequestContext().getRequestParameter("startTime") ;
       String finishTime = event.getRequestContext().getRequestParameter("finishTime") ;
+      Boolean isOccur = false;
+      if (!Utils.isEmpty(event.getRequestContext().getRequestParameter(ISOCCUR))) {
+        isOccur = Boolean.parseBoolean(event.getRequestContext().getRequestParameter(ISOCCUR));
+      }
+      String recurId = null;
+      if (isOccur) recurId = event.getRequestContext().getRequestParameter(RECURID);
+      
       try {
         String username = CalendarUtils.getCurrentUser() ;
-        CalendarEvent eventCalendar = calendarview.getDataMap().get(eventId) ;
+        CalendarEvent eventCalendar = null;
+        if (isOccur && !Utils.isEmpty(recurId)) {
+          eventCalendar = calendarview.getRecurrenceMap().get(eventId).get(recurId);
+        } else {
+          eventCalendar = calendarview.getDataMap().get(eventId) ;
+        }
         if(eventCalendar != null) {
           CalendarService calendarService = CalendarUtils.getCalendarService() ;
           Calendar calBegin = calendarview.getInstanceTempCalendar() ;
@@ -340,12 +352,19 @@ public class UIWeekView extends UICalendarView {
               event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
               return ;
             }
-            if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
-              calendarService.saveUserEvent(username, calendarId, eventCalendar, false) ;
-            }else if(calType.equals(CalendarUtils.SHARED_TYPE)){
-              calendarService.saveEventToSharedCalendar(username, calendarId, eventCalendar, false) ;
-            }else if(calType.equals(CalendarUtils.PUBLIC_TYPE)){
-              calendarService.savePublicEvent(calendarId, eventCalendar, false) ;          
+            // if it's a 'virtual' occurrence
+            if (isOccur && !Utils.isEmpty(recurId)) {
+              List<CalendarEvent> listEvent = new ArrayList<CalendarEvent>();
+              listEvent.add(eventCalendar);
+              calendarService.updateOccurrenceEvent(calendarId, calendarId, calType, calType, listEvent, username);
+            } else {
+              if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
+                calendarService.saveUserEvent(username, calendarId, eventCalendar, false) ;
+              } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
+                calendarService.saveEventToSharedCalendar(username, calendarId, eventCalendar, false) ;
+              } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
+                calendarService.savePublicEvent(calendarId, eventCalendar, false) ;          
+              }
             }
             calendarview.setLastUpdatedEventId(eventId) ;
             calendarview.refresh() ;

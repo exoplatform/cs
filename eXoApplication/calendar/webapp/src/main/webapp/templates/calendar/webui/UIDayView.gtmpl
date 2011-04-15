@@ -93,14 +93,16 @@
       <tbody>
         <tr>
           <%
-            int size = uicomponent.getAllDayEvents().values().size() ;
-            for(ce in uicomponent.getAllDayEvents().values()) {
+            int size = uicomponent.getAllDayEvents().size() ;
+            for(ce in uicomponent.getAllDayEvents()) {
              actionLink =  uicomponent.event("SaveEvent",ce.getId()+"&calendarId="+ce.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
             long precent = (99 / size) ;
             color = uicomponent.getColors().get(ce.calType +CalendarUtils.COLON+ ce.getCalendarId()) ;
+            Boolean isOccur = (ce.getRepeatType() != null && !CalendarEvent.RP_NOREPEAT.equals(ce.getRepeatType()) && (ce.getIsExceptionOccurrence() == null || !ce.getIsExceptionOccurrence()));
+            String recurId = ce.getRecurrenceId();
           %>
            <td width="$precent%">
-            <div unselectable="on" class="EventContainerBorder EventBoxes $color" style="height:20px;border:solid 1px white;" calType="$ce.calType" eventCat="$ce.eventCategoryId" eventid="<%=ce.getId()%>" calid="<%=ce.getCalendarId()%>" actionlink="$actionLink">
+            <div unselectable="on" class="EventContainerBorder EventBoxes $color" style="height:20px;border:solid 1px white;" calType="$ce.calType" eventCat="$ce.eventCategoryId" eventid="<%=ce.getId()%>" calid="<%=ce.getCalendarId()%>" actionlink="$actionLink" isOccur="$isOccur" recurId="$recurId">
               <div class="EventContainer"  title="<%=dtf.format(ce.getFromDateTime())%>:-><%=dtf.format(ce.getToDateTime())%>">
                 <%=ce.getSummary()%>
               </div>
@@ -148,7 +150,7 @@
               <div class="EventBoard" style="position : relative ;">
                 <div class="EventBoardContainer" lastUpdatedId="<%=uicomponent.getLastUpdatedEventId()%>">
                   <%
-                 for(ce in  uicomponent.getEventData().values()) {
+                 for(ce in  uicomponent.getEventData()) {
                    cal = uicomponent.getInstanceTempCalendar() ;
                    cal.setTime(ce.getFromDateTime()) ;
                   long   beginTime = cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;

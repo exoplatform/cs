@@ -1161,13 +1161,18 @@ UIResizeEvent.prototype.resizeCallback = function(evt){
     var eventBox = UIResizeEvent.outerElement;
     var start = parseInt(eventBox.getAttribute("startTime"));
     var calType = eventBox.getAttribute("calType");
+    var isOccur = eventBox.getAttribute("isoccur");
+    var recurId = eventBox.getAttribute("recurid");
+    if (recurId == "null") recurId = "";
     var end = start + eventBox.offsetHeight;
     if (eventBox.offsetHeight != UIResizeEvent.beforeHeight) {
 		var actionLink = eventBox.getAttribute("actionLink");
 		var params = [
 			{name:"calendarId",value:eventBox.getAttribute("calid")},
 			{name:"startTime",value:start},
-			{name:"finishTime",value:end}
+			{name:"finishTime",value:end},
+			{name:"isOccur",value:isOccur},
+			{name:"recurId",value:recurId}
 		];
 		eXo.calendar.UICalendarPortlet.setTimeValue(eventBox,start,end);
 		eXo.calendar.UICalendarPortlet.showEvent();
@@ -1303,6 +1308,9 @@ UICalendarPortlet.prototype.dayviewDropCallback = function(){
     var calType = dragObject.getAttribute("calType");
     var start = parseInt(dragObject.getAttribute("startTime"));
     var end = parseInt(dragObject.getAttribute("endTime"));
+    var isOccur = dragObject.getAttribute("isoccur");
+    var recurId = dragObject.getAttribute("recurid");
+    if (recurId == "null") recurId = "";
     var title = eXo.core.DOMUtil.findDescendantsByTagName(dragObject, "p")[0];
     var titleName = UICalendarPortlet.title;
     if (end == 0) 
@@ -1324,7 +1332,9 @@ UICalendarPortlet.prototype.dayviewDropCallback = function(){
 		var params = [
 			{name:"calendarId",value:dragObject.getAttribute("calid")},
 			{name:"startTime",value:currentStart},
-			{name:"finishTime",value:currentEnd}
+			{name:"finishTime",value:currentEnd},
+			{name:"isOccur",value:isOccur},
+			{name:"recurId",value:recurId}
 		];
 		eXo.calendar.UICalendarPortlet.setTimeValue(dragObject,currentStart,currentEnd);
 		eXo.calendar.UICalendarPortlet.showEvent();

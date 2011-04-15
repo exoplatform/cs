@@ -456,8 +456,13 @@ UIWeekView.prototype.rightResizeCallback = function() {
   	var start = parseInt(outer.getAttribute("startTime"));
   	var end = parseInt(outer.getAttribute("endTime")) + delta;
   	var calType = parseInt(outer.getAttribute("calType"));
+  	var isOccur = outer.getAttribute("isoccur");
+  	var recurId = outer.getAttribute("recurid");
+  	if (recurId == "null") recurId = "";
   	var actionLink = UICalendarPortlet.adjustTime(start, end, outer);
   	actionLink = actionLink.toString().replace(/'\s*\)/, "&calType=" + calType + "')");
+  	actionLink = actionLink.toString().replace(/'\s*\)/,"&isOccur=" + isOccur + "')");
+  	actionLink = actionLink.toString().replace(/'\s*\)/,"&recurId=" + recurId + "')");
   	eval(actionLink);
   }
 	eXo.calendar.UIWeekView.removeTooltip();
@@ -477,8 +482,13 @@ UIWeekView.prototype.leftResizeCallback = function() {
   	var start = parseInt(outer.getAttribute("startTime")) + delta;
   	var end = parseInt(outer.getAttribute("endTime"));
   	var calType = parseInt(outer.getAttribute("calType"));
+  	var isOccur = outer.getAttribute("isoccur");
+  	var recurId = outer.getAttribute("recurid");
+  	if (recurId == "null") recurId = "";
   	var actionLink = UICalendarPortlet.adjustTime(start, end, outer);
   	actionLink = actionLink.toString().replace(/'\s*\)/, "&calType=" + calType + "')");
+  	actionLink = actionLink.toString().replace(/'\s*\)/,"&isOccur=" + isOccur + "')");
+  	actionLink = actionLink.toString().replace(/'\s*\)/,"&recurId=" + recurId + "')");
   	eval(actionLink);
   }
 	if(eXo.calendar.UIWeekView.extraWidth) delete eXo.calendar.UIWeekView.extraWidth;
@@ -552,8 +562,13 @@ UIWeekView.prototype.allDayDropCallback = function(evt) {
 		var start =  parseInt(dragObject.getAttribute("startTime")) + delta ;
 		var end = parseInt(dragObject.getAttribute("endTime")) + delta ;
 		var calType = parseInt(dragObject.getAttribute("calType")) ;
+		var isOccur = dragObject.getAttribute("isoccur");
+		var recurId = dragObject.getAttribute("recurid");
+		if (recurId == "null") recurId = "";
 		var actionLink = UICalendarPortlet.adjustTime(start, end, dragObject) ;		
 		actionLink = actionLink.toString().replace(/'\s*\)/,"&calType=" + calType + "')") ;
+		actionLink = actionLink.toString().replace(/'\s*\)/,"&isOccur=" + isOccur + "')") ;
+		actionLink = actionLink.toString().replace(/'\s*\)/,"&recurId=" + recurId + "')") ;
 		eval(actionLink) ;
 	}	
 	eXo.calendar.EventTooltip.enable();

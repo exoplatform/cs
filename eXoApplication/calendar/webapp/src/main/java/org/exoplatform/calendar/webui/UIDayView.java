@@ -18,7 +18,6 @@ package org.exoplatform.calendar.webui;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -71,8 +70,8 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UIDayView extends UICalendarView {
 
-  private Map<String, CalendarEvent> eventData_ = new HashMap<String, CalendarEvent>() ;
-  private Map<String, CalendarEvent> allDayEvent_ = new HashMap<String, CalendarEvent>() ;
+  private List<CalendarEvent> eventData_ = new ArrayList<CalendarEvent>();
+  private List<CalendarEvent> allDayEvent_ = new ArrayList<CalendarEvent>();
 
   public UIDayView() throws Exception{
     super() ;
@@ -114,21 +113,25 @@ public class UIDayView extends UICalendarView {
       if (isSameDate(ce.getFromDateTime(), getCurrentDate())
           && isSameDate(ce.getToDateTime(), getCurrentDate())
           && eventAmount < CalendarUtils.MILISECONS_OF_DAY) {
-        eventData_.put(ce.getId(), ce) ;
+        eventData_.add(ce);
         iter.remove() ;
       } 
     }
     for(CalendarEvent ce : events){
-      allDayEvent_.put(ce.getId(), ce) ;
+      allDayEvent_.add(ce);
     } 
   }
-  protected Map<String, CalendarEvent> getEventData() {return eventData_ ;}
-  protected Map<String, CalendarEvent> getAllDayEvents() {return allDayEvent_ ;} ;
+  protected List<CalendarEvent> getEventData() { return eventData_; }
+  protected List<CalendarEvent> getAllDayEvents() { return allDayEvent_; } ;
 
   public LinkedHashMap<String, CalendarEvent> getDataMap() {
     LinkedHashMap<String, CalendarEvent> dataMap = new LinkedHashMap<String, CalendarEvent>() ;
-    dataMap.putAll(eventData_) ;
-    dataMap.putAll(allDayEvent_) ;
+    for (CalendarEvent ce : eventData_) {
+      dataMap.put(ce.getId(), ce);
+    }
+    for (CalendarEvent ce : allDayEvent_) {
+      dataMap.put(ce.getId(), ce);
+    }
     return dataMap ;
   }
   
@@ -143,8 +146,20 @@ public class UIDayView extends UICalendarView {
       String calendarId = event.getRequestContext().getRequestParameter("calendarId") ;
       String startTime = event.getRequestContext().getRequestParameter("startTime") ;
       String endTime = event.getRequestContext().getRequestParameter("finishTime") ;
+      Boolean isOccur = false;
+      if (!Utils.isEmpty(event.getRequestContext().getRequestParameter(ISOCCUR))) {
+        isOccur = Boolean.parseBoolean(event.getRequestContext().getRequestParameter(ISOCCUR));
+      }
+      String recurId = null;
+      if (isOccur) recurId = event.getRequestContext().getRequestParameter(RECURID);
+      
       String username = CalendarUtils.getCurrentUser() ;
-      CalendarEvent ce = calendarview.eventData_.get(eventId) ;
+      CalendarEvent ce = null;
+      if (isOccur && !Utils.isEmpty(recurId)) {
+        ce = calendarview.getRecurrenceMap().get(eventId).get(recurId);
+      } else {
+        ce = calendarview.getDataMap().get(eventId) ;
+      }
       if(ce != null) {
         CalendarService calService = CalendarUtils.getCalendarService() ;
         try {
@@ -203,12 +218,19 @@ public class UIDayView extends UICalendarView {
             if(ce.getToDateTime().before(ce.getFromDateTime())) {
               return ;
             }
-            if(ce.getCalType().equals(CalendarUtils.PRIVATE_TYPE)) {
-              CalendarUtils.getCalendarService().saveUserEvent(username, calendarId, ce, false) ;
-            }else if(ce.getCalType().equals(CalendarUtils.SHARED_TYPE)){
-              CalendarUtils.getCalendarService().saveEventToSharedCalendar(username, calendarId, ce, false) ;
-            }else if(ce.getCalType().equals(CalendarUtils.PUBLIC_TYPE)){
-              CalendarUtils.getCalendarService().savePublicEvent(calendarId, ce, false) ;          
+            // if it's a 'virtual' occurrence
+            if (isOccur && !Utils.isEmpty(recurId)) {
+              List<CalendarEvent> listEvent = new ArrayList<CalendarEvent>();
+              listEvent.add(ce);
+              calService.updateOccurrenceEvent(calendarId, calendarId, ce.getCalType(), ce.getCalType(), listEvent, username);
+            } else {
+              if (ce.getCalType().equals(CalendarUtils.PRIVATE_TYPE)) {
+                CalendarUtils.getCalendarService().saveUserEvent(username, calendarId, ce, false) ;
+              } else if (ce.getCalType().equals(CalendarUtils.SHARED_TYPE)) {
+                CalendarUtils.getCalendarService().saveEventToSharedCalendar(username, calendarId, ce, false) ;
+              } else if (ce.getCalType().equals(CalendarUtils.PUBLIC_TYPE)) {
+                CalendarUtils.getCalendarService().savePublicEvent(calendarId, ce, false) ;          
+              }
             }
             calendarview.setLastUpdatedEventId(eventId) ;
             calendarview.refresh() ;

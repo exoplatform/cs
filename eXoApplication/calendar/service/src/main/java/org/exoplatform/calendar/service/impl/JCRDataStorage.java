@@ -3158,7 +3158,12 @@ public class JCRDataStorage implements DataStorage {
     DateTime ical4jEventFrom = new DateTime(recurEvent.getFromDateTime());
     ical4jEventFrom.setTimeZone(tz);
 
-    DateTime ical4jFrom = new DateTime(from.getTime());
+    java.util.Calendar occurenceFrom = java.util.Calendar.getInstance();
+    occurenceFrom.setTime(from.getTime());
+    // because occurrence event can begin before the 'from' but end after 'from', so it still intersects with [from, to] window
+    // thus, we decrease the 'from' value (by duration of event) to get such occurrences
+    occurenceFrom.add(java.util.Calendar.MINUTE, -(diffMinutes-1));
+    DateTime ical4jFrom = new DateTime(occurenceFrom.getTime());
     DateTime ical4jTo = new DateTime(to.getTime());
     Period period = new Period(ical4jFrom, ical4jTo);
     DateList list = recur.getDates(ical4jEventFrom, period, net.fortuna.ical4j.model.parameter.Value.DATE_TIME);
@@ -3178,8 +3183,7 @@ public class JCRDataStorage implements DataStorage {
 
       String recurId = format.format(occurrence.getFromDateTime());
       // if this occurrence was listed in the exclude list, skip
-      if (excludeIds != null && excludeIds.contains(recurId))
-        continue;
+      if (excludeIds != null && excludeIds.contains(recurId)) continue;
       occurrence.setRecurrenceId(recurId);
       occurrences.put(recurId, occurrence);
     }
@@ -3197,6 +3201,11 @@ public class JCRDataStorage implements DataStorage {
     try {
       if (originalEvent.getRepeatUntilDate() != null) {
         return originalEvent.getRepeatUntilDate();
+      }
+      
+      // in case of repeat forever event
+      if (originalEvent.getRepeatCount() <= 0) {
+        return null;
       }
 
       DateTime ical4jEventFrom = new DateTime(originalEvent.getFromDateTime());

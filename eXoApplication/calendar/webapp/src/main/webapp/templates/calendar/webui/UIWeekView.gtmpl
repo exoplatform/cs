@@ -135,7 +135,7 @@
       <div class="Space"><span></span></div>
       <div style="margin-left: 55px;">
         <div class="EventAlldayBoard">
-                  <% for (event in uicomponent.getEventList().values()) {
+                  <% for (event in uicomponent.allDayEvent) {
                     begindate =  event.getFromDateTime().getTime() ;  
                     enddate = event.getToDateTime().getTime() ; 
                     leftClass = "LeftResizeEvent ResizableSign" ;
@@ -190,7 +190,7 @@
            dayOfWeek = cl.get(Calendar.DAY_OF_WEEK) ;
           events = uicomponent.getEventData().get(key) ; 
           if(events != null) {
-          for(event in events.values()){ 
+          for(event in events){ 
             begin =  tf.format(event.fromDateTime) ;
             begindate = dtf.format(event.fromDateTime) ;
             end = tf.format(event.toDateTime) ; 
