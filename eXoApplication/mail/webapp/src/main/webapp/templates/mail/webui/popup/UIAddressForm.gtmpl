@@ -16,7 +16,7 @@
               <div class="MiddleBar">
                     <span class="SearchTitle"><%=_ctx.appRes(uicomponent.id+ ".label.contact-search") %>:</span>
                     <% uiform.renderField(uiform.CONTACT_SEARCH) %>
-                    <a class="SearchIcon" href="<%=uicomponent.event("SearchContact")%>" title="<%=_ctx.appRes(uicomponent.id+ '.label.quick-search') %>"><span></span></a>
+                    <a class="SearchIcon" href="<%=uicomponent.event("SearchContact")%>" title="<%=_ctx.appRes(uicomponent.id+ '.label.quick-search') %>"><span>&nbsp;</span></a>
                   
                  
                   <span class="SelectedLabel"><%=_ctx.appRes(uicomponent.id+ ".label.selected-group") %> : </span>
