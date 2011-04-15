@@ -97,14 +97,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
     @EventConfig(listeners = UIContacts.CopyContactActionListener.class),
     @EventConfig(listeners = UIContacts.ViewDetailsActionListener.class),
     @EventConfig(listeners = UIContacts.SortActionListener.class),
-    
-    @EventConfig(listeners = UIContacts.FirstPageActionListener.class),
-    @EventConfig(listeners = UIContacts.PreviousPageActionListener.class),
-    @EventConfig(listeners = UIContacts.NextPageActionListener.class),
-    @EventConfig(listeners = UIContacts.LastPageActionListener.class),
-    
     @EventConfig(listeners = UIContacts.GotoPageActionListener.class),
-    
     @EventConfig(listeners = UIContacts.ExportContactActionListener.class),
     @EventConfig(listeners = UIContacts.CancelActionListener.class),
     @EventConfig(listeners = UIContacts.SelectTagActionListener.class),
@@ -119,7 +112,6 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   public boolean                         viewListBeforePrint                = false;
 
   private String                         selectedTag_                       = null;
-
 
   private String                         selectedGroup                      = null;
 
@@ -148,7 +140,6 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   private boolean                        isPrintDetail                      = false;
 
   private boolean                        isSelectSharedContacts             = false;
-
 
   private String                         selectedTagBeforeSearch_           = null;
 
@@ -1052,7 +1043,6 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           contact.setViewPermissionUsers(null);
           contact.setViewPermissionGroups(null);
         }
-        // cs-2157
         if (pastedContact.size() > 0) {
           uiContacts.setContact(sharedContacts, false);
           uiContacts.pageList_.getAll().addAll(pastedContact);
@@ -1349,7 +1339,6 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource();
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
-      // cs-1278
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());
       UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class);
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class);
@@ -1424,54 +1413,6 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());
       } else {
         uiContacts.clearCheckedList();
-      }
-    }
-  }
-
-  static public class FirstPageActionListener extends EventListener<UIContacts> {
-    public void execute(Event<UIContacts> event) throws Exception {
-      UIContacts uiContacts = event.getSource();
-      JCRPageList pageList = uiContacts.getContactPageList();
-      if (pageList != null) {
-        pageList.setCurrentPage(1);
-        uiContacts.updateList();
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());
-      }
-    }
-  }
-
-  static public class PreviousPageActionListener extends EventListener<UIContacts> {
-    public void execute(Event<UIContacts> event) throws Exception {
-      UIContacts uiContacts = event.getSource();
-      JCRPageList pageList = uiContacts.getContactPageList();
-      if (pageList != null && pageList.getCurrentPage() > 1) {
-        pageList.setCurrentPage(pageList.getCurrentPage() - 1);
-        uiContacts.updateList();
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());
-      }
-    }
-  }
-
-  static public class NextPageActionListener extends EventListener<UIContacts> {
-    public void execute(Event<UIContacts> event) throws Exception {
-      UIContacts uiContacts = event.getSource();
-      JCRPageList pageList = uiContacts.getContactPageList();
-      if (pageList != null && pageList.getCurrentPage() < pageList.getAvailablePage()) {
-        pageList.setCurrentPage(pageList.getCurrentPage() + 1);
-        uiContacts.updateList();
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());
-      }
-    }
-  }
-
-  static public class LastPageActionListener extends EventListener<UIContacts> {
-    public void execute(Event<UIContacts> event) throws Exception {
-      UIContacts uiContacts = event.getSource();
-      JCRPageList pageList = uiContacts.getContactPageList();
-      if (pageList != null) {
-        pageList.setCurrentPage(pageList.getAvailablePage());
-        uiContacts.updateList();
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());
       }
     }
   }
