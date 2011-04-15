@@ -1,6 +1,6 @@
  <%
-   import org.exoplatform.contact.service.ContactAttachment;
-   import org.exoplatform.contact.service.impl.JCRDataStorage;
+  import org.exoplatform.contact.service.ContactAttachment;
+  import org.exoplatform.contact.service.impl.JCRDataStorage;
   import org.exoplatform.contact.service.AddressBook;
   import org.exoplatform.contact.service.Tag;
   import org.exoplatform.contact.service.ContactService;
@@ -11,7 +11,6 @@
   import org.exoplatform.contact.service.JCRPageList;
   import org.exoplatform.contact.service.SharedAddressBook;
   import org.exoplatform.contact.service.impl.NewUserListener;
-  import java.util.HashMap;
   import java.util.Map;
   import org.exoplatform.container.PortalContainer;
 
@@ -34,10 +33,10 @@
   String previousPageAction = "#" ;
   String nextPageAction = "#" ;
   String lastPageAction = "#" ; 
-
-  Contact[] contacts = uicomponent.getContacts();
+	
+  List contacts = uicomponent.getContacts();
   
-  if (pageList == null || contacts.length == 0) {
+  if (pageList == null || contacts.size() == 0) {
     availableContact = 0 ;    
   } else {
     currentPage = pageList.getCurrentPage();
@@ -46,13 +45,13 @@
     pageSize = pageList.getPageSize() ;
     if (currentPage > 1) {
       cssPreviousPage = "FloatBlock";
-      firstPageAction = uicomponent.event("FirstPage") ;  
-      previousPageAction = uicomponent.event("PreviousPage") ;
+      firstPageAction = uicomponent.event("GotoPage", uicomponent.FIRST_PAGE) ;  
+      previousPageAction = uicomponent.event("GotoPage", uicomponent.PREVIOUS_PAGE) ;
     }
     if (currentPage < availablePage) {
       cssNextPage = "FloatBlock";
-      nextPageAction = uicomponent.event("NextPage") ;
-      lastPageAction = uicomponent.event("LastPage") ;
+      nextPageAction = uicomponent.event("GotoPage", uicomponent.NEXT_PAGE) ;
+      lastPageAction = uicomponent.event("GotoPage", uicomponent.LAST_PAGE) ;
      }
     long fromIndex = (currentPage - 1)* pageSize + 1;
     long endIndex = fromIndex-1 + pageSize;
@@ -62,8 +61,10 @@
     else 
       contactRange = _ctx.appRes(uicomponent.getName() + ".label.contacts") + "&nbsp;" + fromIndex + " - " + endIndex + "&nbsp;" +_ctx.appRes(uicomponent.getName() + ".label.of") + "&nbsp;" + availableContact ;
   }
+  List<String> currentCheckedList = uicomponent.getCurrentCheckedList();
   //Check selected item before run any action
   def msg = _ctx.appRes("UIContacts.msg.have-no-item");
+  String confirm = "onclick=\"eXo.cs.Utils.confirmAction(this,'"+msg+"','"+uiform.id+"') ;\"";
   
   if(uicomponent.getViewContactsList()) {
     rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.cs.CheckBox.init("' + uiform.id + '");') ;
@@ -86,7 +87,7 @@
           </div>
           <% } %>
           
-          <a href="javascript:void(0);" onclick='eXo.cs.Utils.confirmAction(this,"$msg","<%=uiform.id%>") ;' actionLink="<%=uicomponent.event("MoveContacts")%>" class="ControlButton">
+          <a href="javascript:void(0);" <%=uicomponent.getOnclickEvent("MoveContacts", confirm);%> actionLink="<%=uicomponent.event("MoveContacts")%>" class="ControlButton">
             <div class="Icon MoveIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.move")%>"><span></span></div>
           </a>          
           <!--<div class="SeparatorLine"><span></span></div>-->
@@ -95,25 +96,25 @@
             <div class="Icon ChatIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.instantMessage")%>"><span></span></div>
           </a>
           -->
-          <a href="javascript:void(0);" onclick='eXo.cs.Utils.confirmAction(this,"$msg","<%=uiform.id%>") ;' actionLink="<%=uicomponent.event("Tag")%>" class="ControlButton">
+          <a href="javascript:void(0);" <%=uicomponent.getOnclickEvent("Tag", confirm);%> actionLink="<%=uicomponent.event("Tag")%>" class="ControlButton">
             <div class="Icon SelectTagIcon"title="<%=_ctx.appRes(uicomponent.getName() + ".label.tag")%>"><span></span></div>
           </a>
-          <a href="javascript:void(0);" onclick='eXo.cs.Utils.confirmAction(this,"$msg","<%=uiform.id%>") ;' actionLink="<%=uicomponent.event("SendEmail")%>" class="ControlButton">
+          <a href="javascript:void(0);" <%=uicomponent.getOnclickEvent("SendEmail", confirm);%> actionLink="<%=uicomponent.event("SendEmail")%>" class="ControlButton">
             <div class="Icon MessageIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.email")%>"><span></span></div>
           </a>
         <!--  <div class="SeparatorLine"><span></span></div>-->
-          <a href="javascript:void(0);" onclick='eXo.cs.Utils.confirmAction(this,"$msg","<%=uiform.id%>") ;' actionLink="<%=uicomponent.event("DeleteContacts", uicomponent.id, "null")%>" class="ControlButton">
+          <a href="javascript:void(0);" <%=uicomponent.getOnclickEvent("DeleteContacts", confirm);%> actionLink="<%=uicomponent.event("DeleteContacts", uicomponent.id, "null")%>" class="ControlButton">
             <div class="Icon DustBin16x16Icon " title="<%=_ctx.appRes(uicomponent.getName() + ".label.delete")%>"><span></span></div>
           </a>
           
-          <a href="javascript:void(0);" onclick='eXo.cs.Utils.confirmAction(this,"$msg","<%=uiform.id%>") ;' actionLink="<%= uicomponent.event("Print") %>" class="ControlButton">
+          <a href="javascript:void(0);" <%=uicomponent.getOnclickEvent("Print", confirm);%> actionLink="<%= uicomponent.event("Print") %>" class="ControlButton">
               <div class="Icon PrintIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.print")%>"><span></span></div>
           </a>
         
-          <a href="javascript:void(0);" onclick='eXo.cs.Utils.confirmAction(this,"$msg","<%=uiform.id%>") ;' actionLink="<%=uicomponent.event("CopyContact")%>" class="ControlButton">
+          <a href="javascript:void(0);" <%=uicomponent.getOnclickEvent("Print", confirm);%> actionLink="<%=uicomponent.event("CopyContact")%>" class="ControlButton">
               <div class="Icon CopyContactIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.copyContacts")%>"><span></span></div>
           </a>
-          <a href="javascript:void(0);" onclick='eXo.cs.Utils.confirmAction(this,"$msg","<%=uiform.id%>") ;' actionLink="<%=uicomponent.event("SharedContacts")%>" class="ControlButton">
+          <a href="javascript:void(0);" <%=uicomponent.getOnclickEvent("SharedContacts", confirm);%> actionLink="<%=uicomponent.event("SharedContacts")%>" class="ControlButton">
               <div class="Icon ShareIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.sharedContacts")%>"><span></span></div>
           </a>
           <div style="clear: both;"><span></span></div>
@@ -121,7 +122,7 @@
         <div class="TitleSearch" ><%=_ctx.appRes(uicomponent.getName() + ".label.searchResult")%></div>
   <% } else if (uicomponent.selectedGroup != null || uicomponent.selectedTag_ != null || uicomponent.isSelectSharedContacts || isDisplaySearchResult) { %>
         <div class="UIContactActionsBar">
-          <a href="javascript:void(0);" onclick='eXo.cs.Utils.confirmAction(this,"$msg","<%=uiform.id%>") ;' actionLink="<%=uicomponent.event("MoveContacts")%>" class="ControlButton">
+          <a href="javascript:void(0);" <%=uicomponent.getOnclickEvent("MoveContacts", confirm);%> actionLink="<%=uicomponent.event("MoveContacts")%>" class="ControlButton">
             <div class="Icon MoveIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.move")%>"><span></span></div>
           </a>          
           <!--<div class="SeparatorLine"><span></span></div>-->
@@ -133,25 +134,25 @@
           </a>
           -->
           
-          <a href="javascript:void(0);" onclick='eXo.cs.Utils.confirmAction(this,"$msg","<%=uiform.id%>") ;' actionLink="<%=uicomponent.event("Tag")%>" class="ControlButton">
+          <a href="javascript:void(0);" <%=uicomponent.getOnclickEvent("Tag", confirm);%> actionLink="<%=uicomponent.event("Tag")%>" class="ControlButton">
             <div class="Icon SelectTagIcon"title="<%=_ctx.appRes(uicomponent.getName() + ".label.tag")%>"><span></span></div>
           </a>
-          <a href="javascript:void(0);" onclick='eXo.cs.Utils.confirmAction(this,"$msg","<%=uiform.id%>") ;' actionLink="<%=uicomponent.event("SendEmail")%>" class="ControlButton">
+          <a href="javascript:void(0);" <%=uicomponent.getOnclickEvent("SendEmail", confirm);%> actionLink="<%=uicomponent.event("SendEmail")%>" class="ControlButton">
             <div class="Icon MessageIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.email")%>"><span></span></div>
           </a>
           <div class="SeparatorLine"><span></span></div>
-          <a href="javascript:void(0);" onclick='eXo.cs.Utils.confirmAction(this,"$msg","<%=uiform.id%>") ;' actionLink="<%=uicomponent.event("DeleteContacts", uicomponent.id, "null")%>" class="ControlButton">
+          <a href="javascript:void(0);" <%=uicomponent.getOnclickEvent("DeleteContacts", confirm);%> actionLink="<%=uicomponent.event("DeleteContacts", uicomponent.id, "null")%>" class="ControlButton">
             <div class="Icon DustBin16x16Icon " title="<%=_ctx.appRes(uicomponent.getName() + ".label.delete")%>"><span></span></div>
           </a>
           
-          <a href="javascript:void(0);" onclick='eXo.cs.Utils.confirmAction(this,"$msg","<%=uiform.id%>") ;' actionLink="<%= uicomponent.event("Print") %>" class="ControlButton">
+          <a href="javascript:void(0);" <%=uicomponent.getOnclickEvent("Print", confirm);%> actionLink="<%= uicomponent.event("Print") %>" class="ControlButton">
               <div class="Icon PrintIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.print")%>"><span></span></div>
           </a>
         
-          <a href="javascript:void(0);" onclick='eXo.cs.Utils.confirmAction(this,"$msg","<%=uiform.id%>") ;' actionLink="<%=uicomponent.event("CopyContact")%>" class="ControlButton">
+          <a href="javascript:void(0);" <%=uicomponent.getOnclickEvent("CopyContact", confirm);%> actionLink="<%=uicomponent.event("CopyContact")%>" class="ControlButton">
               <div class="Icon CopyContactIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.copyContacts")%>"><span></span></div>
           </a>
-          <a href="javascript:void(0);" onclick='eXo.cs.Utils.confirmAction(this,"$msg","<%=uiform.id%>") ;' actionLink="<%=uicomponent.event("SharedContacts")%>" class="ControlButton">
+          <a href="javascript:void(0);" <%=uicomponent.getOnclickEvent("SharedContacts", confirm);%> actionLink="<%=uicomponent.event("SharedContacts")%>" class="ControlButton">
               <div class="Icon ShareIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.sharedContacts")%>"><span></span></div>
           </a>
           <% if (availableContact > 10) { %>
@@ -181,7 +182,7 @@
             <thead>
               <tr>
                 <th style="width: 18px; padding-left: 7px;" class="text">
-                  <input style="margin: 2px 0px 0px 0px; height: auto;" type="checkbox" class="checkbox" <%= uicomponent.isCheckAll() %> title="<%=_ctx.appRes(uicomponent.getName() + ".label.checkAll")%>" value="4"/>
+                  <input style="margin: 2px 0px 0px 0px; height: auto;" type="checkbox" class="checkbox" <%=uicomponent.checkedAll%> title="<%=_ctx.appRes("UIContacts.label.checkAll")%>" value="4"/>
                 </th>
                 <th style="width: 24px;" class="text"><div class="Icon BlueTagIcon"><span></span></div></th>
                 <th style="width: 20%;" class="text">
@@ -343,7 +344,6 @@
                   }
                   
                    String actionLink  = uicomponent.event("SelectedContact", contact.getId()) ;
-                  checkboxField = uicomponent.getChildById(contact.getId()) ;
                   iconTag = null ;
                   String[] tagIds = contact.getTags() ;
                   StringBuffer tagsName = new StringBuffer() ;
@@ -364,6 +364,11 @@
                    cssClass = "Normal" ;
                    String selectedContact = uicomponent.getSelectedContact() ;
                   if (selectedContact != null && contact.getId().equals(selectedContact)) cssClass = "Selected" ;
+                  checkboxField = uicomponent.getChildById(contact.getId()) ;
+                  if (currentCheckedList.contains(contact.getId())) {
+                    cssClass += " UIHightLight";
+                  }
+                  
              %>
                 
               <tr class="UIContactList $cssClass" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" havePermissionAdd="<%=uicomponent.havePermissionAdd(contact)%>" isSharedAddress = "<%=uicomponent.isSharedAddress(contact)%>" isOwner="<%=contact.isOwner()%>"> 
@@ -427,7 +432,6 @@
                   Map tagMap = uicomponent.getTagMap() ;
                   for(contact in contacts) {
                     String actionLink  = uicomponent.event("SelectedContact", contact.getId()) ;
-                    checkboxField = uicomponent.getChildById(contact.getId()) ;
                     iconTag = null ;
                     String[] tagIds = contact.getTags() ;
                     StringBuffer tagsName = new StringBuffer() ;
@@ -450,6 +454,10 @@
                     }
                     cssClass = "Normal" ;
                     if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "Selected" ;                
+                    checkboxField = uicomponent.getChildById(contact.getId()) ;
+                    if (currentCheckedList.contains(contact.getId())) {
+                      cssClass += " UIHightLight";
+                    }
             %>
               
               <tr class="UIContactList $cssClass" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" havePermissionAdd="<%=uicomponent.havePermissionAdd(contact)%>" isSharedAddress = "<%=uicomponent.isSharedAddress(contact)%>" isOwner="<%=contact.isOwner()%>">
@@ -507,7 +515,7 @@
              <% } %>
           </table>        
 
-        <% if (contacts.length == 0 && (uicomponent.selectedGroup != null || uicomponent.selectedTag_ != null || uicomponent.isSelectSharedContacts || isDisplaySearchResult)) { %>
+        <% if (contacts.size() == 0 && (uicomponent.selectedGroup != null || uicomponent.selectedTag_ != null || uicomponent.isSelectSharedContacts || isDisplaySearchResult)) { %>
              <div style="text-align : center" class="MessageNotice"><%=_ctx.appRes(uicomponent.getName() + ".label.notContactFound")%></div>
         <% } %>
          
@@ -579,8 +587,8 @@
           i = 0 ;
           Contact contact ;
           Map tagMap = uicomponent.getTagMap() ;
-          while (i < contacts.length) {            
-            contact = contacts[i ++] ;
+          while (i < contacts.size()) {            
+            contact = contacts.get(i ++) ;
             iconTag = null ;
             String[] tagIds = contact.getTags() ;
             if (tagIds != null && tagIds.length > 0) {
@@ -698,8 +706,6 @@
                     <% } else { %>
                         <%= emailAdd %>
                     <% } %>    
-                    
-                                  
                   </span> 
                   
                 </div>
@@ -753,8 +759,8 @@
       </td>
       <td style="border: none;">
       <%
-      if (i < contacts.length) {
-        contact = contacts[i ++] ;
+      if (i < contacts.size()) {
+        contact = contacts.get(i ++) ;
         iconTag = null ;
         tagIds = contact.getTags() ;
         if (tagIds != null && tagIds.length > 0) {

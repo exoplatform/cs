@@ -184,7 +184,7 @@ public class UITags extends UIComponent {
       UIContacts uiContacts = workingContainer.findFirstComponentOfType(UIContacts.class) ;      
       UIContactPreview uiContactPreview = workingContainer.findFirstComponentOfType(UIContactPreview.class) ;
       uiContactPreview.setRendered(false) ;
-      uiContacts.setListBeforePrint(Arrays.asList(uiContacts.getContacts())) ;
+      uiContacts.backupBeforePrint() ;
       uiContacts.setViewListBeforePrint(uiContacts.getViewContactsList()) ;
       uiContacts.setViewContactsList(false) ;
       uiContacts.setPrintForm(true) ;
