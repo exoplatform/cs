@@ -160,6 +160,11 @@
 .UIDayView .WorkOffTime {
   background-color: #f3f3f3;
 }
+
+.UIDayView .Title{
+  width: 350px;
+  text-align: center;
+}
 /*====================Week View============================*/
 
 .UIWeekView .EventWeekContent {
@@ -428,7 +433,6 @@
 
 .UIWeekView .TitleBar .Title {
    width:350px;
-   min-width: 350px;
    text-align:center;
 }
 
@@ -663,6 +667,11 @@
 .UIYearView .MonthList .Highlight a{
   font-weight:bold;
 }
+
+.UIYearView .Title{
+  width: 350px;
+  text-align: center;
+}
 /*====================Event List View=====================*/
 
 .UIListView {
@@ -702,6 +711,11 @@
   padding-right: 20px;
   background-position: no-repeat right;
   line-height: 16px;
+}
+
+.Result .Title{
+  width: 350px;
+  text-align: center;
 }
 
 .ListBar {
@@ -1146,6 +1160,11 @@
   white-space: nowrap;
   -moz-user-select : none;
   overflow-x: hidden;
+}
+
+.UIMonthView .Title{
+  width: 350px;
+  text-align: center;
 }
 
 .UICalendarPortlet .MoreEvent {
