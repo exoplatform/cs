@@ -184,7 +184,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   
   public String getOnclickEvent(String eventName, String confirm) throws Exception {
     if (totalCheked > 0){
-      confirm = "onclick=\""+event(eventName)+"\"";
+       return "onclick=\""+event(eventName)+"\"";
     }
     return confirm;
   }
