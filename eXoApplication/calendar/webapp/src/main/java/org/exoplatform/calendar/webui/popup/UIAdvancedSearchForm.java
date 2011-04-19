@@ -29,7 +29,7 @@ import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventCategory;
-import org.exoplatform.calendar.service.EventPageListQuery;
+import org.exoplatform.calendar.service.EventPageList;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Utils;
@@ -339,7 +339,8 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
         }
         
         query.setOrderBy(new String[] {Utils.EXO_SUMMARY});
-        uiListView.update(new EventPageListQuery(username, query.getQueryStatement(), 10)) ;
+        List<CalendarEvent> allEvents = uiListView.getAllEvents(query);
+        uiListView.update(new EventPageList(allEvents,10));
         calendarViewContainer.setRenderedChild(UICalendarViewContainer.LIST_VIEW) ;        
         if(!uiListView.isDisplaySearchResult()) uiListView.setLastViewId(currentView) ;
         uiListView.setDisplaySearchResult(true) ;

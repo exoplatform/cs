@@ -37,7 +37,7 @@ import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
-import org.exoplatform.calendar.service.EventPageListQuery;
+import org.exoplatform.calendar.service.EventPageList;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Utils;
@@ -1098,7 +1098,8 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         eventQuery.setToDate(tocalendar) ;
         eventQuery = CalendarUtils.getEventQuery(uiPortlet.findFirstComponentOfType(UICalendars.class), eventQuery);
         uiListView.setEventQuery(eventQuery);
-        uiListView.update(new EventPageListQuery(username, eventQuery.getQueryStatement(), 10)) ;
+        List<CalendarEvent> allEvents = uiListView.getAllEvents(eventQuery);
+        uiListView.update(new EventPageList(allEvents,10));
         uiListView.setShowEventAndTask(false) ;
         uiListView.setDisplaySearchResult(false) ;
         uiListView.isShowEvent_ = false ;

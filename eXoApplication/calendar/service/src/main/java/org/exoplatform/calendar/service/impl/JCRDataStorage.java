@@ -3021,8 +3021,15 @@ public class JCRDataStorage implements DataStorage {
     if (calendar == null)
       return null;
     List<CalendarEvent> recurEvents = new ArrayList<CalendarEvent>();
-    StringBuffer queryString = new StringBuffer("/jcr:root" + calendar.getPath() + "//element(*,exo:repeatCalendarEvent)[@exo:repeat!='").append(CalendarEvent.RP_NOREPEAT).append("' and @exo:recurrenceId=''").append(" and (not(@exo:repeatUntil) or @exo:repeatUntil >= xs:dateTime('" + ISO8601.format(from) + "'))").append(" and (not(@exo:repeatFinishDate) or @exo:repeatFinishDate >= xs:dateTime('"
-        + ISO8601.format(from) + "'))");
+    StringBuffer queryString = new StringBuffer("/jcr:root" + calendar.getPath() + "//element(*,exo:repeatCalendarEvent)[@exo:repeat!='")
+                                    .append(CalendarEvent.RP_NOREPEAT).append("' and @exo:recurrenceId=''");
+    if (from != null) {
+      queryString.append(" and (not(@exo:repeatUntil) or @exo:repeatUntil >= xs:dateTime('" + ISO8601.format(from) + "'))")
+        .append(" and (not(@exo:repeatFinishDate) or @exo:repeatFinishDate >= xs:dateTime('"+ ISO8601.format(from) + "'))");      
+    } else {
+      queryString.append(" and (not(@exo:repeatUntil))")
+      .append(" and (not(@exo:repeatFinishDate))");
+    }
     if (calendarIds != null && calendarIds.length > 0) {
       queryString.append(" and (");
       for (int i = 0; i < calendarIds.length; i++) {

@@ -19,12 +19,15 @@ package org.exoplatform.calendar.webui;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
-import org.exoplatform.calendar.service.EventPageListQuery;
+import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.EventPageList;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Utils;
@@ -66,7 +69,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 )
 public class UIListView extends UICalendarView {
   private LinkedHashMap<String, CalendarEvent> eventMap_ = new LinkedHashMap<String, CalendarEvent>() ;
-  private EventPageListQuery pageList_ = null ;
+  private EventPageList pageList_ = null ;
   private String selectedEvent_ = null ;
   private boolean isShowEventAndTask = true ;
   private boolean isSearchResult = false ;
@@ -112,6 +115,7 @@ public class UIListView extends UICalendarView {
   public void refresh() throws Exception{
     UIListContainer uiListContainer = getParent() ;
     if (uiListContainer.isDisplaySearchResult()) return ;
+    CalendarService calendarService = CalendarUtils.getCalendarService();
     String username = CalendarUtils.getCurrentUser() ;
     query = new EventQuery() ;
     if(!CalendarUtils.isEmpty(categoryId_) && !categoryId_.toLowerCase().equals("null")&& !categoryId_.equals("calId")) query.setCategoryId(new String[]{categoryId_}) ;
@@ -149,9 +153,11 @@ public class UIListView extends UICalendarView {
       query.setCalendarId(new String[] {"null"});
     }
     query.setOrderBy(new String[] {Utils.EXO_SUMMARY});
+    
+    List<CalendarEvent> allEvents = getAllEvents(query);
     if(uiListContainer.isDisplaySearchResult())  { update(pageList_) ;
     } else {
-      update(new EventPageListQuery(username, query.getQueryStatement(),10)) ;
+      update(new EventPageList(allEvents,10)) ;
     }
     if(currentPage_ > 0 && currentPage_ <= pageList_.getAvailablePage()) {
       updateCurrentPage(currentPage_) ;
@@ -191,7 +197,28 @@ public class UIListView extends UICalendarView {
       }
     }
   }
-  public void update(EventPageListQuery pageList) throws Exception {
+  
+  public List<CalendarEvent> getAllEvents (EventQuery eventQuery) throws Exception {
+    CalendarService calendarService = CalendarUtils.getCalendarService();
+    String username = CalendarUtils.getCurrentUser() ;
+    List<CalendarEvent> allEvents = calendarService.getEvents(username, eventQuery, getPublicCalendars())  ;    
+    List<CalendarEvent> originalRecurEvents = calendarService.getOriginalRecurrenceEvents(username, eventQuery.getFromDate(), eventQuery.getToDate(), getPublicCalendars());
+    String timezone = CalendarUtils.getCurrentUserCalendarSetting().getTimeZone();
+    if (originalRecurEvents != null && originalRecurEvents.size() > 0) {
+      Iterator<CalendarEvent> recurEventsIter = originalRecurEvents.iterator();
+      while (recurEventsIter.hasNext()) {
+        CalendarEvent recurEvent = recurEventsIter.next();
+        Map<String,CalendarEvent> tempMap = calendarService.getOccurrenceEvents(recurEvent, eventQuery.getFromDate(), eventQuery.getToDate(), timezone);
+        if (tempMap != null) {
+          recurrenceEventsMap.put(recurEvent.getId(), tempMap);
+          allEvents.addAll(tempMap.values());
+        }
+      }
+    }
+    return allEvents;
+  }
+  
+  public void update(EventPageList pageList) throws Exception {
     pageList_ = pageList ;
     updateCurrentPage(pageList_.getCurrentPage()) ;
   }
@@ -375,7 +402,8 @@ public class UIListView extends UICalendarView {
       uiListView.setSortedField(fieldId);
       if (uiListView.isAscending()) query.setOrderType(Utils.ASCENDING);
       else query.setOrderType(Utils.DESCENDING);
-      uiListView.update(new EventPageListQuery(CalendarUtils.getCurrentUser(), query.getQueryStatement(), 10));
+      List<CalendarEvent> allEvents = uiListView.getAllEvents(query);
+      uiListView.update(new EventPageList(allEvents,10));
       uiListView.updateCurrentPage(currentPage);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiListView); 
     }

@@ -16,17 +16,16 @@
  **/
 package org.exoplatform.calendar.webui;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
-import org.exoplatform.calendar.service.EventPageListQuery;
+import org.exoplatform.calendar.service.EventPageList;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
-import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.webui.popup.UIAdvancedSearchForm;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -120,7 +119,8 @@ public class UISearchForm extends UIForm {
         eventQuery = CalendarUtils.getEventQuery(uiCalendars, eventQuery);
         uiListView.setViewType(UIListView.TYPE_BOTH) ;
         uiListView.setEventQuery(eventQuery);
-        uiListView.update(new EventPageListQuery(username, eventQuery.getQueryStatement(), 10)) ;
+        List<CalendarEvent> allEvents = uiListView.getAllEvents(eventQuery);
+        uiListView.update(new EventPageList(allEvents,10));
         uiListView.setDisplaySearchResult(true) ;
         uiListView.setSelectedEvent(null) ;
         uiListView.setLastUpdatedEventId(null) ;
