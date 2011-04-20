@@ -72,9 +72,7 @@ addDependency(new Project("org.exoplatform.ecms", "exo-ecms-core-parser", "jar",
     addDependency(new Project("jivesoftware", "smackx", "jar", "${jivesoftware.smackx.version}")).
     addDependency(new Project("org.jcrom", "jcrom", "jar", "${jcrom.version}")).
     addDependency(new Project("commons-fileupload", "commons-fileupload", "jar", "${commons-fileupload.version}")).
-    addDependency(new Project("commons-io", "commons-io", "jar", "${commons-io.version}")).
-    addDependency(new Project("org.slf4j", "slf4j-api", "jar", "${org.slf4j.version}")).
-    addDependency(new Project("org.slf4j", "slf4j-jdk14", "jar", "${org.slf4j.version}")));
+    addDependency(new Project("commons-io", "commons-io", "jar", "${commons-io.version}")));
   module.eXoApplication.chat.deployName = "chat";
   
   module.eXoApplication.chatbar =

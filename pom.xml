@@ -91,7 +91,7 @@
     <!--need when deploy CS-->
     <org.apache.pdfbox.fontbox.version>1.4.0</org.apache.pdfbox.fontbox.version>
     <jdom.version>1.0</jdom.version>
-    <org.slf4j.version>1.6.1</org.slf4j.version>
+    <org.slf4j.version>1.5.6</org.slf4j.version>
 	  <c3p0.version>0.9.1.2</c3p0.version>
     <net.oauth.version>20080621</net.oauth.version>
     <cglib.version>2.2</cglib.version>
