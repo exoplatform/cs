@@ -1,0 +1,40 @@
+Index: eXoApplication/calendar/service/src/main/java/org/exoplatform/calendar/service/PopupReminderJob.java
+===================================================================
+--- eXoApplication/calendar/service/src/main/java/org/exoplatform/calendar/service/PopupReminderJob.java	(revision 67314)
++++ eXoApplication/calendar/service/src/main/java/org/exoplatform/calendar/service/PopupReminderJob.java	(working copy)
+@@ -118,9 +118,9 @@
+         }
+       }
+     } catch (RepositoryException e) {
+-      if (log_.isDebugEnabled()) log_.debug("Data base not ready!");
++      if (log_.isDebugEnabled()) log_.debug("Database is not ready!", e);
+     } catch (Exception e) {
+-      if (log_.isDebugEnabled()) log_.debug(e.toString());
++      if (log_.isDebugEnabled()) log_.debug("Update reminder is failed", e);
+     } finally {
+       provider.close(); // release sessions
+     }
+Index: web/csportal/src/main/webapp/WEB-INF/conf/cs/cs-plugins-configuration.xml
+===================================================================
+--- web/csportal/src/main/webapp/WEB-INF/conf/cs/cs-plugins-configuration.xml	(revision 67314)
++++ web/csportal/src/main/webapp/WEB-INF/conf/cs/cs-plugins-configuration.xml	(working copy)
+@@ -39,7 +39,7 @@
+           <property name="job" value="org.exoplatform.calendar.service.ReminderJob"/>
+           <property name="repeatCount" value="0"/>
+           <property name="period" value="180000"/>     
+-          <property name="startTime" value="+0"/>
++          <property name="startTime" value="+60000"/>
+           <property name="endTime" value=""/>               
+         </properties-param>
+         <properties-param>
+@@ -67,8 +67,8 @@
+           <property name="groupName" value="CollaborationSuite"/>
+           <property name="job" value="org.exoplatform.calendar.service.PopupReminderJob"/>
+           <property name="repeatCount" value="0"/>
+-          <property name="period" value="6000"/>     
+-          <property name="startTime" value="+0"/>
++          <property name="period" value="15000"/>     
++          <property name="startTime" value="+60000"/>
+           <property name="endTime" value=""/>               
+         </properties-param>
+ 				<properties-param>

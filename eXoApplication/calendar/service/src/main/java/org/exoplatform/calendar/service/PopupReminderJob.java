@@ -118,9 +118,9 @@ public class PopupReminderJob implements Job {
         }
       }
     } catch (RepositoryException e) {
-      if (log_.isDebugEnabled()) log_.debug("Data base not ready!");
+      if (log_.isDebugEnabled()) log_.debug("Database is not ready!", e);
     } catch (Exception e) {
-      if (log_.isDebugEnabled()) log_.debug(e.toString());
+      if (log_.isDebugEnabled()) log_.debug("Update reminder is failed", e);
     } finally {
       provider.close(); // release sessions
     }
