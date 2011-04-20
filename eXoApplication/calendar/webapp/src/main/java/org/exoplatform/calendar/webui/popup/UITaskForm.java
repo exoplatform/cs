@@ -374,9 +374,9 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
       return CalendarUtils.getBeginDay(df.parse(fromField)).getTime();
     } 
-    DateFormat df = new SimpleDateFormat(dateFormat + " "  + timeFormat, locale) ;
+    DateFormat df = new SimpleDateFormat(dateFormat + Utils.SPACE  + timeFormat, locale) ;
     df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
-    return df.parse(fromField + " " + timeField) ;
+    return df.parse(fromField + Utils.SPACE + timeField) ;
   }
   
   protected String getTaskFormDateValue () {
@@ -408,9 +408,9 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
       return CalendarUtils.getEndDay(df.parse(toField)).getTime();
     } 
-    DateFormat df = new SimpleDateFormat(dateFormat + " " + timeFormat, locale) ;
+    DateFormat df = new SimpleDateFormat(dateFormat + Utils.SPACE + timeFormat, locale) ;
     df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
-    return df.parse(toField + " " + timeField) ;
+    return df.parse(toField + Utils.SPACE + timeField) ;
   }
   
   protected Date getTaskToDate(String dateFormat, String timeFormat) throws Exception {

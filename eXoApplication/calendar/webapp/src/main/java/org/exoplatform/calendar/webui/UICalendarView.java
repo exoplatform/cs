@@ -1444,7 +1444,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
          CalendarEvent originalEvent = null;
          
          org.exoplatform.calendar.service.Calendar calendar = CalendarUtils.getCalendar(calType, calendarId);
-         // cs-4429: fix for group calendar permission
          if(uiCalendarView.isHaveNotPermission(calendar, calType)) 
          {
            UIApplication uiApp = uiCalendarView.getAncestorOfType(UIApplication.class) ;
