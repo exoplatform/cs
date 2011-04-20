@@ -311,9 +311,8 @@
 		<version>${xml-apis.version}</version>
 	  </dependency>
 	  <dependency>
-		<groupId>quartz</groupId>
-		<artifactId>quartz</artifactId>
-		<version>${quartz.version}</version>
+      <groupId>org.quartz-scheduler</groupId>
+      <artifactId>quartz</artifactId>
 	  </dependency>
 	  <dependency>
 		<groupId>rome</groupId>
@@ -506,9 +505,9 @@
       <version>${org.exoplatform.tool.version}</version>      
     </dependency>	
 	<dependency>
-      <groupId>javassist</groupId>
+      <groupId>org.javassist</groupId>
       <artifactId>javassist</artifactId>
-      <version>${javassist.version}</version>      
+      <version>${org.javassist.version}</version>      
     </dependency>
 	<dependency>
       <groupId>html-parser</groupId>

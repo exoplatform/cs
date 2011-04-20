@@ -35,7 +35,7 @@ public class MockImapFolder extends IMAPFolder {
   int                                  i                = 0;
 
   protected MockImapFolder(ExoMockStore store, Mailbox mailbox) {
-    super("INBOX", ';', store);
+    super("INBOX", ';', store, false);
     this.mailbox = mailbox;
   }
 

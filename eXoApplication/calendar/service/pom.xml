@@ -85,9 +85,8 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>quartz</groupId>
+      <groupId>org.quartz-scheduler</groupId>
       <artifactId>quartz</artifactId>
-      <version>${quartz.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -131,6 +130,11 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>commons-chain</groupId>
       <artifactId>commons-chain</artifactId>
       <version>${commons-chain.version}</version>
@@ -150,7 +154,6 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
-      <version>${org.slf4j.slf4j-simple.version}</version>
       <scope>provided</scope>
     </dependency>    
     <dependency>

@@ -166,4 +166,16 @@ public class FakeJobSchedulerServiceImpl implements JobSchedulerService {
 
   }
 
+  @Override
+  public void addCronJob(ComponentPlugin plugin) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public void addPeriodJob(ComponentPlugin plugin) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
+
 }

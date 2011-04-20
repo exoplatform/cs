@@ -158,16 +158,8 @@ public class DeliveryStatus {
 
   private static void writeInternetHeaders(InternetHeaders h, LineOutputStream los) throws IOException {
     Enumeration e = h.getAllHeaderLines();
-    try {
-      while (e.hasMoreElements())
-        los.writeln((String) e.nextElement());
-    } catch (MessagingException mex) {
-      Exception ex = mex.getNextException();
-      if (ex instanceof IOException)
-        throw (IOException) ex;
-      else
-        throw new IOException("Exception writing headers: " + mex);
-    }
+    while (e.hasMoreElements())
+      los.writeln((String) e.nextElement());
   }
 
   public String toString() {
