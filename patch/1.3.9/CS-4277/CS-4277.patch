@@ -1,0 +1,14 @@
+Index: eXoApplication/calendar/webapp/src/main/webapp/skin/DefaultSkin/webui/Stylesheet.css
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/webapp/skin/DefaultSkin/webui/Stylesheet.css	(revision 65824)
++++ eXoApplication/calendar/webapp/src/main/webapp/skin/DefaultSkin/webui/Stylesheet.css	(working copy)
+@@ -340,5 +340,6 @@
+ }
+ 
+ .UICalendarPortlet .UIUserSelector .UIAddressSearchForm .SearchIcon {
+-	margin: 3px 8px;
+-}
+\ No newline at end of file
++	margin: 3px;
++	width: 20px;
++}
