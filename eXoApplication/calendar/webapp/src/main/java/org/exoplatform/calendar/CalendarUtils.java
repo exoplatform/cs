@@ -1001,12 +1001,14 @@ public class CalendarUtils {
     for (GroupCalendarData calendarData : uiCalendars.getPublicCalendars())
       for (org.exoplatform.calendar.service.Calendar  calendar : calendarData.getCalendars())
         if (checkedCals.contains(calendar.getId())) calendarIds.add(calendar.getId());
-    GroupCalendarData shareClas = uiCalendars.getSharedCalendars();
-    if (shareClas != null)
-      for (org.exoplatform.calendar.service.Calendar cal : shareClas.getCalendars())
+    GroupCalendarData sharedCalendars = uiCalendars.getSharedCalendars();
+    if (sharedCalendars != null) {
+      for (org.exoplatform.calendar.service.Calendar cal : sharedCalendars.getCalendars()) {
         if (checkedCals.contains(cal.getId())) {
           calendarIds.add(cal.getId());
         }
+      }
+    }
     if (calendarIds.size() > 0)
       eventQuery.setCalendarId(calendarIds.toArray(new String[] {}));
     else {
