@@ -168,6 +168,32 @@ public class UICalendars extends UIForm  {
     return list ;
   }
   
+  public EventQuery getEventQuery(EventQuery eventQuery) throws Exception {
+    List<String> checkedCals = getCheckedCalendars() ;  
+    List<String> calendarIds = new ArrayList<String>() ; 
+    for (GroupCalendarData groupCalendarData : getPrivateCalendars())
+      for (org.exoplatform.calendar.service.Calendar cal : groupCalendarData.getCalendars())
+        if (checkedCals.contains(cal.getId())) calendarIds.add(cal.getId());
+    for (GroupCalendarData calendarData : getPublicCalendars())
+      for (org.exoplatform.calendar.service.Calendar  calendar : calendarData.getCalendars())
+        if (checkedCals.contains(calendar.getId())) calendarIds.add(calendar.getId());
+    GroupCalendarData sharedCalendars = getSharedCalendars();
+    if (sharedCalendars != null) {
+      for (org.exoplatform.calendar.service.Calendar cal : sharedCalendars.getCalendars()) {
+        if (checkedCals.contains(cal.getId())) {
+          calendarIds.add(cal.getId());
+        }
+      }
+    }
+    if (calendarIds.size() > 0)
+      eventQuery.setCalendarId(calendarIds.toArray(new String[] {}));
+    else {
+      eventQuery.setCalendarId(new String[] {"null"});
+    }
+    eventQuery.setOrderBy(new String[] {Utils.EXO_SUMMARY});
+    return eventQuery;
+  }
+  
   public List<GroupCalendarData> getPrivateCalendars() throws Exception{
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = CalendarUtils.getCurrentUser() ;

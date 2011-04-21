@@ -1090,13 +1090,12 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         UICalendarPortlet uiPortlet = uiCalendarView.getAncestorOfType(UICalendarPortlet.class) ;
         UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
         UIListView uiListView = uiViewContainer.findFirstComponentOfType(UIListView.class) ;
-        String username = CalendarUtils.getCurrentUser() ;
         EventQuery eventQuery = new EventQuery() ;
         java.util.Calendar fromcalendar  = uiListView.getBeginDay(new GregorianCalendar(uiListView.getCurrentYear(), uiListView.getCurrentMonth(), uiListView.getCurrentDay())) ;
         eventQuery.setFromDate(fromcalendar) ;
         java.util.Calendar tocalendar = uiListView.getEndDay(new GregorianCalendar(uiListView.getCurrentYear(), uiListView.getCurrentMonth(), uiListView.getCurrentDay())) ;
         eventQuery.setToDate(tocalendar) ;
-        eventQuery = CalendarUtils.getEventQuery(uiPortlet.findFirstComponentOfType(UICalendars.class), eventQuery);
+        eventQuery = uiPortlet.findFirstComponentOfType(UICalendars.class).getEventQuery(eventQuery);
         uiListView.setEventQuery(eventQuery);
         List<CalendarEvent> allEvents = uiListView.getAllEvents(eventQuery);
         uiListView.update(new EventPageList(allEvents,10));

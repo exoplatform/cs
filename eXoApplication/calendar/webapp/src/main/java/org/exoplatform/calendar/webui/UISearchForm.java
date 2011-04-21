@@ -116,7 +116,7 @@ public class UISearchForm extends UIForm {
         //Collections.sort(resultList, ceCompare);
 
         UICalendars uiCalendars = uiForm.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UICalendars.class);
-        eventQuery = CalendarUtils.getEventQuery(uiCalendars, eventQuery);
+        eventQuery = uiCalendars.getEventQuery(eventQuery);
         uiListView.setViewType(UIListView.TYPE_BOTH) ;
         uiListView.setEventQuery(eventQuery);
         List<CalendarEvent> allEvents = uiListView.getAllEvents(eventQuery);
