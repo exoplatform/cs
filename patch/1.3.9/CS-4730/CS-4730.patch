@@ -1,0 +1,87 @@
+Index: eXoApplication/content/webapp/src/main/webapp/groovy/rssreader/webui/UIContentNavigation.gtmpl
+===================================================================
+--- eXoApplication/content/webapp/src/main/webapp/groovy/rssreader/webui/UIContentNavigation.gtmpl	(rÃ©vision 67864)
++++ eXoApplication/content/webapp/src/main/webapp/groovy/rssreader/webui/UIContentNavigation.gtmpl	(copie de travail)
+@@ -22,7 +22,7 @@
+ 	</div>
+   <div class="NewsCategory">
+     <div class="UIVerticalSlideTabs">
+-      <div class="UpArrowBar" title="Up Level">
++      <div class="UpArrowBar" title="<%=_ctx.appRes("UIContentNavigation.label.upLevel")%>">
+         <%
+           String upLevelLink = uicomponent.event("UpLevel");                
+         %>
+@@ -37,9 +37,9 @@
+        String editLink = uicomponent.event("EditNode") ;
+         %>
+         <%//if(uicomponent.isLogon()) { %>
+-	        <a href="<%=uicomponent.event("AddNode")%>" class="NavigationControlIcon AddCategory24x24Icon" title="Add a Category"><span></span></a>
+-	        <a href="<%=editLink%>" class="NavigationControlIcon EditCategory24x24Icon" title="Edit Selected Category"><span></span></a>
+-	        <a href="<%=removeLink%>" class="NavigationControlIcon DeleteCategory24x24Icon" title="Remove Selected Category"><span></span></a>
++	        <a href="<%=uicomponent.event("AddNode")%>" class="NavigationControlIcon AddCategory24x24Icon" title="<%=_ctx.appRes("UIContentNavigation.label.addCategory")%>"><span></span></a>
++	        <a href="<%=editLink%>" class="NavigationControlIcon EditCategory24x24Icon" title="<%=_ctx.appRes("UIContentNavigation.label.editSelectedCategory")%>"><span></span></a>
++	        <a href="<%=removeLink%>" class="NavigationControlIcon DeleteCategory24x24Icon" title="<%=_ctx.appRes("UIContentNavigation.label.removeSelectedCategory")%>"><span></span></a>
+ 	    	<% //}%>
+ 	    	<div style="clear: left"><span></span></div>
+ 	    </div>
+Index: eXoApplication/content/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/rssreader/RSSReaderPortlet.properties
+===================================================================
+--- eXoApplication/content/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/rssreader/RSSReaderPortlet.properties	(rÃ©vision 67864)
++++ eXoApplication/content/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/rssreader/RSSReaderPortlet.properties	(copie de travail)
+@@ -26,5 +26,10 @@
+ UIDescription.content.contentPortlet=eXo RSS Reader
+ UIContentNavigation.removeNode=Are you sure you want to delete this content?
+ UIContentNavigation.label.rssreader=RSS Feed Reader
++UIContentNavigation.label.upLevel=Up Level
++UIContentNavigation.label.addCategory=Add a Category
++UIContentNavigation.label.removeSelectedCategory=Remove Selected Category
++UIContentNavigation.label.editSelectedCategory=Edit Selected Category
+ ##############################################################################
+-URLValidator.msg.Invalid-Url=Invalid URL format for the field: {0}
+\ No newline at end of file
++URLValidator.msg.Invalid-Url=Invalid URL format for the field: {0}
++URLValidator.msg.Invalid-config=Invalid configuration URL
+Index: eXoApplication/content/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/rssreader/RSSReaderPortlet_en.properties
+===================================================================
+--- eXoApplication/content/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/rssreader/RSSReaderPortlet_en.properties	(rÃ©vision 67864)
++++ eXoApplication/content/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/rssreader/RSSReaderPortlet_en.properties	(copie de travail)
+@@ -27,6 +27,10 @@
+ UIDescription.content.contentPortlet=Description for content portlet - RSS Reader
+ UIContentNavigation.removeNode=Are you sure you want to delete this node?
+ UIContentNavigation.label.rssreader=RSS Feed Reader
++UIContentNavigation.label.upLevel=Up Level
++UIContentNavigation.label.addCategory=Add a Category
++UIContentNavigation.label.removeSelectedCategory=Remove Selected Category
++UIContentNavigation.label.editSelectedCategory=Edit Selected Category
+ ##############################################################################
+ URLValidator.msg.Invalid-Url=Invalid URL format for the field: {0}
+ UIDetailContent.label.refreshbar=Refresh Bar
+Index: eXoApplication/content/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/rssreader/RSSReaderPortlet_fr.properties
+===================================================================
+--- eXoApplication/content/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/rssreader/RSSReaderPortlet_fr.properties	(rÃ©vision 67864)
++++ eXoApplication/content/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/rssreader/RSSReaderPortlet_fr.properties	(copie de travail)
+@@ -15,7 +15,7 @@
+ UIContentForm.action.Cancel=#{word.cancel}
+ UIContentForm.action.Save=#{word.save}
+ UIContentForm.msg.SameNode=Cet identifiant existe déjà.
+-UIContentForm.msg.UrlNull=Vous devez indiqur l'URL du flux
++UIContentForm.msg.UrlNull=Vous devez indiquer l'URL du flux
+ UIDetailContent.msg.NotFound=Ce flux n'a pu être chargé. Vérifiez l'URL.
+ #############################################################################
+ #          org.exoplatform.content.webui.component.UIContentDetail 					#
+@@ -23,9 +23,14 @@
+ UIContentDetail.action.refresh=Actualiser
+ UIContentDetail.label.description=Description
+ UIDescription.title.contentPortlet=Description
+-UIDescription.content.contentPortlet=eXo RSS Reader
++UIDescription.content.contentPortlet=Lecteur de Flux RSS d'eXo
++UIContentNavigation.label.upLevel=Monter
++UIContentNavigation.label.addCategory=Ajouter une catégorie
++UIContentNavigation.label.removeSelectedCategory=Supprimer catégorie
++UIContentNavigation.label.editSelectedCategory=Modifier catégorie
+ UIContentNavigation.removeNode=Etes-vous sur de vouloir supprimer ce contenu ?
+ UIContentNavigation.label.rssreader=Lecteur de Flux RSS
++
+ ##############################################################################
+ URLValidator.msg.Invalid-Url=Format de l'URL invalide pour le champ : {0}
+ UIDetailContent.label.refreshbar=Actualiser

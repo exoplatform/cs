@@ -22,7 +22,7 @@
 	</div>
   <div class="NewsCategory">
     <div class="UIVerticalSlideTabs">
-      <div class="UpArrowBar" title="Up Level">
+      <div class="UpArrowBar" title="<%=_ctx.appRes("UIContentNavigation.label.upLevel")%>">
         <%
           String upLevelLink = uicomponent.event("UpLevel");                
         %>
@@ -37,9 +37,9 @@
        String editLink = uicomponent.event("EditNode") ;
         %>
         <%//if(uicomponent.isLogon()) { %>
-	        <a href="<%=uicomponent.event("AddNode")%>" class="NavigationControlIcon AddCategory24x24Icon" title="Add a Category"><span></span></a>
-	        <a href="<%=editLink%>" class="NavigationControlIcon EditCategory24x24Icon" title="Edit Selected Category"><span></span></a>
-	        <a href="<%=removeLink%>" class="NavigationControlIcon DeleteCategory24x24Icon" title="Remove Selected Category"><span></span></a>
+	        <a href="<%=uicomponent.event("AddNode")%>" class="NavigationControlIcon AddCategory24x24Icon" title="<%=_ctx.appRes("UIContentNavigation.label.addCategory")%>"><span></span></a>
+	        <a href="<%=editLink%>" class="NavigationControlIcon EditCategory24x24Icon" title="<%=_ctx.appRes("UIContentNavigation.label.editSelectedCategory")%>"><span></span></a>
+	        <a href="<%=removeLink%>" class="NavigationControlIcon DeleteCategory24x24Icon" title="<%=_ctx.appRes("UIContentNavigation.label.removeSelectedCategory")%>"><span></span></a>
 	    	<% //}%>
 	    	<div style="clear: left"><span></span></div>
 	    </div>
