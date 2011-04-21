@@ -367,18 +367,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer);
     }
   }
-/*  
-  static  public class CloseActionListener extends EventListener<UIUserSelector> {
-    public void execute(Event<UIUserSelector> event) throws Exception {
-      UIUserSelector uiUseSelector = event.getSource() ;
-      UIPopupWindow uiPoupPopupWindow = uiUseSelector.getParent() ;
-      UIPopupContainer uiContainer = uiPoupPopupWindow.getAncestorOfType(UIPopupContainer.class) ;
-      uiPoupPopupWindow.setUIComponent(null) ;
-      uiPoupPopupWindow.setShow(false) ;      
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;  
-    }
-  }
-  */
+
   static  public class CancelActionListener extends EventListener<UISharedForm> {
     public void execute(Event<UISharedForm> event) throws Exception {
       UISharedForm uiForm = event.getSource() ;
