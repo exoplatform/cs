@@ -64,6 +64,12 @@ import org.mortbay.cometd.continuation.EXoContinuationBayeux;
 )
 public class UICalendarPortlet extends UIPortletApplication {
   private Log log = ExoLogger.getLogger(this.getClass());
+  
+  /**
+   * Social Space id if existed.
+   */
+  private String spaceId = null;
+  
   public UICalendarPortlet() throws Exception {
     UIActionBar uiActionBar = addChild(UIActionBar.class, null, null) ;
     uiActionBar.setCurrentView(UICalendarViewContainer.TYPES[Integer.parseInt(getCalendarSetting().getViewType())]) ;
@@ -130,10 +136,17 @@ public class UICalendarPortlet extends UIPortletApplication {
     return PortalContainer.getInstance().getRestContextName();
   }
   
-  public String getSpaceId(){
-
+  public String getSpaceId() {
+    return this.spaceId;
+  }
+  
+  public boolean isInSpace() {
+    return this.spaceId != null;
+  }
+  
+  private String getSpaceId(WebuiRequestContext context){
     try {
-      PortletRequestContext pcontext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+      PortletRequestContext pcontext = (PortletRequestContext) context;
       PortletPreferences pref = pcontext.getRequest().getPreferences();
       if(pref.getValue("SPACE_URL", null) != null) {
         String url = pref.getValue("SPACE_URL", null);
@@ -145,7 +158,6 @@ public class UICalendarPortlet extends UIPortletApplication {
     } catch (Exception e) {
       return null;
     }
-
   }
   
   public void processInvitationURL(WebuiRequestContext context) throws Exception {
@@ -251,6 +263,7 @@ public class UICalendarPortlet extends UIPortletApplication {
   }
   
   public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception {
+    this.spaceId = getSpaceId(context);
     try {
       processInvitationURL(context);
     }
