@@ -42,7 +42,7 @@
        <td class="FieldComponent">
          <%=uiForm.getLabel(uiForm.EDIT_PERMISSION)%>
        </td>
-       <td class="" width="10%">
+       <td class="" width="15%">
          &nbsp;
        </td>
      </tr>

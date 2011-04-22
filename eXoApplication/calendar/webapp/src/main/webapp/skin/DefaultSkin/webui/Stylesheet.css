@@ -275,6 +275,18 @@
   white-space: normal;
 }
 
+.UICalendarPortlet .UIForm .HorizontalLayout input {
+  width: 200px;
+}
+
+.UICalendarPortlet .UIForm .HorizontalLayout input.checkbox {
+  width: auto;
+}
+
+.UICalendarPortlet .UIAttachFileForm .SelectFileFrame {
+  width: 350px;
+}
+
 .UICalendarPortlet .UIAttachFileForm .SelectFileFrame {
   width: 350px;
 }
