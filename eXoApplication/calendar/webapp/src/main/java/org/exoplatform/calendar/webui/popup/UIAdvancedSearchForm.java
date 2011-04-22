@@ -339,11 +339,11 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
         }
         
         query.setOrderBy(new String[] {Utils.EXO_SUMMARY});
+        uiListView.setDisplaySearchResult(true) ;
         List<CalendarEvent> allEvents = uiListView.getAllEvents(query);
         uiListView.update(new EventPageList(allEvents,10));
         calendarViewContainer.setRenderedChild(UICalendarViewContainer.LIST_VIEW) ;        
         if(!uiListView.isDisplaySearchResult()) uiListView.setLastViewId(currentView) ;
-        uiListView.setDisplaySearchResult(true) ;
         uiListView.setSelectedEvent(null) ;
         uiListView.setLastUpdatedEventId(null) ;
         calendarViewContainer.findFirstComponentOfType(UIPreview.class).setEvent(null) ;

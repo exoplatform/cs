@@ -976,7 +976,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         // need to get recurrence-id
         String recurId = null;
         if (isOccur) recurId = event.getRequestContext().getRequestParameter(RECURID);
-        
         CalendarService calendarService = CalendarUtils.getCalendarService() ;
         UICalendarPortlet uiPortlet = uiCalendarView.getAncestorOfType(UICalendarPortlet.class) ;
         UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
@@ -1411,6 +1410,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
          }
          
          calService.removeOccurrenceInstance(username, occurrence);
+         if(uiCalendarView instanceof UIListView) {
+           uiCalendarView.refresh() ;
+         }
          // update UI
          uiPopupAction.deActivate();
        } catch (Exception e) {
@@ -1466,7 +1468,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
          }
          
          calService.removeRecurrenceSeries(username, originalEvent);
-         
+         if(uiCalendarView instanceof UIListView) {
+           uiCalendarView.refresh() ;
+         }
          uiPopupAction.deActivate();
        } catch (Exception e) {
          e.printStackTrace();

@@ -119,9 +119,9 @@ public class UISearchForm extends UIForm {
         eventQuery = uiCalendars.getEventQuery(eventQuery);
         uiListView.setViewType(UIListView.TYPE_BOTH) ;
         uiListView.setEventQuery(eventQuery);
+        uiListView.setDisplaySearchResult(true) ;
         List<CalendarEvent> allEvents = uiListView.getAllEvents(eventQuery);
         uiListView.update(new EventPageList(allEvents,10));
-        uiListView.setDisplaySearchResult(true) ;
         uiListView.setSelectedEvent(null) ;
         uiListView.setLastUpdatedEventId(null) ;
         calendarViewContainer.findFirstComponentOfType(UIPreview.class).setEvent(null) ;

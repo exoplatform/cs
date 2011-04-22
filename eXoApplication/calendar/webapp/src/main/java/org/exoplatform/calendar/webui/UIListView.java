@@ -63,8 +63,10 @@ import org.exoplatform.webui.form.UIFormSelectBox;
       @EventConfig(listeners = UIListView.ShowPageActionListener.class ),
       @EventConfig(listeners = UICalendarView.ExportEventActionListener.class),
       @EventConfig(listeners = UIListView.OnchangeActionListener.class ),   
-      @EventConfig(listeners = UIListView.SortActionListener.class )
-
+      @EventConfig(listeners = UIListView.SortActionListener.class ),
+      @EventConfig(listeners = UICalendarView.ConfirmDeleteOnlyInstance.class),
+      @EventConfig(listeners = UICalendarView.ConfirmDeleteAllSeries.class),
+      @EventConfig(listeners = UICalendarView.ConfirmDeleteCancel.class)
     }
 )
 public class UIListView extends UICalendarView {
@@ -115,8 +117,6 @@ public class UIListView extends UICalendarView {
   public void refresh() throws Exception{
     UIListContainer uiListContainer = getParent() ;
     if (uiListContainer.isDisplaySearchResult()) return ;
-    CalendarService calendarService = CalendarUtils.getCalendarService();
-    String username = CalendarUtils.getCurrentUser() ;
     query = new EventQuery() ;
     if(!CalendarUtils.isEmpty(categoryId_) && !categoryId_.toLowerCase().equals("null")&& !categoryId_.equals("calId")) query.setCategoryId(new String[]{categoryId_}) ;
     java.util.Calendar fromcalendar = getBeginDay(new GregorianCalendar(getCurrentYear(),  getCurrentMonth(),  getCurrentDay())) ;
@@ -201,7 +201,11 @@ public class UIListView extends UICalendarView {
   public List<CalendarEvent> getAllEvents (EventQuery eventQuery) throws Exception {
     CalendarService calendarService = CalendarUtils.getCalendarService();
     String username = CalendarUtils.getCurrentUser() ;
-    List<CalendarEvent> allEvents = calendarService.getEvents(username, eventQuery, getPublicCalendars())  ;    
+    if (isDisplaySearchResult()) {
+      eventQuery.setExcludeRepeatEvent(false);
+      return calendarService.getEvents(username, eventQuery, getPublicCalendars())  ;
+    }
+    List<CalendarEvent> allEvents =  calendarService.getEvents(username, eventQuery, getPublicCalendars())  ;  
     List<CalendarEvent> originalRecurEvents = calendarService.getOriginalRecurrenceEvents(username, eventQuery.getFromDate(), eventQuery.getToDate(), getPublicCalendars());
     String timezone = CalendarUtils.getCurrentUserCalendarSetting().getTimeZone();
     if (originalRecurEvents != null && originalRecurEvents.size() > 0) {
