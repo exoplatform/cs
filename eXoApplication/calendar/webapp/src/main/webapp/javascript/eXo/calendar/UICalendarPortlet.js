@@ -2356,19 +2356,18 @@ UICalendarPortlet.prototype.checkAllInBusy = function(chk){
  * Sets up checking free/busy
  * @param {Object} container DOM element contains event data
  */
-UICalendarPortlet.prototype.initCheck = function(container){
+UICalendarPortlet.prototype.initCheck = function(container, userSettingTimezone){
     var DOMUtil = eXo.core.DOMUtil;
     if (typeof(container) == "string") 
         container = document.getElementById(container);
     var dateAll = DOMUtil.findDescendantsByClass(container, "input", "checkbox")[1];
-    var serverTimezone = parseInt(container.getAttribute("serverTimezone"));
     var table = DOMUtil.findFirstDescendantByClass(container, "table", "UIGrid");
     var tr = DOMUtil.findDescendantsByTagName(table, "tr");
     var firstTr = tr[1];
     this.busyCell = DOMUtil.findDescendantsByTagName(firstTr, "td").slice(1);
     var len = tr.length;
     for (var i = 2; i < len; i++) {
-        this.showBusyTime(tr[i], serverTimezone);
+        this.showBusyTime(tr[i], userSettingTimezone);
     }
     if (eXo.calendar.UICalendarPortlet.allDayStatus) 
         dateAll.checked = eXo.calendar.UICalendarPortlet.allDayStatus.checked;
@@ -2422,10 +2421,10 @@ UICalendarPortlet.prototype.parseTime = function(string, timezoneOffset){
  * @param {Object} tr Tr tag contains event data
  * @param {Object} serverTimezone Server timezone
  */
-UICalendarPortlet.prototype.showBusyTime = function(tr, serverTimezone){
+UICalendarPortlet.prototype.showBusyTime = function(tr, userSettingTimezoneOffset){
     var stringTime = tr.getAttribute("busytime");
-    var localize = (tr.getAttribute("usertimezone")) ? parseInt(tr.getAttribute("usertimezone")) : 0;
-    var extraTime = localize - serverTimezone;
+    var browserTimezone = (new Date).getTimezoneOffset();
+    var extraTime = browserTimezone - userSettingTimezoneOffset;
     if (!stringTime) 
         return;
     var time = this.parseTime(stringTime, extraTime);

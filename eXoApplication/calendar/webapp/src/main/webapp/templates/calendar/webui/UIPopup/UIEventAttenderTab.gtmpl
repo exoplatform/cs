@@ -7,9 +7,10 @@
     return (value % div) ;
   }
   def rcontext = _ctx.getRequestContext() ;
-  rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.UICalendarPortlet.initCheck("' + uicomponent.id + '") ;') ;
+  def userSettingTimezoneOffset = uicomponent.getUserTimeZone();
+  rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.UICalendarPortlet.initCheck("' + uicomponent.id + '",' + userSettingTimezoneOffset + ') ;') ;
 %>
-<div class="UIAddNewEvent $uicomponent.id" id="$uicomponent.id" serverTimeZone="<%=uicomponent.getServerTimeZone()%>" >
+<div class="UIAddNewEvent $uicomponent.id" id="$uicomponent.id" >
   <div class="NewEventAttendee">
     <div class="UIFormInputSet">
       <div class="UIFormInputSetWithAction">
@@ -119,7 +120,7 @@
               </tr>
               <% Map parMap = uicomponent.getMap() ; %>
               <%for(String p in uicomponent.getParticipants()) {%>
-              <tr busytime="<%=parMap.get(p);%>" userTimeZone="<%=uicomponent.getUserTimeZone(p)%>">
+              <tr busytime="<%=parMap.get(p);%>">
                 <td>
                   <div class="LeftSide">
                     <div class="Input">
