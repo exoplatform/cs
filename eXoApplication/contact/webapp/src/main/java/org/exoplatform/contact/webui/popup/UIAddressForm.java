@@ -121,7 +121,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       SelectOptionGroup sharedContacts = new SelectOptionGroup("shared-contacts");
       for(SharedAddressBook scg : sharedAdd) {
         String name = "" ;
-        if(!CalendarUtils.isEmpty(scg.getSharedUserId())) name = scg.getSharedUserId() + "-" ;
+        if(!ContactUtils.isEmpty(scg.getSharedUserId())) name = scg.getSharedUserId() + "-" ;
         sharedContacts.addOption(new SelectOption(name + scg.getName(), scg.getId())) ;
       }
       options.add(sharedContacts);

@@ -215,8 +215,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      to = to.replaceAll(CalendarUtils.SEMICOLON, CalendarUtils.COLON);
-      if (CalendarUtils.isValidEmailAddresses(to)) {
+      to = to.replaceAll(org.exoplatform.contact.service.Utils.SEMI_COLON, org.exoplatform.contact.service.Utils.COLON);
+      if (!org.exoplatform.contact.service.Utils.isValidEmailAddresses(to)) {
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.invalid-email", null, ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
