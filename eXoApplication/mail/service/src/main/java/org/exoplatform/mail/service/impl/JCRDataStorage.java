@@ -2411,29 +2411,18 @@ public class JCRDataStorage implements DataStorage {
   }
 
   public void createReference(Node msgNode, Node converNode) throws Exception {
-    List<Value> valueList = new ArrayList<Value>();
     Value[] values = {};
     if (msgNode.isNodeType("exo:messageMixin")) {
       values = msgNode.getProperty("exo:conversationId").getValues();
     } else {
       msgNode.addMixin("exo:messageMixin");
     }
-    boolean isExist = false;
-    for (int i = 0; i < values.length; i++) {
-      Value value = values[i];
-      String uuid = value.getString();
-      Node refNode = converNode.getSession().getNodeByUUID(uuid);
-      if (refNode.getPath().equals(converNode.getPath())) {
-        isExist = true;
-        break;
-      }
-      valueList.add(value);
+    HashMap<String, Value> valueMap = new HashMap<String, Value>();
+    for (Value value : values) {
+      valueMap.put(value.getString(), value);
     }
-    if (!isExist) {
-      Value value2add = msgNode.getSession().getValueFactory().createValue(converNode);
-      valueList.add(value2add);
-    }
-
+    valueMap.put(converNode.getUUID(), msgNode.getSession().getValueFactory().createValue(converNode));
+    List<Value> valueList = new ArrayList<Value>(valueMap.values());
     if (valueList.size() > 0) {
       msgNode.setProperty("exo:conversationId", valueList.toArray(new Value[valueList.size()]));
       msgNode.save();
