@@ -579,7 +579,7 @@
            <object type="org.exoplatform.mail.service.MailSettingConfig">
              <field name="name"><string>incomingSecureAuthentication</string></field>
              <field name="userAllowed"><boolean>true</boolean></field>
-             <field name="defaultValue"><string>starttls</string></field>
+             <field name="defaultValue"><string>ssl/tls</string></field>
            </object>
         </object-param>
         <object-param>
@@ -606,7 +606,7 @@
            <object type="org.exoplatform.mail.service.MailSettingConfig">
              <field name="name"><string>outgoingSecureAuthentication</string></field>
              <field name="userAllowed"><boolean>true</boolean></field>
-             <field name="defaultValue"><string>starttls</string></field>
+             <field name="defaultValue"><string>ssl/tls</string></field>
            </object>
         </object-param>
         <object-param>

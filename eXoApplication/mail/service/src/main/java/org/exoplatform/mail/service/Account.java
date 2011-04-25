@@ -64,9 +64,9 @@ public class Account {
 
   private Map<String, String> smtpServerProperties;
 
-  private String              secureAuthsIncoming = Utils.STARTTLS;
+  private String              secureAuthsIncoming = Utils.getIncomingSecureAuthentication();
 
-  private String              secureAuthsOutgoing = Utils.STARTTLS;
+  private String              secureAuthsOutgoing = Utils.getOutgoingSecureAuthentication();
 
   private String              authMechsIncoming   = Utils.PLAIN;
 
