@@ -61,8 +61,6 @@ function getProduct(version) {
 
   /* cleanup duplicated lib */
   //product.removeDependency(new Project("commons-httpclient", "commons-httpclient", "jar", "3.0"));
-  product.removeDependency(new Project("javax.mail", "mail", "jar", "1.4"));
-   
 
   product.module = cs ;
   product.dependencyModule = [ kernel, core, ws, eXoJcr];
