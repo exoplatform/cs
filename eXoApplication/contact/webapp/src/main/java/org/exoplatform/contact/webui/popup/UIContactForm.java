@@ -23,6 +23,7 @@ import java.util.List;
 
 import javax.jcr.PathNotFoundException;
 
+import org.exoplatform.contact.CalendarUtils;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
@@ -233,16 +234,13 @@ public class UIContactForm extends UIFormTabPane {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      String EMAIL_REGEX = 
-        "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+";
-      String emails = profileTab.getFieldEmail() ;
-      for (String email : emails.split(Utils.SEMI_COLON)) {
-        if (!ContactUtils.isEmpty(email) && (!email.trim().matches(EMAIL_REGEX) || (email.length() > 40))) {
-          uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.invalid-email", null, 
-              ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;
-        }
+      String emails = profileTab.getFieldEmail();
+      if (!ContactUtils.isEmpty(emails))
+        emails = emails.replaceAll(CalendarUtils.SEMICOLON, CalendarUtils.COLON);
+      if (!CalendarUtils.isValidEmailAddresses(emails)) {
+        uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.invalid-email", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
       }
       contact.setEmailAddress(emails);
       if(profileTab.getImage() != null) {

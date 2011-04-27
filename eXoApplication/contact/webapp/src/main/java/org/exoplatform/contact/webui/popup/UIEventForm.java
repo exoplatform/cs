@@ -290,7 +290,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
         errorMsg_ = "UIEventForm.msg.event-email-required" ;
         return false ;
       }
-      else if(!CalendarUtils.isAllEmailValid(getEmailAddress())) {
+      else if(!CalendarUtils.isValidEmailAddresses(getEmailAddress())) {
         errorMsg_ = "UIEventForm.msg.event-email-invalid" ;
         return false ;
       } 
