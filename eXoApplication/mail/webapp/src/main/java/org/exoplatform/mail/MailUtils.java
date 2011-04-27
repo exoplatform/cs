@@ -41,6 +41,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeUtility;
+import javax.portlet.PortletPreferences;
 
 import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.Contact;
@@ -64,6 +65,8 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.event.Event;
 
@@ -565,6 +568,16 @@ public class MailUtils {
       uiAddContactForm.setLastNameField(lastName);
       uiAddContactForm.setEmailField(email);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
+    }
+    
+    public static int getLimitUploadSize() {
+      PortletRequestContext pcontext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+      PortletPreferences portletPref = pcontext.getRequest().getPreferences();
+      int limitMB = -1;
+      try {
+        limitMB = Integer.parseInt(portletPref.getValue("uploadFileSizeLimitMB", "").trim());
+      } catch (Exception e) {}
+      return limitMB;
     }
 }
 

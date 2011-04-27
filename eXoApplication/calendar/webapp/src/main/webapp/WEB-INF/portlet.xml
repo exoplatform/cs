@@ -25,6 +25,17 @@
       <short-title>Calendar Portlet</short-title>
       <keywords>collaboration</keywords>
     </portlet-info>
-    <supported-processing-event><name>RefreshCalendar</name></supported-processing-event>
+    
+    <portlet-preferences>
+      <preference>
+			  <name>uploadFileSizeLimitMB</name>
+			  <value>10</value>
+			  <read-only>false</read-only>
+			</preference>
+    </portlet-preferences>
+    
+    <supported-processing-event>
+    	<name>RefreshCalendar</name>
+    </supported-processing-event>
   </portlet>  
 </portlet-app>

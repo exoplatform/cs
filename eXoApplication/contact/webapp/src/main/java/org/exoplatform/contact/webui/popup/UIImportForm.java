@@ -92,10 +92,7 @@ public class UIImportForm extends UIForm {
     }
     addUIFormInput(new UIFormSelectBox(FIELD_TYPE, FIELD_TYPE, options)) ;
     
-    UIFormUploadInput formUploadInput = new UIFormUploadInput(FIELD_UPLOAD, FIELD_UPLOAD) ;
-   
-    
-    
+    UIFormUploadInput formUploadInput = new UIFormUploadInput(FIELD_UPLOAD, FIELD_UPLOAD, true) ;
     addUIFormInput(formUploadInput) ;    
   }
   

@@ -40,6 +40,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.jcr.PathNotFoundException;
 import javax.mail.internet.InternetAddress;
+import javax.portlet.PortletPreferences;
 
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -1005,4 +1006,13 @@ public class CalendarUtils {
     return options ;
   }
   
+  public static int getLimitUploadSize() {
+    PortletRequestContext pcontext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+    PortletPreferences portletPref = pcontext.getRequest().getPreferences();
+    int limitMB = -1;
+    try {
+      limitMB = Integer.parseInt(portletPref.getValue("uploadFileSizeLimitMB", "").trim());
+    } catch (Exception e) {}
+    return limitMB;
+  }
 }

@@ -22,6 +22,7 @@ import java.util.List;
 import org.exoplatform.cs.common.webui.UIPopupAction;
 import org.exoplatform.cs.common.webui.UIPopupActionContainer;
 import org.exoplatform.cs.common.webui.UIPopupComponent;
+import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.mail.webui.UIMailPortlet;
@@ -59,13 +60,13 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
 
   public static final String FIELD_UPLOAD = "upload" ;  
   public int numberFile = 5 ;
-  public static final int MAX_SIZE = 10*1024*1024 ;
   private long attSize = 0;
 
   public UIAttachFileForm() throws Exception {
     setMultiPart(true) ;
+    int sizeLimit = MailUtils.getLimitUploadSize();
     for (int i = 0; i < 5; i++ ) {
-      UIFormUploadInput uiInput = new UIFormUploadInput(FIELD_UPLOAD + String.valueOf(i+1), FIELD_UPLOAD + String.valueOf(i+1)) ;
+      UIFormUploadInput uiInput = new UIFormUploadInput(FIELD_UPLOAD + String.valueOf(i+1), FIELD_UPLOAD + String.valueOf(i+1), sizeLimit, true) ;
       addUIFormInput(uiInput) ;
     }
   }
@@ -85,7 +86,7 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
 
   public static void removeUploadTemp(UploadService uservice, String uploadId) {
     try {
-      uservice.removeUpload(uploadId) ;
+      uservice.removeUploadResource(uploadId) ;
     } catch (Exception e) {
       e.printStackTrace() ;
     }
@@ -104,7 +105,7 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
           UploadResource uploadResource = input.getUploadResource() ;
           if (uploadResource != null) {
             attSize = attSize + ((long)uploadResource.getUploadedSize()) ;
-            if(attSize > MAX_SIZE) {
+            if(attSize > 10*1024*1024) {
               uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.size-attachs-must-be-smaller-than-10M", null, ApplicationMessage.WARNING)) ;
               event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
               return ;

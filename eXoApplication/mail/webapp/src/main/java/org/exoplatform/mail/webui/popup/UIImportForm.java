@@ -61,7 +61,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent {
   public UIImportForm() throws Exception { }
 
   public void init(String accId) throws Exception {
-    addUIFormInput(new UIFormUploadInput(CHOOSE_MIME_MESSAGE, CHOOSE_MIME_MESSAGE));
+    addUIFormInput(new UIFormUploadInput(CHOOSE_MIME_MESSAGE, CHOOSE_MIME_MESSAGE, true));
     UISelectFolder uiSelectFolder = new UISelectFolder() ;
     addUIFormInput(uiSelectFolder);
     uiSelectFolder.init(accId) ;
@@ -116,7 +116,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent {
         return ;
       } 
       UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
-      uploadService.removeUpload(uiUploadInput.getUploadId()) ;
+      uploadService.removeUploadResource(uiUploadInput.getUploadId()) ;
       uiPortlet.cancelAction() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class)) ;
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);

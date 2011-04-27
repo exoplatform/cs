@@ -33,6 +33,7 @@ import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.upload.UploadResource;
+import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -64,7 +65,8 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
    
   public UIImageForm() throws Exception {
     this.setMultiPart(true) ;
-    addUIFormInput(new UIFormUploadInput(FIELD_UPLOAD, FIELD_UPLOAD)) ;
+    int sizeLimit = MailUtils.getLimitUploadSize();
+    addUIFormInput(new UIFormUploadInput(FIELD_UPLOAD, FIELD_UPLOAD, sizeLimit, true));
   }
   
   public void activate() throws Exception { }
@@ -119,6 +121,9 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
       attachment.setFileName(fileName) ;
       attachment.setMimeType(mimeType) ;
       contact.setAttachment(attachment) ; 
+      // remove the file upload in component upload input.
+      UploadService uploadSv = uiForm.getApplicationComponent(UploadService.class);
+      uploadSv.removeUploadResource(input.getUploadId());
       ContactService contactSrv = uiForm.getApplicationComponent(ContactService.class);
       String username = MailUtils.getCurrentUser() ;
       List<String> tempContact = new ArrayList<String>() ;

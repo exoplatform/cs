@@ -61,8 +61,9 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
   public static final String FIELD_UPLOAD = "upload".intern() ;
 
   public UIImageForm() throws Exception {
+    int sizeLimit = ContactUtils.getLimitUploadSize();
     this.setMultiPart(true) ;
-    addUIFormInput(new UIFormUploadInput(FIELD_UPLOAD, FIELD_UPLOAD)) ;
+    addUIFormInput(new UIFormUploadInput(FIELD_UPLOAD, FIELD_UPLOAD, sizeLimit, true)) ;
   }
   
   public void activate() throws Exception { }
@@ -121,7 +122,7 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
       uiProfileInputSet.setFileName(fileName) ;
       
       UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
-      uploadService.removeUpload(input.getUploadId()) ;
+      uploadService.removeUploadResource(input.getUploadId()) ;
       
       UIPopupAction popupAction = uiPopupActionContainer.getChild(UIPopupAction.class) ;
       popupAction.deActivate() ;
@@ -136,7 +137,7 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
       UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
       UIFormUploadInput uiformInput = uiForm.getUIInput(FIELD_UPLOAD) ;  
       UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
-      uploadService.removeUpload(uiformInput.getUploadId()) ;
+      uploadService.removeUploadResource(uiformInput.getUploadId()) ;
       uiPopupAction.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
      }

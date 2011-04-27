@@ -19,6 +19,7 @@ package org.exoplatform.calendar.webui.popup;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.upload.UploadResource;
 import org.exoplatform.upload.UploadService;
@@ -52,15 +53,15 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
 
   final static public String FIELD_UPLOAD = "upload" ;  
   private int maxField = 5 ;
-  public static final long MAX_SIZE = 10*1024*1024 ;
 
   private long attSize = 0;
 
   public UIAttachFileForm() throws Exception {
     setMultiPart(true) ;
+    int sizeLimit = CalendarUtils.getLimitUploadSize();
     int i = 0 ;
     while(i++ < maxField) {
-      UIFormUploadInput uiInput = new UIFormUploadInput(FIELD_UPLOAD + String.valueOf(i), FIELD_UPLOAD + String.valueOf(i)) ;
+      UIFormUploadInput uiInput = new UIFormUploadInput(FIELD_UPLOAD + String.valueOf(i), FIELD_UPLOAD + String.valueOf(i), sizeLimit, true) ;
       addUIFormInput(uiInput) ;
     }
   }
@@ -73,7 +74,7 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
 
   public static void removeUploadTemp(UploadService uservice, String uploadId) {
     try {
-      uservice.removeUpload(uploadId) ;
+      uservice.removeUploadResource(uploadId) ;
     } catch (Exception e) {
       e.printStackTrace() ;
     }
@@ -92,7 +93,7 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
         if(uploadResource != null) {
           long fileSize = ((long)uploadResource.getUploadedSize()) ;
           size = size + fileSize ;
-          if(fileSize>= MAX_SIZE || size >= MAX_SIZE) {
+          if(size >= 10*1024*1024) {
             uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.total-attachts-size-over10M", null, ApplicationMessage.WARNING)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ;

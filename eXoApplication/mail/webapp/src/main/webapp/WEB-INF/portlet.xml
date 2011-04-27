@@ -25,5 +25,14 @@
       <short-title>Mail Portlet</short-title>
       <keywords>collaboration</keywords>
     </portlet-info>
+    
+    <portlet-preferences>
+      <preference>
+			  <name>uploadFileSizeLimitMB</name>
+			  <value>10</value>
+			  <read-only>false</read-only>
+			</preference>
+    </portlet-preferences>
+    
   </portlet>  
 </portlet-app>

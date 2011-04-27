@@ -107,7 +107,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
       options.add(new SelectItemOption<String>(type, type)) ;
     }
     addUIFormInput(new UIFormSelectBox(TYPE, TYPE, options)) ;
-    addUIFormInput(new UIFormUploadInput(FIELD_UPLOAD, FIELD_UPLOAD));
+    addUIFormInput(new UIFormUploadInput(FIELD_UPLOAD, FIELD_UPLOAD, true));
     UIFormSelectBoxWithGroups privateCal = new UIFormSelectBoxWithGroups(FIELD_TO_CALENDAR, FIELD_TO_CALENDAR, CalendarUtils.getCalendarOption()) ;
     addUIFormInput(privateCal);
     addUIFormInput(new UIFormStringInput(DISPLAY_NAME, DISPLAY_NAME, null).addValidator(MandatoryValidator.class).addValidator(SpecialCharacterValidator.class));

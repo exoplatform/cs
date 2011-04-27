@@ -21,6 +21,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import javax.jcr.RepositoryException;
+import javax.portlet.PortletPreferences;
 
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccessImpl;
@@ -47,6 +48,7 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIBreadcumbs;
 import org.exoplatform.webui.core.UIComponent;
@@ -468,6 +470,16 @@ public class ContactUtils {
     String downloadLink = dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;      
     event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');") ;
     uiForm.getAncestorOfType(UIContactPortlet.class).cancelAction() ;
+  }
+  
+  public static int getLimitUploadSize() {
+    PortletRequestContext pcontext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+    PortletPreferences portletPref = pcontext.getRequest().getPreferences();
+    int limitMB = -1;
+    try {
+      limitMB = Integer.parseInt(portletPref.getValue("uploadFileSizeLimitMB", "").trim());
+    } catch (Exception e) {}
+    return limitMB;
   }
   
 }
