@@ -28,6 +28,7 @@ import javax.mail.Store;
 import javax.mail.UIDFolder;
 import javax.mail.URLName;
 import javax.mail.internet.MimeMessage;
+import javax.net.ssl.SSLSocketFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -52,9 +53,12 @@ public class ImapConnector extends BaseConnector {
 
   private Account account_;  
 
-  public ImapConnector(Account account) throws Exception {
-    Session session = getSession(account);
-    IMAPStore imapStore = (IMAPStore)session.getStore("imap");
+  public ImapConnector(Account account, SSLSocketFactory sslSocketFact) throws Exception {
+    Session session = getSession(account, sslSocketFact);
+    String protocolName = Utils.SVR_IMAP;
+    String emailaddr = account.getIncomingUser();
+    if(Utils.isGmailAccount(emailaddr)) protocolName = Utils.SVR_IMAPS;
+    IMAPStore imapStore = (IMAPStore) session.getStore(protocolName);
     store_ = imapStore;
     account_ = account;
     store_.connect(account_.getIncomingHost(), Integer.valueOf(account_.getIncomingPort()), 
@@ -65,16 +69,23 @@ public class ImapConnector extends BaseConnector {
 
   public void openStore(Account account) throws Exception { }
 
-  private Session getSession(Account account) throws Exception {
+  private Session getSession(Account account, SSLSocketFactory sslSocketFact) throws Exception {
     Properties props = System.getProperties();
-    String socketFactoryClass = "javax.net.SocketFactory";
-    if (account.isIncomingSsl()) socketFactoryClass = Utils.SSL_FACTORY;
-    props.setProperty("mail.imap.socketFactory.class", socketFactoryClass);
-    props.setProperty("mail.mime.base64.ignoreerrors", "true");
-    props.setProperty("mail.imap.socketFactory.fallback", "false");
+    String socketFactoryClass = Utils.SOCKET_FACTORY;
+    String propSocketFactory = Utils.IMAP_SOCKET_FACTORY_CLASS;
+    if (account.isIncomingSsl()) {
+      props.put(Utils.MAIL_IMAP_SSL_ENABLE, true);
+      propSocketFactory = Utils.IMAP_SSL_SOCKET_FACTORY_CLASS;
+      socketFactoryClass = Utils.EXOMAIL_SSL_SOCKET_FACTORY_CLASS;
+      props.put(Utils.IMAP_SOCKETFACTORY_FALLBACK, false);
+      props.put(Utils.IMAP_SSL_FACTORY, sslSocketFact);
+    }
+    props.put(propSocketFactory, socketFactoryClass);
+    props.put("mail.mime.base64.ignoreerrors", "true");
+    
     return Session.getInstance(props, null);
   }
-
+  
   public javax.mail.Folder createFolder(Folder folder) throws Exception {
     return createFolder(null, folder);
   }

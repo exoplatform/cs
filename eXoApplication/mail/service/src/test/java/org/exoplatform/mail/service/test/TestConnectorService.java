@@ -19,6 +19,7 @@ package org.exoplatform.mail.service.test;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.net.ssl.SSLSocketFactory;
 import java.util.Random;
 
 import javax.mail.AuthenticationFailedException;
@@ -29,7 +30,7 @@ import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
-
+import org.exoplatform.mail.service.impl.ExoMailSSLSocketFactory;
 import com.sun.mail.imap.IMAPFolder;
 
 
@@ -46,6 +47,10 @@ public class TestConnectorService extends BaseMailTestCase {
 
   public void setUp() throws Exception {
     super.setUp();
+  }
+  public SSLSocketFactory getSSLSocketFactory(String protocol){
+	      ExoMailSSLSocketFactory sslSocketFact = new ExoMailSSLSocketFactory(protocol);
+	      return sslSocketFact.getSSLSocketFactory();
   }
 
   /**
@@ -201,7 +206,7 @@ public class TestConnectorService extends BaseMailTestCase {
     Folder folder = new Folder();
     folder.setId("testID");
     folder.setName("testFolder");
-    Connector connector = getConnector(account);
+    Connector connector = new ImapConnector(account, this.getSSLSocketFactory(null));
     if(connector != null){
       javax.mail.Folder imapFolder = connector.createFolder(folder);
       folder.setURLName(imapFolder.getURLName().toString());
@@ -217,7 +222,7 @@ public class TestConnectorService extends BaseMailTestCase {
 
     Folder parentFolder = new Folder();
     parentFolder.setName("parentFolder2");
-    Connector connector = getConnector(account);
+    Connector connector = new ImapConnector(account, this.getSSLSocketFactory(null));
     if(connector != null) {
 
       javax.mail.Folder imapParentFolder = connector.createFolder(parentFolder);
@@ -242,7 +247,7 @@ public class TestConnectorService extends BaseMailTestCase {
     Account account = createAccountObj(Utils.IMAP, prv_);
     Folder folder = new Folder();
     folder.setName("rootFolder");
-    Connector connector = getConnector(account);
+    Connector connector = new ImapConnector(account, this.getSSLSocketFactory(null));
     if (connector != null) {
       IMAPFolder imapFolder = (IMAPFolder) connector.createFolder(folder);
       folder.setURLName(imapFolder.getURLName().toString());
@@ -262,7 +267,7 @@ public class TestConnectorService extends BaseMailTestCase {
 
   private Connector getConnector(Account acc) {
     try {  
-      return new ImapConnector(acc);
+      return new ImapConnector(acc, this.getSSLSocketFactory(null));
     } catch (UnknownHostException e) {
       e.printStackTrace();
       System.out.println("\n\n check your net work connection or account configuration");
@@ -285,7 +290,7 @@ public class TestConnectorService extends BaseMailTestCase {
     Folder folder = new Folder();
     folder.setId("folderReadID");
     folder.setName("foldeReadrName");
-    Connector connector = getConnector(account);
+    Connector connector = new ImapConnector(account, this.getSSLSocketFactory(null));
     if(connector != null) {
       javax.mail.Folder imapFolder = connector.createFolder(folder);
       folder.setURLName(imapFolder.getURLName().toString());
@@ -308,7 +313,7 @@ public class TestConnectorService extends BaseMailTestCase {
     Folder folder = new Folder();
     folder.setId("folderUnReadID");
     folder.setName("foldeUnReadrName");
-    Connector connector = getConnector(account);
+    Connector connector = new ImapConnector(account, this.getSSLSocketFactory(null));
     if(connector != null) {
       javax.mail.Folder imapFolder = connector.createFolder(folder);
       folder.setURLName(imapFolder.getURLName().toString());
@@ -332,7 +337,7 @@ public class TestConnectorService extends BaseMailTestCase {
     Folder folder = new Folder();
     folder.setId("setIsStaredID");
     folder.setName("setIsStaredName");
-    Connector connector = getConnector(account);
+    Connector connector = new ImapConnector(account, this.getSSLSocketFactory(null));
     if(connector != null){
       javax.mail.Folder imapFolder = connector.createFolder(folder);
       folder.setURLName(imapFolder.getURLName().toString());
@@ -355,7 +360,7 @@ public class TestConnectorService extends BaseMailTestCase {
     Folder folder = new Folder();
     folder.setId("setIsNotStaredID");
     folder.setName("setIsNotStaredName");
-    Connector connector = getConnector(account);
+    Connector connector = new ImapConnector(account, this.getSSLSocketFactory(null));
     if(connector != null){
       javax.mail.Folder imapFolder = connector.createFolder(folder);
       folder.setURLName(imapFolder.getURLName().toString());
