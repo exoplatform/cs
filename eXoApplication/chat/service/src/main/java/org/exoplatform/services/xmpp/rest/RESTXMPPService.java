@@ -76,6 +76,7 @@ import org.exoplatform.services.xmpp.history.HistoricalMessage;
 import org.exoplatform.services.xmpp.history.impl.jcr.HistoryImpl;
 import org.exoplatform.services.xmpp.userinfo.UserInfo;
 import org.exoplatform.services.xmpp.userinfo.UserInfoService;
+import org.exoplatform.services.xmpp.util.CometdChannels;
 import org.exoplatform.services.xmpp.util.PresenceUtil;
 import org.exoplatform.services.xmpp.util.SearchFormFields;
 import org.exoplatform.services.xmpp.util.TransformUtils;
@@ -129,6 +130,8 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       put("chat.message.file.event.time.out", "chat_message_file_event_time_out");
       put("chat.message.file.exchange.waiting.for.authorize", "chat_message_file_exchange_waiting_for_authorize");
       put("chat.message.file.exchange.uploading.file.to.server", "chat_message_file_exchange_uploading_file_to_server");
+      put("chat.message.xmpp.session.has.expired", "chat_message_xmpp_session_has_expired");
+      put("chat.information.session.has.expired", "chat_information_session_has_expired");
     }
   };
   
@@ -1939,6 +1942,8 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         session.sendMessage(message);
         return Response.Builder.ok().cacheControl(cc).build();
       } else {
+        // CS-4849: notify when session has expired
+        delegate.sendMessage(username, CometdChannels.NOTIFICATION, "session-expired", null);
         return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
                                .errorMessage(rb.getString("chat.message.room.xmppsession.null"))
                                .build();
@@ -1964,6 +1969,8 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         session.sendMessageToMUC(room, body);
         return Response.Builder.ok().cacheControl(cc).build();
       } else {
+        // CS-4849: notify when session has expired
+        delegate.sendMessage(username, CometdChannels.NOTIFICATION, "session-expired", null);
         return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR).build();
       }
     } catch (XMPPException e) {

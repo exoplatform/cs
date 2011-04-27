@@ -26,6 +26,8 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.security.ConversationRegistry;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.xmpp.connection.XMPPSession;
+import org.exoplatform.services.xmpp.util.CometdChannels;
+import org.exoplatform.ws.frameworks.cometd.transport.ContinuationServiceDelegate;
 
 /**
  * Created by The eXo Platform SAS
@@ -50,6 +52,11 @@ public class AuthenticationLogoutListener extends Listener<ConversationRegistry,
         XMPPSession session = messenger.getSession(userId);
         if (session != null) session.removeAllTransport();
         messenger.logout(userId);
+        ContinuationServiceDelegate delegate = (ContinuationServiceDelegate) container.getComponentInstanceOfType(ContinuationServiceDelegate.class);
+        if (delegate != null) {
+          // CS-4849: notify when session has expired
+          delegate.sendMessage(userId, CometdChannels.NOTIFICATION, "session-expired", null);
+        }
       }
      } catch (Exception e){
        if(log.isDebugEnabled())
