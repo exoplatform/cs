@@ -1509,30 +1509,28 @@ public class JCRDataStorage implements DataStorage {
     if (eventNode.hasProperty(Utils.EXO_LOCATION))
       summary.append(eventNode.getProperty(Utils.EXO_LOCATION).getString());
     summary.append("<br>");
+    if (!Utils.isEmpty(reminder.getReminderOwner())) {
+      try {
+        cal.setTimeZone(TimeZone.getTimeZone(getCalendarSetting(reminder.getReminderOwner()).getTimeZone()));
+      } catch (Exception e) {
+        if (log.isDebugEnabled()) {
+          log.debug(e);          
+        }
+      }
+    }
     cal.setTime(eventNode.getProperty(Utils.EXO_FROM_DATE_TIME).getDate().getTime());
     summary.append("From       : ").append(cal.get(java.util.Calendar.HOUR_OF_DAY)).append(":");
     summary.append(cal.get(java.util.Calendar.MINUTE)).append(" - ");
     summary.append(cal.get(java.util.Calendar.DATE)).append("/");
     summary.append(cal.get(java.util.Calendar.MONTH) + 1).append("/");
 
-    String timezone = Utils.EMPTY_STR;
-    try {
-      if (!Utils.isEmpty(reminder.getReminderOwner()))
-        timezone = " (" + generateTimeZoneLabel(getCalendarSetting(reminder.getReminderOwner()).getTimeZone()) + ")";
-    } catch (NullPointerException ex) {
-      log.debug("reminder owner is null");
-    } catch (Exception e) {
-      if (log.isDebugEnabled())
-        log.debug(e);
-    }
-
-    summary.append(cal.get(java.util.Calendar.YEAR)).append(timezone).append("<br>");
+    summary.append(cal.get(java.util.Calendar.YEAR)).append("<br>");
     cal.setTime(eventNode.getProperty(Utils.EXO_TO_DATE_TIME).getDate().getTime());
     summary.append("To         : ").append(cal.get(java.util.Calendar.HOUR_OF_DAY)).append(":");
     summary.append(cal.get(java.util.Calendar.MINUTE)).append(" - ");
     summary.append(cal.get(java.util.Calendar.DATE)).append("/");
     summary.append(cal.get(java.util.Calendar.MONTH) + 1).append("/");
-    summary.append(cal.get(java.util.Calendar.YEAR)).append(timezone).append("<br>");
+    summary.append(cal.get(java.util.Calendar.YEAR)).append("<br>");
     reminderNode.setProperty(Utils.EXO_DESCRIPTION, summary.toString());
     reminderNode.setProperty(Utils.EXO_SUMMARY, eventNode.getProperty(Utils.EXO_SUMMARY).getString());
     if (!reminderFolder.isNew())
@@ -4433,29 +4431,6 @@ public class JCRDataStorage implements DataStorage {
   public void setCalDavResourceEtag(String username, String calendarId, String eventId, String etag) throws Exception {
     Node eventNode = getUserCalendarHome(username).getNode(calendarId).getNode(eventId);
     eventNode.setProperty(Utils.EXO_CALDAV_HREF, etag);
-  }
-
-  private String generateTimeZoneLabel(String timeZoneID) {
-    String label = timeZoneID;
-    if (label.lastIndexOf("/") > 0 && label.toLowerCase().lastIndexOf("etc".toLowerCase()) < 0 && label.toLowerCase().lastIndexOf("system") < 0) {
-      TimeZone timeZone = TimeZone.getTimeZone(label);
-      int rawOffset = timeZone.getRawOffset() / 60000;
-      int hours = rawOffset / 60;
-      int minutes = Math.abs(rawOffset) % 60;
-      String hrStr = Utils.EMPTY_STR;
-      if (Math.abs(hours) < 10) {
-        if (hours < 0) {
-          hrStr = "-0" + Math.abs(hours);
-        } else {
-          hrStr = "0" + Math.abs(hours);
-        }
-      } else {
-        hrStr = Integer.toString(hours);
-      }
-      String minStr = (minutes < 10) ? ("0" + Integer.toString(minutes)) : Integer.toString(minutes);
-      label = " GMT " + ((timeZone.getRawOffset() >= 0) ? "+" : Utils.EMPTY_STR) + hrStr + ":" + minStr + " - " + timeZoneID;
-    }
-    return label;
   }
 
 }
