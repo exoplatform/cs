@@ -147,7 +147,7 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
       boolean isExportAll = event.getRequestContext().getRequestParameter(OBJECTID).equals("all");
       List<String> groupIds ;
       if (isExportAll) {
-        groupIds = (ArrayList<String>)uiForm.uiPageIterator_.getPageList().getAll() ;
+        groupIds = uiForm.uiPageIterator_.getPageList().getAll() ;
       } else {
         for (String add : uiForm.getAddress()) {
           UIFormCheckBoxInput uiCheckBox = uiForm.getChildById(add);
