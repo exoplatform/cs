@@ -23,6 +23,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.security.Security;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
@@ -1242,21 +1243,35 @@ public class MailServiceImpl implements MailService, Startable {
       Folder eXoFolder = getFolder(username, accountId, folderId);
       
       Date lastCheckedDate = eXoFolder.getLastCheckedDate();
-      Date lastCheckedFromDate = eXoFolder.getLastStartCheckingTime();
       Date checkFromDate = eXoFolder.getCheckFromDate();
-      
-      if (account.getCheckFromDate() == null) {
-        checkFromDate = null ;
-      } else if (checkFromDate == null || checkFromDate.before(account.getCheckFromDate())) {
-        checkFromDate = account.getCheckFromDate();
-      }
-      
+      Date accCheckFromDate = account.getCheckFromDate();
+      Date date1 = null, date2 = null;
       LinkedHashMap<javax.mail.Message, List<String>> msgMap = new LinkedHashMap<javax.mail.Message, List<String>>();
+      
+      if (accCheckFromDate == null) { // if do not limit time
+        date2 = checkFromDate;
+      } else { 
+        if (lastCheckedDate == null) { // if it's the first time, user checks mail messages.
+          lastCheckedDate = accCheckFromDate;
+        } else {
+          if (checkFromDate != null && accCheckFromDate.before(checkFromDate)) { // if new checking time in account setting is set before current starting time.
+            date1 = accCheckFromDate;
+            date2 = checkFromDate;
+          } else if (accCheckFromDate.after(lastCheckedDate)) { // if new checking time in account setting is set after last checking message time.
+            lastCheckedDate = accCheckFromDate;
+          }
+        }
+      }
+      eXoFolder.setCheckFromDate(accCheckFromDate);
+      
+      msgMap = getMessageMap(username, accountId, folder, date1, date2, lastCheckedDate);
+      /* get the moment that finish checking mail */
+      if (eXoFolder.getLastCheckedDate() == null || eXoFolder.getLastCheckedDate().before(Calendar.getInstance().getTime()))
+        eXoFolder.setLastCheckedDate(new Date(System.currentTimeMillis()));
+
       boolean isImap = account.getProtocol().equals(Utils.IMAP); 
       boolean leaveOnserver = (isImap && Boolean.valueOf(account.getServerProperties().get(Utils.SVR_LEAVE_ON_SERVER)));
-     
-      msgMap = getMessageMap(username, accountId, folder, lastCheckedDate, checkFromDate, lastCheckedFromDate);
-        
+      
       totalNew = msgMap.size();
 
       logger.debug(" #### Folder " + folder.getName() + " contains " + totalNew + " messages !");
@@ -1269,7 +1284,7 @@ public class MailServiceImpl implements MailService, Startable {
         List<String> filterList, folderList, tagList;;
         MessageFilter filter;
         
-        Date lastFromDate = null, receivedDate = null;
+//        Date lastFromDate = null, receivedDate = null;
         List<javax.mail.Message> msgList = new ArrayList<javax.mail.Message>(msgMap.keySet()) ;
         SpamFilter spamFilter = getSpamFilter(username, account.getId());
         
@@ -1317,15 +1332,15 @@ public class MailServiceImpl implements MailService, Startable {
             
             if (saved && !leaveOnserver) msg.setFlag(Flags.Flag.DELETED, true);       
               
-            receivedDate = MimeMessageParser.getReceivedDate(msg).getTime();
+//            receivedDate = MimeMessageParser.getReceivedDate(msg).getTime();
 
-            if (i == 0) lastFromDate = receivedDate;                  
-            eXoFolder.setLastCheckedDate(receivedDate);
-            if ((i == (totalNew - 1))) eXoFolder.setCheckFromDate(lastFromDate);
+//            if (i == 0) lastFromDate = receivedDate;                  
+//            eXoFolder.setLastCheckedDate(receivedDate);
+//            if ((i == (totalNew - 1))) eXoFolder.setCheckFromDate(lastFromDate);
             
-            if (lastFromDate != null && (eXoFolder.getLastStartCheckingTime() == null || eXoFolder.getLastStartCheckingTime().before(lastFromDate))) {
-              eXoFolder.setLastStartCheckingTime(lastFromDate);
-            }
+//            if (lastFromDate != null && (eXoFolder.getLastStartCheckingTime() == null || eXoFolder.getLastStartCheckingTime().before(lastFromDate))) {
+//              eXoFolder.setLastStartCheckingTime(lastFromDate);
+//            }
           } catch (Exception e) {
             i++;
             continue;
@@ -1337,7 +1352,9 @@ public class MailServiceImpl implements MailService, Startable {
         
         FetchMailContentThread downloadContentMail = new FetchMailContentThread(storage_, msgMap, i, folder, username, accountId);
         new Thread(downloadContentMail).start();        
-      }      
+      } else {
+        saveFolder(username, accountId, eXoFolder, false);
+      }
       checkingLog_.get(key).setStatusMsg("Finished download for " + folder.getName() + " folder.");
       logger.debug("#### Synchronization finished for " + folder.getName() + " folder.");
 
@@ -1346,32 +1363,31 @@ public class MailServiceImpl implements MailService, Startable {
     }
   }
   
-  private LinkedHashMap<javax.mail.Message, List<String>> getMessageMap(String username, String accountId, javax.mail.Folder folder, Date lastCheckedDate, 
-                                                                        Date checkFromDate, Date lastCheckedFromDate) throws Exception{
+  /**
+   * get map of message and its filter list. <br />
+   * Actions of this function: <br />
+   * <i>action 1:</i> get messages from {date3} to now. <br>
+   * <i>action 2:</i> get messages from {date1} to {date2}. <br><br>
+   * Example: <br>
+   * --------[date1]*********[date2]--------[date3]**********[now]
+   * @param username
+   * @param accountId
+   * @param folder - mail folder
+   * @param date1 if it is null, time is not limited.
+   * @param date2 if it is null,  action 2 is <b>not</b> executed.  
+   * @param date3 if it is null, time is not limited. All suitable messages are get. 
+   * @return list of message. return empty map if no action is executed.
+   * @throws Exception
+   */
+  private LinkedHashMap<javax.mail.Message, List<String>> getMessageMap(String username, String accountId, javax.mail.Folder folder, Date date1, 
+                                                                        Date date2, Date date3) throws Exception{
     LinkedHashMap<javax.mail.Message, List<String>> msgMap = new LinkedHashMap<javax.mail.Message, List<String>>();
     List<MessageFilter> filters = getFilters(username, accountId);
-    if (checkFromDate == null) {
-      if (lastCheckedDate != null && lastCheckedFromDate != null) {
-        msgMap = getMessages(msgMap, folder, true, lastCheckedFromDate, null, filters);
-        msgMap = getMessages(msgMap, folder, true, null, lastCheckedDate, filters);
-      } else if (lastCheckedFromDate != null) {
-        msgMap = getMessages(msgMap, folder, true, lastCheckedFromDate, null, filters);
-      } else if (lastCheckedDate != null) {
-        msgMap = getMessages(msgMap, folder, true, null, lastCheckedDate, filters);
-      }  else {
-        msgMap = getMessages(msgMap, folder, true, null, null, filters);
-      }
-    } else {
-      if (lastCheckedDate != null && lastCheckedFromDate != null) {
-        msgMap = getMessages(msgMap, folder, true, lastCheckedFromDate, null, filters);
-        msgMap = getMessages(msgMap, folder, true, checkFromDate, lastCheckedDate, filters);
-      } else if (lastCheckedFromDate != null) {
-        msgMap = getMessages(msgMap, folder, true, lastCheckedFromDate, null, filters);
-      } else if (lastCheckedDate != null && lastCheckedDate.after(checkFromDate)) {
-        msgMap = getMessages(msgMap, folder, true, checkFromDate, lastCheckedDate, filters);
-      }  else {
-        msgMap = getMessages(msgMap, folder, true, checkFromDate, null, filters);
-      }
+    
+    msgMap = getMessages(msgMap, folder, true, date3, null, filters);
+    
+    if (date3 != null && date2 != null) { // if date3 == null, all messages are get, we don't need run below block.
+      msgMap = getMessages(msgMap, folder, true, date1, date2, filters);
     }
     return msgMap;
   }
