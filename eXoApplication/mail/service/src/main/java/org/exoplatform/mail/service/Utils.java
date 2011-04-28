@@ -17,7 +17,6 @@
 package org.exoplatform.mail.service;
 
 import java.io.InputStream;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.DecimalFormat;
@@ -40,10 +39,6 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeUtility;
 import javax.mail.util.ByteArrayDataSource;
-import javax.naming.NamingException;
-import javax.naming.directory.Attributes;
-import javax.naming.directory.DirContext;
-import javax.naming.directory.InitialDirContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -65,34 +60,7 @@ public class Utils {
   public static MailService mailService_;
   public static JobSchedulerService schedulerService_;
   
-
-  public static final String SVR_IMAP = "imap" ;
-  public static final String SVR_IMAPS = "imaps" ;
-  public static final String IMAP_SSL_FACTORY = "mail.imap.ssl.socketFactory";
-  public static final String SVR_IMAP_STARTTLS_REQUIRED = "mail.imap.starttls.required";
-  public static final String IMAP_STARTTLS_ENABLE = "mail.imap.starttls.enable";
-  public static final String MAIL_IMAP_SSL_ENABLE = "mail.imap.ssl.enable";
-  public static final String IMAP_CONECT_TIMEOUT = "mail.imap.connectiontimeout";
-  public static final String IMAP_SOCKET_FACTORY_CLASS = "mail.imap.socketFactory.class";
-  public static final String IMAP_SSL_SOCKET_FACTORY_CLASS = "mail.imap.ssl.socketFactory.class";
-  public static final String IMAP_SOCKETFACTORY_FALLBACK = "mail.imap.socketFactory.fallback";
-  
-  public static final String POP3S = "pop3s" ;
-  public static final String POP3_SSL_SOCKET_FACTORY = "mail.pop3.ssl.socketFactory";
-  public static final String POP3_STARTTLS_REQUIRED = "mail.pop3.starttls.required";
-  public static final String POP3_SSL_ENABLE = "mail.pop3.ssl.enable";
-  public static final String POP3_CONECT_TIMEOUT = "mail.pop3.connectiontimeout";
-  public static final String POP3_STARTTLS_ENABLE = "mail.pop3.starttls.enable";
-  public static final String POP3_SOCKET_FACTORY_CLASS = "mail.pop3.socketFactory.class";
-  public static final String POP3_SSL_SOCKET_FACTORY_FALLBACK = "mail.imap.ssl.socketFactory.fallback";
-  public static final String POP3_SSL_SOCKET_FACTORY_CLASS = "mail.pop3.ssl.socketFactory.class";   
-  
-//in MS Exchange, a big message maybe insufficience of bytes when received. set it is false to get rid this problem
-  //But neet to certain that Mail server do not implement Imap Partial FETCH
-  public static final String IMAP_MSX_PARTIAL_FETCH = "mail.imap.partialfetch";
-  
   public static final String SVR_SMTP = "smtp" ;
-  public static final String SVR_SMTPS = "smtps" ;
   public static final String SVR_SMTP_HOST = "mail.smtp.host".intern() ;
   public static final String SVR_SMTP_PORT = "mail.smtp.port".intern() ;  
   public static final String SVR_SMTP_USER = "mail.smtp.user".intern() ;
@@ -100,31 +68,16 @@ public class Utils {
   public static final String SVR_SMTP_AUTH = "mail.smtp.auth".intern() ;
   public static final String SVR_SMTP_SOCKET_FACTORY_FALLBACK = "mail.smtp.socketFactory.fallback".intern() ;
   public static final String SVR_SMTP_SOCKET_FACTORY_PORT = "mail.smtp.socketFactory.port".intern() ;
-  public static final String SVR_SMTP_SOCKET_FACTORY_CLASS = "mail.smtp.socketFactory.class";
-  public static final String SVR_SMTP_SSL_SOCKET_FACTORY_CLASS = "mail.smtp.ssl.socketFactory.class";
-  public static final String SVR_SMTP_SSL_SOCKET_FACTORY_PORT = "mail.smtp.ssl.socketFactory.port";
-  public static final String SVR_SMTPS_AUTH = "mail.smtps.auth";
-  public static final String SVR_SMTP_STARTTLS_REQUIRED = "mail.smtp.starttls.required";
-  public static final String SMTP_SSL_FACTORY = "mail.smtp.ssl.socketFactory";
-  public static final String MAIL_SMTP_SSL_ENABLE = "mail.smtp.ssl.enable";
-  public static final String SMTP_QUIT_WAIT="mail.smtp.quitwait";
-  public static final String SMTP_CONECT_TIMEOUT = "mail.smtp.connectiontimeout";
-  public static final String SVR_MAIL_SMTP_DEBUG = "mail.smtp.debug".intern() ;
-  public static final String SMTP_ISAUTHENTICATION = "smtp.isauthentication".intern() ;
-  public static final String SMTP_USEINCOMINGSETTING = "smtp.useincomingsetting".intern();
-  public static final String SMTP_DNS_NOTIFY = "mail.smtp.dsn.notify".intern();
-  public static final String SMTP_DNS_RET = "mail.smtp.dsn.ret".intern();
-  public static final String SMTP_TIMEOUT = "mail.smtp.timeout";
-  
+  public static final String SVR_SMTP_SOCKET_FACTORY_CLASS = "mail.smtp.socketFactory.class".intern() ;
   public static final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory".intern();
+  
   public static final String SVR_SSL_CLASSNAME = "javax.net.ssl.SSLSocketFactory".intern() ;
-  public static final String SOCKET_FACTORY = "javax.net.SocketFactory".intern();
-  
-  public static final String EXOMAIL_SSL_SOCKET_FACTORY_CLASS = "org.exoplatform.mail.service.impl.ExoMailSSLSocketFactory";
-  
+  public static final String SVR_MAIL_SMTP_DEBUG = "mail.smtp.debug".intern() ;
   public static final String SVR_MAIL_DEBUG = "mail.debug".intern() ;
   public static final String SVR_SMTP_STARTTLS_ENABLE = "mail.smtp.starttls.enable".intern() ;
   public static final String SVR_PROTOCOL = "protocol".intern() ;
+  public static final String SMTP_ISAUTHENTICATION = "smtp.isauthentication".intern() ;
+  public static final String SMTP_USEINCOMINGSETTING = "smtp.useincomingsetting".intern();
   public static final String SVR_INCOMING_HOST = "incoming.host".intern() ;
   public static final String SVR_INCOMING_PORT = "incoming.port".intern() ;
   public static final String SVR_INCOMING_FOLDER = "folder".intern() ;
@@ -617,13 +570,5 @@ public class Utils {
     }
     buffer.append(name);
     return buffer.toString();
-  }
-  
-  public static boolean isGmailAccount(String emailaddr){
-    if(emailaddr != null && emailaddr.length() > 0 && emailaddr.contains("@")){
-      String suffixEmail = emailaddr.split("@")[1];
-      if(suffixEmail.equalsIgnoreCase("gmail.com") || suffixEmail.equalsIgnoreCase("google.com")) return true;
-    }
-    return false;
   }
 }
