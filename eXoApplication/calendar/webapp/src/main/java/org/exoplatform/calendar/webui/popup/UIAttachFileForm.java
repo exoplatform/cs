@@ -59,10 +59,12 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
   public UIAttachFileForm() throws Exception {
     setMultiPart(true) ;
     int sizeLimit = CalendarUtils.getLimitUploadSize();
-    int i = 0 ;
-    while(i++ < maxField) {
-      UIFormUploadInput uiInput = new UIFormUploadInput(FIELD_UPLOAD + String.valueOf(i), FIELD_UPLOAD + String.valueOf(i), sizeLimit, true) ;
-      addUIFormInput(uiInput) ;
+    for (int i = 0; i < maxField; i++) {
+      if (sizeLimit == CalendarUtils.DEFAULT_VALUE_UPLOAD_PORTAL) {
+        addUIFormInput(new UIFormUploadInput(FIELD_UPLOAD + String.valueOf(i + 1), FIELD_UPLOAD + String.valueOf(i + 1), true));
+      } else {
+        addUIFormInput(new UIFormUploadInput(FIELD_UPLOAD + String.valueOf(i + 1), FIELD_UPLOAD + String.valueOf(i + 1), sizeLimit, true));
+      }
     }
   }
 

@@ -91,9 +91,10 @@ public class MailUtils {
   private static String EQUAL_ENCODE = "EQUAL_ENCODE_061";
   final public static String SPECIALCHARACTER[] = {"?", "[", "(", "|", ")", "*", "\\", "+", "}", "{", "^", "$", "\""
     ,"!", "#", "%", "&", ":", ">", "<", "~", "`", "]", "'", "/", "-"} ; ;
-    final public static String SUPPORTED_VIEW_TYPE_ATTACH[] = {"gif", "png", "jpg", "jpec", "bmp"} ;
-    final public static String SIMPLECHARACTER[] = {GREATER_THAN, SMALLER_THAN, "'", "\""};
-    final public static int MAX_POPUP_WIDTH = 900;
+  final public static String SUPPORTED_VIEW_TYPE_ATTACH[] = {"gif", "png", "jpg", "jpec", "bmp"} ;
+  final public static String SIMPLECHARACTER[] = {GREATER_THAN, SMALLER_THAN, "'", "\""};
+  final public static int MAX_POPUP_WIDTH = 900;
+  public static final int DEFAULT_VALUE_UPLOAD_PORTAL = -1;
 
     static public MailService getMailService() throws Exception {
       return (MailService)PortalContainer.getComponent(MailService.class) ;
@@ -573,7 +574,7 @@ public class MailUtils {
     public static int getLimitUploadSize() {
       PortletRequestContext pcontext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
       PortletPreferences portletPref = pcontext.getRequest().getPreferences();
-      int limitMB = -1;
+      int limitMB = DEFAULT_VALUE_UPLOAD_PORTAL;
       try {
         limitMB = Integer.parseInt(portletPref.getValue("uploadFileSizeLimitMB", "").trim());
       } catch (Exception e) {}

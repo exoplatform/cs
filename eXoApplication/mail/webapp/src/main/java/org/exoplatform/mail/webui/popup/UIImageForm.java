@@ -66,7 +66,11 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
   public UIImageForm() throws Exception {
     this.setMultiPart(true) ;
     int sizeLimit = MailUtils.getLimitUploadSize();
-    addUIFormInput(new UIFormUploadInput(FIELD_UPLOAD, FIELD_UPLOAD, sizeLimit, true));
+    if (sizeLimit == MailUtils.DEFAULT_VALUE_UPLOAD_PORTAL) {
+      addUIFormInput(new UIFormUploadInput(FIELD_UPLOAD, FIELD_UPLOAD, true));
+    } else {
+      addUIFormInput(new UIFormUploadInput(FIELD_UPLOAD, FIELD_UPLOAD, sizeLimit, true));
+    }
   }
   
   public void activate() throws Exception { }

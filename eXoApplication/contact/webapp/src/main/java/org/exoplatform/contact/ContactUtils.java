@@ -86,6 +86,7 @@ public class ContactUtils {
   final static public String FIELD_EDIT_PERMISSION = "canEdit".intern() ;
   final static public String NAME = "fileName".intern() ;
   final static public String TYPE = "type".intern() ;
+  public static final int DEFAULT_VALUE_UPLOAD_PORTAL = -1;
   
   public static String getDisplayAdddressShared(String sharedUserId, String addressName) {
     return sharedUserId + " - " + addressName ;
@@ -475,7 +476,7 @@ public class ContactUtils {
   public static int getLimitUploadSize() {
     PortletRequestContext pcontext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     PortletPreferences portletPref = pcontext.getRequest().getPreferences();
-    int limitMB = -1;
+    int limitMB = DEFAULT_VALUE_UPLOAD_PORTAL;
     try {
       limitMB = Integer.parseInt(portletPref.getValue("uploadFileSizeLimitMB", "").trim());
     } catch (Exception e) {}

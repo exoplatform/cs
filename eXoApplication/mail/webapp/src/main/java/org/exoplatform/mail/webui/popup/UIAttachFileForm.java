@@ -65,9 +65,12 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
   public UIAttachFileForm() throws Exception {
     setMultiPart(true) ;
     int sizeLimit = MailUtils.getLimitUploadSize();
-    for (int i = 0; i < 5; i++ ) {
-      UIFormUploadInput uiInput = new UIFormUploadInput(FIELD_UPLOAD + String.valueOf(i+1), FIELD_UPLOAD + String.valueOf(i+1), sizeLimit, true) ;
-      addUIFormInput(uiInput) ;
+    for (int i = 0; i < numberFile; i++) {
+      if (sizeLimit == MailUtils.DEFAULT_VALUE_UPLOAD_PORTAL) {
+        addUIFormInput(new UIFormUploadInput(FIELD_UPLOAD + String.valueOf(i + 1),FIELD_UPLOAD + String.valueOf(i + 1), true));
+      } else {
+        addUIFormInput(new UIFormUploadInput(FIELD_UPLOAD + String.valueOf(i + 1), FIELD_UPLOAD + String.valueOf(i + 1), sizeLimit, true));
+      }
     }
   }
 

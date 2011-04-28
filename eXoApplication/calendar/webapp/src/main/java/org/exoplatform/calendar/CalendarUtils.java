@@ -135,6 +135,7 @@ public class CalendarUtils {
   public static final String[] FORMATPATTERNS = {FORMATPATTERN1,FORMATPATTERN2,FORMATPATTERN3,FORMATPATTERN4} ;
   public static final String TWELVE_HOURS  = "12-Hours".intern() ;
   public static final String TWENTY_FOUR_HOURS  = "24-Hours".intern() ;
+  public static final int DEFAULT_VALUE_UPLOAD_PORTAL = -1;
 
   public static final String BREAK_LINE = "\n".intern() ;
 
@@ -1009,7 +1010,7 @@ public class CalendarUtils {
   public static int getLimitUploadSize() {
     PortletRequestContext pcontext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     PortletPreferences portletPref = pcontext.getRequest().getPreferences();
-    int limitMB = -1;
+    int limitMB = DEFAULT_VALUE_UPLOAD_PORTAL;
     try {
       limitMB = Integer.parseInt(portletPref.getValue("uploadFileSizeLimitMB", "").trim());
     } catch (Exception e) {}
