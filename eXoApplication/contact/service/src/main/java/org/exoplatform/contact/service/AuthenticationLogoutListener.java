@@ -38,14 +38,13 @@ public class AuthenticationLogoutListener extends Listener<ConversationRegistry,
 
   @Override
   public void onEvent(Event<ConversationRegistry, ConversationState> event) throws Exception {
-    try {
-      ContactService cService = (ContactService) PortalContainer.getInstance().getComponentInstanceOfType(ContactService.class);
-      String username = event.getData().getIdentity().getUserId();
-      List<String> tempContact = new ArrayList<String>();
-      tempContact.add(Utils.contactTempId);
-      cService.removeContacts(username, tempContact);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+      PortalContainer container = PortalContainer.getInstance();
+      if (container.isStarted()) {
+        ContactService cService = (ContactService) container.getComponentInstanceOfType(ContactService.class);
+        String username = event.getData().getIdentity().getUserId();
+        List<String> tempContact = new ArrayList<String>();
+        tempContact.add(Utils.contactTempId);
+        cService.removeContacts(username, tempContact);
+      }
   }
 }
