@@ -66,7 +66,9 @@ UIMailPortlet.prototype.tagListPopupMenuCallback = function(evt){
 UIMailPortlet.prototype.readMessage = function(){
 };
 
+
 UIMailPortlet.prototype.showPrintPreview = function(obj1){
+    var UIMailPortlet = eXo.mail.UIMailPortlet;
     var uiPortalApplication = document.getElementById("UIPortalApplication");
     uiPortalApplication.style.visibility = "hidden";
     var uiMailPortletNode = document.createElement('div');
@@ -76,6 +78,9 @@ UIMailPortlet.prototype.showPrintPreview = function(obj1){
     var uiMessagePreviewNode = document.createElement('div');
     uiMessagePreviewNode.className = 'UIMessagePreview';
     var frame = document.createElement("iframe");
+    frame.setAttribute("name", "mcntifr");
+    frame.id = "mcntifr";
+    frame.style.border = "1px dashed";
     frame.frameBorder = 0;
     var obj = obj1.cloneNode(true);
     var printContent = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "PrintContent");
@@ -94,29 +99,37 @@ UIMailPortlet.prototype.showPrintPreview = function(obj1){
         uiMailPortletNode.style.height = document.documentElement.scrollHeight + "px";
     document.body.insertBefore(uiMailPortletNode, uiPortalApplication);
     frame.style.width = printContent.offsetWidth + "px";
-    var doc = frame.contentWindow.document;
+    var doc = (frame.contentWindow || frame.contentDocument);
+    if (doc.document) doc = doc.document;
+    // header content 
+    var headerBlock = document.getElementById("headerPrintData");
+    var attachmentBlock = document.getElementById("attachmentPrintArea");
     doc.open();
+    if (headerBlock != null) doc.write(headerBlock.innerHTML);
     doc.write(str);
+    if (attachmentBlock != null) doc.write(attachmentBlock.innerHTML);
     doc.close();
+    var frameBody = doc.body;
+    
     if (eXo.core.Browser.isFF()) {
-        doc.body.style.visibility = "visible";
+        frameBody.style.visibility = "visible";
         frame.style.height = doc.documentElement.offsetHeight + 20 + "px";
-        frame.style.width = doc.body.offsetWidth + "px";
+        frame.style.width = frameBody.offsetWidth + "px";
     } else {
         var docHt = 0, sh, oh;
         if (doc.height) {
             docHt = doc.height;
         }
         else 
-            if (doc.body) {
-                if (doc.body.scrollHeight) 
-                    docHt = sh = doc.body.scrollHeight;
-                if (doc.body.offsetHeight) 
-                    docHt = oh = doc.body.offsetHeight;
+            if (frameBody) {
+                if (frameBody.scrollHeight) 
+                    docHt = sh = frameBody.scrollHeight;
+                if (frameBody.offsetHeight) 
+                    docHt = oh = frameBody.offsetHeight;
                 if (sh && oh) 
                     docHt = Math.max(sh, oh);
             }
-        frame.style.width = doc.body.scrollWidth + "px";
+        frame.style.width = frameBody.scrollWidth + "px";
         frame.style.height = "auto";
         frame.style.height = docHt + 20 + "px";
     }
@@ -128,7 +141,13 @@ UIMailPortlet.prototype.showPrintPreview = function(obj1){
 };
 
 UIMailPortlet.prototype.printMessage = function(){
-    window.print()
+  if (eXo.core.Browser.browserType == "ie") {
+    var frame = window.mcntifr;
+  } else {
+  var frame = window.frames["mcntifr"];
+  }
+  frame.focus();
+  frame.print();
 };
 
 UIMailPortlet.prototype.closePrint = function(){
