@@ -27,6 +27,7 @@ import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.social.core.space.model.Space;
 import org.exoplatform.social.core.space.spi.SpaceService;
+import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -49,6 +50,12 @@ import org.mortbay.cometd.continuation.EXoContinuationBayeux;
     template = "app:/templates/calendar/webui/UICalendarPortlet.gtmpl"
 )
 public class UICalendarPortlet extends UIPortletApplication {
+  
+  /**
+   * Social Space id if existed.
+   */
+  private String spaceId = null;
+  
   public UICalendarPortlet() throws Exception {
     UIActionBar uiActionBar = addChild(UIActionBar.class, null, null) ;
     uiActionBar.setCurrentView(UICalendarViewContainer.TYPES[Integer.parseInt(getCalendarSetting().getViewType())]) ;
@@ -115,10 +122,18 @@ public class UICalendarPortlet extends UIPortletApplication {
     return PortalContainer.getInstance().getRestContextName();
   }
   
-  public String getSpaceId(){
+  public String getSpaceId() {
+    return this.spaceId;
+  }
+  
+  public boolean isInSpace() {
+    return this.spaceId != null;
+  }
+  
+  private String getSpaceId(WebuiRequestContext context){
 
     try {
-      PortletRequestContext pcontext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+      PortletRequestContext pcontext = (PortletRequestContext) context;
       PortletPreferences pref = pcontext.getRequest().getPreferences();
       if(pref.getValue("SPACE_URL", null) != null) {
         String url = pref.getValue("SPACE_URL", null);
@@ -131,6 +146,12 @@ public class UICalendarPortlet extends UIPortletApplication {
       return null;
     }
 
+  }
+
+  @Override
+  public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception {
+    this.spaceId = getSpaceId(context);
+    super.processRender(app, context);
   }
   
 }
