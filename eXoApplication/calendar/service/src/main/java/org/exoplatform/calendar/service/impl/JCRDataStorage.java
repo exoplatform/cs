@@ -460,11 +460,6 @@ public class JCRDataStorage implements DataStorage {
       calNode.remove();
       // calendarHome.save() ;
       calendarHome.getSession().save();
-      try {
-        removeFeed(null, calendarId);
-      } catch (Exception e) {
-        log.warn("Exception occurred when removing feeds from group calendar " + calendarId, e);
-      }
       return calendar;
     }
     return null;

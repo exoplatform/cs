@@ -13,6 +13,8 @@ import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.GroupEventListener;
 
@@ -26,6 +28,8 @@ import org.exoplatform.services.organization.GroupEventListener;
  */
 public class NewGroupListener extends GroupEventListener {
 
+  private static final Log     log                 = ExoLogger.getLogger(NewGroupListener.class);
+  
   protected CalendarService calendarService_;
 
   private String            defaultCalendarDescription;
@@ -118,9 +122,11 @@ public class NewGroupListener extends GroupEventListener {
         }
       }
       super.postDelete(group);
-    } finally {
-      // TODO check session status here
-      // sProvider.close();
+    } catch (Exception e) {
+      // catch any exception to ensure that it is not thrown to higher level and organization service does not need to roll back data.
+      if (log.isWarnEnabled()) {
+        log.warn(String.format("Can not clear calendars of [%s]", group != null ? group.getGroupName() : "null"), e);
+      }
     }
   }
 
