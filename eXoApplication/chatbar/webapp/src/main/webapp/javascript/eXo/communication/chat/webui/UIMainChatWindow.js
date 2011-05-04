@@ -195,6 +195,7 @@ function UIMainChatWindow() {
   this.ResourceBundle = false;
   // The timeout to request resource to avoid portal's session timeout.
   this.PORTAL_SESSION_KEEPER_TIME_STEP = 5 * 1000 * 60;
+  this.isExpired = false;
 };
 
 /**
@@ -436,6 +437,8 @@ UIMainChatWindow.prototype.unsubscribeCometdTopics = function() {
   Cometd.unsubscribe('/eXo/Application/Chat/FileExchange');
 
   Cometd.unsubscribe('/eXo/Application/Chat/fullnameExchange');
+  
+  Cometd.unsubscribe('/eXo/Application/Chat/notification');
 }
 
 /**
@@ -483,6 +486,10 @@ UIMainChatWindow.prototype.subscribeCometdTopics = function() {
             .updateFullNameMap(eventObj);
       });
   // Add 17/06
+  
+  Cometd.subscribe('/eXo/Application/Chat/notification', function(eventObj) {
+    eXo.communication.chatbar.webui.UIMainChatWindow.notificationListener(eventObj);
+  });
 };
 
 /**
@@ -955,6 +962,40 @@ UIMainChatWindow.prototype.messageListener = function(eventObj) {
   this.serverDataStack[eventId] = eXo.core.JSON.parse(eventObj.data);
   eXo.communication.chatbar.webui.UIMainChatWindow.processMessages(eventId);
 };
+
+/**
+ * A Cometd listener for notification, i.e: session expiration notification
+ */
+UIMainChatWindow.prototype.notificationListener = function (eventObj) {
+  var msg = eventObj.data;
+  // CS-4849: notify when session has expired
+  if (msg == "session-expired") {
+    var chatbar = eXo.core.DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', 'TextContent');
+    // check this to handle the case of user logout
+    if (chatbar == null) return;
+    
+    this.isExpired = true;
+    if (window.confirm(this.ResourceBundle.chat_message_xmpp_session_has_expired)) location.reload(true);
+    
+    eXo.core.EventManager.addEvent(chatbar, "mouseover", (function(msg) {
+      return function() {
+        if (window.confirm(msg)) location.reload(true);
+      };
+    })(this.ResourceBundle.chat_message_xmpp_session_has_expired));
+    var bottomDecoratorLeft = eXo.core.DOMUtil.findFirstDescendantByClass(this.rootNode.parentNode, 'div', 'BottomDecoratorLeft');  
+    var bottomInformation = eXo.core.DOMUtil.findFirstDescendantByClass(bottomDecoratorLeft, 'div', 'Information');
+    bottomInformation.innerHTML = this.ResourceBundle.chat_information_session_has_expired;
+    
+    var chatwindow = eXo.core.DOMUtil.findFirstDescendantByClass(this.rootNode.parentNode, 'div', 'UIWindow');
+    eXo.core.EventManager.addEvent(chatwindow, "mouseover", function (e) {
+      var current = eXo.core.EventManager.getEventTargetByClass(e, "Actionbar") && eXo.core.EventManager.getEventTargetByClass(e, "TextContent");
+      if (current) {
+        if (window.confirm(eXo.communication.chatbar.webui.UIMainChatWindow.ResourceBundle.chat_message_xmpp_session_has_expired)) location.reload(true);
+      }
+    });
+  }
+};
+
 
 // ---+--
 /**
@@ -1901,6 +1942,10 @@ UIMainChatWindow.prototype.jabberGetMessageHistory = function(targetPerson,
  *          msg struct: {to:'buddy id', body:'message body'}
  */
 UIMainChatWindow.prototype.jabberSendMessage = function(sendTo, msg) {
+  if (this.isExpired) {
+    if (window.confirm(this.ResourceBundle.chat_message_xmpp_session_has_expired)) location.reload(true);
+    return;
+  }
   this.activeAction = this.SEND_MESSAGE_ACTION;
   msg = {
     to : sendTo,
@@ -1922,6 +1967,10 @@ UIMainChatWindow.prototype.jabberSendMessage = function(sendTo, msg) {
  *          msg struct: {to:'buddy id', body:'message body'}
  */
 UIMainChatWindow.prototype.jabberSendRoomMessage = function(sendTo, msg) {
+  if (this.isExpired) {
+    if (window.confirm(this.ResourceBundle.chat_message_xmpp_session_has_expired)) location.reload(true);
+    return;
+  }
   this.activeAction = this.SEND_MESSAGE_ACTION;
   msg = {
     to : sendTo,

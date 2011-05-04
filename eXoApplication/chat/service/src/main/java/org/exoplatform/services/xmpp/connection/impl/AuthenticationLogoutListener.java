@@ -26,6 +26,8 @@ import org.exoplatform.services.presence.DefaultPresenceStatus;
 import org.exoplatform.services.security.ConversationRegistry;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.xmpp.connection.XMPPSession;
+import org.exoplatform.services.xmpp.util.CometdChannels;
+import org.exoplatform.ws.frameworks.cometd.transport.ContinuationServiceDelegate;
 
 /**
  * Created by The eXo Platform SAS
@@ -56,6 +58,10 @@ public class AuthenticationLogoutListener extends Listener<ConversationRegistry,
             log.error("Can not save user chat status");
           }
           session.removeAllTransport();
+        }
+        ContinuationServiceDelegate delegate = (ContinuationServiceDelegate) container.getComponentInstanceOfType(ContinuationServiceDelegate.class);
+        if (delegate != null) {
+          delegate.sendMessage(userId, CometdChannels.NOTIFICATION, "session-expired", null);
         }
       }
     } catch (Exception e) {
