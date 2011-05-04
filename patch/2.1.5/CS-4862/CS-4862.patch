@@ -1,0 +1,167 @@
+
+Property changes on: .
+___________________________________________________________________
+Modified: svn:mergeinfo
+   Merged /cs/trunk:r67868
+
+Index: eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/UICalendarPortlet.java
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/UICalendarPortlet.java	(revision 67868)
++++ eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/UICalendarPortlet.java	(working copy)
+@@ -27,6 +27,7 @@
+ import org.exoplatform.container.PortalContainer;
+ import org.exoplatform.social.core.space.model.Space;
+ import org.exoplatform.social.core.space.spi.SpaceService;
++import org.exoplatform.webui.application.WebuiApplication;
+ import org.exoplatform.webui.application.WebuiRequestContext;
+ import org.exoplatform.webui.application.portlet.PortletRequestContext;
+ import org.exoplatform.webui.config.annotation.ComponentConfig;
+@@ -49,6 +50,12 @@
+     template = "app:/templates/calendar/webui/UICalendarPortlet.gtmpl"
+ )
+ public class UICalendarPortlet extends UIPortletApplication {
++  
++  /**
++   * Social Space id if existed.
++   */
++  private String spaceId = null;
++  
+   public UICalendarPortlet() throws Exception {
+     UIActionBar uiActionBar = addChild(UIActionBar.class, null, null) ;
+     uiActionBar.setCurrentView(UICalendarViewContainer.TYPES[Integer.parseInt(getCalendarSetting().getViewType())]) ;
+@@ -115,10 +122,18 @@
+     return PortalContainer.getInstance().getRestContextName();
+   }
+   
+-  public String getSpaceId(){
++  public String getSpaceId() {
++    return this.spaceId;
++  }
++  
++  public boolean isInSpace() {
++    return this.spaceId != null;
++  }
++  
++  private String getSpaceId(WebuiRequestContext context){
+ 
+     try {
+-      PortletRequestContext pcontext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
++      PortletRequestContext pcontext = (PortletRequestContext) context;
+       PortletPreferences pref = pcontext.getRequest().getPreferences();
+       if(pref.getValue("SPACE_URL", null) != null) {
+         String url = pref.getValue("SPACE_URL", null);
+@@ -132,5 +147,11 @@
+     }
+ 
+   }
++
++  @Override
++  public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception {
++    this.spaceId = getSpaceId(context);
++    super.processRender(app, context);
++  }
+   
+ }
+\ No newline at end of file
+Index: eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/UICalendars.java
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/UICalendars.java	(revision 67868)
++++ eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/UICalendars.java	(working copy)
+@@ -148,8 +148,12 @@
+   }
+ 
+   public void checkAll() {
++    if (this.getAncestorOfType(UICalendarPortlet.class).isInSpace()) {
++      // As just one calendar is set to checked, this function is broken if the portlet is in Social Space.   
++      return;
++    }
+     for(UIComponent cpm : getChildren())
+-      getUIFormCheckBoxInput(cpm.getId()).setChecked(true) ; 
++      getUIFormCheckBoxInput(cpm.getId()).setChecked(true); 
+   }
+ 
+   public List<String> getCheckedCalendars() {
+@@ -164,6 +168,7 @@
+   
+   public List<GroupCalendarData> getPrivateCalendars() throws Exception{
+     CalendarService calendarService = CalendarUtils.getCalendarService() ;
++    UICalendarPortlet calendarPortlet = this.getAncestorOfType(UICalendarPortlet.class);
+     String username = CalendarUtils.getCurrentUser() ;
+     boolean dontShowAll = false;
+     List<GroupCalendarData> groupCalendars = calendarService.getCalendarCategories(username, dontShowAll) ;
+@@ -180,9 +185,14 @@
+             calendar.setName(newName);
+           }
+           colorMap_.put(Calendar.TYPE_PRIVATE + CalendarUtils.COLON + calendar.getId(), calendar.getCalendarColor()) ;
+-          if(getUIFormCheckBoxInput(calendar.getId()) == null){
+-            addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false).setChecked(isInSpace(calendar.getId()))) ;
+-          } 
++          UIFormCheckBoxInput checkbox = getUIFormCheckBoxInput(calendar.getId());
++          if(checkbox == null){
++            checkbox = new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false);
++            checkbox.setChecked(isCalendarOfSpace(calendar.getId()));
++            addUIFormInput(checkbox) ;
++          } else {
++            checkbox.setChecked(isCalendarOfSpace(calendar.getId()));
++          }
+         }
+       }
+     }
+@@ -192,10 +202,10 @@
+   /**
+    * 
+    * @param calendarId
+-   * @return true if the portlet is access from Social Space or the calendar is used for Social Space.
++   * @return true if the calendar is made by Social Space
+    * else return false.
+    */
+-  protected boolean isInSpace(String calendarId) {
++  protected boolean isCalendarOfSpace(String calendarId) {
+     UICalendarPortlet calendarPortlet = this.getAncestorOfType(UICalendarPortlet.class);
+     String spaceId = calendarPortlet.getSpaceId();
+     return (spaceId == null || (spaceId != null && calendarId.contains(spaceId)));
+@@ -205,6 +215,7 @@
+     String username = CalendarUtils.getCurrentUser() ;
+     String[] groups = CalendarUtils.getUserGroups(username) ;
+     CalendarService calendarService = CalendarUtils.getCalendarService() ;
++    UICalendarPortlet calendarPortlet = this.getAncestorOfType(UICalendarPortlet.class);
+     List<GroupCalendarData> groupCalendars = calendarService.getGroupCalendars(groups, false, username) ;
+     Map<String, String> map = new HashMap<String, String> () ;
+     for(GroupCalendarData group : groupCalendars) {
+@@ -214,7 +225,11 @@
+         colorMap_.put(Calendar.TYPE_PUBLIC + CalendarUtils.COLON + calendar.getId(), calendar.getCalendarColor()) ;
+         UIFormCheckBoxInput checkbox = getUIFormCheckBoxInput(calendar.getId());
+         if(checkbox == null){
+-          addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false).setChecked(isInSpace(calendar.getId()))) ;
++          checkbox = new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false);
++          checkbox.setChecked(isCalendarOfSpace(calendar.getId()));
++          addUIFormInput(checkbox) ;
++        } else {
++          checkbox.setChecked(isCalendarOfSpace(calendar.getId()));
+         }
+       }
+     }
+@@ -225,6 +240,7 @@
+   public GroupCalendarData getSharedCalendars() throws Exception{
+     CalendarService calendarService = CalendarUtils.getCalendarService() ;
+     GroupCalendarData groupCalendars = calendarService.getSharedCalendars(CalendarUtils.getCurrentUser(), false) ;
++    UICalendarPortlet calendarPortlet = this.getAncestorOfType(UICalendarPortlet.class);
+     CalendarSetting setting = calendarService.getCalendarSetting(CalendarUtils.getCurrentUser()) ;
+     Map<String, String> map = new HashMap<String, String>() ;
+     for(String key : setting.getSharedCalendarsColors()) {
+@@ -240,8 +256,13 @@
+         String color = map.get(calendar.getId()) ;
+         if(color == null) color = calendar.getCalendarColor() ;
+         colorMap_.put(Calendar.TYPE_SHARED + CalendarUtils.COLON + calendar.getId(), color) ;
+-        if(getUIFormCheckBoxInput(calendar.getId()) == null){
+-          addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false).setChecked(isInSpace(calendar.getId()))) ;
++        UIFormCheckBoxInput checkbox = getUIFormCheckBoxInput(calendar.getId());
++        if(checkbox == null){
++          checkbox = new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false);
++          checkbox.setChecked(isCalendarOfSpace(calendar.getId()));
++          addUIFormInput(checkbox) ;
++        } else {
++          checkbox.setChecked(isCalendarOfSpace(calendar.getId()));
+         }
+       }
+     }
