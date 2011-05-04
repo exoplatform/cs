@@ -236,13 +236,13 @@ UITabControl.prototype.fileTransportRequestEventFire = function(FTReqEvent) {
   var fileSize = this.getFuzzyFileSize(FTReqEvent.fileSize);
   // Create file transport node
   var fileTransportNode = this.LocalTemplateEngine.getTemplateByClassName(this.CSS_CLASS.sendFile);
-  var labelNode = DOMUtil.findFirstDescendantByClass(fileTransportNode, 'div', this.CSS_CLASS.sendFileLabel);
+  var labelNode = DOMUtil.findFirstDescendantByClass(fileTransportNode, 'h5', this.CSS_CLASS.sendFileLabel);
   //var alertContent = this.tabId.targetPerson + ' want to send you [' + FTReqEvent.filename + ']';
   var fullName = eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[this.tabId.targetPerson];
   var alertContent = this.UIMainChatWindow.ResourceBundle.chat_message_file_transport_request.replace('{0}', fullName);
   alertContent = alertContent.replace('{1}', FTReqEvent.filename);
   labelNode.innerHTML = alertContent;
-  var fileNameNode = DOMUtil.findFirstDescendantByClass(fileTransportNode, 'div', this.CSS_CLASS.sendFileName);
+  var fileNameNode = DOMUtil.findFirstDescendantByClass(fileTransportNode, 'p', this.CSS_CLASS.sendFileName);
   fileNameNode.innerHTML = FTReqEvent.filename + ' (' + fileSize.size + ' ' + fileSize.unit + ')<br>'
                             + (FTReqEvent.description || '') ;
   fileTransportNode.uuid = FTReqEvent.uuid;
@@ -444,7 +444,7 @@ UITabControl.prototype.initUI = function(buddyId) {
   this.messageContainerNode = DOMUtil.findFirstDescendantByClass(this.tabPaneNode, 'div', this.CSS_CLASS.messagesContainer);
   this.messagesBoxNode = DOMUtil.findFirstDescendantByClass(this.tabPaneNode, 'div', this.CSS_CLASS.messagesBox);
   
-  this.buddyListNode = DOMUtil.findFirstDescendantByClass(this.tabPaneNode, 'div', this.CSS_CLASS.nicksGroupChat);
+  this.buddyListNode = DOMUtil.findFirstDescendantByClass(this.tabPaneNode, 'ul', this.CSS_CLASS.nicksGroupChat);
 
   this.tabPaneNode.startTime = (new Date()).getTime();
 
@@ -675,7 +675,7 @@ UITabControl.prototype.createNewMsgNode = function(buddyId, msgObj) {
   } else {
     messageNode = this.LocalTemplateEngine.getTemplateByClassName(this.CSS_CLASS.guestMessage);
   }
-  var msgTitleNode = DOMUtil.findFirstDescendantByClass(messageNode, 'div', this.CSS_CLASS.chatIconStatus);
+  var msgTitleNode = DOMUtil.findFirstDescendantByClass(messageNode, 'h5', this.CSS_CLASS.chatIconStatus);
   var fullNameMap = eXo.communication.chatbar.webui.UIChatWindow.fullNameMap ;
   var fullName = buddyId;
   if(fullName.indexOf('@') >= 0)
@@ -689,13 +689,13 @@ UITabControl.prototype.createNewMsgNode = function(buddyId, msgObj) {
     msgTitleNode.innerHTML = fullName ;
   }
   
-  var chatTimeNode = DOMUtil.findFirstDescendantByClass(messageNode, 'div', this.CSS_CLASS.chatTimeCenter);
+  var chatTimeBoxNode = DOMUtil.findFirstDescendantByClass(messageNode, 'div', this.CSS_CLASS.chatTime);
   if (this.updatingHistoryMessage ||
       msgObj['dateSend']) {
-    var chatTimeBoxNode = DOMUtil.findAncestorByClass(chatTimeNode, this.CSS_CLASS.chatTime);
+    //var chatTimeBoxNode = DOMUtil.findAncestorByClass(chatTimeNode, this.CSS_CLASS.chatTime);
     if (chatTimeBoxNode) {
       chatTimeBoxNode.className += ' ' + this.CSS_CLASS.chatTimeHistory;
-      chatTimeNode = DOMUtil.findFirstDescendantByClass(messageNode, 'div', this.CSS_CLASS.chatTimeCenter);
+      //chatTimeNode = DOMUtil.findFirstDescendantByClass(messageNode, 'div', this.CSS_CLASS.chatTimeCenter);
     }
   }
   var timeStamp = msgObj['dateSend'];
@@ -717,7 +717,7 @@ UITabControl.prototype.createNewMsgNode = function(buddyId, msgObj) {
                 //' - ' + 
                 //timeStamp.getHours() + ':' + (timeStamp.getMinutes() + 1) + ':' + timeStamp.getSeconds();
   }
-  chatTimeNode.innerHTML = timeStamp;
+  chatTimeBoxNode.innerHTML = timeStamp;
     
   return messageNode;
 };
@@ -809,36 +809,6 @@ UITabControl.prototype.setVisible = function(visible) {
     if (this.tabPaneNode.style.display != 'block') {
       this.tabPaneNode.style.display = 'block';
     }
-    /*
-    if (!this.isFixedSize) {
-      var resizableObjectList = DOMUtil.findDescendantsByClass(this.tabPaneNode, 'div', 'UIResizableBlock');
-      for (var i=0; i<resizableObjectList.length; i++) {
-        resizableObjectList[i].style.width = resizableObjectList[i].offsetWidth + 'px';
-        resizableObjectList[i].style.height = resizableObjectList[i].offsetHeight + 'px';
-      }
-      // Fix for room chat tab
-      if (this.isGroupChat) {
-        var totalWidth = DOMUtil.findFirstDescendantByClass(this.tabPaneNode, 'div', 'ChatContainer').offsetWidth;
-        var leftPaneList = DOMUtil.findFirstDescendantByClass(this.tabPaneNode, 'div', 'MessagesContainer');
-        var leftPaneWidth = DOMUtil.getStyle(leftPaneList, 'width', true);
-        leftPaneList = DOMUtil.findDescendantsByClass(this.tabPaneNode, 'div', 'LeftPane');
-        var rightPaneList = DOMUtil.findFirstDescendantByClass(this.tabPaneNode, 'div', 'RightPane');
-        var rightPaneWidth = DOMUtil.getStyle(rightPaneList, 'width', true);
-        rightPaneList = DOMUtil.findDescendantsByClass(this.tabPaneNode, 'div', 'RightPane');
-
-        var delta = ((totalWidth - (leftPaneWidth + rightPaneWidth)) / 2) - 10;
-
-        for (var i=0; i<leftPaneList.length; i++) {
-          leftPaneList[i].style.width = Math.abs(DOMUtil.getStyle(leftPaneList[i], 'width', true) + delta) + 'px';
-        }
-        for (var i=0; i<rightPaneList.length; i++) {
-          rightPaneList[i].style.width = Math.abs(DOMUtil.getStyle(rightPaneList[i], 'width', true) + delta) + 'px';
-        }
-      }
-
-      this.isFixedSize = true;
-    }
-    */
     this.scrollMessageBox();
   } else {
     var selectedTabNode = DOMUtil.findFirstDescendantByClass(this.tabNode, 'div', 'SelectedTab');
@@ -1947,7 +1917,7 @@ UIChatWindow.prototype.autoScroll = function(focusTabIndex) {
 // -- / --
 
 UIChatWindow.prototype.showPopupMenu = function(obj, event){
-  var popup = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "UIRightClickPopupMenu");
+  var popup = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "ul", "UIRightClickPopupMenu");
   eXo.cs.Utils.show(obj, event);
   if (eXo.core.Browser.isIE6()) {
       if (eXo.core.DOMUtil.findDescendantsByTagName(popup, "iframe").length > 0) 

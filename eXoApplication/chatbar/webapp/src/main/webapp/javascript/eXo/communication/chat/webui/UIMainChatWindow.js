@@ -282,10 +282,10 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName,
   // 'div', 'Information');
   this.loginFormNode = DOMUtil.findFirstDescendantByClass(this.rootNode,
       'fieldset', 'LoginForm');
-  this.buddyListNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div',
+  this.buddyListNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'ul',
       'BuddyList');
   this.joinedRoomListNode = DOMUtil.findFirstDescendantByClass(this.rootNode,
-      'div', 'RoomData');
+      'ul', 'RoomData');
   this.buddyItemActionMenuNode = DOMUtil.findFirstDescendantByClass(
       this.chatWindowsContainerNode, 'div', 'BuddyItemActionMenu');
   // this.buddyItemActionMenuNode =
@@ -655,12 +655,7 @@ UIMainChatWindow.prototype.updateJoinedRoomList = function() {
         }
       }
       var roomInfo = roomList[i].roomInfo;
-      var roomNode = document.createElement('div');
-      if (isThisUserJoined)
-        roomNode.className = 'TextMemberRoom HightLightTextMemberRoom';
-      else
-        roomNode.className = 'TextMemberRoom';
-      var roomLink = document.createElement('div');
+      var roomLink = document.createElement('li');
       var roomName = roomInfo.room.substr(0, roomInfo.room.indexOf('@'));
       if (roomName.length > MAX_ROOM_TITLE_LEN)
         roomLink.innerHTML = roomName.substr(0, MAX_ROOM_TITLE_LEN - 3) + '...';
@@ -671,8 +666,7 @@ UIMainChatWindow.prototype.updateJoinedRoomList = function() {
         eXo.communication.chatbar.webui.UIJoinRoomPopupWindow
             .joinSelectedRoomByIdAction(event);
       };
-      roomNode.appendChild(roomLink);
-      this.joinedRoomListNode.appendChild(roomNode);
+      this.joinedRoomListNode.appendChild(roomLink);
     }
   }
 }

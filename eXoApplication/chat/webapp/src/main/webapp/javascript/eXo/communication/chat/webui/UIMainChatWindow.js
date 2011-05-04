@@ -244,7 +244,7 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName, cometd
   this.statusNode = DOMUtil.findAncestorByClass(this.statusIconNode, 'UITab');
   //this.statusbarNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', 'Information');
   this.loginFormNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'fieldset', 'LoginForm');
-  this.buddyListNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', 'BuddyList');
+  this.buddyListNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'ul', 'BuddyList');
   this.buddyItemActionMenuNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'BuddyItemActionMenu');
   //this.buddyItemActionMenuNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', 'BuddyItemActionMenu');
   

@@ -7,7 +7,7 @@ UIChatBar.prototype.showMenu = function(obj,event){
 	event.cancelBubble = true;
 	eXo.core.DOMUtil.cleanUpHiddenElements();
 	var menu = eXo.core.DOMUtil.findFirstDescendantByClass(obj,"div","UIRightClickPopupMenu");
-	var isRoomMenu = eXo.core.DOMUtil.findFirstDescendantByClass(menu, 'div', 'RoomData');
+	var isRoomMenu = eXo.core.DOMUtil.findFirstDescendantByClass(menu, 'ul', 'RoomData');
 	if(isRoomMenu)
 		eXo.communication.chatbar.webui.UIMainChatWindow.jabberGetJoinedRoomList();
 	this.switchState(menu);

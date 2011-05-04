@@ -1,7 +1,5 @@
-<div style="position:relative">
-  <div class="UITooltipAtTop" onclick = "javascript:this.style.display='none';">
+<div class="UITooltipAtTop" onclick = "javascript:this.style.display='none';">
     <div class="UITooltipAtTop_Top"><span></span></div>
     <div class="UITooltipAtTop_Middle"><span class="UITooltipAtTop_Content"></span></div>
-    <div class="UITooltipAtTop_Bottom"></div>
-  </div>
+    <div class="UITooltipAtTop_Bottom"><span></span></div>
 </div>
