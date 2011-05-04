@@ -1621,7 +1621,7 @@ public class JCRDataStorage implements DataStorage {
    * {@inheritDoc}
    */
   public void syncRemoveEvent(Node eventFolder, String rootEventId) throws Exception {
-    QueryManager qm = getSession(createSystemProvider()).getWorkspace().getQueryManager();
+    QueryManager qm = eventFolder.getSession().getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + eventFolder.getParent().getParent().getParent().getPath() + "//element(*,exo:calendarPublicEvent)[@exo:rootEventId='").append(rootEventId).append("']");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
     QueryResult result = query.execute();
@@ -1676,7 +1676,7 @@ public class JCRDataStorage implements DataStorage {
    * {@inheritDoc}
    */
   public Node getDateFolder(Node publicApp, Date date) throws Exception {
-    java.util.Calendar fromCalendar = new GregorianCalendar();
+    java.util.Calendar fromCalendar = Utils.getInstanceTempCalendar();
     fromCalendar.setTime(date);
     Node yearNode;
     Node monthNode;
@@ -3351,7 +3351,25 @@ public class JCRDataStorage implements DataStorage {
    * {@inheritDoc}
    */
   public Map<String, String> checkFreeBusy(EventQuery eventQuery) throws Exception {
-    Node eventFolder = getEventFolder(eventQuery.getFromDate().getTime());
+    Date fromDate = eventQuery.getFromDate().getTime();
+    Date toDate = eventQuery.getToDate().getTime();   
+    Map<String, String> participantMap = new HashMap<String, String>();
+    participantMap.putAll(checkFreeBusy(eventQuery, fromDate));
+    if (!Utils.isSameDate(fromDate, toDate)) {
+      Map<String,String> remainingInfo = checkFreeBusy(eventQuery, toDate);
+      if (remainingInfo.size() > 0) {
+        for (String par : remainingInfo.keySet()) {
+          String newValue = remainingInfo.get(par);
+          if (participantMap.containsKey(par)) newValue += Utils.COMMA + participantMap.get(par);
+          participantMap.put(par, newValue);
+        }
+      }
+    }
+    return participantMap;
+  }
+  
+  public Map<String,String> checkFreeBusy(EventQuery eventQuery, Date date) throws Exception {
+    Node eventFolder = getEventFolder(date);
     Map<String, String> participantMap = new HashMap<String, String>();
     eventQuery.setCalendarPath(eventFolder.getPath());
     eventQuery.setOrderBy(new String[] { Utils.EXO_FROM_DATE_TIME });
@@ -3392,7 +3410,7 @@ public class JCRDataStorage implements DataStorage {
     }
     return participantMap;
   }
-
+  
   /**
    * {@inheritDoc}
    */
