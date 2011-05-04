@@ -98,7 +98,7 @@
     <org.jvnet.mock-javamail.version>1.9</org.jvnet.mock-javamail.version>
     <javagroups.version>2.5.2</javagroups.version>
     <com.thoughtworks.xstream.version>1.2</com.thoughtworks.xstream.version>
-    <org.apache.shindig.version>0.8.1-1-r719456</org.apache.shindig.version>
+    <org.apache.shindig.version>trunk-r719456-eXo03</org.apache.shindig.version>
   </properties>
   <build>
     <resources>
