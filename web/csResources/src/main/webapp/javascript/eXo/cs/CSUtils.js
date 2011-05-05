@@ -127,8 +127,8 @@ Utils.prototype.show = function(obj, evt){
 	if(!evt) evt = window.event ;
 	evt.cancelBubble = true ;
 	var DOMUtil = eXo.core.DOMUtil ;
-	var uiPopupCategory = DOMUtil.findFirstDescendantByClass(obj, 'div', 'UIRightClickPopupMenu') ;	
-	if (!uiPopupCategory) return ;	
+	var uiPopupCategory = DOMUtil.findFirstDescendantByClass(obj, 'ul', 'UIRightClickPopupMenu') ;	
+	if (!uiPopupCategory) uiPopupCategory = DOMUtil.findFirstDescendantByClass(obj, 'div', 'UIRightClickPopupMenu') ;
 	if(uiPopupCategory.style.display == "none") {
 		DOMUtil.cleanUpHiddenElements() ;
 		uiPopupCategory.style.display = "block" ;

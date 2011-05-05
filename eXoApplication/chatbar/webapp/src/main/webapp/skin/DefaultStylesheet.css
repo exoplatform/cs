@@ -355,6 +355,7 @@ form {
 .UIConversation .UIActionbar .HistoryIcon {
 	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -422px; /* orientation=lt */
 	background: url('DefaultSkin/skinIcons/SmallChatIcons-rt.gif') no-repeat right -422px; /* orientation=rt */
+	position: relative;
 }
 
 .UIConversation .UIActionbar .HistoryIcon .DownArrow1Icon {
@@ -1082,7 +1083,8 @@ form {
 }
 
 .UIChatBarPortlet .UIActionbar .ContactArea {
-	width: 27px !important;
+	width: 27px;
+	position: relative;
 }
 
 .UIChatBarPortlet .UIActionbar .ContactArea .UIRightClickPopupMenu {
@@ -1091,12 +1093,18 @@ form {
 }
 
 .UIChatBarPortlet .UIActionbar .RoomArea {
-	width: 27px !important;
+	width: 27px;
+	position: relative;
 }
 
 .UIChatBarPortlet .UIActionbar .RoomArea .UIRightClickPopupMenu {
 	right: 0; /* orientation=lt */
 	left: 0; /* orientation=rt */
+}
+
+.UIChatBarPortlet .UIActionbar .RoomArea {
+	width: 27px;
+	position: relative;
 }
 
 .UIChatBarPortlet .UIActionbar .StatusArea .UIRightClickPopupMenu {

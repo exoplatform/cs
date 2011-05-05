@@ -329,6 +329,7 @@
 .UIConversation .UIActionbar .HistoryIcon {
 	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -422px; /* orientation=lt */
 	background: url('DefaultSkin/skinIcons/SmallChatIcons-rt.gif') no-repeat right -422px; /* orientation=rt */
+	position: relative;
 }
 
 .UIConversation .UIActionbar .HistoryIcon .DownArrow1Icon {
@@ -992,6 +993,7 @@ form {
 .UIChatNotification {
 	float: right; /* orientation=lt */
 	float: left; /* orientation=rt */
+	position: relative;
 }
 
 .UIChatNotification div:first-child {

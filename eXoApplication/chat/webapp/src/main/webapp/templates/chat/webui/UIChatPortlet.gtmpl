@@ -10,7 +10,7 @@
   jsManager.addOnLoadJavascript("eXo.communication.chat.eXoChat.init");
 %>
 <!-- Begin Notification -->
-<div class="UIChatNotification" style="display: none; position: relative; top: 13px;">
+<div class="UIChatNotification" style="display: none; top: 13px;">
     <div style="position: absolute; top: 0px; width: 250px;">
         <div class="BoxNote ClearFix">
             <div class="LeftBoxNote">
@@ -850,7 +850,7 @@
 				   </form>
 				  </div>
 				<span class="SeperatorLine"></span>
-				<div class="Icon HistoryIcon" onclick="eXo.communication.chat.webui.UIChatWindow.showPopupMenu(this, event)" style="position: relative;">
+				<div class="Icon HistoryIcon" onclick="eXo.communication.chat.webui.UIChatWindow.showPopupMenu(this, event)">
 					<a href="#" class="Label DownArrow1Icon"><%=_ctx.appRes("UIChatPortlet.label.history") %></a>
 				  
 				  <% /*Begin Popup Menu*/ %>
@@ -907,7 +907,7 @@
 				<a class="Icon OptionsIcon" title="<%=_ctx.appRes("UIChatPortlet.label.roomConfiguration");%>" onclick="eXo.communication.chat.webui.UIChatWindow.configRoom(event);">
 					<%=_ctx.appRes("UIChatPortlet.label.options");%> </a>
 				<span class="SeperatorLine"></span>
-				<div class="Icon HistoryIcon" onclick="eXo.communication.chat.webui.UIChatWindow.showPopupMenu(this, event)" style="position: relative;">
+				<div class="Icon HistoryIcon" onclick="eXo.communication.chat.webui.UIChatWindow.showPopupMenu(this, event)">
 					<a href="#" class="Label DownArrow1Icon"><%=_ctx.appRes("UIChatPortlet.label.history") %></a>
 				  
 				  <% /*Begin Popup Menu*/ %>

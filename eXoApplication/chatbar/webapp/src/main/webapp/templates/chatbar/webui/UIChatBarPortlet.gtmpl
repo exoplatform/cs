@@ -45,8 +45,7 @@
 
 	<div class="UIChatbarStatusRB ClearFix" style="display:none;" statusNotice="<%=_ctx.appRes("UIChatBarPortlet.label.status-notice");%>" onLine="<%=_ctx.appRes("UIChatBarPortlet.label.onLine");%>" extendAway="<%=_ctx.appRes("UIChatBarPortlet.label.extendAway");%>" away="<%=_ctx.appRes("UIChatBarPortlet.label.away");%>" freeToChat="<%=_ctx.appRes("UIChatBarPortlet.label.freeToChat");%>" offLine="<%=_ctx.appRes("UIChatBarPortlet.label.offLine");%>"></div>
     <div class="UIActionbar ClearFix">
-		<div class="StatusArea IconButton" onclick="eXo.communication.chatbar.webui.UIChatBar.showMenu(this,event);"
-			style="width: 60px; position: relative;">
+		<div class="StatusArea IconButton" onclick="eXo.communication.chatbar.webui.UIChatBar.showMenu(this,event);">
 			<!-- Right Click Popup Online -->
 				<div class="UIRightClickPopupMenu" style="width: 150px; bottom: 27px; display: none;">
 					<ul>
@@ -71,8 +70,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="RoomArea IconButton" onclick="eXo.communication.chatbar.webui.UIChatBar.showMenu(this,event);"
-			style="width: 60px; position: relative;">
+		<div class="RoomArea IconButton" onclick="eXo.communication.chatbar.webui.UIChatBar.showMenu(this,event);">
 			<!-- Right Click Popup Group -->
 				<div class="UIRightClickPopupMenu" style="width: 200px; bottom: 27px; display: none;">
 						<ul class="ScrollGroup RoomData"></ul>
@@ -85,7 +83,7 @@
 			<!-- End Right Click Popup Group-->
 			<a class="IconHolder RoomManageIcon" title="<%=_ctx.appRes("UIChatBarPortlet.label.joinRoom");%>"><span></span></a>
 		</div>
-		<div class="ContactArea IconButton" style="width: 100px; position: relative;" onclick="eXo.communication.chatbar.webui.UIChatBar.showMenu(this,event);" >
+		<div class="ContactArea IconButton" onclick="eXo.communication.chatbar.webui.UIChatBar.showMenu(this,event);" >
 			<% _ctx.include("app:/templates/chatbar/webui/UITooltipAtTop.gtmpl"); %>
 			<!-- Right Click Popup Contact -->
 				<div class="UIRightClickPopupMenu" style="width: 200px; bottom: 27px; display: none;">
@@ -978,7 +976,7 @@
 				   </form>
 				  </div>
 				<span class="SeperatorLine"></span>
-				<div class="Icon HistoryIcon" onclick="eXo.communication.chatbar.webui.UIChatWindow.showPopupMenu(this, event)" style="position: relative;">
+				<div class="Icon HistoryIcon" onclick="eXo.communication.chatbar.webui.UIChatWindow.showPopupMenu(this, event)">
 					<a href="#" class="Label DownArrow1Icon"><%=_ctx.appRes("UIChatBarPortlet.label.history") %></a>
 				  
 				  <% /*Begin Popup Menu*/ %>
@@ -1036,7 +1034,7 @@
 					<%=_ctx.appRes("UIChatBarPortlet.label.options");%> </a>
 					
 				<span class="SeperatorLine"></span>
-				<div class="Icon HistoryIcon" onclick="eXo.communication.chatbar.webui.UIChatWindow.showPopupMenu(this, event)" style="position: relative;">
+				<div class="Icon HistoryIcon" onclick="eXo.communication.chatbar.webui.UIChatWindow.showPopupMenu(this, event)">
 					<a href="#" class="Label DownArrow1Icon"><%=_ctx.appRes("UIChatBarPortlet.label.history") %></a>
 				  
 				  <% /*Begin Popup Menu*/ %>
