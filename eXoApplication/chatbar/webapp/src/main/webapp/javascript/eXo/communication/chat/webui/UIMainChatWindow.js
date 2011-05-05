@@ -964,25 +964,35 @@ UIMainChatWindow.prototype.notificationListener = function (eventObj) {
   var msg = eventObj.data;
   // CS-4849: notify when session has expired
   if (msg == "session-expired") {
-    var chatbar = eXo.core.DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', 'TextContent');
+    var chatbar = eXo.core.DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', 'UIActionbar');
     // check this to handle the case of user logout
     if (chatbar == null) return;
     
     this.isExpired = true;
     if (window.confirm(this.ResourceBundle.chat_message_xmpp_session_has_expired)) location.reload(true);
     
-    eXo.core.EventManager.addEvent(chatbar, "mouseover", (function(msg) {
-      return function() {
-        if (window.confirm(msg)) location.reload(true);
-      };
-    })(this.ResourceBundle.chat_message_xmpp_session_has_expired));
+    eXo.core.EventManager.addEvent(chatbar, "mouseover", function(e) {
+      var current = eXo.core.EventManager.getEventTargetByClass(e, "StatusArea") || 
+                    eXo.core.EventManager.getEventTargetByClass(e, "RoomArea") || 
+                    eXo.core.EventManager.getEventTargetByClass(e, "ContactArea");
+      if (current) {
+        if (window.confirm(eXo.communication.chatbar.webui.UIMainChatWindow.ResourceBundle.chat_message_xmpp_session_has_expired)) location.reload(true);
+      }
+    });
     var bottomDecoratorLeft = eXo.core.DOMUtil.findFirstDescendantByClass(this.rootNode.parentNode, 'div', 'BottomDecoratorLeft');  
     var bottomInformation = eXo.core.DOMUtil.findFirstDescendantByClass(bottomDecoratorLeft, 'div', 'Information');
     bottomInformation.innerHTML = this.ResourceBundle.chat_information_session_has_expired;
     
     var chatwindow = eXo.core.DOMUtil.findFirstDescendantByClass(this.rootNode.parentNode, 'div', 'UIWindow');
     eXo.core.EventManager.addEvent(chatwindow, "mouseover", function (e) {
-      var current = eXo.core.EventManager.getEventTargetByClass(e, "Actionbar") && eXo.core.EventManager.getEventTargetByClass(e, "TextContent");
+      var current = eXo.core.EventManager.getEventTargetByClass(e, "UIActionbar") && 
+                    (eXo.core.EventManager.getEventTargetByClass(e, "ExportMessageIcon") ||
+                     eXo.core.EventManager.getEventTargetByClass(e, "SendFileIcon") ||
+                     eXo.core.EventManager.getEventTargetByClass(e, "HistoryIcon") ||
+                     eXo.core.EventManager.getEventTargetByClass(e, "OptionsIcon") ||
+                     eXo.core.EventManager.getEventTargetByClass(e, "LeaveIcon") ||
+                     eXo.core.EventManager.getEventTargetByClass(e, "AddChatIcon")
+                    );
       if (current) {
         if (window.confirm(eXo.communication.chatbar.webui.UIMainChatWindow.ResourceBundle.chat_message_xmpp_session_has_expired)) location.reload(true);
       }
