@@ -47,7 +47,7 @@
     <div class="UIActionbar ClearFix">
 		<div class="StatusArea IconButton" onclick="eXo.communication.chatbar.webui.UIChatBar.showMenu(this,event);">
 			<!-- Right Click Popup Online -->
-				<div class="UIRightClickPopupMenu" style="width: 150px; bottom: 27px; display: none;">
+				<div class="UIRightClickPopupMenu" style="display: none;">
 					<ul>
 						<li><a href="#" class="ItemIcon OnlineIcon" onclick="eXo.communication.chatbar.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chatbar.webui.UIMainChatWindow.ONLINE_STATUS, null, event);">
 							<%=_ctx.appRes("UIChatBarPortlet.label.onLine");%></a></li>
@@ -72,7 +72,7 @@
 		</div>
 		<div class="RoomArea IconButton" onclick="eXo.communication.chatbar.webui.UIChatBar.showMenu(this,event);">
 			<!-- Right Click Popup Group -->
-				<div class="UIRightClickPopupMenu" style="width: 200px; bottom: 27px; display: none;">
+				<div class="UIRightClickPopupMenu" style="display: none;">
 						<ul class="ScrollGroup RoomData"></ul>
 						<span class="Split"></span>
 						<div class="Icon JoinRoomIcon" onclick="eXo.communication.chatbar.webui.UIJoinRoomPopupWindow.setVisible(true);">
@@ -86,7 +86,7 @@
 		<div class="ContactArea IconButton" onclick="eXo.communication.chatbar.webui.UIChatBar.showMenu(this,event);" >
 			<% _ctx.include("app:/templates/chatbar/webui/UITooltipAtTop.gtmpl"); %>
 			<!-- Right Click Popup Contact -->
-				<div class="UIRightClickPopupMenu" style="width: 200px; bottom: 27px; display: none;">
+				<div class="UIRightClickPopupMenu" style="display: none;">
 					<ul class="ScrollGroup BuddyList"></ul>
 					<span class="Split"></span>
 					<div class="Icon AddContactIcon">

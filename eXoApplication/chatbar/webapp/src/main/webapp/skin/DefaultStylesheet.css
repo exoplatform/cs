@@ -618,8 +618,7 @@ form {
 	-moz-box-shadow: 1px 1px 3px #DADADA;
 	-webkit-box-shadow: 1px 1px 3px #DADADA;
 	height: 28px;
- 	padding-left: 7px; /* orientation=lt */
-	padding-right: 7px; /* orientation=rt */
+ 	padding: 0 7px;
 	margin: 5px;
 }
 
@@ -1090,6 +1089,8 @@ form {
 .UIChatBarPortlet .UIActionbar .ContactArea .UIRightClickPopupMenu {
 	right: 0; /* orientation=lt */
 	left: 0; /* orientation=rt */
+	width: 200px; 
+	bottom: 27px; 
 }
 
 .UIChatBarPortlet .UIActionbar .RoomArea {
@@ -1100,6 +1101,7 @@ form {
 .UIChatBarPortlet .UIActionbar .RoomArea .UIRightClickPopupMenu {
 	right: 0; /* orientation=lt */
 	left: 0; /* orientation=rt */
+	width: 200px; bottom: 27px;
 }
 
 .UIChatBarPortlet .UIActionbar .RoomArea {
@@ -1110,6 +1112,7 @@ form {
 .UIChatBarPortlet .UIActionbar .StatusArea .UIRightClickPopupMenu {
 	right: 0; /* orientation=lt */
 	left: 0; /* orientation=rt */
+	width: 150px; bottom: 27px; 
 }
 
 .UIChatBarPortlet .SeperatorLine {
@@ -1167,7 +1170,7 @@ form {
 .UIChatBarPortlet .UIRightClickPopupMenu .RoomData li {
 	cursor:pointer;
 	line-height: 25px;
-	padding: 2px 5px;
+	padding: 0px 5px;
 	color:#058EE6;
 	display: block;
 }

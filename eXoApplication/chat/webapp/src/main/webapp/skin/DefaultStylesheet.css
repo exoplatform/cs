@@ -207,8 +207,8 @@
 	line-height: 25px;
 	cursor: pointer;
 	display: block;
-	padding: 0px 0px 0px 26px; /* orientation=lt */
-	padding: 0px 26px 0px 0px; /* orientation=rt */
+	padding: 0px 9px 0px 26px; /* orientation=lt */
+	padding: 0px 26px 0px 9px; /* orientation=rt */
 }
 
 .UIChat .UIRightClickPopupMenu .ItemIcon:hover {
@@ -327,8 +327,8 @@
 }
 
 .UIConversation .UIActionbar .HistoryIcon {
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -422px; /* orientation=lt */
-	background: url('DefaultSkin/skinIcons/SmallChatIcons-rt.gif') no-repeat right -422px; /* orientation=rt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -225px; /* orientation=lt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons-rt.gif') no-repeat right -225px; /* orientation=rt */
 	position: relative;
 }
 
@@ -627,8 +627,7 @@ form {
 	-moz-box-shadow: 1px 1px 3px #DADADA;
 	-webkit-box-shadow: 1px 1px 3px #DADADA;
 	height: 28px;
- 	padding-left: 7px; /* orientation=lt */
-	padding-right: 7px; /* orientation=rt */
+ 	padding: 0 7px;
 	margin: 5px;
 }
 
