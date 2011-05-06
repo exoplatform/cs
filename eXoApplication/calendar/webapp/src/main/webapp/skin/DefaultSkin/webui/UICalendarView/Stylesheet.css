@@ -713,7 +713,7 @@
   line-height: 16px;
 }
 
-.Result .Title{
+.UIListView .Title{
   width: 350px;
   text-align: center;
 }
@@ -967,6 +967,7 @@
 .UICalendarPortlet .TitleBar table {
   width: auto;
   margin: auto;
+  background: none;
 }
 
 .UIMonthView .EventMonthContent .RowContainerDay {

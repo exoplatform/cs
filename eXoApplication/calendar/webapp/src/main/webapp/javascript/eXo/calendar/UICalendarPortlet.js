@@ -540,7 +540,7 @@ UICalendarPortlet.prototype.showMainMenu = function(obj, evt){
     var timezoneOffset = d.getTimezoneOffset();
     var oldmenu = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "UIRightClickPopupMenu");
     var actions = eXo.core.DOMUtil.findDescendantsByTagName(oldmenu, "div");
-    actions[1].onclick = String(actions[1].onclick).replace(/&.*/, "&ct=" + currentTime + "&tz=" + timezoneOffset + "')");
+    actions[0].onclick = String(actions[0].onclick).replace(/&.*/, "&ct=" + currentTime + "&tz=" + timezoneOffset + "')");
     eXo.calendar.UICalendarPortlet.swapMenu(oldmenu, obj);
 };
 

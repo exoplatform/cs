@@ -156,14 +156,13 @@
 }
 
 .UIContextMenuContainer .CalendarTableColor .ColorCell img {
- width: 12px; height: 12px;
+ width: 14px; height: 12px;
 }
 
 .UIContextMenuContainer .CalendarTableColor .SelectedColorCell {
-  background: url('skinIcons/icons/CalendarIcons.gif') no-repeat left -342px;
+  background: url('skinIcons/icons/CalendarIcons.gif') no-repeat -5px -342px;
   width: 12px; 
   height: 12px;
-  border: 1px solid red;
 }
 
 .UIContextMenuContainer .CalendarTableColor a:hover {
@@ -322,6 +321,7 @@
   line-height: 22px;
   margin: 0px 2px;
   height: 22px;
+  display: block;
 }
 
 .UICalendarPortlet .MenuItem .ItemIcon {
@@ -366,4 +366,22 @@
   height:20px;
   margin:3px 4px;
   width:24px;
+}
+
+.UICalendarPortlet .ContextMenuContainer .MenuItemBG:hover{
+	background: #dee4f2;
+	color: orange;
+}
+
+.UICalendarPortlet .ContextMenuContainer .MenuItemBG a:hover{
+	color: orange;
+}
+
+.UICalendarPortlet .ContextMenuContainer{
+	background: #efefef;
+	border: 1px solid #c7c7c7;
+}
+
+.UICalendarPortlet ul{
+	margin: 5px 0px;
 }

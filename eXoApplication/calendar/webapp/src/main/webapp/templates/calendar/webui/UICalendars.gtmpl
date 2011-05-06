@@ -10,90 +10,60 @@
 %>
 <%uiform.begin()%>
   <div class="UICalendars" >
-    <div class="TitleBar">
-      <div class="Title">
+    <div class="TitleBar ClearFix">
+      <h6 class="Title">
       <%=uiform.getLabel("calendars")%>
-      </div>
+      </h6>
     <div class="ActionsButton" title="<%=uiform.getLabel("calendarActions")%>" onclick="eXo.calendar.UICalendarPortlet.showMainMenu(this, event);">
       <% /*Begin Popup Menu - Main */ %>
-       
-              <div class="UIRightClickPopupMenu" style="display: none ;">
-                <div class="UIContextMenuContainer">
-                  <div class="TopLeftRightClickPopupMenu">
-                    <div class="TopRightRightClickPopupMenu">
-                      <div class="TopCenterRightClickPopupMenu"><span></span></div>
-                    </div>
-                  </div>
-                  <div class="MiddleLeftRightClickPopupMenu">
-                    <div class="MiddleRightRightClickPopupMenu">
-                      <div class="UIRightPopupMenuContainer">
-                         <div class="MenuItem">   
-                          <a class="ItemIcon AddGroupIcon" href="<%=uicomponent.event("AddCalendarCategory")%>">
-                            <%=uiform.getLabel("AddGroup")%>
-                          </a>
-                         </div>
-                         <div class="MenuItem MenuItemHover">   
-                          <a class="ItemIcon AddCalendarIcon" href="<%=uicomponent.event('AddCalendar','id')%>">
-                            <%=uiform.getLabel("AddCalendar")%>
-                          </a>
-                         </div>
-                         <div class="MenuItem">   
-                                <a class="ItemIcon AddCalendarIcon" href="<%=uicomponent.event("RemoteCalendar")%>">
-                                <%=uiform.getLabel("RemoteCalendar")%>
-                                </a>
-                             </div>
-                         <div class="MenuItem">
-                          <a class="ItemIcon AddCategoryIcon" href="<%=uicomponent.event("AddEventCategory")%>">
-                            <%=uiform.getLabel("AddEventCategory")%>
-                          </a>
-                         </div>
-                         <div class="MenuItem">
-                          <a class="ItemIcon ImportCalendarIcon" href="<%=uicomponent.event("ImportCalendar")%>">
-                            <%=uiform.getLabel("ImportCalendar")%>
-                          </a>
-                         </div>
-                         
-                         <!--
-                         <div class="MenuItem">
-                          <a class="ItemIcon GenerateRssIcon" href="<%=uicomponent.event("GenerateRss")%>">
-                            <%=uiform.getLabel("GenerateRss")%>
-                          </a>
-                         </div>
-                         <div class="MenuItem">
-                          <a class="ItemIcon CalDavIcon" href="<%=uicomponent.event("GenerateCalDav")%>">
-                            <%=uiform.getLabel("GenerateCalDav")%>
-                          </a>
-                         </div>
-                         -->
-                         
-                         <div class="MenuItem">   
-                          <a class="ItemIcon SettingCalendarIcon" href="<%=uicomponent.event("CalendarSetting")%>">
-                            <%=uiform.getLabel("CalendarSetting")%>
-                          </a>
-                         </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="BottomLeftRightClickPopupMenu">
-                  <div class="BottomRightRightClickPopupMenu">
-                    <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-                  </div>
-                </div>
-                </div>
-              </div>
+	  
+		<div class="UIRightClickPopupMenu" style="display: none ;"> 
+			 <div class="UIContextMenuContainer ContextMenuContainer">
+				<ul>
+					<li class="MenuItemBG">
+					  <a class="ItemIcon AddGroupIcon" href="<%=uicomponent.event("AddCalendarCategory")%>">
+						<%=uiform.getLabel("AddGroup")%>
+					  </a>
+					</li>
+					<li class="MenuItemBG">
+					  <a class="ItemIcon AddCalendarIcon" href="<%=uicomponent.event('AddCalendar','id')%>">
+						<%=uiform.getLabel("AddCalendar")%>
+					  </a>
+					</li>
+					<li class="MenuItemBG">
+					  <a class="ItemIcon AddCalendarIcon" href="<%=uicomponent.event("RemoteCalendar")%>">
+						<%=uiform.getLabel("RemoteCalendar")%>
+					  </a>
+					</li>
+					<li class="MenuItemBG">
+					  <a class="ItemIcon AddCategoryIcon" href="<%=uicomponent.event("AddEventCategory")%>">
+						<%=uiform.getLabel("AddEventCategory")%>
+					  </a>
+					</li>
+					<li class="MenuItemBG">
+					  <a class="ItemIcon ImportCalendarIcon" href="<%=uicomponent.event("ImportCalendar")%>">
+						<%=uiform.getLabel("ImportCalendar")%>
+					  </a>
+					</li>
+					<li class="MenuItemBG">
+					  <a class="ItemIcon SettingCalendarIcon" href="<%=uicomponent.event("CalendarSetting")%>">
+						<%=uiform.getLabel("CalendarSetting")%>
+					  </a>
+					</li>
+				</ul>
+			</div>
+		</div>
             
       <% /*End Popup Menu*/ %>
     </div>
-    <div style="clear: both"><span></span></div>
   </div>
   <div class="ContentContainer">
   <!-- start private calendars -->
     <div class="MyCalendar">
-      <div class="CalendarTitle">
-        <div class="CollapserFlatStyle"><span></span></div>
-        <div class="Label">
+      <div class="CalendarTitle ClearFix">
+        <h6 class="Label CollapserFlatStyle HStyle">
           <%=_ctx.appRes("UICalendarSettingForm.label.privateCalendar")%>
-        </div>
+        </h6>
       </div>
       <div class="MyCalendarContainer">
         <%
@@ -101,19 +71,15 @@
           for(groupData in groupCalendars) {
             if (groupData.getCalendars().size() > 0) {
         %>
-        <div class="UIVTab">    
-          <div class="CalendarSelectedFlatStyle">
-            <div class="GroupItem"   id="$groupData.id">
-              <div class="GroupColor1">
-                <div class="CollapserFlatStyle"><span></span></div>
-                <div class="CheckBox"><input class="CalendarGroup" type="checkbox"/></div>
-                <div class="CalendarGroupIcon"><span title="$groupData.name">$groupData.name</span></div>
-                <!--<div class="DownArrow1Icon" title="<%=uiform.getLabel('groupActions')%>"  id="$groupData.id"><span></span></div>-->
-                <div style="clear: both;"><span></span></div>
-              </div>
-            </div>
-          </div>
-          <div class="UIVTabContent" >
+         
+			<div class="GroupItem ClearFix"   id="$groupData.id">
+			 
+				<a class="CollapserFlatStyle"></a>
+				<input class="CalendarGroup CheckBox" type="checkbox"/>
+				<div class="CalendarGroupIcon" title="$groupData.name">$groupData.name</div>
+			
+			</div>
+          <ul class="UIVTabContent" >
         <%  
             List calendars = groupData.getCalendars() ;
             for(calendar in calendars) {
@@ -123,17 +89,15 @@
               if(calendar.getViewPermission()!= null && calendar.getViewPermission().length > 0) { icon = "SharedCalendarIcon"}
               if(uicomponent.getChildById(calId) != null) {
         %>
-            <div class="CalendarItem $calendar.calendarColor CalendarItemPrivate" calColor="$calendar.calendarColor" canEdit="true" id="$calId" calType="0" isRemote="$isRemote">
-                <div class="CheckBox"><%uiform.renderField(calId)%></div>
-                <div class="$icon" title="$calendar.name"><span>$calendar.name</span></div>
-                <!--<div class="DownArrow1Icon"><span></span></div>-->
-                <div style="clear: both"><span></span></div>
-            </div>
+            <li class="CalendarItem $calendar.calendarColor CalendarItemPrivate ClearFix" calColor="$calendar.calendarColor" canEdit="true" id="$calId" calType="0" isRemote="$isRemote">
+                <%uiform.renderField(calId)%>
+                <a class="$icon" title="$calendar.name">$calendar.name</a>
+            </li>
         <%     }
             }
         %>
-          </div>
-        </div>  
+          </ul>
+
         <%
             }
           }
@@ -143,18 +107,17 @@
     <!-- end private calendars -->
     <!-- shared calendars -->
     <div class="MyCalendar">
-      <div class="CalendarTitle">
-      <div class="CollapserFlatStyle"><span></span></div>
-        <div class="Label">
+      <div class="CalendarTitle ClearFix">
+        <h6 class="Label CollapserFlatStyle HStyle">
           <%=_ctx.appRes("UICalendarSettingForm.label.sharedCalendar")%>
-        </div>
+        </h6>
       </div>
       <div class="MyCalendarContainer">
         <%
           GroupCalendarData sharedCalendars = uicomponent.getSharedCalendars() ;
           if(sharedCalendars != null) {
         %>
-        <div class="UIVTab">    
+           
           <div class="UIVTabContent" >
         <%  
             List calendarList = sharedCalendars.getCalendars() ;
@@ -167,18 +130,16 @@
               owner = calendar.getCalendarOwner() + "- " ;
             }
         %>
-            <div class="CalendarItem $color CalendarItemShared"  calColor="$color" id="$calId" calType="1"  canEdit="<%=uicomponent.canEdit(Utils.getEditPerUsers(calendar))%>">
-                <div class="CheckBox"><%uiform.renderField(calendar.getId())%></div>
-                <div class="CalendarIcon" title="<%=owner + calendar.getName()%>"><span><%=owner + calendar.getName()%></span></div>
-                <!--<div class="DownArrow1Icon"><span></span></div>-->
-                <div style="clear:both;"><span></span></div>
+            <div class="CalendarItem $color CalendarItemShared ClearFix"  calColor="$color" id="$calId" calType="1"  canEdit="<%=uicomponent.canEdit(Utils.getEditPerUsers(calendar))%>">
+                <%uiform.renderField(calendar.getId())%>
+                <a class="CalendarIcon" title="<%=owner + calendar.getName()%>"><%=owner + calendar.getName()%></a>
             </div>
         <%
         }
             }
         %>
           </div>
-        </div>  
+         
         <%
           }
         %>          
@@ -187,11 +148,10 @@
     <!-- end shared calendars -->
     <!-- start public calendars -->
     <div class="MyCalendar">
-      <div class="CalendarTitle">
-        <div class="CollapserFlatStyle" title="Collapser my calendar"><span></span></div>
-        <div class="Label">
+      <div class="CalendarTitle ClearFix">
+        <h6 class="Label CollapserFlatStyle HStyle" title="Collapser my calendar">
           <%=_ctx.appRes("UICalendarSettingForm.label.publicCalendar")%>
-        </div>
+        </h6>
       </div>
       <div class="MyCalendarContainer">
         <%
@@ -201,17 +161,14 @@
               title = groupData.getName() ;
               label = title.substring(title.lastIndexOf("/") + 1) ;  
         %>
-        <div class="UIVTab">    
-          <div class="CalendarSelectedFlatStyle">
-            <div class="GroupItem">
-              <div class="GroupColor1">
-                <div class="CollapserFlatStyle" title="<%=uiform.getLabel("groupActions")%>"><span></span></div>
-                <div class="CheckBox"><input class="CalendarGroup" type="checkbox"/></div>
-                <div class="CalendarGroupIcon"><span title="$title">$label</span></div>
-                <div style="clear: both"><span></span></div>
-              </div>
+           
+            <div class="GroupItem ClearFix">
+
+                <a class="CollapserFlatStyle" title="<%=uiform.getLabel("groupActions")%>"></a>
+                <input class="CalendarGroup CheckBox" type="checkbox"/>
+                <div class="CalendarGroupIcon" title="$title">$label</div>
+
             </div>
-          </div>
           <div class="UIVTabContent" >
         <%  true
             List calendarList = groupData.getCalendars() ;
@@ -219,18 +176,16 @@
               calId = calendar.getId() ;
               if(uicomponent.getChildById(calId) != null) {
         %>
-            <div class="CalendarItem $calendar.calendarColor CalendarItemPublic"  calColor="$calendar.calendarColor" canEdit="<%=uicomponent.canEdit(calendar.getEditPermission())%>" id="$calId" calType="2" >
-                <div class="CheckBox"><%uiform.renderField(calendar.getId())%></div>
-                <div class="CalendarIcon" title="<%=calendar.getName()%>"><span><%=calendar.getName()%></span></div>
-                <!--<div class="DownArrow1Icon"><span></span></div>-->
-                <div style="clear: both"><span></span></div>
+            <div class="CalendarItem $calendar.calendarColor CalendarItemPublic ClearFix"  calColor="$calendar.calendarColor" canEdit="<%=uicomponent.canEdit(calendar.getEditPermission())%>" id="$calId" calType="2" >
+                <%uiform.renderField(calendar.getId())%>
+                <a class="CalendarIcon" title="<%=calendar.getName()%>"><%=calendar.getName()%></a>
             </div>
         <%
         }
             }
         %>
           </div>
-        </div>  
+       
         <%
           }
             }
@@ -241,278 +196,188 @@
   </div>
   <% /*Begin Popup Menu - Calendar group*/ %>
         
-            <div class="UIRightClickPopupMenu" style="display: none;" id="CalendarGroupPopupMenu" eXoCallback="eXo.calendar.UICalendarPortlet.calendarMenuCallback">
-              <div class="UIContextMenuContainer">
-                <div class="TopLeftRightClickPopupMenu">
-                <div class="TopRightRightClickPopupMenu">
-                  <div class="TopCenterRightClickPopupMenu"><span></span></div>
-                </div>
-              </div>
-                <div class="MiddleLeftRightClickPopupMenu">
-                  <div class="MiddleRightRightClickPopupMenu">
-                  <div class="UIRightPopupMenuContainer">
-                       <div class="MenuItem MenuItemHover">   
-                        <a class="ItemIcon AddCalendarIcon" href="<%=uicomponent.event("AddCalendar","id")%>">
-                           <%=uiform.getLabel("AddCalendar")%>
-                        </a>
-                       </div>
-                       <div class="MenuItem">   
-                            <a class="ItemIcon AddCalendarIcon" href="<%=uicomponent.event("RemoteCalendar", "id")%>">
-                              <%=uiform.getLabel("RemoteCalendar")%>
-                            </a>
-                            </div>
-                      <div class="MenuItem">   
-                        <a class="ItemIcon EditGroupIcon" href="<%=uicomponent.event("EditGroup","id")%>">
-                           <%=uiform.getLabel("EditGroup")%>
-                        </a>
-                       </div>
-                       <div class="MenuItem">
-                        <a class="ItemIcon DeleteGroupIcon" href="<%=uicomponent.event("DeleteGroup",uicomponent.id,"id")%>">
-                          <%=uiform.getLabel("DeleteGroup")%>
-                        </a>
-                       </div>  
-                       <div class="MenuItem">
-                        <a class="ItemIcon ImportCalendarIcon" href="<%=uicomponent.event("ImportCalendar")%>">
-                          <%=uiform.getLabel("ImportCalendar")%>
-                        </a>
-                       </div>
-                       <div class="MenuItem">
-                        <a class="ItemIcon ExportCalendarIcon" href="<%=uicomponent.event("ExportCalendars","id")%>">
-                          <%=uiform.getLabel("ExportCalendars")%>
-                        </a>
-                       </div>
-                  </div>
-                </div>
-              </div>
-                <div class="BottomLeftRightClickPopupMenu">
-                <div class="BottomRightRightClickPopupMenu">
-                  <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-                </div>
-              </div>
-              </div>
-            </div>
+	<div class="UIRightClickPopupMenu" style="display: none;" id="CalendarGroupPopupMenu" eXoCallback="eXo.calendar.UICalendarPortlet.calendarMenuCallback">
+		 <div class="UIContextMenuContainer ContextMenuContainer">
+			<ul>
+				<li class="MenuItemBG">
+					<a class="ItemIcon AddCalendarIcon" href="<%=uicomponent.event("AddCalendar","id")%>">
+					   <%=uiform.getLabel("AddCalendar")%>
+					</a>
+				</li>
+				<li class="MenuItemBG">
+					<a class="ItemIcon AddCalendarIcon" href="<%=uicomponent.event("RemoteCalendar", "id")%>">
+					  <%=uiform.getLabel("RemoteCalendar")%>
+					</a>
+				</li>
+				<li class="MenuItemBG">
+					<a class="ItemIcon EditGroupIcon" href="<%=uicomponent.event("EditGroup","id")%>">
+					   <%=uiform.getLabel("EditGroup")%>
+					</a>
+				</li>
+				<li class="MenuItemBG">
+					<a class="ItemIcon DeleteGroupIcon" href="<%=uicomponent.event("DeleteGroup",uicomponent.id,"id")%>">
+					  <%=uiform.getLabel("DeleteGroup")%>
+					</a>
+				</li>
+				<li class="MenuItemBG">
+					<a class="ItemIcon ImportCalendarIcon" href="<%=uicomponent.event("ImportCalendar")%>">
+					  <%=uiform.getLabel("ImportCalendar")%>
+					</a>
+				</li>
+				<li class="MenuItemBG">
+					<a class="ItemIcon ExportCalendarIcon" href="<%=uicomponent.event("ExportCalendars","id")%>">
+					  <%=uiform.getLabel("ExportCalendars")%>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
           
     <% /*End Popup Menu*/ %>
   
     
   <% /*Begin Popup Menu - Calendar*/ %>
         
-            <div class="UIRightClickPopupMenu" style="display: none;" id="CalendarPopupMenu" eXoCallback="eXo.calendar.UICalendarPortlet.calendarMenuCallback">
-              <div class="UIContextMenuContainer">
-                <div class="TopLeftRightClickPopupMenu">
-                <div class="TopRightRightClickPopupMenu">
-                  <div class="TopCenterRightClickPopupMenu"><span></span></div>
-                </div>
-              </div>
-                <div class="MiddleLeftRightClickPopupMenu">
-                  <div class="MiddleRightRightClickPopupMenu">
-                  <div class="UIRightPopupMenuContainer" >
-                       <div class="MenuItem MenuItemHover">   
-                        <a class="ItemIcon AddNewEvent" href="javascript:eXo.calendar.UICalendarPortlet.addQuickShowHiddenWithId(this, 1, 'objectId=id');">
-                          <%=uiform.getLabel("AddEvent")%>
-                        </a>
-                       </div>
-                       <div class="MenuItem">   
-                        <a class="ItemIcon AddNewTask" href="javascript:eXo.calendar.UICalendarPortlet.addQuickShowHiddenWithId(this, 2, 'objectId=id');">
-                          <%=uiform.getLabel("AddTask")%>
-                        </a>
-                       </div>
-                       <div class="MenuItem">   
-                        <a class="ItemIcon  EditCalendarIcon" href="<%=uicomponent.event("EditCalendar","id")%>">
-                          <%=uiform.getLabel("EditCalendar")%>
-                        </a>
-                       </div>
-                       <div class="MenuItem">   
-                        <a class="ItemIcon RemoveCalendarIcon" href="<%=uicomponent.event("RemoveCalendar",uicomponent.id,"id")%>">
-                          <%=uiform.getLabel("RemoveCalendar")%>
-                        </a>
-                       </div>
-                        <div class="MenuItem">   
-                        <a class="ItemIcon ImportCalendarIcon" href="<%=uicomponent.event('ImportCalendar','id')%>">
-                          <%=uiform.getLabel("ImportCalendar")%>
-                        </a>
-                       </div>
-                       <div class="MenuItem">   
-                        <a class="ItemIcon ExportCalendarIcon" href="<%=uicomponent.event("ExportCalendar","id")%>">
-                          <%=uiform.getLabel("ExportCalendar")%>
-                        </a>
-                       </div>
-                       <!-- 
-                       <div class="MenuItem" style="color: gray;">   
-                        <div class="ItemIcon  SendMailCalendarIcon">
-                          <%=uiform.getLabel("SendMailCalendar")%>
-                        </div>
-                       </div>
-                        -->
-                       <div class="MenuItem">   
-                        <a class="ItemIcon  SharedCalendarIcon" href="<%=uicomponent.event("ShareCalendar","id")%>">
-                          <%=uiform.getLabel("ShareCalendar")%>
-                        </a>
-                       </div>  
-                       
-                       <div class="MenuItem">   
-                        <a class="ItemIcon  RefreshRemoteIcon" href="<%=uicomponent.event("RefreshRemoteCalendar","id")%>">
-                          <%=uiform.getLabel("RefreshRemoteCalendar")%>
-                        </a>
-                       </div>    
-                  </div>
-                    <div class="CalendarTableColor" >
-                    <%
-                      int i = 0 ;
-                      int index = 0 ;
-                      int items = 5 ;
-                      int size = uicomponent.getColors().size() ;
-                      int rows = size/items ;
-                      int count = 0 ;
-                      while(i <= rows)  {
-                        print "<div style='margin:4px 0px;'>" ;  
-                        j = 0 ;
-                        while(j <= items && count < size){
-                         color = uicomponent.getColors()[count] ;
-                         actionLink = uicomponent.event('ChangeColor','id&calColor='+color);  
-                         print "<a href=\"$actionLink\" class=\"$color ColorCell\"><img alt='' src=\"/eXoResources/skin/sharedImages/Blank.gif\" /></a>" ;
-                         count++
-                         j++;
-                        }
-                        print "</div>" ;  
-                        i++ ;
-                      }
-                    %>
-                    </div>
-                </div>
-              </div>
-              <div class="BottomLeftRightClickPopupMenu">
-                <div class="BottomRightRightClickPopupMenu">
-                  <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-                </div>
-              </div>
-              </div>
-            </div>
+	<div class="UIRightClickPopupMenu" style="display: none;" id="CalendarPopupMenu" eXoCallback="eXo.calendar.UICalendarPortlet.calendarMenuCallback">
+		 <div class="UIContextMenuContainer ContextMenuContainer">
+			<ul>
+				<li class="MenuItemBG">
+					<a class="ItemIcon AddNewEvent" href="javascript:eXo.calendar.UICalendarPortlet.addQuickShowHiddenWithId(this, 1, 'objectId=id');">
+					  <%=uiform.getLabel("AddEvent")%>
+					</a>
+				</li>
+				<li class="MenuItemBG">
+					<a class="ItemIcon AddNewTask" href="javascript:eXo.calendar.UICalendarPortlet.addQuickShowHiddenWithId(this, 2, 'objectId=id');">
+					  <%=uiform.getLabel("AddTask")%>
+					</a> 
+				</li>
+				<li class="MenuItemBG">
+					<a class="ItemIcon  EditCalendarIcon" href="<%=uicomponent.event("EditCalendar","id")%>">
+					  <%=uiform.getLabel("EditCalendar")%>
+					</a>
+				</li>
+				<li class="MenuItemBG">
+					<a class="ItemIcon RemoveCalendarIcon" href="<%=uicomponent.event("RemoveCalendar",uicomponent.id,"id")%>">
+					  <%=uiform.getLabel("RemoveCalendar")%>
+					</a>
+				</li>
+				<li class="MenuItemBG">
+					<a class="ItemIcon ImportCalendarIcon" href="<%=uicomponent.event('ImportCalendar','id')%>">
+					  <%=uiform.getLabel("ImportCalendar")%>
+					</a>
+				</li>
+				<li class="MenuItemBG">
+					<a class="ItemIcon ExportCalendarIcon" href="<%=uicomponent.event("ExportCalendar","id")%>">
+					  <%=uiform.getLabel("ExportCalendar")%>
+					</a>
+				</li>
+				<li class="MenuItemBG">
+					<a class="ItemIcon  SharedCalendarIcon" href="<%=uicomponent.event("ShareCalendar","id")%>">
+					  <%=uiform.getLabel("ShareCalendar")%>
+					</a>
+				</li>
+				<li class="MenuItemBG">
+					<a class="ItemIcon  RefreshRemoteIcon" href="<%=uicomponent.event("RefreshRemoteCalendar","id")%>">
+					  <%=uiform.getLabel("RefreshRemoteCalendar")%>
+					</a> 
+				</li>
+				<ul class="CalendarTableColor" >
+					<%
+					  int i = 0 ;
+					  int index = 0 ;
+					  int items = 5 ;
+					  int size = uicomponent.getColors().size() ;
+					  int rows = size/items ;
+					  int count = 0 ;
+					  while(i <= rows)  {
+						print "<div style='margin:4px 0px;'>" ;  
+						j = 0 ;
+						while(j <= items && count < size){
+						 color = uicomponent.getColors()[count] ;
+						 actionLink = uicomponent.event('ChangeColor','id&calColor='+color);  
+						 print "<a href=\"$actionLink\" class=\"$color ColorCell\"><img alt='' src=\"/eXoResources/skin/sharedImages/Blank.gif\" /></a>" ;
+						 count++
+						 j++;
+						}
+						print "</div>" ;  
+						i++ ;
+					  }
+					%>
+				</li>
+			</ul>
+		</div>
+	</div>
     <% /*End Popup Menu*/ %>
     
       
   <% /*Begin Popup Menu - Calendar*/ %>
         
-            <div class="UIRightClickPopupMenu" style="display: none;" id="CalendarPopupMenu2" eXoCallback="eXo.calendar.UICalendarPortlet.calendarMenuCallback">
-              <div class="UIContextMenuContainer">
-                <div class="TopLeftRightClickPopupMenu">
-                <div class="TopRightRightClickPopupMenu">
-                  <div class="TopCenterRightClickPopupMenu"><span></span></div>
-                </div>
-              </div>
-                <div class="MiddleLeftRightClickPopupMenu">
-                  <div class="MiddleRightRightClickPopupMenu">
-                  <div class="UIRightPopupMenuContainer" >
-                       <div class="MenuItem">   
-                        <a class="ItemIcon AddNewEvent" href="javascript:eXo.calendar.UICalendarPortlet.addQuickShowHiddenWithId(this, 1, 'objectId=id');">
-                          <%=uiform.getLabel("AddEvent")%>
-                        </a>
-                       </div>
-                       <div class="MenuItem">
-                        <a class="ItemIcon AddNewTask" href="javascript:eXo.calendar.UICalendarPortlet.addQuickShowHiddenWithId(this, 2, 'objectId=id');">
-                          <%=uiform.getLabel("AddTask")%>
-                        </a>
-                       </div>
-                       <div class="MenuItem">   
-                        <a class="ItemIcon  EditCalendarIcon" href="<%=uicomponent.event("EditCalendar","id")%>">
-                          <%=uiform.getLabel("EditCalendar")%>
-                        </a>
-                       </div>
-                       <div class="MenuItem">   
-                        <a class="ItemIcon RemoveCalendarIcon" href="<%=uicomponent.event("RemoveSharedCalendar",uicomponent.id,"id")%>">
-                          <%=uiform.getLabel("RemoveCalendar")%>
-                        </a>
-                       </div>
-                        <div class="MenuItem">   
-                        <a class="ItemIcon ImportCalendarIcon" href="<%=uicomponent.event('ImportCalendar','id')%>">
-                          <%=uiform.getLabel("ImportCalendar")%>
-                        </a>
-                       </div>
-                       <div class="MenuItem">   
-                        <a class="ItemIcon ExportCalendarIcon" href="<%=uicomponent.event("ExportCalendar","id")%>">
-                          <%=uiform.getLabel("ExportCalendar")%>
-                        </a>
-                       </div>
-                       <!-- 
-                       <div class="MenuItem" style="color: gray;">   
-                        <div class="ItemIcon  SendMailCalendarIcon">
-                          <%=uiform.getLabel("SendMailCalendar")%>
-                        </div>
-                       </div>
-                        -->
-                       <div class="MenuItem">   
-                        <a class="ItemIcon  SharedCalendarIcon" href="<%=uicomponent.event("ShareCalendar","id")%>">
-                          <%=uiform.getLabel("ShareCalendar")%>
-                        </a>
-                       </div>    
-                  </div>
-                    <div class="CalendarTableColor" >
-                    <%
-                      i = 0 ;
-                      index = 0 ;
-                      items = 5 ;
-                      size = uicomponent.getColors().size() ;
-                      rows = size/items ;
-                      count = 0 ;
-                      while(i <= rows)  {
-                        print "<div style='margin:4px 0px;'>" ;  
-                        j = 0 ;
-                        while(j <= items && count < size){
-                         color = uicomponent.getColors()[count] ;
-                         actionLink = uicomponent.event('ChangeColor','id&calColor='+color);  
-                         print "<a href=\"$actionLink\" class=\"$color ColorCell\"><img alt='' src=\"/eXoResources/skin/sharedImages/Blank.gif\" /></a>" ;
-                         count++
-                         j++;
-                        }
-                        print "</div>" ;  
-                        i++ ;
-                      }
-                    %>
-                    </div>
-                </div>
-              </div>
-              <div class="BottomLeftRightClickPopupMenu">
-                <div class="BottomRightRightClickPopupMenu">
-                  <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-                </div>
-              </div>
-              </div>
-            </div>
+		<div class="UIRightClickPopupMenu" style="display: none;" id="CalendarPopupMenu2" eXoCallback="eXo.calendar.UICalendarPortlet.calendarMenuCallback">
+			 <div class="UIContextMenuContainer ContextMenuContainer">
+				<ul>
+					<li class="MenuItemBG">
+						<a class="ItemIcon AddNewEvent" href="javascript:eXo.calendar.UICalendarPortlet.addQuickShowHiddenWithId(this, 1, 'objectId=id');">
+						  <%=uiform.getLabel("AddEvent")%>
+						</a>
+					</li>
+					<li class="MenuItemBG">
+						<a class="ItemIcon AddNewTask" href="javascript:eXo.calendar.UICalendarPortlet.addQuickShowHiddenWithId(this, 2, 'objectId=id');">
+						  <%=uiform.getLabel("AddTask")%>
+						</a>
+					</li>
+					<li class="MenuItemBG">
+						<a class="ItemIcon  EditCalendarIcon" href="<%=uicomponent.event("EditCalendar","id")%>">
+						  <%=uiform.getLabel("EditCalendar")%>
+						</a>
+					</li>
+					<li class="MenuItemBG">
+						<a class="ItemIcon RemoveCalendarIcon" href="<%=uicomponent.event("RemoveSharedCalendar",uicomponent.id,"id")%>">
+						  <%=uiform.getLabel("RemoveCalendar")%>
+						</a>
+					</li>
+					<li class="MenuItemBG">
+						<a class="ItemIcon ImportCalendarIcon" href="<%=uicomponent.event('ImportCalendar','id')%>">
+						  <%=uiform.getLabel("ImportCalendar")%>
+						</a>
+					</li>
+					<li class="MenuItemBG">
+						<a class="ItemIcon ExportCalendarIcon" href="<%=uicomponent.event("ExportCalendar","id")%>">
+						  <%=uiform.getLabel("ExportCalendar")%>
+						</a>
+					</li>
+					<li class="MenuItemBG">
+						<a class="ItemIcon  SharedCalendarIcon" href="<%=uicomponent.event("ShareCalendar","id")%>">
+						  <%=uiform.getLabel("ShareCalendar")%>
+						</a>
+					</li>
+					<li class="CalendarTableColor" >
+						<%
+						  i = 0 ;
+						  index = 0 ;
+						  items = 5 ;
+						  size = uicomponent.getColors().size() ;
+						  rows = size/items ;
+						  count = 0 ;
+						  while(i <= rows)  {
+							print "<div style='margin:4px 0px;'>" ;  
+							j = 0 ;
+							while(j <= items && count < size){
+							 color = uicomponent.getColors()[count] ;
+							 actionLink = uicomponent.event('ChangeColor','id&calColor='+color);  
+							 print "<a href=\"$actionLink\" class=\"$color ColorCell\"><img alt='' src=\"/eXoResources/skin/sharedImages/Blank.gif\" /></a>" ;
+							 count++
+							 j++;
+							}
+							print "</div>" ;  
+							i++ ;
+						  }
+						%>
+					</li>
+				</ul>
+			</div>
+		</div>
     <% /*End Popup Menu*/ %>
     
   </div>
-  <%if(uicomponent.isShowTaskList()){%>
-    <div class="UICalendarTasks">
-      <div class="TitleBar">
-        <div class="Title">
-          <%=uiform.getLabel("tasks")%>
-        </div>
-        <div class="ActionsButton" title="Tasks Actions" onclick="eXo.calendar.UICalendarPortlet.showMainMenu(this, event);"><span></span></div>
-        <div style="clear: both"><span></span></div>
-      </div>
-      <div class="ContentContainer">
-        <div class="MyCalendar">
-          <%for(String status in uicomponent.getTaskStatus()){%>
-            <div class="CalendarTitle">
-              <div class="CollapserFlatStyle"><span></span></div>
-              <div class="Label">
-                <%=uiform.getLabel("task."+status)%>
-              </div>
-            </div>
-            <div class="MyCalendarContainer">
-              <%for(CalendarEvent task in uicomponent.getAllTask(uicomponent.getCurrentMiniBeginDate(),uicomponent.getCurrentMiniEndDate(), status)){
-                color = uicomponent.getColorMap().get(task.calType +CalendarUtils.COLON+ task.getCalendarId()) ;
-              %>
-                <div style="white-space:nowrap;">
-                  <div class="TasksColor" style="background: $color"><span></span></div>
-                  <div class="TasksName" title="$task.summary">$task.summary</div>
-                  <div style="clear: left;"><span></span></div>
-                </div>
-              <%}%>
-            </div>
-          <%}%>
-        </div>
-      </div>
-    </div>
-  <%}%>
+ 
 <%uiform.end()%>

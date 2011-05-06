@@ -19,6 +19,7 @@
   margin: 3px 4px 0px 0px; /* orientation=lt */
   margin: 3px 0px 0px 4px; /* orientation=rt */
   cursor: pointer;
+  display: block;
 }
 
 .UICalendarPortlet .UICalendars .Title {
@@ -31,11 +32,10 @@
 }
 
 .UICalendarPortlet .UICalendars .Label {
-  float: left; /* orientation=lt */
-  float: right; /* orientation=rt */
   line-height: 18px;
   margin-left: 3px; /* orientation=lt */
   margin-right: 3px; /* orientation=rt */
+  font-weight: normal;
 }
 
 .UICalendarPortlet .UICalendars .CalendarTitle {
@@ -55,6 +55,13 @@
   margin: 1px 0px 0px 3px; /* orientation=lt */
   margin: 1px 3px 0px 0px; /* orientation=rt */
   cursor: pointer;
+  display: block;
+}
+
+.UICalendarPortlet .UICalendars .HStyle{
+  width: auto;
+  float: none;
+  padding-left: 16px;
 }
 
 .UICalendarPortlet .UICalendars .MyCalendarContainer .IconHolder {
@@ -70,11 +77,10 @@
 
 .UICalendarPortlet .UICalendars .MyCalendarContainer .GroupItem {
   border: 1px solid #c7c7c7;
-}
-
-.UICalendarPortlet .UICalendars .MyCalendarContainer .GroupItem .GroupColor1 {
-  border: 1px solid #ffffff;
   background-color: #edd5ff;
+  -moz-box-shadow: 1px 1px 0 white inset, -1px -1px 0 white inset;
+  box-shadow: 1px 1px 0 white inset, -1px -1px 0 white inset;
+  -webkit-box-shadow: 1px 1px 0 white inset, -1px -1px 0 white inset;
 }
 
 .UICalendarPortlet .UICalendars .CalendarGroupIcon {
@@ -87,7 +93,7 @@
   line-height: 16px;
   font-weight: bold;
   white-space: nowrap;
-  width: 50%;
+  width: 65%;
   overflow: hidden;
 }
 
@@ -103,7 +109,7 @@
   padding-right: 22px; /* orientation=rt */
   float: left; /* orientation=lt */
   float: right; /* orientation=rt */
-  width: 85px;
+  width: 105px;
   overflow: hidden;
   line-height: 17px;
   white-space: nowrap;
@@ -133,8 +139,8 @@
 }
 
 .UICalendarPortlet .UICalendars .CheckBox {
-  margin: 0px 3px 0px 0px; /* orientation=lt */
-  margin: 0px 0px 0px 3px; /* orientation=rt */
+  margin: 2px 3px 0px 0px; /* orientation=lt */
+  margin: 2px 0px 0px 3px; /* orientation=rt */
   float: left; /* orientation=lt */
   float: right; /* orientation=rt */
   width: 16px;
@@ -143,7 +149,11 @@
 }
 
 .UICalendarPortlet .UICalendars .CalendarItem input.checkbox  {
-  margin: 0px;
+   float: left;
+	line-height: 18px;
+	margin: 2px 3px 0 0;
+	text-align: center;
+	width: 16px;
 }
 
 .UICalendarPortlet .UICalendars a {
@@ -292,4 +302,8 @@
 
 .UICalendarPortlet .UICalendarTasks a:hover {
   color: #058ee6;
+}
+
+.UICalendarPortlet .UICalendars ul{
+	margin: 0px;
 }
