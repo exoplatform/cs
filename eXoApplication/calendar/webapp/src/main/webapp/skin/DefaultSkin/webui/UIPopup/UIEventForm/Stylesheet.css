@@ -429,6 +429,7 @@
 }
 
 .UICalendarPortlet .UIQuickAddEvent .UIFormGrid .FieldComponent .Time{
+  float: left;
   font-size: 11px;
 }
 
