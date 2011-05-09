@@ -23,7 +23,7 @@
 <%
   import org.exoplatform.portal.webui.util.Util;
   import org.exoplatform.webui.form.UIFormTextAreaInput;
-  import org.exoplatform.social.webui.ResourceLinkProvider;
+  import org.exoplatform.social.core.service.LinkProvider;
   import org.exoplatform.social.core.space.model.Space;
   import org.exoplatform.social.webui.Utils;
   import org.exoplatform.social.core.service.LinkProvider;
@@ -40,10 +40,10 @@
 <% if (activity) { //process if not null
 
   def jsManager = pcontext.getJavascriptManager();
-  jsManager.importJavascript("eXo.social.Util", ResourceLinkProvider.JAVASCRIPT_RESOURCE_URL);
-  jsManager.importJavascript("eXo.social.PortalHttpRequest", ResourceLinkProvider.JAVASCRIPT_RESOURCE_URL);
-  jsManager.importJavascript("eXo.social.webui.UIForm", ResourceLinkProvider.JAVASCRIPT_RESOURCE_URL);
-  jsManager.importJavascript("eXo.social.webui.UIActivity", ResourceLinkProvider.JAVASCRIPT_RESOURCE_URL);
+  jsManager.importJavascript("eXo.social.Util", LinkProvider.JAVASCRIPT_RESOURCE_URL);
+  jsManager.importJavascript("eXo.social.PortalHttpRequest", LinkProvider.JAVASCRIPT_RESOURCE_URL);
+  jsManager.importJavascript("eXo.social.webui.UIForm", LinkProvider.JAVASCRIPT_RESOURCE_URL);
+  jsManager.importJavascript("eXo.social.webui.UIActivity", LinkProvider.JAVASCRIPT_RESOURCE_URL);
 
   def labelComment = _ctx.appRes("UIActivity.label.Comment");
   def labelLike = _ctx.appRes("UIActivity.label.Like");
@@ -131,13 +131,13 @@
     ownerUri = ownerIdentity.profile.url;
     ownerAvatar = ownerIdentity.profile.avatarUrl;
     ownerName = ownerIdentity.profile.fullName;
-    if (!ownerAvatar) ownerAvatar= ResourceLinkProvider.PROFILE_DEFAULT_AVATAR_URL;
+    if (!ownerAvatar) ownerAvatar= LinkProvider.PROFILE_DEFAULT_AVATAR_URL;
   } else {
     Space space = Utils.getSpaceService().getSpaceByPrettyName(ownerIdentity.remoteId);
     ownerUri = LinkProvider.getSpaceUri(space.url);
     ownerAvatar = space.avatarUrl;
     ownerName = space.displayName;
-    if (!ownerAvatar) ownerAvatar = ResourceLinkProvider.SPACE_DEFAULT_AVATAR_URL;
+    if (!ownerAvatar) ownerAvatar = LinkProvider.SPACE_DEFAULT_AVATAR_URL;
   }
 %>
 
@@ -163,17 +163,17 @@
       <%}%>
       </div>
       <div class="Content">
-          <%
-            def labelEventAdded = "";
-            if (CalendarSpaceActivityPublisher.EVENT_ADDED.equals(uicomponent.getTypeOfEvent())) {
-              labelEventAdded = _ctx.appRes("CalendarUIActivity.msg.event-add");
-            } else if (CalendarSpaceActivityPublisher.TASK_ADDED.equals(uicomponent.getTypeOfEvent())) {
-              labelEventAdded = _ctx.appRes("CalendarUIActivity.msg.task-add");
-            } else if (CalendarSpaceActivityPublisher.EVENT_UPDATED.equals(uicomponent.getTypeOfEvent())) {
-              labelEventAdded = _ctx.appRes("CalendarUIActivity.msg.event-update");
-            } else if (CalendarSpaceActivityPublisher.TASK_UPDATED.equals(uicomponent.getTypeOfEvent())) {
-              labelEventAdded = _ctx.appRes("CalendarUIActivity.msg.task-update");
-            }
+        <%
+          def labelEventAdded = "";
+          if (CalendarSpaceActivityPublisher.EVENT_ADDED.equals(uicomponent.getTypeOfEvent())) {
+            labelEventAdded = _ctx.appRes("CalendarUIActivity.msg.event-add");
+          } else if (CalendarSpaceActivityPublisher.TASK_ADDED.equals(uicomponent.getTypeOfEvent())) {
+            labelEventAdded = _ctx.appRes("CalendarUIActivity.msg.task-add");
+          } else if (CalendarSpaceActivityPublisher.EVENT_UPDATED.equals(uicomponent.getTypeOfEvent())) {
+            labelEventAdded = _ctx.appRes("CalendarUIActivity.msg.event-update");
+          } else if (CalendarSpaceActivityPublisher.TASK_UPDATED.equals(uicomponent.getTypeOfEvent())) {
+            labelEventAdded = _ctx.appRes("CalendarUIActivity.msg.task-update");
+          }
         %>
         <%= labelEventAdded.replace("{0}", uicomponent.getActivityParamValue(CalendarSpaceActivityPublisher.EVENT_SUMMARY_KEY)) %><br>
         <div><a  style="cursor: pointer;" onclick="<%=uicomponent.event("MoreEventInfo");%>" id="MoreEventInfo${activity.id}"><span><%=_ctx.appRes("CalendarUIActivity.label.more-info")%></span></a></div>
@@ -206,11 +206,11 @@
              if (!CalendarEvent.COMPLETED.equalsIgnoreCase(uicomponent.getTaskStatus())) { %>
               <input type="button" onclick="<%=uicomponent.event("SetTaskStatus", CalendarEvent.COMPLETED);%>" value="<%=_ctx.appRes("CalendarUIActivity.label.complete")%>" class="CommentButton" id="CompleteButton${activity.id}" />
         <%     }
+            }
           }
-        }
         %>
-    </div>
-    <% } %>
+        </div>
+      <% } %>
       </div>
       <div class="LinkCM">
         <span class="DateTime">$activityPostedTime *</span>
@@ -245,7 +245,7 @@
               personLikeFullName = id.profile.fullName;
               personLikeProfileUri = id.profile.url;
               personLikeAvatarImageSource = id.profile.avatarUrl;
-              if (!personLikeAvatarImageSource) personLikeAvatarImageSource = ResourceLinkProvider.PROFILE_DEFAULT_AVATAR_URL;
+              if (!personLikeAvatarImageSource) personLikeAvatarImageSource = LinkProvider.PROFILE_DEFAULT_AVATAR_URL;
               %>
                 <a class="AvatarPeopleBG" title="$personLikeFullName" href="$personLikeProfileUri">
                   <img src="$personLikeAvatarImageSource" alt="$personLikeFullName" title="$personLikeFullName" />
@@ -300,7 +300,7 @@
       commenterFullName = id.profile.fullName;
       commenterProfileUri = id.profile.url;
       commenterImageSource = id.profile.avatarUrl;
-      if (!commenterImageSource) commenterImageSource = ResourceLinkProvider.PROFILE_DEFAULT_AVATAR_URL;
+      if (!commenterImageSource) commenterImageSource = LinkProvider.PROFILE_DEFAULT_AVATAR_URL;
       commentMessage = it.title;
       commentPostedTime = uicomponent.getPostedTimeString(_ctx, it.postedTime);
     %>
