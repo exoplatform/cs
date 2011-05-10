@@ -259,7 +259,7 @@ Index: eXoApplication/contact/webapp/src/main/java/org/exoplatform/contact/webui
 -          return ;
 -        }
 +      to = to.replaceAll(CalendarUtils.SEMICOLON, CalendarUtils.COLON);
-+      if (CalendarUtils.isValidEmailAddresses(to)) {
++      if (!CalendarUtils.isValidEmailAddresses(to)) {
 +        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.invalid-email", null, ApplicationMessage.WARNING));
 +        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
 +        return;
