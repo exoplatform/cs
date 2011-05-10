@@ -209,7 +209,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         return;
       }
       to = to.replaceAll(CalendarUtils.SEMICOLON, CalendarUtils.COLON);
-      if (CalendarUtils.isValidEmailAddresses(to)) {
+      if (!CalendarUtils.isValidEmailAddresses(to)) {
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.invalid-email", null, ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
