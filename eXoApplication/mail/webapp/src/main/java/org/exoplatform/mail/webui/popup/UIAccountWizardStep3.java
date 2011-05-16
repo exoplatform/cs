@@ -94,6 +94,11 @@ public class UIAccountWizardStep3 extends UIFormInputSet implements WizardStep{
     outgoingSsl.setChecked(Boolean.parseBoolean(Utils.getAcceptOutgoingSecureAuthentication()));
     addChild(new UIFormStringInput(FIELD_STOREFOLDER, null,null).addValidator(MandatoryValidator.class)) ;
     setDefaultValue(uiSelect.getValue(), uiCheckBox.isChecked()) ;
+    
+    incomingPort.setRendered(false);
+    outgoingPort.setRendered(false);
+    getUIStringInput(FIELD_STOREFOLDER).setRendered(false);
+    
     resetFields() ;
     infoMessage_.clear() ;
     infoMessage_.add("UIAccountWizardStep3.info.label1") ;
@@ -108,9 +113,7 @@ public class UIAccountWizardStep3 extends UIFormInputSet implements WizardStep{
     getUIStringInput(FIELD_INCOMINGPORT).setRendered(false);
     getUIStringInput(FIELD_OUTGOINGPORT).setRendered(false);
     getUIStringInput(FIELD_STOREFOLDER).setRendered(false);
-    getUIStringInput(FIELD_INCOMING_SERVER).setValue(Utils.getIncomingServer()) ;
-    getUIStringInput(FIELD_INCOMINGPORT).setValue(Utils.getIncomingPort()) ;
-    /*if(serverType.equals(Utils.POP3)) {
+    if(serverType.equals(Utils.POP3)) {
       getUIStringInput(FIELD_INCOMING_SERVER).setValue(UIAccountCreation.DEFAULT_POP_SERVER) ;
       if(isSSL) {
         getUIStringInput(FIELD_INCOMINGPORT).setValue(UIAccountCreation.DEFAULT_POPSSL_PORT) ;
@@ -124,7 +127,7 @@ public class UIAccountWizardStep3 extends UIFormInputSet implements WizardStep{
       } else {
         getUIStringInput(FIELD_INCOMINGPORT).setValue(UIAccountCreation.DEFAULT_IMAP_PORT) ;
       }
-    }*/
+    }
   }
 
   public boolean isFieldsValid() {
