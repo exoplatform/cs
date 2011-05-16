@@ -31,16 +31,14 @@ UpdateList.prototype.update = function(obj){
 	  var folderIds = data.folders;
   	  var folders = folderIds.split(","); 
   	  var folderNumberCountNode ;
-  	  var numberStr;
   	  var updateImapFolder;
       for (var i = 0; i < folders.length; i++) {
     	if (folders[i] != "") {  
 		    folderNumberCountNode = document.getElementById(folders[i]);
 		    if (folderNumberCountNode != null) {
 		  	  if (eXo.core.DOMUtil.findAncestorByClass(folderNumberCountNode, "Folder").className.indexOf("SelectedLabel") > -1) isUpdate = true;
-		  	  if (data.isRead != 'true') {
-		  	    numberStr = folderNumberCountNode.innerHTML;
-		  	    numberStr = numberStr.substring(numberStr.indexOf("(") + 1, numberStr.indexOf(")"));
+		  	  if (folderNumberCountNode.innerHTML && data.isRead != 'true') {
+		  	    var numberStr = folderNumberCountNode.innerHTML.substring(numberStr.indexOf("(") + 1, numberStr.indexOf(")"));
 		  	    if (numberStr.length == 0) numberStr = "0";
 		  	    folderNumberCountNode.innerHTML = "(" + (parseInt(numberStr) + 1) + ")";
 		      }
