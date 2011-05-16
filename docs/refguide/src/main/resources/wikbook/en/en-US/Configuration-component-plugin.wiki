@@ -665,14 +665,14 @@ h2. Mail Configuration {anchor:id=CSref.Configuration.MailConfiguration}
 
 h3. AuthenticationLogoutListener {anchor:id=CSref.Configuration.AuthenticationLogoutListener}
 
-In the Mail application of eXo Collaboration, when a user checks messages for one account, the remote mailbox fetch is performed as a background job. Before CS 1.2, the job was continuing until all messages had been retrieved or when the user stopped the check through the UI. Hence, even when a user was not logged in, the background job was continuing. This can be the resource intensive for the server if many users have large mailboxes.
+In the Mail application of eXo Collaboration, when a user checks messages for one account, the remote mailbox fetch is performed as a background job. Before eXo Collaboration 1.2, the job was continuing until all messages had been retrieved or when the user stopped the check through the UI. Hence, even when a user was not logged in, the background job was continuing. This can be the resource intensive for the server if many users have large mailboxes.
 
-Since eXo Collaboration 1.2,  one capability is added to halt the background job when the user session terminates (logout or timeout). It makes CS more friendly with server resources. If you want to activate this feature, you need to add a bunch of xml congifuration in _/extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/mail/mail-service-configuration.xml_:
+Since eXo Collaboration 1.2,  one capability is added to halt the background job when the user session terminates (logout or timeout). It makes eXo Collaboration more friendly with server resources. If you want to activate this feature, you need to add a bunch of the xml congifuration in _/extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/mail/mail-service-configuration.xml_:
 
 {code:xml}     
 <external-component-plugins>
   <target-component>org.exoplatform.services.listener.ListenerService</target-component>
-  <component-plugin>
+   <component-plugin>
     <name>exo.core.security.ConversationRegistry.unregister</name>
     <set-method>addListener</set-method>
     <type>org.exoplatform.mail.service.AuthenticationLogoutListener</type>
@@ -687,6 +687,149 @@ Details:
 * *Set-method*: {{addListener}} is the plug-in registering method. Keep this value.
 * *Type*: {{org.exoplatform.mail.service.AuthenticationLogoutListener}} is a class that executes all the requires of the plug-in.
 * *Description*: It is a plug-in used to stop checking mails of a user when he logs out.
+
+h3. MailSettingConfigPlugin {anchor:id=CSref.Configuration.MailConfig.MailSettingConfigPlugin}
+ Since eXo Collaboration 2.2.0, _MailSettingConfigPlugin_ is used to defined the behavior, for example, show/hide fields and check/uncheck checkboxes, of email account settings in the mail-server-configuration.xml file. It allows all the settings to be able preconfigured by administrators and possibly set to be not modifiable by end-users. 
+{code:xml}
+<external-component-plugins>
+  <target-component>org.exoplatform.mail.service.MailService</target-component>
+	<component-plugin>   
+		<name>cs.mail.service.settings</name>
+    	<set-method>addPlugin</set-method>
+		<type>org.exoplatform.mail.service.MailSettingConfigPlugin</type>
+		<description>description</description>
+			<init-params>
+				<object-param>
+					<name>leaveOnServer</name>
+		   		<description>options to keep a copy of the message on the mail server after eXo Mail has downloaded the message</description>
+		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
+		     		<field name="name"><string>leaveOnServer</string></field>
+		     		<field name="userAllowed"><boolean>true</boolean></field>
+		     		<field name="defaultValue"><string>true</string></field>
+		   		</object>
+				</object-param>
+				<object-param>
+					<name>incomingServer</name>
+		   		<description>default incoming server to check for new mails.</description>
+		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
+		     		<field name="name"><string>incomingServer</string></field>
+		     		<field name="userAllowed"><boolean>true</boolean></field>
+		     		<field name="defaultValue"><string>imap.gmail.com</string></field>
+		   		</object>
+				</object-param>
+				<object-param>
+					<name>incomingPort</name>
+		   		<description>default port incoming server to check for new mails.</description>
+		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
+		     		<field name="name"><string>incomingPort</string></field>
+		     		<field name="userAllowed"><boolean>true</boolean></field>
+		     		<field name="defaultValue"><string>993</string></field>
+		   		</object>
+				</object-param>
+				<object-param>
+					<name>outgoingServer</name>
+		   		<description>description</description>
+		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
+		     		<field name="name"><string>outgoingServer</string></field>
+		     		<field name="userAllowed"><boolean>true</boolean></field>
+		     		<field name="defaultValue"><string>smtp.gmail.com</string></field>
+		   		</object>
+				</object-param>
+				<object-param>
+					<name>outgoingPort</name>
+		   		<description>description</description>
+		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
+		     		<field name="name"><string>outgoingPort</string></field>
+		     		<field name="userAllowed"><boolean>true</boolean></field>
+		     		<field name="defaultValue"><string>465</string></field>
+		   		</object>
+				</object-param>
+				<object-param>
+					<name>acceptIncomingSecureAuthentication</name>
+		   		<description>description</description>
+		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
+		     		<field name="name"><string>acceptIncomingSecureAuthentication</string></field>
+		     		<field name="userAllowed"><boolean>true</boolean></field>
+		     		<field name="defaultValue"><string>true</string></field>
+		   		</object>
+				</object-param>
+				<object-param>
+					<name>incomingSecureAuthentication</name>
+		   		<description>description</description>
+		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
+		     		<field name="name"><string>incomingSecureAuthentication</string></field>
+		     		<field name="userAllowed"><boolean>true</boolean></field>
+		     		<field name="defaultValue"><string>starttls</string></field>
+		   		</object>
+				</object-param>
+				<object-param>
+					<name>incomingAuthenticationMechanism</name>
+		   		<description>description</description>
+		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
+		     		<field name="name"><string>incomingAuthenticationMechanism</string></field>
+		     		<field name="userAllowed"><boolean>true</boolean></field>
+		     		<field name="defaultValue"><string>plain</string></field>
+		   		</object>
+				</object-param>
+				<object-param>
+					<name>acceptOutgoingSecureAuthentication</name>
+		   		<description>description</description>
+		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
+		     		<field name="name"><string>acceptOutgoingSecureAuthentication</string></field>
+		     		<field name="userAllowed"><boolean>true</boolean></field>
+		     		<field name="defaultValue"><string>true</string></field>
+		   		</object>
+				</object-param>
+				<object-param>
+					<name>outgoingSecureAuthentication</name>
+		   		<description>description</description>
+		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
+		     		<field name="name"><string>outgoingSecureAuthentication</string></field>
+		     		<field name="userAllowed"><boolean>true</boolean></field>
+		     		<field name="defaultValue"><string>starttls</string></field>
+		   		</object>
+				</object-param>
+				<object-param>
+					<name>outgoingAuthenticationMechanism</name>
+		   		<description>description</description>
+		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
+		     		<field name="name"><string>outgoingAuthenticationMechanism</string></field>
+		     		<field name="userAllowed"><boolean>true</boolean></field>
+		     		<field name="defaultValue"><string>plain</string></field>
+		   		</object>
+				</object-param>
+			</init-params>
+  	</component-plugin>      
+  </external-component-plugins>
+{code}
+
+Details:
+* *Name*: {{cs.mail.service.settings}} is the name of the mail settings.
+* *Set-method*: {{addPlugin}} is the plug-in registering method. Keep this value.
+* *Type*: {{org.exoplatform.mail.service.MailSettingConfigPlugin}} is the plug-in's class name..
+* *object type*: {{org.exoplatform.mail.service.MailSettingConfig}} is the class of object that contains a specific setting.
+* *Description*: Describes what the setting is or what the settings is used to do.
+
+
+|| Object-param||Desciption ||
+|leaveOnServer|Options to keep the message on the mail server after it has been downloaded to the Mail application of eXo Collaboration.|
+|incomingServer|The default incoming server is used to check new mails.|
+|incomingPort|The default port of the incoming server is used to check new mails.|
+|outgoingServer|The default port of the outgoing server is used to send new mails.|
+|outgoingPort|The default outgoing port to send new mails.|
+|acceptIncomingSecureAuthentication|Accepts the secure authentication of the incoming server.|
+|incomingSecureAuthentication|The type of incoming secure authentication.|
+|incomingAuthenticationMechanism|The type of incoming authentication mechanism.|
+|acceptOutgoingSecureAuthentication|Accepts the secure authentication of the outgoing server.|
+|outgoingSecureAuthentication|The type of outgoing secure authentication.|
+|outgoingAuthenticationMechanism|The type of incoming authentication mechanism.|
+
+The object parameters have the same field names, but the values of the parameters are different.
+||Field names || Description || Possible values |
+|name|The field name in the account settings form. |String |
+|userAllowed|Allows users to edit the field in the account settings form or not. |Boolen |
+|defaultValue|The default value of the field in the account settings form. |String |
+
 
 h2. Social Integration Configuration {anchor:id=CSref.Configuration.SocialIntegrationConfiguration}
 
