@@ -37,9 +37,12 @@ UpdateList.prototype.update = function(obj){
 		    folderNumberCountNode = document.getElementById(folders[i]);
 		    if (folderNumberCountNode != null) {
 		  	  if (eXo.core.DOMUtil.findAncestorByClass(folderNumberCountNode, "Folder").className.indexOf("SelectedLabel") > -1) isUpdate = true;
-		  	  if (folderNumberCountNode.innerHTML && data.isRead != 'true') {
-		  	    var numberStr = folderNumberCountNode.innerHTML.substring(numberStr.indexOf("(") + 1, numberStr.indexOf(")"));
-		  	    if (numberStr.length == 0) numberStr = "0";
+		  	  if (data.isRead != 'true') {
+		  	    var numberStr = "0";
+		  	    if (folderNumberCountNode.innerHTML) {
+		  	      numberStr = folderNumberCountNode.innerHTML.substring(numberStr.indexOf("(") + 1, numberStr.indexOf(")"));
+		  	      if (numberStr.length == 0) numberStr = "0";
+		  	    }
 		  	    folderNumberCountNode.innerHTML = "(" + (parseInt(numberStr) + 1) + ")";
 		      }
 		    } else {
