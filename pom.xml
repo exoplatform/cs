@@ -53,14 +53,14 @@
     <url>http://builder.exoplatform.org/hudson/job/cs-1.3.x-ci/</url>
   </ciManagement>
   <properties>
-    <org.exoplatform.kernel.version>2.0.15-SNAPSHOT</org.exoplatform.kernel.version>
-    <org.exoplatform.core.version>2.1.13-SNAPSHOT</org.exoplatform.core.version>
-    <org.exoplatform.ws.version>1.3.11-SNAPSHOT</org.exoplatform.ws.version>
-    <org.exoplatform.jcr.version>1.10.12-SNAPSHOT</org.exoplatform.jcr.version>
-    <org.exoplatform.portletcontainer.version>2.0.14-SNAPSHOT</org.exoplatform.portletcontainer.version>
-    <org.exoplatform.portal.version>2.5.13-SNAPSHOT</org.exoplatform.portal.version>
+    <org.exoplatform.kernel.version>2.0.15</org.exoplatform.kernel.version>
+    <org.exoplatform.core.version>2.1.13</org.exoplatform.core.version>
+    <org.exoplatform.ws.version>1.3.11</org.exoplatform.ws.version>
+    <org.exoplatform.jcr.version>1.10.12</org.exoplatform.jcr.version>
+    <org.exoplatform.portletcontainer.version>2.0.14</org.exoplatform.portletcontainer.version>
+    <org.exoplatform.portal.version>2.5.13</org.exoplatform.portal.version>
     <org.exoplatform.tool.version>1.0.0</org.exoplatform.tool.version>
-    <org.exoplatform.webos.version>1.5.10-SNAPSHOT</org.exoplatform.webos.version>
+    <org.exoplatform.webos.version>1.5.10</org.exoplatform.webos.version>
     <org.exoplatform.exopackage.version>1.2.3</org.exoplatform.exopackage.version>
     <version.exobuild.plugin>1.2.2</version.exobuild.plugin>
     <jaxen.version>1.1.1</jaxen.version>
