@@ -57,13 +57,13 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td>click</td>
+	<td>//div[contains(@onclick,'login')]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>5000</td>
+	<td>waitForTextPresent</td>
+	<td>Root</td>
 	<td></td>
 </tr>
 <tr>
@@ -87,9 +87,9 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAt</td>
 	<td>link=Event</td>
-	<td></td>
+	<td>1,1</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -232,26 +232,15 @@
 	<td></td>
 </tr>
 <tr>
-	<td>assertConfirmation</td>
-	<td>Are you sure you want to delete?</td>
-	<td></td>
-</tr>
-<tr>
-	<td>pause</td>
-	<td>5000</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
+	<td>click</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
 <tr>
-	<td>close</td>
-	<td></td>
+	<td>waitForElementPresent</td>
+	<td>link=Sign in</td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>

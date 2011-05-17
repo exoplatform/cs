@@ -207,43 +207,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>verifyElementPresent</td>
-	<td>getMail</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>getMail</td>
-	<td></td>
-</tr>
-<tr>
 	<td>click</td>
 	<td>link=Finish</td>
-	<td></td>
-</tr>
-<tr>
-	<td>pause</td>
-	<td>5000</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>-- Create IMAP mail account--</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder CheckMailIcon']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder CheckMailIcon']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>pause</td>
-	<td>10000</td>
 	<td></td>
 </tr>
 <tr>
@@ -252,23 +217,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementNotPresent</td>
-	<td>//div[@class='MessageNotice']</td>
+	<td>click</td>
+	<td>//div[@id='MailWorkingWorkspace']/div[1]/div/div/div/div/div/div[1]/div</td>
 	<td></td>
 </tr>
 <tr>
-	<td>verifyElementNotPresent</td>
-	<td>//div[@class='MessageNotice']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=eXo_Test</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyElementPresent</td>
-	<td>link=eXo_Test</td>
+	<td>waitForTextPresent</td>
+	<td>Checking email has been finished successfully!!!</td>
 	<td></td>
 </tr>
 <tr>
@@ -487,11 +442,6 @@
 	<td></td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>5000</td>
-	<td></td>
-</tr>
-<tr>
 	<td>echo</td>
 	<td>-- Create POP3 mail account--</td>
 	<td></td>
@@ -504,16 +454,6 @@
 <tr>
 	<td>click</td>
 	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder CheckMailIcon']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>pause</td>
-	<td>10000</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>-- Check Get Mail</td>
 	<td></td>
 </tr>
 <tr>
@@ -571,12 +511,6 @@
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
-<tr>
-	<td>close</td>
-	<td></td>
-	<td></td>
-</tr>
-
 </tbody></table>
 </body>
 </html>
