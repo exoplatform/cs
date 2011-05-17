@@ -294,8 +294,8 @@ The configuration is applied in _extension/webapp/src/main/webapp/WEB-INF/cs-ext
 {code}
 
 Details:
-* *Name*: {{RecordsJob}} is the name of a schedule job. Keep this value.
-* *Set-method*: {{addPeriodJob}} is the plug-in registering method. Keep this value.
+* *Name*: {{RecordsJob}} is the name of a schedule job.
+* *Set-method*: {{addPeriodJob}} is the plug-in registering method.
 * *Type*: {{org.exoplatform.calendar.service.ReminderPeriodJob}} is a class that executes to transfer the data into database of Job Scheduler.
 * *Description*: Add email reminder job to the JobSchedulerService.
 
@@ -349,8 +349,8 @@ The configuration is applied in _extension/webapp/src/main/webapp/WEB-INF/cs-ext
 
 Details:
 
-* *Name*: {{PopupRecordsJob}} is the name of the job. Keep this value.
-* *Set-method*: {{addPeriodJob}} is the plug-in registering method. Keep this value.
+* *Name*: {{PopupRecordsJob}} is the name of the job. 
+* *Set-method*: {{addPeriodJob}} is the plug-in registering method.
 * *Type*: {{org.exoplatform.calendar.service.PopupReminderPeriodJob}} is a class that executes to transfer the data into database of Job Scheduler.
 * *Description*: Add popup reminder job to the JobSchedulerService.
 
@@ -452,8 +452,8 @@ h3. HistoryPeriodJob {anchor:id=CSref.Configuration.HistoryPeriodJob}
 
 Details:
 
-* *Name*: {{ChatRecordsJob}} is the name of the job. Keep this value.
-* *Set-method*: {{addPeriodJob}} is the plug-in registering method. Keep this value.
+* *Name*: {{ChatRecordsJob}} is the name of the job.
+* *Set-method*: {{addPeriodJob}} is the plug-in registering method.
 * *Type*: {{org.exoplatform.services.xmpp.connection.impl.HistoryPeriodJob}} is a class that executes to transfer the data into the database of Job Scheduler.
 * *Description*: It is used to save chat messages from Openfire Server to History.
 
@@ -490,8 +490,8 @@ h3. RequestFilterComponentPlugin {anchor:id=CSref.Configuration.RequestFilterCom
 
 Details:
 
-* *Name*: {{ws.rs.request.filter}} is the name of the filter. Keep this value.
-* *Set-method*: {{addPlugin}} is the plug-in registering method. Keep this value.
+* *Name*: {{ws.rs.request.filter}} is the name of the filter. 
+* *Set-method*: {{addPlugin}} is the plug-in registering method.
 * *Type*: {{org.exoplatform.services.rest.impl.RequestFilterComponentPlugin}} is a class that executes the requests of the plugin.
 * *Description*: It is used to delete the session of a user when he suddenly closes the browser or changes the session.
 
@@ -525,7 +525,7 @@ h4. AuthenticationLoginListener {anchor:id=CSref.Configuration.AuthenticationLog
 Details:
 
 * *Name*: {{exo.core.security.ConversationRegistry.register}} is the name of plug-in.
-* *Set-method*: {{addListener}} is the plug-in registering method. Keep this value.
+* *Set-method*: {{addListener}} is the plug-in registering method.
 * *Type*: {{org.exoplatform.services.xmpp.connection.impl.AuthenticationLoginListener}} is a class to execute the requests of the plug-in.
 * *Description*: It is used to start the session and log in the chat server.
 
@@ -544,7 +544,7 @@ h4. AuthenticationLogoutListener {anchor:id=CSref.Configuration.RequestFilterCom
 Details:
 
 * *Name*: {{exo.core.security.ConversationRegistry.register}} is the name of plug-in.
-* *Set-method*: {{addListener}} is the plug-in registering method. Keep this value.
+* *Set-method*: {{addListener}} is the plug-in registering method.
 * *Type*: {{org.exoplatform.services.xmpp.connection.impl.AuthenticationLogoutListener}} is a class to execute the requests of the plug-in.
 * *Description*: It is used to end the session and log in the chat server.
 
@@ -574,7 +574,7 @@ h3. NewUserListener {anchor:id=CSref.Configuration.NewUserListener}
 Details:
 
 * *Name*: {{contact.new.user.event.listener}} is the name of listener.
-* *Set-method*: {{addListenerPlugin}} is the plug-in registering method. Keep this value.
+* *Set-method*: {{addListenerPlugin}} is the plug-in registering method.
 * *Type*: {{org.exoplatform.contact.service.impl.NewUserListener}} is a class that executes all the requires of the plug-in.
 * *Description*: It is used to initialize personal contact data for users.
 
@@ -665,7 +665,7 @@ h2. Mail Configuration {anchor:id=CSref.Configuration.MailConfiguration}
 
 h3. AuthenticationLogoutListener {anchor:id=CSref.Configuration.AuthenticationLogoutListener}
 
-In the Mail application of eXo Collaboration, when a user checks messages for one account, the remote mailbox fetch is performed as a background job. Before eXo Collaboration 1.2, the job was continuing until all messages had been retrieved or when the user stopped the check through the UI. Hence, even when a user was not logged in, the background job was continuing. This can be the resource intensive for the server if many users have large mailboxes.
+In the Mail application of eXo Collaboration, when a user checks messages for one account, the remote mailbox fetch is performed as a background job. Before eXo Collaboration 1.2, the job was continued until all messages had been retrieved or when the user stopped the check through the UI. Hence, even when a user was not logged in, the background job was continued. This can be the resource intensive for the server if many users have large mailboxes.
 
 Since eXo Collaboration 1.2,  one capability is added to halt the background job when the user session terminates (logout or timeout). It makes eXo Collaboration more friendly with server resources. If you want to activate this feature, you need to add a bunch of the xml congifuration in _/extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/mail/mail-service-configuration.xml_:
 
@@ -689,7 +689,7 @@ Details:
 * *Description*: It is a plug-in used to stop checking mails of a user when he logs out.
 
 h3. MailSettingConfigPlugin {anchor:id=CSref.Configuration.MailConfig.MailSettingConfigPlugin}
- Since eXo Collaboration 2.2.0, _MailSettingConfigPlugin_ is used to defined the behavior, for example, show/hide fields and check/uncheck checkboxes, of email account settings in the mail-server-configuration.xml file. It allows all the settings to be able preconfigured by administrators and possibly set to be not modifiable by end-users. 
+ Since eXo Collaboration 2.2.0, _MailSettingConfigPlugin_ is used to define the behavior, for example, showing/hiding fields and checking/unchecking checkboxes, of email account settings in the mail-server-configuration.xml file. It allows administrators to preconfigure all settings and to specify if end-users have the modification right on each specific setting or not. 
 {code:xml}
 <external-component-plugins>
   <target-component>org.exoplatform.mail.service.MailService</target-component>
@@ -805,17 +805,17 @@ h3. MailSettingConfigPlugin {anchor:id=CSref.Configuration.MailConfig.MailSettin
 
 Details:
 * *Name*: {{cs.mail.service.settings}} is the name of the mail settings.
-* *Set-method*: {{addPlugin}} is the plug-in registering method. Keep this value.
-* *Type*: {{org.exoplatform.mail.service.MailSettingConfigPlugin}} is the plug-in's class name..
+* *Set-method*: {{addPlugin}} is the plug-in registering method.
+* *Type*: {{org.exoplatform.mail.service.MailSettingConfigPlugin}} is the plug-in's class name.
 * *object type*: {{org.exoplatform.mail.service.MailSettingConfig}} is the class of object that contains a specific setting.
 * *Description*: Describes what the setting is or what the settings is used to do.
 
 
 || Object-param||Desciption ||
 |leaveOnServer|Options to keep the message on the mail server after it has been downloaded to the Mail application of eXo Collaboration.|
-|incomingServer|The default incoming server is used to check new mails.|
-|incomingPort|The default port of the incoming server is used to check new mails.|
-|outgoingServer|The default port of the outgoing server is used to send new mails.|
+|incomingServer|The default incoming server used to check new mails.|
+|incomingPort|The default port of the incoming server used to check new mails.|
+|outgoingServer|The default port of the outgoing server used to send new mails.|
 |outgoingPort|The default outgoing port to send new mails.|
 |acceptIncomingSecureAuthentication|Accepts the secure authentication of the incoming server.|
 |incomingSecureAuthentication|The type of incoming secure authentication.|
@@ -857,7 +857,7 @@ h3. CalendarDataInitialize {anchor:id=CSref.Configuration.CalendarDataInitialize
 Details:
 
 * *Name*: {{CalendarDataInitialize}} is the name of plug-in.
-* *Set-method*: {{addSpaceListener}} is the plug-in registering method. Keep this value.
+* *Set-method*: {{addSpaceListener}} is the plug-in registering method.
 * *Type*: {{org.exoplatform.cs.ext.impl.CalendarDataInitialize}} is a class that executes all the requires of the plug-in.
 * *Description*: It is used to initialize a calendar for a group in a specific space.
 
@@ -888,7 +888,7 @@ h3. ContactDataInitialize {anchor:id=CSref.Configuration.ContactDataInitialize}
 Details:
 
 * *Name*: {{ContactDataInitialize}} is the name of the plug-in.
-* *Set-method*: {{addSpaceListener}} is the plug-in registering method. Keep this value.
+* *Set-method*: {{addSpaceListener}} is the plug-in registering method.
 * *Type*: {{org.exoplatform.cs.ext.impl.ContactDataInitialize}} is a class that executes all the requires of the plug-in.
 * *Description*: It is a plug-in used to initialize an address book for a group in a specific space.
 
@@ -914,7 +914,7 @@ h3. ContactSpaceActivityPublisher {anchor:id=CSref.Configuration.ContactSpaceAct
 Details:
 
 * *Name*: {{ContactEventListener}} is the name of the plug-in.
-* *Set-method*: {{addListenerPlugin}} is the plug-in registering method. Keep this value.
+* *Set-method*: {{addListenerPlugin}} is the plug-in registering method.
 * *Type*: {{org.exoplatform.cs.ext.impl.ContactSpaceActivityPublisher}} is a class that executes all the requires of the plug-in.
 * *Description*: It is a plug-in used to customize the activity status of a specific space when an event happens on an address book.
 
@@ -934,7 +934,7 @@ h3. CalendarSpaceActivityPublisher {anchor:id=CSref.Configuration.CalendarSpaceA
 Details:
 
 * *Name*: {{CalendarEventListener}} is the name of the plug-in.
-* *Set-method*: {{addEventListenerPlugin}} is the plug-in registering method. Keep this value.
+* *Set-method*: {{addEventListenerPlugin}} is the plug-in registering method.
 * *Type*: {{org.exoplatform.cs.ext.impl.CalendarSpaceActivityPublisher}} is a class that executes all the requires of the plug-in.
 * *Description*: It is a plug-in used to customize the activity status of a specific space when an event happens on a calendar.
 
@@ -962,7 +962,7 @@ h3. PortletPreferenceRequiredPlugin {anchor:id=CSref.Configuration.PortletPrefer
 Details:
 
 * *Name*: {{ortlets.prefs.required}} is the name of the plug-in.
-* *Set-method*: {{setPortletsPrefsRequired}} is the plug-in registering method. Keep this value.
+* *Set-method*: {{setPortletsPrefsRequired}} is the plug-in registering method.
 * *Type*: {{org.exoplatform.social.core.application.PortletPreferenceRequiredPlugin}} is a class that executes all the requires of the plug-in.
 * *Description*: It is a plug-in used to declare the application that will automatically create database.
 
