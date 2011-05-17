@@ -276,5 +276,10 @@ public interface DataStorage {
    * @throws Exception
    */
   public List<Account> getDelegateAccounts(String userId) throws Exception;
-
+  
+  /**
+   count size of mailbox in MB 
+  */
+  public long countMailboxSize(String username, String accountId) throws Exception;
+  
 }

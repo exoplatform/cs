@@ -1048,7 +1048,14 @@ import com.sun.mail.smtp.SMTPSendFailedException;
       // folder
       try {
         Account account = mailSvr.getAccountById(usename, accountId);
-        if(!uiComposeForm.saveToSentFolder(usename, account, message)){
+        float percent = (MailUtils.getAllMailboxSize()/(1024*1024))/MailUtils.getDefaultQuota()*100;
+        boolean isSaved = true;
+        if(percent >= 110){
+          isSaved = false;
+          uiApp.addMessage(new ApplicationMessage("UIMessagePreview.UIIntroduction.label.quota.savemessage.alert", null,ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        }
+        if(isSaved && !uiComposeForm.saveToSentFolder(usename, account, message)) {
           uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.cannot-send", null, ApplicationMessage.INFO)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         }
@@ -1113,6 +1120,13 @@ import com.sun.mail.smtp.SMTPSendFailedException;
   static public class SaveDraftActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm composeForm = event.getSource();
+      float percent = (MailUtils.getAllMailboxSize()/(1024*1024))/MailUtils.getDefaultQuota()*100;
+      UIApplication uiApp = composeForm.getAncestorOfType(UIApplication.class) ;
+      if(percent >= 110){
+        uiApp.addMessage(new ApplicationMessage("UIMessagePreview.UIIntroduction.label.quota.alert", null,ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       UIMailPortlet uiPortlet = composeForm.getAncestorOfType(UIMailPortlet.class);
       UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
       MailService mailSvr = composeForm.getApplicationComponent(MailService.class);
@@ -1158,14 +1172,14 @@ import com.sun.mail.smtp.SMTPSendFailedException;
       // CS-4462
       catch (AuthenticationFailedException e) {
         e.printStackTrace();
-        UIApplication uiApp = composeForm.getAncestorOfType(UIApplication.class);
+        uiApp = composeForm.getAncestorOfType(UIApplication.class);
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.the-username-or-password-may-be-wrong-save-draft-error",
                                                 null));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       } catch (Exception e) {
         e.printStackTrace();
-        UIApplication uiApp = composeForm.getAncestorOfType(UIApplication.class);
+        uiApp = composeForm.getAncestorOfType(UIApplication.class);
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-draft-error", null));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
       }

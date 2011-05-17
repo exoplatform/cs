@@ -3051,4 +3051,32 @@ public class JCRDataStorage implements DataStorage {
       tag.setColor(tagNode.getProperty(Utils.EXO_COLOR).getString());
     return tag;
   }
+
+  @Override
+  public long countMailboxSize(String username, String accountId) throws Exception {
+    long quotaNumber = 0l;
+    SessionProvider sessionProvider = null;
+    try {
+      sessionProvider = createSessionProvider();
+      Node homeNode = getMailHomeNode(sessionProvider, username);
+      Node accountNode = homeNode.getNode(accountId);
+      Session session = getSession(sessionProvider);
+      QueryManager qm = session.getWorkspace().getQueryManager();
+      String statement = "SELECT * FROM " +  Utils.EXO_MESSAGE + " WHERE jcr:path LIKE '" + accountNode.getPath() + "/%'";
+      Query query = qm.createQuery(statement, Query.SQL);
+      NodeIterator ni = query.execute().getNodes();
+      int count = 0;
+      while(ni.hasNext()){
+        count++;
+        Node node = ni.nextNode();
+        if(node.hasProperty(Utils.EXO_SIZE))
+          quotaNumber += node.getProperty(Utils.EXO_SIZE).getLong();
+      }
+    } catch (Exception e) {
+      if(logger.isDebugEnabled()) logger.debug("Cannot count size of mailbox", e);
+    }finally{
+      sessionProvider.close(); 
+    }
+    return quotaNumber;
+  }
 }

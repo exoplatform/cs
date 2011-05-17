@@ -83,11 +83,19 @@ public class UIActionBar extends UIContainer {
       String username = uiPortlet.getCurrentUser();
       Folder currentF = null;
       uiPortlet.setFormId(formId);
+
+      float percent = (MailUtils.getAllMailboxSize()/(1024*1024))/MailUtils.getDefaultQuota()*100;
+      
       if(Utils.isEmptyField(accId) || (mailSrv.getAccounts(username).isEmpty() && mailSrv.getDelegatedAccounts(username).isEmpty())) {
         uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       } else {
+        if(percent >= 110){
+          uiApp.addMessage(new ApplicationMessage("UIMessagePreview.UIIntroduction.label.quota.alert", null,ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
         try {
           if (MailUtils.isFieldEmpty(folderId)) {
             context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.checkMail(true) ;");

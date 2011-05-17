@@ -522,6 +522,10 @@ public class Utils {
   private static final String       OUTGOING_SECURE_AUTHENTICATION        = "outgoingSecureAuthentication".intern();
 
   private static final String       OUTGOING_AUTHENTICATION_MECHANISM     = "outgoingAuthenticationMechanism".intern();
+  
+  public static final String        MAIL_QUOTA                            = "mail-quota";      
+  public static final String        MAIL_QUOTA_ADMIN                      = "administrator";
+  public static final String        MAIL_QUOTA_USER                       = "user";
 
   public static boolean isEmptyField(String value) {
     return value == null || value.trim().length() == 0;

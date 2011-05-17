@@ -1290,6 +1290,7 @@
 
 .UIMailPortlet .SubjectMail .ContentMail {
   padding: 4px 0px;
+  margin-left:25px;
 }
 
 .UIMailPortlet .SubjectMail .FeaturesMail {
@@ -1297,6 +1298,14 @@
   font-size: 12px;
   font-weight: bolder;
   border-bottom: 1px solid #c7c7c7;
+}
+
+.UIMailPortlet .SubjectMail .QuotaMail {
+ padding: 4px 0px;
+ color:blue;
+ font-size: 10px;
+ font-weight: bolder;
+ margin-left:25px;
 }
 
 /*=======================Print Priview Mail========================*/
