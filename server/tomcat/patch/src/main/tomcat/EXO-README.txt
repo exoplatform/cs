@@ -115,6 +115,20 @@ Need to set the JAVA_HOME variable for run Collaboration suite's servers.
 		 
    * If on provided chat-server have no run*.* file you can reference here http://wiki.exoplatform.org/xwiki/bin/view/CS/Install%20Guide#HLaunchthechatserverforcs2.0      
 
+To enable mail notifications, quickly you can use your own email account for example :
+
+# EMail
+gatein.email.smtp.username=*youracount@server.com*
+gatein.email.smtp.password=*yourpassword*
+gatein.email.smtp.host=smtp.gmail.com
+gatein.email.smtp.port=465
+gatein.email.smtp.starttls.enable=true
+gatein.email.smtp.auth=true
+gatein.email.smtp.socketFactory.port=465
+gatein.email.smtp.socketFactory.class=javax.net.ssl.SSLSocketFactory
+
+in this file tomcat/gatein/conf/configuration.properties
+
 -) How to access the eXo Collaboration Suite
 
 * Enter one of the following addresses into your browser address bar:   
