@@ -16,7 +16,7 @@
  **/
 
 ============================================================ 
-    Release Notes - eXo Collaboration - Version 2.2.0-Beta02
+    Release Notes - eXo Collaboration - Version 2.2.0
 ============================================================ 
 
 ===============
@@ -49,11 +49,17 @@ experience more productive. It offers several ways to to view and organize your 
 
 
     * General
-	 - Fix bug
-	 - Subscribe to remote calendar
-	 - Calendar repeat option 
-	 - Some improvements and feedbacks added
-	 - Improve integrated with eXo social feature
+	 -  Subscribe to remote calendar
+     - "Leave message on server" mail options
+     - define a service that allowed all settings to be preconfigured by admins and possibly set as not modifiable by users
+     - show warning message when create event with invitation mail but don't enter email address yet
+     - Improve repeating event rule
+     - Contacts selected on the current page are added.
+     - Do not display left panes of Calendar in spaces
+     - Highlight today not unique enough in Mac then it's hard to know what is date today
+     - Tasks and events are not created in calendar
+     - Upload file when select, no need to click to upload button 
+     - Fix bunch of bug
      
     * Find the latest release notes here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Release+Notes            
           
@@ -143,6 +149,65 @@ All those accounts have the default password "gtn".
 ===========
 6 CHANGELOG
 ===========
+- 2.2.0-GA
+
+** Bug
+    * [CS-4665] - Password require when send mail
+    * [CS-4733] - Cannot load and merge the bundle
+    * [CS-4736] - [chatbar] Contact list is not shown after changing status to online
+    * [CS-4737] - [chatbar] user at "Free to chat" can not do some permitted actions
+    * [CS-4752] - Right click on calendar to add event but selected calendar in event form is wrong
+    * [CS-4753] - Switch tab in add event detail form, selected calendar alway back to default
+    * [CS-4762] - Remote Calendar : Repeating events are not imported/synchronized correclty
+    * [CS-4770] - [CS] Always show message when send a mail with attach file with name have accent
+    * [CS-4776] - [Rss] french translation for rss reader portlet
+    * [CS-4781] - Calendar- Some UI error on IE 7
+    * [CS-4784] - Calendar's left panel always disappears after some actions
+    * [CS-4786] - Closing search in calendar changes the displayed week
+    * [CS-4789] - Contact - View a contact - link of home website is invalid
+    * [CS-4793] - IncompatibleClassChangeError when adding a calendar event in space
+    * [CS-4794] - Mail - Can not get mail
+    * [CS-4805] - Invalid message display when delete a calendar
+    * [CS-4807] - [PLF] [IE7] Intranet Home page - vertical scroll of Upcoming Events frame
+    * [CS-4812] - Mail - Delegate user list is invalid in case delegate multiple account
+    * [CS-4815] - [CS-Mail] Delegated user can not open Mail application
+    * [CS-4816] - [Calendar-IE7] Left pane always hide after refresh browser
+    * [CS-4819] - CS - IE7: Next Week icon is displayed wrong on Title bar
+    * [CS-4820] - Delegated user cannot write mail
+    * [CS-4822] - [PLF] Need to keep the space calendar of new created space as default selected when add event on calendar of space
+    * [CS-4823] - Parsing datetime error at last week of March 2011 in week view
+    * [CS-4826] - Repeating event is not shown in List view
+    * [CS-4839] - Exception when show month view with event spreads over 2 months view
+    * [CS-4845] - [Calendar] mini calendar and month view is wrong title day of week name
+    * [CS-4846] - Job starts before loading some nodetypes
+    * [CS-4847] - [MAIL] Print message : only the first page is printed
+    * [CS-4852] - [Mail] need to enter password when user get mail for the account without check on "save password"
+    * [CS-4854] - "Refresh News" on RSS portlet is not translated in French
+    * [CS-4858] - [CS-calendar] the deleted user still display on the share list of the shared calendar
+    * [CS-4866] - [CS-mail] Don't show search icon when search user on To field on Chromium
+    * [CS-4869] - Offline messages are marked with current date
+    * [CS-4870] - Untraslated labels in sharing calendar
+    * [CS-4872] - Untranslated label in the search of agenda
+    * [CS-4881] - [Calendar] reminder by e mail is display time incorrect
+    * [CS-4888] - Chat - there is no user notification of the session timeout
+    * [CS-4896] - Memory leaks in check mail service
+    * [CS-4903] - [Calendar-event] Can not add new event by select add new event on right click 
+    * [CS-4904] - [Calendar] Some event at the end day of the next month from romote calendare, don't display on month view of the month
+    * [CS-4905] - [Calendar] Need show message when select Generate URL without select any calendar
+    * [CS-4909] - RepositoryException when stopping tomcat PLF 3.5 M2
+    * [CS-4911] - Show page not found in special case on CS
+    * [CS-4917] - [CS-Agenda] don't keep the checked reminder by email and show notification popup
+    * [CS-4918] - Can not add a contact with a long mail address in the address book
+    * [CS-4935] - Allday repeating event doesn't show in week view
+    * [CS-4943] - [CS] Show "Email address is invalid" send mail from contact app
+    * [CS-4947] - Can not add daily repeated event that never end
+    * [CS-4949] - CLONE - Wrong date availability in schedule tab in add/edit event form 
+    * [CS-4951] - [CS-calendar] can not re-size time of event/task on IE7
+    * [CS-4957] - [social-integration] Added event is not listed in activities stream
+    * [CS-4962] - [PLF] Unknown error when exporting all address books
+    * [CS-4964] -  Repeat event UI error when add event 
+    * [CS-4975] - SetCurrentIdentityFilter causes ChatBar to crash
+
 - 2.2.0-Beta02
 
 ** Bug
