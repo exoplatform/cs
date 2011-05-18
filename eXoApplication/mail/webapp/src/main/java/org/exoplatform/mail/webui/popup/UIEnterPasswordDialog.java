@@ -138,14 +138,7 @@ public class UIEnterPasswordDialog extends UIForm implements UIPopupComponent{
       }
       
       try {
-        float percent = (MailUtils.getAllMailboxSize()/(1024*1024))/MailUtils.getDefaultQuota()*100;
-        boolean isSaved = true;
-        if(percent >= 110){
-          isSaved = false;
-          uiApp.addMessage(new ApplicationMessage("UIMessagePreview.UIIntroduction.label.quota.savemessage.alert", null,ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        }
-        if(isSaved && !composeForm.saveToSentFolder(username, acc, uiForm.getSendMessage())){
+        if(!composeForm.saveToSentFolder(username, acc, uiForm.getSendMessage())){
           uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.cannot-send", null, ApplicationMessage.INFO)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         }

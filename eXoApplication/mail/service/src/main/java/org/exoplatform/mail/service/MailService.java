@@ -815,8 +815,4 @@ public interface MailService {
   public void addPlugin(ComponentPlugin plugin);
 
   public Map<String, MailSettingConfigPlugin> getSettingConfig();
-  
-  public long countMailboxSize(String username, String accountId) throws Exception;
-  
 }
-

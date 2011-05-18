@@ -43,7 +43,6 @@ import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.JCRMessageAttachment;
-import org.exoplatform.mail.service.MailQuotaConfig;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
@@ -896,46 +895,6 @@ import org.exoplatform.webui.event.EventListener;
       }
     }
     event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
-  }
-  
-  public long getMailboxSize(){
-    long quota = 0l;
-    try{
-      MailService mailSrv = MailUtils.getMailService();
-      UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
-      String username = MailUtils.getCurrentUser();
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      if(!Utils.isEmptyField(username) && !Utils.isEmptyField(accountId))
-       quota = mailSrv.countMailboxSize(username, accountId);
-    }catch (Exception e) {}
-
-    return quota;
-  }
-   
-  public long getDefaultQuota(){
-    MailQuotaConfig mailQuotaConfig = MailUtils.getMailQuotaConfig();
-    if(mailQuotaConfig != null){
-     if(MailUtils.isAdmin()) return mailQuotaConfig.getAdminQuota();
-     else return mailQuotaConfig.getUserQuota();
-    }    
-    return 0;
-  }
-  
-  public long getAllMailboxSize(){
-    long quota = 0l;
-    try{
-      MailService mailSrv = MailUtils.getMailService();
-      String username = MailUtils.getCurrentUser();
-      List<Account> accountList = new ArrayList<Account>();
-      if(!Utils.isEmptyField(username)){
-        accountList = mailSrv.getAccounts(username);
-        for(Account a : accountList){
-          quota += mailSrv.countMailboxSize(username, a.getId());
-        }
-      }
-    }catch (Exception e) {}
-
-    return quota;
   }
   
 }

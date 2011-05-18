@@ -6,17 +6,6 @@
     <key>org.exoplatform.mail.service.MailService</key>
     <type>org.exoplatform.mail.service.impl.MailServiceImpl</type>
   </component>    
-   <!-- Mail quota configure. Default value measure by MB -->
-  <component>
-    <type>org.exoplatform.mail.service.MailQuotaConfig</type>
-    <init-params>
-      <properties-param>
-        <name>mail-quota</name>
-        <property name="administrator" value="1024" />
-        <property name="user" value="512" />
-      </properties-param>
-    </init-params>
-  </component>  
   
   <external-component-plugins>
     <target-component>org.exoplatform.services.listener.ListenerService</target-component>

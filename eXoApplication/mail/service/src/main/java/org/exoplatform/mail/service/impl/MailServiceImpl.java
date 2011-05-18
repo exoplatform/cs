@@ -145,7 +145,7 @@ public class MailServiceImpl implements MailService, Startable {
   private String                       folderStr      = "";
 
   Map<String, MailSettingConfigPlugin> settingPlugins = new HashMap<String, MailSettingConfigPlugin>();
-  
+
   public MailServiceImpl(InitParams initParams, NodeHierarchyCreator nodeHierarchyCreator, JobSchedulerService schedulerService, RepositoryService reposervice) throws Exception {
     storage_ = new JCRDataStorage(nodeHierarchyCreator, reposervice);
     emlImportExport_ = new EMLImportExport(storage_);
@@ -2864,14 +2864,9 @@ public class MailServiceImpl implements MailService, Startable {
       MailSettingConfigPlugin mailConfigPlugin = (MailSettingConfigPlugin) plugin;
       settingPlugins.put(mailConfigPlugin.getName(), mailConfigPlugin);
     }
-    
   }
 
   public Map<String, MailSettingConfigPlugin> getSettingConfig() {
     return settingPlugins;
-  }
-
-  public long countMailboxSize(String username, String accountId) throws Exception{
-    return storage_.countMailboxSize(username, accountId);
   }
 }

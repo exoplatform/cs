@@ -16,15 +16,11 @@
  */
 package org.exoplatform.mail;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.text.DecimalFormat;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -52,7 +48,6 @@ import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.DataStorage;
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.cs.common.webui.UIPopupAction;
 import org.exoplatform.cs.common.webui.UIPopupActionContainer;
@@ -60,22 +55,15 @@ import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
-import org.exoplatform.mail.service.MailQuotaConfig;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIAddContactForm;
-import org.exoplatform.portal.config.UserACL;
-import org.exoplatform.portal.resource.CharSequenceReader;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.CmsService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
-import org.exoplatform.services.organization.Query;
-import org.exoplatform.services.organization.User;
-import org.exoplatform.services.security.ConversationState;
-import org.exoplatform.services.security.Identity;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -592,59 +580,5 @@ public class MailUtils {
       } catch (Exception e) {}
       return limitMB;
     }
-    
-   public static MailQuotaConfig getMailQuotaConfig(){
-     return (MailQuotaConfig)PortalContainer.getInstance().getComponentInstanceOfType(MailQuotaConfig.class);
-   } 
-   
-   public static boolean isAdmin(){
-     UserACL userACL = (UserACL) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(UserACL.class);
-     Identity identity = ConversationState.getCurrent().getIdentity();
-     List<String> userGroups = new ArrayList<String>();
-     userGroups.add(identity.getUserId());
-     userGroups.addAll(identity.getGroups());
-     for(String s : userGroups){
-       if(s.equals(userACL.getAdminGroups()) || s.equals(userACL.getSuperUser())) return true;
-     }
-     return false;
-   }
-   
-   public static float roudingQuota(float number){
-     DecimalFormat df = new DecimalFormat("0.00");
-     if(number < 0.01 && number > 0.001)
-       df = new DecimalFormat("0.000");
-     else if(number < 0.001 && number > 0.0001)  
-       df = new DecimalFormat("0.0000");
-     else if(number < 0.0001)  
-       df = new DecimalFormat("0.00000");   
-     
-     return Float.parseFloat(df.format(number));
-   }
-   
-   public static long getAllMailboxSize(){
-     long quota = 0l;
-     try{
-       MailService mailSrv = getMailService();
-       String username = MailUtils.getCurrentUser();
-       List<Account> accountList = new ArrayList<Account>();
-       if(!Utils.isEmptyField(username)){
-         accountList = mailSrv.getAccounts(username);
-         for(Account a : accountList){
-           quota += mailSrv.countMailboxSize(username, a.getId());
-         }
-       }
-     }catch (Exception e) {}
-
-     return quota;
-   }
-   
-   public static long getDefaultQuota(){
-     MailQuotaConfig mailQuotaConfig = getMailQuotaConfig();
-     if(mailQuotaConfig != null){
-      if(isAdmin()) return mailQuotaConfig.getAdminQuota();
-      else return mailQuotaConfig.getUserQuota();
-     }    
-     return 0;
-   }
 }
 

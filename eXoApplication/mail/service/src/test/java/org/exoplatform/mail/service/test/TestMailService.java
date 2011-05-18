@@ -321,29 +321,4 @@ public class TestMailService extends BaseMailTestCase {
     assertEquals(0, mailService_.getDelegatedAccounts(receiver).size());
 
   }
-  
-  public void testCountMailboxSize() throws Exception{
-    Account accPop = createAccountObj(Utils.POP3);
-    mailService_.createAccount(username, accPop);
-    assertEquals(0, mailService_.countMailboxSize(username, accPop.getId()));
-    
-    StringBuffer sbBody = new StringBuffer("");
-    Message message = new Message();
-    message.setContentType(TEXT_HTML);
-    message.setSubject("This message has been sent form " + accPop.getEmailAddress());
-    message.setFrom(accPop.getEmailAddress());
-    message.setMessageTo(accPop.getEmailAddress());
-    sbBody.append("<b>Hello " + accPop.getIncomingUser() + "</b>").append("<br/>").append(Calendar.getInstance().getTime().toString());
-    message.setMessageBody(accPop.toString());
-    Folder folder = new Folder();
-    folder.setId("folderId1");
-    folder.setName("folder test");
-    folder.setURLName("folder 1");
-    message.setFolders(new String[] { folder.getId() });
-    message.setReceivedDate(new Date());
-    mailService_.saveMessage(username, accPop.getId(), message, true);
-    assertNotSame(0, mailService_.countMailboxSize(username, accPop.getId()));
-    mailService_.removeMessage(username, accPop.getId(), message);
-  }
-  
 }

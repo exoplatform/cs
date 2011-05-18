@@ -1,7 +1,3 @@
-<%
-	import java.text.DecimalFormat;
-	import org.exoplatform.mail.MailUtils;
-%>
 <div class="ReadingPaneBar">
   <div class="Subject"><span><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.title")%></span>
     <span><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.subject")%></span>  <!-- Welcome to eXo Mail - eXo Collaboration Suite. -->
@@ -22,7 +18,7 @@
     <div class="OverviewMail">
       <%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.overview")%>
     </div>
-    <div class="ContentMail">
+    <div class="ContentMail" style="margin-left:25px;">
       <%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.label0")%>
     </div>
     <div class="FeaturesMail">
@@ -37,45 +33,5 @@
         <li><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.label5")%></li>
       </ul>
     </div>
-    <%
-    	long quotaDefault = MailUtils.getDefaultQuota();
-    	long mailBoxSize = MailUtils.getAllMailboxSize();
-    	float curretnQuota = mailBoxSize/(1024*1024);
-    	float percent = (curretnQuota/quotaDefault)*100;
-    				
-    	percent = MailUtils.roudingQuota(percent);
-    	curretnQuota = MailUtils.roudingQuota(curretnQuota);
-    	
-    	if(curretnQuota > 0){
-    %>    
-	    <div class="FeaturesMail">
-	      <%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.quota")%>
-	    </div>
-	    <div class="QuotaMail">
-	      <ul>
-	      <%
-	      	if(percent < 90){
-	      %>
-	        <li>
-	        	<%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.quota.info")%>&nbsp;$curretnQuota&nbsp;MB&nbsp;($percent%)
-	        	<%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.quota.info1")%>&nbsp;$quotaDefault&nbsp;MB
-	         </li>
-	      <%
-	      	}else if(percent > 90 && percent < 110){
-	      %>
-	      	<%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.quota.info")%>&nbsp;$curretnQuota&nbsp;MB&nbsp;($percent%)
-	    	<%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.quota.info1")%>&nbsp;$quotaDefault&nbsp;
-	    	<%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.quota.warning")%>
-	      <%
-	      	}else if(percent >= 110){
-	      %>	
-	      	<li><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.quota.alert")%></li>
-	      <%
-	      	}
-	      %>
-	      </ul>
-	    </div>
-    <%}%>
-    
   </div>
 </div>  
