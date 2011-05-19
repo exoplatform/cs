@@ -718,6 +718,10 @@
 		<version>${xerces.version}</version>
 		<type>jar</type>
 	</dependency>
+<dependency><groupId>javax.activation</groupId><artifactId>activation</artifactId><version>${javax.activation.version}</version><type>jar</type></dependency><!-- 1.1-->
+<dependency><groupId>commons-httpclient</groupId><artifactId>commons-httpclient</artifactId><version>${commons-httpclient.version}</version><type>jar</type></dependency>
+<dependency><groupId>org.jboss</groupId><artifactId>jboss-common-core</artifactId><version>${org.jboss.version}</version><type>jar</type></dependency>
+
   <dependency>
       <groupId>bouncycastle</groupId>
       <artifactId>bcmail-jdk14</artifactId>

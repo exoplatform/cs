@@ -48,7 +48,7 @@
     <commons-lang.version>2.6</commons-lang.version>
     <commons-chain.version>1.2</commons-chain.version>
     <commons-logging.version>1.1.1</commons-logging.version>
-    <commons-httpclient.version>3.0</commons-httpclient.version>
+    <commons-httpclient.version>3.1</commons-httpclient.version>
     <javax.servlet.servlet-api.version>2.5</javax.servlet.servlet-api.version>
     <javax.portlet.portlet-api.version>2.0</javax.portlet.portlet-api.version>
     <javax.mail.mail.version>1.4.4</javax.mail.mail.version>
@@ -58,7 +58,7 @@
     <javax.jcr.api.version>1.0</javax.jcr.api.version>
     <org.jibx.jibx-run.version>1.2.2</org.jibx.jibx-run.version>
     <javax.activation.activation.version>1.1.1</javax.activation.activation.version>
-    <org.log4j.version>1.2.16</org.log4j.version>
+    <org.log4j.version>1.2.14</org.log4j.version>
     <org.jvnet.mock-javamail.version>1.9</org.jvnet.mock-javamail.version>
     <xml-apis.version>1.0.b2</xml-apis.version>
     <pull-parser.version>2</pull-parser.version>
@@ -92,18 +92,18 @@
     <!--need when deploy CS-->
     <org.apache.pdfbox.fontbox.version>1.4.0</org.apache.pdfbox.fontbox.version>
     <jdom.version>1.0</jdom.version>
-    <org.slf4j.version>1.5.6</org.slf4j.version>
-	  <c3p0.version>0.9.1.2</c3p0.version>
+    <org.slf4j.version>1.5.8</org.slf4j.version>
+    <c3p0.version>0.9.1.2</c3p0.version>
     <net.oauth.version>20080621</net.oauth.version>
     <cglib.version>2.2</cglib.version>
-    <commons-dbcp.version>1.2.1</commons-dbcp.version>
+    <commons-dbcp.version>1.4</commons-dbcp.version>
     <org.exoplatform.tool.version>1.0.0</org.exoplatform.tool.version>
     <org.javassist.version>3.14.0-GA</org.javassist.version>
     <html-parser.version>1.6</html-parser.version>
     <com.sun.xml.bind.version>2.1.7</com.sun.xml.bind.version>
     <org.jvnet.jaxb2.maven2.version>0.7.4</org.jvnet.jaxb2.maven2.version>
     <org.gatein.pc.version>2.2.0-GA</org.gatein.pc.version>
-    <commons-pool.version>1.2</commons-pool.version>
+    <commons-pool.version>1.5.5</commons-pool.version>
     <asm.version>1.5.3</asm.version>
     <antlr.version>2.7.6rc1</antlr.version>
     <jcr.version>1.0</jcr.version>
@@ -116,6 +116,8 @@
     <org.reflext.version>1.1.0-beta12</org.reflext.version>
     <xerces.version>2.9.1</xerces.version>
     <commons-collections.version>3.2.1</commons-collections.version>
+    <javax.activation.version>1.1</javax.activation.version>
+    <org.jboss.version>2.2.9.GA</org.jboss.version>
     <!-- ************** -->
     <!-- Build settings -->
     <!-- ************** -->
