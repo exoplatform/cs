@@ -40,7 +40,8 @@ UpdateList.prototype.update = function(obj){
 		  	  if (data.isRead != 'true') {
 		  	    var numberStr = "0";
 		  	    if (folderNumberCountNode.innerHTML) {
-		  	      numberStr = folderNumberCountNode.innerHTML.substring(numberStr.indexOf("(") + 1, numberStr.indexOf(")"));
+		  	      numberStr = folderNumberCountNode.innerHTML;
+		  	      numberStr = numberStr.substring(numberStr.indexOf("(") + 1, numberStr.indexOf(")"));
 		  	      if (numberStr.length == 0) numberStr = "0";
 		  	    }
 		  	    folderNumberCountNode.innerHTML = "(" + (parseInt(numberStr) + 1) + ")";
