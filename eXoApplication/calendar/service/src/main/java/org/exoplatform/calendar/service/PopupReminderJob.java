@@ -59,7 +59,7 @@ public class PopupReminderJob implements Job {
     try {
       if (log_.isDebugEnabled())
         log_.debug("Calendar popup reminder service");
-      java.util.Calendar fromCalendar = GregorianCalendar.getInstance();
+      java.util.Calendar fromCalendar = Utils.getInstanceTempCalendar();
       ContinuationService continuation = (ContinuationService) container.getComponentInstanceOfType(ContinuationService.class);
       Node calendarHome = Utils.getPublicServiceHome(provider);
       if (calendarHome == null)
