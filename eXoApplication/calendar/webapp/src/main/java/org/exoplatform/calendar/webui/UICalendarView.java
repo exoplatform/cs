@@ -799,7 +799,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         UICalendarView uiCalendarView = event.getSource() ;
         UICalendarPortlet uiPortlet = uiCalendarView.getAncestorOfType(UICalendarPortlet.class) ;
         uiPortlet.cancelAction() ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
         CalendarEvent eventCalendar = null ;
         if(uiCalendarView instanceof UIListView) {
           UIListView uiListView = (UIListView)uiCalendarView ;
