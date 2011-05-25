@@ -60,6 +60,7 @@ import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.cms.CmsService;
 import org.exoplatform.services.cms.JcrInputProperty;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.util.Text;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -784,7 +785,7 @@ import org.exoplatform.webui.event.EventListener;
         } else {
           try {
             RepositoryService repoService = (RepositoryService) this.getApplicationComponent(RepositoryService.class);
-            Map<String, JcrInputProperty> inputProps = getInputProperties(selectedAttachment_.getName(),
+            Map<String, JcrInputProperty> inputProps = getInputProperties(Text.escapeIllegalJcrChars(selectedAttachment_.getName()),
                                                                           selectedAttachment_.getInputStream(),
                                                                           selectedAttachment_.getMimeType());
             cmsService.storeNodeByUUID(Utils.NT_FILE,
@@ -792,7 +793,7 @@ import org.exoplatform.webui.event.EventListener;
                                        inputProps,
                                        true);
             message = new ApplicationMessage("UIMessagePreview.msg.DMSSelector.save-successfully",
-                                             new Object[] {selectedAttachment_.getName().replace(".", "&#46;"), folderNode.getName()},
+                                             new Object[] {Text.escapeIllegalJcrChars(selectedAttachment_.getName()).replace(".", "&#46;"), folderNode.getName()},
                                              ApplicationMessage.INFO);
           } catch (Exception e) {
             message = new ApplicationMessage("UIMessagePreview.msg.DMSSelector.save-error",
