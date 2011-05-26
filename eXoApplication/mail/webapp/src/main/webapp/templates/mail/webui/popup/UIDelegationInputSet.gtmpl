@@ -40,7 +40,7 @@
         <div class="AddUserFeild">
         <%uicomponent.renderUIComponent(inputDA)%>
         </div>
-         <div class="SelectUser" onclick="<%=uicomponent.event("SelectUser")%>"><span></span></div>
+         <!--<div class="SelectUser" onclick="<%=uicomponent.event("SelectUser")%>"><span></span></div> -->
          <div class="ClearAll"><span></span></div>
 
         </td>  
