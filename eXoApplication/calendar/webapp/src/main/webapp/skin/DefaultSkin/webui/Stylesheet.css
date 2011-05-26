@@ -274,11 +274,11 @@
   white-space: normal;
 }
 
-.UICalendarPortlet .UIForm .HorizontalLayout input {
+.UICalendarPortlet .UIForm#UICalendarForm .HorizontalLayout input {
   width: 200px;
 }
 
-.UICalendarPortlet .UIForm .HorizontalLayout input.checkbox {
+.UICalendarPortlet .UIForm#UICalendarForm .HorizontalLayout input.checkbox {
   width: auto;
 }
 
