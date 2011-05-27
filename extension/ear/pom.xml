@@ -104,6 +104,12 @@
       <version>${project.version}</version>
       <type>war</type>
     </dependency>
+
+    <dependency>
+       <groupId>org.apache.jackrabbit</groupId>
+       <artifactId>jackrabbit-webdav</artifactId>
+       <version>${org.apache.jackrabbit.version}</version>
+    </dependency>
     
     <!-- 
     integration jars
@@ -282,6 +288,11 @@
               <contextRoot>csResources</contextRoot>
               <bundleFileName>csResources.war</bundleFileName>
             </webModule>
+            <jarModule>
+              <groupId>org.apache.jackrabbit</groupId>
+              <artifactId>jackrabbit-webdav</artifactId>
+              <includeInApplicationXml>true</includeInApplicationXml>
+            </jarModule>
           </modules>
         </configuration>
       </plugin>
