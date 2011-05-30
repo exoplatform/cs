@@ -49,6 +49,11 @@
       <version>${org.exoplatform.jcr.version}</version>
     </dependency>
     <dependency>
+      <groupId>org.exoplatform.jcr</groupId>
+      <artifactId>exo.jcr.component.webdav</artifactId>
+      <version>${org.exoplatform.jcr.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>portal.packaging.module</artifactId>
       <version>${org.exoplatform.portal.version}</version>
