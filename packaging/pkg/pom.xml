@@ -608,8 +608,48 @@
 		<artifactId>reflext.api</artifactId>
 		<version>${org.reflext.version}</version><type>jar</type>
 	</dependency>
-
-        
+  <dependency>
+    <groupId>org.gatein.wsrp</groupId>
+    <artifactId>wsrp-common</artifactId>
+    <version>${org.gatein.wsrp.version}</version>
+  </dependency>
+  <dependency>
+    <groupId>org.gatein.wsrp</groupId>
+    <artifactId>wsrp-producer</artifactId>
+    <version>${org.gatein.wsrp.version}</version>
+    <type>war</type>
+  </dependency>
+  <dependency>
+    <groupId>org.gatein.wsrp</groupId>
+    <artifactId>wsrp-producer-lib</artifactId>
+    <version>${org.gatein.wsrp.version}</version>
+  </dependency>
+  <dependency>
+    <groupId>org.gatein.wsrp</groupId>
+    <artifactId>wsrp-wsrp1-ws</artifactId>
+    <version>${org.gatein.wsrp.version}</version>
+  </dependency>
+  <dependency>
+    <groupId>org.gatein.wsrp</groupId>
+    <artifactId>wsrp-wsrp2-ws</artifactId>
+    <version>${org.gatein.wsrp.version}</version>
+  </dependency>
+  <dependency>
+    <groupId>org.gatein.wsrp</groupId>
+    <artifactId>wsrp-integration-api</artifactId>
+    <version>${org.gatein.wsrp.version}</version>
+  </dependency>
+  <dependency>
+    <groupId>org.gatein.wsrp</groupId>
+    <artifactId>wsrp-admin-gui</artifactId>
+    <version>${org.gatein.wsrp.version}</version>
+    <type>war</type>
+  </dependency>
+  <dependency>
+    <groupId>org.gatein.wsrp</groupId>
+    <artifactId>wsrp-consumer</artifactId>
+    <version>${org.gatein.wsrp.version}</version>
+  </dependency>
 	<dependency>
 		<groupId>org.chromattic</groupId>
 		<artifactId>chromattic.core</artifactId>
