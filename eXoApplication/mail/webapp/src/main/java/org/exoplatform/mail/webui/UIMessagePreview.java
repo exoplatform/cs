@@ -16,15 +16,12 @@
  */
 package org.exoplatform.mail.webui;
 
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.jcr.Node;
 import javax.mail.internet.InternetAddress;
 
 import org.exoplatform.calendar.service.Calendar;
@@ -34,11 +31,10 @@ import org.exoplatform.calendar.service.impl.CalendarServiceImpl;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.cs.common.webui.UIPopupAction;
 import org.exoplatform.cs.common.webui.UIPopupActionContainer;
+import org.exoplatform.cs.common.webui.UISaveAttachment;
 import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
-import org.exoplatform.ecm.webui.selector.UISelectable;
-import org.exoplatform.ecm.webui.tree.selectone.UIOneNodePathSelector;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
@@ -56,13 +52,8 @@ import org.exoplatform.mail.webui.popup.UIMoveMessageForm;
 import org.exoplatform.mail.webui.popup.UIPrintPreview;
 import org.exoplatform.mail.webui.popup.UITagForm;
 import org.exoplatform.mail.webui.popup.UIViewAllHeaders;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.services.cms.CmsService;
-import org.exoplatform.services.cms.JcrInputProperty;
 import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.util.Text;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -94,7 +85,7 @@ import org.exoplatform.webui.event.EventListener;
     @EventConfig(listeners = UIMessagePreview.BackToListActionListener.class),
     @EventConfig(listeners = UIMessagePreview.SaveAttachmentToDMSActionListener.class),
     @EventConfig(listeners = UIMessagePreview.HideMessageListActionListener.class) })
-    public class UIMessagePreview extends UIContainer implements UISelectable {
+    public class UIMessagePreview extends UIContainer{
   public static String  QUESTION           = "question".intern();
 
   public static String  ANSWER_IMPORT      = "yes-import".intern();
@@ -298,28 +289,18 @@ import org.exoplatform.webui.event.EventListener;
         if (att != null) {
           uiMsgPreview.setSelectedAttachment_(att);
           UIPopupAction popupAction = portlet.getChild(UIPopupAction.class);
-
-          UIOneNodePathSelector selector = popupAction.createUIComponent(UIOneNodePathSelector.class,
-                                                                         null,
-                                                                         null);
-          selector.setAcceptedNodeTypesInPathPanel(new String[] {org.exoplatform.ecm.webui.utils.Utils.NT_UNSTRUCTURED, org.exoplatform.ecm.webui.utils.Utils.NT_FOLDER});
-          selector.setSourceComponent(uiMsgPreview, null);
-          MailService service = (MailService) uiMsgPreview.getApplicationComponent(MailService.class);
-          String[] info = service.getDMSDataInfo(CalendarUtils.getCurrentUser());
-
-          selector.setRootNodeLocation(info[0], info[1], info[2]);
-          selector.setIsDisable(info[1], true);
-          selector.setIsShowSystem(false);
-          selector.init(SessionProviderFactory.createSessionProvider());
-
           UIPopupWindow popupChildWindow = popupAction.getChild(UIPopupWindow.class);
-          popupChildWindow.setUIComponent(selector);
-          popupChildWindow.setWindowSize(600, 600);
+          UISaveAttachment uiSaveAttach = popupChildWindow.createUIComponent(UISaveAttachment.class,
+                                                                            null,
+                                                                            null);
+          popupChildWindow.setUIComponent(uiSaveAttach);
+          uiSaveAttach.setFilePath(att.getPath());
+          uiSaveAttach.setFileName(att.getName());
+          popupChildWindow.setWindowSize(800, 450);
           popupChildWindow.setRendered(true);
           popupChildWindow.setShow(true);
 
           popupChildWindow.setResizable(true);
-          // popupAction.activate(selector, 600, 600);
           event.getRequestContext().addUIComponentToUpdateByAjax(popupAction);
         }
 
@@ -764,96 +745,6 @@ import org.exoplatform.webui.event.EventListener;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview.getParent());
     }
   }
-
-  @Override
-  public void doSelect(String selectField, Object value) throws Exception {
-    String valueString = value.toString();
-    String relPath = valueString.substring(valueString.indexOf(":/") + 2);
-    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-    UIApplication uiApp = getAncestorOfType(UIApplication.class);
-    ApplicationMessage message = null;
-    if (selectedAttachment_ != null) {
-      MailService mailService = (MailService) this.getApplicationComponent(MailService.class);
-      CmsService cmsService = (CmsService) this.getApplicationComponent(CmsService.class);
-      Node folderNode = mailService.getDMSSelectedNode(CalendarUtils.getCurrentUser(), relPath);
-      try {
-
-        if (folderNode == null || folderNode.isNodeType(Utils.NT_FILE)) {
-          message = new ApplicationMessage("UIMessagePreview.msg.DMSSelector.notFolder",
-                                           null,
-                                           ApplicationMessage.WARNING);
-        } else {
-          try {
-            RepositoryService repoService = (RepositoryService) this.getApplicationComponent(RepositoryService.class);
-            Map<String, JcrInputProperty> inputProps = getInputProperties(Text.escapeIllegalJcrChars(selectedAttachment_.getName()),
-                                                                          selectedAttachment_.getInputStream(),
-                                                                          selectedAttachment_.getMimeType());
-            cmsService.storeNodeByUUID(Utils.NT_FILE,
-                                       folderNode,
-                                       inputProps,
-                                       true);
-            message = new ApplicationMessage("UIMessagePreview.msg.DMSSelector.save-successfully",
-                                             new Object[] {Text.escapeIllegalJcrChars(selectedAttachment_.getName()).replace(".", "&#46;"), folderNode.getName()},
-                                             ApplicationMessage.INFO);
-          } catch (Exception e) {
-            message = new ApplicationMessage("UIMessagePreview.msg.DMSSelector.save-error",
-                                             null,
-                                             ApplicationMessage.ERROR);
-            e.printStackTrace();
-          }
-
-        }
-      } finally {
-        folderNode.getSession().logout();
-
-      }
-
-      uiApp.addMessage(message);
-      context.addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-    }
-  }
-
-  private Map<String, JcrInputProperty> getInputProperties(String name,
-                                                           InputStream inputStream,
-                                                           String mimeType) {
-    Map<String, JcrInputProperty> inputProperties = new HashMap<String, JcrInputProperty>();
-    JcrInputProperty nodeInput = new JcrInputProperty();
-    nodeInput.setJcrPath("/node");
-    nodeInput.setValue(name);
-    nodeInput.setMixintype("mix:i18n,mix:votable,mix:commentable");
-    nodeInput.setType(JcrInputProperty.NODE);
-    inputProperties.put("/node", nodeInput);
-
-    JcrInputProperty jcrContent = new JcrInputProperty();
-    jcrContent.setJcrPath("/node/jcr:content");
-    jcrContent.setValue("");
-    jcrContent.setMixintype("dc:elementSet");
-    jcrContent.setNodetype(Utils.NT_RESOURCE);
-    jcrContent.setType(JcrInputProperty.NODE);
-    inputProperties.put("/node/jcr:content", jcrContent);
-
-    JcrInputProperty jcrData = new JcrInputProperty();
-    jcrData.setJcrPath("/node/jcr:content/jcr:data");
-    jcrData.setValue(inputStream);
-    inputProperties.put("/node/jcr:content/jcr:data", jcrData);
-
-    JcrInputProperty jcrMimeType = new JcrInputProperty();
-    jcrMimeType.setJcrPath("/node/jcr:content/jcr:mimeType");
-    jcrMimeType.setValue(mimeType);
-    inputProperties.put("/node/jcr:content/jcr:mimeType", jcrMimeType);
-
-    JcrInputProperty jcrLastModified = new JcrInputProperty();
-    jcrLastModified.setJcrPath("/node/jcr:content/jcr:lastModified");
-    jcrLastModified.setValue(new GregorianCalendar());
-    inputProperties.put("/node/jcr:content/jcr:lastModified", jcrLastModified);
-
-    JcrInputProperty jcrEncoding = new JcrInputProperty();
-    jcrEncoding.setJcrPath("/node/jcr:content/jcr:encoding");
-    jcrEncoding.setValue("UTF-8");
-    inputProperties.put("/node/jcr:content/jcr:encoding", jcrEncoding);
-    return inputProperties;
-  }
-
 
   public boolean isShowPicInBody(Message msg){
     List<Attachment> atts = msg.getAttachments();

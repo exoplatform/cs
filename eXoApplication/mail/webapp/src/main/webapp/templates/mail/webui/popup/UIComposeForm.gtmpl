@@ -50,10 +50,10 @@
                   
                   <div class="ControlButton MailListActionsbarButton" onmouseover="eXo.mail.UIMailPortlet.showView(this, event)">
                     <div onclick="<%=uicomponent.event("Attachment")%>" class="IconHolder AttachLocalIcon">
-                      <div class="Label <% if (org.exoplatform.mail.MailUtils.hasECMS()) print "DownArrow1Icon"; %>"><%=_ctx.appRes(uicomponent.id+ ".label.attach-file") %></div>
+                      <div class="Label <% if (org.exoplatform.mail.MailUtils.hasDMSSelector()) print "DownArrow1Icon"; %>"><%=_ctx.appRes(uicomponent.id+ ".label.attach-file") %></div>
                     </div>                  
                   
-                  <% if (org.exoplatform.mail.MailUtils.hasECMS()) { %>
+                  <% if (org.exoplatform.mail.MailUtils.hasDMSSelector()) { %>
                   <% /*Begin Popup Menu*/ %>
                     <div style="position: relative;">
                         <div class="UIRightClickPopupMenu" style="display: none;">

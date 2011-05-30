@@ -521,7 +521,7 @@
                             }  
                           %>
                             <span class="Icon DownloadIcon"> <a href="$downloadAction"><%=_ctx.appRes(uicomponent.id+ ".label.download") %></a></span>
-                            <% if (org.exoplatform.mail.MailUtils.hasECMS()) { %>
+                            <% if (org.exoplatform.mail.MailUtils.hasDMSSelector()) { %>
                             <span class="Icon DownloadIcon"> <a href="$saveToDMSAction"><%=_ctx.appRes(uicomponent.id+ ".label.save-to-dms") %></a></span>
                             <% } %>
                             </div>

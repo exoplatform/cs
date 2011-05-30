@@ -422,13 +422,7 @@
 		  <artifactId>exo.portal.component.xml-parser</artifactId>
 		  <version>3.1.5-PLF</version>
 			<scope>provided</scope>
-		</dependency>
-      <dependency>
-      <groupId>org.exoplatform.ecms</groupId>
-      <artifactId>exo-ecms-core-webui</artifactId>
-      <version>${org.exoplatform.ecms.version}</version>
-	  <scope>provided</scope>      
-    </dependency>
+		</dependency>   
 
 <dependency>
       <groupId>org.exoplatform.ecms</groupId>

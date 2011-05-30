@@ -60,13 +60,13 @@ import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIAddContactForm;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.cms.CmsService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
+import org.exoplatform.webui.commons.UIDocumentSelector;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.event.Event;
 
@@ -452,18 +452,14 @@ public class MailUtils {
     }
 
     /**
-     * this function check appearance of ECMS product in our container.
+     * this function check whether UIDocumentSelector existed.
      * @return
      */
-    public static boolean hasECMS() {    
+    public static boolean hasDMSSelector() {    
       try {
-        Class.forName("org.exoplatform.services.cms.CmsService");
+      Class.forName(UIDocumentSelector.class.getName());
+      return true;
       } catch (ClassNotFoundException e) {
-        return false;
-      }
-      try {
-        return (PortalContainer.getInstance().getComponentInstancesOfType(CmsService.class) != null);
-      } catch (Exception e) {
         return false;
       }
     }

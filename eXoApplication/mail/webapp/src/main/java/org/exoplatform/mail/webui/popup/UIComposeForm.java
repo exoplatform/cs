@@ -31,6 +31,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.jcr.Node;
+import javax.jcr.Session;
 import javax.mail.AuthenticationFailedException;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
@@ -41,15 +42,14 @@ import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.cs.common.webui.EventUIComponent;
+import org.exoplatform.cs.common.webui.UIAddAttachment;
 import org.exoplatform.cs.common.webui.UIPopupAction;
 import org.exoplatform.cs.common.webui.UIPopupActionContainer;
 import org.exoplatform.cs.common.webui.UIPopupComponent;
 import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
-import org.exoplatform.ecm.utils.text.Text;
-import org.exoplatform.ecm.webui.selector.UISelectable;
-import org.exoplatform.ecm.webui.tree.selectone.UIOneNodePathSelector;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
@@ -59,7 +59,6 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
-import org.exoplatform.mail.webui.CalendarUtils;
 import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
@@ -67,7 +66,6 @@ import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.popup.UIAddressForm.ContactData;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.log.ExoLogger;
@@ -117,8 +115,10 @@ import com.sun.mail.smtp.SMTPSendFailedException;
   @EventConfig(listeners = UIComposeForm.ShowBccActionListener.class),
   @EventConfig(listeners = UIComposeForm.ReturnReceiptActionListener.class),
   @EventConfig(listeners = UIComposeForm.CallDMSSelectorActionListener.class),
-  @EventConfig(listeners = UIComposeForm.RemoveGroupActionListener.class) })
-  public class UIComposeForm extends UIForm implements UIPopupComponent, UISelectable {
+  @EventConfig(listeners = UIComposeForm.RemoveGroupActionListener.class),
+  @EventConfig(listeners = UIComposeForm.AttachFileActionListener.class)
+})
+  public class UIComposeForm extends UIForm implements UIPopupComponent{
   final static public String                   FIELD_TO_SET         = "toSet".intern();
 
   final static public String                   FIELD_FROM           = "from";
@@ -196,6 +196,8 @@ import com.sun.mail.smtp.SMTPSendFailedException;
   public List<ContactData>                     bccContacts          = new ArrayList<ContactData>();
 
   private static final Log                     logger               = ExoLogger.getLogger(UIComposeForm.class);
+  
+  public static final String                   ATTACHFILE               = "AttachFile";
 
   public boolean isVisualEditor() {
     return isVisualEditor;
@@ -1244,19 +1246,12 @@ import com.sun.mail.smtp.SMTPSendFailedException;
       }
       UIPopupWindow uiPopup = uiChildPopup.getChild(UIPopupWindow.class);
       uiPopup.setId("UIPopupWindowDMSSelector");
-      uiPopup.setWindowSize(600, 600);
-      UIOneNodePathSelector uiOneNodePathSelector = uiChildPopup.createUIComponent(UIOneNodePathSelector.class,
+      uiPopup.setWindowSize(800, 400);
+      UIAddAttachment uiAddAttach = uiChildPopup.createUIComponent(UIAddAttachment.class,
                                                                                    null,
                                                                                    null);
-      uiOneNodePathSelector.setAcceptedNodeTypesInPathPanel(new String[] { org.exoplatform.ecm.webui.utils.Utils.NT_FILE });
-      MailService service = (MailService) uiForm.getApplicationComponent(MailService.class);
-      String[] info = service.getDMSDataInfo(CalendarUtils.getCurrentUser());
-      uiOneNodePathSelector.setRootNodeLocation(info[0], info[1], info[2]);
-      uiOneNodePathSelector.setIsDisable(info[1], true);
-      uiOneNodePathSelector.setIsShowSystem(false);
-      uiOneNodePathSelector.init(SessionProviderFactory.createSessionProvider());
-      uiPopup.setUIComponent(uiOneNodePathSelector);
-      uiOneNodePathSelector.setSourceComponent(uiForm, null);
+      uiPopup.setUIComponent(uiAddAttach);
+      uiAddAttach.setTargetAttachEvent(new EventUIComponent(uiForm.getId(), ATTACHFILE));
       uiPopup.setRendered(true);
       uiPopup.setShow(true);
       uiPopup.setResizable(true);
@@ -1594,64 +1589,75 @@ import com.sun.mail.smtp.SMTPSendFailedException;
 
     }
   }
-
-  @Override
-  public void doSelect(String selectField, Object value) throws Exception {
-    // UIApplication application = getAncestorOfType(UIApplication.class);
-    // application.getUIPopupMessages().addMessage(new
-    // ApplicationMessage(selectField + value + "", null));
-
-    String valueString = value.toString();
-    String relPath = valueString.substring(valueString.indexOf(":/") + 2);
-
-    MailService service = (MailService) this.getApplicationComponent(MailService.class);
-    UIApplication uiApp = this.getAncestorOfType(UIApplication.class);
-    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-    ApplicationMessage message = null;
-    BufferAttachment attachFile = null;
-    try {
-      attachFile = service.getAttachmentFromDMS(CalendarUtils.getCurrentUser(), relPath);
-    } catch (Exception e) {
-      message = new ApplicationMessage("UIComposeForm.msg.DMSSelector.load-error",
-                                       null,
-                                       ApplicationMessage.ERROR);
-    }
-    if (attachFile == null) {
-      message = new ApplicationMessage("UIComposeForm.msg.DMSSelector.selected-path",
-                                       null,
-                                       ApplicationMessage.WARNING);
-    } else {
-      this.addToUploadFileList(attachFile);
-      this.refreshUploadFileList();
-
-      context.addUIComponentToUpdateByAjax(this);
-    }
-    if (message != null) {
-      uiApp.addMessage(message);
-      context.addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-    }
-    // System.out.println(fileNode.getPrimaryNodeType().getName());
-    // System.out.println(node.getPath());
-
-  }
-
-  public String getTitle(Node node) throws Exception {
-    String title = null;
-    if (node.hasNode("jcr:content")) {
-      Node content = node.getNode("jcr:content");
-      if (content.hasProperty("dc:title")) {
+  
+  static public class AttachFileActionListener extends EventListener<UIComposeForm> {
+    public void execute(Event<UIComposeForm> event) throws Exception {
+      UIComposeForm component = event.getSource();
+      WebuiRequestContext context = event.getRequestContext();
+      String selectedFile = (String) context.getAttribute(UIAddAttachment.SELECTEDFILE);
+      boolean isAttachFile = Boolean.valueOf(String.valueOf(context.getAttribute(UIAddAttachment.ISATTACHFILE)));
+      UIApplication uiApp = component.getAncestorOfType(UIApplication.class);
+      ApplicationMessage message = null;
+      BufferAttachment attachFile = null;
+      if (isAttachFile) {
         try {
-          title = content.getProperty("dc:title").getValues()[0].getString();
-        } catch (Exception ex) {
+          attachFile = component.getFile(selectedFile);
+        } catch (Exception e) {
+          message = new ApplicationMessage("UIComposeForm.msg.DMSSelector.load-error",
+                                           null,
+                                           ApplicationMessage.ERROR);
+        }
+        if (attachFile == null) {
+          message = new ApplicationMessage("UIComposeForm.msg.DMSSelector.selected-path",
+                                           null,
+                                           ApplicationMessage.WARNING);
+        } else {
+          component.addToUploadFileList(attachFile);
+          component.refreshUploadFileList();
+        }
+      } else {
+        if (component.isVisualEditor()) {
+          UIFormWYSIWYGInput input = component.getChildById(FIELD_MESSAGECONTENT);
+          String appendText = "<a href=" + selectedFile + ">" + selectedFile + "</a>";
+          input.setValue(appendText+ "\n" + input.getValue()  );
+        } else {
+          UIFormTextAreaInput input = component.getChildById(FIELD_MESSAGECONTENT);
+          input.setValue(selectedFile + "\n"  + input.getValue());
         }
       }
-    } else if (node.hasProperty("exo:title")) {
-      title = node.getProperty("exo:title").getValue().getString();
+
+      context.addUIComponentToUpdateByAjax(component);
+      if (message != null) {
+        uiApp.addMessage(message);
+        context.addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+      }
     }
-    if ((title == null) || ((title != null) && (title.trim().length() == 0))) {
-      title = node.getName();
-    }
-    return Text.unescapeIllegalJcrChars(title);
+  }
+  
+  private BufferAttachment getFile(String path) throws Exception {
+    BufferAttachment attachFile = new BufferAttachment();
+    Session session = getCurrentSession();
+    Node fileNode = (Node) session.getItem(path);
+
+    if (!fileNode.getPrimaryNodeType().getName().equals("nt:file"))
+      return null;
+    Node fileContentNode = fileNode.getNode(Utils.JCR_CONTENT);
+
+    attachFile.setId("Attachment" + IdGenerator.generate());
+    String fileName = fileNode.getName();
+
+    attachFile.setName(fileName);
+    attachFile.setInputStream(fileContentNode.getProperty(Utils.JCR_DATA).getStream());
+    attachFile.setMimeType(fileContentNode.getProperty(Utils.JCR_MIMETYPE).getString());
+
+    return attachFile;
+  }
+  
+  public Session getCurrentSession() throws Exception {
+    RepositoryService repoService = (RepositoryService) PortalContainer.getInstance()
+                                                                       .getComponentInstanceOfType(RepositoryService.class);
+    String defaultWorkspace = repoService.getCurrentRepository().getConfiguration().getDefaultWorkspaceName();
+    return repoService.getDefaultRepository().getSystemSession(defaultWorkspace);
   }
 
 }
