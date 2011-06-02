@@ -1,7 +1,7 @@
 There are some overridable components in eXo Collaboration so that you can control how these components work by implementing or extending default implementations and then reconfigure these new components in the file configuration.xml.
 
 
-h1. ContentDAO
+h1. ContentDAO {anchor:id=CSref.ExtensionPoints.ContentDAO}
 
 {{ContentDAO}} is an overridable component used in the Content application ( or called RSS reader) of eXo Collaboration.
 
@@ -37,7 +37,7 @@ The example below is an example of plugin configuration:
 {code}
 
 
-h1. ContactLifeCycle
+h1. ContactLifeCycle {anchor:id=CSref.ExtensionPoints.ContactLifeCycle}
 {{ContactLifeCycle}} is an interface that you can implement to extend the capabilities of eXo. A {{ContactLifeCycle}} lets you be notified during the lifecycle of an address book's contact :
 - when a contact is added
 - when a contact is modified
@@ -61,7 +61,7 @@ Explanation:
 {{ContactSpaceActivityPublisher}} implements {{ContactLifeCycle}}. This implementation publishes activities in the space activity stream to notify of new and updated contacts in the space address book.
 
 
-h1. Transport
+h1. Transport {anchor:id=CSref.ExtensionPoints.Transport}
 
 {{Transport}} is an overridable component used in the Chat application of eXo Collaboration.
 
@@ -70,7 +70,7 @@ This overridable component is used to help users add the protocol to the Chat ap
 The Chat application of eXo Collaboration only uses the XMPP protocol that is implemented in this object "{{XMPPTransport}}".
 
 
-h1. EventLifeCycle
+h1. EventLifeCycle {anchor:id=CSref.ExtensionPoints.EventLifeCycle}
 
 {{EventLifeCycle}} is an extension point used in the Calendar application of eXo Collaboration.
 You can find the configuration file of this component at:  _ext/social-integration/src/main/resources/conf/portal/configuration.xml_.
@@ -89,5 +89,3 @@ See the following example:
 
 Explanation:
 {{CalendarSpaceActivityPublisher}} implements {{EventLifeCycle}}. It writes activities in the space activity stream when events or tasks are added/modified.
-
-

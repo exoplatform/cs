@@ -2,12 +2,12 @@
 eXo Collaboration consists of three gadgets: eventslist, taskslist and messageslist. They are packaged in the csResources.war file.
 
 
-h1. Eventslist
+h1. Eventslist {anchor:id=CSref.Gadgets.Evenslist}
 
-h2. Description
+h2. Description {anchor:id=CSref.Gadgets.Eventlist.Description}
 Eventslist lists the maximum number of upcoming events, that is configurable by users. For example, they can set the preference list to 5 or 10 events.
 
-h2. Description of Preferences
+h2. Description of Preferences {anchor:id=CSref.Gadgets.Eventlist.Description_Preferences}
 See the preferences of this gadget in the following sample code:
 
 {code:xml}
@@ -23,17 +23,17 @@ Details:
 | *limit* | The maximum number of upcoming events |
 | *timeformat* | The time format for upcoming events |
 
-For more details on the preferences of gadgets, see [here|http://code.google.com/apis/gadgets/docs/basic.html#Userprefs]
+For more details on the preferences of gadgets, see [here|http://code.google.com/apis/gadgets/docs/basic.html#Userprefs].
 
-h2. Links to used REST services
+h2. Links to used REST services {anchor:id=CSref.Gadgets.Eventslist.LinksToUsedRESTServices}
 It uses upcomingEvent service in the following package:
 _org.exoplatform.webservice.cs.calendar.CalendarWebservice.java_
 
 
-h1. Taskslist
+h1. Taskslist {anchor:id=CSref.Gadgets.Taskslist}
 Taskslist list the maximum number of upcoming tasks that is configurable by users. For example, they can set the preference list to 5 or 10 tasks.
 
-h2. Description of Preferences
+h2. Description of Preferences {anchor:id=CSref.Gadgets.Taskslist.Description}
 See the preferences of this gadget in the following sample code:
 {code:xml}
 <UserPref name="setting" default_value="/calendar:/portal/rest/private/cs/calendar/upcoming:10:AM/PM:Default" datatype="hidden" />
@@ -42,15 +42,16 @@ See the preferences of this gadget in the following sample code:
 Details:
 Setting: It collects all the configuration of upcoming tasks and add some more functions to help developers change the configuration of the default skin.  
 
-h2. Links to used REST services
+h2. Links to used REST services {anchor:id=CSref.Gadgets.Taskslist.LinksToUsedRESTServices}
 It uses upcomingEvent service in the following package:
 _org.exoplatform.webservice.cs.calendar.CalendarWebservice.java_
 
 
 
-h1. Messageslist:
+h1. Messageslist {anchor:id=CSref.Gadgets.Messageslist}
  It lists the maximum number of unread messages, that is configurable by users.
-h2. Description of Preferences
+ 
+h2. Description of Preferences {anchor:id=CSref.Gadgets.Messageslist.Description}
 See the prefereces of this gadget in the following sample code:
 {code:xml}
 <UserPref name="url" display_name="__MSG_baseurl__" datatype="hidden" value="/mail" required="true"/>
@@ -70,6 +71,6 @@ Details:
 | *Folder* | The folder consists of unread messages |
 | *Tag* | The tags in all unread messages |
 
-h2. Links to used REST services
+h2. Links to used REST services {anchor:id=CSref.Gadgets.LinksToUsedRESTServices}
 It uses unreadMail service in the following package:
 _org.exoplatform.webservice.cs.mail.MailWebservice.java_

@@ -1,7 +1,7 @@
 eXo Collaboration implements and provides many public REST APIS to help built-in applications such as Calender, Chat and Mail to communicate and transfer data with the server. By using these public REST APIs, extended or 3rd party applications can make use of this to develop cool web applications faster without much implementation.
 
 
-h1. Calendar application
+h1. Calendar application {anchor:id=CSref.PublicRESTAPIs.CalendarApplication}
 Calendar application of eXo Collaboration use CalendarWebservice to provide all  APIs for working with calendar such as create personal calendars, group calendars, share calendars, manage events / tasks, etc.
 
 REST API of Calendar portlet is exposed by _org.exoplatform.services.cs.calendar.CalendarWebservice_ class.
@@ -31,7 +31,7 @@ Use the following APIs to build all the functions of Calendar application:
 | *getCalendars* | It gets a list of calendars. | /private/cs/calendar/getcalendars| {{no param}} | {{}} |
 
  
-h1. Mail application
+h1. Mail application {anchor:id=CSref.PublicRESTAPIs.MailApplication}
 
 Mail application of eXo Collaboration use MailWebservice to provide all  APIs for working with mail as send mail, check mail, store mail to JCR, etc.
 
@@ -52,13 +52,13 @@ Use the following APIs to build all the functions of Mail application:
 |*searchemail* |It is used to search information from emails|{{{/searchemail/{keywords}}}} | keywords| string |
 
 
-h1. Chat application
+h1. Chat application {anchor:id=CSref.PublicREST_APIs.ChatApplication}
 
 Chat application use some APIs to help users to create a room, join a room, invite other users to room, send files, etc.
 
 And the chat application of eXo Collaboration uses two services: RESTXMPPService and FileExchangeService to do these tasks.
 
-h2. RESTXMPPService
+h2. RESTXMPPService {anchor:id=CSref.PublicREST_APIs.RESTXMPPService}
 
 REST API _RESTXMPPService_ of Chat portlet is exposed by org.exoplatform.services.xmpp.rest.RESTXMPPService class
 
@@ -118,7 +118,7 @@ Use the following APIs to build all the functions of Chat application:
 
 
 
-h2. FileExchangeService
+h2. FileExchangeService {anchor:id=CSref.PublicREST_APIs.FileExchangeService}
 
 REST API _FileExchangeService_ for upload file is defined in org.exoplatform.services.xmpp.rest.FileExchangeService
 

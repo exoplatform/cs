@@ -1,25 +1,25 @@
-h1. Prerequisites
+h1. Prerequisites {anchor:id=CSref.Prerequisites}
 {include:document="Prequisites.wiki"}
 
-h1. Applications
+h1. Applications {anchor:id=CSref.Application}
 
-h2. Portlets
+h2. Portlets {anchor:id=CSref.Portlets}
 {include:document="List_portlets.wiki"}
 
-h2. Gadgets
+h2. Gadgets {anchor:id=CSref.Gadgets}
 {include:document="list_gadgets.wiki"}
 
 
-h1. Configurations
+h1. Configurations {anchor:id=CSref.Configuration}
 {include:document="Configuration.wiki"}
 {include:document="Configuration-component-plugin.wiki"}
 {include:document="Chatserver-configuration.wiki"}
 
-h1. Developer reference
+h1. Developer reference {anchor:id=CSref.DeveloperReference}
 
-h2. Extension points
+h2. Extension points {anchor:id=CSref.ExtensionPoints}
 {include:document="Overridable_components.wiki"}
 
-h2. Public REST APIs
+h2. Public REST APIs {anchor:id=CSref.PublicREST_APIs}
 {include:document="public_rest_api.wiki"}
 

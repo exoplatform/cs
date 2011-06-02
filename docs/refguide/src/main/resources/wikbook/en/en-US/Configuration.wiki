@@ -1,4 +1,4 @@
-h1. Components in eXo Collaboration Configuration
+h1. Components in eXo Collaboration Configuration {anchor:id=CSref.Configuration.ComponentsineXoCollaborationConfiguration}
 This table shows some main components that take init-param in the applications of eXo Collaboration:
 
 
@@ -9,7 +9,7 @@ This table shows some main components that take init-param in the applications o
 | *Webservice* | {{AddActionsPlugin}} | It is used to register a listener for the actions on the nodes |
 
 
-h2. CalendarService
+h2. CalendarService {anchor:id=CSref.Configuration.CalendarService}
 The configuration of the Calendar application is applied mainly in _/eXoApplication/calendar/service/src/main/resources/conf/portal/configuration.xml_ 
 Use the CalendarService to configure the Calendar. The following information will explain details of its configuration.
 When this configuration file is executed, the component named org.exoplatform.calendar.service.impl.CalendarServiceImpl will process the actions of the Calendar application.
@@ -31,7 +31,7 @@ Details:
 ||Properties-Param || Property name || Description || Possible Value || Default Value ||
 | *eventNumber* | {{eventNumber}} | The number of events in a calendar | {{interger}} | {{100}} |
 
-h2. HistoryImpl  
+h2. HistoryImpl {anchor:id=CSref.Configuration.HistoryImpl}
 The configuration of historyImpl is found in the  _/extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/chat/chat-service-configuration.xml_
 When this configuration file is executed, the component named _org.exoplatform.services.xmpp.history.impl.jcr.HistoryImpl_ initializes all the configured parameters.
 
@@ -62,7 +62,7 @@ Details:
 |*path*| Path is JCR path to the location where history data is stored | {{string}} | {{exo:applications/eXoChat/history}}. |
 
 
-h2. XMPPMessenger
+h2. XMPPMessenger {anchor:id=CSref.Configuration.XMPPMessenger}
 The configuration of the XMPPMessenger component is found in _/extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/chat/chat-service-configuration.xml_
  It helps eXo Collaboration connect the Openfire instance. 
 
@@ -89,7 +89,7 @@ Details:
 | *send-file*| {{timeout}} | timeout before aborting attempt to establish a file transfer | {{integer}} | {{7200000}} |
 
 
-h2. DefaultPresenceStatus
+h2. DefaultPresenceStatus {anchor:id=CSref.Configuration.DefaultPresenceStatus}
 The configuration of the DefaultPresenceStatus component is found in _/extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/chat/chat-service-configuration.xml_
 
 
@@ -111,7 +111,7 @@ Details:
 
 
 
-h2. ContactService
+h2. ContactService {anchor:id=CSref.Configuration.ContactService}
 The configuration of the ContactService component is found in _eXoApplication/contact/service/src/main/resources/conf/portal/configuration.xml_
 when the server starts, the configuration file that contains the declaration of ContactService component is executed, after that a ContactService component is created with params and plug-ins in the configuration file.
 

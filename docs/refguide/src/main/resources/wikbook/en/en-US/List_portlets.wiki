@@ -1,8 +1,8 @@
 
-h1. Calendar Portlet
+h1. Calendar Portlet {anchor:id=CSref.Portlets.CalendarPortlet}
 The Calendar Portlet is packaged in the Calendar.war file.
 
-h2. Description
+h2. Description {anchor:id=CSref.Portlets.Description}
 Calendar Portlet shows the Calendar application of eXo Collaboration, that  offers a lot of features to users.
 
 The Calendar application includes the following features:
@@ -22,15 +22,15 @@ The Calendar application includes the following features:
 * Search events/tasks in calendars.
 * Print your agenda.
  
-h2. Portlet.xml
+h2. Portlet.xml {anchor:id=CSref.Portlets.Portletxml}
 To see the portlet in the project, please follow this path:
  _/eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/portlet.xml_
 
 
-h1. Chatbar Portlet
+h1. Chatbar Portlet {anchor:id=CSref.Portlets.ChatbatPortlet}
 The Chatbar Portlet is packaged in the Chatbar.war file.
 
-h2. Description
+h2. Description {anchor:id=CSref.Portlets.ChatbarPortletDescription}
 
 The Chatbar portlet shows the Chatbar application of eXo Collaboration that can be positioned in the portal or page layout as any other, but behaves as a floating box. The bar remains floating at its location even when browser window is scrolled or resized.
 It has a fixed height, but expands horizontally to whatever size is available in its container. This allows to place the portlet in two layout cases :
@@ -48,7 +48,7 @@ It gives access to main chat features :
 * Rooms
 * Minimized conversation window
 
-h2. Portlet preferences
+h2. Portlet preferences {anchor:id=CSref.Portlets.ChatbarPortletPreference}
 
 The Chatbar Portlet consists some preferences as in the following sample code:
  
@@ -100,7 +100,7 @@ The Chatbar Portlet consists some preferences as in the following sample code:
 	</portlet-preferences>
 {code}
 
-|| Preference Name     || Possible Values || Default Values|| Description ||
+|| Preference Name || Possible Values || Default Values|| Description ||
 |  *showMailLink* | {{true / false}} | {{true}} | true or false value to let users see the application icon or not |
 | *showCalendarLink* | {{true / false}} | {{true}} | true or false value to let user see the application icon or not |
 | *showContactLink* | {{true / false}} | {{true}} | true or false value to let user see the application icon or not |
@@ -109,54 +109,52 @@ The Chatbar Portlet consists some preferences as in the following sample code:
 | *contactUrl* | {{string}} | {{Portal/private/intranet/contact}} | page url to application page it come when you configuration page.xml and navigation.xml in portal no need to combine with %domain name : port% chatbar will resolve it from server |
 | *info* | {{Info}}| {{Info}}| This is only the key to get the resource bundle the full key : UIConfigForm.label.info |
       
-h2. Portlet.xml
+h2. Portlet.xml {anchor:id=CSref.Portlets.ChatbarPortletxml}
 See the portlet in the project following this path:
 _/eXoApplication/chatbar/webapp/src/main/webapp/WEB-INF/portlet.xml_
 
 
-h1. Chat Portlet
+h1. Chat Portlet {anchor:id=CSref.Portlets.ChatPortlet}
 The Chat Portlet is packaged in the Chat.war file.
 
-h2. Description
+h2. Description {anchor:id=CSref.Portlets.ChatPortletDescription}
  The Chat Portlet shows the Chat application of eXo Collaboration that allows users to enter chat rooms and communicate with online others at real time.
 
-h2. Portlet.xml
+h2. Portlet.xml {anchor:id=CSref.Portlets.ChatPortletxml}
 See the portlet in the project following this path:
 _/eXoApplication/chat/webapp/src/main/webapp/WEB-INF/portlet.xml_
 
 
 
-h1. Contact Portlet
+h1. Contact Portlet {anchor:id=CSref.Portlets.ContactPortlet}
 Contact Portlet is packaged in the Contact.war file.
 
-h2. Description
+h2. Description {anchor:id=CSref.Portlets.ContactPortletDescription}
 Contact Portlet shows the Contact application of eXo Collaboration that allows users to personalize their contact view from different view types such as List view and VCards view.
 
-h2. Portlet.xml
+h2. Portlet.xml {anchor:id=CSref.Portlets.ContactPortletxml}
 See the portlet in the project following this path:
 _/eXoApplication/contact/webapp/src/main/webapp/WEB-INF/portlet.xml_
 
 
-h1. Mail Portlet
+h1. Mail Portlet {anchor:id=CSref.Portlets.MailPortlet}
 The Mail Portlet is packaged in the Mail.war file.
 
-h2. Description
+h2. Description {anchor:id=CSref.Portlets.MailPortletDescription}
 Mail Portlet shows the Mail application of eXo Collaboration that offers a lot of features to users such as sending, receiving or viewing their mails through Internet without actually downloading them to their computer. Users not only take advantages of eXo Mail by keeping and receiving all important messages, files and pictures forever but also by looking for and viewing their needed messages easily whenever they want. Additionally, eXo Mail is smoothly integrated with other Collaboration modules such as Address Book and Calendar.
 
-h2. Portlet.xml
+h2. Portlet.xml {anchor:id=CSref.Portlets.MailPortletxml}
  See the portlet in the project following this path:
 _/eXoApplication/mail/webapp/src/main/webapp/WEB-INF/portlet.xml_
 
 
-h1. RSSreader Portlet
+h1. RSSreader Portlet {anchor:id=CSref.Portlets.RSSreaderPortlet}
 
 The RSSreader Portlet is packaged in the Rssreader.war file.
 
-h2. Description
+h2. Description {anchor:id=CSref.Portlets.RSSreaderDescription} 
 eXo Collaboration uses the RSS Reader Portlet that facilitates users to quickly get a view of their favorite feeds around the web. They will get the latest news, the last updated posts from their favorite blogs, latest emails,etc.
 
-h2. Portlet.xml
+h2. Portlet.xml {anchor:id=CSref.Portlets.RSSreaderPortletxml}
 See the portlet in the project following this path:
 _/eXoApplication/content/webapp/src/main/webapp/WEB-INF/portlet.xml_
-
-

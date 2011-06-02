@@ -1,16 +1,17 @@
-h1.eXo Chatserver Configuration
+h1. eXo Chatserver Configuration {anchor:id=CSref.Configuration.eXoChatserverConfiguration}
 
-h2.  Openfire Configuration
+h2. Openfire Configuration {anchor:id=CSref.Configuration.OpenfireConfiguration}
 
-eXo Collaboration chat services is a Jabber engine powered by Openfire . eXo will delegate the actual Jabber protocol communication to Openfire.
+eXo Collaboration chat services is a Jabber engine powered by Openfire. eXo will delegate the actual Jabber protocol communication to Openfire.
 
-You have full latitude to configure Openfire. There are two possible ways do it :
+You have full latitude to configure Openfire. There are two possible ways do it:
 
-the admin console : http://localhost:9090/
-the openfire.xml file, in $openfire_home/conf/
+* The admin console: http://localhost:9090/.
+
+* The openfire.xml file in $openfire_home/conf/.
 
 
-h3. Configuration in Openfire.xml 
+h3. Configuration in Openfire.xml {anchor:id=CSref.Configuration.ConfigurationinOpenfirexml}
 
 The Openfire server has a single configuration file called openfire.xml and located under exo-openfire/conf directory. Configuration is based on properties expressed in an XML syntax. For example, to set property prop.name.is.blah=value, you would write this xml snippet :
 
@@ -25,15 +26,15 @@ The Openfire server has a single configuration file called openfire.xml and loca
 {code}
 Openfire has an extensive list of configuration properties. You can read a list of all properties on this page : http://www.igniterealtime.org/community/docs/DOC-1061
 
-h3. eXo specific configuration
+h3. eXo specific configuration {anchor:id=CSref.Configuration.eXospecificConfiguration}
 
-eXo Collaboration bundle comes with a pre-configured openfire server. It is bundled with some eXo plugins and configurations that allow connectivity with eXo. The key properties for integration are :
+eXo Collaboration bundle comes with a pre-configured openfire server. It is bundled with some eXo plugins and configurations that allow connectivity with eXo. The key properties for integration are:
 
-* {{*provider.auth.className*}} : An implementation of the AuthProvider interface for authentication of users on the chat server
+* {{*provider.auth.className*}}: An implementation of the AuthProvider interface for authentication of users on the chat server.
 
-* {{*provider.users.className*}} : An implementation of the UserProvider interface to which openfire will delegate users management
+* {{*provider.users.className*}}: An implementation of the UserProvider interface to which openfire will delegate users management.
 
-* {{*provider.groups.className*}} : An implementation of the GroupProvider interface to which openfire will delegate groups management
+* {{*provider.groups.className*}}: An implementation of the GroupProvider interface to which openfire will delegate groups management.
 
 eXo provides implementations for these 3 interfaces with ExoAuthProvider, ExoUserProvider, ExoGroupProvider. These implementations are based on eXo REST framework and let you configure the endpoints within the openfire.xml file with additional properties :
 || Property || Description || Default value ||
@@ -71,7 +72,7 @@ _restContextName_ is used to specify Openfire server  that is dedicated for the 
 _eXo.env.restContextName_ system property can be set by specifying the {{{ -D }}} option to the java command when running Openfire. 
 
 Example: 
-- If Openfire server is dedicated for the portal named "portal", the command will have  the following format : 
+- If Openfire server is dedicated for the portal named "portal", the command will have  the following format: 
 
 _{{{ java -DeXo.env.restContextName=rest -jar ../lib/startup.jar }}}_. 
 
@@ -82,7 +83,7 @@ _{{{ java -DeXo.env.restContextName=rest-csdemo -jar ../lib/startup.jar.}}}_
 By default, Openfire server is dedicated to the portal named "portal"
 {note}
 
-h2. System Configuration
+h2. System Configuration {anchor:id=CSref.Configuration.SystemConfiguration}
 Openfire makes use of several ports for communication.
 || Interface || Port || Type || Description ||
 | *All addresses* | {{5222}} | {{Client to Server}} | The standard port for clients is to connect to the server. Connection may or may not be encrypted. You can update the security settings for this port. |
@@ -92,7 +93,7 @@ Openfire makes use of several ports for communication.
 
 You can view the table above in _http://hostname:9090/index.jsp_ after you are logged in to openfire's web console and also customize those ports by yourself.
 
-h2. AS configuration
+h2. AS configuration {anchor:id=CSref.Configuration.ASConfiguration}
 To enable propagation of identity across the chat webapp, it is required that you enable the SSO valve on Tomcat-based Application server.
 
 * For jboss server, edit _jboss/server/default/deploy/jboss-web.deployer/server.xml_
@@ -109,5 +110,3 @@ In the case of cluster deployment, you may want to use {{ClusteredSingleSignOn}}
 {code:xml}
 <Valve className="org.jboss.web.tomcat.service.sso.ClusteredSingleSignOn" />
 {code}
-
-
