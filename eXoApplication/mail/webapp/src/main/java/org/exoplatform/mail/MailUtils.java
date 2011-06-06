@@ -66,7 +66,6 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
-import org.exoplatform.webui.commons.UIDocumentSelector;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.event.Event;
 
@@ -457,7 +456,7 @@ public class MailUtils {
      */
     public static boolean hasDMSSelector() {    
       try {
-      Class.forName(UIDocumentSelector.class.getName());
+      Class.forName("org.exoplatform.webui.commons.UIDocumentSelector");
       return true;
       } catch (ClassNotFoundException e) {
         return false;
