@@ -509,7 +509,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
                 if (((UIFormSelectBoxWithGroups) uiAddressBook.getChildById(SELECT_GROUP)).getValue()
                     .equals(uiAddressBook.sharedContacts_)) {
                   try {
-                    contactServ.removeUserShareContact(contact.getPath(), contact.getId(), username);
+                    contactServ.removeUserShareContact(contact.getAuthor(), contact.getId(), username);
                   } catch (PathNotFoundException e) {
                   }
                 } else {

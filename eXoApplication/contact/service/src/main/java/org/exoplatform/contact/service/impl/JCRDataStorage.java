@@ -854,7 +854,11 @@ public class JCRDataStorage implements DataStorage {
       try {
         Node contactNode = iter.nextProperty().getParent();
         if (contactNode.getName().equals(contactId)) {
-          return Utils.getContact(contactNode, DataStorage.SHARED);
+          Contact contact = Utils.getContact(contactNode, DataStorage.SHARED);
+          if (contactNode.hasProperty("exo:sharedUserId")) {
+            contact.setAuthor(contactNode.getProperty("exo:sharedUserId").getString());
+          }
+          return contact;
         }
       } catch (Exception e) {
         e.printStackTrace();
@@ -873,7 +877,11 @@ public class JCRDataStorage implements DataStorage {
     while (iter.hasNext()) {
       try {
         Node contactNode = iter.nextProperty().getParent();
-        sharedContacts.add(Utils.getContact(contactNode, SHARED));
+        Contact contact = Utils.getContact(contactNode, SHARED);
+        if (contactNode.hasProperty("exo:sharedUserId")) {
+          contact.setAuthor(contactNode.getProperty("exo:sharedUserId").getString());
+        }        
+        sharedContacts.add(contact);
       } catch (Exception e) {
         e.printStackTrace();
       }

@@ -1003,7 +1003,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
                   addressId = add;
               contactService.removeSharedContact(username, addressId, contact.getId());
             } else {
-              contactService.removeUserShareContact(contact.getPath(), contact.getId(), username);
+              contactService.removeUserShareContact(contact.getAuthor(), contact.getId(), username);
             }
             contact.setAddressBookIds(new String[] { addressBookId });
           }else{
@@ -1222,7 +1222,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
                   }
                 }
               }
-              contactService.removeUserShareContact(contact.getPath(), id, username);
+              contactService.removeUserShareContact(contact.getAuthor(), id, username);
             } catch (PathNotFoundException e) {
               uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-not-existed",
                                                       null,

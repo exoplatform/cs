@@ -126,6 +126,8 @@ public class Contact {
   private boolean            isOwner     = false;
 
   private String             ownerId;
+  
+  private String             author = null;
 
   private ContactAttachment  attachment;
 
@@ -540,6 +542,14 @@ public class Contact {
 
   public String getOwnerId() {
     return ownerId;
+  }
+  
+  public void setAuthor(String author) {
+    this.author = author;
+  }
+
+  public String getAuthor() {
+    return author;
   }
 
   public void setAttachment(ContactAttachment attachment) {

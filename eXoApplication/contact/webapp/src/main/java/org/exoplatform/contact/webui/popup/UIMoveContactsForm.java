@@ -199,8 +199,7 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
               contactService.removeSharedContact(username, addressId, contact.getId()) ;
              } else {
               try {
-                contactService.removeUserShareContact(
-                    contact.getPath(), contact.getId(), username) ;              
+                contactService.removeUserShareContact(contact.getAuthor(), contact.getId(), username) ;              
               } catch (PathNotFoundException e) {
                 UIApplication uiApp = uiMoveContactForm.getAncestorOfType(UIApplication.class) ;
                 uiApp.addMessage(new ApplicationMessage("UIMoveContactsForm.msg.contact-not-existed", null, 
@@ -261,12 +260,11 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
         }
       } else if (ContactUtils.isEmpty(uiContacts.getSelectedGroup()) && 
           ContactUtils.isEmpty(uiContacts.getSelectedTag())) {
-
         //select shared contacts        
         if (contacts.size() > 0) uiContacts.setContact(contacts, false) ;
         if (sharedContacts.size() > 0) uiContacts.setContact(sharedContacts, false) ;
       }
-      uiContacts.setContacts(ContactUtils.getContactService().getSharedContacts(username));
+      uiContacts.updateList();
       uiContactPortlet.cancelAction() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet.getChild(UIWorkingContainer.class)) ;
     }
