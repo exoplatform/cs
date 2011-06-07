@@ -69,17 +69,17 @@
 }
 
 .UIDayView .EventDayContent .UIGrid td{
-  padding: 0px;
-  height: 30px ;
   border-left: none ;
-  *height: 29px ; /* fixed for IE */
+padding:0px;
+*height:29px;
+height:29px;\
+height:30px;
+[height:30px;
+ height:29px;]
 }
 
 .UIDayView .EventDayContent .UIGrid td{ /* fix for Safari */
-  [
-    height:29px;
-    height:29px;
-  ]
+  
 }
 
 .UIDayView .EventDayContent .HourPoint {
@@ -270,17 +270,12 @@
 }
 
 .UIWeekView .UIGrid td {
-  padding: 0px;
-  height: 30px ;
-}
-
-.UIWeekView .UIGrid td { /* fix for Safari */
-  [
-  height: 29px ;
-  height: 29px ;
-  #
-  height:30px;
-  ]
+padding:0px;
+*height:29px;
+height:29px;\
+height:30px;
+[height:30px;
+ height:29px;]
 }
 
 .UIWeekView .EventAllday {
