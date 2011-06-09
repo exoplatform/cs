@@ -219,7 +219,11 @@ public class EventQuery {
       StringBuffer stringBuffer = new StringBuffer("[");
       // desclared full text query
       if (text != null && text.length() > 0) {
-        stringBuffer.append("jcr:contains(., '").append(text).append("')");
+        stringBuffer.append("(jcr:contains(@" + Utils.EXO_SUMMARY + ", '" + text + "')")
+              .append(" or jcr:contains(@" + Utils.EXO_DESCRIPTION + ", '" + text + "')")
+              .append(" or jcr:contains(@" + Utils.EXO_LOCATION + ", '" + text + "')")
+              .append(" or jcr:contains(@" + Utils.EXO_PARTICIPANT + ", '" + text + "')")
+              .append(" or jcr:contains(@" + Utils.EXO_INVITATION + ", '" + text + "'))");
         hasConjuntion = true;
       }
       // desclared event type query
