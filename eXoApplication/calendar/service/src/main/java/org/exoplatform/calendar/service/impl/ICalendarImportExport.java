@@ -424,15 +424,19 @@ public class ICalendarImportExport implements CalendarImportExport {
     return eventList;
   }
 
-  public boolean isValidate(InputStream icalInputStream) throws Exception {
+  public boolean isValidate(InputStream icalInputStream) {
     try {
       CalendarBuilder calendarBuilder = new CalendarBuilder();
       calendarBuilder.build(icalInputStream);
       return true;
-    } catch (Exception e) {
-      e.printStackTrace();
-      return false;
+    } catch (ParserException pe) {
+      if (logger.isDebugEnabled()) 
+        logger.debug("Can not parsing input stream to calendar under ICal format", pe);
+    } catch (IOException ioe) {
+      if (logger.isDebugEnabled()) 
+        logger.debug("IO Error occurs when parsing input stream to calendar under ICal format", ioe);
     }
+    return false;
   }
 
   public void importCalendar(String username, InputStream icalInputStream, String calendarId, String calendarName, java.util.Calendar from, java.util.Calendar to, boolean isNew) throws Exception {
