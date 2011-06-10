@@ -283,7 +283,7 @@
 </tr>
 <tr>
 	<td>contextMenu</td>
-	<td>//a[@title='CS_Smoke_01']</td>
+	<td>//div[@title='CS_Smoke_01']</td>
 	<td></td>
 </tr>
 <tr>
@@ -297,7 +297,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>assertConfirmation</td>
+	<td>verifyConfirmation</td>
 	<td>The calendar and all its events and tasks will be deleted. Do you confirm?</td>
 	<td></td>
 </tr>
@@ -332,16 +332,6 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForConfirmation</td>
-	<td>The category will be deleted. Do you confirm ?</td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertConfirmation</td>
-	<td>The category will be deleted. Do you confirm ?</td>
-	<td></td>
-</tr>
-<tr>
 	<td>waitForElementPresent</td>
 	<td>//div[contains(@onclick,'ClosePopup')]</td>
 	<td></td>
@@ -349,6 +339,16 @@
 <tr>
 	<td>click</td>
 	<td>//div[contains(@onclick,'ClosePopup')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForConfirmation</td>
+	<td>The category will be deleted. Do you confirm ?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyConfirmation</td>
+	<td>The category will be deleted. Do you confirm ?</td>
 	<td></td>
 </tr>
 <tr>
@@ -392,7 +392,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>assertConfirmation</td>
+	<td>verifyConfirmation</td>
 	<td>Are you sure you want to delete?</td>
 	<td></td>
 </tr>
