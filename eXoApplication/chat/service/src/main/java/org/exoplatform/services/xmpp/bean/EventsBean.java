@@ -71,6 +71,7 @@ public class EventsBean {
     messages = new ArrayList<MessageBean>();
     mucEvents = new ArrayList<MUCPacketBean>();
     fileEvents = new ArrayList<FileTransferEventBean>();
+    roster = new ArrayList<ContactBean>();
   }
 
   /**
