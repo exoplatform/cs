@@ -207,16 +207,6 @@
 	<td></td>
 </tr>
 <tr>
-	<td>verifyElementPresent</td>
-	<td>getMail</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>getMail</td>
-	<td></td>
-</tr>
-<tr>
 	<td>click</td>
 	<td>link=Finish</td>
 	<td></td>
@@ -224,6 +214,11 @@
 <tr>
 	<td>echo</td>
 	<td>-- Edit Create Account</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@class='UISelectAccount']//div[@title='Manage accounts']</td>
 	<td></td>
 </tr>
 <tr>
@@ -507,16 +502,6 @@
 	<td></td>
 </tr>
 <tr>
-	<td>verifyElementPresent</td>
-	<td>getMail</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>getMail</td>
-	<td></td>
-</tr>
-<tr>
 	<td>click</td>
 	<td>link=Finish</td>
 	<td></td>
@@ -572,16 +557,15 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>click</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
 <tr>
-	<td>close</td>
-	<td></td>
+	<td>waitForElementPresent</td>
+	<td>link=Sign in</td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>

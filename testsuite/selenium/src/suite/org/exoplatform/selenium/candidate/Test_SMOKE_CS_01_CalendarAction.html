@@ -92,11 +92,6 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>tmpMenuElement</td>
-	<td></td>
-</tr>
-<tr>
 	<td>click</td>
 	<td>//div[contains(@title,'Calendar actions')]</td>
 	<td></td>
@@ -147,13 +142,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>tmpMenuElement</td>
+	<td>click</td>
+	<td>//div[contains(@title,'Calendar actions')]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='tmpMenuElement']/div/div[2]/div/div/div[2]/a</td>
+	<td>//a[@class='ItemIcon AddCalendarIcon']</td>
 	<td></td>
 </tr>
 <tr>
@@ -178,7 +173,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- Create a event</td>
+	<td>-- Create a event --</td>
 	<td></td>
 </tr>
 <tr>
@@ -212,6 +207,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@class=&quot;EventContainer&quot;]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>mouseOver</td>
 	<td>//div[@class=&quot;EventContainer&quot;]</td>
 	<td></td>
@@ -219,11 +219,6 @@
 <tr>
 	<td>contextMenu</td>
 	<td>//div[@class=&quot;EventContainer&quot;]</td>
-	<td>contexdMenu</td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=View</td>
 	<td></td>
 </tr>
 <tr>
@@ -233,12 +228,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//span/div/div/div[1]/div/div/div/div[2]</td>
+	<td>//div[contains(@onclick,'ClosePopup')]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//span/div/div/div[1]/div/div/div/div[2]</td>
+	<td>//div[contains(@onclick,'ClosePopup')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -278,37 +273,67 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- Delete test data</td>
+	<td>-- Delete Calendar</td>
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>//form[@id='UICalendars']/div[2]/div[1]</td>
+	<td>mouseOver</td>
+	<td>//div[@class=&quot;MyCalendarContainer&quot;]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>//div[@onclick='eXo.calendar.UICalendarPortlet.showMainMenu(this, event);']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>//div[@id='tmpMenuElement']/div/div[2]/div/div/div[1]/a</td>
+	<td>contextMenu</td>
+	<td>//a[@title='CS_Smoke_01']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='tmpMenuElement']/div/div[2]/div/div/div[1]/a</td>
+	<td>//a[@class='ItemIcon RemoveCalendarIcon']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>//tr[2]/td[2]/div/img[2]</td>
+	<td>waitForConfirmation</td>
+	<td>The calendar and all its events and tasks will be deleted. Do you confirm?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>The calendar and all its events and tasks will be deleted. Do you confirm?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Delete Group</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//tr[2]/td[2]/div/img[2]</td>
+	<td>//div[contains(@title,'Calendar actions')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//a[contains(@href,'AddCalendarCategory')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//a[contains(@href,'AddCalendarCategory')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@title='CS_Smoke_01']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@title='CS_Smoke_01']/following::td/div/img[@title='Delete']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForConfirmation</td>
+	<td>The category will be deleted. Do you confirm ?</td>
 	<td></td>
 </tr>
 <tr>
@@ -317,68 +342,53 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>//div[contains(@onclick,'ClosePopup')]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
-	<td>link=Close</td>
+	<td>//div[contains(@onclick,'ClosePopup')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Delete Event</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Week</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Week</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@class=&quot;EventContainer&quot;]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>mouseOver</td>
-	<td>//div[@title=&quot;CS_Smoke_01&quot;]</td>
+	<td>//div[@class=&quot;EventContainer&quot;]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>contextMenu</td>
-	<td>//div[@title=&quot;CS_Smoke_01&quot;]</td>
-	<td>contextmenu</td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=Remove</td>
+	<td>//div[@class=&quot;EventContainer&quot;]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>link=Remove</td>
+	<td>link=Delete</td>
 	<td></td>
 </tr>
 <tr>
-	<td>assertConfirmation</td>
-	<td>The calendar and all its events and tasks. Do you confirm?</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>value</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>value</td>
-	<td>CS</td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>//form[@id='UISearchForm']/div[2]/div[2]/div</td>
-	<td></td>
-</tr>
-<tr>
-	<td>mouseOver</td>
-	<td>//span[@title='CS_Smoke_01']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>contextMenu</td>
-	<td>//span[@title='CS_Smoke_01']</td>
-	<td>contextMenu</td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>tmpMenuElement</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>//div[@id='tmpMenuElement']/div/div[2]/div/div/a[3]/div</td>
+	<td>waitForConfirmation</td>
+	<td>Are you sure you want to delete?</td>
 	<td></td>
 </tr>
 <tr>
@@ -392,13 +402,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>click</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
 <tr>
-	<td>close</td>
-	<td></td>
+	<td>waitForElementPresent</td>
+	<td>link=Sign in</td>
 	<td></td>
 </tr>
 </tbody></table>
