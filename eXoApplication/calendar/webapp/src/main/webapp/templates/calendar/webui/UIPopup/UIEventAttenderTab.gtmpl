@@ -119,14 +119,17 @@
                 %>
               </tr>
               <% Map parMap = uicomponent.getMap() ; %>
-              <%for(String p in uicomponent.getParticipants()) {%>
+              <%
+              	for(String p in uicomponent.getParticipants()) {
+              		fullname = uicomponent.getFullname(p); 
+               %>
               <tr busytime="<%=parMap.get(p);%>">
                 <td>
                   <div class="LeftSide">
                     <div class="Input">
                       <%uiForm.renderField(p)%>
                     </div>
-                    <div class="Title">$p</div>
+                    <div class="Title">$fullname</div>
                     <div style="clear: left;">
                       <span></span>
                     </div>

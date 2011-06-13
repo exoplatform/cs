@@ -911,7 +911,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     return buider.toString() ;
   }
   
-  protected void  setParticipantStatusValues(String[] values) {
+  protected void  setParticipantStatusValues(String[] values) throws Exception {
     participantStatus_.clear();
     participantStatusList_.clear();
    // StringBuilder buider = new StringBuilder("") ;
@@ -2234,14 +2234,18 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 
   public class ParticipantStatus {
     private String participant ;
+    private String displayParticipant ;
     private String status ;
-
-    public ParticipantStatus(String participant,String status){
+    
+    public ParticipantStatus(String participant,String status) throws Exception {
       this.participant = participant;
+      User user = CalendarUtils.getOrganizationService().getUserHandler().findUserByName(participant);
+      this.displayParticipant = user.getFullName() + org.exoplatform.calendar.service.Utils.SPACE 
+        + CalendarUtils.OPEN_PARENTHESIS + user.getEmail() + CalendarUtils.CLOSE_PARENTHESIS;
       this.status = status ;
     }
 
-    public String getParticipant() {
+    public String getParticipant() throws Exception {
       return participant;
     }
 
@@ -2249,6 +2253,14 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       this.participant = participant;
     }
 
+    public String getDisplayParticipant() throws Exception {
+     return displayParticipant;
+    }
+    
+    public void setDisplayParticipant(String displayParticipant) {
+      this.displayParticipant = displayParticipant;
+    }
+    
     public String getStatus() {
       return status;
     }

@@ -189,7 +189,7 @@ public class UICalendarPortlet extends UIPortletApplication {
           calService.confirmInvitation(inviter, user.getEmail(), username, calType, event.getCalendarId(), eventId, Utils.ACCEPT);
           // pop-up event form
           UIPopupAction uiParentPopup = this.getChild(UIPopupAction.class);
-          UIPopupContainer uiPopupContainer = uiParentPopup.activate(UIPopupContainer.class, 700);
+          UIPopupContainer uiPopupContainer = uiParentPopup.activate(UIPopupContainer.class, 800);
           uiPopupContainer.setId(UIPopupContainer.UIEVENTPOPUP);
           UIEventForm uiEventForm =  uiPopupContainer.addChild(UIEventForm.class, null, null) ;
           uiEventForm.initForm(this.getCalendarSetting(), null, formTime);

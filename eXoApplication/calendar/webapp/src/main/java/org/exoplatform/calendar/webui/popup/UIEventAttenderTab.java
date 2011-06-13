@@ -106,12 +106,17 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
   public boolean isCheckFreeTime() {
     return getUIFormCheckBoxInput(FIELD_CHECK_TIME).isChecked() ;
   }
-  protected Map<String, String> getMap(){ 
+  protected Map<String, String> getMap() { 
     for(String id : parMap_.keySet()) {
-      if(getUIFormCheckBoxInput(id) == null) addUIFormInput(new UIFormCheckBoxInput<Boolean>(id, id, false)) ;
+      if(getUIFormCheckBoxInput(id) == null) {
+        addUIFormInput(new UIFormCheckBoxInput<Boolean>(id, id, false)) ;
+      }
     }
-    return parMap_ ; 
-
+    return parMap_ ;
+  }
+  
+  public String getFullname(String username) throws Exception {
+    return CalendarUtils.getOrganizationService().getUserHandler().findUserByName(username).getFullName();
   }
   
   private DateFormat getSimpleFormatDate() throws Exception {
