@@ -162,41 +162,62 @@ UIContextMenu.prototype.showHide = function() {
 } ;
 
 UIContextMenu.prototype.swapMenu = function(oldmenu, mousePos,evt) {
-	var DOMUtil = eXo.core.DOMUtil ;
-	var Browser = eXo.core.Browser ;
-	var browserHeight = eXo.core.Browser.getBrowserHeight() + document.documentElement.scrollTop || document.body.scrollTop ;
-	var browserWidth = eXo.core.Browser.getBrowserWidth() + document.documentElement.scrollLeft || document.body.scrollLeft ;
-	if(document.getElementById("tmpMenuElement")) DOMUtil.removeElement(document.getElementById("tmpMenuElement")) ;
-	var tmpMenuElement = oldmenu.cloneNode(true) ;
-	tmpMenuElement.setAttribute("id","tmpMenuElement") ;
-	DOMUtil.addClass(tmpMenuElement, this.portletCssClass + " UIEmpty") ;
-	this.menuElement = tmpMenuElement ;
-	var callback = this.getCallback(tmpMenuElement) ;
-	if(callback) {
-		callback = callback + "(evt)" ;
-		eval(callback) ;
-	}
-	var uiApplication = document.getElementById("UIPortalApplication") ;
-	if(this.menuElement){
-	document.body.insertBefore(this.menuElement,uiApplication) ;
-	var left = mousePos.x - 2;
-	var top = mousePos.y - 2;
-	if(Browser.isIE6()) this.menuElement.style.width = "140px";
-	if(eXo.core.I18n.isRT()){
-		left -= (eXo.cs.Utils.getElementWidth(this.menuElement)  - 3);
-		if(Browser.isIE6() || Browser.isIE7()) left -= eXo.cs.Utils.getScrollbarWidth() + 3 ;
-	}
-	this.menuElement.style.zIndex = 2000 ;
-	this.menuElement.style.top = top  + "px" ;
-	this.menuElement.style.left = left + "px" ;
-	this.menuElement.style.display = "block" ;
-	this.menuElement.style.visibility = "hidden" ;
-	if((this.menuElement.offsetHeight + mousePos.y) > browserHeight) this.menuElement.style.top = mousePos.y - this.menuElement.offsetHeight + 2  + "px" ;	
-	if((this.menuElement.offsetWidth + mousePos.x) > browserWidth) this.menuElement.style.left = mousePos.x - this.menuElement.offsetWidth + 2  + "px" ;	
-	this.menuElement.style.display = "none" ;
-	this.menuElement.style.visibility = "visible" ;
-	}
-	this.showHide() ;	
+  var DOMUtil = eXo.core.DOMUtil;
+  var Browser = eXo.core.Browser;
+  var browserHeight = eXo.core.Browser.getBrowserHeight() + document.documentElement.scrollTop || document.body.scrollTop;
+  var browserWidth = eXo.core.Browser.getBrowserWidth() + document.documentElement.scrollLeft || document.body.scrollLeft;
+  if (document.getElementById("tmpMenuElement"))
+    DOMUtil.removeElement(document.getElementById("tmpMenuElement"));
+  var tmpMenuElement = oldmenu.cloneNode(true);
+  tmpMenuElement.setAttribute("id", "tmpMenuElement");
+  DOMUtil.addClass(tmpMenuElement, this.portletCssClass + " UIEmpty");
+  this.menuElement = tmpMenuElement;
+  var callback = this.getCallback(tmpMenuElement);
+  if (callback) {
+    callback = callback + "(evt)";
+    eval(callback);
+  }
+  var uiApplication = document.getElementById("UIPortalApplication");
+  if (this.menuElement) {
+    document.body.insertBefore(this.menuElement, uiApplication);
+    eXo.webui.UIRightClickPopupMenu.disableContextMenu('tmpMenuElement');
+    this.menuElement.onmousedown = function(e) {
+      var rightclick = false;
+      if (!e)
+        var e = window.event;
+      if (e.which)
+        rightclick = (e.which == 3);
+      else if (e.button)
+        rightclick = (e.button == 2);
+      if (rightclick) {
+        document.oncontextmenu = function() {
+          return false
+        };
+        e.cancelBubble = true;
+        return false;
+      }
+    }
+    var left = mousePos.x - 2;
+    var top = mousePos.y - 2;
+    if (Browser.isIE6())
+      this.menuElement.style.width = "140px";
+    if (eXo.core.I18n.isRT()) {
+      left -= (eXo.cs.Utils.getElementWidth(this.menuElement) - 3);
+      if (Browser.isIE6() || Browser.isIE7())
+        left -= eXo.cs.Utils.getScrollbarWidth() + 3;
+    }
+    this.menuElement.style.padding = "0px";
+    this.menuElement.style.zIndex = 2000;
+    this.menuElement.style.top = top + "px";
+    this.menuElement.style.left = left + "px";
+    if ((this.menuElement.offsetHeight + mousePos.y) > browserHeight)
+      this.menuElement.style.top = mousePos.y - this.menuElement.offsetHeight + 2 + "px";
+    if ((this.menuElement.offsetWidth + mousePos.x) > browserWidth)
+      this.menuElement.style.left = mousePos.x - this.menuElement.offsetWidth + 2 + "px";
+    this.menuElement.style.display = "none";
+    this.menuElement.style.visibility = "visible";
+  }
+  this.showHide(); 	
 } ;
 
 UIContextMenu.prototype.show = function(evt) {
