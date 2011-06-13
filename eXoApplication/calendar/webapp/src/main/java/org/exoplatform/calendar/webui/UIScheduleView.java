@@ -42,5 +42,11 @@ public class UIScheduleView extends UICalendarView  {
   @Override
   LinkedHashMap<String, CalendarEvent> getDataMap() {
     return null;
+  }
+
+  @Override
+  public String getDefaultStartTimeOfEvent() {
+    // TODO Auto-generated method stub
+    return null;
   }  
 }

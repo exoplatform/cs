@@ -139,4 +139,10 @@ public class UIYearView extends UICalendarView {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiYearView);           
     }
   }
+
+  @Override
+  public String getDefaultStartTimeOfEvent() {
+    // TODO Auto-generated method stub
+    return String.valueOf(calendar_.getTimeInMillis());
+  }
 }

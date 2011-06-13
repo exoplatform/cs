@@ -27,6 +27,7 @@ import java.util.Map;
 
 import javax.jcr.PathNotFoundException;
 
+
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
@@ -377,6 +378,25 @@ public class UIWeekView extends UICalendarView {
         e.printStackTrace() ;
         return ;
       }
+    }
+  }
+
+  @Override
+  public String getDefaultStartTimeOfEvent() {
+    if (isCurrentWeek(calendar_.get(Calendar.WEEK_OF_YEAR), calendar_.get(Calendar.MONTH), calendar_.get(Calendar.YEAR))) {
+      // if selected week is current week, the start time is present
+      return String.valueOf(System.currentTimeMillis());
+    } else {
+      // else the start time is last date of week.
+      Calendar c = Calendar.getInstance();
+      c.setTime(calendar_.getTime());
+      int firstDayOfWeek = calendar_.getFirstDayOfWeek();
+      c.setFirstDayOfWeek(firstDayOfWeek);
+      do {
+        c.add(Calendar.DATE, 1);
+      } while (c.get(Calendar.DAY_OF_WEEK) != firstDayOfWeek);
+      c.add(Calendar.DATE, -1);
+      return String.valueOf(c.getTimeInMillis());
     }
   }
 }

@@ -132,4 +132,8 @@ public class UIPreview extends UICalendarView implements UIPopupComponent {
       }
     }
   }
+  @Override
+  public String getDefaultStartTimeOfEvent() {
+    return String.valueOf(calendar_.getTimeInMillis());
+  }
 }

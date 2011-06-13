@@ -11,6 +11,7 @@
   uiform.begin() ;
   def rcontext = _ctx.getRequestContext() ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.setSelected("'+uiform.id+'") ;') ;
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.currentDate = ' + uicomponent.getDefaultStartTimeOfEvent() +';') ;
    _ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
   int currentYear = uicomponent.getCurrentYear() ;
   Calendar cal =  new GregorianCalendar() ;

@@ -81,9 +81,6 @@ public class UIActionBar extends UIContainer  {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      String formTime = CalendarUtils.getCurrentTime(uiActionBar) ;//event.getRequestContext().getRequestParameter(CURRENTTIME) ;
-      String categoryId = event.getRequestContext().getRequestParameter(CATEGORYID) ;
       UICalendarPortlet uiPortlet = uiActionBar.getAncestorOfType(UICalendarPortlet.class) ;
       UICalendarWorkingContainer workContainer = uiPortlet.findFirstComponentOfType(UICalendarWorkingContainer.class) ;
       workContainer.getChild(UIPopupWindow.class).setShow(true) ;

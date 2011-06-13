@@ -48,7 +48,8 @@
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.initSelection() ;') ;
   //rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;
   rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.UICalendarPortlet.checkFilter();') ;
-   rcontext.getJavascriptManager().addOnResizeJavascript('eXo.calendar.UICalendarPortlet.browserResizeCallback') ;
+  rcontext.getJavascriptManager().addOnResizeJavascript('eXo.calendar.UICalendarPortlet.browserResizeCallback') ;
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.currentDate = ' + uicomponent.getDefaultStartTimeOfEvent() +';') ;
   cssClass = "Day" ;
   
   DateFormat tempFormat = new  SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss", Locale.ENGLISH) ;
@@ -188,7 +189,8 @@
                       style = "" ;
                       if(isShowWorkingTime) {style = "WorkOffTime" ;}
                       Calendar cl = uicomponent.getInstanceTempCalendar() ;
-                cl = uicomponent.getBeginDay(cl) ;  
+                      cl.setTime(uicomponent.calendar_.getTime());
+                      cl = uicomponent.getBeginDay(cl) ;  
                     for(full in uicomponent.getDisplayTimes(timeFormat, timeInterval, locale)){
           String h = full.substring(0,full.lastIndexOf("_")) ;
           String display = full.substring(full.lastIndexOf("_")+1) ;
