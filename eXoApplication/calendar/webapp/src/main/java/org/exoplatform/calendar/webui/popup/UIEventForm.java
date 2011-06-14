@@ -2240,8 +2240,12 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     public ParticipantStatus(String participant,String status) throws Exception {
       this.participant = participant;
       User user = CalendarUtils.getOrganizationService().getUserHandler().findUserByName(participant);
-      this.displayParticipant = user.getFullName() + org.exoplatform.calendar.service.Utils.SPACE 
-        + CalendarUtils.OPEN_PARENTHESIS + user.getEmail() + CalendarUtils.CLOSE_PARENTHESIS;
+      if (user == null) {
+        this.displayParticipant = participant;
+      } else {
+        this.displayParticipant = user.getFullName() + org.exoplatform.calendar.service.Utils.SPACE 
+        + CalendarUtils.OPEN_PARENTHESIS + user.getEmail() + CalendarUtils.CLOSE_PARENTHESIS;        
+      }
       this.status = status ;
     }
 
