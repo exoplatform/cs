@@ -87,6 +87,8 @@ public class MessageFilter {
   private boolean  applyForAll_;
 
   private boolean  hasStructure_;
+  
+  private String[] returnedProperties;
 
   public MessageFilter(String name) {
     this.id_ = Utils.KEY_FILTER + IdGenerator.generate();
@@ -334,9 +336,28 @@ public class MessageFilter {
   public void setHasStructure(boolean hasStructure) {
     this.hasStructure_ = hasStructure;
   }
+  
+  
+
+  public String[] getReturnedProperties() {
+    return returnedProperties;
+  }
+
+  public void setReturnedProperties(String[] returnedProperties) {
+    this.returnedProperties = returnedProperties;
+  }
 
   public String getStatement() throws Exception {
     StringBuffer queryString = new StringBuffer("/jcr:root" + accountPath_ + "//element(*,exo:message)");
+    StringBuilder columnSpecifier = new StringBuilder();
+    if (returnedProperties != null && returnedProperties.length > 0) {
+      columnSpecifier.append("/(@" + returnedProperties[0]);
+      for (int i = 1; i < returnedProperties.length; i++) {
+        columnSpecifier.append(" | @" + returnedProperties[i]);
+      }
+      columnSpecifier.append(")");
+    }
+    queryString.append(columnSpecifier);
     boolean hasConjuntion = false;
     StringBuffer stringBuffer = new StringBuffer("[");
     if (text_ != null && text_.trim().length() > 0) {

@@ -16,6 +16,8 @@
  */
 package org.exoplatform.mail.service;
 
+import javax.mail.Store;
+
 /**
  * Created by The eXo Platform SAS
  * Author : Nam Phung
@@ -86,6 +88,8 @@ public class CheckingInfo {
   private int                syncFolderStatus_          = 300;
 
   private StatusInfo         status_                    = new StatusInfo();
+  
+  private Store              mailStore;
 
   public int getTotalMsg() {
     return totalMsg_;
@@ -285,4 +289,13 @@ public class CheckingInfo {
     return status_.getAccountId();
   }
 
+  public Store getMailStore() {
+    return mailStore;
+  }
+
+  public void setMailStore(Store mailStore) {
+    this.mailStore = mailStore;
+  }
+  
+  
 }

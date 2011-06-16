@@ -815,4 +815,12 @@ public interface MailService {
   public void addPlugin(ComponentPlugin plugin);
 
   public Map<String, MailSettingConfigPlugin> getSettingConfig();
+  
+  /**
+   * get list of message ids by a filter.
+   * @param username name of user
+   * @param filter constraints for returned list
+   * @return
+   */
+  public List<String> getListOfMessageIds(String username, MessageFilter filter) throws Exception;
 }

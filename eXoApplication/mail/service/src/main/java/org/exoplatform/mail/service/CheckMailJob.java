@@ -58,10 +58,6 @@ public class CheckMailJob implements Job, InterruptableJob {
     PortalContainer container = getPortalContainer(context);
     // MailService mailService = getMailService();
     MailService mailService = (MailService) container.getComponentInstanceOfType(MailService.class);
-    if (mailService.getContinuationService() == null) {
-      ContinuationService continuationService = (ContinuationService) container.getComponentInstanceOfType(ContinuationService.class);
-      mailService.setContinuationService(continuationService);
-    }
 
     JobDetail jobDetail = context.getJobDetail();
     JobDataMap dataMap = jobDetail.getJobDataMap();

@@ -3051,4 +3051,37 @@ public class JCRDataStorage implements DataStorage {
       tag.setColor(tagNode.getProperty(Utils.EXO_COLOR).getString());
     return tag;
   }
+  
+  /**
+   * get list of message ids by filter
+   * @param username
+   * @param filter
+   * @return
+   * @throws Exception
+   */
+  public List<String> getListOfMessageIds(String username, MessageFilter filter) throws Exception {
+    List<String> strList = new ArrayList<String>();
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider();
+      Node homeMsg = getMessageHome(sProvider, username, filter.getAccountId());
+      filter.setAccountPath(homeMsg.getPath());
+      filter.setReturnedProperties(new String[] {Utils.EXO_ID});
+      QueryManager qm = getSession(sProvider).getWorkspace().getQueryManager();
+      String queryString = filter.getStatement();
+      Query query = qm.createQuery(queryString, Query.XPATH);
+      QueryResult result = query.execute();
+      NodeIterator iter = result.getNodes();
+      while (iter.hasNext()) {
+        Node node = iter.nextNode();
+        if (node.hasProperty(Utils.EXO_ID)) {
+          strList.add(node.getProperty(Utils.EXO_ID).getString());
+        }
+      }
+    } finally {
+      closeSessionProvider(sProvider);
+    }
+    return strList;
+  }
+  
 }
