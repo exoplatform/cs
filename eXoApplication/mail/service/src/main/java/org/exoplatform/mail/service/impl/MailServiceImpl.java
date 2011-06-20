@@ -1762,7 +1762,6 @@ public class MailServiceImpl implements MailService, Startable {
       return;
     String folderId = null;
     String folderName = folder.getName();
-    long unreadMsgCount = 0;
     if (!folder.isOpen()) {
       folder.open(javax.mail.Folder.READ_ONLY);
     }
@@ -1780,6 +1779,7 @@ public class MailServiceImpl implements MailService, Startable {
     }
     Folder eXoFolder = getFolder(userName, accountId, folderId);
     if (eXoFolder != null) {
+      long unreadMsgCount = eXoFolder.getNumberOfUnreadMessage();
       Date checkFromDate = eXoFolder.getCheckFromDate();
 
       if (account.getCheckFromDate() == null) {
