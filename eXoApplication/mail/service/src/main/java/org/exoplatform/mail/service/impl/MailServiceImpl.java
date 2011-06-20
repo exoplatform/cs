@@ -1802,8 +1802,11 @@ public class MailServiceImpl implements MailService, Startable {
       }
       
       // get list of messages in folder
-      Calendar c = Calendar.getInstance();
-      c.setTime(checkFromDate);
+      Calendar c = null;
+      if (checkFromDate != null) {
+        c = Calendar.getInstance();
+        c.setTime(checkFromDate);
+      }
       HashSet<String> savedMsgList = new HashSet<String>(getListOfMessageIdsInFolder(userName, accountId, folderId, c , null));
       
       
