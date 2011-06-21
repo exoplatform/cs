@@ -112,6 +112,7 @@ import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 import org.exoplatform.ws.frameworks.json.impl.JsonException;
 import org.exoplatform.ws.frameworks.json.impl.JsonGeneratorImpl;
 import org.exoplatform.ws.frameworks.json.value.JsonValue;
+import org.gatein.common.util.ParameterValidation;
 import org.picocontainer.Startable;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
@@ -602,91 +603,77 @@ public class MailServiceImpl implements MailService, Startable {
     Account acc = getAccountById(userName, accId);
     return sendMessage(userName, acc, message);
   }
-
+  
+  /**
+   * make suitable properties for SMTP session.  
+   * @param acc - specified mail account 
+   * @return
+   */
+  private Properties generateSMTPConfig(Account acc) {
+    Properties props = new Properties();
+    fillGeneralSMTPConfig(props, acc);
+    if (Utils.STARTTLS.equalsIgnoreCase(acc.getSecureAuthsOutgoing())) {
+      // STARTTLS is supported by smtp protocol.
+      fillSMTPConfig4STARTTLS(props, acc, Utils.SVR_SMTP);
+    } else if (Utils.TLS_SSL.equalsIgnoreCase(acc.getSecureAuthsOutgoing())) {
+      // SSLTLS requires smtps protocol
+      fillSMTPConfig4SSLTLS(props, acc, Utils.SVR_SMTPS);
+    }
+    return props;
+  }
+  
+  private void fillGeneralSMTPConfig(Properties props, Account acc) {
+    String protocol = Utils.SVR_SMTP;
+    if (Utils.TLS_SSL.equalsIgnoreCase(acc.getSecureAuthsOutgoing())) {
+      protocol = Utils.SVR_SMTPS;
+    }
+    props.put(Utils.SVR_TRANSPORT_PROTOCOL, protocol);
+    props.put(Utils.getMailConfigPropertyName(protocol, Utils.SVR_SMTP_AUTH), acc.isOutgoingAuthentication());
+    props.put(Utils.getMailConfigPropertyName(protocol, Utils.SVR_SMTP_USER), acc.getOutgoingUserName());
+    props.put(Utils.getMailConfigPropertyName(protocol, Utils.SVR_SMTP_PASSWORD), acc.getOutgoingPassword());
+    props.put(Utils.getMailConfigPropertyName(protocol, Utils.SVR_SMTP_HOST), acc.getOutgoingHost());
+    props.put(Utils.getMailConfigPropertyName(protocol, Utils.SVR_SMTP_PORT), acc.getOutgoingPort());
+    props.put(Utils.getMailConfigPropertyName(protocol, Utils.SMTP_AUTH_MECHS), acc.getAuthMechsOutgoing());
+    props.put(Utils.getMailConfigPropertyName(protocol, Utils.SMTP_DNS_NOTIFY), "SUCCESS,FAILURE ORCPT=rfc822;" + acc.getEmailAddress());
+    props.put(Utils.getMailConfigPropertyName(protocol, Utils.SMTP_DNS_RET), "FULL");
+    props.put(Utils.getMailConfigPropertyName(protocol, Utils.SVR_SMTP_SOCKET_FACTORY_CLASS), Utils.SOCKET_FACTORY);
+    props.put(Utils.getMailConfigPropertyName(protocol, Utils.SVR_SMTP_SOCKET_FACTORY_FALLBACK), false);
+    props.put(Utils.getMailConfigPropertyName(protocol, Utils.SVR_SMTP_SOCKET_FACTORY_PORT), acc.getOutgoingPort());
+  }
+  
+  private void fillSMTPConfig4STARTTLS(Properties props, Account acc, String protocol) {
+    props.put(Utils.getMailConfigPropertyName(protocol, Utils.SVR_SMTP_STARTTLS_ENABLE), true);
+    props.put(Utils.getMailConfigPropertyName(protocol, Utils.SMTP_SSL_FACTORY), getSSLSocketFactory(acc.getOutgoingHost()));
+  }
+  
+  private void fillSMTPConfig4SSLTLS(Properties props, Account acc, String protocol) {
+    props.put(Utils.SVR_TRANSPORT_PROTOCOL, protocol);
+    props.put(Utils.getMailConfigPropertyName(protocol, Utils.SVR_SMTP_SSL_ENABLE), true);
+    props.put(Utils.getMailConfigPropertyName(protocol, Utils.SMTP_SSL_FACTORY), getSSLSocketFactory(acc.getOutgoingHost()));
+    props.put(Utils.getMailConfigPropertyName(protocol, Utils.SVR_SMTP_SSL_SOCKET_FACTORY_PORT), acc.getOutgoingPort());
+    props.put(Utils.getMailConfigPropertyName(protocol, Utils.SMTP_SSL_PROTOCOLS), "SSLv3 TLSv1");
+//    props.put(Utils.getMailConfigPropertyName(protocol, Utils.SMTP_QUIT_WAIT), false);
+  }
+  
+  @Override
   public Message sendMessage(String userName, Account acc, Message message) throws Exception {
+    ParameterValidation.throwIllegalArgExceptionIfNull(acc, "acc");
+    ParameterValidation.throwIllegalArgExceptionIfNullOrEmpty(userName, "username", null);
+    ParameterValidation.throwIllegalArgExceptionIfNull(message, "message");
+    Properties props = generateSMTPConfig(acc);
     String smtpUser = acc.getIncomingUser();
     String outgoingHost = acc.getOutgoingHost();
     String outgoingPort = acc.getOutgoingPort();
-    String isSSl = acc.getServerProperties().get(Utils.SVR_OUTGOING_SSL);
-    boolean isSMTPAuth = acc.isOutgoingAuthentication();
-    Properties props = System.getProperties();
-    String protocolName = Utils.SVR_SMTP;
-    String smtpPort = Utils.SVR_SMTP_SOCKET_FACTORY_PORT;
-    String svrSmtpUser = Utils.SVR_SMTP_USER;
-    String svrSmtpHost = Utils.SVR_SMTP_HOST;
-    String svrSmtpPort = Utils.SVR_SMTP_PORT;
-    String dsnNotify = Utils.SMTP_DNS_NOTIFY;
-    String smtpDnsRet = Utils.SMTP_DNS_RET;
-    String socketFactoryClass = Utils.SOCKET_FACTORY;
-    String smtpconnecttimeout = Utils.SMTP_CONECT_TIMEOUT;
-    String smtptimeout = Utils.SMTP_TIMEOUT;
-    String smtpSocketFactoryClazz = Utils.SVR_SMTP_SOCKET_FACTORY_CLASS;
-    String smtpSocketFacFallback = Utils.SVR_SMTP_SOCKET_FACTORY_FALLBACK;
-    String smtpQuitWait = Utils.SMTP_QUIT_WAIT;
-
-    String smtpSslProtocols = "mail.smtp.ssl.protocols";
-    String smtpSslStarttls = Utils.SVR_SMTP_STARTTLS_ENABLE;
-    String smtpSslFactory = Utils.SMTP_SSL_FACTORY;
-    String smtpAuth = Utils.SVR_SMTP_AUTH;
-    String smtpPropSslEnable = Utils.MAIL_SMTP_SSL_ENABLE;
-
-    if (Boolean.valueOf(isSSl)) {
-      protocolName = Utils.SVR_SMTPS;
-      MailSSLSocketFactory socketFactory = this.getSSLSocketFactory(outgoingHost);
-      props.put(smtpSslFactory.replace("smtp", "smtps"), socketFactory);
-      smtpPort = Utils.SVR_SMTP_SSL_SOCKET_FACTORY_PORT;
-      if (acc.getSecureAuthsOutgoing().equalsIgnoreCase(Utils.STARTTLS))
-        props.put(smtpSslStarttls.replace("smtp", "smtps"), true);
-      else
-        props.put(smtpPropSslEnable.replace("smtp", "smtps"), true);
-      props.put(Utils.SMTP_AUTH_MECHS.replace("smtp", "smtps"), acc.getAuthMechsOutgoing());
-      props.put(smtpSslProtocols.replace("smtp", "smtps"), "SSLv3 TLSv1");
-    }
-    if (Utils.isGmailAccount(smtpUser) || Utils.isGmailAccount(acc.getOutgoingUserName())) {
-      protocolName = Utils.SVR_SMTPS;
-      props.put(smtpQuitWait.replace("smtp", "smtps"), false);
-      if (isSMTPAuth)
-        props.put(smtpAuth.replace("smtp", "smtps"), true);
-    }
-
-    if (protocolName.equalsIgnoreCase(Utils.SVR_SMTP)) {
-      props.put(svrSmtpUser, smtpUser);
-      props.put(svrSmtpHost, outgoingHost);
-      props.put(svrSmtpPort, outgoingPort);
-      props.put(dsnNotify, "SUCCESS,FAILURE ORCPT=rfc822;" + acc.getEmailAddress());
-      props.put(smtpDnsRet, "FULL");
-      props.put(smtpconnecttimeout, "0");
-      props.put(smtptimeout, "10000");
-      props.put(smtpSocketFactoryClazz, socketFactoryClass);
-      props.put(smtpSocketFacFallback, false);
-      props.put(smtpPort, outgoingPort);
-      if (isSMTPAuth)
-        props.put(Utils.SVR_SMTP_AUTH, true);
-      else
-        props.put(Utils.SVR_SMTP_AUTH, false);
-    } else {
-      props.put(svrSmtpUser.replace("smtp", "smtps"), smtpUser);
-      props.put(svrSmtpHost.replace("smtp", "smtps"), outgoingHost);
-      props.put(svrSmtpPort.replace("smtp", "smtps"), outgoingPort);
-      props.put(dsnNotify.replace("smtp", "smtps"), "SUCCESS,FAILURE ORCPT=rfc822;" + acc.getEmailAddress());
-      props.put(smtpDnsRet.replace("smtp", "smtps"), "FULL");
-      props.put(smtpconnecttimeout.replace("smtp", "smtps"), "0");
-      props.put(smtptimeout.replace("smtp", "smtps"), "10000");
-      props.put(smtpSocketFactoryClazz.replace("smtp", "smtps"), socketFactoryClass);
-      props.put(smtpSocketFacFallback.replace("smtp", "smtps"), false);
-      // props.put(smtpPropSslEnable, true);
-      if (isSMTPAuth)
-        props.put(smtpAuth.replace("smtp", "smtps"), true);
-      else
-        props.put(smtpAuth.replace("smtp", "smtps"), false);
-    }
-    Session session = Session.getDefaultInstance(props, null);
-    logger.debug(" #### Sending email ..f  ");
-    if (protocolName.equalsIgnoreCase(Utils.SVR_SMTPS))
+    
+    Session session = Session.getInstance(props, null);
+    if (logger.isDebugEnabled()) 
+      logger.debug(String.format(" #### Sending email with account '%1$s' ...", acc.getOutgoingUserName()));
+    if (Utils.TLS_SSL.equalsIgnoreCase(acc.getSecureAuthsOutgoing())) {
       session.setProtocolForAddress("rfc822", Utils.SVR_SMTPS);
-    SMTPTransport transport = (SMTPTransport) session.getTransport(protocolName);
+    }
+    SMTPTransport transport = (SMTPTransport) session.getTransport();
     try {
-      if (!isSMTPAuth) {
+      if (!acc.isOutgoingAuthentication()) {
         transport.connect();
       } else if (acc.useIncomingSettingForOutgoingAuthent()) {
         transport.connect(outgoingHost, Integer.parseInt(outgoingPort), smtpUser, acc.getIncomingPassword());
@@ -695,13 +682,15 @@ public class MailServiceImpl implements MailService, Startable {
       }
     } catch (Exception ex) {
       if (logger.isDebugEnabled())
-        logger.debug("#### Can not connect to smtp server ...");
+        logger.debug("#### Can not connect to smtp server ...", ex);
       throw ex;
     }
-    Message msg = send(session, transport, message);
-
-    transport.close();
-
+    Message msg = null;
+    try {
+      msg = send(session, transport, message);
+    } finally {
+      transport.close();
+    }
     return msg;
   }
 
@@ -714,13 +703,16 @@ public class MailServiceImpl implements MailService, Startable {
     msgList.add(message);
     sendMessages(msgList, message.getServerConfiguration());
   }
-
+  /**
+   * @Deprecated using {@link MailService#sendMessage(String, Account, Message)} instead 
+   */
+  @Deprecated
   public void sendMessages(List<Message> msgList, ServerConfiguration serverConfig) throws Exception {
     Properties props = System.getProperties();
     String protocolName = Utils.SVR_SMTP;
     String propSmtpPort = Utils.SVR_SMTP_SOCKET_FACTORY_PORT;
     String smtpSslProtocols = "mail.smtp.ssl.protocols";
-    String smtpSsl = Utils.MAIL_SMTP_SSL_ENABLE;
+    String smtpSsl = Utils.SVR_SMTP_SSL_ENABLE;
     String smtpAuth = Utils.SVR_SMTP_AUTH;
     String propSmtpSslSocketFactory = Utils.SMTP_SSL_FACTORY;
     boolean isSMTPAuth = serverConfig.isOutgoingAuthentication();
@@ -1306,7 +1298,7 @@ public class MailServiceImpl implements MailService, Startable {
       TrustManager[] trusts = new TrustManager[] { new ExoMailTrustManager(null, false, host, null) };
       sslsocket.setTrustManagers(trusts);
     } catch (GeneralSecurityException gse) {
-      logger.error("Imap SSL: Cannot create a ssl socket between client and server. All host will trusted.");
+      logger.error("Imap SSL: Cannot create a ssl socket between client and server. All host will trusted.", gse);
       sslsocket = trustAllHost();
     } catch (Exception e) {
       logger.error("Your email was not trusted by Mail server", e);
@@ -1839,6 +1831,7 @@ public class MailServiceImpl implements MailService, Startable {
               if (savedMsgList.contains(msgId)) {
                 // if the message has been saved to db, remove it from list and ignore.
                 savedMsgList.remove(msgId);
+                i++;
                 continue;
               }
               saved = saveMessage(true, folderId, msgMap, userName, accountId, msg, folder);

@@ -49,6 +49,7 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.scheduler.JobSchedulerService;
 import org.exoplatform.ws.frameworks.cometd.ContinuationService;
+import org.gatein.common.util.ParameterValidation;
 
 /**
  * Created by The eXo Platform SARL
@@ -63,6 +64,14 @@ public class Utils {
   public static MailService         mailService_;
 
   public static JobSchedulerService schedulerService_;
+  
+  /**
+   * {@literal
+   * Javamail uses property names are always in form mail.<protocol>.<property>, 
+   * therefore this string is used as prefix part of mail property names.
+   * }
+   */
+  public static final String        SVR_MAIL                              = "mail";
 
   public static final String        SVR_IMAP                              = "imap";
 
@@ -95,58 +104,60 @@ public class Utils {
   // in MS Exchange, a big message maybe insufficience of bytes when received. set it is false to get rid this problem
   // But neet to certain that Mail server do not implement Imap Partial FETCH
   public static final String        IMAP_MSX_PARTIAL_FETCH                = "mail.imap.partialfetch".intern();
-
+  
   public static final String        SVR_SMTP                              = "smtp";
 
   public static final String        SVR_SMTPS                             = "smtps";
+  
+  public static final String        SVR_TRANSPORT_PROTOCOL                = "mail.transport.protocol";
 
-  public static final String        SVR_SMTP_HOST                         = "mail.smtp.host".intern();
+  public static final String        SVR_SMTP_HOST                         = "host".intern();
 
-  public static final String        SVR_SMTP_PORT                         = "mail.smtp.port".intern();
+  public static final String        SVR_SMTP_PORT                         = "port".intern();
 
-  public static final String        SVR_SMTP_USER                         = "mail.smtp.user".intern();
+  public static final String        SVR_SMTP_USER                         = "user".intern();
 
-  public static final String        SVR_SMTP_PASSWORD                     = "mail.smtp.user".intern();
+  public static final String        SVR_SMTP_PASSWORD                     = "user".intern();
 
-  public static final String        SVR_SMTP_AUTH                         = "mail.smtp.auth".intern();
+  public static final String        SVR_SMTP_AUTH                         = "auth".intern();
 
-  public static final String        SVR_SMTP_SOCKET_FACTORY_FALLBACK      = "mail.smtp.socketFactory.fallback".intern();
+  public static final String        SVR_SMTP_SOCKET_FACTORY_FALLBACK      = "socketFactory.fallback".intern();
 
-  public static final String        SVR_SMTP_SOCKET_FACTORY_PORT          = "mail.smtp.socketFactory.port".intern();
+  public static final String        SVR_SMTP_SOCKET_FACTORY_PORT          = "socketFactory.port".intern();
 
-  public static final String        SVR_SMTP_SOCKET_FACTORY_CLASS         = "mail.smtp.socketFactory.class".intern();
+  public static final String        SVR_SMTP_SOCKET_FACTORY_CLASS         = "socketFactory.class".intern();
 
-  public static final String        SVR_SMTP_SSL_SOCKET_FACTORY_CLASS     = "mail.smtp.ssl.socketFactory.class";
+  public static final String        SVR_SMTP_SSL_SOCKET_FACTORY_CLASS     = "ssl.socketFactory.class";
 
-  public static final String        SVR_SMTP_SSL_SOCKET_FACTORY_PORT      = "mail.smtp.ssl.socketFactory.port";
+  public static final String        SVR_SMTP_SSL_SOCKET_FACTORY_PORT      = "ssl.socketFactory.port";
 
-  public static final String        SVR_SMTPS_AUTH                        = "mail.smtps.auth".intern();
+  public static final String        SVR_SMTP_STARTTLS_REQUIRED            = "starttls.required".intern();
 
-  public static final String        SVR_SMTP_STARTTLS_REQUIRED            = "mail.smtp.starttls.required".intern();
+  public static final String        SMTP_SSL_FACTORY                      = "ssl.socketFactory".intern();
 
-  public static final String        SMTP_SSL_FACTORY                      = "mail.smtp.ssl.socketFactory".intern();
+  public static final String        SVR_SMTP_SSL_ENABLE                  = "ssl.enable".intern();
 
-  public static final String        MAIL_SMTP_SSL_ENABLE                  = "mail.smtp.ssl.enable".intern();
+  public static final String        SMTP_QUIT_WAIT                        = "quitwait".intern();
+  
+  public static final String        SMTP_SSL_PROTOCOLS                    = "ssl.protocols".intern();
 
-  public static final String        SMTP_QUIT_WAIT                        = "mail.smtp.quitwait".intern();
+  public static final String        SMTP_CONECT_TIMEOUT                   = "connectiontimeout".intern();
 
-  public static final String        SMTP_CONECT_TIMEOUT                   = "mail.smtp.connectiontimeout".intern();
-
-  public static final String        SVR_MAIL_SMTP_DEBUG                   = "mail.smtp.debug".intern();
+  public static final String        SVR_MAIL_SMTP_DEBUG                   = "debug".intern();
 
   public static final String        SMTP_ISAUTHENTICATION                 = "smtp.isauthentication".intern();
 
   public static final String        SMTP_USEINCOMINGSETTING               = "smtp.useincomingsetting".intern();
 
-  public static final String        SMTP_DNS_NOTIFY                       = "mail.smtp.dsn.notify".intern();
+  public static final String        SMTP_DNS_NOTIFY                       = "dsn.notify".intern();
 
-  public static final String        SMTP_DNS_RET                          = "mail.smtp.dsn.ret".intern();
+  public static final String        SMTP_DNS_RET                          = "dsn.ret".intern();
 
-  public static final String        SMTP_TIMEOUT                          = "mail.smtp.timeout";
+  public static final String        SMTP_TIMEOUT                          = "timeout";
 
-  public static final String        SMATP_SSL_STARTTLS_ENABLE             = "mail.smtp.starttls.enable".intern();
+  public static final String        SMATP_SSL_STARTTLS_ENABLE             = "starttls.enable".intern();
 
-  public static final String        SMTP_AUTH_MECHS                       = "mail.smtp.auth.mechanisms".intern();
+  public static final String        SMTP_AUTH_MECHS                       = "auth.mechanisms".intern();
 
   public static final String        SSL_FACTORY                           = "javax.net.ssl.SSLSocketFactory".intern();
 
@@ -156,7 +167,7 @@ public class Utils {
 
   public static final String        SVR_MAIL_DEBUG                        = "mail.debug".intern();
 
-  public static final String        SVR_SMTP_STARTTLS_ENABLE              = "mail.smtp.starttls.enable".intern();
+  public static final String        SVR_SMTP_STARTTLS_ENABLE              = "starttls.enable".intern();
 
   public static final String        SVR_PROTOCOL                          = "protocol".intern();
 
@@ -1066,5 +1077,24 @@ public class Utils {
 
   public static String getOutgoingAuthenticationMechanism() {
     return getSettingConfig().get(OUTGOING_AUTHENTICATION_MECHANISM).getDefaultValue();
+  }
+  
+  /**
+   * <p>
+   * This function is used to get absolute property name from protocol and property.
+   * </p>
+   * <p>
+   * {@literal
+   * Note: As documentation of Javamail 1.4.4, the library is always using property names of the form mail.<protocol>.<property> 
+   * }
+   * </p>
+   * @param protocol - mail protocol such as imap, imaps, smtp, smtps, ...
+   * @param property - such as host, port, ... 
+   * @return
+   */
+  public static String getMailConfigPropertyName(String protocol, String property) {
+    ParameterValidation.throwIllegalArgExceptionIfNullOrEmpty(protocol, "protocol", null);
+    ParameterValidation.throwIllegalArgExceptionIfNullOrEmpty(property, "property", null);
+    return Utils.SVR_MAIL + "." + protocol + "." + property;
   }
 }

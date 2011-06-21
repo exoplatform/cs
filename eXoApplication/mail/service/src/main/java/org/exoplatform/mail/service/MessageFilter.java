@@ -351,11 +351,15 @@ public class MessageFilter {
     StringBuffer queryString = new StringBuffer("/jcr:root" + accountPath_ + "//element(*,exo:message)");
     StringBuilder columnSpecifier = new StringBuilder();
     if (returnedProperties != null && returnedProperties.length > 0) {
-      columnSpecifier.append("/(@" + returnedProperties[0]);
+      if (returnedProperties.length == 1) {
+        columnSpecifier.append("/@" + returnedProperties[0]);
+      } else {
+        columnSpecifier.append("/(@" + returnedProperties[0]);
+      }
       for (int i = 1; i < returnedProperties.length; i++) {
         columnSpecifier.append(" | @" + returnedProperties[i]);
       }
-      columnSpecifier.append(")");
+      if (returnedProperties.length > 1) columnSpecifier.append(")");
     }
     queryString.append(columnSpecifier);
     boolean hasConjuntion = false;
