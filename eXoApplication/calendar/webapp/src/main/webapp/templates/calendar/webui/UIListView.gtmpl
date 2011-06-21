@@ -33,7 +33,6 @@
   }else {
     _ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
 %>
-<div class="UIListView SpliterResizableListArea">
     <div class="TitleBar Result">
       <table>
         <body>
@@ -73,7 +72,7 @@
 <%  
   }
 %>
-  
+  <div class="UIListView SpliterResizableListArea">
     <table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
       <thead>
         <tr>
