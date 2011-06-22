@@ -46,7 +46,6 @@ public class UIScheduleView extends UICalendarView  {
 
   @Override
   public String getDefaultStartTimeOfEvent() {
-    // TODO Auto-generated method stub
     return null;
   }  
 }
