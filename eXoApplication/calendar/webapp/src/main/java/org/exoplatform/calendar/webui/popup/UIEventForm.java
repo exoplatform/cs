@@ -876,7 +876,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     StringBuilder buider = new StringBuilder("") ;
     for (Entry<String, String> par : participantStatus_.entrySet()) {
       if (buider.length() > 0 && par.getKey().contains("@")) buider.append(CalendarUtils.COMMA) ;
-      if(par.getKey().contains("@")) buider.append(par.getKey()) ;
+      if(par.getKey().contains("@")) buider.append(par.getKey().substring(par.getKey()
+        .lastIndexOf(CalendarUtils.OPEN_PARENTHESIS) + 1).replace(CalendarUtils.CLOSE_PARENTHESIS, "")) ;
     }
     return buider.toString() ;
   } 
@@ -2234,17 +2235,20 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 
   public class ParticipantStatus {
     private String participant ;
-    private String displayParticipant ;
+    private String name ;
+    private String email ;
     private String status ;
     
     public ParticipantStatus(String participant,String status) throws Exception {
       this.participant = participant;
       User user = CalendarUtils.getOrganizationService().getUserHandler().findUserByName(participant);
       if (user == null) {
-        this.displayParticipant = participant;
+        this.name = participant.substring(0, participant.lastIndexOf(CalendarUtils.OPEN_PARENTHESIS));
+        this.email = participant.substring(
+          participant.lastIndexOf(CalendarUtils.OPEN_PARENTHESIS) + 1).replace(CalendarUtils.CLOSE_PARENTHESIS, "");      
       } else {
-        this.displayParticipant = user.getFullName() + org.exoplatform.calendar.service.Utils.SPACE 
-        + CalendarUtils.OPEN_PARENTHESIS + user.getEmail() + CalendarUtils.CLOSE_PARENTHESIS;        
+        this.name = user.getFullName();
+        this.email = user.getEmail();        
       }
       this.status = status ;
     }
@@ -2257,12 +2261,20 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       this.participant = participant;
     }
 
-    public String getDisplayParticipant() throws Exception {
-     return displayParticipant;
+    public String getName() throws Exception {
+      return name;
+     }
+     
+     public void setName(String name) {
+       this.name = name;
+     }
+    
+    public String getEmail() throws Exception {
+     return email;
     }
     
-    public void setDisplayParticipant(String displayParticipant) {
-      this.displayParticipant = displayParticipant;
+    public void setEmail(String email) {
+      this.email = email;
     }
     
     public String getStatus() {

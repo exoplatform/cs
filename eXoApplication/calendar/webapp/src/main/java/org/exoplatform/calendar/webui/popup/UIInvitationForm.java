@@ -23,7 +23,6 @@ import java.util.List;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
-import org.exoplatform.calendar.webui.popup.UIAddressForm.ContactData;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
@@ -173,7 +172,7 @@ public class UIInvitationForm extends UIForm implements UIPopupComponent {
     List<String> pars = new ArrayList<String>();
     pars.addAll(Arrays.asList(parList.split(CalendarUtils.BREAK_LINE)));
     for(String par : pars){
-      par = par.trim();
+      par = par.trim().substring(par.lastIndexOf(CalendarUtils.OPEN_PARENTHESIS) + 1).replace(CalendarUtils.CLOSE_PARENTHESIS, "");
       if(par.contains("@")){
         if(builder.length()>0) builder.append(", ");
         builder.append(par);

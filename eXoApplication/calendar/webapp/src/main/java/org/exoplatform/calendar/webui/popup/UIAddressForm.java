@@ -231,7 +231,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         }
       }
       List<String> listMail = Arrays.asList( sb.toString().split(CalendarUtils.COMMA)) ; 
-      String email = null ;
+      String info = null ;
       for(ContactData c : uiForm.getCheckedContact()) {
         if(!uiForm.checkedList_.contains(c.getId())){
           Contact con = new Contact() ;
@@ -240,10 +240,11 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
           con.setFullName(c.getFullName()) ;
           if (!uiForm.checkedList_.contains(c.getId())) uiForm.checkedList_.add(c.getId()) ;
         }
-        email = c.getEmail() ;
-        if(!CalendarUtils.isEmpty(email) && !listMail.contains(email)) {
+        info = c.getFullName() + org.exoplatform.calendar.service.Utils.SPACE + 
+          CalendarUtils.OPEN_PARENTHESIS + c.getEmail() + CalendarUtils.CLOSE_PARENTHESIS;
+        if(!CalendarUtils.isEmpty(info) && !listMail.contains(info)) {
           if(sb != null && sb.length() > 0) sb.append(CalendarUtils.COMMA) ;
-          if(email != null) sb.append(email.replace(";", ",")) ;
+          if(info != null) sb.append(info.replace(";", ",")) ;
         }
       }
       if(uiTaskForm != null) {

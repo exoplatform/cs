@@ -54,7 +54,7 @@ import org.exoplatform.webui.form.UIFormRadioBoxInput;
 ) 
 public class UIEventShareTab extends UIFormInputWithActions {
 
-  public static String[] BEAN_FIELD = {"participant","displayParticipant","status"};
+  public static String[] BEAN_FIELD = {"name","email","status"};
   private static String[] ACTION = { "Delete"} ;
   final public static String FIELD_SHARE = "shareEvent".intern() ;
   final public static String FIELD_STATUS = "status".intern() ;
