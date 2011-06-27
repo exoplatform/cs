@@ -114,7 +114,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   protected CalendarSetting calendarSetting_ ;
 
   private String dateTimeFormat_  ;
-  private DateFormat dfFormat = null;
   protected List<String> privateCalendarIds = new ArrayList<String>() ;
   protected List<String> publicCalendarIds = new ArrayList<String>() ;
   protected Calendar instanceTempCalendar_ = null ;
@@ -274,11 +273,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
 
   
   protected String renderDateTimeString(Date date) {
-    if (dfFormat == null) {
-      dfFormat = new SimpleDateFormat(dateTimeFormat_);
-      Calendar cal = (Calendar) calendar_.clone();
-      dfFormat.setCalendar(cal);
-    }
+    DateFormat dfFormat = new SimpleDateFormat(dateTimeFormat_);
+    Calendar cal = (Calendar) calendar_.clone();
+    dfFormat.setCalendar(cal);
     return dfFormat.format(date);
   }
   
