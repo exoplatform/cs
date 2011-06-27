@@ -167,7 +167,11 @@ UICalendarPortlet.prototype.addQuickShowHiddenWithTime = function(obj, type, fro
     	alert(divEventCategory.getAttribute("msg")) ;
     	return;
     }
-    var formater = eXo.cs.DateTimeFormater ;
+		
+		var tmpMenuElement = document.getElementById("tmpMenuElement");
+		if (tmpMenuElement) eXo.webui.UIPopup.hide(tmpMenuElement) ;
+    
+		var formater = eXo.cs.DateTimeFormater ;
     var data = {
     		from:parseInt(fromMilli),
     		fromTime:parseInt(fromMilli),
