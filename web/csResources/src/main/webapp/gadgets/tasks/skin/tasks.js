@@ -338,12 +338,11 @@ eXoEventGadget.prototype.trigger = function(){
   this.settingButton.onmouseout = this.moveOut;
 }
 eXoEventGadget.prototype.moveOver = function(){
-  if(eXoEventGadget.hiddenTimeout) window.clearTimeout(eXoEventGadget.hiddenTimeout);  
-  eXoEventGadget.settingButton.style.display = "block";
+  if(eXoEventGadget.hiddenTimeout) window.clearTimeout(eXoEventGadget.hiddenTimeout);
 }
 eXoEventGadget.prototype.moveOut = function(){
   eXoEventGadget.hiddenTimeout = window.setTimeout(function(){
-    eXoEventGadget.settingButton.style.display = "none";
+    
   },200);
 }
 

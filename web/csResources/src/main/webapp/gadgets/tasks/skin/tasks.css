@@ -90,7 +90,7 @@ table {
   float:right;
   margin-top:2px;
   margin-right:10px;
-  display:none;
+  display:block;
   background:url(/csResources/gadgets/tasks/skin/settings.png) no-repeat;
 }
 .UIGadgetThemes .SettingButton a{
