@@ -97,8 +97,8 @@ public class CalendarSpaceActivityPublisher extends CalendarEventListener {
 
       IdentityManager indentityM = (IdentityManager) PortalContainer.getInstance().getComponentInstanceOfType(IdentityManager.class);
       ActivityManager activityM = (ActivityManager) PortalContainer.getInstance().getComponentInstanceOfType(ActivityManager.class);
-      String spaceId = calendarId.split(CalendarDataInitialize.CALENDAR_ID_PREFIX)[1];
-      Identity spaceIdentity = indentityM.getOrCreateIdentity(SpaceIdentityProvider.NAME, spaceId, false);
+      String prettyNameOfSpace = calendarId.split(CalendarDataInitialize.CALENDAR_ID_PREFIX)[1];
+      Identity spaceIdentity = indentityM.getOrCreateIdentity(SpaceIdentityProvider.NAME, prettyNameOfSpace, false);
       activityM.saveActivity(spaceIdentity, activity);
     } catch (Exception e) {
       if (LOG.isErrorEnabled())
@@ -121,8 +121,8 @@ public class CalendarSpaceActivityPublisher extends CalendarEventListener {
       activity.setTemplateParams(makeActivityParams(event, calendarId, eventType));
       IdentityManager indentityM = (IdentityManager) PortalContainer.getInstance().getComponentInstanceOfType(IdentityManager.class);
       ActivityManager activityM = (ActivityManager) PortalContainer.getInstance().getComponentInstanceOfType(ActivityManager.class);
-      String spaceId = calendarId.split(CalendarDataInitialize.CALENDAR_ID_PREFIX)[1];
-      Identity spaceIdentity = indentityM.getOrCreateIdentity(SpaceIdentityProvider.NAME, spaceId, false);
+      String prettyNameOfSpace = calendarId.split(CalendarDataInitialize.CALENDAR_ID_PREFIX)[1];
+      Identity spaceIdentity = indentityM.getOrCreateIdentity(SpaceIdentityProvider.NAME, prettyNameOfSpace, false);
       activityM.saveActivity(spaceIdentity, activity);
     } catch (Exception e) {
       if (LOG.isErrorEnabled())

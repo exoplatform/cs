@@ -82,8 +82,8 @@ public class ContactSpaceActivityPublisher extends ContactEventListener {
 
       IdentityManager indentityM = (IdentityManager) PortalContainer.getInstance().getComponentInstanceOfType(IdentityManager.class);
       ActivityManager activityM = (ActivityManager) PortalContainer.getInstance().getComponentInstanceOfType(ActivityManager.class);
-      String spaceId = addrBookId.split(ContactDataInitialize.ADDRESSBOOK_ID_PREFIX)[1];
-      Identity spaceIdentity = indentityM.getOrCreateIdentity(SpaceIdentityProvider.NAME, spaceId, false);
+      String prettyNameOfSpace = addrBookId.split(ContactDataInitialize.ADDRESSBOOK_ID_PREFIX)[1];
+      Identity spaceIdentity = indentityM.getOrCreateIdentity(SpaceIdentityProvider.NAME, prettyNameOfSpace, false);
       activityM.saveActivity(spaceIdentity, activity);
     } catch (Exception e) {
       LOG.error("Can not record Activity for space when contact added " + e.getMessage());
@@ -107,8 +107,8 @@ public class ContactSpaceActivityPublisher extends ContactEventListener {
 
       IdentityManager indentityM = (IdentityManager) PortalContainer.getInstance().getComponentInstanceOfType(IdentityManager.class);
       ActivityManager activityM = (ActivityManager) PortalContainer.getInstance().getComponentInstanceOfType(ActivityManager.class);
-      String spaceId = addrBookId.split(ContactDataInitialize.ADDRESSBOOK_ID_PREFIX)[1];
-      Identity spaceIdentity = indentityM.getOrCreateIdentity(SpaceIdentityProvider.NAME, spaceId, false);
+      String prettyNameOfSpace = addrBookId.split(ContactDataInitialize.ADDRESSBOOK_ID_PREFIX)[1];
+      Identity spaceIdentity = indentityM.getOrCreateIdentity(SpaceIdentityProvider.NAME, prettyNameOfSpace, false);
       activityM.saveActivity(spaceIdentity, activity);
     } catch (Exception e) {
       LOG.error("Can not record Activity for space when contact updated " + e.getMessage());

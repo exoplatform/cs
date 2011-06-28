@@ -97,7 +97,7 @@ public class ContactDataInitialize extends SpaceListenerPlugin {
       /* --- end --- */
 
       ContactService contactService = (ContactService) PortalContainer.getComponent(ContactService.class);
-      String addrBookId = ADDRESSBOOK_ID_PREFIX + space.getId();
+      String addrBookId = ADDRESSBOOK_ID_PREFIX + space.getPrettyName();
       AddressBook book = null;
       try {
         book = contactService.getPersonalAddressBook(firstMem, addrBookId);
@@ -108,8 +108,8 @@ public class ContactDataInitialize extends SpaceListenerPlugin {
       if (book == null) {
         book = new AddressBook();
         book.setId(addrBookId);
-        book.setName(space.getName() + " [sharing for Space]");
-        book.setDescription("AddressBook for Social Space: " + space.getName());
+        book.setName(space.getDisplayName() + " [sharing for Space]");
+        book.setDescription("AddressBook for Social Space: " + space.getDisplayName());
         book.setEditPermissionGroups(new String[] { space.getGroupId() });
         book.setViewPermissionGroups(new String[] { space.getGroupId() });
         contactService.saveAddressBook(firstMem, book, true);

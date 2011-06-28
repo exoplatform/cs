@@ -72,7 +72,7 @@ public class CalendarDataInitialize extends SpaceListenerPlugin {
 
     if (!portletName.equals(event.getSource())) {
       /*
-       * this function is called only if Calendar Portlet is added to Social Space. Hence, if the application added to space do not have the name as configured, we will be out now.
+       * this function is called only if Calendar Portlet is added to Social Space. Hence, if the application added to space do not have the name as configured, we will do nothing.
        */
       return;
     }
@@ -80,7 +80,7 @@ public class CalendarDataInitialize extends SpaceListenerPlugin {
     try {
       Space space = event.getSpace();
       CalendarService calService = (CalendarService) PortalContainer.getInstance().getComponentInstanceOfType(CalendarService.class);
-      String calendarId = CALENDAR_ID_PREFIX + space.getId();
+      String calendarId = CALENDAR_ID_PREFIX + space.getPrettyName();
       String username = space.getGroupId();
       Calendar calendar = null;
       try {
@@ -93,7 +93,7 @@ public class CalendarDataInitialize extends SpaceListenerPlugin {
         calendar.setId(calendarId);
         calendar.setPublic(false);
         calendar.setGroups((new String[] { space.getGroupId() }));
-        calendar.setName(space.getName());
+        calendar.setName(space.getDisplayName());
         calendar.setEditPermission(new String[] { space.getGroupId() + SLASH_COLON + ANY });
         calendar.setCalendarOwner(username);
         calService.savePublicCalendar(calendar, true, username);
