@@ -36,7 +36,7 @@
     <gatein.wci.version>2.0.2-GA</gatein.wci.version>
     <exo.tool.framework.junit.version>1.2.0</exo.tool.framework.junit.version>
     <org.exoplatform.exopackage.version>1.1.2</org.exoplatform.exopackage.version>
-    <version.chromattic>1.1.0-beta5</version.chromattic>    
+    <version.chromattic>1.1.0-beta6</version.chromattic>    
      <!--commons dependencies-->
      <org.exoplatform.commons.version>1.1.0-Beta02-SNAPSHOT</org.exoplatform.commons.version>	      
     <org.hsqldb.version>2.0.0</org.hsqldb.version>
