@@ -531,7 +531,7 @@ public class CalendarUtils {
   public static String getCalendarURL() throws Exception {
     PortalRequestContext pContext = Util.getPortalRequestContext();
     String url = pContext.getRequest().getRequestURL().toString();
-    String selectedNode = Util.getUIPortal().getSelectedNode().getUri() ;
+    String selectedNode = Util.getUIPortal().getSelectedUserNode().getURI() ;
     String portalName = pContext.getPortalOwner();
     if (url.indexOf(portalName) > 0) {
       if(url.indexOf(portalName + "/" + selectedNode) < 0){
