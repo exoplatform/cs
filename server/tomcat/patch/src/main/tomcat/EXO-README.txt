@@ -165,8 +165,14 @@ All those accounts have the default password "gtn".
 ===========
 - 2.2.0-GA
 
+
 ** Bug
+    * [CS-4541] - [Contact] Invalid contact list display when move contact
+    * [CS-4560] - Calendar: Show exception when import Invalid file type or format
+    * [CS-4649] - Mail - Can not get and send mail with exoplatform.vn server
     * [CS-4665] - Password require when send mail
+    * [CS-4667] - The popup menu is not usually shown valid when right click at one mouse point
+    * [CS-4688] - Unexpected error message display when click calendar settings
     * [CS-4733] - Cannot load and merge the bundle
     * [CS-4736] - [chatbar] Contact list is not shown after changing status to online
     * [CS-4737] - [chatbar] user at "Free to chat" can not do some permitted actions
@@ -179,6 +185,7 @@ All those accounts have the default password "gtn".
     * [CS-4784] - Calendar's left panel always disappears after some actions
     * [CS-4786] - Closing search in calendar changes the displayed week
     * [CS-4789] - Contact - View a contact - link of home website is invalid
+    * [CS-4792] - Calendar - Date format is not used when displaying search results
     * [CS-4793] - IncompatibleClassChangeError when adding a calendar event in space
     * [CS-4794] - Mail - Can not get mail
     * [CS-4805] - Invalid message display when delete a calendar
@@ -196,9 +203,11 @@ All those accounts have the default password "gtn".
     * [CS-4846] - Job starts before loading some nodetypes
     * [CS-4847] - [MAIL] Print message : only the first page is printed
     * [CS-4852] - [Mail] need to enter password when user get mail for the account without check on "save password"
+    * [CS-4853] - Mail service is unstably:Can not get mail and stop server.
     * [CS-4854] - "Refresh News" on RSS portlet is not translated in French
     * [CS-4858] - [CS-calendar] the deleted user still display on the share list of the shared calendar
     * [CS-4866] - [CS-mail] Don't show search icon when search user on To field on Chromium
+    * [CS-4867] - [CS-mail] can not send mail when check return receipt
     * [CS-4869] - Offline messages are marked with current date
     * [CS-4870] - Untraslated labels in sharing calendar
     * [CS-4872] - Untranslated label in the search of agenda
@@ -213,14 +222,47 @@ All those accounts have the default password "gtn".
     * [CS-4917] - [CS-Agenda] don't keep the checked reminder by email and show notification popup
     * [CS-4918] - Can not add a contact with a long mail address in the address book
     * [CS-4935] - Allday repeating event doesn't show in week view
+    * [CS-4938] - Event's from and to datetime in quick add event in dayview alway set to today
     * [CS-4943] - [CS] Show "Email address is invalid" send mail from contact app
     * [CS-4947] - Can not add daily repeated event that never end
     * [CS-4949] - CLONE - Wrong date availability in schedule tab in add/edit event form 
-    * [CS-4951] - [CS-calendar] can not re-size time of event/task on IE7
     * [CS-4957] - [social-integration] Added event is not listed in activities stream
     * [CS-4962] - [PLF] Unknown error when exporting all address books
     * [CS-4964] -  Repeat event UI error when add event 
     * [CS-4975] - SetCurrentIdentityFilter causes ChatBar to crash
+    * [CS-4988] - CS - Mail - Exception when viewing attached file
+    * [CS-4990] - Bad french traduction in portlet Address book in bloc Contact details
+    * [CS-5004] - [CS] Javascript error shown when Selenium script is running more than 5 times (standalone only) 
+    * [CS-5015] - [CS][Calendar] Hidden Calendar on left menu are checked automatically when righ clicking on an event/task to view
+    * [CS-5016] - [CS][Calendar] Reminder popup isn't shown
+    * [CS-5017] - Mail: Do not show form to select user for delegation
+    * [CS-5018] - UI error with Repeating event form
+    * [CS-5021] - [CS][Calendar] Reminder mail isn't sent after configuring Reminder setting for task/event
+    * [CS-5027] - [IE7] Calendar - view Week - event card located in wrong time range
+    * [CS-5032] - [CS][Calendar][Search] Can not search Task/Event with number (0,1,2,...) in Search box 
+    * [CS-5034] - [CS][Calendar] Javascript error - mini context menu did not disappear after right clicking to Add/Edit/Export/Delete task or event
+    * [CS-5037] - [CS][Chat] no invitation window shown after adding contact into Contact list
+    * [CS-5038] - [CS] This portlet encountered an error and could not be displayed
+    * [CS-5050] - [CS][Mail] Abnormal case caused Unknown Error - Exception occurred when trying to stop getting mail
+    * [CS-5053] - CS - Mail - Filter {With Attachment} does not work
+    * [CS-5065] - CLONE - In Calendar, the identifier is displayed in the list of participants of an event  instead of name, surname and mail
+    * [CS-5081] - Error with Calendar list when configure My tasks gadget in Intranet Home page
+    * [CS-5106] - Chat - exception when add all contact at once
+
+** Improvement
+    * [CS-2983] - should show warning message when create event with invitation mail but don't enter email address yet
+    * [CS-4824] - Improve repeating event rule
+    * [CS-4834] - only contacts selected on the current page are added.
+    * [CS-4865] - CLONE - Do not display left panes of Calendar in spaces
+    * [CS-4878] - Highlight today not unique enough in Mac then it's hard to know what is date today  
+    * [CS-4961] - Upload file when select, no need to click to upload button 
+    * [CS-5059] - Navigation API - new GateIn Implementation
+
+** New Feature
+    * [CS-756] - Subscribe to remote calendar
+    * [CS-4370] - "Leave message on server" mail options
+    * [CS-4860] - define a service that allowed all settings to be preconfigured by admins and possibly set as not modifiable by users
+    * [CS-5026] - Show  event on agenda when tasks/events begin at a day and end at another day. 
 
 - 2.2.0-Beta02
 
