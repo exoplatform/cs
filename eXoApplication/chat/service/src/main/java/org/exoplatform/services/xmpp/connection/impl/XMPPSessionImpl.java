@@ -2117,7 +2117,7 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
       if (c == lc) {
         sb.append(c);
       } else {
-        sb.append("openfire").append(lc);
+        sb.append("s220w748s8xn3btua").append(lc);
       }
     }
     return sb.toString();
@@ -2129,10 +2129,10 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
    * @return
    */
   public static String decodeUsername(String username) {
-    if (username == null || username.indexOf("openfire") < 0) {
+    if (username == null || username.indexOf("s220w748s8xn3btua") < 0) {
       return username;
     }
-    String[] tokens = username.split("openfire");
+    String[] tokens = username.split("s220w748s8xn3btua");
     StringBuilder sb = new StringBuilder("");
     for (int i = 0; i < tokens.length; i++) {
       if (i > 0 && tokens[i].length() > 0) {
