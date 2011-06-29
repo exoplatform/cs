@@ -29,17 +29,17 @@ import org.exoplatform.services.xmpp.connection.impl.XMPPSessionImpl;
 public class UtilsTest extends TestCase {
 
   public void testEncodeUsername() {
-    assertEquals("openfirejohn", XMPPSessionImpl.encodeUserName("John"));
-    assertEquals("jopenfireohn", XMPPSessionImpl.encodeUserName("jOhn"));
-    assertEquals("joopenfirehn", XMPPSessionImpl.encodeUserName("joHn"));
-    assertEquals("johopenfiren", XMPPSessionImpl.encodeUserName("johN"));
+    assertEquals("s220w748s8xn3btuajohn", XMPPSessionImpl.encodeUserName("John"));
+    assertEquals("js220w748s8xn3btuaohn", XMPPSessionImpl.encodeUserName("jOhn"));
+    assertEquals("jos220w748s8xn3btuahn", XMPPSessionImpl.encodeUserName("joHn"));
+    assertEquals("johs220w748s8xn3btuan", XMPPSessionImpl.encodeUserName("johN"));
   }
 
   public void testDecodeUsername() {
-    assertEquals("John", XMPPSessionImpl.decodeUsername("openfirejohn"));
-    assertEquals("jOhn", XMPPSessionImpl.decodeUsername("jopenfireohn"));
-    assertEquals("joHn", XMPPSessionImpl.decodeUsername("joopenfirehn"));
-    assertEquals("johN", XMPPSessionImpl.decodeUsername("johopenfiren"));
+    assertEquals("John", XMPPSessionImpl.decodeUsername("s220w748s8xn3btuajohn"));
+    assertEquals("jOhn", XMPPSessionImpl.decodeUsername("js220w748s8xn3btuaohn"));
+    assertEquals("joHn", XMPPSessionImpl.decodeUsername("jos220w748s8xn3btuahn"));
+    assertEquals("johN", XMPPSessionImpl.decodeUsername("johs220w748s8xn3btuan"));
   }
 
 }
