@@ -36,8 +36,6 @@ function getModule(params) {
   module.eXoApplication.calendar =
     new Project("org.exoplatform.cs", "exo.cs.eXoApplication.calendar.webapp", "war", module.version).
     addDependency(new Project("org.exoplatform.cs", "exo.cs.eXoApplication.calendar.service", "jar",  module.version)).
-    addDependency(new Project("rome", "rome", "jar", "${rome.version}")).
-    addDependency(new Project("jdom", "jdom", "jar", "${jdom.version}")).
     addDependency(new Project("ical4j", "ical4j", "jar", "${ical4j.version}")).
     addDependency(new Project("org.apache.jackrabbit", "jackrabbit-webdav", "jar", "${org.apache.jackrabbit.version}")).
     addDependency(new Project("org.apache.jackrabbit", "jackrabbit-jcr-commons", "jar", "${org.apache.jackrabbit.version}"));
@@ -67,9 +65,7 @@ addDependency(new Project("org.exoplatform.ecms", "exo-ecms-core-parser", "jar",
   	//addDependency(new Project("org.exoplatform.cs", "exo.cs.eXoApplication.organization.webapp", "war", module.version)).
     addDependency(new Project("jivesoftware", "smack", "jar", "${jivesoftware.smack.version}")).
     addDependency(new Project("jivesoftware", "smackx", "jar", "${jivesoftware.smackx.version}")).
-    addDependency(new Project("org.jcrom", "jcrom", "jar", "${jcrom.version}")).
-    addDependency(new Project("commons-fileupload", "commons-fileupload", "jar", "${commons-fileupload.version}")).
-    addDependency(new Project("commons-io", "commons-io", "jar", "${commons-io.version}")));
+    addDependency(new Project("org.jcrom", "jcrom", "jar", "${jcrom.version}")));
   module.eXoApplication.chat.deployName = "chat";
   
   module.eXoApplication.chatbar =
