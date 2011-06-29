@@ -39,6 +39,7 @@ import javax.ws.rs.core.UriInfo;
 
 import org.exoplatform.common.http.HTTPStatus;
 import org.exoplatform.commons.utils.PageList;
+import org.exoplatform.services.authentication.rest.RESTAuthenticator;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
@@ -89,6 +90,7 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
   @Path("/user/find-all/")
   @Produces(MediaType.APPLICATION_JSON)
   public Response findUsers(@Context UriInfo uriInfo, @QueryParam("username") String username, @QueryParam("firstname") String firstname, @QueryParam("lastname") String lastname, @QueryParam("email") String email, @QueryParam("fromLoginDate") String fromLoginDate, @QueryParam("toLogindate") String toLoginDate) {
+    username = RESTAuthenticator.decodeUsername(username);
     try {
       // TODO : now returned all founded user need be carefully then using wildcard (*)
       Query query = new Query();
@@ -239,6 +241,7 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
   @Path("/user/info/{username}/")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getUser(@PathParam("username") String username) {
+    username = RESTAuthenticator.decodeUsername(username);
     try {
       User user = userHandler.findUserByName(username);
       if (user == null) {

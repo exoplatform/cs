@@ -102,8 +102,8 @@ import org.jivesoftware.smack.packet.IQ;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.packet.Presence;
-import org.jivesoftware.smack.packet.XMPPError;
 import org.jivesoftware.smack.packet.Presence.Type;
+import org.jivesoftware.smack.packet.XMPPError;
 import org.jivesoftware.smackx.Form;
 import org.jivesoftware.smackx.FormField;
 import org.jivesoftware.smackx.ReportedData;
@@ -123,10 +123,10 @@ import org.jivesoftware.smackx.muc.Occupant;
 import org.jivesoftware.smackx.muc.RoomInfo;
 import org.jivesoftware.smackx.muc.SubjectUpdatedListener;
 import org.jivesoftware.smackx.packet.DiscoverInfo;
-import org.jivesoftware.smackx.packet.DiscoverItems;
-import org.jivesoftware.smackx.packet.MUCUser;
 import org.jivesoftware.smackx.packet.DiscoverInfo.Identity;
+import org.jivesoftware.smackx.packet.DiscoverItems;
 import org.jivesoftware.smackx.packet.DiscoverItems.Item;
+import org.jivesoftware.smackx.packet.MUCUser;
 import org.jivesoftware.smackx.packet.MUCUser.Invite;
 import org.jivesoftware.smackx.search.UserSearchManager;
 
@@ -226,6 +226,8 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
   private String                            status_                = DefaultPresenceStatus.DEFAULT_STATUS;
 
   protected XMPPSessionImpl(String username, String password, final UserInfoService organization, final ContinuationServiceDelegate delegate, final HistoryImpl history, final ResourceBundle rb) throws XMPPException {
+    this.username_ = username;
+    username = encodeUserName(username);
     // 17/06/2010 add start
     if (beanList == null)
       beanList = new ArrayList<OccupantBean>();
@@ -238,7 +240,6 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
     this.uiStateData_ = new UIStateDataBean();
     this.rb_ = rb;
     this.connection_ = new XMPPConnection(XMPPMessenger.getConnectionConfiguration());
-    this.username_ = username;
     try {
       connection_.connect();
       connection_.login(username, password, null);
@@ -291,11 +292,16 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
               packet.setPacketID(CodingUtils.encodeToHex(UUID.randomUUID().toString()));
             HistoricalMessage historyMsg = HistoryUtils.messageToHistoricalMessage((Message) packet);
             MessageBean message = TransformUtils.messageToBean(historyMsg);
+            if(Message.Type.groupchat.name().equals(message.getType())){
+              message.setFrom(decodeUsername(message.getFrom()));
+            }
             /*
              * history.addHistoricalMessage(HistoryUtils.messageToHistoricalMessage((Message) packet), sessionProvider);
              */
             // Fix for CS-3246: contact list in public room is empty in special case
             // Because persistence operations are massive -> much delay time -> bug ->to solve by using cache
+            historyMsg.setFrom(decodeUsername(historyMsg.getFrom()));
+            historyMsg.setTo(decodeUsername(historyMsg.getTo()));
             history_.logMessage(historyMsg);
             EventsBean eventsBean = new EventsBean();
             eventsBean.addMessage(message);
@@ -589,6 +595,7 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
    * {@inheritDoc}
    */
   public boolean addTransport(Transport transport, String remoteUser, String remotePassword, boolean autoLogin) {
+    remoteUser = encodeUserName(remoteUser);
     if (!isTransportAvailable(transport) && isTransportSupported(transport)) {
       try {
         XMPPConnectionUtils.registerUser(connection_, transport.getServiceName(), remoteUser, remotePassword);
@@ -610,6 +617,7 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
    * {@inheritDoc}
    */
   public void addBuddy(String username, String nickname, String group) throws XMPPException {
+    username = encodeUserName(username);
     String jid = username + "@" + connection_.getServiceName();
     Roster roster = connection_.getRoster();
     roster.createEntry(jid, nickname, new String[] { group });
@@ -621,6 +629,7 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
    * {@inheritDoc}
    */
   public void askForSubscription(String username, String nickname) {
+    username = encodeUserName(username);
     String jid = username + "@" + connection_.getServiceName();
     Presence precense = new Presence(Presence.Type.subscribe);
     precense.setTo(jid);
@@ -633,6 +642,7 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
    * {@inheritDoc}
    */
   public RosterEntry getBuddy(String name) {
+    name = encodeUserName(name);
     String jid = name + "@" + connection_.getServiceName();
     return connection_.getRoster().getEntry(jid);
   }
@@ -641,6 +651,7 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
    * {@inheritDoc}
    */
   public void updateBuddy(String username, String nickname, String group) throws XMPPException {
+    username = encodeUserName(username);
     String jid = username + "@" + connection_.getServiceName();
     Roster roster = connection_.getRoster();
     RosterEntry entry = roster.getEntry(jid);
@@ -802,6 +813,7 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
    * {@inheritDoc}
    */
   public UserInfo getUserInfo(String userID) {
+    userID = decodeUsername(userID);
     return organization_.getUserInfo(userID);
   }
 
@@ -852,6 +864,7 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
    * {@inheritDoc}
    */
   public boolean removeBuddy(String name) throws XMPPException {
+    name = encodeUserName(name);
     String jid = name + "@" + connection_.getServiceName();
     Roster buddies = connection_.getRoster();
     for (RosterEntry re : buddies.getEntries()) {
@@ -916,6 +929,7 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
    * {@inheritDoc}
    */
   public void sendMessage(Message message) {
+    message.setFrom(encodeUserName(message.getFrom()));
     if (connection_.isConnected()) {
       connection_.sendPacket(message);
     }
@@ -928,7 +942,7 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
     MultiUserChat chat = multiUserChatManager.getMultiUserChat(room);
     Message message = chat.createMessage();
     message.setBody(body);
-    message.setFrom(getUsername());
+    message.setFrom(encodeUserName(getUsername()));
     chat.sendMessage(message);
   }
 
@@ -945,6 +959,7 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
    * {@inheritDoc}
    */
   public void subscribeUser(String user) {
+    user = encodeUserName(user);
     String jid = user + "@" + connection_.getServiceName();
     Presence precense = new Presence(Presence.Type.subscribed);
     precense.setTo(jid);
@@ -955,6 +970,7 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
    * {@inheritDoc}
    */
   public void subscribeUser(String toUser, String serviceName) {
+    toUser = encodeUserName(toUser);
     Presence precense = new Presence(Presence.Type.subscribed);
     precense.setTo(toUser + "@" + serviceName);
     sendPresence(precense);
@@ -964,6 +980,7 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
    * {@inheritDoc}
    */
   public void unsubscribeUser(String user) {
+    user = encodeUserName(user);
     String jid = user + "@" + connection_.getServiceName();
     Presence precense = new Presence(Presence.Type.unsubscribed);
     precense.setTo(jid);
@@ -974,6 +991,7 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
    * {@inheritDoc}
    */
   public void unsubscribeUser(String toUser, String serviceName) {
+    toUser = encodeUserName(toUser);
     Presence precense = new Presence(Presence.Type.unsubscribed);
     precense.setTo(toUser + "@" + serviceName);
     sendPresence(precense);
@@ -1009,6 +1027,7 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
     MultiUserChat chat = new MultiUserChat(connection_, roomJID);
     if (nickname == null)
       nickname = username_;
+    nickname = encodeUserName(nickname);
     chat.create(nickname);
     multiUserChatManager.addMultiUserChat(chat);
     addListeners(chat);
@@ -1214,6 +1233,7 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
   // 17/06/2010 add start
   @Override
   public void addFullUserNames(String userName, String fullUserName) {
+    userName = encodeUserName(userName);
     OccupantBean bean = new OccupantBean();
     bean.setFullName(fullUserName);
     bean.setNick(userName);
@@ -1241,8 +1261,10 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
     }
     // 17/06/2010 add end
 
-    if (nickname == null)
+    if (nickname == null) {
       nickname = username_;
+    }
+    nickname = encodeUserName(nickname);
     MultiUserChat chat = getMultiUserChat(room);
     if (chat == null) {
       String roomJID = validateRoomJID(room);
@@ -1374,7 +1396,7 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
         occupantBean.setJid(occupant.getJid());
         occupantBean.setNick(occupant.getNick());
         occupantBean.setRole(occupant.getRole());
-        UserInfo userInfo = organization.getUserInfo(occupant.getNick());
+        UserInfo userInfo = organization.getUserInfo(decodeUsername(occupant.getNick()));
         occupantBean.setFullName(userInfo.getFirstName() + " " + userInfo.getLastName());
         occupants.add(occupantBean);
       }
@@ -1393,6 +1415,7 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
    * {@inheritDoc}
    */
   public void declineRoom(String room, String inviter, String reason) {
+    inviter = encodeUserName(inviter);
     String roomJID = validateRoomJID(room);
     String inviterJID = inviter + "@" + connection_.getServiceName();
     MultiUserChat.decline(connection_, roomJID, inviterJID, reason);
@@ -1402,6 +1425,7 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
    * {@inheritDoc}
    */
   public Boolean inviteToRoom(String room, String invitee, String reason) throws XMPPException {
+    invitee = encodeUserName(invitee);
     String inviteeJID = invitee + "@" + connection_.getServiceName();
     MultiUserChat chat = getMultiUserChat(room);
     if (chat != null) {
@@ -1431,6 +1455,7 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
    * {@inheritDoc}
    */
   public void manageRole(String room, String nickname, String role, String command) throws XMPPException {
+    nickname = encodeUserName(nickname);
     MultiUserChat chat = getMultiUserChat(room);
     if (chat == null)
       throw new XMPPException("Chat not found", new XMPPError(XMPPError.Condition.item_not_found));
@@ -1459,6 +1484,7 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
    * {@inheritDoc}
    */
   public void kickUser(String room, String nickname, String reason) throws XMPPException {
+    nickname = encodeUserName(nickname);
     MultiUserChat chat = getMultiUserChat(room);
     if (chat == null)
       throw new XMPPException("Chat not found", new XMPPError(XMPPError.Condition.item_not_found));
@@ -1469,6 +1495,7 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
    * {@inheritDoc}
    */
   public void banUser(String room, String nickname, String reason) throws XMPPException {
+    nickname = encodeUserName(nickname);
     MultiUserChat chat = getMultiUserChat(room);
     if (chat == null)
       throw new XMPPException("Chat not found", new XMPPError(XMPPError.Condition.item_not_found));
@@ -1486,6 +1513,7 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
    * {@inheritDoc}
    */
   public void changeNickname(String room, String nickname) throws XMPPException {
+    nickname = encodeUserName(nickname);
     MultiUserChat chat = getMultiUserChat(room);
     if (chat != null && nickname != null)
       chat.changeNickname(nickname);
@@ -1508,6 +1536,7 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
    * {@inheritDoc}
    */
   public void manageAffiliation(String room, String nickname, String affiliation, String command) throws XMPPException {
+    nickname = encodeUserName(nickname);
     MultiUserChat chat = getMultiUserChat(room);
     if (chat == null)
       throw new XMPPException("Chat not found", new XMPPError(XMPPError.Condition.item_not_found));
@@ -1559,6 +1588,7 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
    * @param isRoom true if file send to the group chat
    */
   public void sendFile(String requestor, String path, String description, boolean isRoom) throws Exception {
+    requestor = encodeUserName(requestor);
     if (!isRoom) {
       contFileTransfers = 1;
       String fullJID = connection_.getRoster().getPresence(requestor + "@" + connection_.getServiceName()).getFrom();
@@ -2065,6 +2095,52 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
         e.printStackTrace();
     }
     return roomJID;
+  }
+  
+  /**
+   * Encoding sensitive user names to bypass the limitation in only insensitive user names of Openfire
+   * @param username
+   * @return
+   */
+  public static String encodeUserName(String username) {
+    if (username == null) {
+      return "";
+    }
+    String lusername = username.toLowerCase();
+    if (username.equals(lusername)) {
+      return username;
+    }
+    StringBuilder sb = new StringBuilder("");
+    for (int i = 0; i < username.length(); i++) {
+      char c = username.charAt(i);
+      char lc = lusername.charAt(i);
+      if (c == lc) {
+        sb.append(c);
+      } else {
+        sb.append("openfire").append(lc);
+      }
+    }
+    return sb.toString();
+  }
+  
+  /**
+   * Decoding sensitive user names to bypass the limitation in only insensitive user names of Openfire
+   * @param username
+   * @return
+   */
+  public static String decodeUsername(String username) {
+    if (username == null || username.indexOf("openfire") < 0) {
+      return username;
+    }
+    String[] tokens = username.split("openfire");
+    StringBuilder sb = new StringBuilder("");
+    for (int i = 0; i < tokens.length; i++) {
+      if (i > 0 && tokens[i].length() > 0) {
+        tokens[i] = tokens[i].substring(0, 1).toUpperCase() + tokens[i].substring(1);
+      }
+      sb.append(tokens[i]);
+    }
+    return sb.toString();
   }
 
   /**

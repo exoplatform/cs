@@ -291,12 +291,13 @@ public class HistoryImpl implements Startable {
         if (conversation != null) {
           conversation.addMessage(historicalMessage);
           conversation.setLastActiveDate(date);
-          updateConversation(conversationNode, conversation, usernameTo);
+          updateConversation(conversationNode, conversation);
         } else {
           conversationId = CodingUtils.encodeToHex(UUID.randomUUID().toString());
           createNewConversation(conversationNode, participantsNode, conversationId, date, historicalMessage);
         }
         conversationNode.getSession().save();
+        participantsNode.getSession().save();
       } catch (Exception e) {
         // TODO: find why exception happens
         // e.printStackTrace();
@@ -690,10 +691,9 @@ public class HistoryImpl implements Startable {
    * 
    * @param conversationsNode the node
    * @param conversation the conversation
-   * @param username the username
    * @throws Exception 
    */
-  private void updateConversation(Node conversationsNode, Conversation conversation, String username) throws Exception {
+  private void updateConversation(Node conversationsNode, Conversation conversation) throws Exception {
     try {
       if (conversationsNode.hasNode(conversation.getConversationId())) {
         Node node = conversationsNode.getNode(conversation.getConversationId());
