@@ -32,6 +32,7 @@ import org.exoplatform.services.xmpp.bean.HostedRoomBean;
 import org.exoplatform.services.xmpp.bean.MessageBean;
 import org.exoplatform.services.xmpp.bean.PresenceBean;
 import org.exoplatform.services.xmpp.bean.SearchResultsBean;
+import org.exoplatform.services.xmpp.connection.impl.XMPPSessionImpl;
 import org.exoplatform.services.xmpp.history.HistoricalMessage;
 import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.RosterEntry;
@@ -86,7 +87,7 @@ public class TransformUtils {
         groupNames.add(group.getName());
       }
       contactBean.setGroups(groupNames);
-      contactBean.setUser(re.getUser());
+      contactBean.setUser(XMPPSessionImpl.decodeUsername(re.getUser()));
       contactBean.setPresence(presenceToBean(roster.getPresence(re.getUser())));
       list.add(contactBean);
     }
