@@ -670,7 +670,7 @@ public class CalendarUtils {
   }
   
   public static String getGroupCalendarName(String groupName, String calendarName) {
-    return groupName + MINUS + calendarName;
+    return calendarName + Utils.SPACE + OPEN_PARENTHESIS + groupName + CLOSE_PARENTHESIS;
   }
 
   public static List<SelectItem> getCalendarCategoryOption() throws Exception {
