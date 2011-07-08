@@ -240,8 +240,12 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
           con.setFullName(c.getFullName()) ;
           if (!uiForm.checkedList_.contains(c.getId())) uiForm.checkedList_.add(c.getId()) ;
         }
-        info = c.getFullName() + org.exoplatform.calendar.service.Utils.SPACE + 
-          CalendarUtils.OPEN_PARENTHESIS + c.getEmail() + CalendarUtils.CLOSE_PARENTHESIS;
+        if(uiInvitationForm != null) {
+          info = c.getFullName() + org.exoplatform.calendar.service.Utils.SPACE + 
+            CalendarUtils.OPEN_PARENTHESIS + c.getEmail() + CalendarUtils.CLOSE_PARENTHESIS;
+        } else {
+          info = c.getEmail();
+        }
         if(!CalendarUtils.isEmpty(info) && !listMail.contains(info)) {
           if(sb != null && sb.length() > 0) sb.append(CalendarUtils.COMMA) ;
           if(info != null) sb.append(info.replace(";", ",")) ;
