@@ -1616,7 +1616,6 @@ public class UIMessageList extends UIForm {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       uiMessageList.init(accountId);
       uiPortlet.findFirstComponentOfType(UIFetchingBar.class).setIsShown(false);
-
       String username = uiPortlet.getCurrentUser();
       String folderId = uiPortlet.findFirstComponentOfType(UIFolderContainer.class).getSelectedFolder();
       MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
@@ -1704,7 +1703,7 @@ public class UIMessageList extends UIForm {
       } catch(Exception e) {
         
       }
-
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgList);
     }
   }
 
