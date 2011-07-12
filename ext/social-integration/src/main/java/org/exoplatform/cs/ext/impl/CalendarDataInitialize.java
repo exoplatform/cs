@@ -80,7 +80,7 @@ public class CalendarDataInitialize extends SpaceListenerPlugin {
     try {
       Space space = event.getSpace();
       CalendarService calService = (CalendarService) PortalContainer.getInstance().getComponentInstanceOfType(CalendarService.class);
-      String calendarId = CALENDAR_ID_PREFIX + space.getPrettyName();
+      String calendarId = CALENDAR_ID_PREFIX + space.getId();
       String username = space.getGroupId();
       Calendar calendar = null;
       try {

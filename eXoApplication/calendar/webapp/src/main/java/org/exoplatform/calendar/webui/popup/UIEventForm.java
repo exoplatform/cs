@@ -71,6 +71,8 @@ import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItem;
 import org.exoplatform.webui.core.model.SelectItemOption;
+import org.exoplatform.webui.core.model.SelectOption;
+import org.exoplatform.webui.core.model.SelectOptionGroup;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
@@ -80,6 +82,7 @@ import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormRadioBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
+import org.exoplatform.webui.form.UIFormSelectBoxWithGroups;
 import org.exoplatform.webui.form.UIFormTabPane;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
@@ -367,13 +370,41 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     uiAttenderTab.calendar_.setTime(time) ;
   }
 
+  private boolean setCalendarOptionOfSpaceAsSelected(String spaceId, List<? extends SelectItem> items, UIFormSelectBoxWithGroups selectBoxWithGroups) {
+    if (spaceId == null || items == null) {
+      return false;
+    }
+    for (SelectItem si : items) {
+      if (si instanceof SelectOption) {
+        SelectOption so = (SelectOption) si;
+        // find Calendar option of space of which value end with space id.
+        if (so.getValue().endsWith(spaceId)) {
+          selectBoxWithGroups.setValue(so.getValue());
+          return true;
+        }
+      } else if (si instanceof SelectOptionGroup) {
+        if (setCalendarOptionOfSpaceAsSelected(spaceId, ((SelectOptionGroup) si).getOptions(), selectBoxWithGroups)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+  
   public void update(String calType, List<SelectItem> options) throws Exception{
     UIEventDetailTab uiEventDetailTab = getChildById(TAB_EVENTDETAIL) ;
+    UIFormSelectBoxWithGroups selectBoxWithGroups = uiEventDetailTab.getUIFormSelectBoxGroup(UIEventDetailTab.FIELD_CALENDAR);
     if(options != null) {
-      uiEventDetailTab.getUIFormSelectBoxGroup(UIEventDetailTab.FIELD_CALENDAR).setOptions(options) ;
+      selectBoxWithGroups.setOptions(options) ;
     }else {
-      uiEventDetailTab.getUIFormSelectBoxGroup(UIEventDetailTab.FIELD_CALENDAR).setOptions(getCalendars()) ;
+      selectBoxWithGroups.setOptions(getCalendars()) ;
     }
+    
+    String spaceId = getAncestorOfType(UICalendarPortlet.class).getSpaceId();
+    if (spaceId != null) {
+      setCalendarOptionOfSpaceAsSelected(spaceId, selectBoxWithGroups.getOptions(), selectBoxWithGroups);
+    }
+    
     calType_ = calType ;
   }
   private List<SelectItem> getCalendars() throws Exception {

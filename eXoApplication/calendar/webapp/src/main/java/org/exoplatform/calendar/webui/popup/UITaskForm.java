@@ -56,11 +56,14 @@ import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItem;
 import org.exoplatform.webui.core.model.SelectItemOption;
+import org.exoplatform.webui.core.model.SelectOption;
+import org.exoplatform.webui.core.model.SelectOptionGroup;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
+import org.exoplatform.webui.form.UIFormSelectBoxWithGroups;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTabPane;
 import org.exoplatform.webui.form.ext.UIFormComboBox;
@@ -664,13 +667,41 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     eventDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_PRIORITY).setValue(value) ;
   }
 
+  private boolean setCalendarOptionOfSpaceAsSelected(String spaceId, List<? extends SelectItem> items, UIFormSelectBoxWithGroups selectBoxWithGroups) {
+    if (spaceId == null || items == null) {
+      return false;
+    }
+    for (SelectItem si : items) {
+      if (si instanceof SelectOption) {
+        SelectOption so = (SelectOption) si;
+        // find Calendar option of space of which value end with space id.
+        if (so.getValue().endsWith(spaceId)) {
+          selectBoxWithGroups.setValue(so.getValue());
+          return true;
+        }
+      } else if (si instanceof SelectOptionGroup) {
+        if (setCalendarOptionOfSpaceAsSelected(spaceId, ((SelectOptionGroup) si).getOptions(), selectBoxWithGroups)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+  
   public void update(String calType, List<SelectItem> options) throws Exception{
     UITaskDetailTab uiTaskDetailTab = getChildById(TAB_TASKDETAIL) ;
+    UIFormSelectBoxWithGroups selectBoxWithGroups = uiTaskDetailTab.getUIFormSelectBoxGroup(UITaskDetailTab.FIELD_CALENDAR);
     if(options != null) {
-      uiTaskDetailTab.getUIFormSelectBoxGroup(UITaskDetailTab.FIELD_CALENDAR).setOptions(options) ;
+      selectBoxWithGroups.setOptions(options) ;
     }else {
-      uiTaskDetailTab.getUIFormSelectBoxGroup(UITaskDetailTab.FIELD_CALENDAR).setOptions(getCalendars()) ;
+      selectBoxWithGroups.setOptions(getCalendars()) ;
     }
+    
+    String spaceId = getAncestorOfType(UICalendarPortlet.class).getSpaceId();
+    if (spaceId != null) {
+      setCalendarOptionOfSpaceAsSelected(spaceId, selectBoxWithGroups.getOptions(), selectBoxWithGroups);
+    }
+    
     calType_ = calType ;
   }
 
