@@ -8,15 +8,15 @@
   </parent>
   <groupId>org.exoplatform.cs</groupId>
   <artifactId>cs</artifactId>
-  <version>2.2.0-GA</version>
+  <version>2.2.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>eXo Collaboration</name>
   <description>eXo Collaboration made of Address Book, Calendar, Mail and Chat.</description>
   <url>http://wiki.exoplatform.org/xwiki/bin/view/CS/</url>
   <scm>
-   <connection>scm:svn:http://svn.exoplatform.org/projects/cs/tags/2.2.0-GA</connection>
-   <developerConnection>scm:svn:http://svn.exoplatform.org/projects/cs/tags/2.2.0-GA</developerConnection>
-   <url>https://fisheye.exoplatform.org/browse/cs/tags/2.2.0-GA</url>
+   <connection>scm:svn:http://svn.exoplatform.org/projects/cs/branches/2.2.x</connection>
+   <developerConnection>scm:svn:http://svn.exoplatform.org/projects/cs/branches/2.2.x</developerConnection>
+   <url>https://fisheye.exoplatform.org/browse/cs/branches/2.2.x</url>
   </scm>
   <issueManagement>
     <system>jira</system>
@@ -24,7 +24,7 @@
   </issueManagement>
   <ciManagement>
     <system>hudson</system>
-    <url>https://ci.exoplatform.org/job/cs-trunk-ci/</url>
+    <url>https://ci.exoplatform.org/job/cs-2.1.x-ci/</url>
   </ciManagement>
   <properties>
     <org.exoplatform.kernel.version>2.3.0-CR2</org.exoplatform.kernel.version>
