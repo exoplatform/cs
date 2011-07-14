@@ -69,13 +69,13 @@
 }
 
 .UIDayView .EventDayContent .UIGrid td{
-  border-left: none ;
-padding:0px;
-*height:29px;
-height:29px;\
-height:30px;
-[height:30px;
- height:29px;]
+  border-left: none;
+  padding:0px;
+  height:30px;
+  [height:29px;
+   height:29px;]
+  *height:29px;
+  _height:29px;
 }
 
 .UIDayView .EventDayContent .UIGrid td{ /* fix for Safari */
@@ -270,12 +270,12 @@ height:30px;
 }
 
 .UIWeekView .UIGrid td {
-padding:0px;
-*height:29px;
-height:29px;\
-height:30px;
-[height:30px;
- height:29px;]
+  padding:0px;
+  height:30px;
+  [height:30px;
+   height:29px;]
+  *height:30px;
+  _height:30px;
 }
 
 .UIWeekView .EventAllday {
