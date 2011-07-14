@@ -85,6 +85,11 @@ UIWeekView.prototype.adjustWidth = function(el) {
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
 	var inter = UICalendarPortlet.getInterval(el) ;
 	if (el.length <= 0) return ;
+  // set position of events in vertical axis.
+  for (var i = 0; i < el.length; i++) {
+    UICalendarPortlet.setSize(el[i]) ;
+  }
+
 	var width = "" ;
 	for(var i = 0 ; i < inter.length ; i ++) {
 		var totalWidth = (arguments.length > 1) ? arguments[1] : parseFloat(100) ;
@@ -110,7 +115,6 @@ UIWeekView.prototype.adjustWidth = function(el) {
 		}
 		var n = 0 ;
 		for(var j = inter[i]; j < inter[i+1] ; j++) {
-			eXo.calendar.UICalendarPortlet.setSize(el[j]) ;
 			if(mark != null) {				
 				width = parseFloat((totalWidth + left - parseFloat(el[mark].style.left) - parseFloat(el[mark].style.width))/len) ;
 			} else {
