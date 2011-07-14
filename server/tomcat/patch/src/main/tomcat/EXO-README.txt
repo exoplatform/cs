@@ -165,7 +165,6 @@ All those accounts have the default password "gtn".
 ===========
 - 2.2.0-GA
 
-
 ** Bug
     * [CS-4541] - [Contact] Invalid contact list display when move contact
     * [CS-4560] - Calendar: Show exception when import Invalid file type or format
@@ -173,6 +172,7 @@ All those accounts have the default password "gtn".
     * [CS-4665] - Password require when send mail
     * [CS-4667] - The popup menu is not usually shown valid when right click at one mouse point
     * [CS-4688] - Unexpected error message display when click calendar settings
+    * [CS-4725] - The calendar application counts wrong
     * [CS-4733] - Cannot load and merge the bundle
     * [CS-4736] - [chatbar] Contact list is not shown after changing status to online
     * [CS-4737] - [chatbar] user at "Free to chat" can not do some permitted actions
@@ -248,6 +248,7 @@ All those accounts have the default password "gtn".
     * [CS-5065] - CLONE - In Calendar, the identifier is displayed in the list of participants of an event  instead of name, surname and mail
     * [CS-5081] - Error with Calendar list when configure My tasks gadget in Intranet Home page
     * [CS-5106] - Chat - exception when add all contact at once
+    * [CS-5158] - [Calendar] Can not send remind email
 
 ** Improvement
     * [CS-2983] - should show warning message when create event with invitation mail but don't enter email address yet
@@ -262,7 +263,7 @@ All those accounts have the default password "gtn".
     * [CS-756] - Subscribe to remote calendar
     * [CS-4370] - "Leave message on server" mail options
     * [CS-4860] - define a service that allowed all settings to be preconfigured by admins and possibly set as not modifiable by users
-    * [CS-5026] - Show  event on agenda when tasks/events begin at a day and end at another day. 
+    * [CS-5026] - Show  event on agenda when tasks/events begin at a day and end at another day.  
 
 - 2.2.0-Beta02
 
