@@ -34,8 +34,13 @@ import org.exoplatform.services.rest.impl.ResourceBinder;
  * @author <a href="mailto:andrew00x@gmail.com">Andrey Parfonov</a>
  * @version $Id: $
  */
-@ConfiguredBy( { @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"), @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.organization-configuration.xml"), @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.cs.eXoApplication.organization.service.test-configuration.xml"),
-    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration1.xml"), @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration2.xml") })
+@ConfiguredBy({
+    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
+    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.identity-configuration.xml"),
+    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/org/exoplatform/services/organization/TestOrganization-configuration.xml"),
+    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.cs.eXoApplication.organization.service.test-configuration.xml"),
+    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration1.xml"),
+    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration2.xml") })
 public abstract class BaseTest extends AbstractKernelTest {
 
   protected PortalContainer     container;

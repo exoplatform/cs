@@ -59,6 +59,7 @@
               <outputDirectory>${project.build.outputDirectory}</outputDirectory>
               <excludes>**/conf/server.xml, *.*/conf/login-config.xml</excludes>
               <includes>**</includes>
+              <excludeArtifactIds>hsqldb</excludeArtifactIds>
             </configuration>
           </execution>
         </executions>

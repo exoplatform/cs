@@ -41,8 +41,13 @@ import org.exoplatform.services.security.Identity;
  *          hung.nguyen@exoplatform.com
  * May 7, 2008  
  */
-@ConfiguredBy( { @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"), @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.organization-configuration.xml"), @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/portal/exo.cs.eXoApplication.contact.service.test-configuration.xml"),
-    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/portal/exo.cs.eXoApplication.contact.service.portal-configuration.xml"), @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration1.xml") })
+@ConfiguredBy({
+    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
+    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.identity-configuration.xml"),
+    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "org/exoplatform/services/organization/TestOrganization-configuration.xml"),
+    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/portal/exo.cs.eXoApplication.contact.service.test-configuration.xml"),
+    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/portal/exo.cs.eXoApplication.contact.service.portal-configuration.xml"),
+    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration1.xml") })
 public abstract class BaseContactServiceTestCase extends AbstractKernelTest {
 
   private static final Log              log                    = ExoLogger.getLogger("cs.contact.service.test");
