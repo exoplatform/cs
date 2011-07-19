@@ -511,6 +511,25 @@ public class CalendarWebservice implements ResourceContainer{
     }
   }
   
+  private SingleEvent makeSingleEvent(CalendarSetting calSetting, CalendarEvent cEvent) {
+    if (calSetting == null || cEvent == null) {
+      throw new IllegalArgumentException("parameters must be not null");
+    }
+    SingleEvent event = new SingleEvent();
+    event.setDescription(cEvent.getDescription());
+    event.setEventState(cEvent.getEventState());
+    event.setLocation(cEvent.getLocation());
+    event.setPriority(cEvent.getPriority());
+    event.setSummary(cEvent.getSummary());
+    // evaluate timeoffset
+    TimeZone timeZone = TimeZone.getTimeZone(calSetting.getTimeZone());
+    event.setStartDateTime(cEvent.getFromDateTime().getTime());
+    event.setStartTimeOffset(timeZone.getOffset(cEvent.getFromDateTime().getTime()));
+    event.setEndDateTime(cEvent.getToDateTime().getTime());
+    event.setEndTimeOffset(timeZone.getOffset(cEvent.getToDateTime().getTime()));
+    return event;
+  }
+  
   @GET
   @RolesAllowed("users")
   @Path("/getevent/{eventid}")
@@ -522,9 +541,9 @@ public class CalendarWebservice implements ResourceContainer{
       CalendarService calService = (CalendarService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
       String username = ConversationState.getCurrent().getIdentity().getUserId();
       CalendarEvent calEvent = calService.getEvent(username, eventid);
+      CalendarSetting calSetting = calService.getCalendarSetting(username);
       if(!calEvent.getAttachment().isEmpty()) calEvent.setAttachment(null);
-      SingleEvent data = new SingleEvent();
-      data.setInfo(calEvent);
+      SingleEvent data = makeSingleEvent(calSetting, calEvent);
       //data.setCalendars(calList);
       return Response.ok(data, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
     }catch(Exception e){

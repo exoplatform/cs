@@ -70,16 +70,8 @@
 
 .UIDayView .EventDayContent .UIGrid td{
   border-left: none ;
-padding:0px;
-*height:29px;
-height:29px;\
-height:30px;
-[height:30px;
- height:29px;]
-}
-
-.UIDayView .EventDayContent .UIGrid td{ /* fix for Safari */
-  
+  padding:0px;
+  line-height: 29px;
 }
 
 .UIDayView .EventDayContent .HourPoint {
@@ -270,12 +262,8 @@ height:30px;
 }
 
 .UIWeekView .UIGrid td {
-padding:0px;
-*height:29px;
-height:29px;\
-height:30px;
-[height:30px;
- height:29px;]
+  padding:0px;
+  line-height: 30px;
 }
 
 .UIWeekView .EventAllday {

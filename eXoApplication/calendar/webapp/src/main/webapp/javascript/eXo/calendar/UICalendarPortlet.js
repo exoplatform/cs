@@ -2776,7 +2776,8 @@ ScrollManager.prototype.csCheckAvailableSpace = function(maxSpace) { // in pixel
 	}
 };
 
-eXo.calendar.EventTooltip = {	
+eXo.calendar.EventTooltip = {
+  UTC_0: "UTC:0",
 	isDnD: false,
 	timer: 1000,
 	getContainer: function(evt){
@@ -2849,7 +2850,7 @@ eXo.calendar.EventTooltip = {
 	  request.process() ;
 	},
 	parseData: function(req){
-		var data = eXo.core.JSON.parse(req.responseText).info;
+		var data = eXo.core.JSON.parse(req.responseText);
 		var time = this.getRealTime(data);
 		return {
 			title: data.summary,
@@ -2861,9 +2862,9 @@ eXo.calendar.EventTooltip = {
 		}
 	},
 	isAllday:function(eventObject){
-		var startDate = (new Date(this.convertTimezone(eventObject.fromDateTime))).getDate();
-		var endDate = (new Date(this.convertTimezone(eventObject.toDateTime))).getDate();
-		var delta = eventObject.toDateTime.time - eventObject.fromDateTime.time;
+		var startDate = eventObject.startDateTime;
+		var endDate = eventObject.endDateTime;
+		var delta = endDate - startDate;
 		if((startDate == endDate) && (delta == (24*60 - 1)*60*1000)) return 1;
 		if((startDate != endDate) && (delta >= 24*60*60.1000) ) return 2;
 		return 0;
@@ -2879,19 +2880,20 @@ eXo.calendar.EventTooltip = {
 			var formater = eXo.cs.DateTimeFormater ;
 			timeFormat = formater.masks.shortTime ;
 		}
-		var d = new Date(this.convertTimezone(data.fromDateTime));
-		var d1 = new Date(this.convertTimezone(data.toDateTime));
+		var currentDate = new Date();
+		var d = new Date(parseInt(data.startDateTime) + parseInt(data.startTimeOffset));
+		var d1 = new Date(parseInt(data.endDateTime) + parseInt(data.endTimeOffset));
 		var df = eXo.cs.DateTimeFormater;
 		if(type == 1){
-			time = df.format(d,"dd/mm/yyyy");
+			time = df.format(d,"dd/mm/yyyy", this.UTC_0);
 		}
 		else if(type == 2){
-			time = df.format(d,"dd/mm/yyyy") + " " + df.format(d,timeFormat) + " - ";
-			time += df.format(d1,"dd/mm/yyyy") + " " + df.format(d1,timeFormat);			
+			time = df.format(d,"dd/mm/yyyy", this.UTC_0) + " " + df.format(d,timeFormat, this.UTC_0) + " - ";
+			time += df.format(d1,"dd/mm/yyyy", this.UTC_0) + " " + df.format(d1,timeFormat, this.UTC_0);			
 		}
 		else{
-			time = df.format(d,"dd/mm/yyyy") + " " + df.format(d,timeFormat);
-			time += " - " + df.format(d1,timeFormat);
+			time = df.format(d,"dd/mm/yyyy", this.UTC_0) + " " + df.format(d,timeFormat, this.UTC_0);
+			time += " - " + df.format(d1,timeFormat, this.UTC_0);
 		}
 		return time;
 	},
