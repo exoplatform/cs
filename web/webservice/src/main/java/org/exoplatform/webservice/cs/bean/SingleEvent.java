@@ -16,8 +16,6 @@
  */
 package org.exoplatform.webservice.cs.bean;
 
-import org.exoplatform.calendar.service.CalendarEvent;
-
 /**
  * Created by The eXo Platform SAS
  * Author : Hoang Manh Dung
@@ -25,12 +23,95 @@ import org.exoplatform.calendar.service.CalendarEvent;
  * Jan 4, 2011  
  */
 public class SingleEvent {
-  private CalendarEvent info ;  
+
+  private String        summary       = "";
+
+  private String        description   = "";
+
+  private String        location      = "";
+
+  private String        eventState    = "";
+
+  private String        priority      = "";
+
+  private long          startDateTime = -1;
+
+  private long          endDateTime   = -1;
+
+  private long          startTimeOffset    = 0;
   
-  public CalendarEvent getInfo() {
-    return info;
-  }  
-  public void setInfo(CalendarEvent info) {
-    this.info = info;
-  }  
+  private long          endTimeOffset    = 0;
+
+  public String getSummary() {
+    return summary;
+  }
+
+  public void setSummary(String summary) {
+    this.summary = summary != null ? summary : "";
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description != null ? description : "";
+  }
+
+  public String getLocation() {
+    return location;
+  }
+
+  public void setLocation(String location) {
+    this.location = location != null ? location : "";
+  }
+
+  public String getEventState() {
+    return eventState;
+  }
+
+  public void setEventState(String eventState) {
+    this.eventState = eventState != null ? eventState : "";
+  }
+
+  public String getPriority() {
+    return priority;
+  }
+
+  public void setPriority(String priority) {
+    this.priority = priority != null ? priority : "";
+  }
+
+  public long getStartDateTime() {
+    return startDateTime;
+  }
+
+  public void setStartDateTime(long startDateTime) {
+    this.startDateTime = startDateTime;
+  }
+
+  public long getEndDateTime() {
+    return endDateTime;
+  }
+
+  public void setEndDateTime(long endDateTime) {
+    this.endDateTime = endDateTime;
+  }
+
+  public long getStartTimeOffset() {
+    return startTimeOffset;
+  }
+
+  public void setStartTimeOffset(long startTimeOffset) {
+    this.startTimeOffset = startTimeOffset;
+  }
+
+  public long getEndTimeOffset() {
+    return endTimeOffset;
+  }
+
+  public void setEndTimeOffset(long endTimeOffset) {
+    this.endTimeOffset = endTimeOffset;
+  }
+  
 }
