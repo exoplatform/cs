@@ -238,8 +238,7 @@ public class UICalendars extends UIForm  {
    * else return false.
    */
   protected boolean isCalendarOfSpace(String calendarId) {
-    UICalendarPortlet calendarPortlet = this.getAncestorOfType(UICalendarPortlet.class);
-    String spaceId = calendarPortlet.getSpaceId();
+    String spaceId = UICalendarPortlet.getSpaceId();
     return (spaceId == null || (spaceId != null && calendarId.contains(spaceId)));
   }
   

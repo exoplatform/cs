@@ -400,7 +400,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       selectBoxWithGroups.setOptions(getCalendars()) ;
     }
     
-    String spaceId = getAncestorOfType(UICalendarPortlet.class).getSpaceId();
+    String spaceId = UICalendarPortlet.getSpaceId();
     if (spaceId != null) {
       setCalendarOptionOfSpaceAsSelected(spaceId, selectBoxWithGroups.getOptions(), selectBoxWithGroups);
     }

@@ -63,12 +63,13 @@ import org.mortbay.cometd.continuation.EXoContinuationBayeux;
     template = "app:/templates/calendar/webui/UICalendarPortlet.gtmpl"
 )
 public class UICalendarPortlet extends UIPortletApplication {
-  private Log log = ExoLogger.getLogger(this.getClass());
-  
   /**
    * Social Space id if existed.
    */
-  private String spaceId = null;
+  private static ThreadLocal<String> spaceId = new ThreadLocal<String>();
+  
+  private Log log = ExoLogger.getLogger(this.getClass());
+  
   
   public UICalendarPortlet() throws Exception {
     UIActionBar uiActionBar = addChild(UIActionBar.class, null, null) ;
@@ -136,12 +137,16 @@ public class UICalendarPortlet extends UIPortletApplication {
     return PortalContainer.getInstance().getRestContextName();
   }
   
-  public String getSpaceId() {
-    return this.spaceId;
+  /**
+   * get space id if the request comes from one Social space, else return null.
+   * @return 
+   */
+  public static String getSpaceId() {
+    return spaceId.get();
   }
   
-  public boolean isInSpace() {
-    return this.spaceId != null;
+  public static boolean isInSpace() {
+    return spaceId.get() != null;
   }
   
   private String getSpaceId(WebuiRequestContext context){
@@ -263,7 +268,7 @@ public class UICalendarPortlet extends UIPortletApplication {
   }
   
   public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception {
-    this.spaceId = getSpaceId(context);
+    spaceId.set(getSpaceId(context));
     try {
       processInvitationURL(context);
     }
