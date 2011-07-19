@@ -30,6 +30,8 @@ import org.exoplatform.social.core.identity.model.Identity;
 import org.exoplatform.social.core.identity.provider.SpaceIdentityProvider;
 import org.exoplatform.social.core.manager.ActivityManager;
 import org.exoplatform.social.core.manager.IdentityManager;
+import org.exoplatform.social.core.space.model.Space;
+import org.exoplatform.social.core.space.spi.SpaceService;
 
 /**
  * Created by The eXo Platform SAS
@@ -97,9 +99,13 @@ public class CalendarSpaceActivityPublisher extends CalendarEventListener {
 
       IdentityManager indentityM = (IdentityManager) PortalContainer.getInstance().getComponentInstanceOfType(IdentityManager.class);
       ActivityManager activityM = (ActivityManager) PortalContainer.getInstance().getComponentInstanceOfType(ActivityManager.class);
-      String prettyNameOfSpace = calendarId.split(CalendarDataInitialize.CALENDAR_ID_PREFIX)[1];
-      Identity spaceIdentity = indentityM.getOrCreateIdentity(SpaceIdentityProvider.NAME, prettyNameOfSpace, false);
-      activityM.saveActivity(spaceIdentity, activity);
+      SpaceService spaceService = (SpaceService) PortalContainer.getInstance().getComponentInstanceOfType(SpaceService.class);
+      String spaceId = calendarId.split(CalendarDataInitialize.CALENDAR_ID_PREFIX)[1];
+      Space space = spaceService.getSpaceById(spaceId);
+      if (space != null) {
+        Identity spaceIdentity = indentityM.getOrCreateIdentity(SpaceIdentityProvider.NAME, space.getPrettyName(), false);
+        activityM.saveActivity(spaceIdentity, activity);
+      }
     } catch (Exception e) {
       if (LOG.isErrorEnabled())
         LOG.error("Can not record Activity for space when event added ", e);
@@ -121,9 +127,13 @@ public class CalendarSpaceActivityPublisher extends CalendarEventListener {
       activity.setTemplateParams(makeActivityParams(event, calendarId, eventType));
       IdentityManager indentityM = (IdentityManager) PortalContainer.getInstance().getComponentInstanceOfType(IdentityManager.class);
       ActivityManager activityM = (ActivityManager) PortalContainer.getInstance().getComponentInstanceOfType(ActivityManager.class);
-      String prettyNameOfSpace = calendarId.split(CalendarDataInitialize.CALENDAR_ID_PREFIX)[1];
-      Identity spaceIdentity = indentityM.getOrCreateIdentity(SpaceIdentityProvider.NAME, prettyNameOfSpace, false);
-      activityM.saveActivity(spaceIdentity, activity);
+      SpaceService spaceService = (SpaceService) PortalContainer.getInstance().getComponentInstanceOfType(SpaceService.class);
+      String spaceId = calendarId.split(CalendarDataInitialize.CALENDAR_ID_PREFIX)[1];
+      Space space = spaceService.getSpaceById(spaceId);
+      if (space != null) {
+        Identity spaceIdentity = indentityM.getOrCreateIdentity(SpaceIdentityProvider.NAME, space.getPrettyName(), false);
+        activityM.saveActivity(spaceIdentity, activity);
+      }
     } catch (Exception e) {
       if (LOG.isErrorEnabled())
         LOG.error("Can not record Activity for space when event updated ", e);
