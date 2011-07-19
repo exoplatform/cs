@@ -1,0 +1,12 @@
+Index: eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/bean/EventsBean.java
+===================================================================
+--- eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/bean/EventsBean.java	(revision 70330)
++++ eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/bean/EventsBean.java	(working copy)
+@@ -73,6 +73,7 @@
+     messages = new ArrayList<MessageBean>();
+     mucEvents = new ArrayList<MUCPacketBean>();
+     fileEvents = new ArrayList<FileTransferEventBean>();
++    roster = new ArrayList<ContactBean>();
+   }
+ 
+   /**
