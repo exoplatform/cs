@@ -135,9 +135,10 @@
     </dependency>
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
-      <artifactId>exo.portal.component.test.organization</artifactId>
+      <artifactId>exo.portal.component.identity</artifactId>
       <version>${org.exoplatform.portal.version}</version>
       <scope>test</scope>
+      <type>test-jar</type>
     </dependency>
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
@@ -147,20 +148,13 @@
     </dependency>
 
     <dependency>
-      <groupId>org.exoplatform.portal</groupId>
-      <artifactId>exo.portal.component.portal</artifactId>
-      <version>${org.exoplatform.portal.version}</version>
-      <scope>test</scope>
-      <type>test-jar</type>
-    </dependency>
- <!--  
-    <dependency>
       <groupId>org.chromattic</groupId>
       <artifactId>chromattic.core</artifactId>
       <version>${version.chromattic}</version>
       <scope>test</scope>
     </dependency>
     
+ <!--  
     
     <dependency>
       <groupId>org.reflext</groupId>
@@ -197,11 +191,6 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>${junit.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.hsqldb</groupId>
-      <artifactId>hsqldb</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

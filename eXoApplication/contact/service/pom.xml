@@ -50,8 +50,9 @@
     </dependency>
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
-      <artifactId>exo.portal.component.test.organization</artifactId>
+      <artifactId>exo.portal.component.identity</artifactId>
       <version>${org.exoplatform.portal.version}</version>
+      <type>test-jar</type>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -153,11 +154,6 @@
       <artifactId>commons-lang</artifactId>
       <version>${commons-lang.version}</version>
       <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.hsqldb</groupId>
-      <artifactId>hsqldb</artifactId>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>

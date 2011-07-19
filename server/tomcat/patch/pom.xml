@@ -45,6 +45,7 @@
               <outputDirectory>${project.build.outputDirectory}</outputDirectory>
               <excludes>**/GATEIN-README.txt,**/EXO-README.txt,**/conf/server.xml,**/Catalina/localhost/rest.xml,**/conf/jaas.conf</excludes>
               <includes>**</includes>
+              <excludeArtifactIds>hsqldb</excludeArtifactIds>
             </configuration>
           </execution>
         </executions>

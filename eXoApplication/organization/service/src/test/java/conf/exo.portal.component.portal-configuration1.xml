@@ -203,6 +203,7 @@
           <value>org.exoplatform.portal.mop.ProtectedResource</value>
           <value>org.exoplatform.portal.mop.Described</value>
           <value>org.exoplatform.portal.mop.Visible</value>
+          <value>org.exoplatform.portal.mop.importer.Imported</value>
         </values-param>
       </init-params>
     </component-plugin>
