@@ -30,8 +30,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 import java.util.Map.Entry;
+import java.util.TimeZone;
 
 import javax.jcr.AccessDeniedException;
 import javax.jcr.Node;
@@ -698,23 +698,23 @@ public class JCRDataStorage implements DataStorage {
     eventCategoryHome.getSession().logout();
   }
 
-  public void removeEventCategory(String username, String eventCategoryName) throws Exception {
+  public void removeEventCategory(String username, String eventCategoryId) throws Exception {
     Node eventCategoryHome = getEventCategoryHome(username);
-    if (eventCategoryHome.hasNode(eventCategoryName)) {
-      Node eventCategoryNode = eventCategoryHome.getNode(eventCategoryName);
+    if (eventCategoryHome.hasNode(eventCategoryId)) {
+      Node eventCategoryNode = eventCategoryHome.getNode(eventCategoryId);
       // CS-3482
       // SessionProvider systemSession = SessionProvider.createSystemProvider() ;
-      for (CalendarEvent ce : getUserEventByCategory(username, eventCategoryName)) {
+      for (CalendarEvent ce : getUserEventByCategory(username, eventCategoryId)) {
         ce.setEventCategoryId(NewUserListener.DEFAULT_EVENTCATEGORY_ID_ALL);
         ce.setEventCategoryName(NewUserListener.DEFAULT_EVENTCATEGORY_NAME_ALL);
         saveUserEvent(username, ce.getCalendarId(), ce, false);
       }
-      for (CalendarEvent ce : getSharedEventByCategory(username, eventCategoryName)) {
+      for (CalendarEvent ce : getSharedEventByCategory(username, eventCategoryId)) {
         ce.setEventCategoryId(NewUserListener.DEFAULT_EVENTCATEGORY_ID_ALL);
         ce.setEventCategoryName(NewUserListener.DEFAULT_EVENTCATEGORY_NAME_ALL);
         saveEventToSharedCalendar(username, ce.getCalendarId(), ce, false);
       }
-      for (CalendarEvent ce : getPublicEventByCategory(username, eventCategoryName)) {
+      for (CalendarEvent ce : getPublicEventByCategory(username, eventCategoryId)) {
         ce.setEventCategoryId(NewUserListener.DEFAULT_EVENTCATEGORY_ID_ALL);
         ce.setEventCategoryName(NewUserListener.DEFAULT_EVENTCATEGORY_NAME_ALL);
         savePublicEvent(ce.getCalendarId(), ce, false);
@@ -1209,6 +1209,7 @@ public class JCRDataStorage implements DataStorage {
    */
   public void savePublicEvent(String calendarId, CalendarEvent event, boolean isNew) throws Exception {
     Node calendarNode = getPublicCalendarHome().getNode(calendarId);
+    event.setCalendarId(calendarId);
     Node reminderFolder = getReminderFolder(event.getFromDateTime());
     saveEvent(calendarNode, event, reminderFolder, isNew);
   }

@@ -218,7 +218,7 @@ public interface CalendarService {
    * @param eventCategoryName The unique name of category
    * @throws Exception
    */
-  public void removeEventCategory(String username, String eventCategoryName) throws Exception;
+  public void removeEventCategory(String username, String eventCategoryId) throws Exception;
 
   /**
    * The method gets category of event by given id

@@ -24,6 +24,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.jcr.PathNotFoundException;
 
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
@@ -37,6 +40,7 @@ import org.exoplatform.calendar.service.RemoteCalendar;
 import org.exoplatform.calendar.service.RemoteCalendarService;
 import org.exoplatform.calendar.service.RssData;
 import org.exoplatform.calendar.service.Utils;
+import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.services.jcr.util.IdGenerator;
 
 /**
@@ -46,10 +50,10 @@ import org.exoplatform.services.jcr.util.IdGenerator;
  * July 3, 2008  
  */
 
-public class TestCalendarService extends BaseCalendarServiceTestCase {
+public class TestCalendarService extends BaseCalendarTestCase {
   private CalendarService calendarService_;
 
-  private static String   username = "root";
+  private static String username = "root";
 
   public TestCalendarService() throws Exception {
     super();
@@ -186,11 +190,22 @@ public class TestCalendarService extends BaseCalendarServiceTestCase {
     CalendarCategory calCategory = new CalendarCategory();
     calCategory.setName("categoryName");
     calCategory.setDescription("Description");
-    // calCategory.setCalendars(new String [] {"calendar1", "calendar2"}) ;
     calendarService_.saveCalendarCategory(username, calCategory, true);
-    List<GroupCalendarData> categories = calendarService_.getCalendarCategories(username, true);
-    assertEquals(categories.size(), 1);
+    
+    Calendar cal = new Calendar();
+    cal.setName("CalendarName");
+    cal.setCategoryId(calCategory.getId());
+    cal.setPublic(false);
+    calendarService_.saveUserCalendar(username, cal, true);
+    
     assertEquals(1, calendarService_.getCategories(username).size());
+    List<GroupCalendarData> categories = calendarService_.getCalendarCategories(username, true);
+    assertEquals(1, categories.size());
+    
+    List<Calendar> calendars = categories.get(0).getCalendars();
+    assertEquals(1, calendars.size());
+    Calendar calendar = calendars.get(0);
+    assertEquals("CalendarName", calendar.getName());
 
     // get calendar category
     calCategory = calendarService_.getCalendarCategory(username, calCategory.getId());
@@ -284,7 +299,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase {
     calendarService_.saveEventCategory(username, eventCategory, true);
 
     CalendarEvent calEvent = new CalendarEvent();
-    calEvent.setEventCategoryId(eventCategory.getName());
+    calEvent.setEventCategoryId(eventCategory.getId());
     calEvent.setSummary("Have a meeting");
     java.util.Calendar fromCal = java.util.Calendar.getInstance();
     java.util.Calendar toCal = java.util.Calendar.getInstance();
@@ -323,7 +338,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase {
     calendarService_.saveEventCategory(username, eventCategory, true);
 
     CalendarEvent calEvent = new CalendarEvent();
-    calEvent.setEventCategoryId(eventCategory.getName());
+    calEvent.setEventCategoryId(eventCategory.getId());
     calEvent.setSummary("Have a meeting");
     java.util.Calendar fromCal = java.util.Calendar.getInstance();
     java.util.Calendar toCal = java.util.Calendar.getInstance();
@@ -333,7 +348,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase {
     calendarService_.saveUserEvent(username, cal.getId(), calEvent, true);
 
     EventQuery query = new EventQuery();
-    query.setCategoryId(new String[] { eventCategory.getName() });
+    query.setCategoryId(new String[] { eventCategory.getId() });
     assertEquals(calendarService_.getUserEvents(username, query).size(), 1);
 
     EventQuery eventQuery = new EventQuery();
@@ -378,9 +393,10 @@ public class TestCalendarService extends BaseCalendarServiceTestCase {
     eventCategory.setName("LastUpdatedTimeEventCategoryName");
     eventCategory.setDescription("EventCategoryDescription");
     calendarService_.saveEventCategory(username, eventCategory, true);
-
+    
     CalendarEvent calEvent = new CalendarEvent();
-    calEvent.setEventCategoryId(eventCategory.getName());
+    calEvent.setEventCategoryId(eventCategory.getId());
+    calEvent.setCalendarId(cal.getId());
     calEvent.setSummary("Have a meeting");
     java.util.Calendar fromCal = java.util.Calendar.getInstance();
     java.util.Calendar toCal = java.util.Calendar.getInstance();
@@ -397,7 +413,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase {
     Date modifiedDate = calendarService_.getGroupEvent(cal.getId(), event.getId()).getLastUpdatedTime();
     assertNotNull(modifiedDate);
     assertTrue(modifiedDate.after(createdDate));
-
+    
     calendarService_.removeEventCategory(username, eventCategory.getId());
     calendarService_.removeUserCalendar(username, cal.getId());
     calendarService_.removeCalendarCategory(username, calCategory.getId());
@@ -420,7 +436,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase {
     calendarService_.saveEventCategory(username, eventCategory, true);
 
     CalendarEvent calEvent = new CalendarEvent();
-    calEvent.setEventCategoryId(eventCategory.getName());
+    calEvent.setEventCategoryId(eventCategory.getId());
     calEvent.setSummary("Have a meeting");
     java.util.Calendar fromCal = java.util.Calendar.getInstance();
     java.util.Calendar toCal = java.util.Calendar.getInstance();
@@ -498,5 +514,388 @@ public class TestCalendarService extends BaseCalendarServiceTestCase {
   private void checkAssertRemote(Calendar cal) throws Exception {
     List<CalendarEvent> events = calendarService_.getUserEventByCalendar(username, Arrays.asList(cal.getId()));
     assertTrue(events.size() > 0);
+  }
+  
+  public void testGetUserCalendar() {
+    try {
+      Calendar calendar = calendarService_.getUserCalendar(username, "Not exist calendar");
+      assertNull(calendar);
+    } catch (Exception e) {
+      fail();
+    }
+  }
+  
+  public void testSaveUserCalendar() {
+    try {
+      CalendarCategory calendarCategory = createCalendarCategory("CalendarCategory", "CaldendarCategoryDescription");
+      Calendar calendar = createCalendar("CalendarName", "CalendarDesscription", calendarCategory.getId());
+      
+      // Edit calendar
+      String newCalendarName = "CalendarName edited";
+      calendar.setName(newCalendarName);
+      calendarService_.saveUserCalendar(username, calendar, false);
+      
+      List<Calendar> calendars = calendarService_.getUserCalendarsByCategory(username, calendarCategory.getId());
+      assertEquals(1, calendars.size());
+      Calendar edidedCalendar = calendars.get(0);
+      assertEquals(newCalendarName, edidedCalendar.getName());
+    } catch (Exception e) {
+      fail();
+    }
+  }
+  
+  public void testSavePublicCalendar() {
+    try {
+      CalendarCategory calendarCategory = createCalendarCategory("CalendarCategory", "CaldendarCategoryDescription");
+      Calendar calendar = createPublicCalendar("CalendarName", "CalendarDesscription", calendarCategory.getId());
+
+      // Add calendar again
+      calendarService_.savePublicCalendar(calendar, true, username);
+      
+      // If there is no exception occur, then the test case fail
+      fail();
+    } catch (Exception e) {
+      assertEquals("This calendar is already exists", e.getMessage());
+    }
+  }
+  
+  public void testSaveCalendarCategory() {
+    try {
+      CalendarCategory calCategory = new CalendarCategory();
+      calCategory.setName("CalendarCategoryName");
+      calCategory.setDescription("CaldendarCategoryDescription");
+      calendarService_.saveCalendarCategory(username, calCategory, true);
+      
+      // Add calendar category again
+      calendarService_.saveCalendarCategory(username, calCategory, true);
+
+      // If there is no exception occur, then the test case fail
+      fail();
+    } catch (Exception e) {
+      assertEquals("This calendar category is already exists! ", e.getMessage());
+    }
+  }
+  
+  public void testSaveEventCategory() {
+    try {
+      CalendarCategory calendarCategory = createCalendarCategory("categoryName", "description");
+      Calendar calendar = createCalendar("myCalendar", "Description", calendarCategory.getId());
+      Calendar publicCalendar = createPublicCalendar("publicCalendar", "publicDescription", calendarCategory.getId());
+      
+      String eventCategoryName = "eventCategoryName1";
+      EventCategory eventCategory = createEventCategory(eventCategoryName, "description");
+      
+      java.util.Calendar fromCal = java.util.Calendar.getInstance();
+      java.util.Calendar toCal = java.util.Calendar.getInstance();
+      toCal.add(java.util.Calendar.HOUR, 1);
+      
+      // Create user event 
+      createEvent(calendar.getId(), eventCategory, "Have a meeting", fromCal, toCal);
+      
+      // Create public event
+      CalendarEvent publicEvent = createPublicEvent(publicCalendar.getId(), eventCategory, "Have a meeting", fromCal, toCal);
+      
+      // Edit event category
+      String newEventCategoryName = "newEventCategoryName";
+      String newDescription = "newDescription";
+      eventCategory.setName(newEventCategoryName);
+      eventCategory.setDescription(newDescription);
+      calendarService_.saveEventCategory(username, eventCategory, false);
+      
+      // Check edited event category
+      EventCategory edidedEventCategory = calendarService_.getEventCategory(username, eventCategory.getId());
+      assertNotNull(edidedEventCategory);
+      assertEquals(newEventCategoryName, edidedEventCategory.getName());
+      
+      // Check user event
+//      EventQuery query3 = new EventQuery();
+//      query3.setCategoryId(new String[] { eventCategory.getId() });
+//      List<CalendarEvent> calendarEvents3 = calendarService_.getUserEvents(username, query3);
+//      assertEquals(1, calendarEvents3.size());
+//      CalendarEvent calendarEvent3 = calendarEvents3.get(0);
+//      assertNotNull(calendarEvent3);
+//      assertEquals(newEventCategoryName, calendarEvent3.getEventCategoryName());
+      
+      // Check public event
+//      CalendarEvent calendarEvent4 = calendarService_.getGroupEvent(publicCalendar.getId(), publicEvent.getId());
+//      assertNotNull(calendarEvent4);
+//      assertEquals(newEventCategoryName, calendarEvent4.getEventCategoryName());
+    } catch (Exception e) {
+      fail();
+    }
+  }
+  
+  public void testRemoveEventCategory() {
+    try {
+      CalendarCategory calendarCategory = createCalendarCategory("categoryName", "description");
+      Calendar calendar = createCalendar("myCalendar", "Description", calendarCategory.getId());
+      Calendar publicCalendar = createPublicCalendar("publicCalendar", "publicDescription", calendarCategory.getId());
+      
+      EventCategory eventCategory = createEventCategory("eventCategoryName2", "description");
+      
+      java.util.Calendar fromCal = java.util.Calendar.getInstance();
+      java.util.Calendar toCal = java.util.Calendar.getInstance();
+      toCal.add(java.util.Calendar.HOUR, 1);
+      
+      CalendarEvent userEvent = createEvent(calendar.getId(), eventCategory, "Have a meeting", fromCal, toCal);
+      CalendarEvent publicEvent = createPublicEvent(publicCalendar.getId(), eventCategory, "Have a meeting", fromCal, toCal);
+      
+      // Remove event category
+      calendarService_.removeEventCategory(username, eventCategory.getId());
+      
+      // Check removed event category
+      try {
+        calendarService_.getEventCategory(username, eventCategory.getId());
+        
+        // If not throw exception then fail
+        fail();
+      } catch (PathNotFoundException ex) {
+      }
+      
+      // Check user event
+      CalendarEvent calendarEvent3 = calendarService_.getEvent(username, userEvent.getId());
+      assertNotNull(calendarEvent3);
+      assertEquals(NewUserListener.DEFAULT_EVENTCATEGORY_ID_ALL, calendarEvent3.getEventCategoryId());
+      assertEquals(NewUserListener.DEFAULT_EVENTCATEGORY_NAME_ALL, calendarEvent3.getEventCategoryName());
+    
+      // Check public event
+      CalendarEvent calendarEvent4 = calendarService_.getGroupEvent(publicCalendar.getId(), publicEvent.getId());
+      assertNotNull(calendarEvent4);
+      assertEquals(NewUserListener.DEFAULT_EVENTCATEGORY_ID_ALL, calendarEvent4.getEventCategoryId());
+      assertEquals(NewUserListener.DEFAULT_EVENTCATEGORY_NAME_ALL, calendarEvent4.getEventCategoryName());
+    } catch (Exception e) {
+      fail();
+    }
+  }
+  
+  public void testGetEvent() {
+    try {
+      CalendarCategory calendarCategory = createCalendarCategory("categoryName", "description");
+      Calendar calendar = createCalendar("myCalendar", "Description", calendarCategory.getId());
+      
+      EventCategory eventCategory = createEventCategory("eventCategoryName3", "description");
+      
+      java.util.Calendar fromCal = java.util.Calendar.getInstance();
+      java.util.Calendar toCal = java.util.Calendar.getInstance();
+      toCal.add(java.util.Calendar.HOUR, 1);
+      
+      String eventSummay = "Have a meeting";
+      CalendarEvent userEvent = createEvent(calendar.getId(), eventCategory, eventSummay, fromCal, toCal);
+      
+      CalendarEvent findEvent = calendarService_.getEvent(username, userEvent.getId());
+      assertNotNull(findEvent);
+      assertEquals(eventSummay, findEvent.getSummary());
+    } catch (Exception e) {
+      fail();
+    }
+  }
+  
+  public void testRemoveSharedCalendarFolder() {
+    try {
+      CalendarCategory calendarCategory = createCalendarCategory("categoryName", "description");
+      createSharedCalendar("sharedCalendar", "shareDescription", calendarCategory.getId());
+      
+      calendarService_.removeSharedCalendarFolder(username);
+      
+      GroupCalendarData groupCalendarData = calendarService_.getSharedCalendars(username, true);
+      assertNull(groupCalendarData);
+    } catch (Exception e) {
+      fail();
+    }
+  }
+  
+  public void testGetTypeOfCalendar() {
+    try {
+      CalendarCategory calendarCategory = createCalendarCategory("categoryName", "description");
+      Calendar calendar = createCalendar("myCalendar", "Description", calendarCategory.getId());
+      Calendar publicCalendar = createPublicCalendar("publicCalendar", "publicDescription", calendarCategory.getId());
+      Calendar sharedCalendar = createSharedCalendar("sharedCalendar", "shareDescription", calendarCategory.getId());
+      
+      assertEquals(Utils.PRIVATE_TYPE, calendarService_.getTypeOfCalendar(username, calendar.getId()));
+      assertEquals(Utils.PUBLIC_TYPE, calendarService_.getTypeOfCalendar(username, publicCalendar.getId()));
+      assertEquals(Utils.SHARED_TYPE, calendarService_.getTypeOfCalendar("john", sharedCalendar.getId()));
+      assertEquals(Utils.INVALID_TYPE, calendarService_.getTypeOfCalendar(username, "Not exist id"));
+    } catch (Exception e) {
+      fail();
+    }
+  }
+  
+  public void testMoveEvent() {
+    try {
+      CalendarCategory calendarCategory = createCalendarCategory("categoryName", "description");
+      Calendar calendar = createCalendar("myCalendar", "Description", calendarCategory.getId());
+      Calendar publicCalendar = createPublicCalendar("publicCalendar", "publicDescription", calendarCategory.getId());
+      
+      EventCategory eventCategory = createEventCategory("MoveEventCategory", "description");
+      
+      java.util.Calendar fromCal = java.util.Calendar.getInstance();
+      java.util.Calendar toCal = java.util.Calendar.getInstance();
+      toCal.add(java.util.Calendar.HOUR, 1);
+      
+      CalendarEvent publicEvent = createPublicEvent(publicCalendar.getId(), eventCategory, "Have a meeting", fromCal, toCal);
+      
+      List<CalendarEvent> events = new ArrayList<CalendarEvent>();
+      events.add(publicEvent);
+      calendarService_.moveEvent(publicCalendar.getId(), calendar.getId(), String.valueOf(Calendar.TYPE_PUBLIC), String.valueOf(Calendar.TYPE_PRIVATE), events, username);
+      
+      CalendarEvent userEvent = calendarService_.getEvent(username, publicEvent.getId());
+      assertNotNull(userEvent);
+    } catch (Exception e) {
+      fail();
+    }
+  }
+  
+  public void testCheckFreeBusy() {
+    try {
+      CalendarCategory calendarCategory = createCalendarCategory("categoryName", "description");
+      Calendar publicCalendar = createPublicCalendar("publicCalendar", "publicDescription", calendarCategory.getId());
+      
+      EventCategory eventCategory = createEventCategory("CheckFreeBusyCategory", "description");
+      
+      java.util.Calendar fromCal = java.util.Calendar.getInstance();
+      java.util.Calendar toCal = java.util.Calendar.getInstance();
+      toCal.add(java.util.Calendar.HOUR, 1);
+      createPublicEvent(publicCalendar.getId(), eventCategory, "Have a meeting", fromCal, toCal);
+      
+      toCal.add(java.util.Calendar.DATE, 4);
+      
+      EventQuery eventQuery = new EventQuery() ;
+      eventQuery.setFromDate(fromCal) ;
+      eventQuery.setToDate(toCal) ;
+      eventQuery.setParticipants(new String[] {"root"}) ;
+      eventQuery.setNodeType("exo:calendarPublicEvent") ;
+      Map<String, String> parsMap = calendarService_.checkFreeBusy(eventQuery);
+    } catch (Exception e) {
+      fail();
+    }
+  }
+  
+  private CalendarCategory createCalendarCategory(String name, String description) {
+    try {
+      // Create and save calendar category
+      CalendarCategory calendarCategory = new CalendarCategory();
+      calendarCategory.setName(name);
+      calendarCategory.setDescription(description);
+      calendarService_.saveCalendarCategory(username, calendarCategory, true);
+      return calendarCategory;
+    } catch (Exception e) {
+      fail();
+      return null;
+    }
+  }
+  
+  private Calendar createSharedCalendar(String name, String description, String calendarCategoryId) {
+    try {
+      Calendar sharedCalendar = new Calendar();
+      sharedCalendar.setName(name);
+      sharedCalendar.setDescription(description);
+      sharedCalendar.setCategoryId(calendarCategoryId);
+      sharedCalendar.setPublic(true);
+      sharedCalendar.setViewPermission(new String[] { "*.*" });
+      sharedCalendar.setEditPermission(new String[] { "*.*", "john" });
+      calendarService_.saveUserCalendar(username, sharedCalendar, true);
+      
+      List<String> receiverUser = new ArrayList<String>();
+      receiverUser.add("john");
+      calendarService_.shareCalendar(username, sharedCalendar.getId(), receiverUser);
+      
+      return sharedCalendar;
+    } catch (Exception e) {
+      fail();
+      return null;
+    }
+  }
+  
+  private Calendar createCalendar(String name, String desscription, String calendarCategoryId) {
+    try {
+      // Create and save calendar
+      Calendar calendar = new Calendar();
+      calendar.setName(name);
+      calendar.setDescription(desscription);
+      calendar.setCategoryId(calendarCategoryId);
+      calendar.setPublic(false);
+      calendarService_.saveUserCalendar(username, calendar, true);
+      return calendar;
+    } catch (Exception e) {
+      fail();
+      return null;
+    }
+  }
+  
+  private Calendar createPublicCalendar(String name, String desscription, String calendarCategoryId) {
+    try {
+      Calendar publicCalendar = new Calendar();
+      publicCalendar.setName(name);
+      publicCalendar.setDescription(desscription);
+      publicCalendar.setCategoryId(calendarCategoryId);
+      publicCalendar.setPublic(true);
+      calendarService_.savePublicCalendar(publicCalendar, true, username);
+      return publicCalendar;
+    } catch (Exception e) {
+      fail();
+      return null;
+    }
+  }
+  
+  private EventCategory createEventCategory(String name, String description) {
+    try {
+      EventCategory eventCategory = new EventCategory();
+      eventCategory.setName(name);
+      eventCategory.setDescription("description");
+      calendarService_.saveEventCategory(username, eventCategory, true);
+      return eventCategory;
+    } catch (Exception e) {
+      e.printStackTrace();
+      fail();
+      return null;
+    }
+  }
+  
+  private CalendarEvent createEvent(String calendarId, EventCategory eventCategory, String summary, java.util.Calendar fromCal, java.util.Calendar toCal) {
+    try {
+      CalendarEvent calendarEvent = new CalendarEvent();
+      calendarEvent.setEventCategoryId(eventCategory.getId());
+      calendarEvent.setEventCategoryName(eventCategory.getName());
+      calendarEvent.setSummary(summary);
+      calendarEvent.setFromDateTime(fromCal.getTime());
+      calendarEvent.setToDateTime(toCal.getTime());
+      calendarService_.saveUserEvent(username, calendarId, calendarEvent, true);
+      return calendarEvent;
+    } catch (Exception e) {
+      fail();
+      return null;
+    }
+  }
+  
+  private CalendarEvent createPublicEvent(String publicCalendarId, EventCategory eventCategory, String summary, java.util.Calendar fromCal, java.util.Calendar toCal) {
+    try {
+      CalendarEvent publicEvent = new CalendarEvent();
+      publicEvent.setEventCategoryId(eventCategory.getId());
+      publicEvent.setEventCategoryName(eventCategory.getName());
+      publicEvent.setSummary("Have a meeting");
+      publicEvent.setFromDateTime(fromCal.getTime());
+      publicEvent.setToDateTime(toCal.getTime());
+      calendarService_.savePublicEvent(publicCalendarId, publicEvent, true);
+      return publicEvent;
+    } catch (Exception e) {
+      fail();
+      return null;
+    }
+  }
+  
+  private CalendarEvent createSharedEvent(String sharedCalendarId, EventCategory eventCategory, String summary, java.util.Calendar fromCal, java.util.Calendar toCal) {
+    try {
+      CalendarEvent sharedEvent = new CalendarEvent();
+      sharedEvent.setCalendarId(sharedCalendarId);
+      sharedEvent.setSummary(summary);
+      sharedEvent.setEventType(CalendarEvent.TYPE_EVENT);
+      sharedEvent.setFromDateTime(fromCal.getTime());
+      sharedEvent.setToDateTime(toCal.getTime());
+      calendarService_.saveEventToSharedCalendar("john", sharedCalendarId, sharedEvent, true);
+      return sharedEvent;
+    } catch (Exception e) {
+      fail();
+      return null;
+    }
   }
 }
