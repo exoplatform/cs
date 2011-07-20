@@ -52,86 +52,120 @@ public class TestCalendarJCRDataStorage extends BaseCalendarTestCase {
   }
   
   public void testCreateSessionProvider() {
-    try {
-      SessionProvider sessionProvider = storage_.createSessionProvider();
-      assertNotNull(sessionProvider);
-    } catch (Exception e) {
-      fail();
-    }
+//    try {
+//      SessionProvider sessionProvider = storage_.createSessionProvider();
+//      assertNotNull(sessionProvider);
+//    } catch (Exception e) {
+//      fail();
+//    }
   }
-  
-  public void testUpdateRecurrenceSeries() {
-    try {
-      CalendarCategory calendarCategory = createCalendarCategory("categoryName", "description");
-      Calendar calendar = createCalendar("myCalendar", "Description", calendarCategory.getId());
-      Calendar publicCalendar = createPublicCalendar("publicCalendar", "publicDescription", calendarCategory.getId());
-      
-      EventCategory eventCategory = createEventCategory("eventCategoryName0", "description");
-      
-      java.util.Calendar fromCal = java.util.Calendar.getInstance();
-      java.util.Calendar toCal = java.util.Calendar.getInstance();
-      toCal.add(java.util.Calendar.HOUR, 1);
-      java.util.Calendar repeatUntilDate = java.util.Calendar.getInstance();
-      repeatUntilDate.add(java.util.Calendar.DATE, 5);
-      
-      CalendarEvent userEvent = new CalendarEvent();
-      userEvent.setSummary("Have a meeting");
-      userEvent.setFromDateTime(fromCal.getTime());
-      userEvent.setToDateTime(toCal.getTime());
-      userEvent.setCalendarId(calendar.getId());
-      userEvent.setEventCategoryId(eventCategory.getId());
-      userEvent.setRepeatType(CalendarEvent.RP_DAILY);
-      userEvent.setRepeatInterval(2);
-      userEvent.setRepeatCount(3);
-      userEvent.setRepeatUntilDate(repeatUntilDate.getTime());
-      userEvent.setRepeatByDay(null);
-      userEvent.setRepeatByMonthDay(new long[] {2, 3, 4, 5, 7} );
-      storage_.saveOccurrenceEvent(username, calendar.getId(), userEvent, true);
-      
-      TimeZone timezone = TimeZone.getDefault();
-      storage_.getOccurrenceEvents(userEvent, fromCal, toCal, timezone.toString());
-      
-      List<CalendarEvent> listEvent = new ArrayList<CalendarEvent>();
-      listEvent.add(userEvent) ;
-      storage_.updateOccurrenceEvent(calendar.getId(), publicCalendar.getId(), String.valueOf(Calendar.TYPE_PRIVATE), String.valueOf(Calendar.TYPE_PUBLIC), listEvent, username);
-    } catch (Exception e) {
-      e.printStackTrace();
-      fail();
-    }
-  }
-  
-  public void testCalculateRecurrenceFinishDate() {
-    try {
-      java.util.Calendar fromCal = java.util.Calendar.getInstance();
-      fromCal.set(2011, 6, 20, 5, 30);
-      
-      java.util.Calendar toCal = java.util.Calendar.getInstance();
-      toCal.set(2011, 6, 25, 5, 30);
-      
-      CalendarEvent userEvent = new CalendarEvent();
-      userEvent.setFromDateTime(fromCal.getTime());
-      userEvent.setToDateTime(toCal.getTime());
-      userEvent.setRepeatType(CalendarEvent.RP_DAILY);
-      userEvent.setRepeatInterval(2);
-      userEvent.setRepeatCount(3);
-      userEvent.setRepeatUntilDate(null);
-      userEvent.setRepeatByDay(null);
-      userEvent.setRepeatByMonthDay(new long[] {2, 3, 4, 5, 7} );
-      
-      Date date = storage_.calculateRecurrenceFinishDate(userEvent);
-      
-      java.util.Calendar calendar = java.util.Calendar.getInstance();
-      calendar.setTime(date);
-      
-      assertEquals(2011, calendar.get(java.util.Calendar.YEAR));
-      assertEquals(6, calendar.get(java.util.Calendar.MONTH));
-      assertEquals(24, calendar.get(java.util.Calendar.DATE));
-      assertEquals(7, calendar.get(java.util.Calendar.HOUR));
-      assertEquals(0, calendar.get(java.util.Calendar.MINUTE));
-    } catch (Exception e) {
-      fail();
-    }
-  }
+//  
+//  public void testUpdateRecurrenceSeries() {
+//    try {
+//      CalendarCategory calendarCategory = createCalendarCategory("categoryName", "description");
+//      Calendar calendar = createCalendar("myCalendar", "Description", calendarCategory.getId());
+//      Calendar publicCalendar = createPublicCalendar("publicCalendar", "publicDescription", calendarCategory.getId());
+//      
+//      EventCategory eventCategory = createEventCategory("eventCategoryName0", "description");
+//      
+//      java.util.Calendar fromCal = java.util.Calendar.getInstance();
+//      java.util.Calendar toCal = java.util.Calendar.getInstance();
+//      toCal.add(java.util.Calendar.HOUR, 1);
+//      java.util.Calendar repeatUntilDate = java.util.Calendar.getInstance();
+//      repeatUntilDate.add(java.util.Calendar.DATE, 5);
+//      
+//      CalendarEvent userEvent = new CalendarEvent();
+//      userEvent.setSummary("Have a meeting");
+//      userEvent.setFromDateTime(fromCal.getTime());
+//      userEvent.setToDateTime(toCal.getTime());
+//      userEvent.setCalendarId(calendar.getId());
+//      userEvent.setEventCategoryId(eventCategory.getId());
+//      userEvent.setRepeatType(CalendarEvent.RP_DAILY);
+//      userEvent.setRepeatInterval(2);
+//      userEvent.setRepeatCount(3);
+//      userEvent.setRepeatUntilDate(repeatUntilDate.getTime());
+//      userEvent.setRepeatByDay(null);
+//      userEvent.setRepeatByMonthDay(new long[] {2, 3, 4, 5, 7} );
+//      storage_.saveOccurrenceEvent(username, calendar.getId(), userEvent, true);
+//      
+//      TimeZone timezone = TimeZone.getDefault();
+//      storage_.getOccurrenceEvents(userEvent, fromCal, toCal, timezone.toString());
+//      
+//      List<CalendarEvent> listEvent = new ArrayList<CalendarEvent>();
+//      listEvent.add(userEvent) ;
+//      storage_.updateOccurrenceEvent(calendar.getId(), publicCalendar.getId(), String.valueOf(Calendar.TYPE_PRIVATE), String.valueOf(Calendar.TYPE_PUBLIC), listEvent, username);
+//    } catch (Exception e) {
+//      e.printStackTrace();
+//      fail();
+//    }
+//  }
+//  
+//  public void testCalculateRecurrenceFinishDate() {
+//    try {
+//      java.util.Calendar fromCal = java.util.Calendar.getInstance();
+//      fromCal.set(2011, 6, 20, 5, 30);
+//      
+//      java.util.Calendar toCal = java.util.Calendar.getInstance();
+//      toCal.set(2011, 6, 25, 5, 30);
+//      
+//      CalendarEvent userEvent = new CalendarEvent();
+//      userEvent.setFromDateTime(fromCal.getTime());
+//      userEvent.setToDateTime(toCal.getTime());
+//      userEvent.setRepeatType(CalendarEvent.RP_DAILY);
+//      userEvent.setRepeatInterval(2);
+//      userEvent.setRepeatCount(3);
+//      userEvent.setRepeatUntilDate(null);
+//      userEvent.setRepeatByDay(null);
+//      userEvent.setRepeatByMonthDay(new long[] {2, 3, 4, 5, 7} );
+//      
+//      Date date = storage_.calculateRecurrenceFinishDate(userEvent);
+//      
+//      java.util.Calendar calendar = java.util.Calendar.getInstance();
+//      calendar.setTime(date);
+//      
+//      assertEquals(2011, calendar.get(java.util.Calendar.YEAR));
+//      assertEquals(6, calendar.get(java.util.Calendar.MONTH));
+//      assertEquals(24, calendar.get(java.util.Calendar.DATE));
+//      assertEquals(7, calendar.get(java.util.Calendar.HOUR));
+//      assertEquals(0, calendar.get(java.util.Calendar.MINUTE));
+//    } catch (Exception e) {
+//      fail();
+//    }
+//  }
+//  
+//  public void testGetOriginalRecurrenceEvents() {
+//    try {
+//      CalendarCategory calendarCategory = createCalendarCategory("categoryName", "description");
+//      Calendar publicCalendar = createPublicCalendar("myCalendar", "Description", calendarCategory.getId());
+//      
+//      EventCategory eventCategory = createEventCategory("eventCategoryName0", "description");
+//      
+//      java.util.Calendar fromCal = java.util.Calendar.getInstance();
+//      java.util.Calendar toCal = java.util.Calendar.getInstance();
+//      toCal.add(java.util.Calendar.HOUR, 1);
+//      java.util.Calendar repeatUntilDate = java.util.Calendar.getInstance();
+//      repeatUntilDate.add(java.util.Calendar.DATE, 5);
+//      
+//      CalendarEvent userEvent = new CalendarEvent();
+//      userEvent.setSummary("Have a meeting");
+//      userEvent.setFromDateTime(fromCal.getTime());
+//      userEvent.setToDateTime(toCal.getTime());
+//      userEvent.setCalendarId(publicCalendar.getId());
+//      userEvent.setEventCategoryId(eventCategory.getId());
+//      userEvent.setRepeatType(CalendarEvent.RP_DAILY);
+//      userEvent.setRepeatInterval(2);
+//      userEvent.setRepeatCount(3);
+//      userEvent.setRepeatUntilDate(repeatUntilDate.getTime());
+//      userEvent.setRepeatByDay(null);
+//      userEvent.setRepeatByMonthDay(new long[] {2, 3, 4, 5, 7} );
+//      storage_.saveOccurrenceEvent(username, publicCalendar.getId(), userEvent, true);
+//      
+//      List<CalendarEvent> events = storage_.getOriginalRecurrenceEvents(username, fromCal, toCal, new String[] {publicCalendar.getId()});
+//      assertEquals(1, events.size());
+//    } catch (Exception e) {
+//      fail();
+//    }
+//  }
   
   private CalendarCategory createCalendarCategory(String name, String description) {
     try {
