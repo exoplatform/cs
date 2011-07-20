@@ -1,0 +1,218 @@
+Index: eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/impl/JCRDataStorage.java
+===================================================================
+--- eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/impl/JCRDataStorage.java	(revision 70439)
++++ eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/impl/JCRDataStorage.java	(working copy)
+@@ -988,7 +988,6 @@
+             nodeMsg.setProperty(Utils.EXO_HASATTACH, !file.isShownInBody());
+           }
+         }
+-
+         if (nodeMsg.canAddMixin("mix:referenceable")) nodeMsg.addMixin("mix:referenceable");
+         nodeMsg.setProperty(Utils.EXO_SUBJECT, message.getSubject());
+         nodeMsg.setProperty(Utils.IS_LOADED, message.isLoaded());   
+@@ -1079,7 +1078,9 @@
+         node.setProperty(Utils.EXO_CC, getAddresses(msg, javax.mail.Message.RecipientType.CC));
+         node.setProperty(Utils.EXO_BCC, getAddresses(msg, javax.mail.Message.RecipientType.BCC));
+         node.setProperty(Utils.EXO_REPLYTO, Utils.decodeText(InternetAddress.toString(msg.getReplyTo())));
+-
++        if(msgUID != 0) {
++          node.setProperty(Utils.IS_LOADED, false);
++        }
+         String subject = msg.getSubject();
+         if (!Utils.isEmptyField(subject)) subject = Utils.decodeText(subject);
+         else subject = "";
+@@ -1347,10 +1348,10 @@
+           attId = attId.substring(0, attId.length() - 1);
+           hasIMGTag = true;
+           isNotAttach = false;
+-        } else if (disposition != null && (disposition.equalsIgnoreCase(Part.ATTACHMENT) || part.isMimeType("image/*"))) {
++        } else {
+           attId = "Attachment" + IdGenerator.generate();
+         } 
+-
++        
+         if (attHome.hasNode(attId)) return body;
+ 
+         Node nodeFile = attHome.addNode(attId, Utils.EXO_MAIL_ATTACHMENT);
+@@ -1376,18 +1377,22 @@
+           nodeContent.setProperty(Utils.JCR_DATA, part.getInputStream());
+           nodeFile.setProperty(Utils.ATT_IS_LOADED_PROPERLY, true);
+           nodeFile.setProperty(Utils.ATT_IS_SHOWN_IN_BODY, false);
+-          if (((disposition == null || !disposition.equalsIgnoreCase(Part.ATTACHMENT)) && part.isMimeType("image/*")) || hasIMGTag) {
++          if (hasIMGTag) {
+             nodeFile.setProperty(Utils.ATT_IS_SHOWN_IN_BODY, true);
+           }
++          isNotAttach = false;
+         } catch (Exception e) {
+           nodeContent.setProperty(Utils.JCR_DATA, new ByteArrayInputStream("".getBytes()));
+           nodeFile.setProperty(Utils.ATT_IS_LOADED_PROPERLY, false);
+           node.setProperty(Utils.ATT_IS_LOADED_PROPERLY, false);
+         }
+         nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance().getTimeInMillis());
+-        if (disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT) && !isNotAttach) {
++        if (!isNotAttach) {
+           node.setProperty(Utils.EXO_HASATTACH, true);
+         }else node.setProperty(Utils.EXO_HASATTACH, false);
++        if(node.isNew()) {
++          node.getSession().save();
++        } else node.save();
+       }
+     } catch (Exception e) {
+       e.printStackTrace();
+Index: eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIMessageList.java
+===================================================================
+--- eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIMessageList.java	(revision 70439)
++++ eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIMessageList.java	(working copy)
+@@ -52,6 +52,7 @@
+ import org.exoplatform.mail.webui.popup.UIPrintPreview;
+ import org.exoplatform.mail.webui.popup.UITagForm;
+ import org.exoplatform.web.application.ApplicationMessage;
++import org.exoplatform.webui.application.WebuiRequestContext;
+ import org.exoplatform.webui.config.annotation.ComponentConfig;
+ import org.exoplatform.webui.config.annotation.EventConfig;
+ import org.exoplatform.webui.core.UIApplication;
+@@ -826,107 +827,62 @@
+   
+   static public class ViewStarredActionListener extends EventListener<UIMessageList> {
+     public void execute(Event<UIMessageList> event) throws Exception {
+-      UIMessageList uiMessageList = event.getSource();     
+-      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+-      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+-      if(Utils.isEmptyField(accId)) {
+-        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
+-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+-        return ;
+-      }
+-      try {
+-        uiMessageList.filterMessage("@" + Utils.EXO_STAR + "='true'");
+-      } catch (PathNotFoundException e) {
+-        uiMessageList.setMessagePageList(null) ;
+-        uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
+-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
+-        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
+-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+-        return ;
+-      }
+-      uiMessageList.viewing_ = VIEW_STARRED ;
+-      uiMessageList.viewMode = MODE_LIST;
+-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
++      event.getSource().processViewMessageList(event.getRequestContext(), Utils.EXO_STAR, VIEW_STARRED);
+     }
+   }
+ 
+   static public class ViewUnreadActionListener extends EventListener<UIMessageList> {
+     public void execute(Event<UIMessageList> event) throws Exception {
+-      UIMessageList uiMessageList = event.getSource();
+-      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+-      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+-      if(Utils.isEmptyField(accId)) {
+-        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
+-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+-        return ;
+-      }
+-      try {
+-      uiMessageList.filterMessage("@" + Utils.EXO_ISUNREAD + "='true'");
+-      } catch (PathNotFoundException e) {
+-        uiMessageList.setMessagePageList(null) ;
+-        uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
+-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
+-        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
+-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+-        return ;
+-      }
+-      uiMessageList.viewing_ = VIEW_UNREAD ;
+-      uiMessageList.viewMode = MODE_LIST;
+-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
++      event.getSource().processViewMessageList(event.getRequestContext(), Utils.EXO_ISUNREAD, VIEW_UNREAD);
+     }
+   }
+ 
+   static public class ViewAttachmentActionListener extends EventListener<UIMessageList> {
+     public void execute(Event<UIMessageList> event) throws Exception {
+-      UIMessageList uiMessageList = event.getSource();
+-      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+-      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+-      if(Utils.isEmptyField(accId)) {
+-        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
+-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+-        return ;
+-      }
+-      try {
+-        uiMessageList.filterMessage("@" + Utils.EXO_HASATTACH + "='true'");
+-      } catch (PathNotFoundException e) {
+-        uiMessageList.setMessagePageList(null) ;
+-        uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
+-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
+-        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
+-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+-        return ;
+-      }
+-      uiMessageList.viewing_ = VIEW_ATTACHMENT ;
+-      uiMessageList.viewMode = MODE_LIST;
+-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
++      event.getSource().processViewMessageList(event.getRequestContext(), Utils.EXO_HASATTACH, VIEW_ATTACHMENT);
+     }
+   }
+ 
++  private void processViewMessageList(WebuiRequestContext context, String property, int type) throws Exception {
++    UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
++    String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
++    if (Utils.isEmptyField(accId)) {
++      uiPortlet.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null));
++      context.addUIComponentToUpdateByAjax(uiPortlet.getUIPopupMessages());
++      return;
++    }
++    try {
++      filterMessage("@" + property + "='true'");
++    } catch (PathNotFoundException e) {
++      setMessagePageList(null);
++      uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
++      uiPortlet.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING));
++      context.addUIComponentToUpdateByAjax(uiPortlet.getUIPopupMessages());
++      context.addUIComponentToUpdateByAjax(uiPortlet);
++      return;
++    }
++    viewing_ = type;
++    viewMode = MODE_LIST;
++    context.addUIComponentToUpdateByAjax(getAncestorOfType(UIMessageArea.class));
++  }
++  
+   public void filterMessage(String viewQuery) throws Exception {
+     UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
+     MailService mailSrv = getApplicationComponent(MailService.class);
+-    setViewQuery(viewQuery);
+     String username = uiPortlet.getCurrentUser();
+     String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+-
+-    MessageFilter msgFilter = getMessageFilter();
+-    msgFilter.setAccountId(accountId);
+-    msgFilter.setOrderBy(getSortedBy());
+-    msgFilter.setAscending(isAscending_);
+-    msgFilter.setViewQuery(getViewQuery());
+-    if (!msgFilter.getName().equals("Search")) {
+-      msgFilter.setText("");
+-      msgFilter.setFolder((getSelectedFolderId() == null) ? null : new String[] {getSelectedFolderId()});
+-      msgFilter.setTag((getSelectedTagId() == null) ? null : new String[] {getSelectedTagId()});
++    viewQuery_ = viewQuery;
++    msgFilter_.setAccountId(accountId);
++    msgFilter_.setOrderBy(sortedBy_);
++    msgFilter_.setAscending(isAscending_);
++    msgFilter_.setViewQuery(viewQuery);
++    if (!msgFilter_.getName().equals("Search")) {
++      msgFilter_.setText("");
++      msgFilter_.setFolder((getSelectedFolderId() == null) ? null : new String[] { getSelectedFolderId() });
++      msgFilter_.setTag((getSelectedTagId() == null) ? null : new String[] { getSelectedTagId() });
+     }
+-    msgFilter.setHasStructure(false) ;
+-    setMessagePageList(mailSrv.getMessagePageList(username, msgFilter));
++    msgFilter_.setHasStructure(false);
++    setMessagePageList(mailSrv.getMessagePageList(username, msgFilter_));
+   }
+ 
+   static public class ReplyActionListener extends EventListener<UIMessageList> {

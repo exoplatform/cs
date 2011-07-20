@@ -52,6 +52,7 @@ import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
 import org.exoplatform.mail.webui.popup.UIPrintPreview;
 import org.exoplatform.mail.webui.popup.UITagForm;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -826,107 +827,62 @@ public class UIMessageList extends UIForm {
   
   static public class ViewStarredActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
-      UIMessageList uiMessageList = event.getSource();     
-      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
-      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      if(Utils.isEmptyField(accId)) {
-        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
-      try {
-        uiMessageList.filterMessage("@" + Utils.EXO_STAR + "='true'");
-      } catch (PathNotFoundException e) {
-        uiMessageList.setMessagePageList(null) ;
-        uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
-      uiMessageList.viewing_ = VIEW_STARRED ;
-      uiMessageList.viewMode = MODE_LIST;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+      event.getSource().processViewMessageList(event.getRequestContext(), Utils.EXO_STAR, VIEW_STARRED);
     }
   }
 
   static public class ViewUnreadActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
-      UIMessageList uiMessageList = event.getSource();
-      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
-      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      if(Utils.isEmptyField(accId)) {
-        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
-      try {
-      uiMessageList.filterMessage("@" + Utils.EXO_ISUNREAD + "='true'");
-      } catch (PathNotFoundException e) {
-        uiMessageList.setMessagePageList(null) ;
-        uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
-      uiMessageList.viewing_ = VIEW_UNREAD ;
-      uiMessageList.viewMode = MODE_LIST;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+      event.getSource().processViewMessageList(event.getRequestContext(), Utils.EXO_ISUNREAD, VIEW_UNREAD);
     }
   }
 
   static public class ViewAttachmentActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
-      UIMessageList uiMessageList = event.getSource();
-      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
-      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      if(Utils.isEmptyField(accId)) {
-        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
-      try {
-        uiMessageList.filterMessage("@" + Utils.EXO_HASATTACH + "='true'");
-      } catch (PathNotFoundException e) {
-        uiMessageList.setMessagePageList(null) ;
-        uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
-      uiMessageList.viewing_ = VIEW_ATTACHMENT ;
-      uiMessageList.viewMode = MODE_LIST;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+      event.getSource().processViewMessageList(event.getRequestContext(), Utils.EXO_HASATTACH, VIEW_ATTACHMENT);
     }
   }
 
+  private void processViewMessageList(WebuiRequestContext context, String property, int type) throws Exception {
+    UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
+    String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+    if (Utils.isEmptyField(accId)) {
+      uiPortlet.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null));
+      context.addUIComponentToUpdateByAjax(uiPortlet.getUIPopupMessages());
+      return;
+    }
+    try {
+      filterMessage("@" + property + "='true'");
+    } catch (PathNotFoundException e) {
+      setMessagePageList(null);
+      uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
+      uiPortlet.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING));
+      context.addUIComponentToUpdateByAjax(uiPortlet.getUIPopupMessages());
+      context.addUIComponentToUpdateByAjax(uiPortlet);
+      return;
+    }
+    viewing_ = type;
+    viewMode = MODE_LIST;
+    context.addUIComponentToUpdateByAjax(getAncestorOfType(UIMessageArea.class));
+  }
+  
   public void filterMessage(String viewQuery) throws Exception {
     UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
     MailService mailSrv = getApplicationComponent(MailService.class);
-    setViewQuery(viewQuery);
     String username = uiPortlet.getCurrentUser();
     String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-
-    MessageFilter msgFilter = getMessageFilter();
-    msgFilter.setAccountId(accountId);
-    msgFilter.setOrderBy(getSortedBy());
-    msgFilter.setAscending(isAscending_);
-    msgFilter.setViewQuery(getViewQuery());
-    if (!msgFilter.getName().equals("Search")) {
-      msgFilter.setText("");
-      msgFilter.setFolder((getSelectedFolderId() == null) ? null : new String[] {getSelectedFolderId()});
-      msgFilter.setTag((getSelectedTagId() == null) ? null : new String[] {getSelectedTagId()});
+    viewQuery_ = viewQuery;
+    msgFilter_.setAccountId(accountId);
+    msgFilter_.setOrderBy(sortedBy_);
+    msgFilter_.setAscending(isAscending_);
+    msgFilter_.setViewQuery(viewQuery);
+    if (!msgFilter_.getName().equals("Search")) {
+      msgFilter_.setText("");
+      msgFilter_.setFolder((getSelectedFolderId() == null) ? null : new String[] { getSelectedFolderId() });
+      msgFilter_.setTag((getSelectedTagId() == null) ? null : new String[] { getSelectedTagId() });
     }
-    msgFilter.setHasStructure(false) ;
-    setMessagePageList(mailSrv.getMessagePageList(username, msgFilter));
+    msgFilter_.setHasStructure(false);
+    setMessagePageList(mailSrv.getMessagePageList(username, msgFilter_));
   }
 
   static public class ReplyActionListener extends EventListener<UIMessageList> {

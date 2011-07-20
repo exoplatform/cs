@@ -988,7 +988,6 @@ public class JCRDataStorage {
             nodeMsg.setProperty(Utils.EXO_HASATTACH, !file.isShownInBody());
           }
         }
-
         if (nodeMsg.canAddMixin("mix:referenceable")) nodeMsg.addMixin("mix:referenceable");
         nodeMsg.setProperty(Utils.EXO_SUBJECT, message.getSubject());
         nodeMsg.setProperty(Utils.IS_LOADED, message.isLoaded());   
@@ -1079,7 +1078,9 @@ public class JCRDataStorage {
         node.setProperty(Utils.EXO_CC, getAddresses(msg, javax.mail.Message.RecipientType.CC));
         node.setProperty(Utils.EXO_BCC, getAddresses(msg, javax.mail.Message.RecipientType.BCC));
         node.setProperty(Utils.EXO_REPLYTO, Utils.decodeText(InternetAddress.toString(msg.getReplyTo())));
-
+        if(msgUID != 0) {
+          node.setProperty(Utils.IS_LOADED, false);
+        }
         String subject = msg.getSubject();
         if (!Utils.isEmptyField(subject)) subject = Utils.decodeText(subject);
         else subject = "";
@@ -1347,10 +1348,10 @@ public class JCRDataStorage {
           attId = attId.substring(0, attId.length() - 1);
           hasIMGTag = true;
           isNotAttach = false;
-        } else if (disposition != null && (disposition.equalsIgnoreCase(Part.ATTACHMENT) || part.isMimeType("image/*"))) {
+        } else {
           attId = "Attachment" + IdGenerator.generate();
         } 
-
+        
         if (attHome.hasNode(attId)) return body;
 
         Node nodeFile = attHome.addNode(attId, Utils.EXO_MAIL_ATTACHMENT);
@@ -1376,18 +1377,22 @@ public class JCRDataStorage {
           nodeContent.setProperty(Utils.JCR_DATA, part.getInputStream());
           nodeFile.setProperty(Utils.ATT_IS_LOADED_PROPERLY, true);
           nodeFile.setProperty(Utils.ATT_IS_SHOWN_IN_BODY, false);
-          if (((disposition == null || !disposition.equalsIgnoreCase(Part.ATTACHMENT)) && part.isMimeType("image/*")) || hasIMGTag) {
+          if (hasIMGTag) {
             nodeFile.setProperty(Utils.ATT_IS_SHOWN_IN_BODY, true);
           }
+          isNotAttach = false;
         } catch (Exception e) {
           nodeContent.setProperty(Utils.JCR_DATA, new ByteArrayInputStream("".getBytes()));
           nodeFile.setProperty(Utils.ATT_IS_LOADED_PROPERLY, false);
           node.setProperty(Utils.ATT_IS_LOADED_PROPERLY, false);
         }
         nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance().getTimeInMillis());
-        if (disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT) && !isNotAttach) {
+        if (!isNotAttach) {
           node.setProperty(Utils.EXO_HASATTACH, true);
         }else node.setProperty(Utils.EXO_HASATTACH, false);
+        if(node.isNew()) {
+          node.getSession().save();
+        } else node.save();
       }
     } catch (Exception e) {
       e.printStackTrace();
