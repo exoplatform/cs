@@ -1,0 +1,2481 @@
+Index: eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_en.properties
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_en.properties	(revision 0)
++++ eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_en.properties	(revision 0)
+@@ -0,0 +1,1063 @@
++javax.portlet.title=eXo Mail
++
++###################################################################
++       # org.exoplatform.mail.webui.UISelectAccount #
++###################################################################
++UISelectAccount.action.AddAccount=Add account
++UISelectAccount.action.EditAccount=Edit account
++UISelectAccount.action.DeleteAccount=Delete account
++UISelectAccount.msg.account-list-empty=You must add new account first.
++UISelectAccount.label.default=Default
++UISelectAccount.label.manage-accounts=Manage accounts
++###################################################################
++       # org.exoplatform.mail.webui.popup.UIAccountCreation #
++###################################################################
++UIPopupWindow.title.UIAccountCreationContainer = Account Wizard
++UIPopupWindow.title.UIAccountCreation = Create a new mail account  
++UIAccountCreation.tab.info.step0=Introduction step
++UIAccountCreation.tab.info.step1=Step 1 : Account name & description
++UIAccountCreation.tab.info.step2=Step 2 : Mail identity settings
++UIAccountCreation.tab.info.step3=Step 3 : Server information
++UIAccountCreation.tab.info.step4=Step 4 : User name & password
++UIAccountCreation.tab.info.step5=Step 5 : Verify information
++
++UIAccountWizardStepIntro.info.label1=Check to add new account
++UIAccountWizardStepIntro.info.label2=Check to edit account
++UIAccountWizardStep1.info.label1=Enter the name to identify this particular account, for example "Marry at work".
++UIAccountWizardStep1.info.label2=Write some description about your account, for example "This is the account I use for emails at work".
++UIAccountWizardStep2.info.label1=Mail identity is the name and email address used in your email correspondence. Each mail account has an identity, which is the information that identifies you to mail recipients when they receive your mails.
++UIAccountWizardStep3.info.label1=Select the type of mail service you are using. 
++UIAccountWizardStep3.info.label2=Enter the incoming and outgoing mail server, for example: mail.yourcompany.com
++UIAccountWizardStep3.info.label3=If in doubt, ask your system administrator.
++UIAccountWizardStep4.info.label1=Enter user name and password to connect on the mail server.
++UIAccountWizardStep5.info.label1=Verify that the information below is correct before saving and exiting this wizzard.
++ 
++UIPopupWindow.title.UIAccountPopupCreation=Create a new account  
++UIAccountCreation.label.selectActions=Create new
++UIAccountCreation.label.accounts=Accounts 
++UIAccountCreation.label.accountName=Account name
++UIAccountCreation.label.description=Description
++UIAccountCreation.label.checkFromDate=Do not download all messages (IMAP only)
++UIAccountCreation.label.fromDate=Limit to messages arrived since
++UIAccountCreation.label.outgoingName=Your display name
++UIAccountCreation.label.emailAddress=Email address
++UIAccountCreation.label.emailReply=Reply-to address
++UIAccountCreation.label.signature=Signature
++UIAccountCreation.label.serverType=Service type
++UIAccountCreation.label.incomingServer=Incoming mail server
++UIAccountCreation.label.incomingPort=Incoming server port
++UIAccountCreation.label.outgoingServer=Outgoing mail server
++UIAccountCreation.label.outgoingPort=Outgoing server port 
++UIAccountCreation.label.isSsl=Use incoming SSL
++UIAccountCreation.label.outgoingSsl=Use outgoing SSL
++UIAccountCreation.label.storeFolder=New messages will be fetched from
++
++UIAccountCreation.label.getMail=Start downloading messages now
++UIFormInputSetWithAction.msg.confirm-delete=Are you sure you want to delete ? 
++UIAccountCreation.msg.confirm-cancel=Your account is not yet configured. Are you sure you want to abort ?
++UIAccountCreation.msg.fields-requirement=Please fill all required fields.
++UIAccountCreation.msg.create-acc-successfully=Your account has been configured successfully.
++UIAccountCreation.msg.create-acc-unsuccessfully=Your account could not be configured properly. Please contact your administrator.
++UIAccountCreation.msg.getMail-unsuccessfully=Errors occured while downloading messages from server.
++UIAccountCreation.msg.userName-password-incorrect=The server indicated an invalid username or password.
++UIAccountCreation.label.wizardSteps=Steps
++
++UIAccountCreation.msg.account-name-requirement=Please give a name to your account.
++UIAccountCreation.msg.display-name-requirement=Please tell us what will be your display name for this account.
++UIAccountCreation.msg.email-address-requirement=You need to enter the email address for this account.
++UIAccountCreation.msg.email-address-is-invalid=Your email address doesn't look well formed. It should be something like yourname@yourcompany.com
++UIAccountCreation.msg.reply-address-is-invalid=Your reply-to address doesn't look well formed. It should be something like yourname@yourcompany.com
++UIAccountCreation.msg.incoming-server-requirement=Enter the name of the incoming server.
++UIAccountCreation.msg.outgoing-server-requirement=Enter the name of the outgoing server.
++UIAccountCreation.msg.store-folder-requirement=Please indicate where new messages arrive on server. If in doubt, use 'Inbox'.
++UIAccountCreation.msg.incoming-port-is-not-number=The incoming port should be a number. Ask your administrator.
++UIAccountCreation.msg.outgoing-port-is-not-number=The outgoing port should be a number. Ask your administrator.
++UIAccountCreation.msg.username-requirement=Please enter the username to connect on the server.
++UIAccountCreation.msg.password-requirement=Please enter the password for this username.
++
++UIAccountCreation.action.Next=#{word.next}
++UIAccountCreation.action.Back=#{word.back}
++UIAccountCreation.action.Finish=#{word.finish}
++UIAccountCreation.action.Cancel=#{word.cancel}
++
++###################################################################
++      # package org.exoplatform.mail.webui.popup.UIAccountSetting #
++###################################################################
++
++UIPopupWindow.title.UIAccountPopupSetting = Edit Account
++UIAccountSetting.tab.label.identitySettings=Identity
++UIAccountSetting.tab.label.incoming=Incoming
++UIAccountSetting.tab.label.outgoing=Outgoing
++UIAccountSetting.tab.label.fetchOptions=Fetch Options
++UIAccountSetting.label.accounts=Accounts
++UIAccountSetting.label.isOutgoingAuthentication=Enable SMTP authentication
++UIAccountSetting.label.useIncomingSettingForOutgoingAuthent=Use incoming server username/password
++UIAccountSetting.label.outgoingUsername=Username
++UIAccountSetting.label.outgoingPassword=Password
++UIAccountSetting.label.accountName=Account name
++UIAccountSetting.label.display-name=Your name
++UIAccountSetting.label.incomingUsername=Incoming user name
++UIAccountSetting.label.checkFromDate=Do not download all messages
++UIAccountSetting.label.fromDate=Limit to emails arrived since
++UIAccountSetting.label.yourOutgoingName=Your outgoing user name
++UIAccountSetting.label.yourEmailAddress=Your email address
++UIAccountSetting.label.replyToAddress=Reply-to address
++UIAccountSetting.label.incomingAccount=User name
++UIAccountSetting.label.incomingPassword=Password
++UIAccountSetting.label.isSavePassword=Remember password
++UIAccountSetting.label.mailSignature=Mail signature
++UIAccountSetting.label.placeSignature=Place signature
++UIAccountSetting.label.applySignatureBy=Apply signature by
++UIAccountSetting.label.serverType=Service type
++UIAccountSetting.label.incomingServer=Server name
++UIAccountSetting.label.outgoingServer=Server name
++UIAccountSetting.label.messageComeInFolder=Custom Inbox folder
++UIAccountSetting.label.leaveMailOnServer=Leave messages on server
++UIAccountSetting.label.skipMessageOverMaxSize=Skip messages with size over (Max: 5M)
++UIAccountSetting.label.markItAsDeleted=Mark messages as deleted on server
++UIAccountSetting.label.incomingPort=Port	
++UIAccountSetting.label.outgoingPort=Port
++UIAccountSetting.label.isSSL=Use secure authentication (SSL)
++UIAccountSetting.label.isOutgoingSsl=Use secure authentication (SSL)
++UIAccountSetting.label.checkMailAutomatically=Check mails automatically
++UIAccountSetting.label.emptyTrashWhenExit=Empty trash when exit
++UIAccountSetting.label.option.signOnHead=Header of message
++UIAccountSetting.label.option.signOnFoot=Footer of message
++UIAccountSetting.label.delete-acc=Delete account
++UIAccountSetting.msg.edit-acc-successfully=Account has been updated successfully.
++UIAccountSetting.msg.edit-acc-unsuccessfully=Account has been updated unsuccessfully.
++UIAccountSetting.msg.please-choose-specified-date=Please choose specified date
++UIAccountSetting.msg.email-address-is-invalid=Your email address doesn't look well formed. It should be something like yourname@yourcompany.com
++UIAccountSetting.msg.reply-address-is-invalid=Your email address doesn't look well formed. It should be something like yourname@yourcompany.com
++UIAccountSetting.msg.incoming-port-is-not-number=The port should be a number. Ask your administrator.
++UIAccountSetting.msg.outgoing-port-is-not-number=The port should be a number. Ask your administrator.
++UIAccountSetting.msg.field-password-is-required=Please enter the password.
++UIAccountSetting.msg.field-username-is-required=Please enter the username.
++
++UIAccountSetting.action.Save=#{word.save}
++UIAccountSetting.action.Cancel=#{word.cancel}
++
++UIPopupWindow.title.UIMailSettings=Settings
++UIMailSettings.label.default-account=Choose a default account
++UIMailSettings.label.number-of-conversation=Number of conversations per page
++UIMailSettings.label.period-check-mail=Automatic message check every
++UIMailSettings.label.compose-message-in=Compose message with
++UIMailSettings.label.reply-forward-as=Message format
++UIMailSettings.label.reply-message-with=Reply to message with
++UIMailSettings.label.forward-message-with=Forward message with
++UIMailSettings.label.prefix-message-with=Prefix message with
++UIMailSettings.label.save-sent-message=Save sent messages in 'Sent' folder
++UIMailSettings.label.returnReceipts=
++returnReceipts.label.askme=Ask me when someone requests a return receipt
++returnReceipts.label.never=Never send a return receipt 
++returnReceipts.label.always=Always send a return receipt 
++UIMailSettings.action.Save = #{word.save}
++UIMailSettings.action.Cancel = #{word.cancel}
++UIMailSettings.tab.label.general=General
++UIMailSettings.tab.label.return-receipt=Return Receipts
++UIMailSettings.tab.label.layout=Layout
++UIMailSettings-VerticalLayout.label.vertical-layout=Vertical
++UIMailSettings-HorizontalLayout.label.horizontal-layout=Horizontal
++UIMailSettings-NosplitLayout.label.nosplit-layout=Flip
++
++UIAccountSetting.msg.confirm-remove-account=Deleting this account will delete all associated emails. Do you confirm?
++
++UIAccountCreation.label.userName=User name
++UIAccountCreation.label.password=Password
++UIAccountCreation.label.savePassword=Save password
++
++UIMailSettings.label.general-settings=General
++
++
++UIMailSettings.label.option.period.0=Never
++UIMailSettings.label.option.period.5=5 minutes
++UIMailSettings.label.option.period.10=10 minutes
++UIMailSettings.label.option.period.20=20 minutes
++UIMailSettings.label.option.period.30=30 minutes
++UIMailSettings.label.option.period.60=1 hour
++UIMailSettings.label.option.editor.true=rich text
++UIMailSettings.label.option.editor.false=plain text
++UIMailSettings.label.option.format.true=same format of the original message
++UIMailSettings.label.option.format.false=plain text only
++UIMailSettings.label.option.replywith.true=original message as attachment
++UIMailSettings.label.option.replywith.false=original message text quoted
++UIMailSettings.label.option.forwardwith.true=original message as attachment
++UIMailSettings.label.option.forwardwith.false=original message text quoted
++
++UIPopupWindow.title.UIAddressForm=Find an email address
++UIAddressForm.action.Save=#{word.save}
++UIAddressForm.action.Cancel=#{word.cancel}
++
++###################################################################
++      # package org.exoplatform.mail.webui.UISearchForm #
++###################################################################
++UISearchForm.label.inputValue=Search:
++UISearchForm.msg.account-list-empty=You must add an account first.
++UISearchForm.msg.no-text-to-search=Please enter a search term.
++UISearchForm.label.advance-search=Advanced search
++UISearchForm.label.search=Search
++UISearchForm.msg.contain-special-characters=Your search term must contain only alphanumeric characters.
++
++###################################################################
++      # package org.exoplatform.mail.webui.UIActionBar #
++###################################################################
++UIActionBar.msg.account-list-empty=You must add an account first.
++UIActionBar.msg.userName-password-incorrect=Could not connect to server. Invalid user name or password.
++UIActionBar.msg.check-mail-error=An error occurred while checking messages on server. Please verify your settings.
++UIActionBar.msg.conection-false=An error occurred while connecting to server. Is network down?
++UIActionBar.label.check-mail=Get Mail
++UIActionBar.label.stop-check-mail=Stop
++UIActionBar.label.compose=Write Mail
++UIActionBar.label.address-book=Contacts
++UIActionBar.label.add-event=New Event
++UIActionBar.label.filter=Filters
++UIActionBar.label.accounts=Accounts
++UIActionBar.label.settings=Settings
++
++###################################################################
++      # package org.exoplatform.mail.webui.UIFolderContainer#
++###################################################################
++UIFolderContainer.action.AddFolder=Add
++UIFolderContainer.label.folders=Folders
++UIFolderContainer.label.my-folders=Personal Folders
++UIFolderContainer.label.new-folder=New folder
++UIFolderContainer.label.mark-all-read=Mark all read
++UIFolderContainer.label.move-all-to-trash=Move all to trash
++UIFolderContainer.label.empty-trash=Empty trash
++UIFolderContainer.label.new-subfoder=New Subfolder
++UIFolderContainer.label.rename=Rename
++UIFolderContainer.label.remove=Remove
++UIFolderContainer.label.Inbox=Inbox
++UIFolderContainer.label.Drafts=Drafts
++UIFolderContainer.label.Sent=Sent
++UIFolderContainer.label.Spam=Spam
++UIFolderContainer.label.Trash=Trash
++UIFolderContainer.label.click-to-collapse=Click to collapse
++UIFolderContainer.label.click-to-expand=Click to expand
++UIFolderContainer.msg.account-list-empty=You must add an account first.
++UIFolderContainer.msg.confirm-remove-folder=The folder and its content will be deleted. Do you confirm ?
++
++###################################################################
++      # package org.exoplatform.mail.webui.UIFolderForm#
++###################################################################
++UIPopupWindow.title.UIFolderForm=Add
++UIFolderForm.label.folderName=Folder name
++UIFolderForm.action.Save=#{word.save}
++UIFolderForm.action.Cancel=#{word.cancel}
++
++UIFolderForm.msg.error-create-folder=Folder could not be created.
++UIFolderForm.msg.folder-exist=Folder '{0}' already exists.
++UIFolderForm.msg.add-folder-successfuly=Folder '{0}' has been created successfully.
++
++###################################################################
++      # package org.exoplatform.mail.webui.UIRenameFolderForm#
++###################################################################
++UIPopupWindow.title.UIRenameFolderForm=Rename folder
++
++UIRenameFolderForm.label.curFolderName=Current name
++UIRenameFolderForm.label.newFolderName=New folder name
++
++UIRenameFolderForm.action.Save=#{word.save}
++UIRenameFolderForm.action.Cancel=#{word.cancel}
++
++UIRenameFolderForm.msg.error-rename-folder=Error while renaming the folder.
++
++###################################################################
++      # package org.exoplatform.mail.webui.popup.UIComposeForm#
++###################################################################
++UIPopupWindow.title.UIPopupActionComposeContainer=Compose a new message
++UIChildPopupWindowUIPopupActionAddressContainer.title.UIPopupActionComposeContainer=Compose a new message
++UIComposeForm.label.fromInput=UIComposeForm 
++UIComposeForm.label.options=Options
++UIComposeForm.label.returnReceipt=Return Receipt
++UIComposeForm.label.from=From	
++UIComposeForm.label.to=To
++UIComposeForm.label.cc=CC
++UIComposeForm.label.bcc=BCC
++UIComposeForm.label.subject=Subject
++UIComposeForm.label.attachments=Attachments
++UIComposeForm.label.messageContent=Message
++UIComposeForm.label.action.To=[To]
++UIComposeForm.label.action.ToCC=[CC]
++UIComposeForm.label.action.ToBCC=[BCC]
++UIComposeForm.label.action.remove=[Remove]
++UIComposeForm.label.send-mail=Send
++UIComposeForm.label.save-as-a-draft=Save in Drafts
++UIComposeForm.label.discard=Discard
++UIComposeForm.label.attach-file=Attach
++UIComposeForm.label.message-priority=Priority
++UIComposeForm.label.low-priority=Low
++UIComposeForm.label.normal-priority=Normal
++UIComposeForm.label.hight-priority=High
++UIComposeForm.label.editor-options=Editor
++UIComposeForm.label.rich-text-editor=Rich Text
++UIComposeForm.label.plain-text=Plain Text
++UIComposeForm.label.from=From
++UIComposeForm.label.add-cc=CC
++UIComposeForm.label.add-bcc=BCC
++UIComposeForm.label.to=To
++UIComposeForm.label.cc=Cc
++UIComposeForm.label.bcc=Bcc
++UIComposeForm.label.subject=Subject
++UIComposeForm.msg.to-field-required=Enter a recipient address in To: field.
++UIComposeForm.msg.send-mail-error=An error occurred while sending the email.
++UIComposeForm.msg.save-sent-error=The message could not be saved in Sent folder.
++UIComposeForm.msg.send-mail-succsessfuly=The message has been sent.
++UIComposeForm.msg.save-draft-error=The message could not be saved in Drafts folder.
++UIComposeForm.msg.save-mail-draff=Your message has been saved in draft folder.
++UIComposeForm.msg.to-field-empty=Enter a recipient address in To: field.
++UIComposeForm.msg.subject-field-empty=Your message needs to have a subject.
++UIComposeForm.msg.content-field-empty=Your message needs to have a body.
++UIComposeForm.msg.invalid-to-field=The email address in To field doesn't seem well formed.
++UIComposeForm.msg.invalid-cc-field=The email address in CC field doesn't seem well formed.
++UIComposeForm.msg.invalid-bcc-field=The email address in BCC field doesn't seem well formed.
++UIComposeForm.msg.select-at-least-recipient=Please specify at least one recipient.
++UIComposeForm.msg.there-was-an-error-parsing-the-addresses-sending-failed=There was an error parsing the addresses. The message was not sent.
++UIComposeForm.msg.the-username-or-password-may-be-wrong-sending-failed=The Username or Password may be wrong. The message was not sent.
++UIComposeForm.msg.sorry-there-was-an-error-sending-the-message-sending-failed=An error occured during transfer. The message was not sent.
++UIComposeForm.msg.there-was-an-unexpected-error-sending-falied=There was an unexpected error. The message was not sent. Please check your outgoing host again.
++UIComposeForm.msg.no-subject=It looks like your message has no Subject. Send anyway ?
++UIComposeForm.msg.please-check-configuration-for-smtp-server=Communication with the server failed. Save the message and verify the outgoing server.
++
++###################################################################
++      # package org.exoplatform.mail.webui.popup.UIAttachFileForm#
++###################################################################
++UIChildPopupWindowUIPopupActionComposeContainer.title.UIAttachFileForm=Attach files
++UIChildPopupWindowUIPopupActionEventContainer.title.UIAttachFileForm=Attach files
++UIAttachFileForm.label.upload = Attach file
++UIAttachFileForm.label.upload1=Upload file 1
++UIAttachFileForm.label.upload2=Upload file 2
++UIAttachFileForm.label.upload3=Upload file 3
++UIAttachFileForm.label.upload4=Upload file 4
++UIAttachFileForm.label.upload5=Upload file 5
++UIAttachFileForm.label.upload6=Upload file 6
++UIAttachFileForm.label.upload7=Upload file 7
++UIAttachFileForm.label.upload8=Upload file 8
++UIAttachFileForm.label.upload9=Upload file 9
++UIAttachFileForm.label.upload10=Upload file 10
++UIAttachFileForm.label.add-more=Add more
++UIAttachFileForm.action.Save=#{word.save}
++UIAttachFileForm.action.Cancel=#{word.cancel}
++UIAttachFileForm.msg.file-empty-error=You need to upload the file before saving.
++UIAttachFileForm.msg.upload-error=The file is too big for upload.
++UIAttachFileForm.msg.fileName-error=The name of the file is invalid, please try to rename it before uploading.
++UIAttachFileForm.msg.unformat-imagefile=The file is not image format, please select again.
++UIAttachFileForm.msg.size-attachs-must-be-smaller-than-10M=Total size of attachments must be smaller than 10M
++###################################################################
++      # package org.exoplatform.mail.webui.UITagContainer#
++###################################################################
++UITagContainer.label.tags=Tags
++UITagContainer.label.edit=Edit
++UITagContainer.label.remove=Remove
++UITagContainer.label.empty=Empty
++UITagContainer.action.AddTag=Add a new tag
++UITagContainer.msg.confirm-remove-tag=Are you sure you want to remove this tag ?
++
++###################################################################
++      # package org.exoplatform.mail.webui.popup.UITagForm#
++###################################################################
++UIPopupWindow.title.UITagForm=Tag Message
++UITagForm.label.select-avaiable-tag=Select an available tag
++UITagForm.label.tagName=Tag
++UITagForm.label.tag-name=Tag name
++UITagForm.label.choose-color=Color
++UITagForm.label.subject=Subject
++UITagForm.label.no-tag=
++UITagForm.label.tag-description=Description
++UITagForm.action.Add=Add
++UITagForm.action.Remove=Remove
++UITagForm.action.Cancel = #{word.cancel}
++UITagForm.msg.tag-already-exists=This tag already exists.
++UITagForm.msg.have-to-choose-at-least-a-tag=You have to select at least a tag
++UITagForm.msg.name-tag-no-value=Name the tag.
++###################################################################
++      # package org.exoplatform.mail.webui.popup.UIEditTagForm#
++###################################################################
++UIPopupWindow.title.UIEditTagForm=Tag
++UIEditTagForm.label.curTagName=Current name
++UIEditTagForm.label.newTagName=Name
++UIEditTagForm.label.description=Description
++UIEditTagForm.label.color=Color
++UIEditTagForm.action.Save=#{word.save}
++UIEditTagForm.action.Cancel=#{word.cancel}
++UIEditTagForm.msg.error-rename-tag=Could not rename the tag.
++UIEditTagForm.msg.name-required=Name the tag.
++UIEditTagForm.msg.tag-already-exists=This tag already exists, choose a different name.
++
++###################################################################
++      # package org.exoplatform.mail.webui.popup.UIAccountList#
++###################################################################
++UIPopupWindow.title.UIPopupDeleteAccountContainer=Delete account
++UIAccountList.header.name=Name
++UIAccountList.header.email=Email
++UIAccountList.header.server=Server
++UIAccountList.header.protocol=Service
++UIAccountList.header.action=
++UIAccountList.action.Close=#{word.close}
++UIAccountList.msg.confirm-delete=Are you sure you want to delete this account?
++UIAccountList.msg.remove-accout-error=Could not remove the account.
++
++###################################################################
++      # package org.exoplatform.mail.webui.popup.UIAddressForm#
++###################################################################
++UIChildPopupWindowUIPopupActionComposeContainer.title.UIAddressForm=Contacts
++UIAddressForm.label.contact-group=Group
++UIAddressForm.label.contact-search=Search
++UIAddressForm.label.change-group=ChangeGroup
++
++UIAddressForm.label.quick-search=Quick search
++UIAddressForm.label.addresses-from-group=Address book
++UIAddressForm.label.selected-group=Send to all
++UIAddressForm.label.checkAll=Check all
++UIAddressForm.label.name=Name
++UIAddressForm.label.email=Email
++UIAddressForm.label.add-address=Add
++UIAddressForm.label.replace=Replace
++UIAddressForm.label.cancel=Close
++
++UIAddressForm.label.option.all=All contacts
++UIAddressForm.optionGroup.label.personal-contacts=Personal address books
++UIAddressForm.optionGroup.label.public-contacts=Public address books
++UIAddressForm.optionGroup.label.public-groups-contacts=Public groups
++UIAddressForm.optionGroup.label.shared=Shared address books
++UIAddressForm.label.option.sharedContacts=shared contacts
++
++UIAddressForm.msg.contact-email-required=Please select at least one contact.
++UIAddressForm.msg.you-should-only-choose-contact-with-email-address=Please only choose contacts having an email address.
++UIAddressForm.msg.search-error-keyword=Please enter simple text in search field.
++###################################################################
++      # package org.exoplatform.mail.webui.popup.UIMoveMessageForm#
++###################################################################
++UIPopupWindow.title.UIMoveMessageForm=Move Message
++UIMoveMessageForm.label.folder=Move to folder
++UIMoveMessageForm.optionGroup.label.default-folder=Default folders
++UIMoveMessageForm.optionGroup.label.my-folder=Personal folders
++UIMoveMessageForm.action.Save=#{word.save}
++UIMoveMessageForm.action.Cancel=#{word.cancel}
++ApplicationMessage.WARNING=You haven't selected any message.
++UIMoveMessageForm.label.Inbox=Inbox
++UIMoveMessageForm.label.Drafts=Drafts
++UIMoveMessageForm.label.Sent=Sent
++UIMoveMessageForm.label.Spam=Spam
++UIMoveMessageForm.label.Trash=Trash
++UIMoveMessageForm.msg.selected-folder-is-not-exits-any-more=The selected folder does not exist anymore.
++UIMoveMessageForm.msg.move_delete_not_successful=Not all messages were moved or deleted. Sorry for our inconvenience.
++UIMoveMessageForm.msg.create-massage-not-successful=Not all messages were created on server. It is only available on client. Sorry for our inconvenience.
++##################################################################
++      # package org.exoplatform.mail.webui.UIMessageList#
++###################################################################
++UIMessageList.msg.account-list-empty=You must create an account.
++UIMessageList.msg.checkMessage-select-no-messages=Please select messages.
++UIMessageList.msg.checkMessage-select-many-messages=This action can only be executed on a single message.
++UIMessageList.label.receiving-messages=Receiving messages....
++UIMessageList.label.there-are-no-messages=There are no messages.
++UIMessageList.label.there-are-no-account=No account, click here to create one.
++UIMessageList.label.more-actions=More actions
++UIMessageList.label.mark-as-read=Mark as read
++UIMessageList.label.mark-as-unread=Mark as unread
++UIMessageList.label.add-star=Star
++UIMessageList.label.remove-star=Unstar
++UIMessageList.label.tag-message=Tag
++UIMessageList.label.move-message=Move
++UIMessageList.label.import-message=Import
++UIMessageList.label.export-message=Export
++UIMessageList.label.view=Filter
++UIMessageList.label.view-as=View as
++UIMessageList.label.list=List
++UIMessageList.label.thread=Thread
++UIMessageList.label.conversation=Conversation
++UIMessageList.label.groupBy=Group by
++UIMessageList.label.groupByReceivedDate=Received date
++UIMessageList.label.view-all-messages=View all
++UIMessageList.label.view-starred-messages=Starred
++UIMessageList.label.view-unstarred-messages=Unstarred
++UIMessageList.label.view-unread-messages=Unread
++UIMessageList.label.view-read-messages=Read
++UIMessageList.label.view-with-attachment=With attachments
++UIMessageList.label.edit-draft=Edit draft
++UIMessageList.label.print=Print
++UIMessageList.label.reply-to-sender=Reply
++UIMessageList.label.reply-to-all=Reply to all 
++UIMessageList.label.forward=Forward
++UIMessageList.label.create-filter-from-this=Filter messages like this
++UIMessageList.label.move-to-folder=Move to folder
++UIMessageList.label.tag=Tag
++UIMessageList.label.delete=Delete
++UIMessageList.label.not-spam=Not spam
++UIMessageList.label.report-spam=Report spam
++UIMessageList.label.add-sender-to-contacts=Add to contacts 
++UIMessageList.label.export-eml=Export (*.eml) 
++UIMessageList.label.sender=Sender
++UIMessageList.label.to=To
++UIMessageList.label.messages=Messages
++UIMessageList.label.threads=Threads
++UIMessageList.label.conversations=Conversations
++UIMessageList.label.to-index=to
++UIMessageList.label.of=of
++UIMessageList.label.subject=Subject
++UIMessageList.label.date-time=Date & Time
++UIMessageList.label.size=Size
++UIMessageList.label.first-page=First Page
++UIMessageList.label.previous-page=Previous Page
++UIMessageList.label.next-page=Next Page
++UIMessageList.label.last-page=Last Page
++
++UIMessageList.label.starting=Starting
++UIMessageList.label.stop=Stop
++UIMessageList.label.stoping=stoping
++UIMessageList.label.hide=Hide
++UIMessageList.label.refresh=Refresh
++UIMessageList.label.attachment=Attachment
++UIMessageList.label.check-all=Check All
++UIMessageList.label.sort-by-sender=Sort by sender
++UIMessageList.label.add-star-for-this-message=Star this message
++UIMessageList.label.sort-by-subject=Sort by subject
++UIMessageList.label.sort-by-date-time=Sort by date
++UIMessageList.label.sort-by-size=Sort by size
++UIMessageList.label.sort-by-priority=Sort by priority
++UIMessageList.label.total-messages-in-conversation=Total messages in conversation
++UIMessageList.label.no-subject=(no subject)
++UIMessageList.label.there-are-attachments-could-not-be-loaded-properly=Some attachments of this message could not be loaded properly.
++
++UIMessageList.msg.deleted_account=This account does no longer exist.
++UIMessageList.msg.confirm-remove-message=Are you sure you want to delete this(these) message(s)?
++##################################################################
++      # package org.exoplatform.mail.webui.UIMessagePreview#
++###################################################################
++UIMessagePreview.label.subject=Subject
++UIMessagePreview.label.from=From
++UIMessagePreview.label.reply-to=Reply-to
++UIMessagePreview.label.to=To
++UIMessagePreview.label.cc=Cc
++UIMessagePreview.label.bcc=Bcc
++UIMessagePreview.label.print=Print
++UIMessagePreview.label.reply-to-sender=Reply to sender
++UIMessagePreview.label.reply-to-all=Reply to all 
++UIMessagePreview.label.forward=Forward
++UIMessagePreview.label.create-filter-from-this=Filter messages like this
++UIMessagePreview.label.move-to-folder=Move to folder
++UIMessagePreview.label.tag=Tag
++UIMessagePreview.label.delete=Delete
++UIMessagePreview.label.attachments=Attachments
++UIMessagePreview.label.reply=Reply
++UIMessagePreview.label.size=Size
++UIMessagePreview.label.back-to-list=Back to List
++UIMessagePreview.label.hide-message-list=Hide message list pane
++UIMessagePreview.label.vertical-split-layout=Show message list pane
++UIMessagePreview.label.add-sender-to-contacts=Add to contacts 
++UIMessagePreview.label.export-eml=Export (*.eml) 
++UIMessagePreview.label.view-all-headers=View all headers
++
++UIMessagePreview.label.no-subject=No subject
++UIMessagePreview.label.add-star-for-this-message=Star this message
++UIMessagePreview.label.click-here-to-expand=Click here to expand content of message
++UIMessagePreview.label.date-time=Date & Time
++UIMessagePreview.label.view=View
++UIMessagePreview.label.download=Download
++UIMessagePreview.label.show-details=Show details
++UIMessagePreview.label.hide-details=Hide details
++UIMessagePreview.label.action-on-this-messge=Actions
++UIMessagePreview.label.maximize-reading-pane=Toggle reading pane
++UIMessagePreview.label.this-attachment-could-not-be-loaded-properly=This attachment could not be loaded properly.
++
++UIMessagePreview.label.question=Will you attend ?
++UIMessagePreview.label.yes-import=Yes and Import
++UIMessagePreview.label.yes=Yes
++UIMessagePreview.label.no=No
++UIMessagePreview.label.maybe=Maybe
++
++UIMessagePreview.msg.trouble-loading-event=The event might have been deleted, or you might not have access to it any more.
++UIMessagePreview.msg.confirm-remove-message=Are you sure you want to delete this message ?
++UIMessagePreview.msg.return-receipt-subject=Disposition notification
++UIMessagePreview.msg.return-receipt-text=The message sent on {0} to {1} with subject "{2}" has been displayed. This is no guarantee that the message has been read or understood.
++
++#########################################################
++			#UIIntroduction
++######################################################
++UIMessagePreview.UIIntroduction.label.title=Subject:
++UIMessagePreview.UIIntroduction.label.subject=Welcome to eXo Mail - eXo Collaboration Suite.
++UIMessagePreview.UIIntroduction.label.commentwarning=please do not reply to this message !
++
++UIMessagePreview.UIIntroduction.label.welcome=Welcome to
++UIMessagePreview.UIIntroduction.action.title.togglePreview=Toggle reading pane
++UIMessagePreview.UIIntroduction.label.overview=Overview
++
++UIMessagePreview.UIIntroduction.label.label0=eXo Mail is an email client with variety of features designed to make your e-mail experience more productive and convenient.
++UIMessagePreview.UIIntroduction.label.comment=Your powerful webmail
++UIMessagePreview.UIIntroduction.label.features=Features
++UIMessagePreview.UIIntroduction.label.label1=Folders : organize your emails in a folder tree
++UIMessagePreview.UIIntroduction.label.label2=Tags : flag messages with custom labels called tags to easily retrieve them
++UIMessagePreview.UIIntroduction.label.label3=Filters : filter incoming messages with special conditions to apply to special folder or tag.
++UIMessagePreview.UIIntroduction.label.label4=Advanced Search : find your emails thank to many powerfull search options.
++UIMessagePreview.UIIntroduction.label.label5=eXo Collaboration Suite Integration : reply to event invitations, organize meetings, collect new contacts all within Mail helped by Calendar and Address Book.
++
++##################################################################
++      # package org.exoplatform.mail.webui.popup.UIAdvancedSearchForm#
++###################################################################
++UIPopupWindow.title.UIAdvancedSearchForm=Advanced Search
++UIAdvancedSearchForm.label.search-input=search input
++UIAdvancedSearchForm.label.folder=Search in folder
++UIAdvancedSearchForm.label.from-field=From
++UIAdvancedSearchForm.label.to-field=To
++UIAdvancedSearchForm.label.subject-field=Subject
++UIAdvancedSearchForm.label.message-content=Message
++UIAdvancedSearchForm.label.from-date=Received after
++UIAdvancedSearchForm.label.to-date=Received before
++UIAdvancedSearchForm.label.filter-from-condition=From header condition
++UIAdvancedSearchForm.label.filter-to-condition=To header condition
++UIAdvancedSearchForm.label.filter-subject-condition=Subject condition
++UIAdvancedSearchForm.label.filter-body-condition=Body condition
++UIAdvancedSearchForm.label.search-priority=Priority
++UIAdvancedSearchForm.label.search-has-star=Has star
++UIAdvancedSearchForm.label.search-has-attachment=Has attachment
++UIAdvancedSearchForm.action.Cancel=#{word.cancel}
++UIAdvancedSearchForm.action.Search=Search
++UIAdvancedSearchForm.msg.date-time-invalid=To date must be after From date.
++UIAdvancedSearchForm.msg.invalid-date=Receive after and Received before field must be date type.
++UIAdvancedSearchForm.msg.search-query-invalid=Your search term must contain only alphanumeric characters.
++UIAdvancedSearchForm.optionGroup.label.default-folder=Default folders
++UIAdvancedSearchForm.optionGroup.label.my-folder=Personal folders
++UIAdvancedSearchForm.label.has-star=Has Star
++UIAdvancedSearchForm.label.priority=Priority
++UIAdvancedSearchForm.label.has-attachment=Has Attachment
++UIAdvancedSearchForm.label.option.0=contains
++UIAdvancedSearchForm.label.option.1=does not contain
++UIAdvancedSearchForm.label.option.2=is
++UIAdvancedSearchForm.label.option.3=is not
++UIAdvancedSearchForm.label.option.4=starts with
++UIAdvancedSearchForm.label.option.5=ends with
++UIAdvancedSearchForm.label.option.priority.0=--Choose--
++UIAdvancedSearchForm.label.option.priority.1=High
++UIAdvancedSearchForm.label.option.priority.3=Normal
++UIAdvancedSearchForm.label.option.priority.5=Low
++UIAdvancedSearchForm.label.Inbox=Inbox
++UIAdvancedSearchForm.label.Drafts=Drafts
++UIAdvancedSearchForm.label.Sent=Sent
++UIAdvancedSearchForm.label.Spam=Spam
++UIAdvancedSearchForm.label.Trash=Trash
++###################################################################
++      # package org.exoplatform.mail.webui.popup.UIPrintPreview#
++###################################################################
++UIPopupWindow.title.UIPrintPreview=Print Message
++UIPrintPreview.label.from=From
++UIPrintPreview.label.to=To
++UIPrintPreview.label.attachments=Attachments
++UIPrintPreview.action.Print=Print
++UIPrintPreview.label.size=Size
++UIPrintPreview.action.Cancel=#{word.close}
++
++###################################################################
++      # package org.exoplatform.mail.webui.popup.UIQuickAddEvent#
++###################################################################
++UIPopupWindow.title.UIQuickAddEvent=Quick add Event
++UIQuickAddEvent.label.eventName=Event summary  	
++UIQuickAddEvent.label.description=Description 	
++UIQuickAddEvent.label.from=From 	
++UIQuickAddEvent.label.to=To 	
++UIQuickAddEvent.label.allDay=All day
++UIQuickAddEvent.label.calendar=Calendar 	
++UIQuickAddEvent.label.category=Event category
++UIQuickAddEvent.label.mailReminder=By email
++UIQuickAddEvent.label.popupReminder=By popup
++
++UIQuickAddEvent.action.MoreDetail=More detail
++UIQuickAddEvent.action.Save=#{word.save} 	
++UIQuickAddEvent.action.Cancel=#{word.cancel} 	
++UIQuickAddEvent.msg.calendar-field-required=You must add a calendar first.
++UIQuickAddEvent.msg.category-field-required=You must add an event category first.
++UIQuickAddEvent.msg.logic-required=To date must be after the From date.
++UIQuickAddEvent.msg.add-unsuccessfully=Impossible to add this event.
++UIQuickAddEvent.msg.add-successfully= The event has been added successfully.
++UIQuickAddEvent.msg.fromDate-format=Start date format is invalid.
++UIQuickAddEvent.msg.toDate-format=End date format is invalid.
++
++###################################################################
++      # package org.exoplatform.mail.webui.popup.UIImportForm#
++###################################################################
++UIPopupWindow.title.UIImportForm=Import Message
++UIImportForm.label.UISelectFolder=Import to folder 
++UIImportForm.optionGroup.label.default-folder=Default folders
++UIImportForm.optionGroup.label.my-folder=Personal folders
++UIImportForm.label.choose-mime-message=Choose file (.eml)
++UIImportForm.label.import-to-folder=Import message into folder 
++UIImportForm.action.Import=Import
++UIImportForm.action.Cancel=#{word.cancel}
++UIImportForm.msg.file-upload-error=The file could not be uploaded.
++UIImportForm.msg.upload-error=Please upload the file before.
++UIImportForm.msg.import-messages-error=The message file could not be imported. Check format.
++UIImportForm.label.Inbox=Inbox
++UIImportForm.label.Drafts=Drafts
++UIImportForm.label.Sent=Sent
++UIImportForm.label.Spam=Spam
++UIImportForm.label.Trash=Trash
++###################################################################
++      # package org.exoplatform.mail.webui.popup.UIExportForm#
++###################################################################
++UIPopupWindow.title.UIExportForm=Export Message
++UIExportForm.label.export-file-type=Export format
++UIExportForm.label.export-file-name=File name
++UIExportForm.action.Export=Export
++UIExportForm.action.Cancel=#{word.cancel}
++
++UIExportForm.msg.export-name-blank=Please name the file to export.
++
++###################################################################
++      # package org.exoplatform.mail.webui.popup.UIViewAllHeaders#
++###################################################################
++UIPopupWindow.title.UIViewAllHeaders=All Message Headers
++UIViewAllHeaders.header.key=Header
++UIViewAllHeaders.header.value=Value
++UIViewAllHeaders.action.Close=#{word.close}
++
++##################################################################
++      # package org.exoplatform.mail.webui.popup.UIMessageFilter#
++###################################################################
++UIPopupWindow.title.UIMessageFilter=Message Filter
++UIPopupWindow.title.UIPopupActionFilterContainer=Message Filter
++
++UIMessageFilter.label.search-input=search input
++UIMessageFilter.label.folder=Search in folder
++UIMessageFilter.label.from-field=From
++UIMessageFilter.label.to-field=To
++UIMessageFilter.label.subject-field=Subject
++UIMessageFilter.label.message-content=Message
++UIMessageFilter.label.from-date=Received before
++UIMessageFilter.label.to-date=Received after
++UIMessageFilter.label.condition-contain=contains
++UIMessageFilter.label.condition-not-contain=doesn't contain
++UIMessageFilter.label.condition-is=is
++UIMessageFilter.label.condition-not-is=is not
++UIMessageFilter.label.condition-end-with=ends with
++UIMessageFilter.label.condition-start-with=starts with
++UIMessageFilter.label.add-filter=Add new filter
++UIMessageFilter.label.edit-filter=Edit filter
++UIMessageFilter.label.delete-filter=Delete filter
++UIMessageFilter.action.Close=Close
++
++UIMessageFilter.label.filter-name=Filter name
++UIMessageFilter.label.filter=Filter
++UIMessageFilter.label.click-here-to-add-a-new-filter=Click here to add a new filter
++UIMessageFilter.label.to=To
++UIMessageFilter.label.from=From
++UIMessageFilter.label.subject=Subject
++UIMessageFilter.label.body=Body
++UIMessageFilter.label.folder=Folder
++UIMessageFilter.label.tag=Tag
++UIMessageFilter.label.this-filter-contains-some-conditions-follow=This filter contains some conditions follow
++UIMessageFilter.label.then-apply-for=Then apply for
++UIMessageFilter.label.introduction-title1=Protect your inbox from email annoyances.
++UIMessageFilter.label.introduction-content1=Create filters to automatically shield your inbox from rogue messages and senders.
++UIMessageFilter.label.introduction-title2=Organize your messages automatically.
++UIMessageFilter.label.introduction-content2=Create filters to automatically tag or move messages into folders as they come.
++
++UIMessageFilter.msg.select-no-filter=Please select a specific filter to edit.
++UIMessageFilter.msg.confirm-remove-filter=Are you sure you want to delete this filter ? 
++##################################################################
++      # package org.exoplatform.mail.webui.popup.UIAddMessageFilter#
++###################################################################
++UIChildPopupWindowUIPopupActionFilterContainer.title.UIAddMessageFilter=Add/Edit Message Filter
++UIPopupWindow.title.UIAddMessageFilter=Add/Edit Message Filter
++UIAddMessageFilter.label.filter-name=Filter name
++UIAddMessageFilter.label.filter-from=From header 
++UIAddMessageFilter.label.filter-from-condition=From header condition
++UIAddMessageFilter.label.filter-to=To header
++UIAddMessageFilter.label.filter-to-condition=To header condition
++UIAddMessageFilter.label.filter-subject=Subject
++UIAddMessageFilter.label.filter-subject-condition=Subject condition
++UIAddMessageFilter.label.filter-body=Body
++UIAddMessageFilter.label.filter-body-condition=Body condition
++UIAddMessageFilter.label.filter-aplly-folder=Move the message to folder 
++UIAddMessageFilter.label.filter-aplly-tag=Apply tag
++UIAddMessageFilter.label.filter-keep-in-inbox=Keep in Inbox
++UIAddMessageFilter.label.apply-all-messages=Execute now
++UIAddMessageFilter.optionGroup.label.default-folder=Default folders
++UIAddMessageFilter.optionGroup.label.my-folder=Personal folders
++UIAddMessageFilter.action.Save=#{word.save}
++UIAddMessageFilter.action.Cancel=#{word.cancel}
++UIAddMessageFilter.msg.filter-name-blank=Name the filter.
++UIAddMessageFilter.msg.fill-at-lease-field=You must set at least one rule for the filter.
++
++UIAddMessageFilter.label.filter-name=Filter Name
++UIAddMessageFilter.label.if-all-of-the-flowing-true=If all of the flowing rules are true ...
++UIAddMessageFilter.label.from=From
++UIAddMessageFilter.label.to=To
++UIAddMessageFilter.label.subject=Subject
++UIAddMessageFilter.label.body=Body
++UIAddMessageFilter.label.then=Then
++UIAddMessageFilter.label.Inbox=Inbox
++UIAddMessageFilter.label.Drafts=Drafts
++UIAddMessageFilter.label.Sent=Sent
++UIAddMessageFilter.label.Spam=Spam
++UIAddMessageFilter.label.Trash=Trash
++
++UIAddMessageFilter.label.option.choose-tag=Choose a tag
++UIAddMessageFilter.label.option.0=contains
++UIAddMessageFilter.label.option.1=doesn't contain
++
++UIAddMessageFilter.msg.contain-special-characters=The filter term you entered is invalid. Try something simpler.
++##################################################################
++      # package org.exoplatform.mail.webui.popup.UIAddressBookForm#
++###################################################################
++UIPopupWindow.title.UIAddressBookForm=Contacts
++UIPopupWindow.title.UIPopupActionAddressContainer=Contacts
++UIAddressBookForm.label.select-group=Group
++UIAddressBookForm.action.Close=#{word.close}
++UIAddressBookForm.msg.confirm-remove-contact=Are you sure you want to delete this contact ? 
++UIAddressBookForm.msg.cannot-delete-this-contact=You can not delete this contact.
++UIAddressBookForm.msg.no-selected-contact-to-edit=Have no contact to edit
++UIAddressBookForm.msg.no-selected-contact-to-delete=Have no contact to delete.
++UIAddressBookForm.msg.no-selected-contact-to-send-mail=Impossible to find an email address.
++UIAddressBookForm.optionGroup.label.personal-contacts=Personal address books
++UIAddressBookForm.optionGroup.label.public-contacts=Group address books
++UIAddressBookForm.optionGroup.label.shared-contacts=Shared address books
++UIAddressBookForm.label.option.sharedContacts=Shared contacts
++UIAddressBookForm.msg.cannot-delete-ownerContact=This contact is the owner of the address book and cannot be deleted.
++UIAddressBookForm.msg.cannot-delete=This cannot be done from here. Please use eXo Address Book application for advanced editing capabilities.
++UIAddressBookForm.msg.cannot-edit=You do not have the permission to edit this contact.
++
++UIAddressBookForm.label.add-new-group=Add Address Book
++UIAddressBookForm.label.add-new-contact=Add
++UIAddressBookForm.label.edit-contact=Edit
++UIAddressBookForm.label.delete-contact=Delete
++UIAddressBookForm.label.search=Search
++UIAddressBookForm.label.contact=Contact
++UIAddressBookForm.label.profile=Profile
++UIAddressBookForm.label.nick-name=Nick name
++UIAddressBookForm.label.gender=Gender
++UIAddressBookForm.label.job-title=Job title
++UIAddressBookForm.label.birthday=Birthday
++UIAddressBookForm.label.email=Email
++UIAddressBookForm.label.send-multi-email=Send Email
++##################################################################
++      # package org.exoplatform.mail.webui.popup.UIAddGroupForm#
++###################################################################
++UIChildPopupWindowUIPopupActionAddressContainer.title.UIAddGroupForm=Add Address Book
++UIChildPopupWindowUIPopupAddContactForm.title.UIAddGroupForm=Add Address Book
++UIChildPopupWindowUIPopupActionAddContactContainer.title.UIAddGroupForm=Add Address Book
++UIPopupWindow.title.UIPopupActionEventContainer=Add event
++UIAddGroupForm.label.group-name=Name
++UIAddGroupForm.label.group-description=Description
++UIAddGroupForm.action.Add=Add
++UIAddGroupForm.action.Cancel=#{word.cancel}
++UIAddGroupForm.msg.group-name-required=Please give a name to this adress book.
++UIAddGroupForm.msg.group-name-exist=An address book with this name already exists, please choose a different one.
++
++##################################################################
++      # package org.exoplatform.mail.webui.popup.UIAdd/EditNewContact#
++###################################################################
++UIChildPopupWindowUIPopupActionAddressContainer.title.UIPopupAddContactForm=Contact
++UIPopupWindow.title.UIPopupActionAddContactContainer=Contact
++UIPopupWindow.title.UIPopupAddContactForm=Contact
++UIAddContactForm.label.select-group=Select group
++UIAddContactForm.label.name=Name
++UIAddContactForm.label.first-name=First name
++UIAddContactForm.label.last-name=Last name
++UIAddContactForm.label.nickName=Nickname
++UIAddContactForm.label.email=Email
++UIAddContactForm.label.gender=Gender
++UIAddContactForm.label.day=Day
++UIAddContactForm.label.month=Month
++UIAddContactForm.label.year=Year
++UIAddContactForm.label.birthday=Birthday
++UIAddContactForm.label.jobTitle=Job Title
++UIAddContactForm.label.male=Male
++UIAddContactForm.label.female=Female
++UIAddContactForm.msg.name-required=First and Last name are required.
++UIAddContactForm.msg.birthday-incorrect=Birthday is incorrect.
++UIAddContactForm.msg.date-time-invalid=Hm... It looks like this person was not born yet...You'd better check the birthday date one more time.
++UIAddContactForm.msg.email-required=Enter the email address.
++UIAddContactForm.msg.add-contact-successfully=The contact was added successfully to the address book.
++UIAddContactForm.action.Save=#{word.save}
++UIAddContactForm.action.Cancel=#{word.cancel}
++UIAddContactForm.optionGroup.label.personal-contacts=Personal address books
++UIAddContactForm.optionGroup.label.public-contacts=Group address books
++UIAddContactForm.optionGroup.label.shared-contacts=Shared address books
++UIAddContactForm.msg.email-invalid=Your email address doesn't look well formed. It should be something like yourname@yourcompany.com
++UIAddContactForm.msg.too-manyField=Sorry, the number of email adresses is limited.
++UIAddContactForm.msg.non-permission=You do not have permission to perform this action.
++
++UIAddContactForm.label.address-book=Address Book
++UIAddContactForm.label.first-name=First Name
++UIAddContactForm.label.last-name=Last Name
++UIAddContactForm.label.nick-name=Nick Name
++UIAddContactForm.label.gender=Gender
++UIAddContactForm.label.birthday=Birthday
++UIAddContactForm.label.job-title=Job Title
++UIAddContactForm.label.email=Email
++UIAddContactForm.label.picture=Picture
++UIAddContactForm.label.change=Change
++UIAddContactForm.label.delete=Delete
++
++UIAddContactForm.label.option.day=Day
++UIAddContactForm.label.option.month=Month
++UIAddContactForm.label.option.year=Year
++UIAddContactForm.label.addAddress=Ajouter un carnet d'adresse
++##################################################################
++      # package org.exoplatform.mail.webui.popup.UIImageForm#
++###################################################################
++UIChildPopupWindowUIPopupAddContactForm.title.UIImageForm=Change Image
++UIChildPopupWindowUIPopupActionAddContactContainer.title.UIImageForm=Change Image
++UIImageForm.action.Save=Save
++UIImageForm.action.Cancel=Cancel
++UIImageForm.label.upload=Upload file
++UIImageForm.msg.selectFile-required=You have to upload the image first.
++
++##################################################################
++      # package org.exoplatform.mail.webui.popup.UIEventForm#
++###################################################################
++UIPopupWindow.title.UIPopupAddEventContainer=Add/Edit Events
++UIEventForm.tab.label.eventDetail=Event detail
++UIEventForm.tab.label.eventReminder=Reminders
++UIEventForm.tab.label.eventShare=Participants
++UIEventForm.tab.label.eventAttender=Schedule
++UIEventForm.action.AddAttachment=Attach file
++UIEventForm.label.eventName=Event summary
++UIEventForm.label.description=Description
++UIEventForm.label.calendar=Calendar
++UIEventForm.label.category=Event Category
++UIEventForm.label.mailReminder=Remind by email	
++UIEventForm.label.mailReminderTime=When event starts in next
++UIEventForm.label.mailReminderAddress=Send reminders to  	  
++UIEventForm.label.popupReminder=Show a notification popup
++UIEventForm.label.popupReminderTime=When event starts in next
++UIEventForm.label.action.AddCategory=Add new category
++UIEventForm.label.from=From 
++UIEventForm.label.to=To
++UIEventForm.label.allDay=All day
++UIEventForm.label.repeat=Repeat
++UIEventForm.label.attachments=Attachments
++UIEventForm.label.place=Location
++UIEventForm.label.reminder=Reminder
++UIEventForm.label.timeReminder=Remind me before (minutes)
++UIEventForm.label.shareEvent=Event privacy
++UIEventForm.label.status=Show participants as
++UIEventForm.label.meeting=Invitation message
++UIEventForm.label.participant=Users to invite
++UIEventForm.label.action.AddParticipant=Add participant email
++UIEventForm.label.action.RemoveAttachment=Remove
++UIEventForm.label.action.AddEmailAddress=Add email address   
++UIEventForm.label.priority=Priority
++UIEventForm.label.action.AddAttachment=Upload file
++UIEventForm.label.dateFrom=From
++UIEventForm.label.dateTo=To
++UIEventForm.label.dateAll=All day
++UIEventForm.label.snooze=Snooze time
++UIEventForm.label.emailIsRepeat=Repeat
++UIEventForm.label.emailRepeatInterval=every
++UIEventForm.msg.summary-invalid=An event summary must not contain {0} or {1}.
++UIEventForm.msg.event-email-invalid=Email addresses are invalid.
++UIEventForm.msg.email-reminder-required=Please check reminder by email first.
++UIEventForm.msg.add-event-successfully=Event has been added successfully.
++UIEventForm.msg.update-event-successfully=Event has been saved successfully.
++UIEventForm.msg.add-event-error=Impossible to save event.
++UIEventForm.msg.event-summary-required=Event summary is required.
++UIEventForm.msg.event-calendar-required=You must select calendar first.
++UIEventForm.msg.event-category-required=You must add event category first.
++UIEventForm.msg.event-fromdate-required=From date is required.
++UIEventForm.msg.event-fromdate-notvalid=From date format is not correct.
++UIEventForm.msg.event-todate-required=To date is required.
++UIEventForm.msg.event-todate-notvalid=To date format is not correct.
++UIEventForm.msg.event-date-time-logic=To Date time must be greater than From Date time.
++UIEventForm.msg.event-date-time-getvalue=Date time is not correct.
++UIEventForm.msg.event-email-required=Please provide at list one email adress for reminders.
++UIEventForm.msg.have-no-calendar=The event could not be added. The calendar does no longer exist.
++UIEventForm.msg.have-no-permission-to-edit=The event could not be added. You don't have the permission to add events in this calendar.
++UIEventForm.action.Save=#{word.save}
++UIEventForm.action.Cancel=#{word.cancel}
++
++UIEventForm.label.option.false=No Repeat
++UIEventForm.label.option.true=Repeat
++
++UIEventForm.label.option.norepeat=No Repeat
++UIEventForm.label.option.daily=Daily
++UIEventForm.label.option.weekly=Weekly
++UIEventForm.label.option.monthly=Monthly
++UIEventForm.label.option.yearly=Yearly
++UIEventForm.label.option.weekend=Weekend
++UIEventForm.label.option.workingdays=Working days
++UIEventForm.label.option.none=None
++UIEventForm.label.option.high=High
++UIEventForm.label.option.normal=Normal
++UIEventForm.label.option.low=Low
++UIEventForm.label.minutes=minutes
++
++UIEventForm.optionGroup.label.privateCalendar=Personal calendars
++UIEventForm.optionGroup.label.sharedCalendar=Shared calendars
++UIEventForm.optionGroup.label.publicCalendar=Group calendars
++
++UIEventForm.label.defaultEventCategoryIdAll=All
++UIEventForm.label.defaultEventCategoryIdMeeting=Meeting
++UIEventForm.label.defaultEventCategoryIdCalls=Calls
++UIEventForm.label.defaultEventCategoryIdClients=Clients
++UIEventForm.label.defaultEventCategoryIdHoliday=Holiday
++UIEventForm.label.defaultEventCategoryIdAnniversary=Anniversary
++
++
++UIEventForm.label.defaultCalendarCategoryId=My group
++UIEventForm.label.defaultCalendarId=Default
++UIEventForm.label.SelectEmail=Select Email
++##################################################################
++#org.exoplatform.calendar.webui.popup.UIEventCategoryForm
++##################################################################
++
++UIEventCategoryForm.label.eventCategoryName=Category
++UIEventCategoryForm.label.description=Description
++UIEventCategoryForm.action.Reset=Reset
++UIEventCategoryForm.action.Cancel=#{word.close}
++UIEventCategoryForm.action.Save=#{word.save}
++UIEventCategoryForm.msg.name-required=Name the category.
++UIEventCategoryForm.msg.name-exist=This category already exists.
++##################################################################
++#org.exoplatform.calendar.webui.popup.UIEventCategoryManager
++##################################################################
++
++UIChildPopupWindowUIPopupActionEventContainer.title.UIEventCategoryManager=Event categories
++UIChildPopupWindowUIPopupActionEventContainer.title.UIPopupActionContainer=Event categories
++UIChildPopupWindowUIPopupActionEventContainer.title.UIAddressForm=Select an email address
++
++##################################################################
++#org.exoplatform.calendar.webui.popup.UIComfirmPassword
++##################################################################
++UIPopupWindow.title.UIComfirmPassword=Enter your password
++UIComfirmPassword.label.input-password=Enter your password
++UIComfirmPassword.label.saved-message=Remember this password
++UIComfirmPassword.action.Save=Check mail
++UIComfirmPassword.action.Cancel=#{word.cancel}
++
++##################################################################
++#org.exoplatform.calendar.webui.popup.UIEnterPasswordDialog
++##################################################################
++UIPopupWindow.title.UIEnterPasswordDialog=Enter your password
++UIChildPopupWindowUIPopupActionComposeContainer.title.UIEnterPasswordDialog=Enter your password
++UIEnterPasswordDialog.label.input-password=Enter your password
++UIEnterPasswordDialog.label.saved-message=Remember this password
++UIEnterPasswordDialog.action.Save=#{word.save}
++UIEnterPasswordDialog.action.Cancel=#{word.cancel}
++
++UIEnterPasswordDialog.label.you-have-to-enter-the-valid-password-for-account=Please enter your password or verify the account settings.
++UIEnterPasswordDialog.label.on=on
++UIEnterPasswordDialog.msg.there-was-an-error-parsing-the-addresses-sending-failed=There was an error parsing the addresses. The email was not sent.
++UIEnterPasswordDialog.msg.sorry-there-was-an-error-sending-the-message-sending-failed=There was an error sending the message.The email was not sent.
++UIEnterPasswordDialog.msg.there-was-an-unexpected-error-sending-falied=There was an unexpected error. The email was not sent.
++
++##################################################################
++      # package org.exoplatform.mail.webui.UIFetchingBar#
++###################################################################
++UIFetchingBar.label.starting=starting
++UIFetchingBar.label.stop=stop
++UIFetchingBar.label.stoping=stoping
++UIFetchingBar.label.hide=hide
++UIFetchingBar.label.refresh=refresh
++UIFetchingBar.msg.deleted_account=Account deleted outside
++
++##################################################################
++      # package org.exoplatform.mail.webui.popup.UIAskmeReturnReceipt#
++###################################################################
++UIPopupWindow.title.UIAskmeReturnReceipt=Confirm return receipt
++UIAskmeReturnReceipt.label.warning_askme_text=The sender requested to be informed when you read this message. Would you like to tell him ?
++UIAskmeReturnReceipt.action.Yes=Yes
++UIAskmeReturnReceipt.action.No=No
++
++#org.exoplatform.mail.webui.popup.UIFormMultiValueInputSet
++UIFormMultiValueInputSet.label.addItem=Add Item
++UIFormMultiValueInputSet.label.removeItem=Remove Item
+\ No newline at end of file
+Index: eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_en.properties
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_en.properties	(revision 0)
++++ eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_en.properties	(revision 0)
+@@ -0,0 +1,844 @@
++javax.portlet.title=eXo Calendar
++
++#org.exoplatform.calendar.webui.UICalendars
++UICalendars.label.calendars=Calendars
++UICalendars.label.tasks=Tasks
++UICalendars.label.task.needs-action=Needs action
++UICalendars.label.task.completed=Completed
++UICalendars.label.task.in-process=In progress
++UICalendars.label.task.canceled=Canceled
++
++UICalendars.label.AddGroup=Add group
++UICalendars.label.AddCalendar=Add calendar
++UICalendars.label.AddEventCategory=Add event category
++UICalendars.label.ImportCalendar=Import
++UICalendars.label.GenerateRss=Generate RSS
++UICalendars.label.GenerateCalDav=Generate CalDAV
++UICalendars.label.CalendarSetting=Calendar settings
++UICalendars.label.EditGroup=Edit
++UICalendars.label.DeleteGroup=Delete
++UICalendars.label.ExportCalendars=Export all
++UICalendars.label.ShareCalendar=Share
++UICalendars.label.SendMailCalendar=Email
++UICalendars.label.ExportCalendar=Export
++UICalendars.label.RemoveCalendar=Remove
++UICalendars.label.EditCalendar=Edit
++UICalendars.label.AddTask=Add task
++UICalendars.label.AddEvent=Add event
++UICalendars.label.calendarActions=Calendar actions
++UICalendars.label.groupActions=Group actions
++UICalendars.msg.have-no-permission-to-edit=You are not allowed to edit this calendar.
++UICalendars.msg.have-no-permission-to-edit-event=You are not allowed to edit this event.
++UICalendars.msg.confirm-delete-calendar=The calendar and all its events and tasks. Do you confirm?
++UICalendars.msg.confirm-delete-sharedCalendar=You are about to removed a shared calendar. You will no longer be able to see events and tasks of this calendar. Do you confirm?
++UICalendars.msg.confirm-delete-group=You are about to delete a group and all its calendars. Do you confirm?
++UICalendars.msg.have-no-calendar=The calendar has been removed or not created.
++UICalendars.msg.have-no-item=No items is selected.
++UICalendars.msg.calendar-require=You have to add calendar first.
++UICalendars.msg.not-support-edit-share-calendar=Shared calendars may not be modified.
++
++#org.exoplatform.calendar.webui.popup.UIPopupAction
++UICalendarPopupWindow.title.UIPopupAddCalendarContainer=Calendar 
++UICalendarChildPopupWindow.title.UIGroupSelector=User selector
++UICalendarPopupWindow.title.UICalendarCategoryForm=Calendar groups
++UICalendarPopupWindow.title.UIEventCategoryForm=Event categories
++UICalendarPopupWindow.title.UICalendarSettingForm=Calendar settings
++UICalendarPopupWindow.title.UIExportForm=Export calendars
++UICalendarPopupWindow.title.UIImportForm=Import calendars
++UICalendarPopupWindow.title.UIRssForm=Generate RSS
++UICalendarPopupWindow.title.UICalDavForm=Generate CalDAV
++UICalendarPopupWindow.title.UIFeed=Calendar Feed
++UICalendarPopupWindow.title.UIAdvancedSearchForm=Advanced Search
++UICalendarPopupWindow.title.UISharedForm=Sharing calendar
++UICalendarPopupWindow.title.UIPermissionSelectPopup=Share calendar
++UICalendarChildPopupWindow.title.UISelectUserForm=Select users
++UISharedForm.label.calendarName=Calendar name
++UISharedForm.label.canEdit=Edit permission
++UISharedForm.label.UICombobox=UISharedForm
++UISharedForm.label.UIInputUserSelect=UISharedForm
++UISharedForm.label.action.SelectUser=User
++UISharedForm.label.action.SelectGroup=Group
++UISharedForm.label.action.SelectMemberShip=Role
++
++UIAddEditPermission.header.viewPermission=User name
++UIAddEditPermission.header.editPermission=Can edit
++UIAddEditPermission.header.action=Actions
++UIAddEditPermission.label.true=Yes
++UIAddEditPermission.label.false=No
++
++UIPopupWindowUserSelect.title.UIUserSelector=Select users
++UIPopupWindowUserSelectEventForm.title.UIUserSelector=Select users
++UIPopupWindowUserSelectTaskForm.title.UIUserSelector=Select users
++UIPopupWindowAddUserEventForm.title.UIUserSelector=Select users
++
++#org.exoplatform.calendar.webui.popup.UICalendarCategoryForm
++UICalendarCategoryForm.action.Reset=Reset
++UICalendarCategoryForm.action.Cancel=#{word.close}
++UICalendarCategoryForm.action.Save=#{word.save}
++UICalendarCategoryForm.label.categoryName=Group name
++UICalendarCategoryForm.label.description=Description
++UICalendarCategoryForm.msg.category-name-required=Group name is required.
++UICalendarCategoryForm.msg.name-invalid=This name is invalid for a group of calendar, choose something simpler.
++UICalendarCategoryForm.msg.group-existed=This group already exists.
++
++#org.exoplatform.calendar.webui.popup.UICalendarForm
++UICalendarForm.tab.label.MyTab=My tab
++UICalendarForm.label.selectPermission=Select Permission
++UICalendarPopupWindow.title.UICalendarForm=Calendar
++UICalendarForm.action.Cancel=Cancel
++UICalendarForm.action.Save=Save
++UICalendarForm.action.Reset=Reset
++UICalendarForm.tab.label.public=Groups
++UICalendarForm.tab.label.calendarDetail=Calendar details
++UICalendarForm.label.displayName=Display name
++UICalendarForm.label.description=Description
++UICalendarForm.label.category=Groups
++UICalendarForm.label.isPublic=Is public?
++UICalendarForm.label.action.AddCategory=Add group
++UICalendarForm.label.action.SelectUser=Select user
++UICalendarForm.label.action.SelectMemberShip=Select membership
++UICalendarForm.label.locale=Country (Language)
++UICalendarForm.label.timeZone=Time zone
++UICalendarForm.label.selectGroups=Show in groups
++UICalendarForm.label.selectColor=Color
++UICalendarForm.label.editPermission=Editable by
++UICalendarForm.label.action.EditPermission=Change permission
++UICalendarForm.label.action.SelectPermission=Select permission
++UICalendarForm.msg.name-invalid=This name is invalid for a calendar, choose something simpler.
++UICalendarForm.msg.name-exist=The name {0} already exists.
++UICalendarForm.msg.name-not-on-group=The name {0} is not on group {1}, remove it
++UICalendarForm.msg.group-empty=Select at least one group where the calendar will be displayed.
++UICalendarForm.msg.category-empty=Add a calendar group first.
++UICalendarForm.msg.checkbox-public-notchecked=Please check at least one group.
++UICalendarForm.msg.checkbox-notchecked=Select {0} in order to change permissions.
++#org.exoplatform.calendar.webui.popup.UIEventCategoryForm
++UIEventCategoryForm.label.eventCategoryName=Event category
++UIEventCategoryForm.label.description=Description
++UIEventCategoryForm.action.Reset=Reset
++UIEventCategoryForm.action.Cancel=Close
++UIEventCategoryForm.action.Save=Save
++UIEventCategoryForm.msg.name-invalid=This name is invalid for a category, choose something simpler.
++UIEventCategoryForm.msg.name-is-default=This name is duplicated with the default category, you can not create it.
++UIEventCategoryForm.msg.name-exist=This category already exists.
++#org.exoplatform.calendar.webui.popup.UICalendarSettingForm
++UICalendarSettingForm.tab.label.setting=Settings
++UICalendarSettingForm.tab.label.defaultCalendarTab=Displayed calendars
++UICalendarSettingForm.label.viewType=View type
++UICalendarSettingForm.label.timeInterval=Time interval(in minutes)
++UICalendarSettingForm.label.weekStartOn=Week start on
++UICalendarSettingForm.label.dateFormat=Date format
++UICalendarSettingForm.label.timeFormat=Time format
++UICalendarSettingForm.label.location=Country (Language)
++UICalendarSettingForm.label.timeZone=Time Zone
++UICalendarSettingForm.label.showWorkingTime=Show working times
++UICalendarSettingForm.label.beginTime=Start
++UICalendarSettingForm.label.endTime=End
++UICalendarSettingForm.label.baseURL=RSS base URL
++UICalendarSettingForm.label.defaultCalendars=Note:
++UICalendarSettingForm.label.note=Uncheck calendars that you want to hide.
++UICalendarSettingForm.label.privateCalendar=Personal calendars
++UICalendarSettingForm.label.sharedCalendar=Shared calendars
++UICalendarSettingForm.label.publicCalendar=Group calendars
++UICalendarSettingForm.label.option.0=Day view
++UICalendarSettingForm.label.option.1=Week view
++UICalendarSettingForm.label.option.2=Month view
++UICalendarSettingForm.label.option.3=Year view
++UICalendarSettingForm.label.option.4=List view
++UICalendarSettingForm.label.option.5=Schedule view
++UICalendarSettingForm.label.option.6=Work week
++UICalendarSettingForm.label.option.dfm0=dd/mm/yyyy
++UICalendarSettingForm.label.option.dfm1=dd-mm-yyyy
++UICalendarSettingForm.label.option.dfm2=mm/dd/yyyy
++UICalendarSettingForm.label.option.dfm3=mm-dd-yyyy
++UICalendarSettingForm.label.option.12-Hours=AM/PM
++UICalendarSettingForm.label.option.24-Hours=24 Hours
++UICalendarSettingForm.label.option.1-wst=Sunday
++UICalendarSettingForm.label.option.2-wst=Monday
++UICalendarSettingForm.label.option.3-wst=Tuesday
++UICalendarSettingForm.label.option.4-wst=Wednesday
++UICalendarSettingForm.label.option.5-wst=Thursday
++UICalendarSettingForm.label.option.6-wst=Friday
++UICalendarSettingForm.label.option.7-wst=Saturday
++
++UICalendarSettingForm.action.Cancel=#{word.cancel}
++UICalendarSettingForm.action.Save=#{word.save}
++UICalendarSettingForm.msg.working-time-logic=End working time must greater than begin working time
++#org.exoplatform.calendar.webui.popup.UIGroupSelector
++UICalendarPopupWindow.title.UIGroupSelector=Select on right pane
++UIGroupSelector.label.selectGroup=Select group
++UIGroupSelector.label.selectUser=Select user
++UIGroupSelector.label.selectMemberShip=Select membership
++#org.exoplatform.calendar.webui.popup.UIEventForm
++UICalendarPopupWindow.title.UIPopupAddEventContainer=Add/edit event
++UIEventForm.tab.label.eventDetail=Detail
++UIEventForm.tab.label.eventReminder=Reminders
++UIEventForm.tab.label.eventShare=Participants
++UIEventForm.tab.label.eventAttender=Schedule
++UIEventForm.action.AddAttachment=Attach file
++UIEventForm.action.AddUser=Add participant
++UIEventForm.action.Save=#{word.save}
++UIEventForm.action.Cancel=#{word.cancel}
++UIEventForm.label.eventName=Event summary
++UIEventForm.label.description=Description
++UIEventForm.label.calendar=Calendar
++UIEventForm.label.category=Event Category
++UIEventForm.label.mailReminder=Remind by email
++UIEventForm.label.repeat=Repeat
++UIEventForm.label.mailReminderTime=Send mail before event starts in
++UIEventForm.label.mailReminderAddress=Also send reminders to  	  
++UIEventForm.label.popupReminder=Show a notification popup
++UIEventForm.label.popupReminderTime=When event starts in next
++UIEventForm.label.action.AddCategory=Add new category
++UIEventForm.label.from=From 
++UIEventForm.label.to=To
++UIEventForm.label.allDay=All day
++UIEventForm.label.attachments=Attachments
++UIEventForm.label.place=Location
++UIEventForm.label.reminder=Reminder
++UIEventForm.label.timeReminder=Remind me before (minutes)
++UIEventForm.label.shareEvent=Privacy
++UIEventForm.label.status=Available
++UIEventForm.label.participant=Participants to invite
++UIEventForm.label.action.AddParticipant=Find participant
++UIEventForm.label.action.RemoveAttachment=Remove
++UIEventForm.label.action.AddEmailAddress=Add email address   
++UIEventForm.label.priority=Priority
++UIEventForm.label.action.AddAttachment=Upload file
++UIEventForm.label.dateAll=All day
++UIEventForm.label.checkTime=Apply selected date
++UIEventForm.label.timeTo=From
++UIEventForm.label.timeFrom=To
++UIEventForm.label.action.AddUser=Add Participant
++UIEventForm.label.emailIsRepeat=Repeat
++UIEventForm.label.emailRepeatInterval=every
++UIEventForm.label.popupIsRepeat=Repeat
++UIEventForm.label.popupRepeatInterval=every
++UIEventForm.label.Participants=Participants
++UIEventForm.label.DeleteUsername=Remove attendee 
++UIEventForm.label.AddUsername=Add attendee
++UIEventForm.label.FreeTimes=Available
++UIEventForm.label.BusyTimes=Busy
++UIEventForm.label.isSendMail=Send an invitation
++UIEventForm.label.SelectEmail=Add more
++UIEventForm.label.invitation=Invitation
++UIEventForm.label.invitedTo=You are invited to
++UIEventForm.label.fromWho=By
++UIEventForm.label.when=When ?
++
++UIEventForm.msg.summary-invalid=An event summary must not contain {0} or {1}.
++UIEventForm.msg.error-particimant-email-required=Add participants to invite.
++UIEventForm.msg.invalid-username='{0}' is not a valid user name
++UIEventForm.msg.email-reminder-required=Please check reminder by email first.
++UIEventForm.msg.add-event-successfully=Event has been added successfully.
++UIEventForm.msg.update-event-successfully=Event has been saved successfully.
++UIEventForm.msg.add-event-error=Impossible to save event.
++UIEventForm.msg.event-summary-required=Event summary is required.
++UIEventForm.msg.event-calendar-required=You must select calendar first.
++UIEventForm.msg.event-category-required=You must add event category first.
++UIEventForm.msg.event-fromdate-required=From date is required.
++UIEventForm.msg.event-fromdate-notvalid=From date format is not correct.
++UIEventForm.msg.event-todate-required=To date is required.
++UIEventForm.msg.event-todate-notvalid=To date format is not correct.
++UIEventForm.msg.event-date-time-logic=To Date time must be greater than From Date time.
++UIEventForm.msg.event-date-time-getvalue=Date time is not correct.
++UIEventForm.msg.event-email-required=The list ofemail address must not be empty.
++UIEventForm.msg.event-email-invalid={0} is not a valid email address
++UIEventForm.msg.can-not-check=You can't check availability over one day.
++UIEventForm.msg.participant-required=You have to add participant.
++UIEventForm.msg.name-not-correct=User '{0}' was not found.
++UIEventForm.msg.check-free-busy-required=Check availability
++UIEventForm.msg.cant-send-email=You need to have an eXo Mail account to send an email
++UIEventForm.msg.error-send-email=Impossible to send mail to participants. Please verify your eXo Mail account settings.
++UIEventForm.msg.event-participant-invalid='{0}' is not a valid participant.
++UIEventForm.optionGroup.label.privateCalendar=Personal calendars
++UIEventForm.optionGroup.label.sharedCalendar=Shared calendars
++UIEventForm.optionGroup.label.publicCalendar=Group calendars
++
++UIEventForm.label.option.none=None
++UIEventForm.label.option.normal=Normal 
++UIEventForm.label.option.high=High
++UIEventForm.label.option.low=Low 
++UIEventForm.label.option.norepeat=No repeat
++UIEventForm.label.option.no-repeat=No repeat
++UIEventForm.label.option.repeat=Repeat
++UIEventForm.label.option.daily=Daily
++UIEventForm.label.option.workingdays=Working days
++UIEventForm.label.option.weekend=Weekend 
++UIEventForm.label.option.weekly=Weekly
++UIEventForm.label.option.monthly=Monthly 
++UIEventForm.label.option.yearly=Yearly
++UIEventForm.label.option.private=Private
++UIEventForm.label.option.public=Public
++UIEventForm.label.option.busy=Busy
++UIEventForm.label.option.available=Available 
++UIEventForm.label.option.outside=Outside
++
++#org.exoplatform.calendar.webui.popup.UIAddEmailAddress
++UICalendarPopupWindow.title.UIAddEmailAddress=Add mail address
++
++#org.exoplatform.calendar.webui.popup.UIExportForm
++UIExportForm.action.Cancel=#{word.cancel}
++UIExportForm.action.Save=#{word.save}
++UIExportForm.label.name=File name
++UIExportForm.label.type=Export format
++UIExportForm.msg.event-does-not-existing=There is no events to export in this calendar or this isn't an event.
++UIExportForm.msg.calendar-does-not-existing=Select the calendar to export.
++
++#org.exoplatform.calendar.webui.popup.UIImportForm
++UIImportForm.action.Cancel=#{word.cancel}
++UIImportForm.action.Save=#{word.save}
++UIImportForm.label.type=Format
++UIImportForm.label.upload=Upload file
++UIImportForm.label.isAddTo=Choose an existing calendar
++UIImportForm.label.impotTo=Import to
++UIImportForm.label.displayName=Calendar name
++UIImportForm.label.description=Description
++UIImportForm.label.category=Groups
++UIImportForm.label.locale=Country (Language)
++UIImportForm.label.timeZone=Time zone
++UIImportForm.label.selectColor=Color
++UIImportForm.label.AddCalendar=New calendar
++UIImportForm.label.permission=Editable by
++
++UIImportForm.optionGroup.label.privateCalendar=Personal calendar
++UIImportForm.optionGroup.label.sharedCalendar=Shared calendar
++UIImportForm.optionGroup.label.publicCalendar=Group calendar
++
++UIImportForm.msg.file-name-error=You must upload file first
++UIImportForm.msg.file-type-error=Invalid file type or format
++UIImportForm.msg.file-name-invalid=The name of the file is invalid. Try simpler.
++#org.exoplatform.calendar.webui.popup.UIRssForm
++UIRssForm.action.Cancel=#{word.cancel}
++UIRssForm.action.GenerateRss=Generate
++UIRssForm.label.name=Feed name
++UIRssForm.label.version=Version
++UIRssForm.label.url=URL
++UIRssForm.label.title=Title
++UIRssForm.label.description=Description
++UIRssForm.label.descriptions=
++UIRssForm.label.copyrights=
++UIRssForm.label.copyright=Copyright
++UIRssForm.label.link=Link
++UIRssForm.label.link-url=
++UIRssForm.label.pubDate=Publish date
++UIRssForm.label.info=Information
++UIRssForm.label.message=Check the calendars you want to add to the feed
++UIRssForm.tab.label.rssInfo=Informations
++UIRssForm.tab.label.rssCalendars=Calendars
++UIRssForm.msg.there-is-not-calendar=Please select at least one calendar to generate an RSS feed.
++UIRssForm.msg.feed-has-been-generated= The feed {0} has been generated successfully.
++UIRssForm.msg.feed-name-invalid=This is an invalid RSS title. Try simpler.
++UIRssForm.msg.no-data-generated=This calendar is empty. The feed was not generated.
++
++#org.exoplatform.calendar.webui.popup.UIFeed
++UIFeed.action.Close=#{word.close}
++UIFeed.msg.there-are-not-feed-generated=There is no feed existing.
++#org.exoplatform.calendar.webui.UICalendarView
++UICalendarView.msg.some-events-cannot-move=Unable to move {0} events (tasks) , you might have no permission.
++UICalendarView.msg.confirm-delete=Are you sure you want to delete?
++UICalendarView.msg.calendar-list-empty=You must have at least one calendar or accessible calendar.
++UICalendarView.msg.event-category-list-empty=You have to add at least one category first.
++UICalendarView.msg.check-box-required=Please check at least one event or task.
++UICalendarView.msg.delete-event-successfully=Event(s) or Task(s) have been deleted.
++UICalendarView.msg.delete-event-error=Impossible to delete events or tasks.
++UICalendarView.msg.function-not-supported=This feature is not there. Try to upgrade.
++UICalendarView.msg.have-no-edit-permission=You have no permission to edit.
++UICalendarView.msg.have-no-delete-permission=You have no permission to delete.
++UICalendarView.msg.event-not-found=The event(task) no longer exists or has been moved to other calendar.
++UICalendarView.msg.can-not-delete-all-event=Impossible to delete events (tasks) because you have no edit permission.
++UICalendarView.msg.feed-list-empty=You need to generate a feed first.
++#org.exoplatform.calendar.webui.UISearchForm
++UISearchForm.label.value=Search:
++UISearchForm.label.AdvancedSearch=Advanced Search
++UISearchForm.label.Search=Search
++UISearchForm.msg.no-text-to-search=Please enter a search term.
++UISearchForm.msg.error-text-to-search=Search term must not contain special characters. 
++
++#org.exoplatform.calendar.webui.UIQuickAddEvent
++UICalendarPopupWindow.title.UIQuickAddEvent = Quick add event
++UIQuickAddEvent.label.eventName=Event summary  	
++UIQuickAddEvent.label.description=Description 	
++UIQuickAddEvent.label.from=From 	
++UIQuickAddEvent.label.to=To 	
++UIQuickAddEvent.label.allDay=All day
++UIQuickAddEvent.label.calendar=Calendar 	
++UIQuickAddEvent.label.category=Event category
++UIQuickAddEvent.label.mailReminder=By email
++UIQuickAddEvent.label.popupReminder=By popup
++
++UIQuickAddEvent.optionGroup.label.privateCalendar=Personal calendars
++UIQuickAddEvent.optionGroup.label.sharedCalendar=Shared calendars
++UIQuickAddEvent.optionGroup.label.publicCalendar=Group calendars
++  
++UIQuickAddEvent.action.MoreDetail=More details
++UIQuickAddEvent.action.Save=#{word.save} 	
++UIQuickAddEvent.action.Cancel=#{word.cancel}
++ 	
++UIQuickAddEvent.msg.summary-invalid=An event summary must not contain {0} or {1}.
++UIQuickAddEvent.msg.calendar-field-required=You must select calendar first.
++UIQuickAddEvent.msg.category-field-required=You must add event category first.
++UIQuickAddEvent.msg.logic-required=To date must be greater than From date.
++UIQuickAddEvent.msg.add-unsuccessfully=Impossible to add event.
++UIQuickAddEvent.msg.add-successfully=Event has been added successfully.
++UIQuickAddEvent.msg.fromDate-format=Form date time is incorrect.
++UIQuickAddEvent.msg.toDate-format=To date time is incorrect.
++#org.exoplatform.calendar.webui.UIAdvancedSearchForm
++UIAdvancedSearchForm.label.text=Text
++UIAdvancedSearchForm.label.type=Type
++UIAdvancedSearchForm.label.calendar=Calendar
++UIAdvancedSearchForm.label.category=Category
++UIAdvancedSearchForm.label.state=Task status
++UIAdvancedSearchForm.label.priority=Priority
++UIAdvancedSearchForm.label.fromDate=From date
++UIAdvancedSearchForm.label.toDate=To date
++UIAdvancedSearchForm.label.option.0=None
++UIAdvancedSearchForm.label.option.normal=Normal 
++UIAdvancedSearchForm.label.option.high=High
++UIAdvancedSearchForm.label.option.low=Low
++UIAdvancedSearchForm.label.option.Event=Event
++UIAdvancedSearchForm.label.option.Task=Task
++UIAdvancedSearchForm.label.option.needs-action=Needs action
++UIAdvancedSearchForm.label.option.completed=Completed
++UIAdvancedSearchForm.label.option.in-process=In Process
++UIAdvancedSearchForm.label.option.tentative=Tentative
++UIAdvancedSearchForm.label.option.confirmed=Confirmed
++UIAdvancedSearchForm.label.option.canceled=Canceled
++  
++  
++  
++UIAdvancedSearchForm.action.Cancel=#{word.cancel}
++UIAdvancedSearchForm.action.Search=Search
++UIAdvancedSearchForm.msg.from-date-time-invalid=From date is invalid.
++UIAdvancedSearchForm.msg.to-date-time-invalid=To date is invalid.
++UIAdvancedSearchForm.msg.date-time-invalid=To date must be greater than From date.
++
++#org.exoplatform.calendar.webui.UIQuickAddTask
++UICalendarPopupWindow.title.UIQuickAddTask=Quick add task
++UIQuickAddTask.label.eventName=Task 	
++UIQuickAddTask.label.description=Note	
++UIQuickAddTask.label.from=From 	
++UIQuickAddTask.label.to=To 	
++UIQuickAddTask.label.allDay=All day
++UIQuickAddTask.label.calendar=Calendar 	
++UIQuickAddTask.label.category=Task category
++UIQuickAddTask.optionGroup.label.privateCalendar=Personal calendars
++UIQuickAddTask.optionGroup.label.sharedCalendar=Shared calendars
++UIQuickAddTask.optionGroup.label.publicCalendar=Group calendars
++
++UIQuickAddTask.action.MoreDetail=More details
++UIQuickAddTask.action.Save=#{word.save} 	
++UIQuickAddTask.action.Cancel=#{word.cancel} 	
++
++UIQuickAddTask.msg.summary-invalid=A task name must not contain {0} or {1}.
++UIQuickAddTask.msg.calendar-field-required=Please add a calendar first.
++UIQuickAddTask.msg.category-field-required=Please add a category first.
++UIQuickAddTask.msg.logic-required=To date must be greater than from date.
++UIQuickAddTask.msg.add-unsuccessfully=Impossible to add a task.
++UIQuickAddTask.msg.add-successfully=The task has been added successfully.
++
++#org.exoplatform.calendar.webui.popup.UIAttachFileForm
++UICalendarChildPopupWindow.title.UIAttachFileForm=Attach files
++UIAttachFileForm.label.upload1=File 1
++UIAttachFileForm.label.upload2=File 2
++UIAttachFileForm.label.upload3=File 3
++UIAttachFileForm.label.upload4=File 4
++UIAttachFileForm.label.upload5=File 5
++
++UIAttachFileForm.action.Save=#{word.save} 	
++UIAttachFileForm.action.Cancel=#{word.cancel} 	
++UIAttachFileForm.msg.fileName-error=Please make sure that you uploaded the selected file to the server by using the upload icon.
++UIAttachFileForm.msg.total-attachts-size-over10M=Total files size must be lower than 10MB.
++
++#org.exoplatform.calendar.webui.popup.UICalendarCategoryManager
++UICalendarChildPopupWindow.title.UICalendarCategoryManager=Calendar groups
++UICalendarPopupWindow.title.UICalendarCategoryManager=Calendar groups
++UICalendarCategoryManager.header.name=Group
++UICalendarCategoryManager.header.action=Actions
++UICalendarCategoryManager.action.title.Delete=Delete
++UICalendarCategoryManager.action.title.Edit=Edit
++UICalendarCategoryManager.msg.confirm-delete=The category will be deleted. Do you confirm ?
++UICalendarCategoryManager.msg.can-not-delete-calendar-in-use=You cannot delete this group. You are editing a calendar in this group. 
++
++#org.exoplatform.calendar.webui.popup.UIEventCategoryManager
++UICalendarChildPopupWindow.title.UIEventCategoryManager=Event categories
++UICalendarPopupWindow.title.UIEventCategoryManager=Event categories
++UIEventCategoryManager.header.name=Category
++UIEventCategoryManager.header.action=Actions
++UIEventCategoryManager.action.title.Delete=Delete
++UIEventCategoryManager.action.title.Edit=Edit
++UIEventCategoryManager.msg.confirm-delete=The category will be deleted. Do you confirm ?
++
++#org.exoplatform.calendar.webui.UIActionBar
++UIActionBar.label.QuickAdd=
++UIActionBar.label.Event=Event
++UIActionBar.label.Task=Task
++UIActionBar.label.CalendarView=
++UIActionBar.label.CalendarSettings=Settings
++UIActionBar.label.RSS=RSS
++UIActionBar.label.Print=Print
++UIActionBar.label.ShowHide=Custom Layout
++UIActionBar.label.DefaultLayout=Default layout
++UIActionBar.label.ShowHideAll=Toggle Left Pane
++UIActionBar.label.ShowHideMinicalendar=Toggle Mini Calendar
++UIActionBar.label.ShowHideCalendarList=Toggle Calendar List
++UIActionBar.label.Today=Today
++
++UIActionBar.label.UIDayView=Day
++UIActionBar.label.UIWeekView=Week
++UIActionBar.label.UIMonthView=Month
++UIActionBar.label.UIYearView=Year
++UIActionBar.label.UIListContainer=List
++UIActionBar.label.UIScheduleView=Schedule
++UIActionBar.label.UIWorkingView=Work week
++UIActionBar.label.previous=Previous
++UIActionBar.label.next=Next
++
++#org.exoplatform.calendar.webui.popup.UITaskForm
++UICalendarPopupWindow.title.UIPopupAddTaskContainer=Add/Edit tasks
++UITaskForm.tab.label.eventDetail=Detail
++UITaskForm.tab.label.eventReminder=Reminder
++UITaskForm.action.AddAttachment=Attach file
++UITaskForm.action.Save=#{word.save}
++UITaskForm.action.Cancel=#{word.cancel}
++UITaskForm.label.eventName=Task name
++UITaskForm.label.description=Note
++UITaskForm.label.delegation=Task delegations
++UITaskForm.label.calendar=Calendar
++UITaskForm.label.category=Task Category
++UITaskForm.label.mailReminder=Reminder by email	
++UITaskForm.label.mailReminderTime=When task starts in next
++UITaskForm.label.mailReminderAddress=Send reminders to  	  
++UITaskForm.label.popupReminder=Show notification popup
++UITaskForm.label.popupReminderTime=When event starts in next
++UITaskForm.label.action.AddCategory=Add new category
++UITaskForm.label.from=From 
++UITaskForm.label.to=To
++UITaskForm.label.allDay=All day
++UITaskForm.label.attachments=Attachments
++UITaskForm.label.place=Location
++UITaskForm.label.reminder=Reminder
++UITaskForm.label.timeReminder=Remind me when task starts in next
++UITaskForm.label.status=Task status
++UITaskForm.label.action.RemoveAttachment=Remove
++UITaskForm.label.action.AddEmailAddress=Add email address   
++UITaskForm.label.priority=Priority
++UITaskForm.label.action.AddAttachment=Upload file
++UITaskForm.label.dateFrom=From
++UITaskForm.label.dateTo=To
++UITaskForm.label.dateAll=All day
++UITaskForm.label.emailIsRepeat=Repeat
++UITaskForm.label.emailRepeatInterval=every
++UITaskForm.label.popupIsRepeat=Repeat
++UITaskForm.label.popupRepeatInterval=every
++UITaskForm.label.SelectEmail=Select email
++UITaskForm.label.action.SelectUser=Select user
++UITaskForm.label.option.none=None
++UITaskForm.label.option.normal=Normal 
++UITaskForm.label.option.high=High
++UITaskForm.label.option.low=Low 
++UITaskForm.label.option.needs-action=Needs action
++UITaskForm.label.option.completed=Completed
++UITaskForm.label.option.in-process=In Process
++UITaskForm.label.option.canceled=Cancelled
++UITaskForm.label.option.no-repeat=No repeat
++UITaskForm.label.option.repeat=Repeat
++UITaskForm.label.repeat=Repeat
++UITaskForm.msg.summary-invalid=Task name should not contain {0} or {1}.
++UITaskForm.msg.email-reminder-required=Please check email reminder first.
++UITaskForm.msg.event-email-invalid=The email address format is not valid.
++UITaskForm.msg.add-event-successfully=Task has been added successfully.
++UITaskForm.msg.update-event-successfully=Task has been saved successfully.
++UITaskForm.msg.add-event-error=Impossible to save tasks.
++UITaskForm.msg.event-summary-required=Task name is required.
++UITaskForm.msg.event-calendar-required=Please add a calendar first.
++UITaskForm.msg.event-category-required=Please add an event category first.
++UITaskForm.msg.event-fromdate-required=From date is required.
++UITaskForm.msg.event-fromdate-notvalid=From date format is not correct.
++UITaskForm.msg.event-todate-required=To date is required.
++UITaskForm.msg.event-todate-notvalid=To date format is not correct.
++UITaskForm.msg.event-date-time-logic=To Date time must be greater than From Date time.
++UITaskForm.msg.event-date-time-getvalue=Date time is not correct.
++UITaskForm.msg.event-email-required=Email list is required.
++
++UITaskForm.optionGroup.label.privateCalendar=Personal calendars
++UITaskForm.optionGroup.label.sharedCalendar=Shared calendars
++UITaskForm.optionGroup.label.publicCalendar=Group calendars
++#org.exoplatform.calendar.webui.UIEventPreview
++UICalendarPopupWindow.title.UIEventPreview=Preview
++
++#org.exoplatform.calendar.webui.popup.UIShareForm
++UISharedForm.msg.invalid-username=Invalid user name for sharing calendar.
++UISharedForm.label.username=User name
++UISharedForm.action.Save=#{word.save}
++UISharedForm.action.Close=#{word.close}
++UISharedForm.action.Cancel=#{word.close}
++UISharedForm.msg.not-found-user=User {0} was not found, please check again.
++UISharedForm.msg.found-user= User {0} is the owner of this calendar, no need to share the calendar to him.
++#org.exoplatform.calendar.webui.popup.UIAddressForm
++UICalendarChildPopupWindow.title.UIAddressForm=Select an email
++UIAddressForm.label.keyWord=Search
++UIAddressForm.label.group=Address books: 
++UIAddressForm.label.name=Name
++UIAddressForm.label.email=#{word.email}
++UIAddressForm.msg.keyword-error=Please enter plain text.
++UIAddressForm.msg.contact-email-required=Please select at least one contact.
++UIAddressForm.action.Cancel=#{word.close}
++UIAddressForm.action.Replace=Replace
++UIAddressForm.action.Add=Add
++
++#org.exoplatform.calendar.webui.popup.UICalDavForm
++UICalDavForm.action.Cancel=#{word.cancel}
++UICalDavForm.action.Generate=Generate
++UICalDavForm.label.name=Feed name
++UICalDavForm.label.version=Version
++UICalDavForm.label.url=URL
++UICalDavForm.label.title=Title
++UICalDavForm.label.description=Description
++UICalDavForm.label.copyright=Copyright
++UICalDavForm.label.pubDate=Publish date
++UICalDavForm.label.info=Information
++UICalDavForm.label.message=Check calendars you want to generate
++UICalDavForm.label.descriptions=
++UICalDavForm.label.copyrights=
++UICalDavForm.tab.label.rssInfo=Informations
++UICalDavForm.tab.label.rssCalendars=Calendars
++UICalDavForm.msg.there-is-not-calendar=Please select at least one calendar to generate a CalDAV feed.
++UICalDavForm.msg.feed-has-been-generated= The feed {0} has been generated successfully.
++
++#org.exoplatform.calendar.webui.UIHeaderBar
++UIHeaderBar.label.AddEvent=Add event
++UIHeaderBar.label.AddTask=Add task
++UIHeaderBar.label.Delete=Delete checked
++UIHeaderBar.label.eventCategory=Categories:
++UIHeaderBar.label.Event=Show events only
++UIHeaderBar.label.Task=Show tasks only
++UIHeaderBar.label.Both=Show all 
++UIHeaderBar.label.addNewCategory=Event categories management
++
++#org.exoplatform.calendar.webui.UIDayView
++UIDayView.label.previousDay=Previous day
++UIDayView.label.nextDay=Next day
++UIDayView.label.moveEvent=Drag and drop to move event
++UIDayView.label.option.all=All
++
++#org.exoplatform.calendar.webui.UIWeekView
++UIWeekView.label.previousWeek=Previous week
++UIWeekView.label.nextWeek=Next week
++UIWeekView.label.Week=Week
++UIWeekView.label.moveEvent=Drag and drop to move event
++UIWeekView.label.option.all=All
++
++#org.exoplatform.calendar.webui.UIMonthView
++UIMonthView.label.previousMonth=Previous month
++UIMonthView.label.nextMonth=Next month
++UIMonthView.label.option.all=All
++
++#org.exoplatform.calendar.webui.UIYearView
++UIYearView.label.previousYear=Previous year
++UIYearView.label.nextYear=Next year
++UIYearView.label.year=Year
++UIYearView.label.option.all=All
++#org.exoplatform.calendar.webui.UIListView
++UIListView.label.searchResult=Search result
++UIListView.label.Summary=Summary
++UIListView.label.Start=Start
++UIListView.label.End=End
++UIListView.label.CloseSearch=Close Search
++UIListView.label.noData=No events or tasks to show
++UIListView.label.Event=Event
++UIListView.label.Start=Start
++UIListView.label.End=End
++UIListView.label.EventDescription=Event Description
++UIListView.label.CheckAll=Check All
++UIListView.label.option.all=All
++UIListView.label.Task=Task
++UIListView.label.Priority=Priority
++UIListView.label.Status=Status
++UIListView.label.DueDate=Due date
++UIListView.label.TaskDelegation=Delegated to
++UIListView.label.days=days
++UIListView.label.needs-action=Needs action
++UIListView.label.completed=Completed
++UIListView.label.in-process=In process
++UIListView.label.canceled=Cancelled
++
++#org.exoplatform.calendar.webui.UIPreview
++UIPreview.label.eventDetail=Event details
++UIPreview.label.fullSize=View details
++UIPreview.label.From=From:
++UIPreview.label.To=To:
++UIPreview.label.View=View
++UIPreview.label.Close=#{word.close}
++UIPreview.label.Download=Download
++UIPreview.label.Place=Location:
++UIPreview.label.RepeatEvent=Repeat Event:
++UIPreview.label.Description=Description:
++UIPreview.label.EventReminder=Reminder:
++UIPreview.label.EventSharing=Privacy:
++UIPreview.label.ShowAs=Availability:
++UIPreview.label.Invitation=Invitation message:
++UIPreview.label.Participant=Participants:
++UIPreview.label.ViewOnCalendar=View on calendar
++UIPreview.label.EditEvent=Edit
++UIPreview.label.DeleteEvent=Delete
++
++UIPreview.label.taskDetail=Task detail
++UIPreview.label.Status=Status
++UIPreview.label.Priority=Priority:
++UIPreview.label.StartDate=Start Date:
++UIPreview.label.DueDate=Due Date
++UIPreview.label.TaskDelegation=Delegated to:
++UIPreview.label.Reminder=Reminder:
++UIPreview.label.Note=Note:
++UIPreview.label.EditTask=Edit Task
++UIPreview.label.DeleteTask=Delete Task
++
++UIPreview.label.none=None
++UIPreview.label.normal=Normal 
++UIPreview.label.high=High
++UIPreview.label.low=Low 
++UIPreview.label.needs-action=Needs action
++UIPreview.label.completed=Completed
++UIPreview.label.in-process=In Process
++UIPreview.label.canceled=Cancelled
++UIPreview.label.free=Available
++UIPreview.label.busy=Busy
++UIPreview.label.private=Private
++UIPreview.label.public=Public
++UIPreview.label.norepeat=No repeat
++UIPreview.label.daily=Daily
++UIPreview.label.weekly=Weekly
++UIPreview.label.monthly=Monthy
++UIPreview.label.yearly=Yearly
++UIPreview.label.weekend=Weekend
++UIPreview.label.workingdays=Working days
++UIPreview.label.false=Private
++UIPreview.label.true=Public
++
++#org.exoplatform.calendar.webui.UIPreviewPopup
++UIPreviewPopup.label.eventDetail=Event detail
++UIPreviewPopup.label.fullSize=View full - size event
++UIPreviewPopup.label.From=From:
++UIPreviewPopup.label.To=To:
++UIPreviewPopup.label.View=View
++UIPreviewPopup.label.Close=#{word.close}
++UIPreviewPopup.label.Download=Download
++UIPreviewPopup.label.Place=Location:
++UIPreviewPopup.label.RepeatEvent=Event repetition:
++UIPreviewPopup.label.Description=Description:
++UIPreviewPopup.label.EventReminder=Reminder:
++UIPreviewPopup.label.EventSharing=Privacy:
++UIPreviewPopup.label.ShowAs=Availability:
++UIPreviewPopup.label.Invitation=Invitation email:
++UIPreviewPopup.label.Participant=Participants:
++UIPreviewPopup.label.ViewOnCalendar=Belongs to calendar
++UIPreviewPopup.label.EditEvent=Edit Event
++UIPreviewPopup.label.DeleteEvent=Delete Event
++UIPreviewPopup.label.available=available
++
++UIPreviewPopup.label.taskDetail=Task detail
++UIPreviewPopup.label.Status=Status
++UIPreviewPopup.label.Priority=Priority
++UIPreviewPopup.label.StartDate=Start date
++UIPreviewPopup.label.DueDate=Due date
++UIPreviewPopup.label.TaskDelegation=Delegated to
++UIPreviewPopup.label.Reminder=Reminder
++UIPreviewPopup.label.Note=Note
++UIPreviewPopup.label.EditTask=Edit
++UIPreviewPopup.label.DeleteTask=Delete
++
++UIPreviewPopup.label.none=None
++UIPreviewPopup.label.normal=Normal 
++UIPreviewPopup.label.high=High
++UIPreviewPopup.label.low=Low 
++UIPreviewPopup.label.needs-action=Needs action
++UIPreviewPopup.label.completed=Completed
++UIPreviewPopup.label.in-process=In Process
++UIPreviewPopup.label.canceled=Cancelled
++UIPreviewPopup.label.available=Available
++UIPreviewPopup.label.busy=Busy
++UIPreviewPopup.label.private=Private
++UIPreviewPopup.label.public=Public
++UIPreviewPopup.label.norepeat=No repeat
++UIPreviewPopup.label.daily=Daily
++UIPreviewPopup.label.weekly=Weekly
++UIPreviewPopup.label.monthly=Monthy
++UIPreviewPopup.label.yearly=Yearly
++UIPreviewPopup.label.weekend=Weekend
++UIPreviewPopup.label.workingdays=Working days
++
++UIPreviewPopup.label.false=Private
++UIPreviewPopup.label.true=Public
++#org.exoplatform.calendar.webui.ContextMenu
++ContextMenu.label.addEvent=Add new event
++ContextMenu.label.addTask=Add new task
++ContextMenu.label.View=View
++ContextMenu.label.Edit=Edit
++ContextMenu.label.Delete=Delete
++ContextMenu.label.ExportEvent=Export
++
++#org.exoplatform.calendar.webui.UISelectUserForm
++UISelectUserForm.label.keyWord=Search
++UISelectUserForm.label.group=Group:
++UISelectUserForm.label.name=#{word.name}
++UISelectUserForm.label.email=#{word.email}
++UISelectUserForm.label.option.all=All
++
++UISelectUserForm.label.option.userName=#{word.userName}
++UISelectUserForm.label.option.lastName=#{word.lastName}
++UISelectUserForm.label.option.firstName=#{word.firstName}
++UISelectUserForm.label.option.email=#{word.email}
++
++UISelectUserForm.label.Replace=Replace
++UISelectUserForm.label.Add=Add 
++UISelectUserForm.label.Close=#{word.close}
++UISelectUserForm.msg.user-required=Please check at least one user.
++ 
++#org.exoplatform.calendar.webui.popup.UIInvitationForm
++UIInvitationForm.label.default-invitation-msg=You are invited to join this event
++UIInvitationForm.label.participant=Participants
++UIInvitationForm.label.invitation-msg=Invitation Message 
++UIInvitationForm.label.contact-picker=Pick a contact
++UIInvitationForm.label.user-picker=Pick a user
++UIInvitationForm.label.group-picker=Pick a group
++UIInvitationForm.action.Save=#{word.save}
++UIInvitationForm.action.Cancel=#{word.cancel}
++UIEventForm.label.info=Participants :
++UIEventForm.label.answer=Attending ?
++UIEventForm.label.always=Always
++UIEventForm.label.never=Never
++UIEventForm.label.ask=Ask
++UIEventForm.label.send=Invitations sending
++UIEventForm.label.confirm-msg="The event will be saved and invitations sent. Do you confirm?"
++UIEventForm.label.messageName=Invitation message
++shareEvent.label.private=Private
++shareEvent.label.public=Public
++status.label.busy=Busy
++status.label.available=Available
++status.label.outside=Outside
++send.label.setting=Use calendar settings
++send.label.never=Never
++send.label.always=Always
++send.label.ask=Ask
++UICalendarChildPopupWindow.title.UIInvitationContainer=Invitations
++PUIPopupGroupSelector.title.PGroupSelector=Select group
++UIPopupWindow3.title.UIAddressForm=Add Contact
++UICalendarSettingForm.label.send=Send event invitations
++UIPopupWindow.title.UIAddressForm=Select Address
++
++#org.exoplatform.calendar.webui.popup.UIConfirmForm
++UICalendarChildPopupWindow.title.UIConfirmForm=Confirm
++UIConfirmForm.label.confirm=Message
++UIConfirmForm.action.ConfirmOK=Save and Send	
++UIConfirmForm.action.ConfirmCancel=#{word.save}
++
++#org.exoplatform.calendar.webui.popup.UIEventShareTab
++UIEventForm.msg.confirm-delete=Do you confirm deletion this participant from the list ?
++eventShare.header.participant=Participant
++eventShare.header.status=Status
++eventShare.header.action=
++eventShare.action.title.Delete=Delete
++
++UIQuckAddEventPopupWindow.title.UIQuickAddEvent=Quick add event
++UIQuckAddTaskPopupWindow.title.UIQuickAddTask=Quick add task
++
+Index: eXoApplication/contact/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/contact/ContactPortlet_en.properties
+===================================================================
+--- eXoApplication/contact/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/contact/ContactPortlet_en.properties	(revision 0)
++++ eXoApplication/contact/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/contact/ContactPortlet_en.properties	(revision 0)
+@@ -0,0 +1,558 @@
++javax.portlet.title=eXo Address Book
++
++UIContactPopupWindow.title.AddNewContact=Add/Edit Contact
++contactActionUIPopupWindow.title.UIAddressForm=Select Email
++UIContactPopupWindow.title.UICategoryForm=Add/Edit Address book
++contactActionUIPopupWindow.title.UICategoryForm=Add/Edit Address book
++UIContactPopupWindow.title.AddNewEvent=Add Event
++UIContactPopupWindow.title.ExportForm=Export Contacts
++UIContactPopupWindow.title.ImportAddress=Import Address Books
++UIContactPopupWindow.title.ImportContacts=Import Contacts
++UIContactPopupWindow.title.UIExportAddressBookForm=Export Address Books
++UIContactPopupWindow.title.UITagForm=Add/Remove Tag
++contactActionUIPopupWindow.title.UIImageForm=Upload Image
++contactActionUIPopupWindow.title.UIPopupContainer
++UIContactPopupWindow.title.ContactDetails=Contact Details
++UIContactPopupWindow.title.UIMoveContactsForm=Move Contact
++UIContactPopupWindow.title.UIEditTagForm=Add/Edit tag 
++UIContactPopupWindow.title.UIAdvancedSearchForm=Advanced Search
++UIPopupGroupSelector.title.UIGroupSelector=Group Selector
++
++UIPopupWindowUserSelect.title.UIUserSelector=User Selector
++UIContactPopupWindow.title.UIPermissionGroupForm=Share Address Book to other users
++UIContactPopupWindow.title.UIPermissionContactForm=Share contact to other users
++UIContactPopupWindow.title.UIPermissionContactsForm=Share contacts to other users
++UIContactPopupWindow.title.UIMoveToPublicForm=Move to Group AddressBook
++UIContactPopupWindow.title.UIComposeForm=Send Email
++contactActionUIPopupWindow.title.UIComposeForm=Send Email
++
++#org.exoplatform.contact.webui.popup.UICategorySelect
++UICategorySelect.label.category=Address Book
++UICategorySelect.label.action.AddCategory=Add Address Book
++
++#org.exoplatform.contact.webui.popup.UIContactForm
++UIContactForm.label.contactName=Contact name
++UIContactForm.action.Save=#{word.save}
++UIContactForm.action.Cancel=#{word.cancel}
++UIContactForm.label.firstName=First Name
++UIContactForm.label.lastName=Last Name
++UIContactForm.label.nickName=Nick Name
++UIContactForm.label.gender=Gender
++UIContactForm.label.option.day=day
++UIContactForm.label.option.month=month
++UIContactForm.label.option.year=year
++UIContactForm.label.day=Day
++UIContactForm.label.month=Month
++UIContactForm.label.year=Year
++UIContactForm.label.birthday=Birthday
++UIContactForm.label.jobTitle=Job Title
++UIContactForm.label.multiEmail=Email
++UIContactForm.label.exoChat=eXo Chat
++UIContactForm.label.google=Gtalk
++UIContactForm.label.msn=MSN
++UIContactForm.label.aolAim=AOL/AIM
++UIContactForm.label.yahoo=Yahoo!
++UIContactForm.label.irc=IRC
++UIContactForm.label.skype=Skype
++UIContactForm.label.icq=ICQ
++UIContactForm.label.homeAddress=Address
++UIContactForm.label.homeCity=City
++UIContactForm.label.homeState_province=State/Province
++UIContactForm.label.homePostalCode=Postal Code
++UIContactForm.label.homeCountry=Country
++UIContactForm.label.homePhone1=Phone
++UIContactForm.label.homePhone2=Phone (secondary)
++UIContactForm.label.homeFax=Fax
++UIContactForm.label.personalSite=Website
++UIContactForm.label.workAddress=Address
++UIContactForm.label.workCity=City
++UIContactForm.label.workState_province=State/Province
++UIContactForm.label.workPostalCode=Postal Code
++UIContactForm.label.workCountry=Country
++UIContactForm.label.workPhone1=Phone
++UIContactForm.label.workPhone2=Phone (secondary)
++UIContactForm.label.workFax=Fax
++UIContactForm.label.mobilePhone=Mobile
++UIContactForm.label.webPage=Web Page
++UIContactForm.label.note=Note
++UIContactForm.label.selectGroups=Select Groups 
++UIContactForm.label.editPermission=Edit Permission
++UIContactForm.tab.label.protileTab=Profile
++UIContactForm.tab.label.imContactTab=IM Contact
++UIContactForm.tab.label.homeTab=Home
++UIContactForm.tab.label.workTab=Work
++UIContactForm.tab.label.noteTab=Note
++UIContactForm.tab.label.shareContactTab=Group Sharing
++UIContactForm.label.male=Male
++UIContactForm.label.female=Female
++UIContactForm.msg.invalid-birthday=Birthday date is invalid.
++UIContactForm.label.editPermission=Edit Permission
++UIContactForm.label.action.SelectUser=Select User
++UIContactForm.label.action.SelectMemberShip=Select membership
++UIContactForm.msg.contact-deleted=You can't perform this action, the contact does not exist.
++UIContactForm.label.delete=Delete
++UIContactForm.label.change=Update
++UIContactForm.label.picture=Picture
++UIContactForm.msg.address-deleted=Unable save contact, address book selected was deleted.
++UIContactForm.msg.removedPer=Unable to complete this action, your edit permission was removed.
++UIContactForm.msg.invalid-email=Invalid email address.
++UIContactForm.msg.too-manyField=You added too many addresses.
++UIContactForm.msg.nameTooLong=Name field too long
++UIContactForm.msg.jobTooLong=Job field too long
++
++#org.exoplatform.contact.webui.popup.UICategoryForm
++UICategoryForm.action.Save=#{word.save}
++UICategoryForm.action.Cancel=#{word.cancel}
++UICategoryForm.msg.existed-categoryName=Address book name already exists, please choose a different one.
++UICategoryForm.msg.userExisted-categoryName={0} has already an address book with this name, please choose a different one.
++UICategoryForm.label.categoryName=Name
++UICategoryForm.label.description=Description
++UICategoryForm.msg.category-deleted=Unable to complete this action, the selected address book was deleted.
++UICategoryForm.msg.non-permission=Unable to complete this action, your edit permission was removed.
++UICategoryForm.msg.nameTooLong=Name field too long.
++
++#org.exoplatform.contact.webui.popup.UIImportForm
++UIImportForm.action.Cancel=#{word.cancel}
++UIImportForm.action.Save=#{word.save}
++UIImportForm.label.type=Import format
++UIImportForm.label.upload=Upload file
++UIImportForm.msg.fileName-empty=Please select a file.
++UIImportForm.msg.fileName-error=Only VCard (.vcf) files are supported to import.
++UIImportForm.msg.invalid-format=Impossible to import uploaded file. File may be corrupted.
++UIImportForm.msg.uploadResource-empty=Please select a file and use the upload icon for uploading.
++UIImportForm.msg.addGroup-required=Please add an address book where to import.
++#Please dont delete continuous line
++UIImportForm.label.category=
++UIImportForm.label.action.AddCategory=Add an address book
++UIImportForm.label.categoryInput=Address Book
++UIImportForm.msg.address-deleted=Unable to complete this action, the selected address book was deleted.
++UIImportForm.msg.too-many-contact=This file contains more than {0} contacts. It cannot be imported.
++
++#org.exoplatform.contact.webui.popup.UIExportForm
++UIExportForm.action.Cancel=#{word.cancel}
++UIExportForm.action.Save=#{word.save}
++UIExportForm.label.type=Export format
++UIExportForm.label.fileName=File name
++UIExportForm.msg.check-contact-required=Please check contacts to export.
++UIExportForm.label.exportSelected=Export only selected
++UIExportForm.label.exportAll=Export all
++UIExportForm.label.export=Export
++UIExportForm.label.cancel=#{word.cancel}
++UIExportForm.label.email=#{word.email}
++UIExportForm.label.name=#{word.name}
++UIExportForm.label.addressBook=Address book :
++UIExportForm.label.tag=Tag :
++UIExportForm.label.checkAll=Check all
++UIExportForm.label.available=Available
++UIExportForm.msg.manyContacts=You cannot import more than {0} contacts at once.
++UIExportForm.msg.deletedPer=You do not have permission to perform this action.
++
++#org.exoplatform.contact.webui.popup.UIExportAddressBookForm
++UIExportAddressBookForm.action.Cancel=#{word.cancel}
++UIExportAddressBookForm.action.Save=#{word.save}
++UIExportAddressBookForm.label.type=Export format
++UIExportAddressBookForm.label.fileName=File name
++UIExportAddressBookForm.checkGroup-required=Select at least one address book to export.
++UIExportAddressBookForm.msg.there-is-not-contacts-exists=An empty address book cannot be exported.
++UIExportAddressBookForm.label.title=Select address books to export...
++UIExportAddressBookForm.label.exportSelected=Export Selected
++UIExportAddressBookForm.label.exportAll=Export All
++UIExportAddressBookForm.label.cancel=#{word.cancel}
++UIExportAddressBookForm.label.name=#{word.name}
++UIExportAddressBookForm.label.checkAll=Check all
++UIExportAddressBookForm.many-Contacts=You cannot export more than {0} contacts at once.
++
++#org.exoplatform.contact.webui.popup.UITagForm
++UITagForm.label.contact=Contact
++UITagForm.label.tagName=Tag
++UITagForm.label.color=Color
++UITagForm.msg.tagName-required=You need to name your tag.
++UITagForm.msg.tagName-existed=This tag already exists, please enter a new name!
++UITagForm.label.shareContactTab=Group share
++UITagForm.action.Add=Add
++UITagForm.action.Cancel=Cancel
++UITagForm.action.Remove=Remove 
++UITagForm.msg.checkTag-required=Please select the tag to remove.
++UITag.msg.noContactToExport=There is no contact to export in this tag.
++UITagForm.msg.contact-not-existed=Could not tag this contact. Contact no longer exists.
++UITagForm.msg.contact-not-exist-remove=Could not untag this contact. Contact no longer exists.
++UITagForm.msg.nameTooLong=This tag name is too long.
++UITagForm.msg.noTagRemoved={0} is not assigned to any contact.
++
++#org.exoplatform.contact.webui.popup.UIEditTagForm
++UIEditTagForm.label.tagName=Tag
++UIEditTagForm.label.description=Desciption
++UIEditTagForm.msg.tagName-required=You need to name your tag.
++UIEditTagForm.msg.tagName-existed=This tag already exists. Please choose a new name.
++UIEditTagForm.action.Save=#{word.save}
++UIEditTagForm.action.Cancel=#{word.cancel}
++UIEditTagForm.label.color=Color
++UIEditTagForm.msg.tag-deleted=Action failed. Contact no longer exists.
++UIEditTagForm.msg.nameTooLong=This name is too long.
++
++#org.exoplatform.contact.webui.UIContacts
++UIContacts.label.checkContact=Check Contact
++UIContacts.msg.confirm-delete=Are you sure you want to delete this contact ?
++UIContacts.msg.cannotMove=Cannot move
++UIContacts.action.print=Print 
++UIContacts.label.edit=Edit
++UIContacts.label.copy=Copy
++UIContacts.label.shared=Share
++UIContacts.label.sendEmail=Email
++UIContacts.label.instantMessage=Instant Message
++UIContacts.label.tag=Tag
++UIContacts.label.move=Move
++UIContacts.label.delete=Delete
++UIContacts.label.print=Print 
++UIContacts.label.export=Export
++UIContacts.msg.no-email-found=Impossible to find an email address.
++UIContacts.msg.cannot-move=Impossible to move these contacts.
++UIContacts.msg.cannot-move-ownerContact=Impossible to move this contact.
++UIContacts.msg.cannot-share=Impossible to share these contacts.
++UIContacts.msg.cannot-delete=Impossible to delete these contacts.
++UIContacts.msg.cannot-delete-ownerContact=Impossible to delete the owner contact.
++UIContacts.msg.non-permission=You do not have permission to perform this action.
++UIContacts.label.vcard=VCards
++UIContacts.label.jobTitle=Job Title
++UIContacts.label.workPhone=Phone
++UIContacts.label.addressBook=Address book
++UIContacts.label.email=#{word.email}
++UIContacts.label.name=#{word.name}
++UIContacts.label.move=Move
++UIContacts.label.searchResult=Search Result
++UIContacts.label.of=of
++UIContacts.label.contacts=Contacts
++UIContacts.msg.contact-deleted=The contact has been deleted.
++UIContacts.label.print=Print
++UIContacts.action.Cancel=#{word.close}
++UIContacts.msg.checkContact-toDelete=Please select contacts to delete.
++UIContacts.msg.checkContact-toCopy=Please select contacts for copy.
++UIContacts.msg.checkContact-toSendMail=Please select contacts to send an email
++UIContacts.msg.checkContact-toPrint=Please select on contacts to print.
++UIContacts.msg.checkContact-toMove=Please select contacts to move.
++UIContacts.msg.checkContact-toTag=Please select contacts to tag.
++UIContacts.label.sharedContacts=(Shared Contacts)
++UIContacts.msg.chatApp-notAvaiable=Chat Application is not available.
++UIContacts.msg.checkContact-toChat=Please select on contacts to chat.
++UIContacts.msg.have-no-item=No contact is selected.
++UIContacts.label.sharedContacts=Shared Contacts
++UIContacts.label.print=Print
++UIContacts.label.copyContacts=Copy
++UIContacts.label.workPhone=Phone
++UIContacts.label.webSite=Website
++UIContacts.label.viewDetails=View Details
++UIContacts.label.firstPage=First Page
++UIContacts.label.previousPage=Previous Page
++UIContacts.label.nextPage=Next Page
++UIContacts.label.lastPage=Last Page
++UIContacts.label.checkAll=Check all
++UIContacts.label.sortByName=Sort by Name
++UIContacts.label.sortByEmail=Sort by Email
++UIContacts.label.sortByJobTitle=Sort by Job Title
++UIContacts.label.available=Available
++UIContacts.label.notContactFound=There are no contacts
++UIContacts.label.mobile=Mobile
++UIContacts.msg.contact-not-existed=Unable to perform this action, contact does not exist.
++UIContacts.msg.contact-deleted=Unable to perform this action, contact does not exist.
++
++
++#org.exoplatform.contact.webui.popup.UIMoveContactsForm
++UIMoveContactsForm.action.Cancel=#{word.cancel}
++UIMoveContactsForm.msg.selectGroup-required=Please select a group to save contact.
++UIMoveContactsForm.msg.non-permission=You do not have permission to perform this action.
++UIMoveContactsForm.label.contacts=Contacts :
++UIMoveContactsForm.label.toPrivate=To Personal Address Books :
++UIMoveContactsForm.label.toShared=To Shared Address Books
++UIMoveContactsForm.msg.contact-not-existed=Impossible perform this action, the contact does not exist.
++UIMoveContactsForm.msg.contact-deleted=Impossible perform this action, the contact does not exist.
++
++
++#org.exoplatform.contact.webui.UIAddressBooks
++UIAddressBooks.msg.confirm-delete=This address book will be deleted. Do you confirm?
++UIAddressBooks.msg.groupCannot-deleted=Can not delete this group
++UIAddressBooks.msg.not-already=Not yet
++UIAddressBooks.msg.noContactToExport=Cannot export an empty address book.
++UIAddressBooks.msg.invalidAddress=Why don't you select a different address book?
++UIAddressBooks.msg.no-email-found=Impossible to find an email address.
++UIAddressBooks.msg.non-permission=You do not have permission to perform this action!
++UIAddressBooks.label.sharedContacts=Shared
++UIAddressBooks.label.addressBooks=Address Books
++UIAddressBooks.label.addAddress=Add
++UIAddressBooks.label.importAddress=Import
++UIAddressBooks.label.exportAddress=Export
++UIAddressBooks.label.personalAddress=Personal
++UIAddressBooks.label.publicAddress=Group
++UIAddressBooks.label.publicGroups=Public Groups
++UIAddressBooks.label.addContact=Add
++UIAddressBooks.label.copyContacts=Copy
++UIAddressBooks.label.pasteContacts=Paste
++UIAddressBooks.label.share=Share
++UIAddressBooks.label.exportContacts=Export
++UIAddressBooks.label.importContacts=Import
++UIAddressBooks.label.edit=Edit
++UIAddressBooks.label.sendEmail=Email
++UIAddressBooks.label.delete=Delete
++UIAddressBooks.label.discard=Discard
++UIAddressBooks.msg.confirm-discard=You are about to discard a shared address book. You will no longer be able to see it. Do you confirm?
++UIAddressBooks.label.print=Print
++UIAddressBooks.label.collapse-expand=Collapse/Expand all
++UIAddressBooks.label.defaultAddName=My Contacts
++UIAddressBooks.label.defaultAddDes=My personal address book
++UIAddressBooks.msg.removedPer=You do not have edit permission so you can not perform this action!
++UIAddressBooks.label.collectedAddresses=Collected Addresses
++
++#org.exoplatform.contact.webui.UITags
++UITags.msg.confirm-delete=Are you sure you want to delete this tag ?
++UITags.label.tags=Tags
++UITags.label.printContacts=Print Contacts
++UITags.label.exportContacts=Export Contacts
++UITags.label.delete=Delete
++UITags.label.edit=Edit
++UITags.label.collapse-expand=Collapse/Expand all
++UITags.label.sendEmail=Email
++UITags.msg.no-email-found=No email address was found on this contact.
++UITags.label.addTag=Add
++
++#org.exoplatform.contact.webui.popup.UIImageForm
++UIImageForm.action.Save=#{word.save}
++UIImageForm.action.Cancel=#{word.cancel}
++UIImageForm.label.upload=Upload file 
++
++#org.exoplatform.contact.webui.popup.UISendEmail
++UISendEmail.action.Send=Send
++UISendEmail.action.Cancel=#{word.cancel}
++UISendEmail.label.to=To
++UISendEmail.label.subject=Subject
++UISendEmail.label.content=Content
++
++#org.exoplatform.contact.webui.popup.UIContactPreviewForm
++UIContactPreviewForm.action.Cancel=#{word.close}
++UIContactPreviewForm.action.print=Print
++UIContactPreviewForm.action.printPreview=Print Preview
++UIContactPreviewForm.label.profile=Profile
++UIContactPreviewForm.label.nickname=Nick name :
++UIContactPreviewForm.label.gender=Gender :
++UIContactPreviewForm.label.email=Email :
++UIContactPreviewForm.label.birthday=Birthday :
++UIContactPreviewForm.label.work=Work 
++UIContactPreviewForm.label.city=City :
++UIContactPreviewForm.label.state-province=State/Province :
++UIContactPreviewForm.label.postalCode=Postal Code :
++UIContactPreviewForm.label.country=Country :
++UIContactPreviewForm.label.map=Map
++UIContactPreviewForm.label.workPhone1=Phone :
++UIContactPreviewForm.label.workPhone2=Phone (secondary) :
++UIContactPreviewForm.label.webPage=Website :
++UIContactPreviewForm.label.instantMessaginContacts=Instant Messaging :
++UIContactPreviewForm.label.exoChat=eXo Chat :
++UIContactPreviewForm.label.google=Google :
++UIContactPreviewForm.label.msn=Msn :
++UIContactPreviewForm.label.aol-aim=AOL/AIM : 
++UIContactPreviewForm.label.yahoo=Yahoo :
++UIContactPreviewForm.label.icr=IRC :
++UIContactPreviewForm.label.skype=Skype :
++UIContactPreviewForm.label.icq=Icq :
++UIContactPreviewForm.label.home=Home
++UIContactPreviewForm.label.street=Street :
++UIContactPreviewForm.label.city=City :
++UIContactPreviewForm.label.country-region=Country/Region :
++UIContactPreviewForm.label.homePhone1=Phone :
++UIContactPreviewForm.label.homePhone2=Phone (secondary):
++UIContactPreviewForm.label.homeFax=Fax :
++UIContactPreviewForm.label.webPage=Web Page :
++UIContactPreviewForm.label.note=Note
++UIContactPreviewForm.label.address=Address :
++UIContactPreviewForm.label.workFax=Fax :
++UIContactPreviewForm.label.mobilePhone=Mobile :
++
++#org.exoplatform.contact.webui.UIContactPreview
++UIContactPreview.label.lastUpdated=Last Updated
++UIContactPreview.label.profile=Profile
++UIContactPreview.label.nickname=Nick name :
++UIContactPreview.label.gender=Gender :
++UIContactPreview.label.email=Email :
++UIContactPreview.label.birthday=Birthday :
++UIContactPreview.label.work=Work 
++UIContactPreview.label.city=City :
++UIContactPreview.label.state-province=State/Province :
++UIContactPreview.label.postalCode=Postal Code :
++UIContactPreview.label.country=Country :
++UIContactPreview.label.map=Map
++UIContactPreview.label.workPhone1=Phone :
++UIContactPreview.label.workPhone2=Phone (secondary) :
++UIContactPreview.label.webPage=Website :
++UIContactPreview.label.instantMessaginContacts=Instant Messaging :
++UIContactPreview.label.exoChat=eXo Chat :
++UIContactPreview.label.google=Google Talk:
++UIContactPreview.label.msn=Msn :
++UIContactPreview.label.aol-aim=AOL/AIM : 
++UIContactPreview.label.yahoo=Yahoo :
++UIContactPreview.label.icr=IRC :
++UIContactPreview.label.skype=Skype :
++UIContactPreview.label.icq=Icq :
++UIContactPreview.label.home=Home
++UIContactPreview.label.street=Street :
++UIContactPreview.label.city=City :
++UIContactPreview.label.country-region=Country/Region :
++UIContactPreview.label.homePhone1=Phone :
++UIContactPreview.label.homePhone2=Phone (secondary) :
++UIContactPreview.label.homeFax=Fax :
++UIContactPreview.label.webPage=Website :
++UIContactPreview.label.note=Note
++UIContactPreview.label.address=Address :
++UIContactPreview.label.contactDetails=Contact Details
++UIContactPreview.label.viewFull=View full size
++UIContactPreview.label.workFax=Fax :
++UIContactPreview.label.mobilePhone=Mobile :
++UIContactPreview.label.Male=Male
++UIContactPreview.label.Female=Female
++
++#org.exoplatform.contact.webui.popup.UIAttachFileForm
++UIAttachFileForm.msg.selectFile-required=Please select an image file and upload selected file by using upload icon!
++UIAttachFileForm.msg.invalid-image=This file is not an image.
++
++#org.exoplatform.contact.webui.UIActionBar
++UIActionBar.label.contactsList=List
++UIActionBar.label.vcard=VCards
++UIActionBar.label.contact=Contact
++UIActionBar.label.addressBook=Address Book
++UIActionBar.label.addNew=Add New
++UIActionBar.label.importAddress=Import
++UIActionBar.label.exportAddress=Export
++UIActionBar.label.default=Default layout
++UIActionBar.label.navigation=Left Pane
++UIActionBar.label.addressbooks=Address books
++UIActionBar.label.tags=Tags
++UIActionBar.label.details=Details
++UIActionBar.label.customLayoutView=Custom Layout
++UIActionBar.label.contactsView=View
++UIActionBar.label.layoutView=Layout
++UIActionBar.msg.cannot-changeView=Close search to change layout.
++UIActionBar.label.addContact=Add a contact
++UIActionBar.label.addAddressBook=Add an Address book
++UIActionBar.label.addEvent=Add Event
++UIActionBar.label.event=Event
++
++#org.exoplatform.contact.webui.UISearchForm
++UISearchForm.msg.no-text-to-search=Please enter a search term .
++UISearchForm.label.inputValue=Search:
++UISearchForm.label.advanceSearch=Advanced Search
++UISearchForm.label.search=Search
++UISearchForm.msg.text-search-error=Your search term must contain only alphanumeric characters.
++
++#org.exoplatform.contact.webui.popup.UIAdvancedSearchForm
++UIAdvancedSearchForm.action.Search=Search
++UIAdvancedSearchForm.action.Cancel=#{word.cancel}
++UIAdvancedSearchForm.label.text=Text
++UIAdvancedSearchForm.label.fullName=Full Name
++UIAdvancedSearchForm.label.firstName=First Name
++UIAdvancedSearchForm.label.lastName=Last Name
++UIAdvancedSearchForm.label.nickName=Nick Name
++UIAdvancedSearchForm.label.gender=Gender
++UIAdvancedSearchForm.label.jobTitle=Job Title
++UIAdvancedSearchForm.label.email=#{word.email}
++UIAdvancedSearchForm.label.option.Male=Male
++UIAdvancedSearchForm.label.option.Female=Female
++UIAdvancedSearchForm.msg.no-text-to-search=Please enter a search term.
++UIAdvancedSearchForm.msg.text-search-error=Your search term must contain only alphanumeric characters.
++
++#org.exoplatform.contact.webui.popup.UIGroupSelector
++UIGroupSelector.label.selectUser=User
++UIGroupSelector.label.selectGroup=Group
++UIGroupSelector.label.selectMemberShip=Role  
++UIGroupSelector.msg.invalid-username=You cannot share to yourself.
++
++#org.exoplatform.contact.webui.popup.UIUserSelector
++UIUserSelector.label.selectUser=Select a user
++UIUserSelector.label.selectGroup=Select a group
++UIUserSelector.label.selectMemberShip=Select a role
++
++#org.exoplatform.contact.webui.popup.UIComposeForm
++UIComposeForm.msg.to-field-empty=Who would you like to send to ?
++UIComposeForm.msg.send-mail-error=Message could not be send.
++UIComposeForm.msg.send-mail-succsessfuly=The message was sent successfully.
++UIComposeForm.msg.invalidAcc=You need to have an account in eXo Mail application to send messages.
++UIComposeForm.label.sendMail=Send Mail
++UIComposeForm.label.discard=Discard
++UIComposeForm.label.from=From
++UIComposeForm.label.to=To
++UIComposeForm.label.subject=Subject
++UIComposeForm.msg.save-sent-error=An error occured while saving the message to your Sent folder.
++UIComposeForm.msg.invalid-email=Email address is invalid.
++
++#org.exoplatform.contact.webui.popup.UIAddEditPermission
++UIAddEditPermission.msg.confirm-delete=Are you sure you want to remove this permission ?
++UIAddEditPermission.header.viewPermission=Shared to
++UIAddEditPermission.header.editPermission=Can edit?
++UIAddEditPermission.header.action=Actions
++UIAddEditPermission.action.title.Edit=Edit
++UIAddEditPermission.action.title.Delete=Delete
++UIAddEditPermission.msg.cannot-deleteShared=You cannot delete this permission.
++UIAddEditPermission.label.true=Yes
++UIAddEditPermission.label.false=No
++
++#org.exoplatform.contact.webui.popup.UISharedForm
++UISharedForm.label.addressName=Address book
++UISharedForm.label.contactName=Contact
++UISharedForm.label.user=User
++UISharedForm.label.group=Group
++UISharedForm.label.canEdit=Can edit?
++UISharedForm.label.action.SelectUser=Select User 
++UISharedForm.label.action.SelectGroup=Select Group
++#Please dont edit label "UISharedForm"
++UISharedForm.label.UIInputUserSelect=UISharedForm
++UISharedForm.label.UIPopupWindow=UISharedForm
++UISharedForm.action.Save=#{word.save}
++UISharedForm.action.Cancel=#{word.close}
++UISharedForm.msg.empty-username=Who would you like to share to?
++UISharedForm.msg.not-exist-username={0} is not a user that you can share to.
++UISharedForm.msg.not-exist-group={0} is not a group that you can share to.
++UISharedForm.msg.cannot-change-username=You cannot change user when editing a share entry.
++UISharedForm.msg.shared-yourself=You can not share to yourself.
++
++#org.exoplatform.contact.webui.popup.UISharedContactsForm
++UISharedContactsForm.label.contactName=Contacts Name:
++UISharedContactsForm.label.user=User
++UISharedContactsForm.label.group=Group
++UISharedContactsForm.label.canEdit=Edit Permission
++UISharedContactsForm.label.action.SelectUser=Select User 
++UISharedContactsForm.label.action.SelectGroup=Select Child Group
++# please dont edit label UISharedContactsForm
++UISharedContactsForm.label.UIInputUserSelect=UISharedContactsForm
++UISharedContactsForm.label.UIPopupWindow=UISharedContactsForm
++UISharedContactsForm.action.Save=#{word.save}
++UISharedContactsForm.action.Cancel=#{word.cancel}
++UISharedContactsForm.msg.empty-username=Indicate who you want to share with.
++UISharedContactsForm.msg.contacts-shared=Contacts are now shared.
++UISharedContactsForm.msg.not-exist-username={0} is not a user that you can share to.
++UISharedContactsForm.msg.not-exist-group={0} is not a group that you can share to.
++UISharedContactsForm.msg.invalid-username=You cannot share to this user.
++UISharedContactsForm.msg.deleted-contact=Sharing failed. This contact no longer exists.
++
++#org.exoplatform.contact.webui.popup.UIIMContactInputSet
++imContactTab.label.googleTalk=Google Talk
++imContactTab.label.msn=MSN
++imContactTab.label.aol-aim=AOL/AIM
++imContactTab.label.yahoo=Yahoo
++imContactTab.label.IRC=IRC
++imContactTab.label.skype=Skype
++imContactTab.label.ICQ=ICQ
++
++#org.exoplatform.contact.webui.popup.UITagInfo
++UITagInfo.label.tag=Tag
++UITagInfo.label.tagName=Tag
++
++#org.exoplatform.contact.webui.UIWelcomeContact
++UIWelcomeContact.label.label0=Welcome to
++UIWelcomeContact.label.label1=Your contacts manager
++UIWelcomeContact.label.label2=Overview
++UIWelcomeContact.label.label3=The eXo Address Book is an application integrated to eXo Collaboration Suite. It manages all contacts entered manually, imported from a file or even collected automatically. Your contacts are organized in address books and freely shareable to your collaborators.
++UIWelcomeContact.label.label4=Features
++UIWelcomeContact.label.label5=eXo Address Book offers many features to enhance your productivity : sharing, search, tags, vcards and other group actions.
++
++#org.exoplatform.contact.ContactUtils
++ContactUtils.label.emptyName=(unnamed)
++
++#org.exoplatform.contact.webui.popup.UIFormMultiValueInputSet
++UIFormMultiValueInputSet.label.addItem=Add Item
++UIFormMultiValueInputSet.label.removeItem=Remove Item
