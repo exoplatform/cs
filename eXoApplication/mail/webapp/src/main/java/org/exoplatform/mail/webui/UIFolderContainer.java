@@ -286,6 +286,7 @@ public class UIFolderContainer extends UIContainer {
       List<Message> messages = mailSrv.getMessages(username, filter);
       mailSrv.toggleMessageProperty(username, accountId, messages, folderId, Utils.EXO_ISUNREAD, false);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
+      Folder currentFolder = mailSrv.getFolder(username, accountId, folderId);
       if (folderId.equals(uiMessageList.getSelectedFolderId())) {
         List<Message> msgList = new  ArrayList<Message>(uiMessageList.messageList_.values());
         for (Message msg : msgList) {
@@ -294,6 +295,8 @@ public class UIFolderContainer extends UIContainer {
         }
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent()) ;
       }
+      currentFolder.setNumberOfUnreadMessage(0);
+      mailSrv.updateNumberOfUnreadMessages(username, accountId, folderId, 0);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class)) ;
     }
   }

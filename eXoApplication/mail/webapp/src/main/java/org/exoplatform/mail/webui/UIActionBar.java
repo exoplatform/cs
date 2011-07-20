@@ -16,8 +16,14 @@
  */
 package org.exoplatform.mail.webui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.service.Folder;
+import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIAccountCreation;
 import org.exoplatform.mail.webui.popup.UIAccountSetting;
@@ -69,6 +75,9 @@ public class UIActionBar extends UIContainer {
       UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
       String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+      MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
+      String username = uiPortlet.getCurrentUser();
+      Folder currentF = null;
       if(Utils.isEmptyField(accId)) {
         uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -78,11 +87,19 @@ public class UIActionBar extends UIContainer {
           context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.checkMail(true) ;");
         } else {
           context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.checkMail(true, '" + folderId + "') ;");
+          currentF = mailSrv.getFolder(username, accId, folderId);
+          if(currentF.getNumberOfUnreadMessage() < 0) currentF.setNumberOfUnreadMessage(0);
         }
         context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.showStatusBox() ;");
         uiPortlet.findFirstComponentOfType(UIFetchingBar.class).setIsShown(true);
       }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class)) ;
+      
+      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
+      uiMessageList.init(accId);
+      
+      UIMessageArea uiMessageArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea) ;
     }
   }
 
@@ -93,7 +110,7 @@ public class UIActionBar extends UIContainer {
       UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
       UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
       UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
-      String accId = uiSelect.getSelectedValue() ;      
+      String accId = uiSelect.getSelectedValue() ;
       if(Utils.isEmptyField(accId)) {
         uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

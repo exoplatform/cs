@@ -1,0 +1,448 @@
+Index: eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/MailService.java
+===================================================================
+--- eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/MailService.java	(revision 71575)
++++ eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/MailService.java	(working copy)
+@@ -620,4 +620,16 @@
+   public void addListenerPlugin(ComponentPlugin listener) throws Exception ;
+   
+   public boolean sendReturnReceipt(String username, String accId, String msgId, ResourceBundle res) throws Exception;
++  
++  /**
++   * update number of unread message for a folder.
++   * @param username - user name
++   * @param accountId - account id
++   * @param folderId - folder id 
++   * @param num - new number of unread message 
++   * @return
++   * @throws Exception
++   */
++  public boolean updateNumberOfUnreadMessages(String username, String accountId, String folderId, long num) throws Exception;
++  
+ }
+\ No newline at end of file
+Index: eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/MessagePageList.java
+===================================================================
+--- eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/MessagePageList.java	(revision 71575)
++++ eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/MessagePageList.java	(working copy)
+@@ -354,11 +354,13 @@
+   @Override
+   public List<Message> getAll() throws Exception { return null; }
+   
+-  public List<Message> getAll(String username) throws Exception { 
++  public List<Message> getAll(String username) throws Exception {
++    long page = getCurrentPage();
+     List<Message> messageList = new ArrayList<Message>();
+     for (int i = 1; i <= getAvailablePage(); i++) {
+       messageList.addAll(getPage(i, username));
+     }
++    checkAndSetPage(page);
+     return messageList;
+   }
+ 
+Index: eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/impl/MailServiceImpl.java
+===================================================================
+--- eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/impl/MailServiceImpl.java	(revision 71575)
++++ eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/impl/MailServiceImpl.java	(working copy)
+@@ -48,6 +48,7 @@
+ import javax.mail.Store;
+ import javax.mail.Transport;
+ import javax.mail.URLName;
++import javax.mail.Flags.Flag;
+ import javax.mail.internet.AddressException;
+ import javax.mail.internet.InternetAddress;
+ import javax.mail.internet.MimeBodyPart;
+@@ -1189,7 +1190,7 @@
+           }  
+         } catch (Exception e) { 
+         } finally {
+-          checkingLog_.get(key).setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);    
++          if(checkingLog_ != null) checkingLog_.get(key).setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);    
+           removeCheckingInfo(username, accountId);
+           store.close();
+         }
+@@ -1208,12 +1209,12 @@
+             synchImapMessage(username, accountId, folder, key);
+           } catch (MessagingException e){
+             System.err.println("Failed to open '" + folder.getName() + "' folder as read-only");
+-            checkingLog_.get(key).setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);    
++            if(checkingLog_ != null) checkingLog_.get(key).setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);    
+             removeCheckingInfo(username, accountId);
+             e.printStackTrace();
+           }
+         }
+-        checkingLog_.get(key).setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);    
++        if(checkingLog_ != null) checkingLog_.get(key).setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);    
+         removeCheckingInfo(username, accountId);
+       }
+       if (!account.isSavePassword()) account.setIncomingPassword("");
+@@ -1242,6 +1243,8 @@
+       
+       Folder eXoFolder = getFolder(username, accountId, folderId);
+       
++      long unreadCount = eXoFolder.getNumberOfUnreadMessage();
++      
+       Date lastCheckedDate = eXoFolder.getLastCheckedDate();
+       Date checkFromDate = eXoFolder.getCheckFromDate();
+       Date accCheckFromDate = account.getCheckFromDate();
+@@ -1289,23 +1292,24 @@
+         SpamFilter spamFilter = getSpamFilter(username, account.getId());
+         
+         while (i < totalNew) {
+-          if(checkingLog_.get(key).isRequestStop()) {
++          if(checkingLog_ != null && checkingLog_.get(key).isRequestStop()) {
+             if (logger.isDebugEnabled()) {
+               logger.debug("Stop requested on checkmail for " + account.getId());
+             }
+             break;
+           }
+-          if (!Utils.isEmptyField(checkingLog_.get(key).getRequestingForFolder_()) && 
++          if (checkingLog_ != null && !Utils.isEmptyField(checkingLog_.get(key).getRequestingForFolder_()) && 
+               !String.valueOf(((IMAPFolder) folder).getUIDValidity()).equals(Utils.getFolderNameFromFolderId(checkingLog_.get(key).getRequestingForFolder_()))) {
+             break;
+           }
+            
+           folderIds =  new String[]{ folderId };
+           msg = msgList.get(i);
++          if(checkingLog_ != null){
++            checkingLog_.get(key).setFetching(i + 1);
++            checkingLog_.get(key).setStatusMsg("Synchronizing  " + folder.getName()+ " : " + (i + 1) + "/" + totalNew);
++          }
+           
+-          checkingLog_.get(key).setFetching(i + 1);
+-          checkingLog_.get(key).setStatusMsg("Synchronizing  " + folder.getName()+ " : " + (i + 1) + "/" + totalNew);
+-          
+           filterList = msgMap.get(msg);
+           try {            
+             folderList = new ArrayList<String>();
+@@ -1330,24 +1334,25 @@
+             msgUID = ((IMAPFolder)folder).getUID(msg);
+             saved = storage_.saveMessage(username, accountId, msgUID, msg, folderIds, tagList, spamFilter, infoObj, continuation, false);
+             
+-            if (saved && !leaveOnserver) msg.setFlag(Flags.Flag.DELETED, true);       
+-              
+-//            receivedDate = MimeMessageParser.getReceivedDate(msg).getTime();
++            if (saved){
++              try {
++                if (!leaveOnserver)
++                  msg.setFlag(Flags.Flag.DELETED, true);
++                if (!msg.getFlags().contains(Flag.SEEN))
++                  unreadCount++;
++              } catch (MessagingException e) {
++                if (logger.isDebugEnabled())
++                  logger.debug("Number of unread messages is not updated successfully because of ", e);
++              } 
++            }  
+ 
+-//            if (i == 0) lastFromDate = receivedDate;                  
+-//            eXoFolder.setLastCheckedDate(receivedDate);
+-//            if ((i == (totalNew - 1))) eXoFolder.setCheckFromDate(lastFromDate);
+-            
+-//            if (lastFromDate != null && (eXoFolder.getLastStartCheckingTime() == null || eXoFolder.getLastStartCheckingTime().before(lastFromDate))) {
+-//              eXoFolder.setLastStartCheckingTime(lastFromDate);
+-//            }
+           } catch (Exception e) {
+             i++;
+             continue;
+           }
+           i++;
+         }
+-
++        eXoFolder.setNumberOfUnreadMessage(unreadCount);
+         saveFolder(username, accountId, eXoFolder, false);
+         
+         FetchMailContentThread downloadContentMail = new FetchMailContentThread(storage_, msgMap, i, folder, username, accountId);
+@@ -2129,4 +2134,8 @@
+     }
+     logger.debug(" #### Info : " + status);
+   }
++
++  public boolean updateNumberOfUnreadMessages(String username, String accountId, String folderId, long num) throws Exception {
++     return  storage_.updateUnreadMessageInFolder(username, accountId, folderId, num);
++  }
+ }
+Index: eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/impl/JCRDataStorage.java
+===================================================================
+--- eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/impl/JCRDataStorage.java	(revision 71576)
++++ eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/impl/JCRDataStorage.java	(working copy)
+@@ -3061,4 +3061,20 @@
+     return part.getHeader("Content-Id") == null ? false : true;
+   }
+   
++   public boolean updateUnreadMessageInFolder(String username, String accountId, String folderId, long numunread) throws Exception{
++     SessionProvider sp = null;
++     try {
++       sp = createSessionProvider(username);
++       Node fNode = getFolderNodeById(sp, username, accountId, folderId);
++       if(fNode != null){
++         fNode.setProperty(Utils.EXO_UNREADMESSAGES, numunread);
++         fNode.save();
++         return true;
++       }
++     } finally {
++       closeSessionProvider(sp);
++     }
++     
++     return false;
++   }
+ }
+\ No newline at end of file
+Index: eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIActionBar.java
+===================================================================
+--- eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIActionBar.java	(revision 71575)
++++ eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIActionBar.java	(working copy)
+@@ -16,8 +16,14 @@
+  */
+ package org.exoplatform.mail.webui;
+ 
++import java.util.ArrayList;
++import java.util.List;
++
+ import org.exoplatform.calendar.service.CalendarService;
+ import org.exoplatform.mail.MailUtils;
++import org.exoplatform.mail.service.Folder;
++import org.exoplatform.mail.service.MailService;
++import org.exoplatform.mail.service.Message;
+ import org.exoplatform.mail.service.Utils;
+ import org.exoplatform.mail.webui.popup.UIAccountCreation;
+ import org.exoplatform.mail.webui.popup.UIAccountSetting;
+@@ -69,6 +75,9 @@
+       UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
+       String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
+       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
++      MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
++      String username = uiPortlet.getCurrentUser();
++      Folder currentF = null;
+       if(Utils.isEmptyField(accId)) {
+         uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null)) ;
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+@@ -78,11 +87,19 @@
+           context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.checkMail(true) ;");
+         } else {
+           context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.checkMail(true, '" + folderId + "') ;");
++          currentF = mailSrv.getFolder(username, accId, folderId);
++          if(currentF.getNumberOfUnreadMessage() < 0) currentF.setNumberOfUnreadMessage(0);
+         }
+         context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.showStatusBox() ;");
+         uiPortlet.findFirstComponentOfType(UIFetchingBar.class).setIsShown(true);
+       }
+-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class)) ;
++      
++      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
++      uiMessageList.init(accId);
++      
++      UIMessageArea uiMessageArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
++      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
++      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea) ;
+     }
+   }
+ 
+@@ -93,7 +110,7 @@
+       UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
+       UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
+       UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
+-      String accId = uiSelect.getSelectedValue() ;      
++      String accId = uiSelect.getSelectedValue() ;
+       if(Utils.isEmptyField(accId)) {
+         uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null)) ;
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+Index: eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIFolderContainer.java
+===================================================================
+--- eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIFolderContainer.java	(revision 71575)
++++ eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIFolderContainer.java	(working copy)
+@@ -286,6 +286,7 @@
+       List<Message> messages = mailSrv.getMessages(username, filter);
+       mailSrv.toggleMessageProperty(username, accountId, messages, folderId, Utils.EXO_ISUNREAD, false);
+       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
++      Folder currentFolder = mailSrv.getFolder(username, accountId, folderId);
+       if (folderId.equals(uiMessageList.getSelectedFolderId())) {
+         List<Message> msgList = new  ArrayList<Message>(uiMessageList.messageList_.values());
+         for (Message msg : msgList) {
+@@ -294,6 +295,8 @@
+         }
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent()) ;
+       }
++      currentFolder.setNumberOfUnreadMessage(0);
++      mailSrv.updateNumberOfUnreadMessages(username, accountId, folderId, 0);
+       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class)) ;
+     }
+   }
+Index: eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIMessageList.java
+===================================================================
+--- eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIMessageList.java	(revision 71576)
++++ eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIMessageList.java	(working copy)
+@@ -17,6 +17,7 @@
+ package org.exoplatform.mail.webui ;
+ 
+ import java.util.ArrayList;
++
+ import java.util.LinkedHashMap;
+ import java.util.List;
+ import java.util.ResourceBundle;
+@@ -188,14 +189,13 @@
+     String username = MailUtils.getCurrentUser();
+     MailService mailSrv = MailUtils.getMailService();
+     try {
++      UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
+       Account acc = mailSrv.getAccountById(username, accId);
+       if (acc == null) {
+-        UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
+         try {
+           String selectedAccId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+           if (!MailUtils.isFieldEmpty(selectedAccId)) {
+             init(selectedAccId);
+-          } else {
+             init(null);
+             uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);
+           }
+@@ -204,7 +204,7 @@
+           uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);
+         }
+       }
+-    } catch (Exception ex) { }
++     } catch (Exception ex) {}
+   }
+   
+   public String getAccountId() { return accountId_ ; }
+@@ -364,6 +364,7 @@
+       String username = uiPortlet.getCurrentUser();
+       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+       String folderId = uiPortlet.findFirstComponentOfType(UIFolderContainer.class).getSelectedFolder();
++      Folder currentFolder = null;
+       if (Utils.isEmptyField(folderId)) folderId = "";
+       
+       Message msg = uiMessageList.messageList_.get(msgId);
+@@ -372,7 +373,7 @@
+         MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
+         msg = mailSrv.loadTotalMessage(username, accountId, msg) ;
+         Account account = mailSrv.getAccountById(username, accountId);
+-              
++        currentFolder = mailSrv.getFolder(username, accountId, folderId);              
+         uiMessageList.setSelectedMessageId(msgId);
+         for (Message uncheckedMsg : uiMessageList.messageList_.values()) {
+           UIFormCheckBoxInput<Boolean> uiCheckbox = uiMessageList.getChildById(uncheckedMsg.getId());
+@@ -468,6 +469,13 @@
+             mailSrv.toggleMessageProperty(username, accountId, msgL, folderId, Utils.IS_RETURN_RECEIPT, false);
+           }
+         } 
++        long numberOfUnread = currentFolder.getNumberOfUnreadMessage();
++        if(msg.isUnread() && currentFolder != null && numberOfUnread > 0) {
++          numberOfUnread = numberOfUnread -1;
++          currentFolder.setNumberOfUnreadMessage(numberOfUnread);
++        }        
++        mailSrv.updateNumberOfUnreadMessages(username, accountId, folderId, numberOfUnread);
++        event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
+       }          
+     }
+@@ -1315,6 +1323,10 @@
+       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+       String folderId = uiPortlet.findFirstComponentOfType(UIFolderContainer.class).getSelectedFolder();
+       UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
++      MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
++      List<Message> msgList = new ArrayList<Message>();
++      Folder currentFolder = mailSrv.getFolder(username, accountId, folderId);
++      long numberUnreadMsg = currentFolder.getNumberOfUnreadMessage();
+       if(Utils.isEmptyField(accountId)) {
+         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+@@ -1326,13 +1338,12 @@
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+         return;
+       }
+-      MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
+-      List<Message> msgList = new ArrayList<Message>();
+       for (Message msg : checkedMsgs) {
+         if (msg.isUnread()) {
+           msgList.add(msg);
+           msg.setUnread(false);
+           uiMessageList.messageList_.put(msg.getId(), msg);
++          numberUnreadMsg -= 1;
+         }
+       }
+       try {
+@@ -1347,6 +1358,10 @@
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+         return ;
+       }
++      if(numberUnreadMsg >= 0){
++        currentFolder.setNumberOfUnreadMessage(numberUnreadMsg);
++        mailSrv.updateNumberOfUnreadMessages(username, accountId, folderId, numberUnreadMsg);
++      }
+       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class));
+       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class));
+     }
+@@ -1359,6 +1374,10 @@
+       String username = uiPortlet.getCurrentUser();
+       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+       String folderId = uiPortlet.findFirstComponentOfType(UIFolderContainer.class).getSelectedFolder();
++      MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
++      List<Message> msgList = new ArrayList<Message>();
++      Folder currentFolder = mailSrv.getFolder(username, accountId, folderId);
++      long numberUnreadMsg = currentFolder.getNumberOfUnreadMessage();
+       if (Utils.isEmptyField(folderId)) folderId = "";
+       UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+       if(Utils.isEmptyField(accountId)) {
+@@ -1372,13 +1391,12 @@
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+         return;
+       }
+-      MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
+-      List<Message> msgList = new ArrayList<Message>();
+       for (Message msg : appliedList) {
+         if (!msg.isUnread()) {
+           msgList.add(msg);
+           msg.setUnread(true);
+           uiMessageList.messageList_.put(msg.getId(), msg);
++          numberUnreadMsg += 1;
+         }
+       }
+       try {
+@@ -1388,6 +1406,8 @@
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+         return;
+       }
++      currentFolder.setNumberOfUnreadMessage(numberUnreadMsg);
++      mailSrv.updateNumberOfUnreadMessages(username, accountId, folderId, numberUnreadMsg);
+       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class));
+       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class));
+     }
+@@ -1617,7 +1637,7 @@
+ 
+   static public class FirstPageActionListener extends EventListener<UIMessageList> {
+     public void execute(Event<UIMessageList> event) throws Exception {
+-      UIMessageList uiMessageList = event.getSource() ; 
++      UIMessageList uiMessageList = event.getSource() ;
+       uiMessageList.updateList(1);
+       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+     }
+@@ -1626,7 +1646,7 @@
+   static public class PreviousPageActionListener extends EventListener<UIMessageList> {
+     public void execute(Event<UIMessageList> event) throws Exception {
+       UIMessageList uiMessageList = event.getSource() ; 
+-      MessagePageList pageList = uiMessageList.getMessagePageList(); 
++      MessagePageList pageList = uiMessageList.getMessagePageList();
+       if (pageList.getCurrentPage() > 1){
+         uiMessageList.updateList(pageList.getCurrentPage() - 1);
+       }
+@@ -1637,7 +1657,7 @@
+   static public class NextPageActionListener extends EventListener<UIMessageList> {
+     public void execute(Event<UIMessageList> event) throws Exception {
+       UIMessageList uiMessageList = event.getSource() ; 
+-      MessagePageList pageList = uiMessageList.getMessagePageList(); 
++      MessagePageList pageList = uiMessageList.getMessagePageList();
+       if (pageList.getCurrentPage() < pageList.getAvailablePage()){
+         uiMessageList.updateList(pageList.getCurrentPage() + 1);
+       }
+Index: eXoApplication/mail/webapp/src/main/webapp/templates/mail/webui/UIMessageList.gtmpl
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/templates/mail/webui/UIMessageList.gtmpl	(revision 71575)
++++ eXoApplication/mail/webapp/src/main/webapp/templates/mail/webui/UIMessageList.gtmpl	(working copy)
+@@ -364,7 +364,7 @@
+             else if (uicomponent.viewMode == uicomponent.MODE_CONVERSATION) nvLabel = "conversations" ;
+             else if (uicomponent.viewMode == uicomponent.MODE_GROUP_BY_DATE) nvLabel = "messages" ;
+           %>
+-          <div class="TotalPages"><%=_ctx.appRes(uicomponent.id + ".label." + nvLabel)%>
++          <div class="TotalPages" style="display:none;"><%=_ctx.appRes(uicomponent.id + ".label." + nvLabel)%>
+           	<span class="MailQuantity"> $mailRange </span>
+           </div>
+         </div>

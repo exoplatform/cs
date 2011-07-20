@@ -620,4 +620,16 @@ public interface MailService {
   public void addListenerPlugin(ComponentPlugin listener) throws Exception ;
   
   public boolean sendReturnReceipt(String username, String accId, String msgId, ResourceBundle res) throws Exception;
+  
+  /**
+   * update number of unread message for a folder.
+   * @param username - user name
+   * @param accountId - account id
+   * @param folderId - folder id 
+   * @param num - new number of unread message 
+   * @return
+   * @throws Exception
+   */
+  public boolean updateNumberOfUnreadMessages(String username, String accountId, String folderId, long num) throws Exception;
+  
 }

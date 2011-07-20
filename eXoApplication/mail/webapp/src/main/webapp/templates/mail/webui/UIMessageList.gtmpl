@@ -364,7 +364,7 @@
             else if (uicomponent.viewMode == uicomponent.MODE_CONVERSATION) nvLabel = "conversations" ;
             else if (uicomponent.viewMode == uicomponent.MODE_GROUP_BY_DATE) nvLabel = "messages" ;
           %>
-          <div class="TotalPages"><%=_ctx.appRes(uicomponent.id + ".label." + nvLabel)%>
+          <div class="TotalPages" style="display:none;"><%=_ctx.appRes(uicomponent.id + ".label." + nvLabel)%>
           	<span class="MailQuantity"> $mailRange </span>
           </div>
         </div>

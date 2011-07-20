@@ -354,11 +354,13 @@ public class MessagePageList extends JCRPageList {
   @Override
   public List<Message> getAll() throws Exception { return null; }
   
-  public List<Message> getAll(String username) throws Exception { 
+  public List<Message> getAll(String username) throws Exception {
+    long page = getCurrentPage();
     List<Message> messageList = new ArrayList<Message>();
     for (int i = 1; i <= getAvailablePage(); i++) {
       messageList.addAll(getPage(i, username));
     }
+    checkAndSetPage(page);
     return messageList;
   }
 

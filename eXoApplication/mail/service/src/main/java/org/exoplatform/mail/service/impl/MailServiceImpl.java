@@ -48,6 +48,7 @@ import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.Transport;
 import javax.mail.URLName;
+import javax.mail.Flags.Flag;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
@@ -1189,7 +1190,7 @@ public class MailServiceImpl implements MailService, Startable {
           }  
         } catch (Exception e) { 
         } finally {
-          checkingLog_.get(key).setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);    
+          if(checkingLog_ != null) checkingLog_.get(key).setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);    
           removeCheckingInfo(username, accountId);
           store.close();
         }
@@ -1208,12 +1209,12 @@ public class MailServiceImpl implements MailService, Startable {
             synchImapMessage(username, accountId, folder, key);
           } catch (MessagingException e){
             System.err.println("Failed to open '" + folder.getName() + "' folder as read-only");
-            checkingLog_.get(key).setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);    
+            if(checkingLog_ != null) checkingLog_.get(key).setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);    
             removeCheckingInfo(username, accountId);
             e.printStackTrace();
           }
         }
-        checkingLog_.get(key).setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);    
+        if(checkingLog_ != null) checkingLog_.get(key).setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);    
         removeCheckingInfo(username, accountId);
       }
       if (!account.isSavePassword()) account.setIncomingPassword("");
@@ -1241,6 +1242,8 @@ public class MailServiceImpl implements MailService, Startable {
       if (folder.getName().equalsIgnoreCase(Utils.FD_INBOX)) folderId = Utils.generateFID(accountId, Utils.FD_INBOX, false);
       
       Folder eXoFolder = getFolder(username, accountId, folderId);
+      
+      long unreadCount = eXoFolder.getNumberOfUnreadMessage();
       
       Date lastCheckedDate = eXoFolder.getLastCheckedDate();
       Date checkFromDate = eXoFolder.getCheckFromDate();
@@ -1289,22 +1292,23 @@ public class MailServiceImpl implements MailService, Startable {
         SpamFilter spamFilter = getSpamFilter(username, account.getId());
         
         while (i < totalNew) {
-          if(checkingLog_.get(key).isRequestStop()) {
+          if(checkingLog_ != null && checkingLog_.get(key).isRequestStop()) {
             if (logger.isDebugEnabled()) {
               logger.debug("Stop requested on checkmail for " + account.getId());
             }
             break;
           }
-          if (!Utils.isEmptyField(checkingLog_.get(key).getRequestingForFolder_()) && 
+          if (checkingLog_ != null && !Utils.isEmptyField(checkingLog_.get(key).getRequestingForFolder_()) && 
               !String.valueOf(((IMAPFolder) folder).getUIDValidity()).equals(Utils.getFolderNameFromFolderId(checkingLog_.get(key).getRequestingForFolder_()))) {
             break;
           }
            
           folderIds =  new String[]{ folderId };
           msg = msgList.get(i);
-          
-          checkingLog_.get(key).setFetching(i + 1);
-          checkingLog_.get(key).setStatusMsg("Synchronizing  " + folder.getName()+ " : " + (i + 1) + "/" + totalNew);
+          if(checkingLog_ != null){
+            checkingLog_.get(key).setFetching(i + 1);
+            checkingLog_.get(key).setStatusMsg("Synchronizing  " + folder.getName()+ " : " + (i + 1) + "/" + totalNew);
+          }
           
           filterList = msgMap.get(msg);
           try {            
@@ -1330,24 +1334,25 @@ public class MailServiceImpl implements MailService, Startable {
             msgUID = ((IMAPFolder)folder).getUID(msg);
             saved = storage_.saveMessage(username, accountId, msgUID, msg, folderIds, tagList, spamFilter, infoObj, continuation, false);
             
-            if (saved && !leaveOnserver) msg.setFlag(Flags.Flag.DELETED, true);       
-              
-//            receivedDate = MimeMessageParser.getReceivedDate(msg).getTime();
+            if (saved){
+              try {
+                if (!leaveOnserver)
+                  msg.setFlag(Flags.Flag.DELETED, true);
+                if (!msg.getFlags().contains(Flag.SEEN))
+                  unreadCount++;
+              } catch (MessagingException e) {
+                if (logger.isDebugEnabled())
+                  logger.debug("Number of unread messages is not updated successfully because of ", e);
+              } 
+            }  
 
-//            if (i == 0) lastFromDate = receivedDate;                  
-//            eXoFolder.setLastCheckedDate(receivedDate);
-//            if ((i == (totalNew - 1))) eXoFolder.setCheckFromDate(lastFromDate);
-            
-//            if (lastFromDate != null && (eXoFolder.getLastStartCheckingTime() == null || eXoFolder.getLastStartCheckingTime().before(lastFromDate))) {
-//              eXoFolder.setLastStartCheckingTime(lastFromDate);
-//            }
           } catch (Exception e) {
             i++;
             continue;
           }
           i++;
         }
-
+        eXoFolder.setNumberOfUnreadMessage(unreadCount);
         saveFolder(username, accountId, eXoFolder, false);
         
         FetchMailContentThread downloadContentMail = new FetchMailContentThread(storage_, msgMap, i, folder, username, accountId);
@@ -2128,5 +2133,9 @@ public class MailServiceImpl implements MailService, Startable {
       // logger.debug(" #### Info : " + status);
     }
     logger.debug(" #### Info : " + status);
+  }
+
+  public boolean updateNumberOfUnreadMessages(String username, String accountId, String folderId, long num) throws Exception {
+     return  storage_.updateUnreadMessageInFolder(username, accountId, folderId, num);
   }
 }

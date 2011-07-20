@@ -3061,4 +3061,20 @@ public class JCRDataStorage {
     return part.getHeader("Content-Id") == null ? false : true;
   }
   
+   public boolean updateUnreadMessageInFolder(String username, String accountId, String folderId, long numunread) throws Exception{
+     SessionProvider sp = null;
+     try {
+       sp = createSessionProvider(username);
+       Node fNode = getFolderNodeById(sp, username, accountId, folderId);
+       if(fNode != null){
+         fNode.setProperty(Utils.EXO_UNREADMESSAGES, numunread);
+         fNode.save();
+         return true;
+       }
+     } finally {
+       closeSessionProvider(sp);
+     }
+     
+     return false;
+   }
 }
