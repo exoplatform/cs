@@ -56,6 +56,7 @@
     <javax.xml.stream.stax-api.version>1.0-2</javax.xml.stream.stax-api.version>
     <javax.ws.rs.jsr311-api.version>1.0</javax.ws.rs.jsr311-api.version>
     <javax.jcr.api.version>1.0</javax.jcr.api.version>
+    <javax.resource.connector-api.version>1.5</javax.resource.connector-api.version>
     <org.jibx.jibx-run.version>1.2.2</org.jibx.jibx-run.version>
     <javax.activation.activation.version>1.1.1</javax.activation.activation.version>
     <org.log4j.version>1.2.14</org.log4j.version>
