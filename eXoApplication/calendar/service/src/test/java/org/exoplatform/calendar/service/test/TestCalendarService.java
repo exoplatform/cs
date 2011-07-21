@@ -18,6 +18,7 @@ package org.exoplatform.calendar.service.test;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,6 +30,7 @@ import java.util.TimeZone;
 
 import javax.jcr.PathNotFoundException;
 
+import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -37,6 +39,7 @@ import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.service.RemoteCalendar;
 import org.exoplatform.calendar.service.RemoteCalendarService;
 import org.exoplatform.calendar.service.RssData;
@@ -750,15 +753,73 @@ public class TestCalendarService extends BaseCalendarTestCase {
       java.util.Calendar fromCal = java.util.Calendar.getInstance();
       java.util.Calendar toCal = java.util.Calendar.getInstance();
       toCal.add(java.util.Calendar.HOUR, 1);
-
+      
+      // Create attachment
+      String attachmentName = "Acttach file";
+      String attachmentMinetype = "MimeType";
+      Attachment attachment = new Attachment() ;
+      attachment.setName(attachmentName) ;
+      attachment.setInputStream(new InputStream() {
+        @Override
+        public int read() throws IOException {
+          return 0;
+        }
+      }) ;
+      attachment.setMimeType(attachmentMinetype) ;
+      
+      // Create reminder
+      String reminderType = Reminder.TYPE_BOTH;
+      long reminderAlarmBefore = new Date().getTime();
+      String reminderEmailAddress = "abc@gmail.com";
+      Reminder reminder = new Reminder(reminderType);
+      reminder.setAlarmBefore(reminderAlarmBefore);
+      reminder.setEmailAddress(reminderEmailAddress);
+      reminder.setRepeate(false);
+      
+      // Create and save event
       String eventSummay = "Have a meeting";
-      CalendarEvent userEvent = createEvent(calendar.getId(), eventCategory, eventSummay, fromCal, toCal);
-
-      CalendarEvent findEvent = calendarService_.getEvent(username, userEvent.getId());
+      CalendarEvent calendarEvent = new CalendarEvent();
+      calendarEvent.setEventCategoryId(eventCategory.getId());
+      calendarEvent.setEventCategoryName(eventCategory.getName());
+      calendarEvent.setSummary(eventSummay);
+      calendarEvent.setFromDateTime(fromCal.getTime());
+      calendarEvent.setToDateTime(toCal.getTime());
+      calendarEvent.setAttachment(Arrays.asList(attachment));
+      calendarEvent.setReminders(Arrays.asList(reminder));
+      calendarService_.saveUserEvent(username, calendar.getId(), calendarEvent, true);
+      
+      CalendarEvent findEvent = calendarService_.getEvent(username, calendarEvent.getId());
       assertNotNull(findEvent);
       assertEquals(eventSummay, findEvent.getSummary());
       
-      calendarService_.removeUserEvent(username, calendar.getId(), userEvent.getId());
+      // Check attachment
+      List<Attachment> attachments = findEvent.getAttachment();
+      assertNotNull(attachments);
+      assertEquals(1, attachments.size());
+      Attachment eventAttachment = attachments.get(0);
+      assertEquals(attachmentName, eventAttachment.getName());
+      assertEquals(attachmentMinetype, eventAttachment.getMimeType());
+      
+      // Check reminder
+      List<Reminder> reminders = findEvent.getReminders();
+      assertNotNull(reminders);
+      assertEquals(1, reminders.size());
+      Reminder eventReminder = reminders.get(0);
+      assertEquals(reminderType, eventReminder.getReminderType());
+      assertEquals(reminderAlarmBefore, eventReminder.getAlarmBefore());
+      assertEquals(reminderEmailAddress, eventReminder.getEmailAddress());
+      assertEquals(false, eventReminder.isRepeat());
+      
+      // Xóa reminder
+      findEvent.setReminders(null);
+      calendarService_.saveUserEvent(username, calendar.getId(), findEvent, false);
+      
+      CalendarEvent findEvent1 = calendarService_.getEvent(username, calendarEvent.getId());
+      assertNotNull(findEvent1);
+      List<Reminder> reminders1 = findEvent1.getReminders();
+      assertEquals(0, reminders1.size());
+      
+      calendarService_.removeUserEvent(username, calendar.getId(), calendarEvent.getId());
       calendarService_.removeEventCategory(username, eventCategory.getId());
       calendarService_.removeUserCalendar(username, calendar.getId());
       calendarService_.removeCalendarCategory(username, calendarCategory.getId());
@@ -1006,6 +1067,13 @@ public class TestCalendarService extends BaseCalendarTestCase {
     } catch (Exception ex) {
       fail();
     }
+  }
+  
+  public void test() {
+    try {
+    } catch (Exception e) {
+      fail();
+    } 
   }
   
   private CalendarCategory createCalendarCategory(String name, String description) {
