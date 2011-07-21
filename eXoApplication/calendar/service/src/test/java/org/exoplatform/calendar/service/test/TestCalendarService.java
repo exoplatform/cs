@@ -865,80 +865,103 @@ public class TestCalendarService extends BaseCalendarTestCase {
     }
   }
 
-  public void testCalculateRecurrenceFinishDate() {
+//  public void testCalculateRecurrenceFinishDate() {
+//    try {
+//      java.util.Calendar fromCal = java.util.Calendar.getInstance();
+//      fromCal.set(2011, 6, 20, 5, 30);
+//
+//      java.util.Calendar toCal = java.util.Calendar.getInstance();
+//      toCal.set(2011, 6, 25, 5, 30);
+//
+//      CalendarEvent userEvent = new CalendarEvent();
+//      userEvent.setFromDateTime(fromCal.getTime());
+//      userEvent.setToDateTime(toCal.getTime());
+//      userEvent.setRepeatType(CalendarEvent.RP_DAILY);
+//      userEvent.setRepeatInterval(2);
+//      userEvent.setRepeatCount(3);
+//      userEvent.setRepeatUntilDate(null);
+//      userEvent.setRepeatByDay(null);
+//      userEvent.setRepeatByMonthDay(new long[] { 2, 3, 4, 5, 7 });
+//
+//      Date date = storage_.calculateRecurrenceFinishDate(userEvent);
+//
+//      java.util.Calendar calendar = java.util.Calendar.getInstance();
+//      calendar.setTime(date);
+//
+//      assertEquals(2011, calendar.get(java.util.Calendar.YEAR));
+//      assertEquals(6, calendar.get(java.util.Calendar.MONTH));
+//      assertEquals(24, calendar.get(java.util.Calendar.DATE));
+//      assertEquals(7, calendar.get(java.util.Calendar.HOUR));
+//      assertEquals(0, calendar.get(java.util.Calendar.MINUTE));
+//    } catch (Exception e) {
+//      fail();
+//    }
+//  }
+  
+//  public void testGetPublicEvents() {
+//    try {
+//      CalendarCategory calendarCategory = createCalendarCategory("categoryName", "description");
+//      Calendar publicCalendar = createPublicCalendar("publicCalendar", "publicDescription", calendarCategory.getId());
+//
+//      EventCategory eventCategory = createEventCategory("GetPublicEventsCategory", "description");
+//
+//      java.util.Calendar fromCal = java.util.Calendar.getInstance();
+//      java.util.Calendar toCal = java.util.Calendar.getInstance();
+//      toCal.add(java.util.Calendar.HOUR, 1);
+//
+//      CalendarEvent event = createPublicEvent(publicCalendar.getId(), eventCategory, "Have a meeting", fromCal, toCal);
+//      
+//      EventQuery eventQuery = new EventQuery();
+//      eventQuery.setText(event.getId());
+//      List<CalendarEvent> events = calendarService_.getPublicEvents(eventQuery);
+//      assertEquals(1, events.size());
+//      CalendarEvent resultEvent = events.get(0);
+//      assertEquals(event.getId(), resultEvent.getId());
+//      assertEquals(event.getSummary(), resultEvent.getSummary());
+//    } catch (Exception ex) {
+//      fail();
+//    }
+//  }
+  
+  public void test2() {
     try {
-      java.util.Calendar fromCal = java.util.Calendar.getInstance();
-      fromCal.set(2011, 6, 20, 5, 30);
-
-      java.util.Calendar toCal = java.util.Calendar.getInstance();
-      toCal.set(2011, 6, 25, 5, 30);
-
-      CalendarEvent userEvent = new CalendarEvent();
-      userEvent.setFromDateTime(fromCal.getTime());
-      userEvent.setToDateTime(toCal.getTime());
-      userEvent.setRepeatType(CalendarEvent.RP_DAILY);
-      userEvent.setRepeatInterval(2);
-      userEvent.setRepeatCount(3);
-      userEvent.setRepeatUntilDate(null);
-      userEvent.setRepeatByDay(null);
-      userEvent.setRepeatByMonthDay(new long[] { 2, 3, 4, 5, 7 });
-
-      Date date = storage_.calculateRecurrenceFinishDate(userEvent);
-
-      java.util.Calendar calendar = java.util.Calendar.getInstance();
-      calendar.setTime(date);
-
-      assertEquals(2011, calendar.get(java.util.Calendar.YEAR));
-      assertEquals(6, calendar.get(java.util.Calendar.MONTH));
-      assertEquals(24, calendar.get(java.util.Calendar.DATE));
-      assertEquals(7, calendar.get(java.util.Calendar.HOUR));
-      assertEquals(0, calendar.get(java.util.Calendar.MINUTE));
-    } catch (Exception e) {
+      
+    } catch (Exception ex) {
       fail();
     }
   }
-
-  // public void testGetOriginalRecurrenceEvents() {
-  // try {
-  // CalendarCategory calendarCategory = createCalendarCategory("categoryName",
-  // "description");
-  // Calendar publicCalendar = createPublicCalendar("myCalendar", "Description",
-  // calendarCategory.getId());
-  //
-  // EventCategory eventCategory =
-  // createEventCategory("GetOriginalRecurrenceEventsEventCategory",
-  // "description");
-  //
-  // java.util.Calendar fromCal = java.util.Calendar.getInstance();
-  // java.util.Calendar toCal = java.util.Calendar.getInstance();
-  // toCal.add(java.util.Calendar.HOUR, 1);
-  // java.util.Calendar repeatUntilDate = java.util.Calendar.getInstance();
-  // repeatUntilDate.add(java.util.Calendar.DATE, 5);
-  //
-  // CalendarEvent userEvent = new CalendarEvent();
-  // userEvent.setSummary("Have a meeting");
-  // userEvent.setFromDateTime(fromCal.getTime());
-  // userEvent.setToDateTime(toCal.getTime());
-  // userEvent.setCalendarId(publicCalendar.getId());
-  // userEvent.setEventCategoryId(eventCategory.getId());
-  // userEvent.setRepeatType(CalendarEvent.RP_DAILY);
-  // userEvent.setRepeatInterval(2);
-  // userEvent.setRepeatCount(3);
-  // userEvent.setRepeatUntilDate(repeatUntilDate.getTime());
-  // userEvent.setRepeatByDay(null);
-  // userEvent.setRepeatByMonthDay(new long[] { 2, 3, 4, 5, 7 });
-  // storage_.saveOccurrenceEvent(username, publicCalendar.getId(), userEvent,
-  // true);
-  //
-  // List<CalendarEvent> events = storage_.getOriginalRecurrenceEvents(username,
-  // fromCal,
-  // toCal,
-  // new String[] { publicCalendar.getId() });
-  // assertEquals(1, events.size());
-  // } catch (Exception e) {
-  // fail();
-  // }
-  // }
+  
+  public void test3() {
+    try {
+      
+    } catch (Exception ex) {
+      fail();
+    }
+  }
+  
+  public void test4() {
+    try {
+      
+    } catch (Exception ex) {
+      fail();
+    }
+  }
+  
+  public void test5() {
+    try {
+      
+    } catch (Exception ex) {
+      fail();
+    }
+  }
+  
+  public void test6() {
+    try {
+      
+    } catch (Exception ex) {
+      fail();
+    }
+  }
 
   private CalendarCategory createCalendarCategory(String name, String description) {
     try {
