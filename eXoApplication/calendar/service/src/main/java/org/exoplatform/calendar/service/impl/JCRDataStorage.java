@@ -4316,7 +4316,6 @@ public class JCRDataStorage implements DataStorage {
       remoteCalendar.setRemoteUrl(calendarNode.getProperty(Utils.EXO_REMOTE_URL).getString());
       remoteCalendar.setRemoteUser(calendarNode.getProperty(Utils.EXO_REMOTE_USERNAME).getString());
       remoteCalendar.setRemotePassword(calendarNode.getProperty(Utils.EXO_REMOTE_PASSWORD).getString());
-      remoteCalendar.setRemotePassword(calendarNode.getProperty(Utils.EXO_REMOTE_PASSWORD).getString());
       remoteCalendar.setLastUpdated(calendarNode.getProperty(Utils.EXO_REMOTE_LAST_UPDATED).getDate());
     } catch (Exception e) {
       log.debug("Failed to get RemoteCalendar by user.", e);
