@@ -52,13 +52,8 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
-	<td></td>
-</tr>
-<tr>
-	<td>pause</td>
-	<td>10000</td>
+	<td>click</td>
+	<td>//a[contains(@onclick,'login')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -129,12 +124,12 @@
 <tr>
 	<td>type</td>
 	<td>emailAddress</td>
-	<td>exotest4@gmail.com</td>
+	<td>exomailtest@gmail.com</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>emailReply</td>
-	<td>exotest4@gmail.com</td>
+	<td>exomailtest@gmail.com</td>
 </tr>
 <tr>
 	<td>type</td>
@@ -179,12 +174,12 @@
 <tr>
 	<td>type</td>
 	<td>userName</td>
-	<td>exotest4@gmail.com</td>
+	<td>exomailtest@gmail.com</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>password</td>
-	<td>exovietnam</td>
+	<td>exoadmin</td>
 </tr>
 <tr>
 	<td>click</td>
@@ -219,11 +214,6 @@
 <tr>
 	<td>click</td>
 	<td>link=Finish</td>
-	<td></td>
-</tr>
-<tr>
-	<td>pause</td>
-	<td>10000</td>
 	<td></td>
 </tr>
 <tr>
@@ -284,7 +274,7 @@
 <tr>
 	<td>type</td>
 	<td>to</td>
-	<td>exotest3@gmail.com</td>
+	<td>exomailtest@gmail.com</td>
 </tr>
 <tr>
 	<td>type</td>
@@ -294,11 +284,6 @@
 <tr>
 	<td>click</td>
 	<td>xpath=//div[@class='UIToolbar']//div[@class='IconHolder SendMailIcon']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>pause</td>
-	<td>5000</td>
 	<td></td>
 </tr>
 <tr>
@@ -367,8 +352,8 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td>click</td>
+	<td>//a[contains(@onclick,'login')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -444,12 +429,12 @@
 <tr>
 	<td>type</td>
 	<td>emailAddress</td>
-	<td>exotest3@gmail.com</td>
+	<td>exomailtest@gmail.com</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>emailReply</td>
-	<td>exotest3@gmail.com</td>
+	<td>exomailtest@gmail.com</td>
 </tr>
 <tr>
 	<td>type</td>
@@ -494,12 +479,12 @@
 <tr>
 	<td>type</td>
 	<td>userName</td>
-	<td>exotest3@gmail.com</td>
+	<td>exomailtest@gmail.com</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>password</td>
-	<td>exovietnam</td>
+	<td>exoadmin</td>
 </tr>
 <tr>
 	<td>click</td>
@@ -537,11 +522,6 @@
 	<td></td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>5000</td>
-	<td></td>
-</tr>
-<tr>
 	<td>echo</td>
 	<td>-- Create IMAP mail account--</td>
 	<td></td>
@@ -554,11 +534,6 @@
 <tr>
 	<td>click</td>
 	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder CheckMailIcon']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>pause</td>
-	<td>10000</td>
 	<td></td>
 </tr>
 <tr>
@@ -587,13 +562,98 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>echo</td>
+	<td>-- Delete 2 newly created account --</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder AccountSettingIcon']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder AccountSettingIcon']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//div[@class='DeleteIcon']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmationPresent</td>
+	<td>Are you sure to delete this account with all associated emails?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
 <tr>
-	<td>close</td>
+	<td>waitForElementPresent</td>
+	<td>link=Sign in</td>
 	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Sign in</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>username</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>username</td>
+	<td>demo</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>password</td>
+	<td>gtn</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//a[contains(@onclick,'login')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Mail</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Mail</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder AccountSettingIcon']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder AccountSettingIcon']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//div[@class='DeleteIcon']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmationPresent</td>
+	<td>Are you sure to delete this account with all associated emails?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Sign out</td>
 	<td></td>
 </tr>
 </tbody></table>
