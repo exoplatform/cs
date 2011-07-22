@@ -3012,7 +3012,7 @@ public class JCRDataStorage implements DataStorage {
 
   private void setCometdMessage(ContinuationService continuation, Info infoObj, String from, String msgId, boolean isReadMessage, String subject, String size, String accId, Calendar gc, Calendar sc, String currentUserName, String username) {
     infoObj.setFrom(from);
-    infoObj.setMsgId(msgId);
+    infoObj.setMsgId(Utils.encodeMailId(msgId));
     infoObj.setIsRead(isReadMessage);
     infoObj.setSubject(subject);
     infoObj.setSize(size);

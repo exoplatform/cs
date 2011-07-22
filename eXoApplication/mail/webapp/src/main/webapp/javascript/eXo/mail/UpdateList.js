@@ -137,24 +137,8 @@ UpdateList.prototype.update = function(obj){
 		  		tr.className = "OddItem";
 		  	}
 		  }
-		  var form = eXo.core.DOMUtil.findAncestorByTagName(tbodyMsgList, "form");
-		  if (this.msgCount < 10) {
-			  this.msgCount++;
-		  } else {
-			  this.msgCount = 0;
-			  eXo.mail.UpdateList.sendRequest(form.action,data.msgId, form);
-		  }
 		}
   }
-} ;
-
-UpdateList.prototype.sendRequest = function(url, msgId, form){
-//	url += "&formOp=UpdateList&objectId=" + msgId + "&ajaxRequest=true";
-	url += "&formOp=Refresh&objectId=" + msgId + "&ajaxRequest=true";
-	if(form == null) {
-		url = (url).split("?")[0];
-	}
-	ajaxAsyncGetRequest(url, false);
 } ;
 
 eXo.mail.UpdateList = new UpdateList();

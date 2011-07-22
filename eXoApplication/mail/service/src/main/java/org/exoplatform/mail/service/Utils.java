@@ -534,6 +534,10 @@ public class Utils {
 
   private static final String       OUTGOING_AUTHENTICATION_MECHANISM     = "outgoingAuthenticationMechanism".intern();
 
+  private static String             PLUS_ENCODE                           = "PLUS_ENCODE_043";
+
+  private static String             EQUAL_ENCODE                          = "EQUAL_ENCODE_061";
+
   public static boolean isEmptyField(String value) {
     return value == null || value.trim().length() == 0;
   }
@@ -1096,5 +1100,15 @@ public class Utils {
     ParameterValidation.throwIllegalArgExceptionIfNullOrEmpty(protocol, "protocol", null);
     ParameterValidation.throwIllegalArgExceptionIfNullOrEmpty(property, "property", null);
     return Utils.SVR_MAIL + "." + protocol + "." + property;
+  }
+  
+  public static String encodeMailId(String id) {
+    if (id == null) return "";
+    return id.replaceAll("\\+", PLUS_ENCODE).replaceAll("=", EQUAL_ENCODE);
+  }
+
+  public static String decodeMailId(String id) {
+    if (id == null) return "";
+    return id.replaceAll(PLUS_ENCODE, "+").replaceAll(EQUAL_ENCODE, "=");
   }
 }

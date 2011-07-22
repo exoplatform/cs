@@ -272,7 +272,7 @@ import org.exoplatform.webui.event.EventListener;
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
-      msgId = MailUtils.decodeMailId(msgId);
+      msgId = Utils.decodeMailId(msgId);
       String attId = event.getRequestContext().getRequestParameter("attachId");
       UIMailPortlet portlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
 
@@ -312,7 +312,7 @@ import org.exoplatform.webui.event.EventListener;
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
-      msgId = MailUtils.decodeMailId(msgId);
+      msgId = Utils.decodeMailId(msgId);
       String attId = event.getRequestContext().getRequestParameter("attachId");
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
       Message msg = uiMsgPreview.getShowedMessageById(msgId);
@@ -341,7 +341,7 @@ import org.exoplatform.webui.event.EventListener;
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
-      msgId = MailUtils.decodeMailId(msgId);
+      msgId = Utils.decodeMailId(msgId);
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
       UIMessageArea uiMsgArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
       UIMessageList uiMessageList = uiMsgArea.getChild(UIMessageList.class);
@@ -383,7 +383,7 @@ import org.exoplatform.webui.event.EventListener;
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
-      msgId = MailUtils.decodeMailId(msgId);
+      msgId = Utils.decodeMailId(msgId);
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
       String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       if(!MailUtils.isFull(accId)) {
@@ -415,7 +415,7 @@ import org.exoplatform.webui.event.EventListener;
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
-      msgId = MailUtils.decodeMailId(msgId);
+      msgId = Utils.decodeMailId(msgId);
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
       String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       if(MailUtils.isDelegated(accId)) {
@@ -459,7 +459,7 @@ import org.exoplatform.webui.event.EventListener;
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
-      msgId = MailUtils.decodeMailId(msgId);
+      msgId = Utils.decodeMailId(msgId);
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       if(!MailUtils.isFull(accountId)) {
@@ -510,7 +510,7 @@ import org.exoplatform.webui.event.EventListener;
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
-      msgId = MailUtils.decodeMailId(msgId);
+      msgId = Utils.decodeMailId(msgId);
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
       Message msg = uiMsgPreview.getShowedMessageById(msgId);
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
@@ -536,7 +536,7 @@ import org.exoplatform.webui.event.EventListener;
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
-      msgId = MailUtils.decodeMailId(msgId);
+      msgId = Utils.decodeMailId(msgId);
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
 
       Message msg = uiMsgPreview.getShowedMessageById(msgId);
@@ -551,7 +551,7 @@ import org.exoplatform.webui.event.EventListener;
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
-      msgId = MailUtils.decodeMailId(msgId);
+      msgId = Utils.decodeMailId(msgId);
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
       try {
         Message msg = uiMsgPreview.getShowedMessageById(msgId);
@@ -571,7 +571,7 @@ import org.exoplatform.webui.event.EventListener;
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
-      msgId = MailUtils.decodeMailId(msgId);
+      msgId = Utils.decodeMailId(msgId);
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
       Message msg = uiMsgPreview.getShowedMessageById(msgId);
       if (msg != null) {
@@ -596,7 +596,7 @@ import org.exoplatform.webui.event.EventListener;
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
-      msgId = MailUtils.decodeMailId(msgId);
+      msgId = Utils.decodeMailId(msgId);
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class)
       .getSelectedValue();
@@ -626,7 +626,7 @@ import org.exoplatform.webui.event.EventListener;
       UIMessagePreview uiMsgPreview = event.getSource();
       String answer = event.getRequestContext().getRequestParameter(OBJECTID);
       String msgId = event.getRequestContext().getRequestParameter("messageId");
-      msgId = MailUtils.decodeMailId(msgId);
+      msgId = Utils.decodeMailId(msgId);
       CalendarService calService = uiMsgPreview.getApplicationComponent(CalendarService.class);
       Message msg = uiMsgPreview.getShowedMessageById(msgId);
       String fromUserId = MailUtils.getEventFrom(msg);
@@ -719,7 +719,7 @@ import org.exoplatform.webui.event.EventListener;
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
-      msgId = MailUtils.decodeMailId(msgId);
+      msgId = Utils.decodeMailId(msgId);
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
       Message msg = uiMsgPreview.getShowedMessageById(msgId);
@@ -765,7 +765,7 @@ import org.exoplatform.webui.event.EventListener;
   static void reply(Event<UIMessagePreview> event, boolean isReplyAll) throws Exception{
     UIMessagePreview uiMsgPreview = event.getSource();
     String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
-    msgId = MailUtils.decodeMailId(msgId);
+    msgId = Utils.decodeMailId(msgId);
     UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
     String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
     if(!MailUtils.isFull(accId)) {

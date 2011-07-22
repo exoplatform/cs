@@ -540,9 +540,9 @@
         public int show(Message msg, int i, int l, Locale locale) {
           if (msg != null && (uicomponent.viewMode != uicomponent.MODE_CONVERSATION || msg.isRootConversation())) {
             l ++ ;
-            String actionLink = uicomponent.event("SelectMessage", MailUtils.encodeMailId(msg.getId()));
-            checkboxField = uicomponent.getChildById(MailUtils.encodeMailId(msg.getId()));
-            String actionAddStar = uicomponent.event("AddStar", MailUtils.encodeMailId(msg.getId()));
+            String actionLink = uicomponent.event("SelectMessage", Utils.encodeMailId(msg.getId()));
+            checkboxField = uicomponent.getChildById(Utils.encodeMailId(msg.getId()));
+            String actionAddStar = uicomponent.event("AddStar", Utils.encodeMailId(msg.getId()));
             String selectedClass = "OddItem" ;
             if ((i%2) == 1) selectedClass = "EvenItem";
             String readStatus = "ReadItem" ;
@@ -552,7 +552,7 @@
             String starClass = "UnStarredIcon" ;
             if (msg.hasStar()) starClass = "StarredIcon";
       %>
-            <tr class="MessageItem $selectedClass" msgId="<%=MailUtils.encodeMailId(msg.getId())%>">
+            <tr class="MessageItem $selectedClass" msgId="<%=Utils.encodeMailId(msg.getId())%>">
               <td>
                 <%
                   if (checkboxField != null) uicomponent.renderField(checkboxField);

@@ -346,7 +346,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
       if (!attachdata.isShownInBody()) {
         ActionData fileUpload = new ActionData();
         fileUpload.setActionListener("Download");
-        fileUpload.setActionParameter(MailUtils.encodeMailId(attachdata.getId()));
+        fileUpload.setActionParameter(Utils.encodeMailId(attachdata.getId()));
         fileUpload.setActionType(ActionData.TYPE_ICON);
         fileUpload.setCssIconClass("AttachmentIcon");
         fileUpload.setActionName(attachdata.getName() + " ("
@@ -356,7 +356,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
         ActionData removeAction = new ActionData();
         removeAction.setActionListener("RemoveAttachment");
         removeAction.setActionName(ACT_REMOVE);
-        removeAction.setActionParameter(MailUtils.encodeMailId(attachdata.getId()));
+        removeAction.setActionParameter(Utils.encodeMailId(attachdata.getId()));
         removeAction.setCssIconClass("LabelLink");
         removeAction.setActionType(ActionData.TYPE_LINK);
         removeAction.setBreakLine(true);
@@ -1263,7 +1263,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiComposeForm = event.getSource();
       String attId = event.getRequestContext().getRequestParameter(OBJECTID);
-      attId = MailUtils.decodeMailId(attId);
+      attId = Utils.decodeMailId(attId);
       for (Attachment attach : uiComposeForm.getAttachFileList()) {
         if (attach.getId().equals(attId)) {
           DownloadResource dresource = new InputStreamDownloadResource(attach.getInputStream(),
@@ -1286,7 +1286,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiComposeForm = event.getSource();
       String attFileId = event.getRequestContext().getRequestParameter(OBJECTID);
-      attFileId = MailUtils.decodeMailId(attFileId);
+      attFileId = Utils.decodeMailId(attFileId);
       Iterator<Attachment> iter = uiComposeForm.attachments_.iterator();
       Attachment att;
       while (iter.hasNext()) {

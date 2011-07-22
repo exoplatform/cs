@@ -55,7 +55,6 @@ import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
@@ -69,7 +68,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
  */
 
 @ComponentConfig(
-                 lifecycle = UIFormLifecycle.class,
+                 lifecycle = UIMessageListLifecycle.class,
                  template =  "app:/templates/mail/webui/UIMessageList.gtmpl",
                  events = {
                    @EventConfig(listeners = UIMessageList.SelectMessageActionListener.class),
@@ -314,7 +313,7 @@ public class UIMessageList extends UIForm {
         return ;
       }
       for (Message message : msgList) {
-        String encodeId = MailUtils.encodeMailId(message.getId());
+        String encodeId = Utils.encodeMailId(message.getId());
         UIFormCheckBoxInput<Boolean> uiCheckBox = new UIFormCheckBoxInput<Boolean>(encodeId, encodeId, false);
         addUIFormInput(uiCheckBox);
         messageList_.put(message.getId(), message);
@@ -331,7 +330,7 @@ public class UIMessageList extends UIForm {
     List<Message> checkedList = new ArrayList<Message>();
     UIFormCheckBoxInput uiCheckbox;
     for (Message msg : getMessageList()) {
-      uiCheckbox = getUIFormCheckBoxInput(MailUtils.encodeMailId(msg.getId()));
+      uiCheckbox = getUIFormCheckBoxInput(Utils.encodeMailId(msg.getId()));
       if (uiCheckbox != null && uiCheckbox.isChecked()) {
         checkedList.add(msg);
         if (viewMode == MODE_CONVERSATION && includeGroupedMsgs) {
@@ -384,7 +383,7 @@ public class UIMessageList extends UIForm {
   static public class SelectMessageActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      msgId = MailUtils.decodeMailId(msgId);
+      msgId = Utils.decodeMailId(msgId);
       UIMessageList uiMessageList = event.getSource();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       UIMessagePreview uiMessagePreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class);
@@ -405,7 +404,7 @@ public class UIMessageList extends UIForm {
         currentFolder = mailSrv.getFolder(username, accountId, folderId);              
         uiMessageList.setSelectedMessageId(msgId);
         for (Message uncheckedMsg : uiMessageList.messageList_.values()) {
-          UIFormCheckBoxInput<Boolean> uiCheckbox = uiMessageList.getChildById(MailUtils.encodeMailId(uncheckedMsg.getId()));
+          UIFormCheckBoxInput<Boolean> uiCheckbox = uiMessageList.getChildById(Utils.encodeMailId(uncheckedMsg.getId()));
           if (uiCheckbox != null ) {
             if (uncheckedMsg.getId().equals(msg.getId())) uiCheckbox.setChecked(true);
             else uiCheckbox.setChecked(false); 
@@ -490,7 +489,7 @@ public class UIMessageList extends UIForm {
         if(msg.isUnread() && currentFolder != null && numberOfUnread > 0) currentFolder.setNumberOfUnreadMessage(numberOfUnread -1);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
-      }          
+      }
     }
   }
 
@@ -521,7 +520,7 @@ public class UIMessageList extends UIForm {
   static public class EditDraftActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      msgId = MailUtils.decodeMailId(msgId);
+      msgId = Utils.decodeMailId(msgId);
       UIMessageList uiMessageList = event.getSource();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
@@ -552,7 +551,7 @@ public class UIMessageList extends UIForm {
   static public class AddStarActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      msgId = MailUtils.decodeMailId(msgId);
+      msgId = Utils.decodeMailId(msgId);
       UIMessageList uiMessageList = event.getSource();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       String username = uiPortlet.getCurrentUser();
@@ -912,7 +911,7 @@ public class UIMessageList extends UIForm {
       UIMessageList uiMessageList = event.getSource() ; 
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      msgId = MailUtils.decodeMailId(msgId);
+      msgId = Utils.decodeMailId(msgId);
       String accId = uiPortlet.getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue() ;
       // Verify
       UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
@@ -940,8 +939,10 @@ public class UIMessageList extends UIForm {
       UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
 
       Message message = null;
-      if (!Utils.isEmptyField(msgId)) message = uiMessageList.messageList_.get(msgId) ;
-      else  message = checkedMsgs.get(0);
+      if (!Utils.isEmptyField(msgId) && !"null".equals(msgId))
+        message = uiMessageList.messageList_.get(msgId);
+      else
+        message = checkedMsgs.get(0);
       try {
         MailService mService = MailUtils.getMailService();
         String uid = uiPortlet.getCurrentUser();
@@ -960,8 +961,7 @@ public class UIMessageList extends UIForm {
       }
       uiPopupContainer.addChild(uiComposeForm) ;
 
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;      
     }
   }  
 
@@ -975,7 +975,7 @@ public class UIMessageList extends UIForm {
         return;
       }
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      msgId = MailUtils.decodeMailId(msgId);
+      msgId = Utils.decodeMailId(msgId);
       // Verify
       UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
       List<Message> checkedMsgs = uiMessageList.getCheckedMessage(false) ;
@@ -990,8 +990,10 @@ public class UIMessageList extends UIForm {
       }
 
       Message message = null;
-      if (!Utils.isEmptyField(msgId)) message = uiMessageList.messageList_.get(msgId) ;
-      else  message = uiMessageList.getCheckedMessage().get(0);
+      if (!Utils.isEmptyField(msgId) && !"null".equals(msgId))
+        message = uiMessageList.messageList_.get(msgId);
+      else
+        message = checkedMsgs.get(0);
 
       String from = Utils.getAddresses(message.getFrom())[0];
       MessageFilter filter = new MessageFilter(from);
@@ -1099,7 +1101,7 @@ public class UIMessageList extends UIForm {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      msgId = MailUtils.decodeMailId(msgId);
+      msgId = Utils.decodeMailId(msgId);
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
       String username = MailUtils.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
@@ -1149,7 +1151,7 @@ public class UIMessageList extends UIForm {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      msgId = MailUtils.decodeMailId(msgId);
+      msgId = Utils.decodeMailId(msgId);
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
       String username = MailUtils.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
@@ -1194,7 +1196,7 @@ public class UIMessageList extends UIForm {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      msgId = MailUtils.decodeMailId(msgId);
+      msgId = Utils.decodeMailId(msgId);
       UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       List<Message> checkedMsgs = uiMessageList.getCheckedMessage(false);
@@ -1233,8 +1235,10 @@ public class UIMessageList extends UIForm {
       }
       Message message = null ;
       
-      if (!Utils.isEmptyField(msgId)) message = uiMessageList.messageList_.get(msgId) ;
-      else  message = checkedMsgs.get(0);
+      if (!Utils.isEmptyField(msgId) && !"null".equals(msgId))
+        message = uiMessageList.messageList_.get(msgId);
+      else
+        message = checkedMsgs.get(0);
       if (message != null) message = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(uid, accountId, message);  
       if (message != null && !message.isLoaded()) {
         message = mailSrv.loadTotalMessage(uid, accountId, message) ;
@@ -1500,7 +1504,7 @@ public class UIMessageList extends UIForm {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ;   
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      msgId = MailUtils.decodeMailId(msgId);
+      msgId = Utils.decodeMailId(msgId);
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       Message msg = uiMessageList.messageList_.get(msgId);
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
@@ -1686,7 +1690,7 @@ public class UIMessageList extends UIForm {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMsgList = event.getSource() ;  
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      msgId = MailUtils.decodeMailId(msgId);
+      msgId = Utils.decodeMailId(msgId);
       UIMailPortlet uiPortlet = uiMsgList.getAncestorOfType(UIMailPortlet.class);
       MailService mailSrv = uiMsgList.getApplicationComponent(MailService.class);
       String username = uiPortlet.getCurrentUser();
@@ -1697,7 +1701,7 @@ public class UIMessageList extends UIForm {
       }
       try {
         Message msg = mailSrv.getMessageById(uid, accountId, msgId);        
-        String newId = MailUtils.encodeMailId(msg.getId());
+        String newId = Utils.encodeMailId(msg.getId());
         UIFormCheckBoxInput<Boolean> uiCheckBox = new UIFormCheckBoxInput<Boolean>(newId, newId, false);
         uiMsgList.addUIFormInput(uiCheckBox);
         uiMsgList.messageList_.put(msg.getId(), msg);
@@ -1731,7 +1735,7 @@ public class UIMessageList extends UIForm {
     UIMessageList uiMessageList = event.getSource() ; 
     UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
     String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-    msgId = MailUtils.decodeMailId(msgId);
+    msgId = Utils.decodeMailId(msgId);
     String accId = uiPortlet.getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue() ;
     String useid = uiPortlet.getCurrentUser();
     UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ; 
@@ -1759,8 +1763,10 @@ public class UIMessageList extends UIForm {
     uiPopupAction.activate(uiPopupContainer, MailUtils.MAX_POPUP_WIDTH, 0, true);
     UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
     Message message = null;
-    if (!Utils.isEmptyField(msgId)) message = uiMessageList.messageList_.get(msgId) ;
-    else  message = checkedMsgs.get(0);
+    if (!Utils.isEmptyField(msgId) && !"null".equals(msgId))
+      message = uiMessageList.messageList_.get(msgId);
+    else
+      message = checkedMsgs.get(0);
     try {
       MailService mService = MailUtils.getMailService();
       String uid = useid;
@@ -1782,8 +1788,7 @@ public class UIMessageList extends UIForm {
       return; 
     }
     uiPopupContainer.addChild(uiComposeForm) ;
-    event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-    event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class));
+    event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;    
   }
   
   public static void setConversationMode(Event<UIMessageList> event) throws Exception{
