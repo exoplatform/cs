@@ -174,14 +174,11 @@ public class FakeJobSchedulerServiceImpl implements JobSchedulerService {
   public void addPeriodJob(ComponentPlugin plugin) throws Exception {
   }
 
-  @Override
   public boolean suspend() {
     return false;
   }
 
-  @Override
   public boolean resume() {
     return false;
   }
-
 }

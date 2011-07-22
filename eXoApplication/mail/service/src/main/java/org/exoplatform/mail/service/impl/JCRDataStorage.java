@@ -1607,7 +1607,7 @@ public class JCRDataStorage implements DataStorage {
     }
   }
 
-  public boolean isExistFolder(String username, String accountId, String parentId, String folderId) throws Exception {
+  public boolean isExistFolder(String username, String accountId, String parentId, String folderName) throws Exception {
     SessionProvider sProvider = null;
     boolean isExist = false;
     try {
@@ -1618,11 +1618,16 @@ public class JCRDataStorage implements DataStorage {
       } else {
         parentNode = getFolderHome(sProvider, username, accountId);
       }
+      
+      if (parentNode == null) {
+        return false;
+      }
+      
       NodeIterator nit = parentNode.getNodes();
       while (nit.hasNext()) {
         Node node = nit.nextNode();
         String fn = node.getProperty(Utils.EXO_NAME).getString();
-        if (fn.trim().equalsIgnoreCase(folderId))
+        if (fn.trim().equalsIgnoreCase(folderName))
           isExist = true;
       }
     } finally {
