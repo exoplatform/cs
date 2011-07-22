@@ -327,7 +327,7 @@ public class TestCalendarService extends BaseCalendarTestCase {
     calEvent.setToDateTime(toCal.getTime());
     calendarService_.savePublicEvent(cal.getId(), calEvent, true);
 
-    assertNotNull(calendarService_.getGroupEvent(cal.getId(), calEvent.getId()));
+    assertNotNull(calendarService_.getGroupEvent(calEvent.getId()));
     List<String> calendarIds = new ArrayList<String>();
     calendarIds.add(cal.getId());
     assertEquals(1, calendarService_.getGroupEventByCalendar(calendarIds).size());
@@ -511,7 +511,6 @@ public class TestCalendarService extends BaseCalendarTestCase {
       cal = remoteCalendarService.importRemoteCalendar(remoteCal);
     } catch (IOException e) {
       log.info("Exception occurs when connect to remote calendar. Skip this test.");
-      fail();
       return;
     }
     cal.setCategoryId(calCategory.getId());
@@ -550,7 +549,6 @@ public class TestCalendarService extends BaseCalendarTestCase {
       cal = remoteCalendarService.importRemoteCalendar(remoteCal);
     } catch (IOException e) {
       log.info("Exception occurs when connect to remote calendar. Skip this test.");
-      fail();
       return;
     }
     
