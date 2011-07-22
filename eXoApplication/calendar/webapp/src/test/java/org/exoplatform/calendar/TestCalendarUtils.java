@@ -26,4 +26,26 @@ public class TestCalendarUtils extends TestCase {
     
     assertEquals(display, CalendarUtils.generateTimeZoneLabel(vietnamTimezone));
   }
+  
+  public void testCleanValue() throws Exception {
+    String values = "";
+    assertEquals("", CalendarUtils.cleanValue(values));
+    values = "root,";
+    assertEquals("root", CalendarUtils.cleanValue(values));
+    values = "root, ";
+    assertEquals("root", CalendarUtils.cleanValue(values));
+    values = " root     ,root ";
+    assertEquals("root", CalendarUtils.cleanValue(values));
+    values = " root, root , root ";
+    assertEquals("root", CalendarUtils.cleanValue(values));
+    values = ",root,";
+    assertEquals("root", CalendarUtils.cleanValue(values));
+    values = " , root , ";
+    assertEquals("root", CalendarUtils.cleanValue(values));
+    values = " , root , root abc ";
+    assertEquals("root,root abc", CalendarUtils.cleanValue(values));
+    values = "demo, root, exo/test  ,   platform/user ";
+    assertEquals("demo,root,exo/test,platform/user", CalendarUtils.cleanValue(values));
+  }
 }
+
