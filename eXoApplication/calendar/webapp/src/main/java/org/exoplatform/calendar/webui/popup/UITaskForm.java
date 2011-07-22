@@ -717,19 +717,6 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     return attSize ;
   }
 
-  public static String cleanValue(String values) throws Exception{
-    String[] tmpArr = values.split(",");
-      List<String> list = Arrays.asList(tmpArr);
-      java.util.Set<String> set = new java.util.HashSet<String>(list);
-      String[] result = new String[set.size()];
-      set.toArray(result);
-      String data = "";
-      for (String s : result) {
-          data += "," + s;
-      }
-      data = data.substring(1);
-    return data;
-  }
   public Attachment getAttachment(String attId) {
     UITaskDetailTab uiDetailTab = getChildById(TAB_TASKDETAIL) ;
     for (Attachment att : uiDetailTab.getAttachments()) {
@@ -881,7 +868,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       String currentValues = uiInput.getValue();
       String values = uiUserSelector.getSelectedUsers();
       if(!CalendarUtils.isEmpty(currentValues) && !currentValues.equals("null")) values += ","+ currentValues;
-      values = cleanValue(values);
+      values = CalendarUtils.cleanValue(values);
       uiInput.setValue(values);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer);
     }

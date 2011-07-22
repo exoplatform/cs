@@ -30,11 +30,13 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -890,6 +892,21 @@ public class CalendarUtils {
     return builder.toString() ;
   }
 
+  public static String cleanValue(String values) throws Exception{
+    if(isEmpty(values)) return "";
+    values = values.trim().replaceAll("(,\\s*)", COMMA).replaceAll("(\\s*,)", COMMA);
+    String[] tmpArr = values.split(COMMA);
+      Set<String> set = new HashSet<String>(Arrays.asList(tmpArr));
+      StringBuilder data = new StringBuilder();
+      for (String s : set) {
+        if(s.trim().length() > 0) {
+          if(data.length() > 0) data.append(COMMA);
+          data.append(s.trim());
+        }
+      }
+    return data.toString();
+  }
+  
   public static String getResourceBundle(String key) {
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
     ResourceBundle res = context.getApplicationResourceBundle() ;
