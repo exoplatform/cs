@@ -364,6 +364,9 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       if(!CalendarUtils.isEmpty(currentValues) && !currentValues.equals("null")) values += ","+ currentValues; 
       values = UITaskForm.cleanValue(values);
       uiInput.setValue(values);
+      UIPopupWindow popupWindow = uiUserSelector.getAncestorOfType(UIPopupWindow.class); 
+      popupWindow.setShow(false);
+      popupWindow.setUIComponent(null);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer);
     }
   }
