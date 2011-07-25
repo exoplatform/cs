@@ -31,11 +31,16 @@ import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
+import org.exoplatform.mail.service.SpamFilter;
+import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.service.impl.JCRDataStorage;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.mortbay.log.Log;
 
 /**
@@ -60,12 +65,17 @@ public class TestMailService extends BaseMailTestCase {
   public static final String TEXT_PLAIN = "text/plain".intern();
 
   public static final String TEXT_HTML  = "text/html".intern();
+  
+  private JCRDataStorage  storage_;
 
   public void setUp() throws Exception {
     super.setUp();
     mailService_ = (MailService) container.getComponentInstanceOfType(MailService.class);
     SessionProviderService sessionProviderService = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
     sProvider = sessionProviderService.getSystemSessionProvider(null);
+    
+    NodeHierarchyCreator nodeHierarchyCreator = (NodeHierarchyCreator) container.getComponentInstanceOfType(NodeHierarchyCreator.class);
+    storage_ = new JCRDataStorage(nodeHierarchyCreator, repositoryService);
   }
 
   public void testMailService() throws Exception {
@@ -144,6 +154,7 @@ public class TestMailService extends BaseMailTestCase {
 
     Account getAccount2 = mailService_.getAccountById(username, accId2);
     assertNotNull(getAccount2);
+    assertEquals("imap.gmail.com", getAccount2.getIncomingHost());
 
     Account defaultAcc = mailService_.getDefaultAccount(username);
     assertNotNull(defaultAcc);
@@ -307,7 +318,6 @@ public class TestMailService extends BaseMailTestCase {
     
     String newMessageBody = "new" + messageBody;
     String newMessageSubject = "new" + messageSubject;
-    String[] newMessageFolderIds = new String[] {folder.getId()};
     Date newMessageReceivedDate = new Date();
     
     // Create attachment data
@@ -358,14 +368,14 @@ public class TestMailService extends BaseMailTestCase {
     expectedMessage1.setMessageBody(newMessageBody);
     expectedMessage1.setSubject(newMessageSubject);
     expectedMessage1.setReceivedDate(newMessageReceivedDate);
-    mailService_.saveMessage(username, accountPop.getId(), folder.getPath(), message, false);
-    expectedMessage1 = mailService_.getMessageById(username, accountPop.getId(), message.getId());
-    assertEquals(messageSubject, expectedMessage1.getSubject());
-    assertEquals(messageBody, expectedMessage1.getMessageBody());
-    assertEquals(messageReceivedDate, expectedMessage1.getReceivedDate());
+    mailService_.saveMessage(username, accountPop.getId(), folder.getPath(), expectedMessage1, false);
+    Message expectedMessage8 = mailService_.getMessageById(username, accountPop.getId(), message.getId());
+    assertEquals(newMessageSubject, expectedMessage8.getSubject());
+    assertEquals(newMessageBody, expectedMessage8.getMessageBody());
+    assertEquals(newMessageReceivedDate, expectedMessage8.getReceivedDate());
     
     // Test loadTotalMessage
-    Message expectedMessage2 = mailService_.loadTotalMessage(username, accountPop.getId(), expectedMessage1);
+    Message expectedMessage2 = mailService_.loadTotalMessage(username, accountPop.getId(), expectedMessage8);
     assertNotNull(expectedMessage2);
     List<Attachment> attachmentList1 = expectedMessage2.getAttachments();
     assertNotNull(attachmentList1);
@@ -374,7 +384,7 @@ public class TestMailService extends BaseMailTestCase {
     assertEquals(attachmentMimeType, expectedAttachment1.getMimeType());
     
     // Test moveMessage
-    Message expectedMessage3 = mailService_.moveMessage(username, accountPop.getId(), expectedMessage1, folder.getId(), desfolder.getId());
+    Message expectedMessage3 = mailService_.moveMessage(username, accountPop.getId(), expectedMessage8, folder.getId(), desfolder.getId());
     assertNotNull(expectedMessage3);
     List<Message> messageList1 = mailService_.getMessagesByFolder(username, accountPop.getId(), desfolder.getId());
     assertNotNull(messageList1);
@@ -382,8 +392,16 @@ public class TestMailService extends BaseMailTestCase {
     Message expectedMessage4 = messageList1.get(0);
     assertEquals(message.getId(), expectedMessage4.getId());
     
+    // Test move message
+    List<Message> messageList3 = mailService_.moveMessages(username, accountPop.getId(), Arrays.asList(expectedMessage3), desfolder.getId(), folder.getId());
+    assertNotNull(messageList3);
+    assertEquals(1, messageList3.size());
+    assertEquals(expectedMessage3.getId(), messageList3.get(0).getId());
+    Message expectedMessage6 = mailService_.getMessageById(username, accountPop.getId(), expectedMessage3.getId());
+    assertEquals(expectedMessage3.getId(), expectedMessage6.getId());
+    
     // Test removeMessage
-    mailService_.removeMessage(username, accountPop.getId(), expectedMessage1);
+    mailService_.removeMessage(username, accountPop.getId(), expectedMessage8);
     List<Message> messageList2 = mailService_.getMessagesByFolder(username, accountPop.getId(), desfolder.getId());
     assertEquals(0, messageList2.size());
     
@@ -394,11 +412,10 @@ public class TestMailService extends BaseMailTestCase {
     Account accountImap = createAccountObj(Utils.IMAP);
     mailService_.createAccount(username, accountImap);
     
-    folder = createFolder(accountImap.getId(), "folderId", "folderName", "folderUrl");
-    desfolder = createFolder(accountImap.getId(), "desFolderId", "desFolderName", "desFolderUrl");
+    Folder desfolder1 = createFolder(accountImap.getId(), "desFolderId", "desFolderName", "desFolderUrl");
     
     // Create attachment
-    attachment = new Attachment() {
+    Attachment attachment1 = new Attachment() {
       @Override
       public InputStream getInputStream() throws Exception {
         return new InputStream() {
@@ -408,31 +425,39 @@ public class TestMailService extends BaseMailTestCase {
         };
       }
     };
-    attachment.setName(attachmentName);
-    attachment.setMimeType(attachmentMimeType);
+    attachment1.setName(attachmentName);
+    attachment1.setMimeType(attachmentMimeType);
     
     // Create and save message
-    message = new Message();
-    message.setContentType(messageContentType);
-    message.setSubject(messageSubject);
-    message.setFrom(accountImap.getEmailAddress());
-    message.setMessageTo(accountImap.getEmailAddress());
-    message.setMessageBody(messageBody);
-    message.setFolders(messageFolderIds);
-    message.setReceivedDate(messageReceivedDate);
-    message.setAttachements(Arrays.asList(attachment));
-    mailService_.saveMessage(username, accountImap.getId(), desfolder.getPath(), message, true);
+    Message message1 = new Message();
+    message1.setContentType(messageContentType);
+    message1.setSubject(messageSubject);
+    message1.setFrom(accountImap.getEmailAddress());
+    message1.setMessageTo(accountImap.getEmailAddress());
+    message1.setMessageBody(messageBody);
+    message1.setFolders(messageFolderIds);
+    message1.setReceivedDate(messageReceivedDate);
+    message1.setAttachements(Arrays.asList(attachment));
+    mailService_.saveMessage(username, accountImap.getId(), desfolder1.getPath(), message1, true);
     
     // Test loadTotalMessage
-    expectedMessage2 = mailService_.loadTotalMessage(username, accountImap.getId(), expectedMessage1);
-    assertNotNull(expectedMessage2);
-    attachmentList1 = expectedMessage2.getAttachments();
-    assertNotNull(attachmentList1);
-    expectedAttachment1 = attachmentList1.get(0);
-    assertEquals(attachmentName, expectedAttachment1.getName());
-    assertEquals(attachmentMimeType, expectedAttachment1.getMimeType());
+    Message expectedMessage5 = mailService_.loadTotalMessage(username, accountImap.getId(), message1);
+    assertNotNull(expectedMessage5);
+    List<Attachment> attachmentList2 = expectedMessage5.getAttachments();
+    assertNotNull(attachmentList2);
+    Attachment expectedAttachment2 = attachmentList2.get(0);
+    assertEquals(attachmentName, expectedAttachment2.getName());
+    assertEquals(attachmentMimeType, expectedAttachment2.getMimeType());
+    
+    // Test remove message
+    mailService_.removeMessages(username, accountImap.getId(), Arrays.asList(expectedMessage5), true);
+    Message expectedMessage7 = mailService_.getMessageById(username, accountImap.getId(), expectedMessage5.getId());
+    assertNull(expectedMessage7);
+    
+    // Remove account
+    mailService_.removeAccount(username, accountImap.getId());
   }
-
+  
   public void testDelegateAccount() throws Exception {
     Account accountPop = createAccountObj(Utils.POP3);
     mailService_.createAccount(username, accountPop);
@@ -462,6 +487,210 @@ public class TestMailService extends BaseMailTestCase {
     // indicate test remove account also remove delegate references
     mailService_.removeAccount(username, accountPop.getId());
     assertEquals(0, mailService_.getDelegatedAccounts(receiver).size());
+  }
+  
+  public void testFilter() {
+    try {
+      Account accountPop = createAccountObj(Utils.POP3);
+      mailService_.createAccount(username, accountPop);
+      
+      Folder folder = createFolder(accountPop.getId(), "folderId", "folderName", "folderUrl");
+      
+      // Create filter data
+      String filterName = "testFilter";
+      String from = "abc@gmail.com";
+      int fromCondition = Utils.CONDITION_CONTAIN;
+      String to = "xyz@gmail.com";
+      int toCondition = Utils.CONDITION_CONTAIN;
+      String subject = "mnh";
+      int subjectCondition = Utils.CONDITION_CONTAIN;
+      String body = "body to filter";
+      int bodyCondition = Utils.CONDITION_CONTAIN;
+      String applyFolder = folder.getId();
+      String applyTag = "";
+      
+      // Create and save filter
+      MessageFilter filter = new MessageFilter(filterName);       
+      filter.setAccountId(accountPop.getId());
+      filter.setFrom(from);
+      filter.setFromCondition(fromCondition);
+      filter.setTo(to);
+      filter.setToCondition(toCondition);
+      filter.setSubject(subject);
+      filter.setSubjectCondition(subjectCondition);
+      filter.setBody(body);
+      filter.setBodyCondition(bodyCondition);
+      filter.setApplyFolder(applyFolder);
+      filter.setApplyTag(applyTag);
+      mailService_.saveFilter(username, accountPop.getId(), filter, true);
+      
+      // Test getFilterById
+      MessageFilter expectedFilter = mailService_.getFilterById(username, accountPop.getId(), filter.getId());
+      assertNotNull(expectedFilter);
+      assertEquals(filterName, expectedFilter.getName());
+      assertEquals(from, expectedFilter.getFrom());
+      assertEquals(fromCondition, expectedFilter.getFromCondition());
+      assertEquals(to, expectedFilter.getTo());
+      assertEquals(toCondition, expectedFilter.getToCondition());
+      assertEquals(subject, expectedFilter.getSubject());
+      assertEquals(subjectCondition, expectedFilter.getSubjectCondition());
+      assertEquals(body, expectedFilter.getBody());
+      assertEquals(bodyCondition, expectedFilter.getBodyCondition());
+      assertEquals(applyFolder, expectedFilter.getApplyFolder());
+      assertEquals(applyTag, expectedFilter.getApplyTag());
+      
+      // Test getFilters
+      List<MessageFilter> filterList = mailService_.getFilters(username, accountPop.getId());
+      assertNotNull(filterList);
+      assertEquals(1, filterList.size());
+      
+      // Test getListOfMessageIds
+      List<String> messageIdList = mailService_.getListOfMessageIds(username, filter);
+      assertNotNull(messageIdList);
+      assertEquals(0, messageIdList.size());
+      
+      // Test execActionFilter
+      storage_.execActionFilter(username, accountPop.getId(), Calendar.getInstance());
+      
+      // Test removeFilter
+      mailService_.removeFilter(username, accountPop.getId(), expectedFilter.getId());
+      List<MessageFilter> filterList1 = mailService_.getFilters(username, accountPop.getId());
+      assertNotNull(filterList1);
+      assertEquals(0, filterList1.size());
+      
+      // Remove account
+      mailService_.removeAccount(username, accountPop.getId());
+    } catch (Exception ex) {
+      fail();
+    }
+  }
+  
+  public void testSpamFilter() {
+    try {
+      Account accountPop = createAccountObj(Utils.POP3);
+      mailService_.createAccount(username, accountPop);
+      
+      String sender = "abc@gmail.com";
+      
+      SpamFilter filter = new SpamFilter();
+      filter.setSenders(new String[] {sender});
+      mailService_.saveSpamFilter(username, accountPop.getId(), filter);
+      
+      SpamFilter expectedFilter = mailService_.getSpamFilter(username, accountPop.getId());
+      assertNotNull(expectedFilter);
+      String[] senders =  expectedFilter.getSenders();
+      assertNotNull(senders);
+      assertEquals(1, senders.length);
+      assertEquals(sender, senders[0]);
+    } catch (Exception ex) {
+      fail();
+    }
+  }
+  
+  public void testTag() {
+    try {
+      Account accountPop = createAccountObj(Utils.POP3);
+      mailService_.createAccount(username, accountPop);
+      
+      // Create tag data
+      String tagId = "tagId";
+      String tagName = "tagName";
+      String tagDescription = "tagDescription";
+      String tagColor = "WHITE";
+      
+      String newTagName = "newTagName";
+      String newTagDesciption = "newTagDesciption";
+      String newTagColor = "BLACK";
+      
+      // Create and save tag
+      Tag tag = new Tag();
+      tag.setId(tagId);
+      tag.setName(tagName);
+      tag.setDescription(tagDescription);
+      tag.setColor(tagColor);
+      mailService_.addTag(username, accountPop.getId(), tag);
+      
+      // Test getTag
+      Tag expectedTag = mailService_.getTag(username, accountPop.getId(), tag.getId());
+      assertNotNull(expectedTag);
+      assertEquals(tagName, expectedTag.getName());
+      assertEquals(tagDescription, expectedTag.getDescription());
+      assertEquals(tagColor, expectedTag.getColor());
+      
+      // Test update tag
+      expectedTag.setName(newTagName);
+      expectedTag.setDescription(newTagDesciption);
+      expectedTag.setColor(newTagColor);
+      mailService_.updateTag(username, accountPop.getId(), expectedTag);
+      
+      // Test gettags
+      List<Tag> tagList = mailService_.getTags(username, accountPop.getId());
+      assertNotNull(tagList);
+      assertEquals(1, tagList.size());
+      Tag expectedTag1 = tagList.get(0);
+      assertEquals(tagId, expectedTag1.getId());
+      assertEquals(newTagName, expectedTag1.getName());
+      assertEquals(newTagDesciption, expectedTag1.getDescription());
+      assertEquals(newTagColor, expectedTag1.getColor());
+      
+      // Test remove tag
+      mailService_.removeTag(username, accountPop.getId(), expectedTag1.getId());
+      List<Tag> tagList1 = mailService_.getTags(username, accountPop.getId());
+      assertNotNull(tagList1);
+      assertEquals(0, tagList1.size());
+      
+    } catch (Exception ex) {
+      fail();
+    }
+  }
+  
+  public void testMailSetting() {
+    try {
+      Account accountPop = createAccountObj(Utils.POP3);
+      mailService_.createAccount(username, accountPop);
+      
+      long numberMsgPerPage = 50;
+      boolean formatAsOriginal = true;
+      boolean replyWithAtt = true;
+      boolean forwardWithAtt = true;
+      String prefixMsgWith = "abc";
+      long periodCheckAuto = Utils.PRIORITY_HIGH;
+      String defaultAccount = accountPop.getId();
+      boolean useWysiwyg = true;
+      boolean saveMsgInSent = true;
+      long layout = MailSetting.HORIZONTAL_LAYOUT;
+      long sendReceipt = MailSetting.SEND_RECEIPT_ASKSME;
+      
+      MailSetting setting = new MailSetting();
+      setting.setNumberMsgPerPage(numberMsgPerPage);
+      setting.setFormatAsOriginal(formatAsOriginal);
+      setting.setReplyWithAttach(replyWithAtt);
+      setting.setForwardWithAtt(forwardWithAtt);
+      setting.setPrefixMessageWith(prefixMsgWith);
+      setting.setPeriodCheckAuto(periodCheckAuto);
+      setting.setDefaultAccount(defaultAccount);
+      setting.setUseWysiwyg(useWysiwyg);
+      setting.setSaveMessageInSent(saveMsgInSent);
+      setting.setLayout(layout);
+      setting.setSendReturnReceipt(sendReceipt);
+      mailService_.saveMailSetting(username, setting);
+      
+      MailSetting expectedSetting = mailService_.getMailSetting(username);
+      assertNotNull(expectedSetting);
+      assertEquals(numberMsgPerPage, expectedSetting.getNumberMsgPerPage());
+      assertEquals(formatAsOriginal, expectedSetting.formatAsOriginal());
+      assertEquals(replyWithAtt, expectedSetting.replyWithAttach());
+      assertEquals(forwardWithAtt, expectedSetting.forwardWithAtt());
+      assertEquals(prefixMsgWith, expectedSetting.getPrefixMessageWith());
+      assertEquals(periodCheckAuto, expectedSetting.getPeriodCheckAuto());
+      assertEquals(defaultAccount, expectedSetting.getDefaultAccount());
+      assertEquals(useWysiwyg, expectedSetting.useWysiwyg());
+      assertEquals(saveMsgInSent, expectedSetting.saveMessageInSent());
+      assertEquals(layout, expectedSetting.getLayout());
+      assertEquals(sendReceipt, expectedSetting.getSendReturnReceipt());
+    } catch (Exception ex) {
+      fail();
+    }
   }
   
   private Folder createFolder(String accountId, String id, String name, String urlName) {

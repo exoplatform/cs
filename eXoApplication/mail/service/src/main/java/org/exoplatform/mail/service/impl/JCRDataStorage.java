@@ -416,10 +416,10 @@ public class JCRDataStorage implements DataStorage {
       queryImpl.setLimit(1);
       QueryResult result = queryImpl.execute();
       NodeIterator it = result.getNodes();
-      Node node = null;
-      if (it.hasNext())
-        node = it.nextNode();
-      Message msg = getMessage(node);
+      if (!it.hasNext()) {
+        return null;
+      }
+      Message msg = getMessage(it.nextNode());
       return msg;
     } finally {
       closeSessionProvider(sProvider);
@@ -511,6 +511,9 @@ public class JCRDataStorage implements DataStorage {
     try {
       sProvider = createSessionProvider();
       Node homeMsg = getMessageHome(sProvider, username, filter.getAccountId());
+      if (homeMsg == null) {
+        return new ArrayList<Message>();
+      }
       filter.setAccountPath(homeMsg.getPath());
       QueryManager qm = getSession(sProvider).getWorkspace().getQueryManager();
       String queryString = filter.getStatement();
@@ -1830,7 +1833,12 @@ public class JCRDataStorage implements DataStorage {
 
   public Node getMessageHome(SessionProvider sProvider, String username, String accountId) throws Exception {
     sProvider = createSessionProvider();
-    Node accountHome = getMailHomeNode(sProvider, username).getNode(accountId);
+    Node mailHomeNote = getMailHomeNode(sProvider, username);
+    if (mailHomeNote == null) {
+      return null;
+    }
+    
+    Node accountHome = mailHomeNote.getNode(accountId);
     Node msgHome = null;
     try {
       msgHome = accountHome.getNode(Utils.KEY_MESSAGE);
@@ -2190,6 +2198,9 @@ public class JCRDataStorage implements DataStorage {
       sProvider = createSessionProvider();
       List<MessageFilter> msgFilters = getFilters(username, accountId);
       Node homeMsg = getMessageHome(sProvider, username, accountId);
+      if (homeMsg == null) {
+        return;
+      }
       Session sess = getSession(sProvider);
       QueryManager qm = sess.getWorkspace().getQueryManager();
       for (MessageFilter filter : msgFilters) {
@@ -3070,6 +3081,9 @@ public class JCRDataStorage implements DataStorage {
     try {
       sProvider = createSessionProvider();
       Node homeMsg = getMessageHome(sProvider, username, filter.getAccountId());
+      if (homeMsg == null) {
+        return strList;
+      }
       filter.setAccountPath(homeMsg.getPath());
       filter.setReturnedProperties(new String[] {Utils.EXO_ID});
       QueryManager qm = getSession(sProvider).getWorkspace().getQueryManager();
