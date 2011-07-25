@@ -57,8 +57,8 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.ext.UIFormColorPicker.Colors;
@@ -321,8 +321,12 @@ public class UICalendars extends UIForm  {
     }  
     return false ;
   }
-  public boolean canEdit(String[] savePerms) throws Exception{
-    return CalendarUtils.canEdit(CalendarUtils.getOrganizationService(), savePerms, CalendarUtils.getCurrentUser()) ;
+  public boolean canEdit(String[] savePerms, String[] checkPerms) throws Exception{
+    return CalendarUtils.hasEditPermission(savePerms, checkPerms);
+  }
+  
+  public String getCheckPermissionString() throws Exception {
+    return CalendarUtils.getCheckPermissionString();
   }
   
   public boolean isRemoteCalendar(String calendarId) throws Exception {
@@ -581,8 +585,9 @@ public class UICalendars extends UIForm  {
           }
       
           // cs-4429: fix for group calendar permission
-          if((CalendarUtils.SHARED_TYPE.equals(calType) && !uiComponent.canEdit(Utils.getEditPerUsers(calendar))) ||
-             (CalendarUtils.PUBLIC_TYPE.equals(calType) && !uiComponent.canEdit(calendar.getEditPermission()))) 
+          String[] checkPerms = uiComponent.getCheckPermissionString().split(CalendarUtils.COMMA);
+          if((CalendarUtils.SHARED_TYPE.equals(calType) && !uiComponent.canEdit(Utils.getEditPerUsers(calendar), checkPerms)) ||
+             (CalendarUtils.PUBLIC_TYPE.equals(calType) && !uiComponent.canEdit(calendar.getEditPermission(), checkPerms))) 
           {
             UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
             uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null, 1)) ;

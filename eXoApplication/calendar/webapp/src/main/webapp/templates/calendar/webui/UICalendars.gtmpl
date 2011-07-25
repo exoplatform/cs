@@ -7,6 +7,8 @@
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkLayout() ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.getFilterForm("' + uiform.id + '") ;') ;
   //rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;
+  
+  String[] checkPerms = uicomponent.getCheckPermissionString().split(CalendarUtils.COMMA);
 %>
 <%uiform.begin()%>
   <div class="UICalendars" >
@@ -130,7 +132,7 @@
               owner = calendar.getCalendarOwner() + "- " ;
             }
         %>
-            <div class="CalendarItem $color CalendarItemShared ClearFix"  calColor="$color" id="$calId" calType="1"  canEdit="<%=uicomponent.canEdit(Utils.getEditPerUsers(calendar))%>">
+            <div class="CalendarItem $color CalendarItemShared ClearFix"  calColor="$color" id="$calId" calType="1"  canEdit="<%=uicomponent.canEdit(Utils.getEditPerUsers(calendar), checkPerms)%>">
                 <%uiform.renderField(calendar.getId())%>
                 <a class="CalendarIcon" title="<%=owner + calendar.getName()%>"><%=owner + calendar.getName()%></a>
             </div>
@@ -176,7 +178,7 @@
               calId = calendar.getId() ;
               if(uicomponent.getChildById(calId) != null) {
         %>
-            <div class="CalendarItem $calendar.calendarColor CalendarItemPublic ClearFix"  calColor="$calendar.calendarColor" canEdit="<%=uicomponent.canEdit(calendar.getEditPermission())%>" id="$calId" calType="2" >
+            <div class="CalendarItem $calendar.calendarColor CalendarItemPublic ClearFix"  calColor="$calendar.calendarColor" canEdit="<%=uicomponent.canEdit(calendar.getEditPermission(), checkPerms)%>" id="$calId" calType="2" >
                 <%uiform.renderField(calendar.getId())%>
                 <a class="CalendarIcon" title="<%=calendar.getName()%>"><%=calendar.getName()%></a>
             </div>
