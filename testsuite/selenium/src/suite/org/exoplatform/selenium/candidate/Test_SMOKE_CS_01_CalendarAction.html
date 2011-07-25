@@ -57,8 +57,8 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td>click</td>
+	<td>//a[contains(@onclick,'login')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -77,23 +77,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>//div[@onclick='eXo.calendar.UICalendarPortlet.showMainMenu(this, event);']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>//div[@onclick='eXo.calendar.UICalendarPortlet.showMainMenu(this, event);']</td>
-	<td></td>
-</tr>
-<tr>
 	<td>echo</td>
 	<td>-- Create a Group --</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[contains(@title,'Calendar actions')]</td>
+	<td>//div[contains(@title,'Calendar Actions')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -127,13 +117,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>//form[@id='UICalendarCategoryForm']/div[2]/div/div/table/tbody/tr/td/div[3]/div/div/div</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>//div[@onclick='eXo.calendar.UICalendarPortlet.showMainMenu(this, event);']</td>
+	<td>clickAt</td>
+	<td>//a[text()='Close']</td>
 	<td></td>
 </tr>
 <tr>
@@ -143,7 +128,7 @@
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[contains(@title,'Calendar actions')]</td>
+	<td>//div[@onclick='eXo.calendar.UICalendarPortlet.showMainMenu(this, event);']</td>
 	<td></td>
 </tr>
 <tr>
@@ -308,7 +293,7 @@
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[contains(@title,'Calendar actions')]</td>
+	<td>//div[@onclick='eXo.calendar.UICalendarPortlet.showMainMenu(this, event);']</td>
 	<td></td>
 </tr>
 <tr>
@@ -342,13 +327,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>//div[contains(@onclick,'ClosePopup')]</td>
-	<td></td>
-</tr>
-<tr>
 	<td>click</td>
-	<td>//div[contains(@onclick,'ClosePopup')]</td>
+	<td>//a[text()='Close']</td>
 	<td></td>
 </tr>
 <tr>

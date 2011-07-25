@@ -48,12 +48,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td>//a[contains(@onclick,'login')]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td>//a[contains(@onclick,'login')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -68,12 +68,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[8]/div/div/div/div/div/div/div/div/div/div/div/div/div/div/a</td>
+	<td>link=Mail</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[8]/div/div/div/div/div/div/div/div/div/div/div/div/div/div/a</td>
+	<td>link=Mail</td>
 	<td></td>
 </tr>
 <tr>
@@ -83,27 +83,17 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//form[@id='UISelectAccount']/div[2]</td>
+	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder AccountSettingIcon']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//form[@id='UISelectAccount']/div[2]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>//form[@id='UISelectAccount']/div[2]/div/div/div/div[2]/div/div/a[1]/div</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>//form[@id='UISelectAccount']/div[2]/div/div/div/div[2]/div/div/a[1]/div</td>
+	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder AccountSettingIcon']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
-	<td>---- enter all data - step 1</td>
+	<td>-- Step 1</td>
 	<td></td>
 </tr>
 <tr>
@@ -114,26 +104,21 @@
 <tr>
 	<td>type</td>
 	<td>accountName</td>
-	<td>exomailtest</td>
+	<td>Test_account</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>description</td>
-	<td>test delegate user</td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>---- step 2</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=Next</td>
-	<td></td>
+	<td>Test_account_description</td>
 </tr>
 <tr>
 	<td>click</td>
 	<td>link=Next</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Step 2</td>
 	<td></td>
 </tr>
 <tr>
@@ -144,7 +129,7 @@
 <tr>
 	<td>type</td>
 	<td>outgoingName</td>
-	<td>exomailtest</td>
+	<td>Test_Mail</td>
 </tr>
 <tr>
 	<td>type</td>
@@ -159,21 +144,36 @@
 <tr>
 	<td>type</td>
 	<td>signature</td>
-	<td>exomailtest</td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>---- step 4</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=Next</td>
-	<td></td>
+	<td>Test_Mail_Signature</td>
 </tr>
 <tr>
 	<td>click</td>
 	<td>link=Next</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Step 3</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>incomingServer</td>
+	<td>imap.gmail.com</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>incomingServer</td>
+	<td>imap.gmail.com</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Next</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Step 4</td>
 	<td></td>
 </tr>
 <tr>
@@ -189,41 +189,31 @@
 <tr>
 	<td>type</td>
 	<td>password</td>
-	<td>axoadmin</td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>---- step 5</td>
-	<td></td>
-</tr>
-<tr>
-	<td>pause</td>
-	<td>1000</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=5</td>
-	<td></td>
+	<td>exoadmin</td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>link=5</td>
+	<td>link=Next</td>
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>link=Finish</td>
+	<td>echo</td>
+	<td>-- Step 5</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextPresent</td>
+	<td>Test_account</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Test_account</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
 	<td>link=Finish</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>-- verify new added account</td>
 	<td></td>
 </tr>
 <tr>
@@ -313,16 +303,6 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>---- verify delegate user</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>exomailtest (Default)</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
 	<td>---- Save delegate user</td>
 	<td></td>
 </tr>
@@ -383,12 +363,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td>//a[contains(@onclick,'login')]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td>//a[contains(@onclick,'login')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -403,32 +383,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[8]/div/div/div/div/div/div/div/div/div/div/div/div/div/div/a</td>
+	<td>link=Mail</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[8]/div/div/div/div/div/div/div/div/div/div/div/div/div/div/a</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>exomailtest (delegated)</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>--- Select manage account</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>//form[@id='UISelectAccount']/div[2]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>//form[@id='UISelectAccount']/div[2]</td>
+	<td>link=Mail</td>
 	<td></td>
 </tr>
 <tr>
@@ -438,22 +398,17 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//form[@id='UISelectAccount']/div[2]/div/div/div/div[2]/div/div/a[2]/div</td>
+	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder AccountSettingIcon']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//form[@id='UISelectAccount']/div[2]/div/div/div/div[2]/div/div/a[2]/div</td>
+	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder AccountSettingIcon']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
 	<td>-- verify text appear</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>You have no permission on this delegated account!</td>
 	<td></td>
 </tr>
 <tr>
@@ -528,12 +483,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td>//a[contains(@onclick,'login')]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td>//a[contains(@onclick,'login')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -548,32 +503,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[8]/div/div/div/div/div/div/div/div/div/div/div/div/div/div/a</td>
+	<td>link=Mail</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[8]/div/div/div/div/div/div/div/div/div/div/div/div/div/div/a</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>-- check delegated account</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>exomailtest (delegated)</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>//form[@id='UISelectAccount']/div[2]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>//form[@id='UISelectAccount']/div[2]</td>
+	<td>link=Mail</td>
 	<td></td>
 </tr>
 <tr>
@@ -583,22 +518,17 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//form[@id='UISelectAccount']/div[2]/div/div/div/div[2]/div/div/a[2]/div</td>
+	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder AccountSettingIcon']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//form[@id='UISelectAccount']/div[2]/div/div/div/div[2]/div/div/a[2]/div</td>
+	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder AccountSettingIcon']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
 	<td>-- verify text appear</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>You have no permission on this delegated account!</td>
 	<td></td>
 </tr>
 <tr>
@@ -673,12 +603,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td>//a[contains(@onclick,'login')]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td>//a[contains(@onclick,'login')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -693,12 +623,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[8]/div/div/div/div/div/div/div/div/div/div/div/div/div/div/a</td>
+	<td>link=Mail</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[8]/div/div/div/div/div/div/div/div/div/div/div/div/div/div/a</td>
+	<td>link=Mail</td>
 	<td></td>
 </tr>
 <tr>
@@ -708,57 +638,42 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//form[@id='UISelectAccount']/div[2]</td>
+	<td>css=div.IconHolder.AccountSettingIcon</td>
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>//form[@id='UISelectAccount']/div[2]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>//form[@id='UISelectAccount']/div[2]/div/div/div/div[2]/div/div/a[3]/div</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>//form[@id='UISelectAccount']/div[2]/div/div/div/div[2]/div/div/a[3]/div</td>
-	<td></td>
+	<td>clickAt</td>
+	<td>css=div.IconHolder.AccountSettingIcon</td>
+	<td>2,2</td>
 </tr>
 <tr>
 	<td>pause</td>
-	<td>500</td>
+	<td>20000</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIAccountList']/table/tbody/tr/td[5]/div/div/a/img</td>
+	<td>//a[@title='Delete Account']/div</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIAccountList']/table/tbody/tr/td[5]/div/div/a/img</td>
+	<td>//a[@title='Delete Account']/div</td>
 	<td></td>
 </tr>
 <tr>
-	<td>assertConfirmation</td>
-	<td>Are you sure you want to delete this account?</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextNotPresent</td>
-	<td>exomailtest (Default)</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>//div[@id='UIAccountList']/div[2]/div/table/tbody/tr/td/a/div/div/div</td>
+	<td>verifyConfirmation</td>
+	<td> Are you sure to delete this account with all associated emails?</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
 	<td>link=Sign out</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>link=Sign in</td>
 	<td></td>
 </tr>
 </tbody></table>
