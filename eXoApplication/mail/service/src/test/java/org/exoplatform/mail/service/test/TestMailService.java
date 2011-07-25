@@ -592,6 +592,29 @@ public class TestMailService extends BaseMailTestCase {
       Account accountPop = createAccountObj(Utils.POP3);
       mailService_.createAccount(username, accountPop);
       
+      Folder folder = createFolder(accountPop.getId(), "folderId", "folderName", "folderUrl");
+      
+      StringBuffer sbBody = new StringBuffer();
+      sbBody.append("<b>Hello</b>").append("<br/>").append(Calendar.getInstance().getTime().toString());
+      String messageBody = sbBody.toString();
+      String messageSubject = "Welcome message";
+      String messageContentType = TEXT_HTML;
+      String[] messageFolderIds = new String[] {folder.getId()};
+      Date messageReceivedDate = new Date();
+      
+      // Create and save message
+      Message message = new Message();
+      message.setContentType(messageContentType);
+      message.setSubject(messageSubject);
+      message.setFrom(accountPop.getEmailAddress());
+      message.setMessageTo(accountPop.getEmailAddress());
+      message.setMessageBody(messageBody);
+      message.setFolders(messageFolderIds);
+      message.setReceivedDate(messageReceivedDate);
+      mailService_.saveMessage(username, accountPop.getId(), folder.getPath(), message, true);
+      
+      Message expectedMessage1 = mailService_.getMessageById(username, accountPop.getId(), message.getId());
+      
       // Create tag data
       String tagId = "tagId";
       String tagName = "tagName";
@@ -632,6 +655,21 @@ public class TestMailService extends BaseMailTestCase {
       assertEquals(newTagName, expectedTag1.getName());
       assertEquals(newTagDesciption, expectedTag1.getDescription());
       assertEquals(newTagColor, expectedTag1.getColor());
+      
+      // Test addTag
+      mailService_.addTag(username, accountPop.getId(), Arrays.asList(expectedMessage1), Arrays.asList(expectedTag1));
+      
+      // Test getMessageByTag
+      List<Message> messageList = mailService_.getMessageByTag(username, accountPop.getId(), expectedTag1.getId());
+      assertNotNull(messageList);
+      assertEquals(1, messageList.size());
+      assertEquals(expectedMessage1.getId(), messageList.get(0).getId());
+      
+      // Test removeTagsInMessages
+      mailService_.removeTagsInMessages(username, accountPop.getId(), Arrays.asList(expectedMessage1),Arrays.asList(expectedTag1.getId()));
+      List<Message> messageList1 = mailService_.getMessageByTag(username, accountPop.getId(), expectedTag1.getId());
+      assertNotNull(messageList1);
+      assertEquals(0, messageList1.size());
       
       // Test remove tag
       mailService_.removeTag(username, accountPop.getId(), expectedTag1.getId());
