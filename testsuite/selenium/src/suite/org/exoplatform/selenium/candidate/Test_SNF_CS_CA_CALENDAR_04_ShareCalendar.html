@@ -58,7 +58,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td>//a[contains(@onclick,'login')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -93,12 +93,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=Add calendar</td>
+	<td>link=Add Calendar</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>link=Add calendar</td>
+	<td>link=Add Calendar</td>
 	<td></td>
 </tr>
 <tr>
@@ -123,12 +123,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@title='Test_04_calendar']</td>
+	<td>//a[@title='Test_04_calendar']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyElementPresent</td>
-	<td>//div[@title='Test_04_calendar']</td>
+	<td>//a[@title='Test_04_calendar']</td>
 	<td></td>
 </tr>
 <tr>
@@ -138,22 +138,22 @@
 </tr>
 <tr>
 	<td>mouseOver</td>
-	<td>//div[@title='Test_04_calendar']</td>
+	<td>//a[@title='Test_04_calendar']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>contextMenu</td>
-	<td>//div[@title='Test_04_calendar']</td>
+	<td>//a[@title='Test_04_calendar']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='tmpMenuElement']/div/div[2]/div/div[1]/div[7]/a</td>
+	<td>//div[@class='UIContextMenuContainer ContextMenuContainer']//a[@class='ItemIcon&nbsp;&nbsp;SharedCalendarIcon']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='tmpMenuElement']/div/div[2]/div/div[1]/div[7]/a</td>
+	<td>//div[@class='UIContextMenuContainer ContextMenuContainer']//a[@class='ItemIcon&nbsp;&nbsp;SharedCalendarIcon']</td>
 	<td></td>
 </tr>
 <tr>
@@ -177,23 +177,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>link=Save</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>//div[@title='john']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyElementPresent</td>
-	<td>//div[@title='john']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyElementPresent</td>
-	<td>//div[@title='Yes']</td>
+	<td>clickAt</td>
+	<td>//a[text()='Save']</td>
 	<td></td>
 </tr>
 <tr>
@@ -207,23 +192,8 @@
 	<td>demo</td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>link=Save</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>//div[@title='demo']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyElementPresent</td>
-	<td>//div[@title='demo']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyElementPresent</td>
-	<td>//div[@title='No']</td>
+	<td>clickAt</td>
+	<td>//a[text()='Save']</td>
 	<td></td>
 </tr>
 <tr>
@@ -232,8 +202,13 @@
 	<td>mary</td>
 </tr>
 <tr>
+	<td>clickAt</td>
+	<td>//a[text()='Save']</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
-	<td>link=Save</td>
+	<td>//a[text()='Cancel']</td>
 	<td></td>
 </tr>
 <tr>
@@ -242,13 +217,18 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>//div[@id='PermissionList']//tr[3]//img[@class='EditIcon']</td>
+	<td>mouseOver</td>
+	<td>//a[@title='Test_04_calendar']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>//div[@id='PermissionList']//tr[3]//img[@class='EditIcon']</td>
+	<td>contextMenu</td>
+	<td>//a[@title='Test_04_calendar']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//div[@class='UIContextMenuContainer ContextMenuContainer']//a[@class='ItemIcon&nbsp;&nbsp;SharedCalendarIcon']</td>
 	<td></td>
 </tr>
 <tr>
@@ -262,19 +242,14 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>link=Save</td>
+	<td>clickAt</td>
+	<td>//a[text()='Save']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>//div[@id='PermissionList']//tr[3]/td[2]/div</td>
+	<td>clickAt</td>
+	<td>//a[text()='OK']</td>
 	<td></td>
-</tr>
-<tr>
-	<td>verifyElementPresent</td>
-	<td>//div[@id='PermissionList']//tr[3]/td[2]/div</td>
-	<td>Yes</td>
 </tr>
 <tr>
 	<td>echo</td>
@@ -283,27 +258,17 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='PermissionList']//tr[3]//img[@class='DeleteIcon']</td>
+	<td>//img[@class='DeleteIcon']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>//div[@id='PermissionList']//tr[3]//img[@class='DeleteIcon']</td>
+	<td>clickAt</td>
+	<td>//img[@class='DeleteIcon']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>assertConfirmation</td>
-	<td>The category will be deleted. Do you confirm ?</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementNotPresent</td>
-	<td>//div[@title='mary']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyElementNotPresent</td>
-	<td>//div[@title='mary']</td>
+	<td>Are you sure to delete this category?</td>
 	<td></td>
 </tr>
 <tr>
@@ -363,7 +328,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td>//a[contains(@onclick,'login')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -382,18 +347,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>//div[@title='root- Test_04_calendar']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>mouseOver</td>
-	<td>//div[@title='root- Test_04_calendar']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>contextMenu</td>
-	<td>//div[@title='root- Test_04_calendar']</td>
+	<td>verifyElementNotPresent</td>
+	<td>//a[@title='Test_04_calendar']</td>
 	<td></td>
 </tr>
 <tr>
@@ -448,7 +403,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td>//a[contains(@onclick,'login')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -467,23 +422,93 @@
 	<td></td>
 </tr>
 <tr>
+	<td>verifyElementNotPresent</td>
+	<td>//a[@title='Test_04_calendar']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>1000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Sign out</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Login by Mary to check the shared calendar-</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Login</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@title='root- Test_04_calendar']</td>
+	<td>link=Sign in</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Sign in</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>username</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>username</td>
+	<td>mary</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>password</td>
+	<td>gtn</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//a[contains(@onclick,'login')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>5000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Agenda</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Agenda</td>
 	<td></td>
 </tr>
 <tr>
 	<td>mouseOver</td>
-	<td>//div[@title='root- Test_04_calendar']</td>
+	<td>//a[@title='Test_04_calendar']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>contextMenu</td>
-	<td>//div[@title='root- Test_04_calendar']</td>
-	<td>contextmenu</td>
+	<td>//a[@title='Test_04_calendar']</td>
+	<td></td>
 </tr>
 <tr>
-	<td>verifyElementPresent</td>
-	<td>link=Edit</td>
+	<td>clickAt</td>
+	<td>//div[@class='UIContextMenuContainer ContextMenuContainer']//a[@class='ItemIcon&nbsp;&nbsp;EditCalendarIcon']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>displayName</td>
 	<td></td>
 </tr>
 <tr>
@@ -538,7 +563,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td>//a[contains(@onclick,'login')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -563,22 +588,22 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@title='Test_04_calendar']</td>
+	<td>//a[@title='Test_04_calendar']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyElementPresent</td>
-	<td>//div[@title='Test_04_calendar']</td>
+	<td>//a[@title='Test_04_calendar']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>mouseOver</td>
-	<td>//div[@title='Test_04_calendar']</td>
+	<td>//a[@title='Test_04_calendar']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>contextMenu</td>
-	<td>//div[@title='Test_04_calendar']</td>
+	<td>//a[@title='Test_04_calendar']</td>
 	<td></td>
 </tr>
 <tr>
@@ -593,17 +618,12 @@
 </tr>
 <tr>
 	<td>assertConfirmation</td>
-	<td>The calendar and all its events and tasks will be deleted. Do you confirm?</td>
+	<td>Are you sure to delete this calendar and all its events?</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
 	<td>link=Sign out</td>
-	<td></td>
-</tr>
-<tr>
-	<td>close</td>
-	<td></td>
 	<td></td>
 </tr>
 </tbody></table>

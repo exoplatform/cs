@@ -58,7 +58,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td>//a[contains(@onclick,'login')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -93,12 +93,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=Add calendar</td>
+	<td>link=Add Calendar</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>link=Add calendar</td>
+	<td>link=Add Calendar</td>
 	<td></td>
 </tr>
 <tr>
@@ -143,12 +143,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@title='Test_03_calendar']</td>
+	<td>//a[@title='Test_03_calendar']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyElementPresent</td>
-	<td>//div[@title='Test_03_calendar']</td>
+	<td>//a[@title='Test_03_calendar']</td>
 	<td></td>
 </tr>
 <tr>
@@ -158,22 +158,22 @@
 </tr>
 <tr>
 	<td>mouseOver</td>
-	<td>//div[@title='Test_03_calendar']</td>
+	<td>//a[@title='Test_03_calendar']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>contextMenu</td>
-	<td>//div[@title='Test_03_calendar']</td>
+	<td>//a[@title='Test_03_calendar']</td>
 	<td>contextmenu</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[3]/a</td>
+	<td>//div[@class='UIContextMenuContainer ContextMenuContainer']//a[@class='ItemIcon&nbsp;&nbsp;EditCalendarIcon']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[3]/a</td>
+	<td>//div[@class='UIContextMenuContainer ContextMenuContainer']//a[@class='ItemIcon&nbsp;&nbsp;EditCalendarIcon']</td>
 	<td></td>
 </tr>
 <tr>
@@ -208,12 +208,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@class='UIVTabContent']//div[@title='Test_03_calendar_edited']</td>
+	<td>//div[@class='UIVTabContent']//a[@title='Test_03_calendar_edited']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyElementPresent</td>
-	<td>//div[@class='UIVTabContent']//div[@title='Test_03_calendar_edited']</td>
+	<td>//div[@class='UIVTabContent']//a[@title='Test_03_calendar_edited']</td>
 	<td></td>
 </tr>
 <tr>
@@ -228,7 +228,7 @@
 </tr>
 <tr>
 	<td>contextMenu</td>
-	<td>//div[@class='UIVTabContent']//div[@title='Test_03_calendar_edited']</td>
+	<td>//div[@class='UIVTabContent']//a[@title='Test_03_calendar_edited']</td>
 	<td></td>
 </tr>
 <tr>
@@ -243,27 +243,22 @@
 </tr>
 <tr>
 	<td>assertConfirmation</td>
-	<td>The calendar and all its events and tasks will be deleted. Do you confirm?</td>
+	<td>Are you sure to delete this calendar and all its events?</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementNotPresent</td>
-	<td>//div[@title='Test_03_calendar_edited']</td>
+	<td>//a[@title='Test_03_calendar_edited']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyElementNotPresent</td>
-	<td>//div[@title='Test_4_calendar_edited']</td>
+	<td>//a[@title='Test_4_calendar_edited']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
 	<td>link=Sign out</td>
-	<td></td>
-</tr>
-<tr>
-	<td>close</td>
-	<td></td>
 	<td></td>
 </tr>
 </tbody></table>
