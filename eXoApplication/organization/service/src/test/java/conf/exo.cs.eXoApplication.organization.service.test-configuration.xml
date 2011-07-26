@@ -4,10 +4,6 @@
   <component>
       <type>org.exoplatform.services.rest.impl.RequestHandlerImpl</type>
    </component>
-  <component>
-    <key>org.exoplatform.services.jdbc.DataSourceProvider</key>
-    <type>org.exoplatform.services.jdbc.impl.DataSourceProviderImpl</type>
-  </component>
    <component>
       <type>org.exoplatform.services.rest.impl.RequestDispatcher</type>
    </component>

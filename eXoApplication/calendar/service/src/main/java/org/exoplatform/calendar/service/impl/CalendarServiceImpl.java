@@ -225,8 +225,8 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   /**
    * {@inheritDoc}
    */
-  public void removeEventCategory(String username, String eventCategoryName) throws Exception {
-    storage_.removeEventCategory(username, eventCategoryName);
+  public void removeEventCategory(String username, String eventCategoryId) throws Exception {
+    storage_.removeEventCategory(username, eventCategoryId);
   }
 
   /**

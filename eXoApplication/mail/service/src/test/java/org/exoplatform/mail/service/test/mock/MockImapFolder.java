@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Random;
 
 import javax.mail.FetchProfile;
 import javax.mail.Flags;
@@ -29,6 +30,7 @@ import com.sun.mail.imap.protocol.IMAPProtocol;
 
 public class MockImapFolder extends IMAPFolder {
   private final Mailbox                mailbox;
+  private final Random random = new Random();
 
   private final HashMap<Long, Message> messageMapByUUID = new HashMap<Long, Message>();
 
@@ -366,7 +368,7 @@ public class MockImapFolder extends IMAPFolder {
    */
   @Override
   public synchronized long getUIDValidity() throws MessagingException {
-    throw new UnsupportedOperationException();
+    return random.nextLong();
   }
 
   /*

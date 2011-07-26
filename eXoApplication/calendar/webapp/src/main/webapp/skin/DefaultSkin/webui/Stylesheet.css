@@ -385,7 +385,3 @@
 .UICalendarPortlet ul{
 	margin: 5px 0px;
 }
-
-.UICalendarPortlet .UIPopupAddEventContainer .UIWindowContent .UIConfirmForm .HorizontalLayout{
-	*padding: 5px;
-}

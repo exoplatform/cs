@@ -215,10 +215,10 @@ public interface CalendarService {
   /**
    * Remove event category, all events and tasks belong to this category will be destroyed
    * @param username current user name(or user id)
-   * @param eventCategoryName The unique name of category
+   * @param eventCategoryId The unique name of category
    * @throws Exception
    */
-  public void removeEventCategory(String username, String eventCategoryName) throws Exception;
+  public void removeEventCategory(String username, String eventCategoryId) throws Exception;
 
   /**
    * The method gets category of event by given id

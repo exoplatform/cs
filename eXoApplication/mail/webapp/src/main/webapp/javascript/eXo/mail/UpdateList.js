@@ -137,6 +137,8 @@ UpdateList.prototype.update = function(obj){
 		  		tr.className = "OddItem";
 		  	}
 		  }
+		
+		  
 		}
   }
 } ;

@@ -10,14 +10,8 @@
   
   def portalURI = Util.getPortalRequestContext().getPortalURI();
 %>
-<div class="UIUserToolBarCalendarPortlet" id="$uicomponent.id">
-  <div class="UIHorizontalTabs">
-    <div class="TabsContainer" style="position: relative">  
-      <div class="UITab NormalToolbarTab">
-        <div class="">
-            <a class="CalendarIcon TBIcon" href="<%= portalURI + "calendar" %>">Agenda</a>
-        </div>
-      </div>
-    </div>
-  </div>  
-</div>
+<ul class="UIUserToolBarCalendarPortlet UIHorizontalTabs" id="$uicomponent.id">
+  <li class="UITab NormalToolbarTab">
+   	<a class="CalendarIcon TBIcon" href="<%= portalURI + "calendar" %>">Agenda</a>
+  </li>
+</ul>
