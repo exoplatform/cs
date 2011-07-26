@@ -178,7 +178,7 @@ public class UIInvitationForm extends UIForm implements UIPopupComponent {
     List<String> pars = new ArrayList<String>();
     pars.addAll(Arrays.asList(parList.split(CalendarUtils.BREAK_LINE)));
     for(String par : pars){
-      par = par.trim();
+      par = par.trim().substring(par.lastIndexOf(CalendarUtils.OPEN_PARENTHESIS) + 1).replace(CalendarUtils.CLOSE_PARENTHESIS, "");
       if(par.contains("@")){
         if(builder.length()>0) builder.append(", ");
         builder.append(par);
@@ -217,8 +217,7 @@ public class UIInvitationForm extends UIForm implements UIPopupComponent {
           uiPopup.deActivate() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm) ;
-      }
-      else{
+      } else{
         UIApplication uiApp = uiEventForm.getAncestorOfType(UIApplication.class) ;
         StringBuilder builder = new StringBuilder("");
         

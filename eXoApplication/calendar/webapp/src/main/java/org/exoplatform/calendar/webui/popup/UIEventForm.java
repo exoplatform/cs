@@ -912,7 +912,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     StringBuilder buider = new StringBuilder("") ;
     for (Entry<String, String> par : participantStatus_.entrySet()) {
       if (buider.length() > 0 && par.getKey().contains("@")) buider.append(CalendarUtils.COMMA) ;
-      if(par.getKey().contains("@")) buider.append(par.getKey()) ;
+      if(par.getKey().contains("@")) buider.append(par.getKey().substring(par.getKey()
+        .lastIndexOf(CalendarUtils.OPEN_PARENTHESIS) + 1).replace(CalendarUtils.CLOSE_PARENTHESIS, "")) ;
     }
     return buider.toString() ;
     //return invitation ;
@@ -966,7 +967,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     return buider.toString() ;
   }
   
-  protected void  setParticipantStatusValues(String[] values) {
+  protected void  setParticipantStatusValues(String[] values) throws Exception {
     participantStatus_.clear();
     participantStatusList_.clear();
    // StringBuilder buider = new StringBuilder("") ;
@@ -2037,13 +2038,23 @@ public Attachment getAttachment(String attId) {
 
   public class ParticipantStatus {
     private String participant ;
+    private String displayParticipant ;
     private String status ;
 
-    public ParticipantStatus(String participant,String status){
+    public ParticipantStatus(String participant,String status) throws Exception {
       this.participant = participant;
+      User user = CalendarUtils.getOrganizationService().getUserHandler().findUserByName(participant);
+      if (user == null) {
+        this.displayParticipant = participant;
+        this.participant = participant.substring(
+          participant.lastIndexOf(CalendarUtils.OPEN_PARENTHESIS) + 1).replace(CalendarUtils.CLOSE_PARENTHESIS, "");
+      } else {
+        this.displayParticipant = user.getFullName() + org.exoplatform.calendar.service.Utils.SPACE 
+        + CalendarUtils.OPEN_PARENTHESIS + user.getEmail() + CalendarUtils.CLOSE_PARENTHESIS;        
+      }
       this.status = status ;
     }
-
+    
     public String getParticipant() {
       return participant;
     }
@@ -2051,7 +2062,15 @@ public Attachment getAttachment(String attId) {
     public void setParticipant(String participant) {
       this.participant = participant;
     }
-
+    
+    public String getDisplayParticipant() throws Exception {
+      return displayParticipant;
+    }
+        
+    public void setDisplayParticipant(String displayParticipant) {
+      this.displayParticipant = displayParticipant;
+    }
+    
     public String getStatus() {
       return status;
     }

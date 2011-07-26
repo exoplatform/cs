@@ -1,0 +1,228 @@
+Index: eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/UICalendarView.java
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/UICalendarView.java	(revision 70493)
++++ eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/UICalendarView.java	(working copy)
+@@ -666,7 +666,7 @@
+         String value = uiForm.getUIFormSelectBox(EVENT_CATEGORIES).getValue() ;
+         UICalendarPortlet uiPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
+         UIPopupAction uiParenPopup = uiPortlet.getChild(UIPopupAction.class) ;
+-        UIPopupContainer uiPopupContainer = uiParenPopup.activate(UIPopupContainer.class, 700) ;
++        UIPopupContainer uiPopupContainer = uiParenPopup.activate(UIPopupContainer.class, 800) ;
+         if(CalendarEvent.TYPE_TASK.equals(type)) {
+           uiPopupContainer.setId(UIPopupContainer.UITASKPOPUP) ;
+           UITaskForm uiTaskForm = uiPopupContainer.addChild(UITaskForm.class, null, null) ;
+@@ -902,7 +902,7 @@
+               uiEventForm.initForm(uiPortlet.getCalendarSetting(), eventCalendar, null) ;
+               uiEventForm.setSelectedCalendarId(calendarId) ;
+               uiPopupContainer.addChild(uiEventForm) ;
+-              uiPopupAction.activate(uiPopupContainer, 700, 0) ;
++              uiPopupAction.activate(uiPopupContainer, 800, 0) ;
+               event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+             } else if(CalendarEvent.TYPE_TASK.equals(eventCalendar.getEventType())) {
+               uiPopupContainer.setId(UIPopupContainer.UITASKPOPUP) ;
+Index: eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UIAddressForm.java
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UIAddressForm.java	(revision 70493)
++++ eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UIAddressForm.java	(working copy)
+@@ -228,7 +228,7 @@
+         }
+       }
+       List<String> listMail = Arrays.asList( sb.toString().split(CalendarUtils.COMMA)) ; 
+-      String email = null ;
++      String info = null ;
+       for(ContactData c : uiForm.getCheckedContact()) {
+         if(!uiForm.checkedList_.contains(c.getId())){
+           Contact con = new Contact() ;
+@@ -237,10 +237,11 @@
+           con.setFullName(c.getFullName()) ;
+           if (!uiForm.checkedList_.contains(c.getId())) uiForm.checkedList_.add(c.getId()) ;
+         }
+-        email = c.getEmail() ;
+-        if(!CalendarUtils.isEmpty(email) && !listMail.contains(email)) {
++        info = c.getFullName() + org.exoplatform.calendar.service.Utils.SPACE + CalendarUtils.OPEN_PARENTHESIS
++          + c.getEmail() + CalendarUtils.CLOSE_PARENTHESIS;
++        if(!CalendarUtils.isEmpty(info) && !listMail.contains(info)) {
+           if(sb != null && sb.length() > 0) sb.append(CalendarUtils.COMMA) ;
+-          if(email != null) sb.append(email.replace(";", ",")) ;
++          if(info != null) sb.append(info.replace(";", ",")) ;
+         }
+       }
+       if(uiTaskForm != null) {
+Index: eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UIEventShareTab.java
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UIEventShareTab.java	(revision 70493)
++++ eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UIEventShareTab.java	(working copy)
+@@ -53,7 +53,7 @@
+ ) 
+ public class UIEventShareTab extends UIFormInputWithActions {
+ 
+-  public static String[] BEAN_FIELD = {"participant","status"};
++  public static String[] BEAN_FIELD = {"participant","displayParticipant","status"};
+   private static String[] ACTION = { "Delete"} ;
+   final public static String FIELD_SHARE = "shareEvent".intern() ;
+   final public static String FIELD_STATUS = "status".intern() ;
+Index: eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UIEventAttenderTab.java
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UIEventAttenderTab.java	(revision 70493)
++++ eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UIEventAttenderTab.java	(working copy)
+@@ -105,6 +105,11 @@
+     }
+   }
+   
++  public String getFullname(String username) throws Exception {
++    return CalendarUtils.getOrganizationService().getUserHandler().findUserByName(username).getFullName();
++  }
++
++  
+   public boolean isCheckFreeTime() {
+     return getUIFormCheckBoxInput(FIELD_CHECK_TIME).isChecked() ;
+   }
+Index: eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UIEventForm.java
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UIEventForm.java	(revision 70493)
++++ eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UIEventForm.java	(working copy)
+@@ -912,7 +912,8 @@
+     StringBuilder buider = new StringBuilder("") ;
+     for (Entry<String, String> par : participantStatus_.entrySet()) {
+       if (buider.length() > 0 && par.getKey().contains("@")) buider.append(CalendarUtils.COMMA) ;
+-      if(par.getKey().contains("@")) buider.append(par.getKey()) ;
++      if(par.getKey().contains("@")) buider.append(par.getKey().substring(par.getKey()
++        .lastIndexOf(CalendarUtils.OPEN_PARENTHESIS) + 1).replace(CalendarUtils.CLOSE_PARENTHESIS, "")) ;
+     }
+     return buider.toString() ;
+     //return invitation ;
+@@ -966,7 +967,7 @@
+     return buider.toString() ;
+   }
+   
+-  protected void  setParticipantStatusValues(String[] values) {
++  protected void  setParticipantStatusValues(String[] values) throws Exception {
+     participantStatus_.clear();
+     participantStatusList_.clear();
+    // StringBuilder buider = new StringBuilder("") ;
+@@ -2037,13 +2038,23 @@
+ 
+   public class ParticipantStatus {
+     private String participant ;
++    private String displayParticipant ;
+     private String status ;
+ 
+-    public ParticipantStatus(String participant,String status){
++    public ParticipantStatus(String participant,String status) throws Exception {
+       this.participant = participant;
++      User user = CalendarUtils.getOrganizationService().getUserHandler().findUserByName(participant);
++      if (user == null) {
++        this.displayParticipant = participant;
++        this.participant = participant.substring(
++          participant.lastIndexOf(CalendarUtils.OPEN_PARENTHESIS) + 1).replace(CalendarUtils.CLOSE_PARENTHESIS, "");
++      } else {
++        this.displayParticipant = user.getFullName() + org.exoplatform.calendar.service.Utils.SPACE 
++        + CalendarUtils.OPEN_PARENTHESIS + user.getEmail() + CalendarUtils.CLOSE_PARENTHESIS;        
++      }
+       this.status = status ;
+     }
+-
++    
+     public String getParticipant() {
+       return participant;
+     }
+@@ -2051,7 +2062,15 @@
+     public void setParticipant(String participant) {
+       this.participant = participant;
+     }
+-
++    
++    public String getDisplayParticipant() throws Exception {
++      return displayParticipant;
++    }
++        
++    public void setDisplayParticipant(String displayParticipant) {
++      this.displayParticipant = displayParticipant;
++    }
++    
+     public String getStatus() {
+       return status;
+     }
+Index: eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UIInvitationForm.java
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UIInvitationForm.java	(revision 70493)
++++ eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UIInvitationForm.java	(working copy)
+@@ -178,7 +178,7 @@
+     List<String> pars = new ArrayList<String>();
+     pars.addAll(Arrays.asList(parList.split(CalendarUtils.BREAK_LINE)));
+     for(String par : pars){
+-      par = par.trim();
++      par = par.trim().substring(par.lastIndexOf(CalendarUtils.OPEN_PARENTHESIS) + 1).replace(CalendarUtils.CLOSE_PARENTHESIS, "");
+       if(par.contains("@")){
+         if(builder.length()>0) builder.append(", ");
+         builder.append(par);
+@@ -217,8 +217,7 @@
+           uiPopup.deActivate() ;
+           event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
+           event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm) ;
+-      }
+-      else{
++      } else{
+         UIApplication uiApp = uiEventForm.getAncestorOfType(UIApplication.class) ;
+         StringBuilder builder = new StringBuilder("");
+         
+Index: eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_en.properties
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_en.properties	(revision 70493)
++++ eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_en.properties	(working copy)
+@@ -845,6 +845,7 @@
+ #org.exoplatform.calendar.webui.popup.UIEventShareTab
+ UIEventForm.msg.confirm-delete=Do you confirm deletion this participant from the list ?
+ eventShare.header.participant=Participant
++eventShare.header.displayParticipant=Information
+ eventShare.header.status=Status
+ eventShare.header.action=
+ eventShare.action.title.Delete=Delete
+Index: eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_fr.properties
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_fr.properties	(revision 70493)
++++ eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_fr.properties	(working copy)
+@@ -851,6 +851,7 @@
+ #org.exoplatform.calendar.webui.popup.UIEventShareTab
+ UIEventForm.msg.confirm-delete=Confirmez-vous la suppression de ce participant de la liste ?
+ eventShare.header.participant=Participant
++eventShare.header.displayParticipant=Information
+ eventShare.header.status=Etat
+ eventShare.header.action=
+ eventShare.action.title.Delete=Supprimer
+Index: eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet.properties
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet.properties	(revision 70493)
++++ eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet.properties	(working copy)
+@@ -851,6 +851,7 @@
+ #org.exoplatform.calendar.webui.popup.UIEventShareTab
+ UIEventForm.msg.confirm-delete=Do you confirm deletion this participant from the list ?
+ eventShare.header.participant=Participant
++eventShare.header.displayParticipant=Information
+ eventShare.header.status=Status
+ eventShare.header.action=
+ eventShare.action.title.Delete=Delete
+Index: eXoApplication/calendar/webapp/src/main/webapp/templates/calendar/webui/UIPopup/UIEventAttenderTab.gtmpl
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/webapp/templates/calendar/webui/UIPopup/UIEventAttenderTab.gtmpl	(revision 70493)
++++ eXoApplication/calendar/webapp/src/main/webapp/templates/calendar/webui/UIPopup/UIEventAttenderTab.gtmpl	(working copy)
+@@ -127,14 +127,17 @@
+                 %>
+               </tr>
+               <% Map parMap = uicomponent.getMap() ; %>
+-              <%for(String p in uicomponent.getParticipants()) {%>
++              <%
++              	for(String p in uicomponent.getParticipants()) {
++              	  fullname = uicomponent.getFullname(p);
++              %>
+               <tr busytime="<%=parMap.get(p);%>" userTimeZone="<%=uicomponent.getUserTimeZone(p)%>">
+                 <td>
+                   <div class="LeftSide">
+                     <div class="Input">
+                       <%uiForm.renderField(p)%>
+                     </div>
+-                    <div class="Title">$p</div>
++                    <div class="Title">$fullname</div>
+                     <div style="clear: left;">
+                       <span></span>
+                     </div>
