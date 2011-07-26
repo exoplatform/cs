@@ -150,6 +150,9 @@ UIAddContactPopupWindow.prototype.filter4MainBuddyList = function(contact) {
     }
     var userName = contactInfo.buddyInfo.user;
     var shortUserName = userName.substring(0, userName.indexOf('@'));
+    if (shortUserName && shortUserName.indexOf('s220w748s8xn3btua') >= 0) {
+      shortUserName = contactInfo.buddyInfo.nickname;
+    }
     if (shortUserName == contact['userName'] ||
         userName == contact['userName']) {
       contact.enabled4Add = false;
