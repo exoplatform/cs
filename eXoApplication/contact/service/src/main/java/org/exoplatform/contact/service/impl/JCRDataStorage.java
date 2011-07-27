@@ -286,7 +286,7 @@ public class JCRDataStorage implements DataStorage {
   }
 
   public AddressBook findPersonalAddressBookById(String username, String addressBookId) {
-    return null;
+    throw new UnsupportedOperationException();
   }
 
   /**
@@ -2132,35 +2132,13 @@ public class JCRDataStorage implements DataStorage {
     }
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  public SessionProvider createSessionProvider() {
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
-    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
-    SessionProvider provider = service.getSessionProvider(null);
-    if (provider == null) {
-      log.info("No user session provider was available, using a system session provider");
-      provider = service.getSystemSessionProvider(null);
-    }
-    return provider;
-  }
-
-  /**
+  /**`
    * {@inheritDoc}
    */
   public SessionProvider createSystemProvider() {
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
     return service.getSystemSessionProvider(null);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void closeSessionProvider(SessionProvider sessionProvider) {
-    if (sessionProvider != null)
-      sessionProvider.close();
   }
 
   /**
@@ -2302,19 +2280,6 @@ public class JCRDataStorage implements DataStorage {
       userDataHome.save();
       return personalContactsHome;
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public List<String> getPublicAddressBookContacts(String[] groupIds) throws Exception {
-    List<String> groups = new ArrayList<String>();
-    for (String groupId : groupIds) {
-      if (hasContacts(groupId))
-        groups.add(groupId);
-    }
-    return groups;
   }
 
   /**

@@ -74,7 +74,7 @@ public class TestContactService extends BaseContactServiceTestCase {
     // datastorage.getContactApplicationDataHome();
   }
 
- private void clearUserData(String user) throws Exception {
+  private void clearUserData(String user) throws Exception {
     Node personalContactsHome = datastorage.getPersonalContactsHome(user);
     cleanChildren(personalContactsHome);
 
@@ -89,7 +89,6 @@ public class TestContactService extends BaseContactServiceTestCase {
 
     Node sharedContactsHome = datastorage.getSharedContactsHome(user);
     cleanChildren(sharedContactsHome);
-
   }
 
   private void cleanChildren(Node parent) throws Exception {
@@ -120,10 +119,6 @@ public class TestContactService extends BaseContactServiceTestCase {
   }
 
   public void testSaveGetAddressBook() throws Exception {
-    // test the get operation on a non existent address book
-    AddressBook shouldBeNull = contactService.getPersonalAddressBook(root, "nonexistent");
-    assertNull("A non existent address book should be null", shouldBeNull);
-
     AddressBook newAB = new AddressBook();
     newAB.setName("AB1");
     newAB.setDescription("Desc AB1");
@@ -164,8 +159,28 @@ public class TestContactService extends BaseContactServiceTestCase {
     assertEquals("Saved addressBook editPermissionsGroups does not match", savedAB.getEditPermissionGroups(), loadedAB.getEditPermissionGroups());
     assertEquals("Saved addressBook viewPermissionsUsers does not match", savedAB.getViewPermissionUsers(), loadedAB.getViewPermissionUsers());
     assertEquals("Saved addressBook viewPermissionsGroups does not match", savedAB.getViewPermissionGroups(), loadedAB.getViewPermissionGroups());
+    
+    // Test getGroups
+    List<AddressBook> addressBooks = contactService.getGroups(root);
+    assertNotNull(addressBooks);
+    assertEquals(1, addressBooks.size());
+    assertEquals(savedAB.getId(), addressBooks.get(0).getId());
   }
-
+  
+  public void testPublicAddressBook() throws Exception {
+    // Create public book address
+    AddressBook newAB = new AddressBook();
+    newAB.setName("AB1");
+    newAB.setDescription("Desc AB1");
+    contactService.savePublicAddressBook(newAB, true);
+    
+    AddressBook expectedAddressBook = contactService.getPublicAddressBook(root, newAB.getId());
+    assertNotNull(expectedAddressBook);
+    assertEquals(newAB.getId(), expectedAddressBook.getId());
+    assertEquals(newAB.getName(), expectedAddressBook.getName());
+    assertEquals(newAB.getDescription(), expectedAddressBook.getDescription());
+  }
+  
   /**
    * Test ContactService.saveAddressBook() on shared address books
    */
@@ -304,7 +319,7 @@ public class TestContactService extends BaseContactServiceTestCase {
     assertEquals("Shared address books list size was wrong", 1, sharedList.size());
     String sharedId = sharedList.get(0).getId();
     assertEquals("Shared and initial address books ids differ", shared.getId(), sharedId);
-
+    
     // verify getSharedAddressBook() sends the correct address book
     AddressBook loaded = contactService.getSharedAddressBook(john, shared.getId());
     assertEquals("Loaded and Shared address books don't match", loaded.getName(), shared.getName());
@@ -452,7 +467,12 @@ public class TestContactService extends BaseContactServiceTestCase {
     // Three results
     assertEquals(3, emails.values().size());
     // assertContainsAll("Email Values don't match", expectedValues, actualValues);
-
+    
+    ContactFilter filter1 = new ContactFilter();
+    filter1.setLimit(10);
+    filter1.setEmailAddress("email");
+    List<String> expectedEmails = contactService.searchEmailsByFilter(root, filter1);
+    assertEquals(5, expectedEmails.size());
   }
 
   public void testGetPersonalContactByFilter() throws Exception {
@@ -693,10 +713,15 @@ public class TestContactService extends BaseContactServiceTestCase {
     contactService.saveSharedContact(john, contact2);
     assertEquals(contactService.getContact(root, contact2.getId()).getFullName(), "Mai Van Ha");
 
-    // get shared contact:
-
-    assertEquals(contactService.getSharedContact(john, contact2.getId()).getFullName(), "Mai Van Ha");
-
+    // Get share contact
+    Contact expectedSharedContact = contactService.getSharedContact(john, contact2.getId());
+    assertNotNull(expectedSharedContact);
+    assertEquals(contact2.getId(), expectedSharedContact.getId());
+    assertEquals("Mai Van Ha", expectedSharedContact.getFullName());
+    
+    // Check haveEditPermissionOnContact
+    assertTrue(contactService.haveEditPermissionOnContact(john, expectedSharedContact));
+    
     // get shared contacts:
     // assertNotNull(contactService_.getSharedContacts(userMarry_));
     // assertEquals(contactService_.getSharedContacts(userMarry_).getAll().size()
@@ -714,10 +739,9 @@ public class TestContactService extends BaseContactServiceTestCase {
 
     // get Shared Contacts By AddressBook
     Contact shareContact = createContact();
-    ;
     shareContact.setAddressBookIds(new String[] { sharedBook.getId() });
     contactService.saveContact(root, shareContact, true);
-
+    
     pageList = contactService.getPersonalContactsByAddressBook(root, sharedBook.getId());
     pageList.setSession(datastorage.getPersonalContactsHome(root).getSession());
     assertEquals(pageList.getAll().size(), 1);
@@ -742,7 +766,12 @@ public class TestContactService extends BaseContactServiceTestCase {
 
     // save contact to share addressbook:
     contactService.saveContactToSharedAddressBook(john, sharedBook.getId(), shareContact, true);
-
+    
+    // Test getSharedContactAddressBook
+    Contact expectedSharedContact1 = contactService.getSharedContactAddressBook(john, shareContact.getId());
+    assertNotNull(expectedSharedContact1);
+    assertEquals(shareContact.getId(), expectedSharedContact1.getId());
+    
     pageList = contactService.getPersonalContactsByAddressBook(root, sharedBook.getId());
     pageList.setSession(datastorage.getPersonalContactsHome(root).getSession());
     assertEquals(pageList.getAll().size(), 1);

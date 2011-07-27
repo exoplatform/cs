@@ -415,13 +415,6 @@ public interface DataStorage {
   public List<GroupContactData> getPublicContacts(String[] groupIds) throws Exception;
 
   /**
-   * @param groupIds
-   * @return
-   * @throws Exception
-   */
-  public List<String> getPublicAddressBookContacts(String[] groupIds) throws Exception;
-
-  /**
    * @param groupId
    * @return
    * @throws Exception
@@ -598,24 +591,9 @@ public interface DataStorage {
   public void registerNewUser(User user, boolean isNew) throws Exception;
 
   /**
-   * Create a session provider for current context. The method first try to get a normal session provider, 
-   * then attempts to create a system provider if the first one was not available.
-   * @return a SessionProvider initialized by current SessionProviderService
-   * @see SessionProviderService#getSessionProvider(null)
-   */
-  public SessionProvider createSessionProvider();
-
-  /**
    * @return SessionProvider
    */
   public SessionProvider createSystemProvider();
-
-  /**
-   * Safely closes JCR session provider. Call this method in finally to clean any provider initialized by createSessionProvider()
-   * @param sessionProvider the sessionProvider to close
-   * @see SessionProvider#close();
-   */
-  public void closeSessionProvider(SessionProvider sessionProvider);
 
   /**
    * @param username
