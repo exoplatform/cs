@@ -65,27 +65,7 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
   public Response findUsers(@Context UriInfo uriInfo, @QueryParam("username") String username, @QueryParam("firstname") String firstname, @QueryParam("lastname") String lastname, @QueryParam("email") String email, @QueryParam("fromLoginDate") String fromLoginDate, @QueryParam("toLogindate") String toLoginDate) {
     username = RESTAuthenticator.decodeUsername(username);
     try {
-      // TODO : now returned all founded user need be carefully then using
-      // wildcard (*)
-      Query query = new Query();
-      query.setUserName(username);
-      query.setFirstName(firstname);
-      query.setLastName(lastname);
-      query.setEmail(email);
-      if (fromLoginDate != null) {
-        try {
-          query.setFromLoginDate(DateFormat.getDateTimeInstance().parse(fromLoginDate));
-        } catch (ParseException e) {
-          LOGGER.warn("Thrown exception : " + e);
-        }
-      }
-      if (toLoginDate != null) {
-        try {
-          query.setToLoginDate(DateFormat.getDateTimeInstance().parse(toLoginDate));
-        } catch (ParseException e) {
-          LOGGER.warn("Thrown exception : " + e);
-        }
-      }
+      Query query = createFindUsersQuerry(username, firstname, lastname, email, fromLoginDate, toLoginDate);
       List<User> list = new ArrayList<User>();
       PageList pageList = userHandler.findUsers(query);
       int pages = pageList.getAvailablePage();
@@ -107,25 +87,8 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
   public Response findUsersRange(@Context UriInfo uriInfo, @QueryParam("username") String username, @QueryParam("firstname") String firstname, @QueryParam("lastname") String lastname, @QueryParam("email") String email, @QueryParam("fromLoginDate") String fromLoginDate, @QueryParam("toLogindate") String toLoginDate, @PathParam("from") Integer from, @PathParam("num") Integer numResult) {
     username = RESTAuthenticator.decodeUsername(username);
     try {
-      Query query = new Query();
-      query.setUserName(username);
-      query.setFirstName(firstname);
-      query.setLastName(lastname);
-      query.setEmail(email);
-      if (fromLoginDate != null) {
-        try {
-          query.setFromLoginDate(DateFormat.getDateTimeInstance().parse(fromLoginDate));
-        } catch (ParseException e) {
-          LOGGER.warn("Thrown exception : " + e);
-        }
-      }
-      if (toLoginDate != null) {
-        try {
-          query.setToLoginDate(DateFormat.getDateTimeInstance().parse(toLoginDate));
-        } catch (ParseException e) {
-          LOGGER.warn("Thrown exception : " + e);
-        }
-      }
+      Query query = createFindUsersQuerry(username, firstname, lastname, email, fromLoginDate, toLoginDate);
+      
       List<User> list = new ArrayList<User>();
       PageList pageList = userHandler.findUsers(query);
       pageList.setPageSize(numResult);
@@ -137,6 +100,34 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
       LOGGER.error("Thrown exception : " + e);
       return Response.status(HTTPStatus.INTERNAL_ERROR).entity("Thrown exception : " + e).build();
     }
+  }
+
+  private Query createFindUsersQuerry(String username,
+                                      String firstname,
+                                      String lastname,
+                                      String email,
+                                      String fromLoginDate,
+                                      String toLoginDate) {
+    Query query = new Query();
+    query.setUserName(username);
+    query.setFirstName(firstname);
+    query.setLastName(lastname);
+    query.setEmail(email);
+    if (fromLoginDate != null) {
+      try {
+        query.setFromLoginDate(DateFormat.getDateTimeInstance().parse(fromLoginDate));
+      } catch (ParseException e) {
+        LOGGER.warn("Thrown exception : " + e);
+      }
+    }
+    if (toLoginDate != null) {
+      try {
+        query.setToLoginDate(DateFormat.getDateTimeInstance().parse(toLoginDate));
+      } catch (ParseException e) {
+        LOGGER.warn("Thrown exception : " + e);
+      }
+    }
+    return query;
   }
 
   /**

@@ -34,11 +34,16 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.PropertyIterator;
+import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.Value;
+import javax.jcr.ValueFormatException;
+import javax.jcr.lock.LockException;
+import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
+import javax.jcr.version.VersionException;
 
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.contact.service.AddressBook;
@@ -1883,15 +1888,7 @@ public class JCRDataStorage implements DataStorage {
         extNode.setPermission(username, arrayPers);
         extNode.save();
 
-        Node newNode = contactHomeNode.getNode(newId);
-        newNode.setProperty(PROP_ADDRESSBOOK_REFS, new String[] { destAddress });
-        newNode.setProperty("exo:id", newId);
-        newNode.setProperty("exo:isOwner", false);
-
-        newNode.setProperty("exo:editPermissionUsers", new String[] {});
-        newNode.setProperty("exo:viewPermissionUsers", new String[] {});
-        newNode.setProperty("exo:editPermissionGroups", new String[] {});
-        newNode.setProperty("exo:viewPermissionGroups", new String[] {});
+        createContactNote(destAddress, contactHomeNode, newId);
       }
       contactHomeNode.getSession().save();
     } else if (destType.equals(SHARED)) {
@@ -1906,22 +1903,25 @@ public class JCRDataStorage implements DataStorage {
             String newId = "Contact" + IdGenerator.generate();
             Node oldNode = iter.nextNode();
             contactHomeNode.getSession().getWorkspace().copy(srcHomeNode.getPath() + "/" + oldNode.getProperty("exo:id").getString(), contactHomeNode.getPath() + "/" + newId);
-            Node newNode = contactHomeNode.getNode(newId);
-            newNode.setProperty(PROP_ADDRESSBOOK_REFS, new String[] { destAddress });
-            newNode.setProperty("exo:id", newId);
-            newNode.setProperty("exo:isOwner", false);
-
-            newNode.setProperty("exo:editPermissionUsers", new String[] {});
-            newNode.setProperty("exo:viewPermissionUsers", new String[] {});
-            newNode.setProperty("exo:editPermissionGroups", new String[] {});
-            newNode.setProperty("exo:viewPermissionGroups", new String[] {});
-            // newNode.setProperty("exo:tags", new String [] {}) ;
+            createContactNote(destAddress, contactHomeNode, newId);
           }
           contactHomeNode.getSession().save();
           break;
         }
       }
     }
+  }
+
+  private void createContactNote(String destAddress, Node contactHomeNode, String newId) throws Exception {
+    Node newNode = contactHomeNode.getNode(newId);
+    newNode.setProperty(PROP_ADDRESSBOOK_REFS, new String[] { destAddress });
+    newNode.setProperty("exo:id", newId);
+    newNode.setProperty("exo:isOwner", false);
+
+    newNode.setProperty("exo:editPermissionUsers", new String[] {});
+    newNode.setProperty("exo:viewPermissionUsers", new String[] {});
+    newNode.setProperty("exo:editPermissionGroups", new String[] {});
+    newNode.setProperty("exo:viewPermissionGroups", new String[] {});
   }
 
   /**

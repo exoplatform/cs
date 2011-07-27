@@ -749,18 +749,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         if (log.isDebugEnabled())
           e.printStackTrace();
         XMPPError error = e.getXMPPError();
-        String em = new String();
-        switch (error.getCode()) {
-        case 403:
-          em = rb.getString("chat.message.forbidden.error");
-          break;
-        case 400:
-          em = rb.getString("chat.message.user.not.found");
-          break;
-        default:
-          em = rb.getString("chat.message.default.error");
-          break;
-        }
+        String em = getErrorMessage(error);
         return Response.status(error.getCode()).entity(em).build();
       }
     } else {
@@ -794,18 +783,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         if (log.isDebugEnabled())
           e.printStackTrace();
         XMPPError error = e.getXMPPError();
-        String em = new String();
-        switch (error.getCode()) {
-        case 403:
-          em = rb.getString("chat.message.forbidden.error");
-          break;
-        case 400:
-          em = rb.getString("chat.message.user.not.found");
-          break;
-        default:
-          em = rb.getString("chat.message.default.error");
-          break;
-        }
+        String em = getErrorMessage(error);
         return Response.status(error.getCode()).entity(em).build();
       }
     } else {
@@ -838,20 +816,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         if (log.isDebugEnabled())
           e.printStackTrace();
         XMPPError error = e.getXMPPError();
-        String em = new String();
-        switch (error.getCode()) {
-        case 405:
-          em = rb.getString("chat.message.not.allowed.error");
-        case 403:
-          em = rb.getString("chat.message.forbidden.error");
-          break;
-        case 400:
-          em = rb.getString("chat.message.user.not.found");
-          break;
-        default:
-          em = rb.getString("chat.message.default.error");
-          break;
-        }
+        String em = getErrorMessage(error);
         return Response.status(error.getCode()).entity(em).build();
       }
     } else {
@@ -859,6 +824,24 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         log.debug("Sesion is null");
       return Response.status(HTTPStatus.NOT_FOUND).entity(rb.getString("chat.message.room.xmppsession.null")).cacheControl(cc).build();
     }
+  }
+
+  private String getErrorMessage(XMPPError error) {
+    String em = new String();
+    switch (error.getCode()) {
+    case 405:
+      em = rb.getString("chat.message.not.allowed.error");
+    case 403:
+      em = rb.getString("chat.message.forbidden.error");
+      break;
+    case 400:
+      em = rb.getString("chat.message.user.not.found");
+      break;
+    default:
+      em = rb.getString("chat.message.default.error");
+      break;
+    }
+    return em;
   }
 
   /**
@@ -884,20 +867,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         if (log.isDebugEnabled())
           e.printStackTrace();
         XMPPError error = e.getXMPPError();
-        String em = new String();
-        switch (error.getCode()) {
-        case 405:
-          em = rb.getString("chat.message.not.allowed.error");
-        case 403:
-          em = rb.getString("chat.message.forbidden.error");
-          break;
-        case 400:
-          em = rb.getString("chat.message.user.not.found");
-          break;
-        default:
-          em = rb.getString("chat.message.default.error");
-          break;
-        }
+        String em = getErrorMessage(error);
         return Response.status(error.getCode()).entity(em).build();
       }
     } else {

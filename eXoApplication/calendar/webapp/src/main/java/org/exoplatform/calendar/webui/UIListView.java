@@ -131,22 +131,7 @@ public class UIListView extends UICalendarView {
     query.setExcludeRepeatEvent(true);
    
     // TODO CS-3152
-    UICalendars uiCalendars = getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UICalendars.class);
-    List<String> checkedCals = uiCalendars.getCheckedCalendars() ;
-    List<String> calendarIds = new ArrayList<String>() ; 
-    for (GroupCalendarData groupCalendarData : uiCalendars.getPrivateCalendars())
-      for (org.exoplatform.calendar.service.Calendar cal : groupCalendarData.getCalendars())
-        if (checkedCals.contains(cal.getId())) calendarIds.add(cal.getId());
-    for (GroupCalendarData calendarData : uiCalendars.getPublicCalendars())
-      for (org.exoplatform.calendar.service.Calendar  calendar : calendarData.getCalendars())
-        if (checkedCals.contains(calendar.getId())) calendarIds.add(calendar.getId());
-    GroupCalendarData shareClas = uiCalendars.getSharedCalendars();
-    if (shareClas != null)
-      for (org.exoplatform.calendar.service.Calendar cal : shareClas.getCalendars())
-        if (checkedCals.contains(cal.getId())) {
-          calendarIds.add(cal.getId());
-        }
-    
+    List<String> calendarIds = findCalendarIds();
     if (calendarIds.size() > 0)
       query.setCalendarId(calendarIds.toArray(new String[] {}));
     else {
@@ -196,6 +181,37 @@ public class UIListView extends UICalendarView {
         setLastUpdatedEventId(null) ;
       }
     }
+  }
+
+  private List<String> findCalendarIds() throws Exception {
+    List<String> calendarIds = new ArrayList<String>();
+    UICalendars uiCalendars = getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UICalendars.class);
+    List<String> checkedCals = uiCalendars.getCheckedCalendars();
+    for (GroupCalendarData groupCalendarData : uiCalendars.getPrivateCalendars()) {
+      for (org.exoplatform.calendar.service.Calendar cal : groupCalendarData.getCalendars()) {
+        if (checkedCals.contains(cal.getId())) {
+          calendarIds.add(cal.getId());
+        }
+      }
+    }
+
+    for (GroupCalendarData calendarData : uiCalendars.getPublicCalendars()) {
+      for (org.exoplatform.calendar.service.Calendar calendar : calendarData.getCalendars()) {
+        if (checkedCals.contains(calendar.getId())) {
+          calendarIds.add(calendar.getId());
+        }
+      }
+    }
+
+    GroupCalendarData shareClas = uiCalendars.getSharedCalendars();
+    if (shareClas != null) {
+      for (org.exoplatform.calendar.service.Calendar cal : shareClas.getCalendars()) {
+        if (checkedCals.contains(cal.getId())) {
+          calendarIds.add(cal.getId());
+        }
+      }
+    }
+    return calendarIds;
   }
   
   public List<CalendarEvent> getAllEvents (EventQuery eventQuery) throws Exception {
@@ -380,22 +396,8 @@ public class UIListView extends UICalendarView {
       long currentPage = uiListView.getCurrentPage();
       String fieldId =  event.getRequestContext().getRequestParameter(OBJECTID) ;
       EventQuery query = uiListView.query ;
-      UICalendars uiCalendars = uiListView.getAncestorOfType(UICalendarPortlet.class)
-        .findFirstComponentOfType(UICalendars.class);
-      List<String> checkedCals = uiCalendars.getCheckedCalendars() ;
-      List<String> calendarIds = new ArrayList<String>() ; 
-      for (GroupCalendarData groupCalendarData : uiCalendars.getPrivateCalendars())
-        for (org.exoplatform.calendar.service.Calendar cal : groupCalendarData.getCalendars())
-          if (checkedCals.contains(cal.getId())) calendarIds.add(cal.getId());
-      for (GroupCalendarData calendarData : uiCalendars.getPublicCalendars())
-        for (org.exoplatform.calendar.service.Calendar  calendar : calendarData.getCalendars())
-          if (checkedCals.contains(calendar.getId())) calendarIds.add(calendar.getId());
-      GroupCalendarData shareClas = uiCalendars.getSharedCalendars();
-      if (shareClas != null)
-        for (org.exoplatform.calendar.service.Calendar cal : shareClas.getCalendars())
-          if (checkedCals.contains(cal.getId())) {
-            calendarIds.add(cal.getId());
-          }
+      
+      List<String> calendarIds = uiListView.findCalendarIds();
       if (calendarIds.size() > 0)
         query.setCalendarId(calendarIds.toArray(new String[] {}));
       else {
