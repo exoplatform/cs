@@ -49,8 +49,8 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormSelectBoxWithGroups;
@@ -80,7 +80,8 @@ import org.exoplatform.webui.form.validator.SpecialCharacterValidator;
                  }
 )
 public class UIImportForm extends UIForm implements UIPopupComponent, UISelector{
-  private Log log = ExoLogger.getLogger(this.getClass());
+  private static final Log log = ExoLogger.getLogger(UIImportForm.class);
+  
   final public static String DISPLAY_NAME = "displayName" ;
   final public static String DESCRIPTION = "description" ;
   final public static String CATEGORY = "category" ;
@@ -142,18 +143,12 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
     } 
   }
 
-  private List<SelectItemOption<String>> getTimeZones() {
-    return CalendarUtils.getTimeZoneSelectBoxOptions(TimeZone.getAvailableIDs()) ;
-  } 
   public String getLabel(String id) {
     try {
       return super.getLabel(id) ;
     } catch (Exception e) {
       return id ;
     }
-  }
-  private List<SelectItemOption<String>> getLocales() {
-    return CalendarUtils.getLocaleSelectBoxOptions(java.util.Calendar.getAvailableLocales()) ;
   }
   
   @SuppressWarnings("unchecked")
@@ -402,7 +397,9 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         } 
       } catch(Exception e) {
-        e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("File format to import calendar is not valid", e);
+        }
         uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.file-type-error", null));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;  
       }

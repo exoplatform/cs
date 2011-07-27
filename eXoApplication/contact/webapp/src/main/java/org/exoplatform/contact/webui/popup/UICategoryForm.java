@@ -24,6 +24,8 @@ import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -31,8 +33,8 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -55,6 +57,8 @@ import org.exoplatform.webui.form.validator.StringLengthValidator;
     }
 )
 public class UICategoryForm extends UIForm implements UIPopupComponent {
+  private static final Log log = ExoLogger.getExoLogger(UICategoryForm.class);
+  
   private boolean isNew_ = true ;
   private String groupId_ ;
   public static final String FIELD_CATEGORYNAME_INPUT = "categoryName";
@@ -144,7 +148,9 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
                     return ;
                   }                
               } catch (Exception e) {
-                e.printStackTrace() ;
+                if (log.isDebugEnabled()) {
+                  log.debug("Exception in method execute of class SaveActionListener", e);
+                }
               }
               
             }

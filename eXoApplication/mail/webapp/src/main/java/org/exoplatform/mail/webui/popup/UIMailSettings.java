@@ -36,6 +36,8 @@ import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -72,6 +74,8 @@ import org.exoplatform.webui.form.UIFormTabPane;
                  }
 )
 public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
+  private static final Log log = ExoLogger.getExoLogger(UIMailSettings.class);
+  
   public static final String DEFAULT_ACCOUNT = "default-account".intern();
   public static final String NUMBER_MSG_PER_PAGE = "number-of-conversation".intern() ;
   public static final String PERIOD_CHECK_AUTO = "period-check-mail".intern() ;
@@ -315,7 +319,9 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
     try {
       accs = MailUtils.getMailService().getAccounts(username);
     } catch (Exception e) {
-      e.printStackTrace(); 
+      if (log.isDebugEnabled()) {
+        log.debug("Exception in method getOwnerAccs", e);
+      }
       return null;
     }
     List<SelectItemOption<String>> ownAccs = new ArrayList<SelectItemOption<String>>();
@@ -379,7 +385,9 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
         inputSet.reset();
         event.getRequestContext().addUIComponentToUpdateByAjax(inputSet) ;
       } catch (Exception e) {
-        e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Exception in method execute of class AddAccountActionListener", e);
+        }
         return;
       }
 
@@ -416,7 +424,9 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
         grid.updateGrid();
         event.getRequestContext().addUIComponentToUpdateByAjax(inputSet) ;
       }  catch (Exception e) {
-        e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Exception in method execute of class OnChangeActionListener", e);
+        }
         return;
       }
     }

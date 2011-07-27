@@ -103,7 +103,7 @@ public class ContactPageList extends JCRPageList {
      * query.execute(); iter_ = result.getNodes(); } else { Node node = (Node) session.getItem(value_); iter_ = node.getNodes(); }
      * } finally { session.logout(); } session.logout(); } setAvailablePage(iter_.getSize()); Node currentNode; long pageSize =
      * getPageSize(); long position = 0; if (page == 1) position = 0; else { position = (page - 1) * pageSize; if (pageReturn ==
-     * page) { try { iter_.skip(position - 1); } catch (Exception e) { System.out.println("\n iter exception"); } } else {
+     * page) { try { iter_.skip(position - 1); } catch (Exception e) {  } } else {
      * iter_.skip(position); } }
      */
 

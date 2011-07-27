@@ -38,6 +38,8 @@ import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.WizardStep;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -46,8 +48,8 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIFormTabPane;
 /**
  * Created by The eXo Platform SARL
@@ -72,7 +74,8 @@ import org.exoplatform.webui.form.UIFormTabPane;
     }
 )
 public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent, Selector {
-
+  private static final Log log = ExoLogger.getExoLogger(UIAccountCreation.class);
+  
   private int wizardMaxStep_ = 5 ;
   private int currentStep_ = 1 ;
   private int wizardMinStep_ = 1 ;
@@ -367,7 +370,9 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       } catch (Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.create-acc-unsuccessfully", null, ApplicationMessage.ERROR)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        e.printStackTrace() ;
+        if (log.isDebugEnabled()) {
+          log.debug("Exception in method execute of class FinishActionListener", e);
+        }
         return ;
       } 
       if(uiAccWs5.isGetmail()) {
@@ -393,7 +398,9 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
         } catch (Exception e) {
           uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.getMail-unsuccessfully", null, ApplicationMessage.ERROR)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          e.printStackTrace() ;
+          if (log.isDebugEnabled()) {
+            log.debug("Exception in method execute of class FinishActionListener", e);
+          }
           return ;
         }
       } else {

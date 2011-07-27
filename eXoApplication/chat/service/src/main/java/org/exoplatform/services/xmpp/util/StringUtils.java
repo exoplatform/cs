@@ -16,6 +16,9 @@
  */
 package org.exoplatform.services.xmpp.util;
 
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
+
 import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
 
 /**
@@ -25,6 +28,7 @@ import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
  * @version $Id: $
  */
 public class StringUtils {
+  private static final Log log = ExoLogger.getExoLogger(StringUtils.class);
 
   public static String encodeToHex(String string) {
     return new String(HexBin.encode(string.getBytes()));
@@ -34,7 +38,9 @@ public class StringUtils {
     try {
       return new String(HexBin.decode(hexstring));
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Exception when decode from hexa string", e);
+      }
       return null;
     }
   }

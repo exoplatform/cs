@@ -910,7 +910,9 @@ import com.sun.mail.smtp.SMTPSendFailedException;
         }
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      if (logger.isDebugEnabled()) {
+        logger.debug("Exception in method addAllMailFromGroup", e);
+      }
     }
     InternetAddress[] internetAddresses = InternetAddress.parse(mailAddresses.toString());
     StringBuffer mailList = new StringBuffer();
@@ -1159,14 +1161,18 @@ import com.sun.mail.smtp.SMTPSendFailedException;
       }
       // CS-4462
       catch (AuthenticationFailedException e) {
-        e.printStackTrace();
+        if (logger.isDebugEnabled()) {
+          logger.debug("AuthenticationFailedException in method execute of class SaveDraftActionListener", e);
+        }
         UIApplication uiApp = composeForm.getAncestorOfType(UIApplication.class);
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.the-username-or-password-may-be-wrong-save-draft-error",
                                                 null));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       } catch (Exception e) {
-        e.printStackTrace();
+        if (logger.isDebugEnabled()) {
+          logger.debug("Exception in method execute of class SaveDraftActionListener", e);
+        }
         UIApplication uiApp = composeForm.getAncestorOfType(UIApplication.class);
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-draft-error", null));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
@@ -1583,7 +1589,9 @@ import com.sun.mail.smtp.SMTPSendFailedException;
         .addUIComponentToUpdateByAjax(uiComposeForm.getChildById(FIELD_TO_SET));
 
       } catch (Exception e) {
-        e.printStackTrace();
+        if (logger.isDebugEnabled()) {
+          logger.debug("Exception in method execute of class RemoveGroupActionListener", e);
+        }
         return;
       }
 

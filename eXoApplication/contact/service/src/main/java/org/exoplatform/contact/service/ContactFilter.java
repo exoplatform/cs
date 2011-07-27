@@ -300,9 +300,6 @@ public class ContactFilter {
                   .append(" fn:upper-case(@exo:note) = '" + text + "' or")
                   .append(" fn:upper-case(@exo:emailAddress) = '" + text + "' or")
                   .append(" fn:upper-case(@exo:workCountry) = '" + text + "')");
-      /*
-       * } else { System.out.println("\n\n else \n\n"); stringBuffer.append("jcr:contains(., '").append(text.toUpperCase()).append("')") ; }
-       */
       hasConjuntion = true;
     }
 

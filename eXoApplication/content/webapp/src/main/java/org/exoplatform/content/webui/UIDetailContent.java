@@ -42,7 +42,7 @@ public class UIDetailContent extends UIContainer {
   private ContentNode node_;
     
   public UIDetailContent() throws Exception {
-    //TODO: Tung.Pham added
+    // Tung.Pham added
     //-----------------------------
     UIBreadcumbs uiBreadcumbs = addChild(UIBreadcumbs.class, null, "ContentBreadcumbs") ;
     uiBreadcumbs.setBreadcumbsStyle("UIExplorerHistoryPath") ;
@@ -83,7 +83,7 @@ public class UIDetailContent extends UIContainer {
     }
   }
   
-  //TODO: Tung.Pham added
+  // Tung.Pham added
   static  public class SelectPathActionListener extends EventListener<UIBreadcumbs> {
     public void execute(Event<UIBreadcumbs> event) throws Exception {
       UIBreadcumbs uiBreadcumbs = event.getSource();

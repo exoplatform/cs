@@ -142,7 +142,6 @@ public class UIYearView extends UICalendarView {
 
   @Override
   public String getDefaultStartTimeOfEvent() {
-    // TODO Auto-generated method stub
     return String.valueOf(calendar_.getTimeInMillis());
   }
 }

@@ -360,7 +360,9 @@ public class UIMessageList extends UIForm {
         }
       }
     } catch(Exception e) {
-      e.printStackTrace() ;
+      if (log.isDebugEnabled()) {
+        log.debug("Exception in method getTags", e);
+      }
     }
     return tagList;
   } 
@@ -451,7 +453,9 @@ public class UIMessageList extends UIForm {
           try {
             uiMessageList.toggleMsgStatus(username, accountId, msgs, folderId, false);
           } catch (PathNotFoundException e) {
-            e.printStackTrace();
+            if (log.isDebugEnabled()) {
+              log.debug("PathNotFoundException in method execute of class SelectMessageActionListener", e);
+            }
             uiMessageList.setMessagePageList(null) ;
             uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
             event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet); 

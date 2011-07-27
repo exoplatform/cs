@@ -350,7 +350,9 @@ public class CsvImportExport implements CalendarImportExport {
       process(new BufferedReader(new InputStreamReader(icalInputStream)));
       return true;
     } catch (Exception e) {
-      e.printStackTrace();
+      if (logger.isDebugEnabled()) {
+        logger.debug("The inputStream is not valid", e);
+      }
       return false;
     }
   }

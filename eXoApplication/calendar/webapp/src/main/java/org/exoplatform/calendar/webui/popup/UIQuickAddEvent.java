@@ -36,6 +36,8 @@ import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UIFormDateTimePicker;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -74,6 +76,7 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
     }
 )
 public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
+  private static final Log log = ExoLogger.getExoLogger(UIQuickAddEvent.class);
 
   final public static String FIELD_EVENT = "eventName".intern() ;
   final public static String FIELD_CALENDAR = "calendar".intern() ;
@@ -164,7 +167,9 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
       return df.parse(fromField.getValue() + " " + timeFile.getValue()) ;
     }
     catch (Exception e) {
-      e.printStackTrace() ;
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to get event from date", e);
+      }
       return null ;
     }
   }
@@ -201,7 +206,9 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
       return df.parse(toField.getValue() + " " + timeFile.getValue()) ;
       
     } catch (Exception e) {
-      e.printStackTrace() ;
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to get event to date", e);
+      }
       return null ;
     }
   }
@@ -432,7 +439,9 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
           event.getRequestContext().addUIComponentToUpdateByAjax(popupWindow) ;
         }
       } catch (Exception e) {
-        e.printStackTrace() ;
+        if (log.isDebugEnabled()) {
+          log.debug("Fail to quick add event to the calendar", e);
+        }
         uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.add-unsuccessfully", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
       }

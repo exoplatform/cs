@@ -26,6 +26,8 @@ import javax.jcr.Session;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 
 /**
  * Created by The eXo Platform SARL
@@ -35,6 +37,8 @@ import org.exoplatform.services.jcr.RepositoryService;
  * 
  */
 public class ContactAttachment {
+  private static final Log log = ExoLogger.getExoLogger(ContactAttachment.class);
+  
   private String id;
 
   private String fileName;
@@ -50,7 +54,9 @@ public class ContactAttachment {
     try {
       attachmentData = (Node) getSesison().getItem(getId());
     } catch (ItemNotFoundException e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Exception in method getDataPath", e);
+      }
       return null;
     }
     return attachmentData.getPath();

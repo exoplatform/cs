@@ -35,6 +35,8 @@ import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.util.IdGenerator;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webservice.cs.calendar.CalendarWebservice;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -44,12 +46,12 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputInfo;
-import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
+import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.ext.UIFormComboBox;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.SpecialCharacterValidator;
@@ -78,6 +80,8 @@ import com.sun.syndication.io.XmlReader;
     }
 )
 public class UIEditFeed extends UIForm implements UIPopupComponent{
+  private static final Log log = ExoLogger.getExoLogger(UIEditFeed.class);
+  
   //final static private String SELECT_CALENDAR = "selectCalendar".intern() ;
   final static private String URL = "url".intern() ;
   final static private String NAME = "name".intern() ;
@@ -139,7 +143,9 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
     try {
       return res.getString("UIEditFeed.label.defaultFeedName");
     } catch (MissingResourceException e) {      
-      e.printStackTrace() ;
+      if (log.isDebugEnabled()) {
+        log.debug("Resource is missing", e);
+      }
       return DEFAULT_FEED_NAME;
     }
   }
@@ -245,7 +251,9 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
           }
         }
       } catch (Exception e) {
-        e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Fail to set feed", e);
+        }
       }      
      
     }    

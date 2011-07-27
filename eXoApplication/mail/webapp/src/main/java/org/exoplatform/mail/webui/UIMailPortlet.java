@@ -35,6 +35,8 @@ import org.exoplatform.mail.service.MessagePageList;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -56,6 +58,7 @@ import org.mortbay.cometd.continuation.EXoContinuationBayeux;
    template = "app:/templates/mail/webui/UIMailPortlet.gtmpl"
 )
 public class UIMailPortlet extends UIPortletApplication {
+  private static final Log log = ExoLogger.getExoLogger(UIMailPortlet.class);
   
   private String formId = "";
   
@@ -73,8 +76,6 @@ public class UIMailPortlet extends UIPortletApplication {
     String accId = getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue();
     MailService mailSvr = Utils.getMailService();
     String username = MailUtils.getCurrentUser();
-    /*System.out.println("mailservice:" + mailSvr);
-    if(mailSvr.getAccountById(username, accId) == null && mailSvr.getDelegatedAccount(username, accId) == null) accId = null;*/ 
     UIMessageArea uiMessageArea = createUIComponent(UIMessageArea.class, null, null);
     uiMessageArea.init(accId);
     uiMessageArea.setMailSetting(getMailSetting());
@@ -148,7 +149,9 @@ public class UIMailPortlet extends UIPortletApplication {
     }catch (PathNotFoundException ex) {
       return;
     } catch (Exception ex) {
-      ex.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Exception in method processRender", ex);
+      }
     } finally {
       super.processRender(app, context);      
     }   

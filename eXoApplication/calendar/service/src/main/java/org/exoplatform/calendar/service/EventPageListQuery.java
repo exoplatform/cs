@@ -37,12 +37,15 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.jcr.impl.core.query.QueryImpl;
 import org.exoplatform.services.jcr.impl.core.query.lucene.QueryResultImpl;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 
 /**
  * @author Hung Nguyen (hung.nguyen@exoplatform.com)
  * @since July 25, 2007
  */
 public class EventPageListQuery extends JCRPageList {
+  private static final Log log = ExoLogger.getExoLogger(EventPageListQuery.class);
 
   private String       username_;
 
@@ -151,7 +154,9 @@ public class EventPageListQuery extends JCRPageList {
     try {
       event.setReminders(getReminders(eventNode, reminderFolder));
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("fail to set the reminders to the event", e);
+      }
     }
     event.setAttachment(getAttachments(eventNode));
     if (eventNode.hasProperty(Utils.EXO_INVITATION)) {

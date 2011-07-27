@@ -68,7 +68,7 @@ public class UIFormInputWithActions extends UIFormInputSet {
         if(inputEntry instanceof UIFormInputBase) ((UIFormInputBase)inputEntry).setLabel(label);
       } catch(MissingResourceException ex){
         label = inputEntry.getId() ;
-        System.err.println("\n "+uiForm.getId()+".label." + inputEntry.getId()+" not found value");
+        log.error("\n "+uiForm.getId()+".label." + inputEntry.getId()+" not found value", ex);
       }
       w.write("<tr>") ;
       if (!(inputEntry instanceof UIFormCheckBoxInput)) {

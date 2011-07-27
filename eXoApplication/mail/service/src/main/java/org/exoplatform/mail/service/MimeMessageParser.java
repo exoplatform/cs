@@ -170,36 +170,6 @@ public class MimeMessageParser {
     return "";
   }
 
-  // TODO : khdung
-  // I implemented a new getMessageId that returns a MD5 string based on all headers of the message.
-  // The purpose is to replace the previous getMessageId ... to better remove duplicate mails (and
-  // to deal with the case when the message-id is null)
-  /**
-   * @return a MD5 string
-   */
-  public static String getMD5MsgId(javax.mail.Message msg) throws Exception {
-    // first construct a key by joining all headers
-    String key = "";
-    Enumeration enu = null;
-    long t1 = System.currentTimeMillis();
-    if (msg != null)
-      enu = msg.getAllHeaders();
-    if (enu != null) {
-      while (enu.hasMoreElements()) {
-        Header header = (Header) enu.nextElement();
-        key += header.getValue();
-      }
-    }
-    if (key.equals(""))
-      key = String.valueOf(t1);
-    String md5 = getMD5(key);
-    long t2 = System.currentTimeMillis();
-    // TODO : change the log level later
-    // just to have an idea about how this method slows down the checking mail
-    logger.error("getMD5MsgId spending time : " + (t2 - t1) + "ms");
-    return md5;
-  }
-
   public static String getMsgUID() {
     long t1 = System.currentTimeMillis();
     if (t1 < Long.MAX_VALUE)

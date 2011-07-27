@@ -26,6 +26,9 @@ import javax.jcr.Node;
 import javax.jcr.Value;
 import javax.mail.internet.InternetAddress;
 
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen
@@ -35,6 +38,8 @@ import javax.mail.internet.InternetAddress;
  */
 
 public class Utils {
+  private static final Log log = ExoLogger.getExoLogger(Utils.class);
+  
   final public static String SPLIT         = "::".intern();
 
   final public static String SEMI_COLON    = ";".intern();
@@ -72,7 +77,9 @@ public class Utils {
           continue;
         email = InternetAddress.parse(email)[0].getAddress();
       } catch (Exception e) {
-        e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Exception in method parseEmails", e);
+        }
       }
       if (isValidEmailAddresses(email))
         emailList.add(email);

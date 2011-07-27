@@ -31,6 +31,8 @@ import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.Utils;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -69,6 +71,7 @@ import org.exoplatform.webui.event.EventListener;
     }
 )
 public class UIDayView extends UICalendarView {
+  private static final Log log = ExoLogger.getExoLogger(UIDayView.class);
 
   private List<CalendarEvent> eventData_ = new ArrayList<CalendarEvent>();
   private List<CalendarEvent> allDayEvent_ = new ArrayList<CalendarEvent>();
@@ -212,7 +215,9 @@ public class UIDayView extends UICalendarView {
               cal.set(Calendar.MINUTE, minutesEnd) ; 
               ce.setToDateTime(cal.getTime()) ; 
             } catch (Exception e) {
-              e.printStackTrace() ;
+              if (log.isDebugEnabled()) {
+                log.debug("Exception when calculate calendar time", e);
+              }
               return ;
             }
             if(ce.getToDateTime().before(ce.getFromDateTime())) {
@@ -238,7 +243,9 @@ public class UIDayView extends UICalendarView {
           }
 
         } catch (PathNotFoundException e) {
-          e.printStackTrace() ;
+          if (log.isDebugEnabled()) {
+            log.debug("The calendar is not found", e);
+          }
           UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -262,7 +269,6 @@ public class UIDayView extends UICalendarView {
 
   @Override
   public String getDefaultStartTimeOfEvent() {
-    // TODO Auto-generated method stub
     return String.valueOf(calendar_.getTimeInMillis());
   }
 }

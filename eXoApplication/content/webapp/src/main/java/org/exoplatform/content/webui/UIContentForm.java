@@ -83,7 +83,7 @@ public class UIContentForm extends UIForm {
 
   static public class SaveActionListener extends EventListener<UIContentForm> {
     public void execute(Event<UIContentForm> event) throws Exception {
-      //TODO: Tung.Pham replaced
+      //Tung.Pham replaced
       //-----------------------------
       UIContentForm uiForm = event.getSource() ;
       ContentNode contentNode = uiForm.getContentNode();         
@@ -125,7 +125,7 @@ public class UIContentForm extends UIForm {
       UIContentForm uiForm = event.getSource() ;
       UIRSSReaderPortlet uiParent = uiForm.getAncestorOfType(UIRSSReaderPortlet.class) ;
       UIContentWorkingArea uiWorkingArea = uiParent.getChild(UIContentWorkingArea.class) ;
-      //TODO: Tung.Pham added
+      //Tung.Pham added
       //----------------------------
       UIContentNavigation uiNavi = uiParent.getChild(UIContentNavigation.class) ;
       if(uiNavi.getSelectedNode() == null) uiWorkingArea.setRenderedChild(UIDescription.class) ;
@@ -151,7 +151,7 @@ public class UIContentForm extends UIForm {
       }
       for(int i = 0; i < s.length(); i ++){
         char c = s.charAt(i);
-        //TODO: Tung.Pham modified
+        // Tung.Pham modified
         //if (Character.isLetter(c) || Character.isDigit(c) || c=='_' || c=='-' || c=='.' || c==':' || c=='/' || c== '?' || c=='%'){
         if (Character.isLetter(c) || Character.isDigit(c) || isAllowedSpecialChar(c)) {
           continue;
@@ -162,7 +162,7 @@ public class UIContentForm extends UIForm {
       uiInput.setValue(s);
     }
 
-    //TODO: Tung.Pham added
+    // Tung.Pham added
     private boolean isAllowedSpecialChar(char chr) {
       char[] allowedCharArray = {'_', '-', '.', ':', '/', '?', '=', '&', '%'} ;
       for(char ele : allowedCharArray) {

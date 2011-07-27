@@ -616,7 +616,6 @@ public class MessageFilter {
       }
     }
 
-    // System.out.println(" ## Query Statement : " + stringBuffer.toString());
     if (hasConjuntion)
       queryString.append(stringBuffer.toString());
     return queryString.toString();

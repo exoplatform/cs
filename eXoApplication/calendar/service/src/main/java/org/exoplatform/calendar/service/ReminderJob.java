@@ -106,9 +106,9 @@ public class ReminderJob implements Job {
       if (log_.isDebugEnabled())
         log_.debug("Data base not ready !");
     } catch (Exception e) {
-      e.printStackTrace();
-      if (log_.isDebugEnabled())
-        log_.debug(e.toString());
+      if (log_.isDebugEnabled()) {
+        log_.debug("Exception in method execute", e);
+      }
     } finally {
       provider.close();
       ExoContainerContext.setCurrentContainer(oldContainer);

@@ -33,6 +33,8 @@ import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.Utils;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -72,6 +74,7 @@ import org.exoplatform.webui.event.EventListener;
     }
 )
 public class UIWeekView extends UICalendarView {
+  private static final Log log = ExoLogger.getExoLogger(UIWeekView.class);
 
   protected Map<String, List<CalendarEvent>> eventData_ = new HashMap<String, List<CalendarEvent>>() ;
   protected List<CalendarEvent> allDayEvent = new ArrayList<CalendarEvent>();
@@ -256,7 +259,9 @@ public class UIWeekView extends UICalendarView {
               cal.set(Calendar.MINUTE, minutesEnd) ;
               eventCalendar.setToDateTime(cal.getTime()) ;
             } catch (Exception e) {
-              e.printStackTrace() ;
+              if (log.isDebugEnabled()) {
+                log.debug("Fail when calculate the time for calendar", e);
+              }
               return ;
             }
             if(eventCalendar.getToDateTime().before(eventCalendar.getFromDateTime())) {
@@ -283,7 +288,9 @@ public class UIWeekView extends UICalendarView {
             event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
           }
         } catch (PathNotFoundException e) {
-          e.printStackTrace() ;
+          if (log.isDebugEnabled()) {
+            log.debug("The calendar is not found", e);
+          }
           UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -375,7 +382,9 @@ public class UIWeekView extends UICalendarView {
           }
         }
       } catch (Exception e) {
-        e.printStackTrace() ;
+        if (log.isDebugEnabled()) {
+          log.debug("Fail to save the event to the calendar", e);
+        }
         return ;
       }
     }

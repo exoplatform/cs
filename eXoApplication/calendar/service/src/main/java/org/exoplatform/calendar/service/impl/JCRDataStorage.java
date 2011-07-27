@@ -2063,7 +2063,9 @@ public class JCRDataStorage implements DataStorage {
       }
       rssHome.getSession().save();
     } catch (Exception ex) {
-      ex.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to remove feed data", ex);
+      }
     }
 
   }
@@ -2459,7 +2461,6 @@ public class JCRDataStorage implements DataStorage {
       if (log.isDebugEnabled())
         log.debug(e);
     } finally {
-      // TODO
       // systemSession.close() ;
     }
     return new EventPageList(events, 10);
@@ -2495,7 +2496,9 @@ public class JCRDataStorage implements DataStorage {
             NodeIterator it = query.execute().getNodes();
             mapData = updateMap(mapData, it, eventQuery.getFromDate(), eventQuery.getToDate(), calSetting.getFilterSharedCalendars());
           } catch (Exception e) {
-            e.printStackTrace();
+            if (log.isDebugEnabled()) {
+              log.debug("Fail to update map of shared event", e);
+            }
           }
         }
       }
@@ -2506,7 +2509,9 @@ public class JCRDataStorage implements DataStorage {
       NodeIterator it = query.execute().getNodes();
       mapData = updateMap(mapData, it, eventQuery.getFromDate(), eventQuery.getToDate(), calSetting.getFilterPublicCalendars());
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to search hight light event", e);
+      }
     } finally {
       calendarHome.getSession().logout();
     }
@@ -2722,7 +2727,9 @@ public class JCRDataStorage implements DataStorage {
             calendars.add(cal);
           }
         } catch (Exception e) {
-          e.printStackTrace();
+          if (log.isDebugEnabled()) {
+            log.debug("Fail to create new calendar", e);
+          }
         }
       }
       if (calendars.size() > 0) {
@@ -2818,7 +2825,9 @@ public class JCRDataStorage implements DataStorage {
               break;
           }
         } catch (Exception e) {
-          e.printStackTrace();
+          if (log.isDebugEnabled()) {
+            log.debug("Fail to get events from calendar", e);
+          }
         }
       }
     }
@@ -2843,7 +2852,9 @@ public class JCRDataStorage implements DataStorage {
             }
           }
         } catch (Exception e) {
-          e.printStackTrace();
+          if (log.isDebugEnabled()) {
+            log.debug("Fail to get events from calendar", e);
+          }
         }
       }
     }
@@ -2968,7 +2979,9 @@ public class JCRDataStorage implements DataStorage {
       // add recurrence events
 
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to get events", e);
+      }
     } finally {
       // systemSession.close() ;
     }
@@ -3575,7 +3588,9 @@ public class JCRDataStorage implements DataStorage {
         break;
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to move event", e);
+      }
     } finally {
       // systemSession.close() ;
     }
@@ -4056,7 +4071,9 @@ public class JCRDataStorage implements DataStorage {
               }
             }
           } catch (Exception e) {
-            e.printStackTrace();
+            if (log.isDebugEnabled()) {
+              log.debug("Exception in method autoShareCalendar", e);
+            }
           }
         }
       }
@@ -4112,7 +4129,9 @@ public class JCRDataStorage implements DataStorage {
       try {
         removeFeed(username, calendarId);
       } catch (Exception e) {
-        e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Fail to remove feed", e);
+        }
       }
     }
   }
@@ -4207,7 +4226,9 @@ public class JCRDataStorage implements DataStorage {
           try {
             removeFeed(username, calendar.getProperty(Utils.EXO_ID).getString());
           } catch (Exception e) {
-            e.printStackTrace();
+            if (log.isDebugEnabled()) {
+              log.debug("Fail to remove feed", e);
+            }
           }
         }
       }

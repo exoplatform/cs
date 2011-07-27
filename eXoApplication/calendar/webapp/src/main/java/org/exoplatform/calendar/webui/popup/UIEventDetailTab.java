@@ -171,13 +171,7 @@ public class UIEventDetailTab extends UIFormInputWithActions {
     options.add(new SelectItemOption<String>("low", "low")) ;
     return options ;
   }
-  private List<SelectItemOption<String>> getRepeater() {
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    for(String s : CalendarEvent.REPEATTYPES) {
-      options.add(new SelectItemOption<String>(s,s)) ;
-    }
-    return options ;
-  }
+
   /*private List<SelectItemOption<String>> getReminder() {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     for(String rmdType : Reminder.REMINDER_TYPES) {

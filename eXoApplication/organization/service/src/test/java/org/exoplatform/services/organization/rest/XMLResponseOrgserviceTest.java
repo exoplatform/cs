@@ -79,7 +79,7 @@ public class XMLResponseOrgserviceTest extends AbstractResourceTest {
    * public void testFindMemberships() throws Exception { MembershipHandler hMembership = orgService.getMembershipHandler(); MultivaluedMetadata mv = new MultivaluedMetadata(); MultivaluedMetadata qp = new MultivaluedMetadata(); MultivaluedMap<String, String> h = new MultivaluedMapImpl(); // admin - user from DummyOrganizationService String username = "admin"; h.putSingle("username", username);
    * String extURI = "/organization/xml/membership/view-all/"; ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter(); Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, qp); Response response = null; response = dispatcher.dispatch(request); ContainerResponse response = service("GET", extURI, baseURI, h, null, writer);
    * assertNotNull(response); assertEquals(HTTPStatus.OK, response.getStatus()); final StreamingOutput entry = (StreamingOutput)response.getEntity(); final PipedOutputStream po = new PipedOutputStream(); final PipedInputStream pi = new PipedInputStream(po); new Thread(){
-   * @Override public void run() { try { entry.write(po); } catch (IOException e) { e.printStackTrace(); } try { po.flush(); po.close(); } catch (IOException e) { e.printStackTrace(); } } }.start(); DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance(); factory.setNamespaceAware(true); DocumentBuilder builder = factory.newDocumentBuilder(); Document document = builder.parse(pi);
+   * @Override public void run() { try { entry.write(po); } catch (IOException e) { } try { po.flush(); po.close(); } catch (IOException e) {  } } }.start(); DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance(); factory.setNamespaceAware(true); DocumentBuilder builder = factory.newDocumentBuilder(); Document document = builder.parse(pi);
    * MembershipHandler mHandler = orgService.getMembershipHandler(); Collection<Membership> mms = mHandler.findMembershipsByUser(username); String username_ = document.getElementsByTagName("user-name").item(0).getTextContent(); assertEquals(username, username_); NodeList nodeList = document.getElementsByTagName("membership"); int i = 0; for(Iterator<Membership>it = mms.iterator(); it.hasNext(); ){
    * Membership m = it.next(); Node node = nodeList.item(i++); //gets membership data NodeList m_list = node.getChildNodes(); Node id = m_list.item(0); Node type = m_list.item(1); assertEquals(m.getMembershipType(), type.getTextContent()); Node groupId = m_list.item(2); assertEquals(m.getGroupId(), groupId.getTextContent()); Node user_name = m_list.item(3); assertEquals(m.getUserName(),
    * user_name.getTextContent()); } }
@@ -114,13 +114,11 @@ public class XMLResponseOrgserviceTest extends AbstractResourceTest {
   // try {
   // entry.writeObject(po);
   // } catch (IOException e) {
-  // e.printStackTrace();
   // }
   // try {
   // po.flush();
   // po.close();
   // } catch (IOException e) {
-  // e.printStackTrace();
   // }
   // }
   // }.start();
@@ -173,7 +171,7 @@ public class XMLResponseOrgserviceTest extends AbstractResourceTest {
    * public void testFindUsersRange() throws Exception { UserHandler hUser = orgService.getUserHandler(); MultivaluedMetadata mv = new MultivaluedMetadata(); MultivaluedMetadata qp = new MultivaluedMetadata(); MultivaluedMap<String, String> h = new MultivaluedMapImpl(); // admin - user from DummyOrganizationService String username = "admin"; h.putSingle("username", username); Integer from = 0, to
    * = 5; String extURI = String.format("/organization/xml/user/view-from-to/%s/%s/", from.toString(), to.toString()); ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter(); Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "POST", mv, qp); Response response = null; response = dispatcher.dispatch(request); ContainerResponse response =
    * service("GET", extURI, baseURI, h, null, writer); assertNotNull(response); assertEquals(HTTPStatus.OK, response.getStatus()); final StreamingOutput entry = (StreamingOutput)response.getEntity(); final PipedOutputStream po = new PipedOutputStream(); final PipedInputStream pi = new PipedInputStream(po); new Thread(){
-   * @Override public void run() { try { entry.write(po); } catch (IOException e) { e.printStackTrace(); } try { po.flush(); po.close(); } catch (IOException e) { e.printStackTrace(); } } }.start(); DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance(); factory.setNamespaceAware(true); DocumentBuilder builder = factory.newDocumentBuilder(); Document document = builder.parse(pi);
+   * @Override public void run() { try { entry.write(po); } catch (IOException e) {  } try { po.flush(); po.close(); } catch (IOException e) {  } } }.start(); DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance(); factory.setNamespaceAware(true); DocumentBuilder builder = factory.newDocumentBuilder(); Document document = builder.parse(pi);
    * Query query = new Query(); query.setUserName(username); Collection<User> list = hUser.findUsers(query).getAll().subList(from, to); NodeList nd_list = document.getElementsByTagName("user"); assertEquals( nd_list.getLength(), list.size() ); }
    */
 
@@ -182,7 +180,7 @@ public class XMLResponseOrgserviceTest extends AbstractResourceTest {
    * public void testGetAllGroup() throws Exception { MultivaluedMetadata mv = new MultivaluedMetadata(); MultivaluedMetadata qp = new MultivaluedMetadata(); MultivaluedMap<String, String> h = new MultivaluedMapImpl(); String group_exclude = ""; h.putSingle("filter", group_exclude); String extURI = "/organization/xml/group/filter/"; ByteArrayContainerResponseWriter writer = new
    * ByteArrayContainerResponseWriter(); Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, qp); Response response = null; response = dispatcher.dispatch(request); ContainerResponse response = service("GET", extURI, baseURI, h, null, writer); assertNotNull(response); assertEquals(HTTPStatus.OK, response.getStatus()); final StreamingOutput entry =
    * (StreamingOutput)response.getEntity(); final PipedOutputStream po = new PipedOutputStream(); final PipedInputStream pi = new PipedInputStream(po); new Thread(){
-   * @Override public void run() { try { entry.write(po); } catch (IOException e) { e.printStackTrace(); } try { po.flush(); po.close(); } catch (IOException e) { e.printStackTrace(); } } }.start(); DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance(); factory.setNamespaceAware(true); DocumentBuilder builder = factory.newDocumentBuilder(); Document document = builder.parse(pi);
+   * @Override public void run() { try { entry.write(po); } catch (IOException e) { } try { po.flush(); po.close(); } catch (IOException e) { } } }.start(); DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance(); factory.setNamespaceAware(true); DocumentBuilder builder = factory.newDocumentBuilder(); Document document = builder.parse(pi);
    * GroupHandler hGroup = orgService.getGroupHandler(); Collection<Group> groups = hGroup.getAllGroups(); NodeList nd_list = document.getElementsByTagName("group"); // is quantity of nodes equals ?? assertEquals(groups.size(), nd_list.getLength() ); // test content int i = 0; for(Iterator<Group> iterator = groups.iterator(); iterator.hasNext(); ){ String groupName =
    * iterator.next().getGroupName(); assertEquals(groupName, nd_list.item(i++).getTextContent()); } }
    */
@@ -205,13 +203,11 @@ public class XMLResponseOrgserviceTest extends AbstractResourceTest {
         try {
           entry.write(po);
         } catch (IOException e) {
-          e.printStackTrace();
         }
         try {
           po.flush();
           po.close();
         } catch (IOException e) {
-          e.printStackTrace();
         }
       }
     }.start();
@@ -253,13 +249,11 @@ public class XMLResponseOrgserviceTest extends AbstractResourceTest {
         try {
           entry.write(po);
         } catch (IOException e) {
-          e.printStackTrace();
         }
         try {
           po.flush();
           po.close();
         } catch (IOException e) {
-          e.printStackTrace();
         }
       }
     }.start();
@@ -295,13 +289,11 @@ public class XMLResponseOrgserviceTest extends AbstractResourceTest {
         try {
           entry.write(po);
         } catch (IOException e) {
-          e.printStackTrace();
         }
         try {
           po.flush();
           po.close();
         } catch (IOException e) {
-          e.printStackTrace();
         }
       }
     }.start();
@@ -338,13 +330,11 @@ public class XMLResponseOrgserviceTest extends AbstractResourceTest {
         try {
           entry.write(po);
         } catch (IOException e) {
-          e.printStackTrace();
         }
         try {
           po.flush();
           po.close();
         } catch (IOException e) {
-          e.printStackTrace();
         }
       }
     }.start();
@@ -381,13 +371,11 @@ public class XMLResponseOrgserviceTest extends AbstractResourceTest {
         try {
           entry.write(po);
         } catch (IOException e) {
-          e.printStackTrace();
         }
         try {
           po.flush();
           po.close();
         } catch (IOException e) {
-          e.printStackTrace();
         }
       }
     }.start();
@@ -422,13 +410,11 @@ public class XMLResponseOrgserviceTest extends AbstractResourceTest {
         try {
           entry.write(po);
         } catch (IOException e) {
-          e.printStackTrace();
         }
         try {
           po.flush();
           po.close();
         } catch (IOException e) {
-          e.printStackTrace();
         }
       }
     }.start();
@@ -464,13 +450,11 @@ public class XMLResponseOrgserviceTest extends AbstractResourceTest {
         try {
           entry.write(po);
         } catch (IOException e) {
-          e.printStackTrace();
         }
         try {
           po.flush();
           po.close();
         } catch (IOException e) {
-          e.printStackTrace();
         }
       }
     }.start();

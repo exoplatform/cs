@@ -42,6 +42,8 @@ import org.exoplatform.calendar.webui.UIFormDateTimePicker;
 import org.exoplatform.calendar.webui.UIListView;
 import org.exoplatform.calendar.webui.UIPreview;
 import org.exoplatform.calendar.webui.UIWeekView;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -49,8 +51,8 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -72,6 +74,8 @@ import org.exoplatform.webui.form.validator.SpecialCharacterValidator;
     }
 )
 public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
+  private static final Log log = ExoLogger.getExoLogger(UIAdvancedSearchForm.class);
+  
   final static  private String TEXT = "text" ;
   final static  private String TYPE = "type" ;
   final static  private String CALENDAR = "calendar" ;
@@ -275,7 +279,9 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
           try {
             query.setCalendarId(new String[]{calendarId.split(CalendarUtils.COLON)[1].trim()}) ;            
           } catch (Exception e) {
-            e.printStackTrace();
+            if (log.isDebugEnabled()) {
+              log.debug("Fail to set calendar id", e);
+            }
           }
           //if (!checkedCals.contains(calendarId)) query.setCalendarId(new String[]{"null"}) ; 
         }
@@ -352,7 +358,9 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
         event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(calendarViewContainer) ;
       } catch (Exception e) {
-        e.printStackTrace() ;
+        if (log.isDebugEnabled()) {
+          log.debug("Exception in method execute of class SearchActionListener", e);
+        }
         return ;
       }
     }

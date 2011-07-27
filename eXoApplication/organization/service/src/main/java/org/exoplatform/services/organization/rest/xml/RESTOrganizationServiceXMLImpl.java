@@ -74,8 +74,7 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
       }
       return Response.ok(new UserListXMLEntity(list, uriInfo.getBaseUri().getPath()), XML_CONTENT_TYPE).build();
     } catch (Exception e) {
-      e.printStackTrace();
-      LOGGER.error("Thrown exception : " + e);
+      LOGGER.error("Thrown exception : ", e);
       return Response.status(HTTPStatus.INTERNAL_ERROR).entity("Thrown exception : " + e).build();
     }
   }
@@ -96,8 +95,7 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
       list = pageList.getPage(page);
       return Response.ok(new UserListXMLEntity(list, uriInfo.getBaseUri().getPath()), XML_CONTENT_TYPE).build();
     } catch (Exception e) {
-      e.printStackTrace();
-      LOGGER.error("Thrown exception : " + e);
+      LOGGER.error("Thrown exception : ", e);
       return Response.status(HTTPStatus.INTERNAL_ERROR).entity("Thrown exception : " + e).build();
     }
   }
@@ -150,8 +148,7 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
       }
       return Response.ok(new UserListXMLEntity(cloneList, uriInfo.getBaseUri().getPath()), XML_CONTENT_TYPE).build();
     } catch (Exception e) {
-      e.printStackTrace();
-      LOGGER.error("Thrown exception : " + e);
+      LOGGER.error("Thrown exception : ", e);
       return Response.status(HTTPStatus.INTERNAL_ERROR).entity("Thrown exception : " + e).build();
     }
   }
@@ -167,8 +164,7 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
       int number = userHandler.getUserPageList(20).getAvailable();
       return Response.ok(new CountXMLEntity(number, "users"), XML_CONTENT_TYPE).build();
     } catch (Exception e) {
-      e.printStackTrace();
-      LOGGER.error("Thrown exception : " + e);
+      LOGGER.error("Thrown exception : ", e);
       return Response.status(HTTPStatus.INTERNAL_ERROR).entity("Thrown exception : " + e).build();
     }
   }
@@ -188,8 +184,7 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
       }
       return Response.ok(new UserXMLEntity(user), XML_CONTENT_TYPE).build();
     } catch (Exception e) {
-      e.printStackTrace();
-      LOGGER.error("Thrown exception : " + e);
+      LOGGER.error("Thrown exception : ", e);
       return Response.status(HTTPStatus.INTERNAL_ERROR).entity("Thrown exception : " + e).build();
     }
   }
@@ -214,8 +209,7 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
       }
       return Response.ok(new GroupXMLEntity(group, members, uriInfo.getBaseUri().getPath()), XML_CONTENT_TYPE).build();
     } catch (Exception e) {
-      e.printStackTrace();
-      LOGGER.error("Thrown exception : " + e);
+      LOGGER.error("Thrown exception : ", e);
       return Response.status(HTTPStatus.INTERNAL_ERROR).entity("Thrown exception : " + e).build();
     }
   }
@@ -239,8 +233,7 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
       }
       return Response.ok(new GroupListXMLEntity(groups, uriInfo.getBaseUri().getPath()), XML_CONTENT_TYPE).build();
     } catch (Exception e) {
-      e.printStackTrace();
-      LOGGER.error("Thrown exception : " + e);
+      LOGGER.error("Thrown exception : ", e);
       return Response.status(HTTPStatus.INTERNAL_ERROR).entity("Thrown exception : " + e).build();
     }
   }
@@ -253,8 +246,7 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
       int number = groupHandler.getAllGroups().size();
       return Response.ok(new CountXMLEntity(number, "groups"), XML_CONTENT_TYPE).build();
     } catch (Exception e) {
-      e.printStackTrace();
-      LOGGER.error("Thrown exception : " + e);
+      LOGGER.error("Thrown exception : ", e);
       return Response.status(HTTPStatus.INTERNAL_ERROR).entity("Thrown exception : " + e).build();
     }
   }
@@ -276,8 +268,7 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
       return Response.ok(new GroupListXMLEntity(groups, uriInfo.getBaseUri().getPath()), XML_CONTENT_TYPE).build();
 
     } catch (Exception e) {
-      e.printStackTrace();
-      LOGGER.error("Thrown exception : " + e);
+      LOGGER.error("Thrown exception : ", e);
       return Response.status(HTTPStatus.INTERNAL_ERROR).entity("Thrown exception : " + e).build();
     }
   }
@@ -306,8 +297,7 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
       return Response.ok(new GroupListXMLEntity(new ArrayList<Group>(groups).subList(offset, amount_), uriInfo.getBaseUri().getPath()), XML_CONTENT_TYPE).build();
 
     } catch (Exception e) {
-      e.printStackTrace();
-      LOGGER.error("Thrown exception : " + e);
+      LOGGER.error("Thrown exception : ", e);
       return Response.status(HTTPStatus.INTERNAL_ERROR).entity("Thrown exception : " + e).build();
     }
   }

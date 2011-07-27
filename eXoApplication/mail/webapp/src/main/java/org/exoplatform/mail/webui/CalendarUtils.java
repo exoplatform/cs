@@ -34,6 +34,8 @@ import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
@@ -48,6 +50,8 @@ import org.exoplatform.webui.core.model.SelectItemOption;
  * Jul 11, 2007  
  */
 public class CalendarUtils {
+  private static final Log log = ExoLogger.getExoLogger(CalendarUtils.class);
+  
   final public static String PRIVATE_CALENDARS = "privateCalendar".intern() ;
   final public static String SHARED_CALENDARS = "sharedCalendar".intern() ;
   final public static String PUBLIC_CALENDARS = "publicCalendar".intern() ;
@@ -295,7 +299,9 @@ public class CalendarUtils {
     try {
       return  res.getString(key);
     } catch (MissingResourceException e) {      
-      e.printStackTrace() ;
+      if (log.isDebugEnabled()) {
+        log.debug("Exception in method getResourceBundle", e);
+      }
       return null ;
     }
   }

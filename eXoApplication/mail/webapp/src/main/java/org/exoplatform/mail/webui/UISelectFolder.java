@@ -22,6 +22,8 @@ import java.util.List;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.webui.core.model.SelectItem;
 import org.exoplatform.webui.core.model.SelectOption;
 import org.exoplatform.webui.core.model.SelectOptionGroup;
@@ -36,6 +38,8 @@ import org.exoplatform.webui.form.UIFormSelectBoxWithGroups;
  * Jan 5, 2008  
  */
 public class UISelectFolder extends UIFormInputSet {
+  private static final Log log = ExoLogger.getExoLogger(UISelectFolder.class);
+  
   final public static String SELECT_FOLDER = "folder" ;
   public String level = "" ;
   public String accountId_ = "";

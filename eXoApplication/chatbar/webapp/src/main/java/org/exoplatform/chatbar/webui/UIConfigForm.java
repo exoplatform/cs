@@ -18,6 +18,8 @@ package org.exoplatform.chatbar.webui;
 
 import javax.portlet.PortletPreferences;
 
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -48,6 +50,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
 )
 
 public class UIConfigForm extends UIForm {
+  private static final Log log = ExoLogger.getExoLogger(UIConfigForm.class);
 
   public static final String CAL_APP = "showCalendarLink".intern();
   public static final String MAIL_APP = "showMailLink".intern();
@@ -89,7 +92,9 @@ public class UIConfigForm extends UIForm {
       getUIFormInputInfo(INFO).setValue(getLabel(preferences.getValue(INFO, null))) ; 
 
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Can not init the config form", e);
+      }
     }
 
   }
@@ -123,7 +128,9 @@ public class UIConfigForm extends UIForm {
         uiApp.addMessage(new ApplicationMessage("UIConfigForm.msg.save-successful", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ; 
       } catch (Exception e) {
-        e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Fail to save the config", e);
+        }
       }
 
     }

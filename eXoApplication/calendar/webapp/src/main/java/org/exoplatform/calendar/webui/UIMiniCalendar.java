@@ -76,8 +76,8 @@ public class UIMiniCalendar extends UICalendarView  {
     cal.set(Calendar.DATE, day);
     return cal.getActualMaximum(java.util.Calendar.WEEK_OF_MONTH) ;
   }
-  @SuppressWarnings("unused")
-  private Map<Integer, String> getData(){ return dataMap ; }
+  
+  protected Map<Integer, String> getData(){ return dataMap ; }
   public LinkedHashMap<String, CalendarEvent> getDataMap(){ return null ; }
 
   public java.util.Calendar getBeginDateOfMonthView() throws Exception{

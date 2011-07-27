@@ -815,7 +815,9 @@ public class JCRDataStorage implements DataStorage {
           sharedAddressBook.setEditPermissionGroups(Utils.valuesToStringArray(addressNode.getProperty("exo:editPermissionGroups").getValues()));
         addressBooks.add(sharedAddressBook);
       } catch (Exception e) {
-        e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Exception in method findSharedAddressBooksByUser", e);
+        }
       }
     }
     return addressBooks;
@@ -866,7 +868,9 @@ public class JCRDataStorage implements DataStorage {
           return contact;
         }
       } catch (Exception e) {
-        e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Exception in method getSharedContact", e);
+        }
       }
     }
     return null;
@@ -888,7 +892,9 @@ public class JCRDataStorage implements DataStorage {
         }        
         sharedContacts.add(contact);
       } catch (Exception e) {
-        e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Exception in method getSharedContacts", e);
+        }
       }
     }
     return new DataPageList(sharedContacts, 10, null, false);
@@ -917,7 +923,9 @@ public class JCRDataStorage implements DataStorage {
           return;
         }
       } catch (Exception e) {
-        e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Exception in method saveSharedContact", e);
+        }
       }
     }
     if (!isEdit)
@@ -1236,7 +1244,9 @@ public class JCRDataStorage implements DataStorage {
             contacts.put(contact.getId(), contact);
           }
         } catch (Exception e) {
-          e.printStackTrace();
+          if (log.isDebugEnabled()) {
+            log.debug("Exception in method saveSharedContact", e);
+          }
         }
       }
     } catch (PathNotFoundException e) {
@@ -1284,7 +1294,9 @@ public class JCRDataStorage implements DataStorage {
             break;
           }
         } catch (Exception exx) {
-          exx.printStackTrace();
+          if (log.isDebugEnabled()) {
+            log.debug("Exception in method getContactNode", exx);
+          }
         }
       }
       if (contactNode == null) {
@@ -1442,7 +1454,9 @@ public class JCRDataStorage implements DataStorage {
             contactNode.save();
           }
         } catch (Exception e) {
-          e.printStackTrace();
+          if (log.isDebugEnabled()) {
+            log.debug("Exception in method removeTag", e);
+          }
         }
       }
     } catch (PathNotFoundException e) {
@@ -1564,7 +1578,9 @@ public class JCRDataStorage implements DataStorage {
               }
             }
           } catch (Exception e) {
-            e.printStackTrace();
+            if (log.isDebugEnabled()) {
+              log.debug("Exception in method searchContact", e);
+            }
           }
         }
       } catch (PathNotFoundException e) {
@@ -1627,10 +1643,10 @@ public class JCRDataStorage implements DataStorage {
     QueryManager qm = getContactUserDataHome(username).getSession().getWorkspace().getQueryManager();
     Query query;
     String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH);
-    // TODO query public contacts
+    // query public contacts
     if (filter.getType() == null || filter.getType().equals(PUBLIC)) {
       filter.setAccountPath(usersPath);
-      // TODO minus shared contacts
+      // minus shared contacts
       filter.setOwner("true");
 
       query = qm.createQuery(filter.getStatement(), Query.XPATH);
@@ -1643,7 +1659,7 @@ public class JCRDataStorage implements DataStorage {
       }
       filter.setOwner(null);
     }
-    // TODO query personal contacts
+    // query personal contacts
     if (filter.getType() == null || filter.getType().equals(PERSONAL)) {
       if (username != null && username.length() > 0) {
         Node contactHome = getPersonalContactsHome(username);
@@ -1660,7 +1676,7 @@ public class JCRDataStorage implements DataStorage {
       }
     }
 
-    // TODO query shared contacts
+    // query shared contacts
     if (filter.getType() == null || filter.getType().equals(SHARED)) {
       try {
         Node sharedContact = getSharedContact(username);
@@ -1685,7 +1701,9 @@ public class JCRDataStorage implements DataStorage {
               feedEmailResult(emails, contactNode);
             }
           } catch (Exception e) {
-            e.printStackTrace();
+            if (log.isDebugEnabled()) {
+              log.debug("Exception in method findEmailsByFilter", e);
+            }
           }
         }
       } catch (PathNotFoundException e) {
@@ -1800,7 +1818,9 @@ public class JCRDataStorage implements DataStorage {
               calculateEmailResult(contactNode, filter, emails);
             }
           } catch (Exception e) {
-            e.printStackTrace();
+            if (log.isDebugEnabled()) {
+              log.debug("Exception in method searchEmailsByFilter", e);
+            }
           }
         }
       } catch (PathNotFoundException e) {

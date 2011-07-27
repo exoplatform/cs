@@ -164,7 +164,9 @@ public class HistoryImpl implements Startable {
 
       jcrom.map(PresenceStatus.class);
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to init HistoryImpl", e);
+      }
     }
   }
 
@@ -300,7 +302,9 @@ public class HistoryImpl implements Startable {
         participantsNode.getSession().save();
       } catch (Exception e) {
         // TODO: find why exception happens
-        // e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Fail to add historical message", e);
+        }
         return false;
       }
     }
@@ -327,7 +331,9 @@ public class HistoryImpl implements Startable {
         return list;
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to get historical messages", e);
+      }
     }
     return list;
   }
@@ -367,7 +373,9 @@ public class HistoryImpl implements Startable {
         return list;
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to get historical messages", e);
+      }
     }
     return list;
   }
@@ -409,7 +417,9 @@ public class HistoryImpl implements Startable {
         return list;
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Exception in method getHistoricalMessages", e);
+      }
     }
     return list;
   }
@@ -434,7 +444,9 @@ public class HistoryImpl implements Startable {
         return list;
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to get the interlocutors", e);
+      }
     }
     return list;
   }
@@ -459,7 +471,9 @@ public class HistoryImpl implements Startable {
       }
       node.getSession().save();
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to get the interlocutors", e);
+      }
     }
 
   }
@@ -485,7 +499,9 @@ public class HistoryImpl implements Startable {
       }
       return list;
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to get not recive message", e);
+      }
     }
     return list;
   }
@@ -520,7 +536,9 @@ public class HistoryImpl implements Startable {
         return participant;
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to get the participant", e);
+      }
     }
     return null;
   }
@@ -539,7 +557,9 @@ public class HistoryImpl implements Startable {
         jcrom.updateNode(node, participant);
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to update the participant", e);
+      }
     }
   }
 
@@ -579,7 +599,9 @@ public class HistoryImpl implements Startable {
         }
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to get conversation", e);
+      }
     }
     return null;
   }
@@ -667,7 +689,9 @@ public class HistoryImpl implements Startable {
       jcrom.addNode(participantsNode, participant);
       participantsNode.getSession().save();
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to add participant", e);
+      }
     }
   }
 
@@ -682,7 +706,9 @@ public class HistoryImpl implements Startable {
       jcrom.addNode(conversationsNode, conversation);
       conversationsNode.getSession().save();
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to add the conversation", e);
+      }
     }
   }
 
@@ -702,7 +728,6 @@ public class HistoryImpl implements Startable {
       }
     } catch (Exception e) {
       throw e;
-      // e.printStackTrace();
     }
   }
 
@@ -716,7 +741,9 @@ public class HistoryImpl implements Startable {
       Session session = repository.getSystemSession(wsName);
       return session.getRootNode().getNode(historyPath + "/" + CONVERSATIONS);
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to get the conversations node", e);
+      }
       return null;
     }
   }
@@ -731,7 +758,9 @@ public class HistoryImpl implements Startable {
       Session session = repository.getSystemSession(wsName);
       return session.getRootNode().getNode(historyPath + "/" + PARTICIPANTS);
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to get the participants node", e);
+      }
       return null;
     }
   }

@@ -25,6 +25,8 @@ import javax.ws.rs.core.StreamingOutput;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
 
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
 
 /**
@@ -35,6 +37,7 @@ import org.exoplatform.services.organization.Group;
  */
 
 public class GroupListXMLEntity implements StreamingOutput {
+  private static final Log log = ExoLogger.getExoLogger(GroupListXMLEntity.class);
 
   private final Collection<Group> groupList_;
 
@@ -70,7 +73,9 @@ public class GroupListXMLEntity implements StreamingOutput {
       xsw.flush();
       xsw.close();
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Exception in method write", e);
+      }
       throw new IOException(e.getMessage());
     }
   }

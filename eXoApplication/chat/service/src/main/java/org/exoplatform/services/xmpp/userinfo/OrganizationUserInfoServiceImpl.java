@@ -81,8 +81,9 @@ public class OrganizationUserInfoServiceImpl implements UserInfoService {
       // userInfo.setUnit("office"); //temporary
       return userInfo;
     } catch (Exception e) {
-      if (log.isDebugEnabled())
-        e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to get the user info from organizationService", e);
+      }
     }
     return null;
   }
@@ -97,8 +98,9 @@ public class OrganizationUserInfoServiceImpl implements UserInfoService {
       if (userID != null && userID.equals(username))
         return (String) curentState.getIdentity().getSubject().getPrivateCredentials().iterator().next();
     } catch (Exception e) {
-      if (log.isDebugEnabled())
-        e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to get the password of user: " + userID, e);
+      }
     }
     return null;
   }

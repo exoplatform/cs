@@ -26,6 +26,8 @@ import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.AccountDelegation;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -48,6 +50,8 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
                  }
 )
 public class UIDelegationAccountGrid extends UIGrid {
+  private static final Log log = ExoLogger.getExoLogger(UIDelegationAccountGrid.class);
+  
   public static final String FULL_PRIVILEGE_FIELD = "isFull" ;  
   public static final String READONLY_PRIVILEGE_FIELD = "isReadOnly" ;
   String fields[] = {"accountName","delegatedUserName",UIDelegationAccountGrid.FULL_PRIVILEGE_FIELD};
@@ -74,10 +78,10 @@ public class UIDelegationAccountGrid extends UIGrid {
             delegation.add(bean);
           }
       }
-
-
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Exception in method updateGrid", e);
+      }
     }
     LazyPageList<AccountDelegation> pageList = new LazyPageList<AccountDelegation>(
         new ListAccessImpl<AccountDelegation>(AccountDelegation.class, delegation), 10);

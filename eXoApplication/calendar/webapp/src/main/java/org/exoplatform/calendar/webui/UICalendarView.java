@@ -73,7 +73,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 
 public abstract class UICalendarView extends UIForm  implements CalendarView {
   final static protected String EVENT_CATEGORIES = "eventCategories".intern() ;
-  private Log log = ExoLogger.getLogger(this.getClass());
+  private final static Log log = ExoLogger.getLogger(UICalendarView.class);
   final public static int TYPE_NONE = -1 ;
   final public static int TYPE_DAY = 0 ;
   final public static int TYPE_WEEK = 1 ;
@@ -265,7 +265,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       return getAncestorOfType(UICalendarPortlet.class)
       .findFirstComponentOfType(UICalendars.class).getColorMap() ;
     }catch(Exception e) {
-      e.printStackTrace() ;
+      if (log.isDebugEnabled()) {
+        log.debug("Can not get the color map", e);
+      }
       return new LinkedHashMap<String, String>() ;
     }    
   }
@@ -616,7 +618,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       try {
         return super.getLabel(arg) ;
       } catch (Exception e) {
-        e.printStackTrace() ;
+        if (log.isDebugEnabled()) {
+          log.debug("Can not get the label: " + arg + " from the resource bundle", e);
+        }
         return arg ;
       }
     }  
@@ -731,7 +735,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
               }
               event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             } catch (Exception e) {
-              e.printStackTrace() ;
+              if (log.isDebugEnabled()) {
+                log.debug("Fail to delete the events", e);
+              }
               uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.delete-event-error", null, ApplicationMessage.WARNING)) ;
               event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
               return ;
@@ -761,7 +767,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
 
           } catch (Exception e) {
-            e.printStackTrace() ;
+            if (log.isDebugEnabled()) {
+              log.debug("Fail to delete the events", e);
+            }
             uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.delete-event-error", null, ApplicationMessage.WARNING)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ;
@@ -1072,7 +1080,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
             event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
           }
         } catch (PathNotFoundException e) {
-          e.printStackTrace() ;
+          if (log.isDebugEnabled()) {
+            log.debug("Exception in method execute of class DeleteEventActionListener", e);
+          }
           UIApplication uiApp = uiCalendarView.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -1186,7 +1196,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
         } catch (Exception e) {
-          e.printStackTrace() ;
+          if (log.isDebugEnabled()) {
+            log.debug("Can not go to date", e);
+          }
         }
       }
     }
@@ -1274,7 +1286,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
         } catch (Exception e) {
-          e.printStackTrace() ;
+          if (log.isDebugEnabled()) {
+            log.debug("Can not move next", e);
+          }
           return ;
         }
       }
@@ -1293,7 +1307,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
         } catch (Exception e) {
-          e.printStackTrace() ;
+          if (log.isDebugEnabled()) {
+            log.debug("Can not move privious", e);
+          }
           return ;
         }
       }
@@ -1418,7 +1434,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
          // update UI
          uiPopupAction.deActivate();
        } catch (Exception e) {
-         e.printStackTrace();
+         if (log.isDebugEnabled()) {
+           log.debug("Fail to delete the event", e);
+         }
        }
      }
    }
@@ -1475,7 +1493,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
          }
          uiPopupAction.deActivate();
        } catch (Exception e) {
-         e.printStackTrace();
+         if (log.isDebugEnabled()) {
+           log.debug("Fail to delete the recurrence series of the event", e);
+         }
        }
      }
    }

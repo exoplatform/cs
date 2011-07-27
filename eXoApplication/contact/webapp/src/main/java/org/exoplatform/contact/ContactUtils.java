@@ -42,6 +42,8 @@ import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.mail.Message;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
@@ -60,8 +62,8 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputWithActions;
-import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
+import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.organization.account.UIGroupSelector;
 import org.exoplatform.webui.organization.account.UIUserSelector;
 
@@ -72,6 +74,8 @@ import org.exoplatform.webui.organization.account.UIUserSelector;
  * Jul 11, 2007  
  */
 public class ContactUtils {
+  private static final Log log = ExoLogger.getExoLogger(ContactUtils.class);
+  
   //private static String AKONG = "@" ;
   final public static String COMMA = ",".intern() ;
   final public static String SEMI_COMMA = ";".intern() ;
@@ -199,7 +203,9 @@ public class ContactUtils {
     try {
         return  res.getString("ContactUtils.label.emptyName");
     } catch (MissingResourceException e) {      
-      e.printStackTrace() ;
+      if (log.isDebugEnabled()) {
+        log.debug("MissingResourceException in method emptyName", e);
+      }
       return "(empty name)" ;
     }
   }  

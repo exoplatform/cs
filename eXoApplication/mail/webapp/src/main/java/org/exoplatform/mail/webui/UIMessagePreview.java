@@ -53,6 +53,8 @@ import org.exoplatform.mail.webui.popup.UIPrintPreview;
 import org.exoplatform.mail.webui.popup.UITagForm;
 import org.exoplatform.mail.webui.popup.UIViewAllHeaders;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -85,7 +87,9 @@ import org.exoplatform.webui.event.EventListener;
     @EventConfig(listeners = UIMessagePreview.BackToListActionListener.class),
     @EventConfig(listeners = UIMessagePreview.SaveAttachmentToDMSActionListener.class),
     @EventConfig(listeners = UIMessagePreview.HideMessageListActionListener.class) })
-    public class UIMessagePreview extends UIContainer{
+public class UIMessagePreview extends UIContainer{
+  private static final Log log = ExoLogger.getExoLogger(UIMessagePreview.class);
+  
   public static String  QUESTION           = "question".intern();
 
   public static String  ANSWER_IMPORT      = "yes-import".intern();
@@ -706,7 +710,9 @@ import org.exoplatform.webui.event.EventListener;
                                        Integer.parseInt(answer));
         }
       } catch (Exception e) {
-        e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Exception in method execute of class AnswerInvitationActionListener", e);
+        }
         UIApplication uiApp = uiMsgPreview.getAncestorOfType(UIApplication.class);
         uiApp.addMessage(new ApplicationMessage("UIMessagePreview.msg.trouble-loading-event", null));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());

@@ -32,7 +32,6 @@ public class UIStateDataBean {
    * 
    */
   public UIStateDataBean() {
-    // TODO Auto-generated constructor stub
   }
 
   /**

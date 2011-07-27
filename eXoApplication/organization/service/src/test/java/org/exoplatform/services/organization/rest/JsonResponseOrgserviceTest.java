@@ -199,7 +199,7 @@ public class JsonResponseOrgserviceTest extends AbstractResourceTest {
 
     Collection<UserBean> collection = entity.getUsers();
     for (UserBean userBean : collection) {
-      System.out.println("JsonResponseOrgserviceTest.testFindUsersRange2()" + userBean.getUserName() + " : " + userBean.getFirstName() + " : " + userBean.getLastName());
+      log.info("JsonResponseOrgserviceTest.testFindUsersRange2()" + userBean.getUserName() + " : " + userBean.getFirstName() + " : " + userBean.getLastName());
     }
 
     Query query = new Query();

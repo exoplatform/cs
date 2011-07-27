@@ -29,6 +29,8 @@ import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIFolderForm;
 import org.exoplatform.mail.webui.popup.UIRenameFolderForm;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -57,6 +59,8 @@ import org.exoplatform.webui.event.EventListener;
                  }
 )
 public class UIFolderContainer extends UIContainer {
+  private static Log log = ExoLogger.getExoLogger(UIFolderContainer.class);
+  
   private String currentFolder_ = null ;
   public int i = 1;
   private boolean isChecking_ = false;

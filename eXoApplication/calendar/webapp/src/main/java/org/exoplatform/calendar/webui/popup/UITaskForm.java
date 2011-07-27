@@ -44,6 +44,8 @@ import org.exoplatform.calendar.webui.UIListView;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.calendar.webui.UIPreview;
 import org.exoplatform.calendar.webui.popup.UIAddressForm.ContactData;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -105,6 +107,8 @@ import org.exoplatform.webui.organization.account.UIUserSelector;
 
 })
 public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISelector{
+  private static final Log log = ExoLogger.getExoLogger(UITaskForm.class);
+  
   final public static String TAB_TASKDETAIL = "eventDetail".intern() ;
   final public static String TAB_TASKREMINDER = "eventReminder".intern() ;
   final public static String ITEM_PUBLIC = "public".intern() ;
@@ -143,7 +147,9 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     try {
       label = super.getLabel(id) ;
     } catch (Exception e) {
-      //e.printStackTrace() ;
+      if (log.isDebugEnabled()) {
+        log.debug("Can not get the label " + id + " from the resource bundle", e);
+      }
     }
     return label ;
   }
@@ -285,14 +291,18 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     try {
       from = getTaskFromDate(dateFormat, timeFormat) ;
     } catch (Exception e) {
-      e.printStackTrace() ;
+      if (log.isDebugEnabled()) {
+        log.debug("Exception when get task of from date", e);
+      }
       errorMsg_ = getId() +  ".msg.event-fromdate-notvalid" ;
       return false ;
     }
     try {
       to = getTaskToDate(dateFormat, timeFormat) ;
     } catch (Exception e) {
-      e.printStackTrace() ;
+      if (log.isDebugEnabled()) {
+        log.debug("Exception when get task of to date", e);
+      }
       errorMsg_ = getId() +  ".msg.event-fromdate-notvalid" ;
       return false ;
     }
@@ -576,7 +586,9 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       String time =  taskDetailTab.getUIFormSelectBox(UIEventReminderTab.POPUP_REPEAT_INTERVAL).getValue() ;
       return Long.parseLong(time) ;
     } catch (Exception e){
-      e.printStackTrace() ;
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to get time from POPUP_REPEAT_INTERVAL", e);
+      }
     }
     return 0 ;
   }
@@ -1022,7 +1034,9 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
         }catch (Exception e) {
           uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.add-event-error", null));
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          e.printStackTrace() ;
+          if (log.isDebugEnabled()) {
+            log.debug("Can not save the task", e);
+          }
         }
       } else {
         uiApp.addMessage(new ApplicationMessage(uiForm.errorMsg_, null));

@@ -132,8 +132,9 @@ public class CalendarWebservice implements ResourceContainer{
         } 
       }  
     } catch (Exception e) {
-      //e.printStackTrace() ;
-      //buffer = new StringBuffer("{ERROR:500 " + e + "}") ;
+      if (log.isDebugEnabled()) {
+        log.debug("Exception when check permission", e);
+      }
       eventData.setPermission(false);
     } 
     return Response.ok(eventData, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();

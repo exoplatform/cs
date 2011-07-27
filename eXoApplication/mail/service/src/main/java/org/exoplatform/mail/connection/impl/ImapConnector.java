@@ -116,7 +116,9 @@ public class ImapConnector extends BaseConnector {
       }
       return folder;
     } catch (Exception ex) {
-      ex.printStackTrace();
+      if (logger.isDebugEnabled()) {
+        logger.debug("Exception in method renameFolder", ex);
+      }
       return null;
     }
   }

@@ -30,14 +30,16 @@ import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.UITagContainer;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
@@ -60,6 +62,7 @@ import org.exoplatform.webui.form.validator.SpecialCharacterValidator;
     }
 )
 public class UIEditTagForm extends UIForm implements UIPopupComponent {
+  private static final Log log = ExoLogger.getExoLogger(UIEditTagForm.class);
 
   final public static String NEW_TAG_NAME = "newTagName" ;
   final public static String DESCRIPTION = "description" ;
@@ -164,7 +167,9 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
           }
         } catch (Exception e){
           uiApp.addMessage(new ApplicationMessage("UIRenameTagForm.msg.error-rename-tag", null)) ;
-          e.printStackTrace() ;
+          if (log.isDebugEnabled()) {
+            log.debug("Exception in method execute of class SaveActionListener", e);
+          }
         }
         UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
         uiMessageList.updateList();

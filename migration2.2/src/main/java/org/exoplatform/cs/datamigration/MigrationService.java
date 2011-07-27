@@ -36,6 +36,8 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.core.nodetype.ExtendedNodeTypeManager;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 
 /**
  * Created by The eXo Platform SAS
@@ -44,6 +46,8 @@ import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
  * Apr 18, 2011  
  */
 public class MigrationService implements Startable{
+  protected static Log log = ExoLogger.getLogger(MigrationService.class);
+  
   private ExtendedNodeTypeManager ntManager_ ;
   private NodeHierarchyCreator nodeHierarchy_ ;
   private InitParams params_ ;
@@ -90,51 +94,54 @@ public class MigrationService implements Startable{
       
       //export data to 2.1 format
       if(isVersion21){
-        System.out.println("\n**********Begin exportion CS data***********");
+        log.info("\n**********Begin exportion CS data***********");
         boolean expo1 = exportUserData();
         boolean expo2 = exportSharedData();
-        if(expo1 &&  expo2)
-          System.out.println("EXO CS DATA EXPORTED SUCCESSFUL");
-        else
-          System.out.println("EXO CS DATA EXPORTED FAILURE");
-        
-        System.out.println("**********End exportion CS data***********\n");
+        if(expo1 &&  expo2) {
+          log.info("EXO CS DATA EXPORTED SUCCESSFUL");
+        } else {
+          log.info("EXO CS DATA EXPORTED FAILURE");
+        }
+        log.info("**********End exportion CS data***********\n");
       }else {
         //import from 2.2 format
-        System.out.println("\n**********Begin importion CS data***********");
+        log.info("\n**********Begin importion CS data***********");
         boolean impo1 = importUserData();
         boolean impo2 = importSharedData();
-        if(impo1 &&  impo2)
-          System.out.println("EXO CS DATA IMPORTED SUCCESSFUL");
-        else
-          System.out.println("EXO CS DATA IMPORTED FAILURE");
-        System.out.println("**********End importion CS data***********\n");
+        if(impo1 &&  impo2) {
+          log.info("EXO CS DATA IMPORTED SUCCESSFUL");
+        } else {
+          log.info("EXO CS DATA IMPORTED FAILURE");
+        }
+        log.info("**********End importion CS data***********\n");
       }
-    }catch (Exception e) {
-      e.printStackTrace();
+    } catch (Exception e) {
+      if (log.isDebugEnabled()) {
+        log.debug("Exception in method start", e);
+      }
     }
   }
   
   @Override
   public void stop() {
-    System.out.println("\n\n\n");
+    log.info("\n\n\n");
   }
   
   public boolean exportUserData(){
     try {
       Node userDataNode = getUserDataRootNode();
       if(userDataNode == null) {
-        System.out.println("Cannot get user data root node");
+        log.info("Cannot get user data root node");
         return false;
       }else{
         String file = params_.getValueParam("userData2.1").getValue() ;
         ByteArrayOutputStream bos = new ByteArrayOutputStream() ;
         userDataNode.getSession().exportSystemView(userDataNode.getPath(), bos, false, false) ;
         saveToFile(bos.toByteArray(), file.replaceAll("file:", ""));
-        System.out.println("CS User data 2.1 has exported to file: \"" + file + "\"") ;
+        log.info("CS User data 2.1 has exported to file: \"" + file + "\"") ;
       }
     } catch (Exception e) {
-      System.out.println("Cannot export eXo CS data 2.1" + e);
+      log.error("Cannot export eXo CS data 2.1", e);
       return false;
     }
     return true;
@@ -144,17 +151,17 @@ public class MigrationService implements Startable{
     try {
       Node sharedDataNode = getSharedDataRootNode();
       if(sharedDataNode == null) {
-        System.out.println("Cannot get shared data root node");
+        log.info("Cannot get shared data root node");
         return false;
       }else{
         String file = params_.getValueParam("sharedData2.1").getValue() ;
         ByteArrayOutputStream bos = new ByteArrayOutputStream() ;
         sharedDataNode.getSession().exportSystemView(sharedDataNode.getPath(), bos, false, false) ;
         saveToFile(bos.toByteArray(), file.replaceAll("file:", ""));
-        System.out.println("CS Shared data 2.1 has exported to file: \"" + file + "\"") ;
+        log.info("CS Shared data 2.1 has exported to file: \"" + file + "\"") ;
       }
     } catch (Exception e) {
-      System.out.println("Cannot export eXo CS data 2.1" + 3);
+      log.error("Cannot export eXo CS data 2.1" + 3, e);
       return false;
     }
     
@@ -165,7 +172,9 @@ public class MigrationService implements Startable{
     try {
       return getNodeByPath(nodeHierarchy_.getJcrPath(USERS_PATH), SessionProvider.createSystemProvider());
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Exception in method getUserDataRootNode", e);
+      }
       return null;
     }
   } 
@@ -175,7 +184,9 @@ public class MigrationService implements Startable{
     try {
       return nodeHierarchy_.getPublicApplicationNode(SessionProvider.createSystemProvider());
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Exception in method getSharedDataRootNode", e);
+      }
       return null;
     }
   }
@@ -183,7 +194,7 @@ public class MigrationService implements Startable{
   public boolean importUserData(){
     try{
       String file = params_.getValueParam("userData2.1").getValue() ;
-      System.out.println("\n CS User data version 2.2 is importing.... ");      
+      log.info("\n CS User data version 2.2 is importing.... ");      
       Node userDataNode = getUserDataRootNode();
       InputStream in = new FileInputStream(file.replace("file:", ""));
       Node root = userDataNode.getParent();
@@ -195,8 +206,7 @@ public class MigrationService implements Startable{
       }
       
     }catch (Exception e) {
-      e.printStackTrace();
-      System.out.println("Cannot import CS User data.");
+      log.error("Cannot import CS User data.", e);
       return false;
     }
     
@@ -206,7 +216,7 @@ public class MigrationService implements Startable{
   public boolean importSharedData(){
     try{
       String file = params_.getValueParam("sharedData2.1").getValue() ;
-      System.out.println("\n CS Shared data version 2.2 is importing.... ");      
+      log.info("\n CS Shared data version 2.2 is importing.... ");      
       Node sharedDataNode = getSharedDataRootNode();
       InputStream in = new FileInputStream(file.replace("file:", ""));
       Node root = sharedDataNode.getParent();
@@ -218,7 +228,7 @@ public class MigrationService implements Startable{
         root.getSession().save();
       }
     }catch (Exception e) {
-      System.out.println("Cannot import CS Shared data." + e);
+      log.error("Cannot import CS Shared data.", e);
       return false;
     }
     

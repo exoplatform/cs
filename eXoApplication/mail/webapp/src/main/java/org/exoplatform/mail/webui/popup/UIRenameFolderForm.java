@@ -28,6 +28,8 @@ import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UISelectAccount;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -57,6 +59,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
     }
 )
 public class UIRenameFolderForm extends UIForm implements UIPopupComponent {
+  private static final Log log = ExoLogger.getExoLogger(UIRenameFolderForm.class);
+  
   final public static String CUR_FOLDER_NAME = "curFolderName" ;
   final public static String NEW_FOLDER_NAME = "newFolderName" ;
   private String folderId;
@@ -111,7 +115,9 @@ public class UIRenameFolderForm extends UIForm implements UIPopupComponent {
       } catch (Exception e){
         uiApp.addMessage(new ApplicationMessage("UIRenameFolderForm.msg.error-rename-folder", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        e.printStackTrace() ;
+        if (log.isDebugEnabled()) {
+          log.debug("Exception in method execute of class SaveActionListener", e);
+        }
         return ;
       }
       uiMailPortlet.cancelAction();

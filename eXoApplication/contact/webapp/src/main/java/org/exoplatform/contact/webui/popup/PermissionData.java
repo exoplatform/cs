@@ -20,6 +20,8 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import org.exoplatform.contact.service.DataStorage;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.webui.application.WebuiRequestContext;
 
 /**
@@ -30,6 +32,8 @@ import org.exoplatform.webui.application.WebuiRequestContext;
  */
 
 public class PermissionData {
+  private static final Log log = ExoLogger.getExoLogger(PermissionData.class);
+  
   String viewPermission = null ;
   String editPermission = null ;
 
@@ -44,7 +48,9 @@ public class PermissionData {
         return res.getString("UIAddEditPermission.label.false");
       }
     } catch (MissingResourceException e) {      
-      e.printStackTrace() ;
+      if (log.isDebugEnabled()) {
+        log.debug("MissingResourceException in method getEditPermission", e);
+      }
       return editPermission ;
     }
   }

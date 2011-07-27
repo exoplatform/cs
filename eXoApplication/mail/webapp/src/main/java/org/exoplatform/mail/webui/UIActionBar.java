@@ -36,6 +36,8 @@ import org.exoplatform.mail.webui.popup.UIComposeForm;
 import org.exoplatform.mail.webui.popup.UIEventForm;
 import org.exoplatform.mail.webui.popup.UIMailSettings;
 import org.exoplatform.mail.webui.popup.UIMessageFilter;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -66,6 +68,7 @@ import org.exoplatform.webui.event.EventListener;
 )
 
 public class UIActionBar extends UIContainer {
+  private static final Log log = ExoLogger.getExoLogger(UIActionBar.class);
 
   public UIActionBar()throws Exception {}
 
@@ -103,7 +106,9 @@ public class UIActionBar extends UIContainer {
           context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.showStatusBox('checkmail-notice') ;");
           uiPortlet.findFirstComponentOfType(UIFetchingBar.class).setIsShown(true);
         } catch (Exception e) {
-          e.printStackTrace();
+          if (log.isDebugEnabled()) {
+            log.debug("Exception in method execute of class CheckMailActionListener", e);
+          }
           return;
         }
       }

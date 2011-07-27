@@ -40,6 +40,8 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.MembershipEventListener;
 
@@ -50,6 +52,8 @@ import org.exoplatform.services.organization.MembershipEventListener;
  * Nov 23, 2007 3:09:21 PM
  */
 public class NewMembershipListener extends MembershipEventListener {
+  private static final Log log = ExoLogger.getExoLogger(NewMembershipListener.class);
+  
   private ContactService       cservice_;
 
   private NodeHierarchyCreator nodeHierarchyCreator_;
@@ -103,7 +107,9 @@ public class NewMembershipListener extends MembershipEventListener {
         storage_.shareContact(userId, addressBookIds, to);
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Exception in method postSave", e);
+      }
     } finally {
       systemSession.close();
     }
@@ -158,7 +164,9 @@ public class NewMembershipListener extends MembershipEventListener {
     } catch (ReferentialIntegrityException e) {
 
     } catch (Exception ex) {
-      ex.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Exception in method preDelete", ex);
+      }
     } finally {
       systemSession.close();
     }

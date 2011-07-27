@@ -30,6 +30,8 @@ import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UIFormDateTimePicker;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -61,6 +63,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
 
 
 public class UIRepeatEventForm extends UIForm implements UIPopupComponent {
+  private static final Log log = ExoLogger.getExoLogger(UIRepeatEventForm.class);
 
   public final static String FIELD_REPEAT_TYPE = "repeatType";
   public final static String FIELD_INTERVAL = "interval";
@@ -203,7 +206,9 @@ public class UIRepeatEventForm extends UIForm implements UIPopupComponent {
         setEndDate(endDate, calSetting.getDateFormat());
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Exception occur when init the UIRepeatEventForm", e);
+      }
     }
   }
   

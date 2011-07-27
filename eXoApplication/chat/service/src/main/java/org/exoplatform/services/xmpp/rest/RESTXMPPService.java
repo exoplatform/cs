@@ -217,8 +217,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       jsResourceBundleBean.setScript(sb.toString());
       return Response.ok(jsResourceBundleBean, JSON_CONTENT_TYPE).cacheControl(cc).build();
     } catch (Exception e) {
-      // if (log.isDebugEnabled())
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to load js resource bundle", e);
+      }
       return Response.status(HTTPStatus.INTERNAL_ERROR).build();
     }
   }
@@ -258,7 +259,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         formBean = TransformUtils.changeFieldForm(formBean, "muc#roomconfig_roomdesc", values);
         return Response.ok(formBean, JSON_CONTENT_TYPE).cacheControl(cc).build();
       } catch (Exception e) {
-        /* e.printStackTrace(); */
+        if (log.isDebugEnabled()) {
+          log.debug("Create room fail", e);
+        }
         return Response.status(HTTPStatus.INTERNAL_ERROR).entity(rb.getString("chat.message.room.creation.error") + "\n" + e.getMessage()).build();
       }
     } else {
@@ -292,11 +295,10 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         return Response.status(HTTPStatus.INTERNAL_ERROR).entity(rb.getString("chat.message.room.xmppsession.null")).build();
       }
     } catch (XMPPException e) {
-      /*
-       * if (log.isDebugEnabled()) e.printStackTrace();
-       */
+      if (log.isDebugEnabled()) {
+        log.debug("Config room fail", e);
+      }
       XMPPError error = e.getXMPPError();
-
       return Response.status(error.getCode()).entity(rb.getString("chat.message.conference.configuration.error") + "\n" + error.getMessage()).build();
     }
   }
@@ -320,11 +322,10 @@ public class RESTXMPPService implements ResourceContainer, Startable {
 
         return Response.status(HTTPStatus.BAD_REQUEST).cacheControl(cc).build();
       } catch (XMPPException e) {
-        /*
-         * if (log.isDebugEnabled()) e.printStackTrace();
-         */
+        if (log.isDebugEnabled()) {
+          log.debug("Config room fail", e);
+        }
         XMPPError error = e.getXMPPError();
-
         return Response.status(error.getCode()).entity(rb.getString("chat.message.conference.configuration.error")).build();
       }
     }
@@ -354,8 +355,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
 
         return Response.status(HTTPStatus.BAD_REQUEST).cacheControl(cc).build();
       } catch (XMPPException e) {
-        if (log.isDebugEnabled())
-          e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Get room info fail", e);
+        }
         XMPPError error = e.getXMPPError();
         return Response.status(error.getCode()).entity(rb.getString("chat.message.conference.info.error") + "\n" + error.getMessage()).build();
       }
@@ -386,8 +388,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         bean.setTotalJoinedRooms(list.size());
         return Response.ok(bean, JSON_CONTENT_TYPE).cacheControl(cc).build();
       } catch (XMPPException e) {
-        if (log.isDebugEnabled())
-          e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Get joined room fail", e);
+        }
         XMPPError error = e.getXMPPError();
 
         return Response.status(error.getCode()).entity(rb.getString("chat.message.conference.info.error") + "\n" + error.getMessage()).build();
@@ -425,8 +428,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         infoBean.setHostedRooms(rooms);
         return Response.ok(infoBean, JSON_CONTENT_TYPE).cacheControl(cc).build();
       } catch (XMPPException e) {
-        if (log.isDebugEnabled())
-          e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Fail to get rooms", e);
+        }
         XMPPError error = e.getXMPPError();
         return Response.status(error.getCode()).entity(error.getMessage()).build();
       }
@@ -445,8 +449,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       try {
         return Response.ok(session.getRooms(from, to, sort), JSON_CONTENT_TYPE).cacheControl(cc).build();
       } catch (XMPPException e) {
-        if (log.isDebugEnabled())
-          e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Fail to get rooms", e);
+        }
         XMPPError error = e.getXMPPError();
         return Response.status(error.getCode()).entity(rb.getString("chat.message.conference.info.error") + "\n" + error.getMessage()).build();
       }
@@ -493,8 +498,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         else
           return Response.status(HTTPStatus.BAD_REQUEST).entity(rb.getString("chat.message.room.not.found")).cacheControl(cc).build();
       } catch (XMPPException e) {
-        if (log.isDebugEnabled())
-          e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Fail to detroy room", e);
+        }
         XMPPError error = e.getXMPPError();
         return Response.status(error.getCode()).entity(rb.getString("chat.message.room.destroy.error") + "\n" + error.getMessage()).build();
       }
@@ -542,8 +548,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
                        .cacheControl(cc)
                        .build();
       } catch (XMPPException e) {
-        // if (log.isDebugEnabled())
-        e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Fail to invite to", e);
+        }
         XMPPError error = e.getXMPPError();
         return Response.status(error.getCode()).entity(rb.getString("chat.message.conference.service.error")).build();
       }
@@ -570,8 +577,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         session.joinRoom(room, nickname, password);
         return Response.ok().cacheControl(cc).build();
       } catch (XMPPException e) {
-        if (log.isDebugEnabled())
-          e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Fail to join room", e);
+        }
         XMPPError error = e.getXMPPError();
         String em = new String();
         switch (error.getCode()) {
@@ -618,8 +626,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
           return Response.ok().cacheControl(cc).build();
         return Response.status(HTTPStatus.BAD_REQUEST).cacheControl(cc).build();
       } catch (XMPPException e) {
-        if (log.isDebugEnabled())
-          e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Fail to leave room", e);
+        }
         XMPPError error = e.getXMPPError();
         return Response.status(error.getCode()).entity(rb.getString("chat.message.default.error")).build();
       }
@@ -646,8 +655,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         session.changeNickname(room, nickname);
         return Response.ok().cacheControl(cc).build();
       } catch (XMPPException e) {
-        if (log.isDebugEnabled())
-          e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Fail to change the nick name", e);
+        }
         XMPPError error = e.getXMPPError();
         String em = new String();
         switch (error.getCode()) {
@@ -684,8 +694,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         session.changeAvailabilityStatusInRoom(room, status, mode);
         return Response.ok().cacheControl(cc).build();
       } catch (XMPPException e) {
-        if (log.isDebugEnabled())
-          e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Fail to change availability status in room", e);
+        }
         XMPPError error = e.getXMPPError();
 
         return Response.status(error.getCode()).entity(rb.getString("chat.message.default.error")).build();
@@ -713,8 +724,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         session.changeSubject(room, subject);
         return Response.ok().cacheControl(cc).build();
       } catch (XMPPException e) {
-        if (log.isDebugEnabled())
-          e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Fail to change the room's subject", e);
+        }
         XMPPError error = e.getXMPPError();
         /*
          * String em= new String(); switch (error.getCode()) { case 403: em = rb.getString("chat.message.subject.change.error"); break; default: em = rb.getString("chat.message.default.error"); break; }
@@ -746,8 +758,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         session.manageRole(room, nickname, role, command);
         return Response.ok().cacheControl(cc).build();
       } catch (XMPPException e) {
-        if (log.isDebugEnabled())
-          e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Fail to manage the role of room", e);
+        }
         XMPPError error = e.getXMPPError();
         String em = getErrorMessage(error);
         return Response.status(error.getCode()).entity(em).build();
@@ -780,8 +793,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         session.manageAffiliation(room, nickname, affiliation, command);
         return Response.ok().cacheControl(cc).build();
       } catch (XMPPException e) {
-        if (log.isDebugEnabled())
-          e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Fail to manage affilation of room", e);
+        }
         XMPPError error = e.getXMPPError();
         String em = getErrorMessage(error);
         return Response.status(error.getCode()).entity(em).build();
@@ -813,8 +827,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         session.kickUser(room, nickname, reason);
         return Response.ok().cacheControl(cc).build();
       } catch (XMPPException e) {
-        if (log.isDebugEnabled())
-          e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Fail to kick user from Room", e);
+        }
         XMPPError error = e.getXMPPError();
         String em = getErrorMessage(error);
         return Response.status(error.getCode()).entity(em).build();
@@ -864,8 +879,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         session.banUser(room, name, reason);
         return Response.ok().cacheControl(cc).build();
       } catch (XMPPException e) {
-        if (log.isDebugEnabled())
-          e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Fail to ban user from Room", e);
+        }
         XMPPError error = e.getXMPPError();
         String em = getErrorMessage(error);
         return Response.status(error.getCode()).entity(em).build();
@@ -920,8 +936,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         return Response.status(HTTPStatus.FORBIDDEN).entity(rb.getString("chat.message.room.xmppsession.null")).build();
       }
     } catch (Exception e) {
-      if (log.isDebugEnabled())
-        e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to add the transport", e);
+      }
       return Response.status(HTTPStatus.BAD_REQUEST).entity(e.getMessage()).build();
     }
   }
@@ -944,8 +961,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         return Response.status(HTTPStatus.INTERNAL_ERROR).build();
       }
     } catch (XMPPException e) {
-      if (log.isDebugEnabled())
-        e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to add the boddy to the roster", e);
+      }
       XMPPError error = e.getXMPPError();
       return Response.status(error.getCode()).entity(rb.getString("chat.message.default.error")).build();
     }
@@ -974,8 +992,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         return Response.status(HTTPStatus.INTERNAL_ERROR).build();
       }
     } catch (XMPPException e) {
-      if (log.isDebugEnabled())
-        e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to update the boddy", e);
+      }
       XMPPError error = e.getXMPPError();
       return Response.status(error.getCode()).entity(rb.getString("chat.message.default.error")).build();
     }
@@ -1045,8 +1064,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         return Response.status(HTTPStatus.INTERNAL_ERROR).entity(rb.getString("chat.message.room.xmppsession.null")).build();
       }
     } catch (XMPPException e) {
-      if (log.isDebugEnabled())
-        e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to clean the boddy list", e);
+      }
       XMPPError error = e.getXMPPError();
       return Response.status(error.getCode()).entity(rb.getString("chat.message.default.error")).build();
     }
@@ -1080,8 +1100,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       } else
         return Response.status(HTTPStatus.FORBIDDEN).build();
     } catch (Exception e) {
-      if (log.isDebugEnabled())
-        e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to get all history", e);
+      }
       return Response.status(HTTPStatus.INTERNAL_ERROR).build();
     }
   }
@@ -1123,8 +1144,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       } else
         return Response.status(HTTPStatus.FORBIDDEN).build();
     } catch (Exception e) {
-      if (log.isDebugEnabled())
-        e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to get history between date", e);
+      }
       return Response.status(HTTPStatus.INTERNAL_ERROR).build();
     }
   }
@@ -1164,8 +1186,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       } else
         return Response.status(HTTPStatus.FORBIDDEN).build();
     } catch (Exception e) {
-      if (log.isDebugEnabled())
-        e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to get history from date to now", e);
+      }
       return Response.status(HTTPStatus.INTERNAL_ERROR).build();
     }
   }
@@ -1187,8 +1210,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       } else
         return Response.status(HTTPStatus.FORBIDDEN).build();
     } catch (Exception e) {
-      if (log.isDebugEnabled())
-        e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to get interlocutors", e);
+      }
       return Response.status(HTTPStatus.INTERNAL_ERROR).build();
     }
   }
@@ -1224,8 +1248,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       } else
         return Response.status(HTTPStatus.FORBIDDEN).build();
     } catch (Exception e) {
-      if (log.isDebugEnabled())
-        e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to get all history file", e);
+      }
       return Response.status(HTTPStatus.INTERNAL_ERROR).build();
     }
   }
@@ -1271,8 +1296,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       } else
         return Response.status(HTTPStatus.FORBIDDEN).build();
     } catch (Exception e) {
-      if (log.isDebugEnabled())
-        e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to get history from date to now file", e);
+      }
       return Response.status(HTTPStatus.INTERNAL_ERROR).build();
     }
   }
@@ -1315,8 +1341,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       } else
         return Response.status(HTTPStatus.FORBIDDEN).build();
     } catch (Exception e) {
-      if (log.isDebugEnabled())
-        e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to get history between date file", e);
+      }
       return Response.status(HTTPStatus.INTERNAL_ERROR).build();
     }
   }
@@ -1336,7 +1363,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         }
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to write the history message list to stream", e);
+      }
     }
     InputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
     return inputStream;
@@ -1361,8 +1390,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       }
       return Response.status(HTTPStatus.FORBIDDEN).cacheControl(cc).entity(rb.getString("chat.message.xmppsession.null")).build();
     } catch (XMPPException e) {
-      if (log.isDebugEnabled())
-        e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to get search users form", e);
+      }
       XMPPError error = e.getXMPPError();
       return Response.status(error.getCode()).entity(rb.getString("chat.message.default.error")).build();
     }
@@ -1386,8 +1416,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       } else
         return Response.status(HTTPStatus.FORBIDDEN).build();
     } catch (Exception e) {
-      if (log.isDebugEnabled())
-        e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to get user info", e);
+      }
       return Response.status(HTTPStatus.BAD_REQUEST).entity(rb.getString("chat.message.default.error")).build();
     }
   }
@@ -1479,15 +1510,15 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       // initInfoBean.setMessages(session.getNotRecieveMessages());
       return Response.ok(initInfoBean, JSON_CONTENT_TYPE).cacheControl(cc).header("Set-Cookie", "userTicket=" + UUID.randomUUID().toString()).build();
     } catch (XMPPException e) {
-      /*
-       * if (log.isDebugEnabled()) e.printStackTrace();
-       */
+      if (log.isDebugEnabled()) {
+        log.debug("XMPPException when login", e);
+      }
       XMPPError error = e.getXMPPError();
       return Response.status(error.getCode()).entity(error.getMessage()).build();
     } catch (Exception e) {
-      /*
-       * if (log.isDebugEnabled()) e.printStackTrace();
-       */
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to login", e);
+      }
       return Response.status(HTTPStatus.INTERNAL_ERROR).entity("Thrown exception : " + e).build();
     }
   }
@@ -1516,8 +1547,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       }
       return Response.ok().cacheControl(cc).build();
     } catch (XMPPException e) {
-      if (log.isDebugEnabled())
-        e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to logout", e);
+      }
       XMPPError error = e.getXMPPError();
       return Response.status(error.getCode()).entity(error.getMessage()).build();
     } finally {
@@ -1543,8 +1575,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       } else
         return Response.status(HTTPStatus.FORBIDDEN).build();
     } catch (Exception e) {
-      if (log.isDebugEnabled())
-        e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to receive the message ", e);
+      }
       return Response.status(HTTPStatus.INTERNAL_ERROR).build();
     }
   }
@@ -1571,8 +1604,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         return Response.status(HTTPStatus.FORBIDDEN).entity(rb.getString("chat.message.xmppsession.null")).build();
       }
     } catch (XMPPException e) {
-      if (log.isDebugEnabled())
-        e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to remove the buddy", e);
+      }
       XMPPError error = e.getXMPPError();
       return Response.status(error.getCode()).entity(rb.getString("chat.message.default.error")).build();
     }
@@ -1613,8 +1647,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         return Response.status(HTTPStatus.FORBIDDEN).entity("sesion is null").build();
       }
     } catch (XMPPException e) {
-      if (log.isDebugEnabled())
-        e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to remove the transport", e);
+      }
       XMPPError error = e.getXMPPError();
       return Response.status(error.getCode()).entity(error.getMessage()).build();
     }
@@ -1649,8 +1684,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       }
       return Response.status(HTTPStatus.FORBIDDEN).entity("session null").build();
     } catch (XMPPException e) {
-      if (log.isDebugEnabled())
-        e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to search users", e);
+      }
       XMPPError error = e.getXMPPError();
       return Response.status(error.getCode()).entity(rb.getString("chat.message.default.error")).build();
     }
@@ -1706,8 +1742,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         return Response.status(HTTPStatus.INTERNAL_ERROR).build();
       }
     } catch (XMPPException e) {
-      if (log.isDebugEnabled())
-        e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to send MUC message", e);
+      }
       XMPPError error = e.getXMPPError();
       return Response.status(error.getCode()).entity(rb.getString("chat.message.default.error")).build();
     }
@@ -1825,8 +1862,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         return Response.status(HTTPStatus.INTERNAL_ERROR).entity(rb.getString("chat.message.room.xmppsession.null")).build();
       }
     } catch (Exception e) {
-      if (log.isDebugEnabled())
-        e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to accept file", e);
+      }
       return Response.status(HTTPStatus.BAD_REQUEST).entity(e.getMessage()).build();
     }
 

@@ -33,6 +33,8 @@ import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -55,6 +57,8 @@ import org.exoplatform.webui.event.EventListener;
     }
 )
 public class UIAccountList extends UIGrid  implements UIPopupComponent{
+  private static final Log log = ExoLogger.getExoLogger(UIAccountList.class);
+  
   private static String[] BEAN_FIELD = {"name", "email", "server","protocol"} ;
   private static String[] BEAN_ACTION = {"Delete"} ;
 
@@ -148,7 +152,9 @@ public class UIAccountList extends UIGrid  implements UIPopupComponent{
       } catch (Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIAccountList.msg.remove-accout-error", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        e.printStackTrace() ;
+        if (log.isDebugEnabled()) {
+          log.debug("Exception in method execute of class DeleteActionListener", e);
+        }
       }
     }
   }

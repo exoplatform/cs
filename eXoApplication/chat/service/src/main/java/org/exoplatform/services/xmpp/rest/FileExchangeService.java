@@ -131,8 +131,9 @@ public class FileExchangeService implements ResourceContainer {
           }
         }
       } catch (Exception e) {
-        if (log.isDebugEnabled())
-          e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Can not upload the file", e);
+        }
         return Response.status(HTTPStatus.BAD_REQUEST).entity(e.getMessage()).build();
       }
     }

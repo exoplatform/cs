@@ -57,7 +57,6 @@ import org.exoplatform.services.rest.resource.ResourceContainer;
 
 @Path("/organization/json/")
 public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbstractImpl implements ResourceContainer {
-
   protected final static String     JSON_CONTENT_TYPE = "application/json";
 
   private final static String       ASCENDING         = "ascending";
@@ -109,7 +108,7 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
         try {
           query.setToLoginDate(DateFormat.getDateTimeInstance().parse(toLoginDate));
         } catch (ParseException e) {
-          LOGGER.warn("Thrown exception : " + e);
+          LOGGER.warn("Exception in method findUsers", e);
         }
       }
       PageList pageList = organizationService_.getUserHandler().findUsers(query);
@@ -228,8 +227,7 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
       user_list.setTotalUser(totalUsers);
       return Response.ok(user_list, JSON_CONTENT_TYPE).cacheControl(cc).build();
     } catch (Exception e) {
-      e.printStackTrace();
-      LOGGER.error("Thrown exception : " + e);
+      LOGGER.error("Exception in method findUsersRange", e);
       return Response.status(HTTPStatus.INTERNAL_ERROR).entity("Thrown exception : " + e).build();
     }
   }

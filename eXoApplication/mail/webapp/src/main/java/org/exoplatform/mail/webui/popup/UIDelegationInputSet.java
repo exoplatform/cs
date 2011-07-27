@@ -20,6 +20,8 @@ import java.util.List;
 
 import org.exoplatform.mail.service.AccountDelegation;
 import org.exoplatform.mail.webui.UIFormInputWithActions;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
 
@@ -36,6 +38,7 @@ import org.exoplatform.webui.core.UIComponent;
 )
 
 public class UIDelegationInputSet extends UIFormInputWithActions {
+  private static final Log log = ExoLogger.getExoLogger(UIDelegationInputSet.class);
 
   private List<AccountDelegation> ad;
 
@@ -46,7 +49,9 @@ public class UIDelegationInputSet extends UIFormInputWithActions {
       UIDelegationAccountGrid grid = addChild(UIDelegationAccountGrid.class, null, null).setRendered(true);
       grid.updateGrid();
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Exception in constructor UIDelegationInputSet", e);
+      }
     }
   }
 

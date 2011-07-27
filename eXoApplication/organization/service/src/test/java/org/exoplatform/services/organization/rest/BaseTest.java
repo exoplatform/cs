@@ -63,7 +63,6 @@ public abstract class BaseTest extends AbstractKernelTest {
     requestHandler = (RequestHandlerImpl) container.getComponentInstanceOfType(RequestHandlerImpl.class);
     ProviderBinder.setInstance(new ProviderBinder());
     providers = ProviderBinder.getInstance();
-    // System.out.println("##########################"+providers);
     ApplicationContextImpl.setCurrent(new ApplicationContextImpl(null, null, providers));
     binder.clear();
   }

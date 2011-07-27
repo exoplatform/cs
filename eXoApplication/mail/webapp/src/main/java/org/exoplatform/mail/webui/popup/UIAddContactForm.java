@@ -42,6 +42,8 @@ import org.exoplatform.cs.common.webui.UIPopupComponent;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -53,8 +55,8 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.core.model.SelectOption;
 import org.exoplatform.webui.core.model.SelectOptionGroup;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormRadioBoxInput;
@@ -75,6 +77,8 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
     @EventConfig(listeners = UIAddContactForm.SaveActionListener.class),
     @EventConfig(listeners = UIAddContactForm.CancelActionListener.class, phase = Phase.DECODE) })
 public class UIAddContactForm extends UIForm implements UIPopupComponent {
+  private static final Log log = ExoLogger.getExoLogger(UIAddContactForm.class);
+  
   public static final String       SELECT_GROUP     = "select-group".intern();
 
   public static final String       NAME             = "name".intern();
@@ -528,7 +532,9 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
                .addUIComponentToUpdateByAjax(uiContact.getAncestorOfType(UIPopupAction.class));
         }
       } catch (Exception e) {
-        e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Exception in method execute of class SaveActionListener", e);
+        }
       }
       List<String> tempContact = new ArrayList<String>();
       tempContact.add(Utils.contactTempId);

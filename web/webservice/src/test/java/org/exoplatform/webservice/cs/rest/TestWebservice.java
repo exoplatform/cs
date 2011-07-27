@@ -171,7 +171,6 @@ public class TestWebservice extends AbstractResourceTest {
     assertEquals(HTTPStatus.OK, response.getStatus());
 
     response = service("GET", event.getLocation(), baseURI, h, null, writer);
-    //System.out.println("\n\n " + response.getContentType());
     //assertEquals(HTTPStatus.OK, response.getStatus());
 
     //assertEquals(MediaType.APPLICATION_OCTET_STREAM_TYPE, response.getContentType());
@@ -179,40 +178,17 @@ public class TestWebservice extends AbstractResourceTest {
     stop();
   }
 
+  public void testUpcomingEvent() throws Exception {
+    MultivaluedMap<String, String> h = new MultivaluedMapImpl();
+    String username = "root";
+    h.putSingle("username", username);
+    // data correct
+    SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
+    String eventURI = "/private/cs/calendar/getissues/" + username + "/20100624/" + CalendarEvent.TYPE_EVENT;
+    ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
+    ContainerResponse response = service("GET", eventURI, baseURI, h, null, writer);
 
-  public void testUpcomingEvent() {
-
-    try {
-
-      MultivaluedMap<String, String> h = new MultivaluedMapImpl();
-      String username = "root";
-      h.putSingle("username", username);
-      //TODO data correct 
-      SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
-      String eventURI = "/private/cs/calendar/getissues/" + username + "/20100624/" + CalendarEvent.TYPE_EVENT;
-      ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
-      ContainerResponse response = service("GET", eventURI, baseURI, h, null, writer);
-
-      response = service("GET", eventURI, baseURI, h, null, writer);
-      //assertNotNull(response);
-
-      //assertEquals(HTTPStatus.NO_CONTENT, response.getStatus()) ;
-
-      //TODO wrong data
-      /*
-      eventURI = "/private/cs/calendar/upcoming/" + username + "/"+"text"+"/"  + CalendarEvent.TYPE_EVENT;
-
-      response = service("GET", eventURI, baseURI, h, null, writer);
-      assertNotNull(response);
-
-      assertEquals(HTTPStatus.INTERNAL_ERROR, response.getStatus()) ;
-
-       */
-
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-
+    response = service("GET", eventURI, baseURI, h, null, writer);
   }
   
   public void testUpdateStatus() throws Exception {

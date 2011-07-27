@@ -283,7 +283,9 @@ public class MailServiceImpl implements MailService, Startable {
         imapFolder = (IMAPFolder) connector.createFolder(folder);
         saveFolder(userName, accountId, null, imapFolder);
       } catch (Exception e) {
-        e.printStackTrace();
+        if (logger.isDebugEnabled()) {
+          logger.debug("Exception in method saveFolder", e);
+        }
         return;
       } finally {
         if (imapFolder != null && imapFolder.isOpen()) {
@@ -781,10 +783,9 @@ public class MailServiceImpl implements MailService, Startable {
         send(session, transport, msg);
         i++;
       } catch (Exception e) {
-        logger.error(" #### Info : send fail at message " + i + " \n");
+        logger.error(" #### Info : send fail at message " + i + " \n", e);
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
-        e.printStackTrace(pw);
         StringBuffer sb = sw.getBuffer();
         logger.error(sb.toString());
       }
@@ -933,7 +934,9 @@ public class MailServiceImpl implements MailService, Startable {
       if (isDelegatedAccount(userName, accountId))
         accoutOwner = delegateAcc.getDelegateFrom();
     } catch (Exception e) {
-      e.printStackTrace();
+      if (logger.isDebugEnabled()) {
+        logger.debug("Exception in method stopCheckMail", e);
+      }
     }
 
     CheckingInfo checkingInfo = getCheckingInfo(accoutOwner, accountId);
@@ -1200,7 +1203,9 @@ public class MailServiceImpl implements MailService, Startable {
         // checkingLog_.put(key, info);
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      if (logger.isDebugEnabled()) {
+        logger.debug("Exception in method synchImapFolders", e);
+      }
     } finally {
       if (store != null && store.isConnected()) {
         store.close();
@@ -1405,10 +1410,9 @@ public class MailServiceImpl implements MailService, Startable {
         return null;
       } catch (Exception e) {
         if (logger.isDebugEnabled())
-          logger.debug("Exception while connecting to server : " + e.getMessage());
+          logger.debug("Exception while connecting to server : ", e);
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
-        e.printStackTrace(pw);
         StringBuffer sb = sw.getBuffer();
         logger.error(sb.toString());
         if (info != null) {
@@ -1853,7 +1857,9 @@ public class MailServiceImpl implements MailService, Startable {
                 eXoFolder.setLastStartCheckingTime(lastFromDate);
               }
             } catch (Exception e) {
-              e.printStackTrace();
+              if (logger.isDebugEnabled()) {
+                logger.debug("Exception in method synchImapMessage", e);
+              }
               i++;
               continue;
             }
@@ -2865,7 +2871,6 @@ public class MailServiceImpl implements MailService, Startable {
 
   @Override
   public List<String> getListOfMessageIds(String username, MessageFilter filter) throws Exception {
-    // TODO Auto-generated method stub
     return storage_.getListOfMessageIds(username, filter);
   }
 }

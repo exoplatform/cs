@@ -24,14 +24,16 @@ import org.exoplatform.cs.common.webui.UIPopupAction;
 import org.exoplatform.mail.webui.CalendarUtils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
@@ -54,6 +56,8 @@ import org.exoplatform.webui.form.validator.SpecialCharacterValidator;
     }
 )
 public class UIEventCategoryForm extends UIForm {
+  private static final Log log = ExoLogger.getExoLogger(UIEventCategoryForm.class);
+  
   final private static String EVENT_CATEGORY_NAME = "eventCategoryName" ; 
   final private static String DESCRIPTION = "description" ;
   private boolean isAddNew_ = true ;
@@ -138,7 +142,9 @@ public class UIEventCategoryForm extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ; 
         return ;
       } catch (Exception e) {
-        e.printStackTrace() ;        
+        if (log.isDebugEnabled()) {
+          log.debug("Exception in method execute of class SaveActionListener", e);
+        }        
       }
     }
   }

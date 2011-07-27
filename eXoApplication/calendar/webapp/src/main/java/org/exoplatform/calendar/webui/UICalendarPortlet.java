@@ -273,7 +273,9 @@ public class UICalendarPortlet extends UIPortletApplication {
       processInvitationURL(context);
     }
     catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Invitation url is not valid", e);
+      }
     }
     super.processRender(app, context);
   }

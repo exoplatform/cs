@@ -28,6 +28,8 @@ import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.webui.popup.UIAdvancedSearchForm;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -54,6 +56,8 @@ import org.exoplatform.webui.form.validator.SpecialCharacterValidator;
     }
 )
 public class UISearchForm extends UIForm {
+  private static final Log log = ExoLogger.getExoLogger(UISearchForm.class);
+  
   final static  private String FIELD_SEARCHVALUE = "value" ;
 
   public UISearchForm() throws Exception {
@@ -131,7 +135,9 @@ public class UISearchForm extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(calendarViewContainer) ;
       } catch (Exception e) {
-        e.printStackTrace() ;
+        if (log.isDebugEnabled()) {
+          log.debug("Fail to search the calendar", e);
+        }
         return;
       }
     }

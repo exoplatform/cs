@@ -308,7 +308,9 @@ public class ICalendarImportExport implements CalendarImportExport {
     try {
       output.output(calendar, bout);
     } catch (ValidationException e) {
-      e.printStackTrace();
+      if (logger.isDebugEnabled()) {
+        logger.debug("Validate error", e);
+      }
       return null;
     }
     return bout;
@@ -344,7 +346,9 @@ public class ICalendarImportExport implements CalendarImportExport {
     try {
       output.output(calendar, bout);
     } catch (ValidationException e) {
-      e.printStackTrace();
+      if (logger.isDebugEnabled()) {
+        logger.debug("Validate error", e);
+      }
       return null;
     }
     return bout;
@@ -383,7 +387,9 @@ public class ICalendarImportExport implements CalendarImportExport {
           try {
             exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())]);
           } catch (Exception e) {
-            e.printStackTrace();
+            if (logger.isDebugEnabled()) {
+              logger.debug("Fail to setPriority to exoEvent", e);
+            }
           }
         }
         try {
@@ -405,7 +411,9 @@ public class ICalendarImportExport implements CalendarImportExport {
             }
           }
         } catch (Exception e) {
-          e.printStackTrace();
+          if (logger.isDebugEnabled()) {
+            logger.debug("Exception in method getEventObjects", e);
+          }
         }
         exoEvent.setPrivate(true);
         PropertyList attendees = event.getProperties(Property.ATTENDEE);
@@ -688,7 +696,9 @@ public class ICalendarImportExport implements CalendarImportExport {
     try {
       output.output(calendar, bout);
     } catch (ValidationException e) {
-      e.printStackTrace();
+      if (logger.isDebugEnabled()) {
+        logger.debug("Validate error", e);
+      }
       return null;
     }
     return bout;

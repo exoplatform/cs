@@ -51,6 +51,8 @@ import org.exoplatform.mail.webui.UIFormComboBox;
 import org.exoplatform.mail.webui.UIFormDateTimePicker;
 import org.exoplatform.mail.webui.popup.UIAddressForm.ContactData;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -63,8 +65,8 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.core.model.SelectOption;
 import org.exoplatform.webui.core.model.SelectOptionGroup;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormSelectBoxWithGroups;
@@ -95,6 +97,8 @@ import org.exoplatform.webui.form.UIFormTabPane;
                  }
 )
 public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Selector{
+  private static final Log log = ExoLogger.getExoLogger(UIEventForm.class);
+  
   final public static String TAB_EVENTDETAIL = "eventDetail".intern() ;
   final public static String TAB_EVENTREMINDER = "eventReminder".intern() ;
   final public static String TAB_EVENTSHARE = "eventShare".intern() ;
@@ -310,40 +314,21 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
     try {
       from = getEventFromDate() ;
     } catch (Exception e) {
-      e.printStackTrace() ;
+      if (log.isDebugEnabled()) {
+        log.debug("Exception when call method getEventFromDate", e);
+      }
       errorMsg_ = "UIEventForm.msg.event-fromdate-notvalid" ;
       return false ;
     }
     try {
       to = getEventToDate() ;
     } catch (Exception e) {
-      e.printStackTrace() ;
+      if (log.isDebugEnabled()) {
+        log.debug("Exception when call method getEventToDate", e);
+      }
       errorMsg_ =  "UIEventForm.msg.event-todate-notvalid" ;
       return false ;
     }
-    /*if(!getEventAllDate()) {
-      if(CalendarUtils.isEmpty(getEventToDateValue())){
-        errorMsg_ = "UIEventForm.msg.event-todate-required" ;
-        return false ;
-      } 
-      try {
-        getEventToDate() ;
-      } catch (Exception e) {
-        e.printStackTrace() ;
-        errorMsg_ =  "UIEventForm.msg.event-todate-notvalid" ;
-        return false ;
-      }
-      try {
-        if(getEventFromDate().after(getEventToDate()) || getEventFromDate().equals(getEventToDate())){
-          errorMsg_ = "UIEventForm.msg.event-date-time-logic" ;
-          return false ;
-        }
-      } catch (Exception e) {
-        e.printStackTrace() ;
-        errorMsg_ = "UIEventForm.msg.event-date-time-getvalue" ;
-        return false ;
-      }      
-    }*/
     if(from.after(to) || from.equals(to)){
       errorMsg_ = "UIEventForm.msg.event-date-time-logic" ;
       return false ;
@@ -539,13 +524,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
           setEmailReminder(true) ;
           setEmailAddress(r.getEmailAddress()) ;
           setEmailReminderTime(String.valueOf(r.getAlarmBefore())) ; 
-        }/*else if(Reminder.TYPE_POPUP.equals(r.getReminderType())) {
-        setPopupReminder(true) ;
-        setPopupReminderTime(String.valueOf(r.getAlarmBefore())) ;
-        //setPopupReminderSnooze(r.getSnooze()) ;
-      } else {
-        System.out.println("\n\n reminder not supported");
-      }*/
+        }
       }
   }
   protected String getEmailRemindBefore() {
@@ -821,7 +800,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
         }catch (Exception e) {
           uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.add-event-error", null));
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          e.printStackTrace() ;
+          if (log.isDebugEnabled()) {
+            log.debug("Exception in method execute of class SaveActionListener", e);
+          }
           return ;
         }
       } 

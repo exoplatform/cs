@@ -25,6 +25,8 @@ import javax.ws.rs.core.Response;
 
 import org.exoplatform.common.http.HTTPStatus;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.rest.resource.ResourceContainer;
 import org.exoplatform.services.security.jaas.BasicCallbackHandler;
 
@@ -34,6 +36,7 @@ import org.exoplatform.services.security.jaas.BasicCallbackHandler;
  */
 @Path("/organization/authenticate")
 public class RESTAuthenticator implements ResourceContainer {
+  private static final Log log = ExoLogger.getExoLogger(RESTAuthenticator.class);
 
   public RESTAuthenticator() {
   }
@@ -53,7 +56,9 @@ public class RESTAuthenticator implements ResourceContainer {
       loginContext.logout();
       return Response.ok().build();
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Exception in method authenticate", e);
+      }
       return Response.status(HTTPStatus.FORBIDDEN).entity(e.getMessage()).build();
     }
   }

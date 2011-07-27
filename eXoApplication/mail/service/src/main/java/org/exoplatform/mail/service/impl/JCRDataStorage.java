@@ -670,7 +670,9 @@ public class JCRDataStorage implements DataStorage {
             msgNode = moveReference(accountId, msgNode);
           msgNode.save();
         } catch (Exception e) {
-          e.printStackTrace();
+          if (logger.isDebugEnabled()) {
+            logger.debug("Exception in method moveMessages", e);
+          }
         }
       }
       try {
@@ -679,7 +681,9 @@ public class JCRDataStorage implements DataStorage {
         if (destFolderNode != null)
           destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (destFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + inUnreadNumber));
       } catch (Exception e) {
-        e.printStackTrace();
+        if (logger.isDebugEnabled()) {
+          logger.debug("Exception in method moveMessages", e);
+        }
       }
 
       try {
@@ -688,7 +692,9 @@ public class JCRDataStorage implements DataStorage {
         if (destFolderNode != null)
           destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (destFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + inTotalMessage));
       } catch (Exception e) {
-        e.printStackTrace();
+        if (logger.isDebugEnabled()) {
+          logger.debug("Exception in method moveMessages", e);
+        }
       }
       if (currentFolderNode != null)
         currentFolderNode.save();
@@ -1015,7 +1021,9 @@ public class JCRDataStorage implements DataStorage {
       }
 
     } catch (Exception e) {
-      e.printStackTrace();
+      if (logger.isDebugEnabled()) {
+        logger.debug("Exception in method saveMessages", e);
+      }
     } finally {
       closeSessionProvider(sProvider);
     }
@@ -1034,31 +1042,6 @@ public class JCRDataStorage implements DataStorage {
   public boolean saveMessage(String username, String accId, long msgUID, javax.mail.Message msg, String folderIds[], List<String> tagList, SpamFilter spamFilter, Info infoObj, ContinuationService continuation, boolean saveTotal, String currentUserName) throws Exception {
     long[] messageUID = { msgUID };
     return saveMessage(username, accId, messageUID, msg, folderIds, tagList, spamFilter, infoObj, continuation, saveTotal, currentUserName);
-  }
-
-  /**
-   *return true if the message has not attachment, false if else
-   **/
-  @Deprecated
-  private boolean checkHasAttachment(javax.mail.Message message) {
-    try {
-      Object obj = message.getContent();
-      if (obj instanceof Multipart) {
-        Multipart multipart = (Multipart) obj;
-        int partCount = multipart.getCount();
-        for (int i = 0; i < partCount; i++) {
-          BodyPart part = multipart.getBodyPart(i);
-          String disposition = part.getDisposition();
-          if (disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT) && !hasContentId(part))
-            return true;
-        }
-      }
-    } catch (IOException e) {
-      logger.debug("IOException: " + e.getMessage());
-    } catch (MessagingException e) {
-      logger.debug("MessagingException: " + e.getMessage());
-    }
-    return false;
   }
 
   @SuppressWarnings("unchecked")
@@ -2927,32 +2910,6 @@ public class JCRDataStorage implements DataStorage {
     } catch (Exception e) {
       return null;
     }
-  }
-
-  /**
-   * checking a Part whether has IMG tag in body
-   * 
-   * @return {@link Boolean}
-   * @throws IOException
-   */
-  // TODO fix cs-4403
-  private boolean hasIMGTag(Part part) throws Exception {
-    try {
-      if (part.isMimeType("text/html")) {
-        String body = (String) part.getContent();
-        if (body != null && body.indexOf("<img") > -1) {
-          String imgtag = body.substring(body.indexOf("<img"), body.length());
-          if (imgtag.length() > 0)
-            imgtag = imgtag.substring(0, imgtag.indexOf(">") + 1);
-          if (body != null && body.contains("<img src=") || imgtag.contains("src"))
-            return true;
-        }
-      }
-    } catch (MessagingException e) {
-      if (logger.isDebugEnabled())
-        logger.debug("Cannot analyses a text/html MimeType", e);
-    }
-    return false;
   }
 
   /**

@@ -205,7 +205,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     try{
       confirm_msg = getLabel("confirm-msg") ;
     } catch (Exception e) {
-      e.printStackTrace() ;
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to get label: " + confirm_msg, e);
+      }
     }
     UIEventDetailTab eventDetailTab =  new UIEventDetailTab(TAB_EVENTDETAIL) ;
     addChild(eventDetailTab) ;
@@ -480,14 +482,18 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     try {
       from = getEventFromDate(dateFormat, timeFormat) ;
     } catch (Exception e) {
-      e.printStackTrace() ;
+      if (log.isDebugEnabled()) {
+        log.debug("Faile to get event from date", e);
+      }
       errorMsg_ = getId() +  ".msg.event-fromdate-notvalid" ;
       return false ;
     }
     try {
       to = getEventToDate(dateFormat, timeFormat) ;
     } catch (Exception e) {
-      e.printStackTrace() ;
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to get event to date", e);
+      }
       errorMsg_ = getId() +  ".msg.event-fromdate-notvalid" ;
       return false ;
     }
@@ -751,7 +757,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       String time =  eventReminderTab.getUIFormSelectBox(UIEventReminderTab.POPUP_REPEAT_INTERVAL).getValue() ;
       return Long.parseLong(time) ;
     } catch (Exception e){
-      e.printStackTrace() ;
+      if (log.isDebugEnabled()) {
+        log.debug("Can't get time from POPUP_REPEAT_INTERVAL", e);
+      }
     }
     return 0 ;
   } 
@@ -1149,7 +1157,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
           attachments.add(bf) ;
         }
       } catch (Exception e) {
-        e.printStackTrace() ;
+        if (log.isDebugEnabled()) {
+          log.debug("Fail to create attachment list", e);
+        }
       }
       for (String s : sbAddress.toString().split(CalendarUtils.COMMA)) {
         Message message = new Message() ;
@@ -1175,7 +1185,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         attachmentCal.setMimeType("text/calendar") ;
       } catch (Exception e) {
         attachmentCal = null;
-        e.printStackTrace() ;
+        if (log.isDebugEnabled()) {
+          log.debug("Fail to create attachment", e);
+        }
       }     
       for (String s : sbAddress.toString().split(CalendarUtils.COMMA)) {
         if (CalendarUtils.isEmpty(s)) continue;
@@ -1506,7 +1518,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
           }catch (Exception e) {
             uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.add-event-error", null));
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-            e.printStackTrace() ;
+            if (log.isDebugEnabled()) {
+              log.debug("Fail to add the event", e);
+            }
           }
           if(calendarEvent != null && uiForm.isSendMail()) {
             Account acc = CalendarUtils.getMailService().getDefaultAccount(username);
@@ -1516,7 +1530,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
             } catch (Exception e) {
               uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.error-send-email", null));
               event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-              e.printStackTrace() ;
+              if (log.isDebugEnabled()) {
+                log.debug("Fail to send mail ivitation to the participant", e);
+              }
             }
           }
           //TODO cs-764
@@ -1541,7 +1557,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
                   }catch (Exception e) {
                     uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.error-send-email", null));
                     event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-                    e.printStackTrace() ;
+                    if (log.isDebugEnabled()) {
+                      log.debug("Fail to send mail ivitation to the participant", e);
+                    }
                   }                  
                   Map<String, String> parsUpdated = new HashMap<String, String>() ;
                   for(String parSt : calendarEvent.getParticipantStatus()) {
@@ -1579,7 +1597,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
                     }catch (Exception e) {
                       uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.error-send-email", null));
                       event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-                      e.printStackTrace() ;
+                      if (log.isDebugEnabled()) {
+                        log.debug("Fail to send mail ivitation to the participant", e);
+                      }
                     }                    
                     Map<String, String> parsUpdated = new HashMap<String, String>() ;
                     for(String parSt : calendarEvent.getParticipantStatus()) {

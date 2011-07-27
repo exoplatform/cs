@@ -45,13 +45,15 @@ import org.exoplatform.contact.webui.popup.UIComposeForm;
 import org.exoplatform.contact.webui.popup.UIContactForm;
 import org.exoplatform.contact.webui.popup.UIExportAddressBookForm;
 import org.exoplatform.contact.webui.popup.UIExportForm;
+import org.exoplatform.contact.webui.popup.UIExportForm.ContactData;
 import org.exoplatform.contact.webui.popup.UIImportForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UIPopupContainer;
 import org.exoplatform.contact.webui.popup.UIPublicAddressPermission;
-import org.exoplatform.contact.webui.popup.UIExportForm.ContactData;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.service.Account;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -93,6 +95,8 @@ import org.exoplatform.webui.event.EventListener;
 )
     
 public class UIAddressBooks extends UIComponent {
+  private static final Log log = ExoLogger.getExoLogger(UIAddressBooks.class);
+  
   private String selectedGroup = null;
   private Map<String, String> privateAddressBookMap_ = new LinkedHashMap<String, String>() ;
   private Map<String, SharedAddressBook> sharedAddressBookMap_ = new LinkedHashMap<String, SharedAddressBook>() ;
@@ -100,8 +104,7 @@ public class UIAddressBooks extends UIComponent {
   private String copyAddress = null ;
   public UIAddressBooks() throws Exception { }
   
-  @SuppressWarnings("unused")
-  private boolean hasSharedContacts() throws Exception {
+  protected boolean hasSharedContacts() throws Exception {
     if (ContactUtils.getContactService().getSharedContacts( ContactUtils.getCurrentUser()).getAvailable() > 0) return true ;
     return false ;
   }
@@ -126,7 +129,9 @@ public class UIAddressBooks extends UIComponent {
           ContactUtils.getContactService().saveAddressBook(
               ContactUtils.getCurrentUser(), group, false) ;
         } catch (MissingResourceException e) {      
-          e.printStackTrace() ;
+          if (log.isDebugEnabled()) {
+            log.debug("MissingResourceException in method getGroups", e);
+          }
         }
       } else if (group.getId().equals(NewUserListener.ADDRESSESGROUP + ContactUtils.getCurrentUser()) &&  groupName.equals(NewUserListener.ADDRESSESGROUPNAME)) {
         WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
@@ -137,7 +142,9 @@ public class UIAddressBooks extends UIComponent {
           ContactUtils.getContactService().saveAddressBook(
               ContactUtils.getCurrentUser(), group, false) ;
         } catch (MissingResourceException e) {      
-          e.printStackTrace() ;
+          if (log.isDebugEnabled()) {
+            log.debug("MissingResourceException in method getGroups", e);
+          }
         }
       }
       privateAddressBookMap_.put(group.getId(), groupName) ; 

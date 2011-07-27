@@ -23,6 +23,8 @@ import org.exoplatform.mail.service.CheckingInfo;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.StatusInfo;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -50,6 +52,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
   }
 )
 public class UIFetchingBar extends UIForm {
+  private static final Log log = ExoLogger.getExoLogger(UIFetchingBar.class);
   
   private boolean isShown_ = false;
   private MailService mailService ;
@@ -69,7 +72,9 @@ public class UIFetchingBar extends UIForm {
         statusInfo = ckInfo.getStatus();        
       }
     } catch (Exception e) {
-       e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Exception in method loadStatusInfo", e);
+      }
     }
     return statusInfo;
   }

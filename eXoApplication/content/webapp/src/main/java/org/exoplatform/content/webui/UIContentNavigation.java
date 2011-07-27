@@ -69,7 +69,7 @@ public class UIContentNavigation extends UIContainer {
   void save(ContentNode node) throws Exception {
     ContentDAO service = getApplicationComponent(ContentDAO.class) ; 
     ContentNode tempNode = selectedNode_;
-    //TODO: Tung.Pham modified
+    // Tung.Pham modified
     //----------------------------------------
     //setSelectedNode(node.getId());
     parentNode_ = null ;
@@ -88,7 +88,7 @@ public class UIContentNavigation extends UIContainer {
       if(tempNode == null) nav_.addNode(node); else tempNode.addChild(node);      
     }
 
-    //TODO: Tung.Pham modified
+    //Tung.Pham modified
     //----------------------------------------
     //selectedNode_ = node;
     service.save(nav_);
@@ -112,7 +112,7 @@ public class UIContentNavigation extends UIContainer {
     UIDetailContent uiDetail = uiWorkingArea.getChild(UIDetailContent.class) ;
     uiDetail.setContentNode(selectedNode_);
     uiWorkingArea.setRenderedChild(UIDetailContent.class) ;
-    //TODO: Tung.Pham added
+    // Tung.Pham added
     //----------------------------
     UIBreadcumbs uiBreadcumbs = uiDetail.getChild(UIBreadcumbs.class) ;
     uiBreadcumbs.setTemplate("app:/groovy/rssreader/webui/UIBreadcumbs.gtmpl");
@@ -123,7 +123,7 @@ public class UIContentNavigation extends UIContainer {
     //----------------------------
   }
   
-  //TODO: Tung.Pham added
+  // Tung.Pham added
   private List<LocalPath> getPath(List<LocalPath> pathList, String nodeId) {
     if(pathList == null) pathList = new ArrayList<LocalPath>() ;
     if(nodeId == null) return pathList ;

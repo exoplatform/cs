@@ -37,6 +37,8 @@ import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -44,8 +46,8 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -74,6 +76,8 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
 )
 
 public class UIAccountSetting extends UIFormTabPane { 
+  private static final Log log = ExoLogger.getExoLogger(UIAccountSetting.class);
+  
   public static final String TAB_IDENTITY_SETTINGS = "identitySettings";
   public static final String TAB_INCOMING = "incoming";
   public static final String TAB_OUTGOING = "outgoing";
@@ -514,7 +518,9 @@ public class UIAccountSetting extends UIFormTabPane {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgList.getAncestorOfType(UIMessageArea.class)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectAccount.getAncestorOfType(UINavigationContainer.class)) ;
       } catch(Exception e) {
-        e.printStackTrace() ;
+        if (log.isDebugEnabled()) {
+          log.debug("Exception in method execute of class DeleteAccountActionListener", e);
+        }
       } 
     }
   }
@@ -632,7 +638,9 @@ public class UIAccountSetting extends UIFormTabPane {
       } catch(Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.edit-acc-unsuccessfully", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        e.printStackTrace() ;
+        if (log.isDebugEnabled()) {
+          log.debug("Exception in method execute of class SaveActionListener", e);
+        }
         return ;
       }
     }

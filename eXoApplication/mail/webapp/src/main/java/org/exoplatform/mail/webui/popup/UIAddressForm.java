@@ -40,6 +40,8 @@ import org.exoplatform.cs.common.webui.UIPopupComponent;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.webui.CalendarUtils;
 import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -51,8 +53,8 @@ import org.exoplatform.webui.core.model.SelectItem;
 import org.exoplatform.webui.core.model.SelectOption;
 import org.exoplatform.webui.core.model.SelectOptionGroup;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBoxWithGroups;
@@ -70,6 +72,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
     @EventConfig(listeners = UIAddressForm.ShowPageActionListener.class, phase = Phase.DECODE),
     @EventConfig(listeners = UIAddressForm.CancelActionListener.class, phase = Phase.DECODE) })
 public class UIAddressForm extends UIForm implements UIPopupComponent {
+  private static final Log log = ExoLogger.getExoLogger(UIAddressForm.class);
+  
   public static final String                CONTACT_SEARCH     = "contact-search".intern();
 
   public static final String                CONTACT_GROUP      = "contact-group".intern();
@@ -478,7 +482,9 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
             String[] values = ((UIFormSelectBoxWithGroups) uiAddressForm.getChildById(UIAddressForm.CONTACT_GROUP)).getSelectedValues();
             value2 = values[0];
           } catch (Exception e) {
-            e.printStackTrace();
+            if (log.isDebugEnabled()) {
+              log.debug("Exception in method execute of class ReplaceActionListener", e);
+            }
           }
         }
 
@@ -624,7 +630,9 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
             String[] values = ((UIFormSelectBoxWithGroups) uiAddressForm.getChildById(UIAddressForm.CONTACT_GROUP)).getSelectedValues();
             value2 = values[0];
           } catch (Exception e) {
-            e.printStackTrace();
+            if (log.isDebugEnabled()) {
+              log.debug("Exception in method execute of class AddActionListener", e);
+            }
           }
           String gottenAddress = uiAddressForm.addressBooksMap.get(value1);
           if (gottenAddress != null) {

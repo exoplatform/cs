@@ -115,7 +115,7 @@ public class TestConnectorService extends BaseMailTestCase {
       // assertEquals(true, connector.deleteFolder(folder));
       // imapFolder.delete(true);
     } else {
-      System.out.println("\n\n connector is null, check configuration !");
+      log.warn("\n\n connector is null, check configuration !");
     }
   }
 
@@ -148,7 +148,7 @@ public class TestConnectorService extends BaseMailTestCase {
       // assertEquals(true, connector.deleteFolder(parentFolder));
       // imapParentFolder.delete(true);
     } else {
-      System.out.println("\n\n connector is null, check configuration !");
+      log.warn("\n\n connector is null, check configuration !");
     }
   }
 
@@ -172,7 +172,7 @@ public class TestConnectorService extends BaseMailTestCase {
       // assertEquals(true, connector.deleteFolder(renamedFolder));
       // imapFolder.delete(true);
     } else {
-      System.out.println("\n\n connector is null, check configuration !");
+      log.warn("\n\n connector is null, check configuration !");
     }
   }
 
@@ -180,13 +180,11 @@ public class TestConnectorService extends BaseMailTestCase {
     try {
       return new ImapConnector(acc, new MailSSLSocketFactory());
     } catch (UnknownHostException e) {
-      e.printStackTrace();
-      System.out.println("\n\n check your net work connection or account configuration");
+      log.error("\n\n check your net work connection or account configuration", e);
     } catch (AuthenticationFailedException e) {
-      e.printStackTrace();
-      System.out.println("\n\n check your account configuration or server mail setting");
+      log.error("\n\n check your account configuration or server mail setting", e);
     } catch (Exception e) {
-      e.printStackTrace();
+      log.error("Fail to get the connector", e);
     }
     return null;
   }
@@ -212,7 +210,7 @@ public class TestConnectorService extends BaseMailTestCase {
       // assertEquals(true, connector.deleteFolder(folder));
       // imapFolder.delete(true);
     } else {
-      System.out.println("\n\n connector is null, check configuration !");
+      log.warn("\n\n connector is null, check configuration !");
     }
   }
 
@@ -237,7 +235,7 @@ public class TestConnectorService extends BaseMailTestCase {
       // assertEquals(true, connector.deleteFolder(folder));
       // imapFolder.delete(true);
     } else {
-      System.out.println("\n\n connector is null, check configuration !");
+      log.warn("\n\n connector is null, check configuration !");
     }
   }
 
@@ -262,7 +260,7 @@ public class TestConnectorService extends BaseMailTestCase {
       // assertEquals(true, connector.deleteFolder(folder));
       // imapFolder.delete(true);
     } else {
-      System.out.println("\n\n connector is null, check configuration !");
+      log.warn("\n\n connector is null, check configuration !");
     }
   }
 
@@ -287,7 +285,7 @@ public class TestConnectorService extends BaseMailTestCase {
       // assertEquals(true, connector.deleteFolder(folder));
       // imapFolder.delete(true);
     } else {
-      System.out.println("\n\n connector is null, check configuration !");
+      log.warn("\n\n connector is null, check configuration !");
     }
   }
 

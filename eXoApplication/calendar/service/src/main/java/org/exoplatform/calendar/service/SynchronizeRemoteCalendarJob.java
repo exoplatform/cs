@@ -153,9 +153,9 @@ public class SynchronizeRemoteCalendarJob implements Job {
       if (log_.isDebugEnabled())
         log_.debug("Data base not ready!");
     } catch (Exception e) {
-      e.printStackTrace();
-      if (log_.isDebugEnabled())
-        log_.debug("Exception when synchronize remote calendar. " + e.toString());
+      if (log_.isDebugEnabled()) {
+        log_.debug("Exception when synchronize remote calendar. ", e);
+      }
     } finally {
       provider.close(); // release sessions
       ExoContainerContext.setCurrentContainer(oldContainer);

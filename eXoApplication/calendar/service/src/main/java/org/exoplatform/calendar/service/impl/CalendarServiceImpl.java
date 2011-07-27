@@ -140,7 +140,6 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     try {
       rb_ = rbs_.getResourceBundle(Utils.RESOURCEBUNDLE_NAME, Locale.getDefault());
     } catch (MissingResourceException e) {
-      // e.printStackTrace();
     }
     return storage_.getUserCalendars(username, isShowAll);
   }
@@ -528,7 +527,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     try {
       rb = rbs_.getResourceBundle(Utils.RESOURCEBUNDLE_NAME, Locale.getDefault());
     } catch (MissingResourceException e) {
-      // TODO the fist time load
+      // the fist time load
     }
     for (EventCategory ev : storage_.getEventCategories(username)) {
       if (ev.getName().equalsIgnoreCase(eventCategoryName)) {

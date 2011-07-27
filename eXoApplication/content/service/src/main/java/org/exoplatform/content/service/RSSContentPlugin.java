@@ -42,7 +42,7 @@ public class RSSContentPlugin extends ContentPlugin {
   @SuppressWarnings("unchecked")
   public PageList loadContentMeta(ContentNode node) throws Exception {
     URL uri = new URL(node.getUrl());
-    // TODO: tuan.pham CS-2531 get encode from rss file
+    // tuan.pham CS-2531 get encode from rss file
     GetMethod get = null;
     HttpClientImpl httpClientService = new HttpClientImpl(uri);
     get = httpClientService.getMethod(uri.getFile());
@@ -68,7 +68,7 @@ public class RSSContentPlugin extends ContentPlugin {
     }
 
     // @SuppressWarnings("unused")
-    // TODO: dang.tung -> set creator of content
+    // dang.tung -> set creator of content
     public void setCreator(String creator) {
       super.setCreator(creator);
     }

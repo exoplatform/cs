@@ -23,6 +23,8 @@ import java.util.Map;
 
 import org.apache.commons.httpclient.HttpStatus;
 import org.exoplatform.rest.client.openfire.Utils.Response;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.jivesoftware.openfire.auth.AuthProvider;
 import org.jivesoftware.openfire.auth.UnauthorizedException;
 import org.jivesoftware.openfire.user.UserNotFoundException;
@@ -33,6 +35,7 @@ import org.jivesoftware.util.JiveGlobals;
  * @version $Id: $
  */
 public class ExoAuthProvider implements AuthProvider {
+  private static final Log log = ExoLogger.getExoLogger(ExoAuthProvider.class);
 
   private static final String       AUTHENTICATION_URL    = "eXo.provider.exoAuthProvider.authenticationURL";
 
@@ -61,7 +64,6 @@ public class ExoAuthProvider implements AuthProvider {
    * @see org.jivesoftware.openfire.auth.AuthProvider#authenticate(java.lang.String, java.lang.String)
    */
   public void authenticate(String user, String pass) throws UnauthorizedException {
-    // System.out.println(">>>>>>>>>>>>>>> plain text authenticate");
     String url = authURL_;
     String method = authMethod_;
     HashMap<String, String> params = new HashMap<String, String>(authParams_);
@@ -77,7 +79,9 @@ public class ExoAuthProvider implements AuthProvider {
       else
         throw new UnauthorizedException("Authentication filed : " + "Configuration error, only HTTP methods 'POST' or 'GET' allowed, " + "but found '" + authMethod_ + "'.");
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Exception in method authenticate", e);
+      }
       throw new UnauthorizedException("Authentication filed : " + e);
     }
     if (resp.getStatus() != HttpStatus.SC_OK) {
@@ -90,8 +94,6 @@ public class ExoAuthProvider implements AuthProvider {
    * @see org.jivesoftware.openfire.auth.AuthProvider#authenticate(java.lang.String, java.lang.String, java.lang.String)
    */
   public void authenticate(String user, String token, String digest) throws UnauthorizedException {
-    // System.out.println(">>>>>>>>>>>>>>> digest authenticate");
-    // System.out.println(user + "\n" + token + "\n" + digest);
     throw new UnsupportedOperationException();
   }
 

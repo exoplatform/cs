@@ -27,6 +27,8 @@ import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.services.jcr.util.IdGenerator;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.upload.UploadResource;
 import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -35,8 +37,8 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormUploadInput;
 
@@ -57,6 +59,7 @@ import org.exoplatform.webui.form.UIFormUploadInput;
 )
 
 public class UIAttachFileForm extends UIForm implements UIPopupComponent {
+  private static final Log log = ExoLogger.getExoLogger(UIAttachFileForm.class);
 
   public static final String FIELD_UPLOAD = "upload" ;  
   public int numberFile = 5 ;
@@ -91,7 +94,9 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
     try {
       uservice.removeUploadResource(uploadId) ;
     } catch (Exception e) {
-      e.printStackTrace() ;
+      if (log.isDebugEnabled()) {
+        log.debug("Exception in method removeUploadTemp", e);
+      }
     }
   }
 
@@ -127,7 +132,9 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
       } catch(Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.upload-error", null, ApplicationMessage.INFO));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        e.printStackTrace() ;
+        if (log.isDebugEnabled()) {
+          log.debug("Exception in method execute of class SaveActionListener", e);
+        }
         return ;
       }     
       if (attachList.isEmpty()) {

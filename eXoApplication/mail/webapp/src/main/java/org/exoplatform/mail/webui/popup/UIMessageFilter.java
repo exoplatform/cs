@@ -30,6 +30,8 @@ import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -58,6 +60,8 @@ import org.exoplatform.webui.form.UIForm;
     }
 )
 public class UIMessageFilter extends UIForm implements UIPopupComponent{
+  private static final Log log = ExoLogger.getExoLogger(UIMessageFilter.class);
+  
   public static final String CONDITION_CONTAIN = "contains".intern();
   public static final String CONDITION_NOT_CONTAIN = "doesn't contain".intern();
   public static final String CONDITION_IS = "is".intern();
@@ -202,7 +206,9 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
         }
         event.getRequestContext().addUIComponentToUpdateByAjax(mailPortlet.getChild(UIPopupAction.class)) ;
       } catch(Exception e) {
-        e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Exception in method execute of class DeleteFilterActionListener", e);
+        }
       } 
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageFilter) ;
     }

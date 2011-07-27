@@ -28,6 +28,8 @@ import javax.jcr.Session;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.util.IdGenerator;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 
 /**
  * Created by The eXo Platform SARL
@@ -37,6 +39,8 @@ import org.exoplatform.services.jcr.util.IdGenerator;
  */
 
 public class Attachment {
+  private static final Log log = ExoLogger.getExoLogger(Attachment.class);
+  
   private String   id;
 
   private String   name;
@@ -98,7 +102,9 @@ public class Attachment {
     try {
       attachmentData = (Node) getSesison().getItem(getId());
     } catch (ItemNotFoundException e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("The attachment note is not exist", e);
+      }
       return null;
     }
     return attachmentData.getPath();

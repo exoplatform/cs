@@ -44,6 +44,8 @@ import org.exoplatform.calendar.service.impl.CalendarEventListener;
 import org.exoplatform.calendar.service.impl.CsvImportExport;
 import org.exoplatform.calendar.service.impl.ICalendarImportExport;
 import org.exoplatform.calendar.service.impl.JCRDataStorage;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.scheduler.JobSchedulerService;
 import org.quartz.JobDetail;
 
@@ -54,6 +56,7 @@ import org.quartz.JobDetail;
  * Mar 3, 2010  
  */
 public class MockCalendarService implements CalendarService{
+  private static final Log log = ExoLogger.getExoLogger(MockCalendarService.class);
 
   private Calendar cal_;
   private Map<String, List<CalendarEvent>> data_;
@@ -258,7 +261,7 @@ public class MockCalendarService implements CalendarService{
 
   @Override
   public CalendarCategory removeCalendarCategory(String username, String calendarCategoryId) throws Exception {
-    System.out.println("\n\n Data clean up");
+    log.info("\n\n Data clean up");
     data_.clear();
     return null;
   }
@@ -342,7 +345,7 @@ public class MockCalendarService implements CalendarService{
     List<CalendarEvent> events = new ArrayList<CalendarEvent>();
     data_ = new HashMap<String, List<CalendarEvent>>();
     data_.put(cal_.getId(), events);
-    System.out.println("\n\n calendar Saved");
+    log.info("\n\n calendar Saved");
 
   }
 

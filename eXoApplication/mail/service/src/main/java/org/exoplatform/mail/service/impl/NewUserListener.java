@@ -21,6 +21,8 @@ import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserEventListener;
 
@@ -34,6 +36,8 @@ import org.exoplatform.services.organization.UserEventListener;
  *
  */
 public class NewUserListener extends UserEventListener {
+  private static final Log log = ExoLogger.getExoLogger(NewUserListener.class);
+  
   private MailService          mservice_;
 
   final static public String   FD_INBOX        = "Inbox".intern();
@@ -124,7 +128,9 @@ public class NewUserListener extends UserEventListener {
         }
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Exception in method postSave", e);
+      }
     }
   }
 

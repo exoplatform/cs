@@ -24,6 +24,8 @@ import javax.ws.rs.core.StreamingOutput;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
 
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Membership;
 
 /**
@@ -31,6 +33,7 @@ import org.exoplatform.services.organization.Membership;
  * @version $Id: $
  */
 public class MembershipXMLEntity implements StreamingOutput {
+  private static final Log log = ExoLogger.getExoLogger(MembershipXMLEntity.class);
 
   private final Membership membership_;
 
@@ -67,7 +70,9 @@ public class MembershipXMLEntity implements StreamingOutput {
       xsw.flush();
       xsw.close();
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Exception in method write", e);
+      }
       throw new IOException(e.getMessage());
     }
 

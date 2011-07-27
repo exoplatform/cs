@@ -21,6 +21,8 @@ import java.util.List;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.security.ConversationRegistry;
 import org.exoplatform.services.security.ConversationState;
 
@@ -31,7 +33,8 @@ import org.exoplatform.services.security.ConversationState;
  * Feb 25, 2009  
  */
 public class AuthenticationLogoutListener extends Listener<ConversationRegistry, ConversationState> {
-
+  protected static Log log = ExoLogger.getLogger(AuthenticationLogoutListener.class);
+  
   public AuthenticationLogoutListener() throws Exception {
   }
 
@@ -45,7 +48,9 @@ public class AuthenticationLogoutListener extends Listener<ConversationRegistry,
         mService.stopAllJobs(username, acc.getId());
       }
     } catch (Exception e) {
-      // e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Exception when stop stop all job when user logout", e);
+      }
     }
   }
 }

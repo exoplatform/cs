@@ -63,6 +63,8 @@ import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -107,6 +109,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
     @EventConfig(listeners = UIContacts.RefreshActionListener.class),
     @EventConfig(listeners = UIContacts.PrintDetailsActionListener.class) })
 public class UIContacts extends UIForm implements UIPopupComponent {
+  private static final Log log = ExoLogger.getExoLogger(UIContacts.class);
+  
   public boolean                         viewContactsList                   = true;
 
   public boolean                         viewListBeforePrint                = false;
@@ -220,7 +224,9 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     } catch (ClassNotFoundException e) {
       return false;
     } catch (Exception ex) {
-      ex.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Exception in method canChat", ex);
+      }
       return false;
     }
   }
@@ -730,7 +736,9 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         try {
           sharedLabel = res.getString("UIContacts.label.sharedContacts");
         } catch (MissingResourceException e) {
-          e.printStackTrace();
+          if (log.isDebugEnabled()) {
+            log.debug("Exception in method execute of class EditContactActionListener", e);
+          }
         }
         categories.add(new SelectItemOption<String>(sharedLabel, sharedLabel));
       }

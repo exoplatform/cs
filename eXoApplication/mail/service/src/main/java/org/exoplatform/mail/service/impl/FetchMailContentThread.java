@@ -60,7 +60,9 @@ public class FetchMailContentThread implements Runnable {
     try {
       downloadMailContent();
     } catch (Exception e) {
-      // e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Exception in downloadMailContent method", e);
+      }
     }
   }
 
@@ -89,7 +91,9 @@ public class FetchMailContentThread implements Runnable {
       if (folder_.isOpen())
         folder_.close(true);
     } catch (Exception e) {
-      // e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Exception when stop fetch mail content", e);
+      }
     }
   }
 }

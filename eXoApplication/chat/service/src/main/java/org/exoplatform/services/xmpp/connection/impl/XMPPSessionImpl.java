@@ -278,8 +278,9 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
             if (log.isDebugEnabled())
               log.debug(json.toString());
           } catch (Exception e) {
-            if (log.isDebugEnabled())
-              e.printStackTrace();
+            if (log.isDebugEnabled()) {
+              log.debug("File transfer fail", e);
+            }
           }
         }
       });
@@ -305,8 +306,9 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
             
             sendMessage(message);
           } catch (Exception e) {
-            // if (log.isDebugEnabled())
-            e.printStackTrace();
+            if (log.isDebugEnabled()) {
+              log.debug("Send message fail", e);
+            }
           }
         }
       }, msgFilter);
@@ -340,8 +342,9 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
             JsonValue json = generatorImpl.createJsonObject(eventsBean);
             delegate_.sendMessage(username_, CometdChannels.SUBSCRIPTION, json.toString(), null);
           } catch (Exception e) {
-            if (log.isDebugEnabled())
-              e.printStackTrace();
+            if (log.isDebugEnabled()) {
+              log.debug("Send subcription fail", e);
+            }
           }
         }
       }, subFilter);
@@ -356,8 +359,9 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
             bean.setRoom(room);
             sendGroupChatEvent(bean);
           } catch (Exception e) {
-            if (log.isDebugEnabled())
-              e.printStackTrace();
+            if (log.isDebugEnabled()) {
+              log.debug("Process the invitation fail", e);
+            }
           }
 
         }
@@ -389,8 +393,9 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
             
             sendMessage(messageBean);
           } catch (Exception e) {
-            // if (log.isDebugEnabled())
-            e.printStackTrace();
+            if (log.isDebugEnabled()) {
+              log.debug("Fail to process the error message package", e);
+            }
           }
         }
       }, errorMessageFilter);
@@ -453,8 +458,9 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
             if (log.isDebugEnabled())
               log.debug(json.toString());
           } catch (Exception e) {
-            if (log.isDebugEnabled())
-              e.printStackTrace();
+            if (log.isDebugEnabled()) {
+              log.debug("Can not send the roster", e);
+            }
           }
         };
       });
@@ -470,11 +476,13 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
       }
       throw new XMPPException("Create XMPP connection for user '" + username + "' failed. ", e);
     } catch (RepositoryException e) {
-      if (log.isDebugEnabled())
-        e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("RepositoryException in constructor XMPPSessionImpl", e);
+      }
     } catch (RepositoryConfigurationException e) {
-      if (log.isDebugEnabled())
-        e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("RepositoryConfigurationException in constructor XMPPSessionImpl", e);
+      }
     }
     if (log.isDebugEnabled())
       log.debug("finish initialize for the user:'" + username + "'.");
@@ -489,7 +497,9 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
       try {
         XMPPConnectionUtils.registerUser(connection_, transport.getServiceName(), remoteUser, remotePassword);
       } catch (XMPPException e) {
-        e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Can not register the user", e);
+        }
         return false;
       }
       if (autoLogin) {
@@ -562,7 +572,9 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
       Roster roster = connection_.getRoster();
       roster.createGroup(grop);
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to create new group", e);
+      }
     }
   }
 
@@ -1114,7 +1126,9 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
       DiscoverInfo info = discover.discoverInfo(roomJID);
       return info.containsFeature("muc_passwordprotected");
     } catch (XMPPException e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("XMPPException when check if password require", e);
+      }
     }
     return false;
   }
@@ -1537,8 +1551,9 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
       if (log.isDebugEnabled())
         log.info("Delete file : " + file.getAbsolutePath());
     } catch (SecurityException e) {
-      if (log.isDebugEnabled())
-        e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("SecurityException when delete file: " + path, e);
+      }
     }
   }
 
@@ -1600,8 +1615,9 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
           delFile(transfer.getFilePath());
         }
       } catch (Exception e) {
-        if (log.isDebugEnabled())
-          e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Fail to transfer the file", e);
+        }
       }
     }
   }
@@ -1933,7 +1949,9 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
       JsonValue json = generatorImpl.createJsonObject(eventsBean);
       delegate_.sendMessage(username_, CometdChannels.MESSAGE, json.toString(), null);
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to send the error message", e);
+      }
     }
   }
 
@@ -1959,14 +1977,11 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
       }
 
       JsonValue json = generatorImpl.createJsonObject(eventsBean);
-      /*
-       * String strReturn = json.toString() ; try { StringBuilder builder = new StringBuilder(strReturn) ; int indexOfOccu = builder.indexOf("occupants\":") ; if (indexOfOccu == -1) throw new Exception() ; int addPo = 0; while (true) { int jid = builder.toString().indexOf("jid", indexOfOccu) ; if (jid == -1) break ; addPo = builder.toString().indexOf("}", jid) ; if (addPo == -1) break ; String
-       * strJid = builder.substring(builder.toString().indexOf(":\"", jid) + 2, builder.toString().indexOf("\",", jid)) ; UserInfo info = getUserInfo(strJid.split("@")[0]) ; String insertStr = ",\"fullName\":\"" + info.getFirstName() + " " + info.getLastName() + "\"" ; if (builder.toString().indexOf("]", indexOfOccu) < (addPo + insertStr.length() + 1)) break ; else indexOfOccu = addPo; }
-       * delegate.sendMessage(username_, CometdChannels.GROUP_CHAT, builder.toString(), null); } catch (Exception e) { e.printStackTrace() ; delegate.sendMessage(username_, CometdChannels.GROUP_CHAT, strReturn, null); }
-       */
       delegate_.sendMessage(username_, CometdChannels.GROUP_CHAT, json.toString(), null);
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to send the group chat", e);
+      }
     }
   }
 
@@ -1980,8 +1995,9 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
         roomJID = room + "@" + mucService;
       }
     } catch (Exception e) {
-      if (log.isDebugEnabled())
-        e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail when validate the room jid", e);
+      }
     }
     return roomJID;
   }
@@ -2056,8 +2072,9 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
       }
       eventsBean.setRoster(list);
     } catch (Exception e) {
-      if (log.isDebugEnabled())
-        e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to send message", e);
+      }
     }
 
     JsonValue json = generatorImpl.createJsonObject(eventsBean);
@@ -2089,8 +2106,9 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
       if (log.isDebugEnabled())
         log.debug(json.toString());
     } catch (Exception e) {
-      if (log.isDebugEnabled())
-        e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Exception in sendRoster method", e);
+      }
     }
   }
 }

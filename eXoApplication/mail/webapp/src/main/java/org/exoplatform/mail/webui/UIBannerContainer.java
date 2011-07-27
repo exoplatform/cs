@@ -44,7 +44,7 @@ import org.exoplatform.webui.core.UIContainer;
 @ComponentConfig(
     template =  "app:/templates/mail/webui/UIBannerContainer.gtmpl"
 )
-//TODO class never use
+// class never use
 public class UIBannerContainer extends UIContainer  {
   public UIBannerContainer() throws Exception {
     addChild(UISearchForm.class, null, null) ;

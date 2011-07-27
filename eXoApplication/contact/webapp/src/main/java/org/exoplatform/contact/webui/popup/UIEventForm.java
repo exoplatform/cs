@@ -35,6 +35,8 @@ import org.exoplatform.contact.CalendarUtils;
 import org.exoplatform.contact.webui.Selector;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -76,6 +78,8 @@ import org.exoplatform.webui.form.UIFormTabPane;
     }
 )
 public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Selector{
+  private static final Log log =  ExoLogger.getExoLogger(UIEventForm.class);
+  
   final public static String TAB_EVENTDETAIL = "eventDetail".intern() ;
   final public static String TAB_EVENTREMINDER = "eventReminder".intern() ;
   final public static String TAB_EVENTSHARE = "eventShare".intern() ;
@@ -253,7 +257,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
     try {
       getEventFromDate() ;
     } catch (Exception e) {
-      e.printStackTrace() ;
+      if (log.isDebugEnabled()) {
+        log.debug("Exception when call method getEventFromDate", e);
+      }
       errorMsg_ = "UIEventForm.msg.event-fromdate-notvalid" ;
       return false ;
     }
@@ -266,7 +272,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
       try {
         getEventToDate() ;
       } catch (Exception e) {
-        e.printStackTrace() ;
+        if (log.isDebugEnabled()) {
+          log.debug("Exception when call method getEventToDate", e);
+        }
         errorMsg_ =  "UIEventForm.msg.event-todate-notvalid" ;
         return false ;
       }
@@ -276,7 +284,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
           return false ;
         }
       } catch (Exception e) {
-        e.printStackTrace() ;
+        if (log.isDebugEnabled()) {
+          log.debug("Exception when call method getEventFromDate and getEventToDate", e);
+        }
         errorMsg_ = "UIEventForm.msg.event-date-time-getvalue" ;
         return false ;
       }      
@@ -652,7 +662,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
         }catch (Exception e) {
           uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.add-event-error", null));
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          e.printStackTrace() ;
+          if (log.isDebugEnabled()) {
+            log.debug("Exception in method execute of class SaveActionListener", e);
+          }
           return ;
         }
       } 

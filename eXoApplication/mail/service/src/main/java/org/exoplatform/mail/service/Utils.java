@@ -17,8 +17,6 @@
 package org.exoplatform.mail.service;
 
 import java.io.InputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.text.DecimalFormat;
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -477,7 +475,6 @@ public class Utils {
 
   public static final String[]      NOT_SUPPORTED_CHARSETS                = { "koi8-r" };
 
-  // TODO
   public static final byte          NO_MAIL_DUPLICATE                     = 0;
 
   public static final byte          MAIL_DUPLICATE_IN_SAME_FOLDER         = 1;
@@ -758,16 +755,12 @@ public class Utils {
   public static String decodeText(String str) throws Exception {
     if (isEmptyField(str))
       return str;
-    // TODO : khdung
+    
     try {
       String ret = MimeUtility.decodeText(str);
       return ret;
     } catch (Exception e) {
-      StringWriter sw = new StringWriter();
-      PrintWriter pw = new PrintWriter(sw);
-      e.printStackTrace(pw);
-      StringBuffer sb = sw.getBuffer();
-      logger.error(sb.toString());
+      logger.error("decode text error", e);
     }
     return str;
   }
@@ -791,8 +784,6 @@ public class Utils {
     }
     return str;
   }
-
-  // TODO : khdung
 
   public static void setMailService(MailService mailService) {
     mailService_ = mailService;

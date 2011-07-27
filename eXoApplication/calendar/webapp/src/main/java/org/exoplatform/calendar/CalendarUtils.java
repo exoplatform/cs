@@ -356,7 +356,6 @@ public class CalendarUtils {
       label = "(GMT " + ((timeZone.getRawOffset() >= 0) ? "+" : "") 
       + hrStr + ":" + minStr + ") " + timeZoneID ;
       //subZoneMap.put(tz,  str) ;
-      //System.out.println("\n\n str "+ str + " saving " + timeZone.getDSTSavings() +" raw off " +  timeZone.getRawOffset()); 
       
     }
     return label;
@@ -368,7 +367,6 @@ public class CalendarUtils {
       if(tz.lastIndexOf("/") > 0 && tz.toLowerCase().lastIndexOf("etc".toLowerCase()) < 0 && tz.toLowerCase().lastIndexOf("system") < 0) {
         String str = generateTimeZoneLabel(tz);
         //subZoneMap.put(tz,  str) ;
-        //System.out.println("\n\n str "+ str + " saving " + timeZone.getDSTSavings() +" raw off " +  timeZone.getRawOffset()); 
         options.add(new SelectItemOption<String>(str, tz)) ;
       } 
     }
@@ -497,7 +495,9 @@ public class CalendarUtils {
           return  dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;        
         } 
       } catch (PathNotFoundException ex) {
-        ex.printStackTrace() ;
+        if (log.isDebugEnabled()) {
+          log.debug("The attachment has no data source", ex);
+        }
         return null ;
       }
     }
@@ -798,7 +798,9 @@ public class CalendarUtils {
         if(!email.matches(emailRegex)) return false ;
       }
     }catch (Exception e){
-      e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Regular expression syntax is not valid", e);
+      }
       return false;
     }
 
@@ -819,7 +821,9 @@ public class CalendarUtils {
           invalidEmails.append(email) ;
         }
       } catch (Exception e){
-        e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Regular expression syntax is not valid", e);
+        }
         if (invalidEmails.length() > 0) invalidEmails.append(", ") ;
         invalidEmails.append(email) ;
       }    
@@ -848,7 +852,9 @@ public class CalendarUtils {
       InternetAddress[] iAdds = InternetAddress.parse(address, true);
       return iAdds[0].getAddress() ;
     }catch (Exception e) {
-      e.printStackTrace() ;
+      if (log.isDebugEnabled()) {
+        log.debug("The mail address is not valid", e);
+      }
       return null ;
     }
   }
@@ -871,7 +877,9 @@ public class CalendarUtils {
     try {
       return (!isEmpty(value) && orgSevice.getUserHandler().findUserByName(value) != null) ;
     } catch( Exception e) {
-      e.printStackTrace() ;
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to check if user exist", e);
+      }
       return false ;
     }
   }
@@ -921,7 +929,9 @@ public class CalendarUtils {
     try {
       return  res.getString(key);
     } catch (MissingResourceException e) {      
-      e.printStackTrace() ;
+      if (log.isDebugEnabled()) {
+        log.debug("Can not get the value of key: " + key + " from resource bundle", e);
+      }
       return null ;
     }
   }

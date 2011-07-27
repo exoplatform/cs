@@ -31,6 +31,8 @@ import org.exoplatform.mail.webui.popup.UIAccountCreation;
 import org.exoplatform.mail.webui.popup.UIAccountList;
 import org.exoplatform.mail.webui.popup.UIAccountSetting;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -60,6 +62,8 @@ import org.exoplatform.webui.form.UIFormSelectBox;
                  }
 ) 
 public class UISelectAccount extends UIForm {
+  private static final Log log = ExoLogger.getExoLogger(UISelectAccount.class);
+  
   final static public String FIELD_SELECT = "accSelect" ;
   static public String accountRefreshed = null ;
 
@@ -119,7 +123,9 @@ public class UISelectAccount extends UIForm {
             return accountRefreshed;
       }
     } catch (Exception e) {
-      // e.printStackTrace();
+      if (log.isDebugEnabled()) {
+        log.debug("Exception in getSelectedValue method", e);
+      }
       return accountRefreshed;
     } 
     return null;
@@ -245,7 +251,9 @@ public class UISelectAccount extends UIForm {
         uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
       } catch(Exception e) { 
-        e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Exception in method execute of class SelectAccountActionListener", e);
+        }
         return;
       }
     }

@@ -97,7 +97,7 @@ import org.exoplatform.webui.form.ext.UIFormColorPicker.Colors;
 )
 
 public class UICalendars extends UIForm  {
-  private Log log = ExoLogger.getLogger(this.getClass());
+  private static final Log log = ExoLogger.getLogger(UICalendars.class);
   public static String CALENDARID = "calendarid".intern() ;
   public static String CALTYPE = "calType".intern() ;
   public static String CALNAME = "calName".intern() ;
@@ -905,7 +905,9 @@ public class UICalendars extends UIForm  {
           }
         }
       } catch (Exception e) {
-        e.printStackTrace() ;
+        if (log.isDebugEnabled()) {
+          log.debug("Can not change the color for the calendar", e);
+        }
       }
       UICalendarPortlet uiPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
@@ -978,7 +980,9 @@ public class UICalendars extends UIForm  {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;      
       }
       catch (Exception e) {
-        e.printStackTrace();
+        if (log.isDebugEnabled()) {
+          log.debug("Fail to refresh remote calendar", e);
+        }
         UIApplication uiApp = uiCalendars.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UICalendars.msg.cant-refresh-remote-calendar", new String[] {calendar.getName()}, ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
