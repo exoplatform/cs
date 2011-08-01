@@ -187,7 +187,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
 
     OrganizationService organizationService = (OrganizationService) PortalContainer.getComponent(OrganizationService.class);
 
-    List<String> publicAddressBookIdsOfUser = contactSrv.getPublicAddressBookIdsOfUser(username);
+    List<String> publicAddressBookIdsOfUser = contactSrv.getPublicAddressBookIdsOfUser(null);
     if (!publicAddressBookIdsOfUser.isEmpty()) {
       SelectOptionGroup publicContacts = new SelectOptionGroup(publicContact);
       for (String publicCg : publicAddressBookIdsOfUser) {
@@ -202,7 +202,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       options.add(publicContacts);
     }
 
-    List<String> publicAddressBookIds = contactSrv.getAllsPublicAddressBookIds(username);
+    List<String> publicAddressBookIds = contactSrv.getAllsPublicAddressBookIds(null);
     publicAddressBookIds.removeAll(publicAddressBookIdsOfUser);
     if (!publicAddressBookIds.isEmpty()) {
       SelectOptionGroup publicContacts = new SelectOptionGroup("public-groups-contacts");

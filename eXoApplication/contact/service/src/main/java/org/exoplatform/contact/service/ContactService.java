@@ -463,7 +463,7 @@ public interface ContactService {
 
   /**
    * use this method to look all public AddressBookIds corresponding to groups in which the user has at least one membership.
-   * @param user The username of the user
+   * @param user The username of the user. If user parameter is null, the current user is implied.
    * @return A collection of the found AddressBookIds. The return collection cannot be null, but it can be empty if no AddressBookId is found.
    */
   public List<String> getPublicAddressBookIdsOfUser(String user) throws Exception;
@@ -471,7 +471,7 @@ public interface ContactService {
   /**
    * Use this method to get all public AddressBookIds corresponding to groups that the user has the permission to view (including groups
    * in which the user has at least one membership).
-   * @param user The username of the user
+   * @param user The username of the user. If user parameter is null, the current user is implied.
    * @return
    */
   public List<String> getAllsPublicAddressBookIds(String user) throws Exception;

@@ -74,6 +74,8 @@ import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.security.ConversationState;
+import org.exoplatform.services.security.Identity;
 
 /**
  * Created by The eXo Platform SARL
@@ -421,11 +423,17 @@ public class JCRDataStorage implements DataStorage {
   }
 
   public List<String> getPublicAddresses(String username) throws Exception {
-    OrganizationService organizationService = (OrganizationService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
-    Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(username).toArray();
-    List<String> groupIds = new ArrayList<String>();
-    for (Object object : objGroupIds) {
-      groupIds.add(((Group) object).getId());
+    List<String> groupIds;
+    if (username == null) {
+      Identity identity = ConversationState.getCurrent().getIdentity();
+      groupIds = new ArrayList<String>(identity.getGroups());
+    } else {
+      OrganizationService organizationService = (OrganizationService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
+      Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(username).toArray();
+      groupIds = new ArrayList<String>();
+      for (Object object : objGroupIds) {
+        groupIds.add(((Group) object).getId());
+      }
     }
     Node addressBooksHome = getPublicAddressHome();
     List<String> addressBooks = new ArrayList<String>();

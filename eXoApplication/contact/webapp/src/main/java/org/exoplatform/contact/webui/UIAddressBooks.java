@@ -50,11 +50,9 @@ import org.exoplatform.contact.webui.popup.UIImportForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UIPopupContainer;
 import org.exoplatform.contact.webui.popup.UIPublicAddressPermission;
-import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.service.Account;
-import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.log.Log;
-import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.security.ConversationState;
+import org.exoplatform.services.security.Identity;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -153,11 +151,11 @@ public class UIAddressBooks extends UIComponent {
   }
   
   public List<String> getGroupsOfUser() throws Exception {
-    return ContactUtils.getContactService().getPublicAddressBookIdsOfUser(ContactUtils.getCurrentUser()) ;
+    return ContactUtils.getContactService().getPublicAddressBookIdsOfUser(null) ;
   }
   
   public List<String> getPublicContactGroups() throws Exception {
-    List<String> publicAddressBookIds = ContactUtils.getContactService().getAllsPublicAddressBookIds(ContactUtils.getCurrentUser()) ;
+    List<String> publicAddressBookIds = ContactUtils.getContactService().getAllsPublicAddressBookIds(null) ;
     //publicAddressBookIds.removeAll(getGroupsOfUser());
     return publicAddressBookIds;
   }
@@ -207,11 +205,10 @@ public class UIAddressBooks extends UIComponent {
           if (editPer.contains(Utils.COLON)) editMembership = editPer.split(Utils.COLON)[1];
           if (editMembership.contains(Utils.MEMBERSHIP)) editMembership = editMembership.replace(Utils.MEMBERSHIP, "");
           if (editMembership.contains("*")) return true;
-          OrganizationService organizationService = 
-            (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
-          if (organizationService.getMembershipHandler().findMembershipByUserGroupAndType(
-            ContactUtils.getCurrentUser(), editGroup, editMembership) != null )
-            return true ;
+          Identity identity = ConversationState.getCurrent().getIdentity();
+          if (identity.isMemberOf(editGroup, editMembership)) {
+            return true;
+          }
         }
     return false ;
   }

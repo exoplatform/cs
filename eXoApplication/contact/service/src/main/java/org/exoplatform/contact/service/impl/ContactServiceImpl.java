@@ -46,6 +46,8 @@ import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserProfile;
+import org.exoplatform.services.security.ConversationState;
+import org.exoplatform.services.security.Identity;
 
 /**
  * Created by The eXo Platform SARL
@@ -114,11 +116,17 @@ public class ContactServiceImpl implements ContactService {
   }
 
   public List<String> getPublicAddressBookIdsOfUser(String user) throws Exception {
-    OrganizationService organizationService = (OrganizationService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
-    Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(user).toArray();
-    List<String> groupIds = new ArrayList<String>();
-    for (Object object : objGroupIds) {
-      groupIds.add(((Group) object).getId());
+    List<String> groupIds;
+    if (user == null) {
+      Identity identity = ConversationState.getCurrent().getIdentity();
+      groupIds = new ArrayList<String>(identity.getGroups());
+    } else {
+      OrganizationService organizationService = (OrganizationService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
+      Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(user).toArray();
+      groupIds = new ArrayList<String>();
+      for (Object object : objGroupIds) {
+        groupIds.add(((Group) object).getId());
+      }
     }
     groupIds = excludeWildCardMatchs(groupIds, nonPublicGroups);
     return groupIds;
