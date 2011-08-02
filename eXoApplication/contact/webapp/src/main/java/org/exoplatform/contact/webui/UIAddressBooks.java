@@ -51,6 +51,8 @@ import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UIPopupContainer;
 import org.exoplatform.contact.webui.popup.UIPublicAddressPermission;
 import org.exoplatform.mail.service.Account;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.security.Identity;
 import org.exoplatform.web.application.ApplicationMessage;
