@@ -677,6 +677,18 @@
   border-left: none;  
 }
 
+.UIMailPortlet .UIMessageList .UIListUsers {
+  border: none;
+}
+
+.UIMailPortlet .UIMessageList .UIListUsers .NoBorder {
+  border-right: none;
+}
+
+.UIMailPortlet .UIMessageList .UIListUsers .Text a {
+  color:black;
+}
+
 .UIMailPortlet .UIMessageList .UIGrid thead {
   border-right: none;
   border-left: none;

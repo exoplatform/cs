@@ -463,7 +463,12 @@
         <div class="Value">email</div>
       </div>
     </div>*/ %>
-    <table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid" style="table-layout: fixed;-moz-user-select:none;" onselectstart="return false">
+    
+    <% if (uicomponent.getMessageList().size() > 0) { %>
+    	<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid" style="table-layout: fixed;-moz-user-select:none;" onselectstart="return false">
+    <% } else { %>
+    	<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid UIListUsers" style="table-layout: fixed;-moz-user-select:none;" onselectstart="return false">
+    <% } %>
       <thead>
         <tr>
           <th style="width: 20px; padding-left: 0px; " class="Border"><input type="checkbox" name="select-all-messages" class="checkbox" title="<%=_ctx.appRes(uicomponent.id+ '.label.check-all') %>" value="4"/></th>
@@ -709,23 +714,47 @@
       <% 
         } else {
       %>
-          <tbody id="TbodyMessageList" viewing="<%=uicomponent.viewing_%>"><tr><td colspan="8">
-            <div class="MessageNotice">
-            <% 
-              if (uicomponent.getAccountId()) {
-             %>
-            <%=_ctx.appRes(uicomponent.id+ ".label.there-are-no-messages") %>
-            <% 
-              } else {
-             %>
-             <a href="<%=uicomponent.event("AddAccount")%>">
-               <div style="color:#D21717"><%=_ctx.appRes(uicomponent.id+ ".label.there-are-no-account") %></div>               
-             </a>
+          <tbody id="TbodyMessageList" viewing="<%=uicomponent.viewing_%>">
+            <tr>
+              <td class="NoBorder" colspan="8">
+                <div class="MessageNotice">
+	            <% 
+	              if (uicomponent.getAccountId()) {
+	             %>
+	            <%=_ctx.appRes(uicomponent.id+ ".label.there-are-no-messages") %>
+	            <% 
+	              } else {
+	             %>
+	             
+	             <div class="UIAction"> 
+	               <table class="ActionContainer">
+	                 <tr>
+	                   <td class="NoBorder" align="center">
+	                   <%
+	                     String actionLabel = _ctx.appRes(uicomponent.id + ".label.there-are-no-account"); 
+	                     String link = uicomponent.event("AddAccount");
+	                   %>
+	                     <div onclick="$link" class="ActionButton LightBlueStyle">
+	                       <div class="ButtonLeft">
+	                         <div class="ButtonRight">
+	                           <div class="ButtonMiddle Text">
+	                             <a href="javascript:void(0);">$actionLabel</a>
+	                           </div>
+	                         </div>
+	                       </div>
+	                     </div>
+	                   </td>
+	                 </tr>
+	               </table> 
+	             </div>
+             
              <% 
                }
               %>
-          </div>
-        </td></tr></tbody>
+             </div>
+           </td>
+         </tr>
+       </tbody>
       <%
         }
       %>
