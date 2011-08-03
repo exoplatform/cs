@@ -23,8 +23,6 @@ import java.util.Map;
 
 import org.apache.commons.httpclient.HttpStatus;
 import org.exoplatform.rest.client.openfire.Utils.Response;
-import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.log.Log;
 import org.jivesoftware.openfire.auth.AuthProvider;
 import org.jivesoftware.openfire.auth.UnauthorizedException;
 import org.jivesoftware.openfire.user.UserNotFoundException;
@@ -35,8 +33,6 @@ import org.jivesoftware.util.JiveGlobals;
  * @version $Id: $
  */
 public class ExoAuthProvider implements AuthProvider {
-  private static final Log log = ExoLogger.getExoLogger(ExoAuthProvider.class);
-
   private static final String       AUTHENTICATION_URL    = "eXo.provider.exoAuthProvider.authenticationURL";
 
   private static final String       AUTHENTICATION_METHOD = "eXo.provider.exoAuthProvider.authenticationMethod";
@@ -79,9 +75,6 @@ public class ExoAuthProvider implements AuthProvider {
       else
         throw new UnauthorizedException("Authentication filed : " + "Configuration error, only HTTP methods 'POST' or 'GET' allowed, " + "but found '" + authMethod_ + "'.");
     } catch (Exception e) {
-      if (log.isDebugEnabled()) {
-        log.debug("Exception in method authenticate", e);
-      }
       throw new UnauthorizedException("Authentication filed : " + e);
     }
     if (resp.getStatus() != HttpStatus.SC_OK) {

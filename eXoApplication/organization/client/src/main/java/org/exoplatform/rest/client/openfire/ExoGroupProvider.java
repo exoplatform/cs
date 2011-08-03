@@ -27,8 +27,6 @@ import java.util.Map;
 
 import org.apache.commons.httpclient.HttpStatus;
 import org.exoplatform.rest.client.openfire.Utils.Response;
-import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.log.Log;
 import org.jivesoftware.openfire.group.Group;
 import org.jivesoftware.openfire.group.GroupAlreadyExistsException;
 import org.jivesoftware.openfire.group.GroupNotFoundException;
@@ -45,8 +43,6 @@ import org.xmpp.packet.JID;
  * @version $Id: $
  */
 public class ExoGroupProvider implements GroupProvider {
-  private static final Log log = ExoLogger.getExoLogger(ExoGroupProvider.class);
-
   private static final String       GROUPS_COUNT_URL          = "eXo.provider.exoGroupProvider.groupsCountURL";
 
   private static final String       GROUPS_COUNT_METHOD       = "eXo.provider.exoGroupProvider.groupsCountMethod";
@@ -168,9 +164,7 @@ public class ExoGroupProvider implements GroupProvider {
         throw new IllegalStateException("Configuration error, only HTTP methods 'POST' or 'GET' are allowed, " + "but found '" + method + "'.");
 
     } catch (Exception e) {
-      if (log.isDebugEnabled()) {
-        log.debug("Exception in method getGroup", e);
-      }
+      e.printStackTrace(); // Ignore sonar
       return null;
     }
     if (resp.getStatus() == HttpStatus.SC_OK) {
@@ -207,9 +201,7 @@ public class ExoGroupProvider implements GroupProvider {
       else
         throw new IllegalStateException("Configuration error, only HTTP methods 'POST' or 'GET' are allowed, " + "but found '" + method + "'.");
     } catch (Exception e) {
-      if (log.isDebugEnabled()) {
-        log.debug("Exception in method getGroupCount", e);
-      }
+      e.printStackTrace(); // Ignore sonar
       return -1;
     }
     if (resp.getStatus() == HttpStatus.SC_OK) {
@@ -308,9 +300,7 @@ public class ExoGroupProvider implements GroupProvider {
       else
         throw new IllegalStateException("Configuration error, only HTTP methods 'POST' or 'GET' are allowed, " + "but found '" + method + "'.");
     } catch (Exception e) {
-      if (log.isDebugEnabled()) {
-        log.debug("Exception in method getGroupNames", e);
-      }
+      e.printStackTrace(); // Ignore sonar
       return null;
     }
     if (resp.getStatus() == HttpStatus.SC_OK) {
@@ -359,9 +349,7 @@ public class ExoGroupProvider implements GroupProvider {
         throw new IllegalStateException("Configuration error, only HTTP methods 'POST' or 'GET' are allowed, " + "but found '" + method + "'.");
 
     } catch (Exception e) {
-      if (log.isDebugEnabled()) {
-        log.debug("Exception in method getGroupNameWithDescendants", e);
-      }
+      e.printStackTrace(); // Ignore sonar
       return null;
     }
     if (resp.getStatus() == HttpStatus.SC_OK) {

@@ -11,12 +11,6 @@
   <description />
   <dependencies>
     <dependency>
-      <groupId>org.exoplatform.kernel</groupId>
-      <artifactId>exo.kernel.commons</artifactId>
-      <version>${org.exoplatform.kernel.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>openfire</groupId>
       <artifactId>openfire</artifactId>
       <version>${openfire.version}</version>
