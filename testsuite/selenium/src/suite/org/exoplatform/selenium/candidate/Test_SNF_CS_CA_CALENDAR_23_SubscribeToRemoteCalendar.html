@@ -13,7 +13,7 @@
 </thead><tbody>
 <tr>
 	<td>echo</td>
-	<td>-- SNF_CS_69_Subscribe to remote calendar </td>
+	<td>-- SNF_CS_69_Subscribe to remote calendar</td>
 	<td></td>
 </tr>
 <tr>
@@ -42,13 +42,8 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
-	<td></td>
-</tr>
-<tr>
 	<td>click</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td>//a[contains(@onclick,'login')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -62,13 +57,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>//div[9]/div/div/div/div/div/div/div/div/div/div/div/div/div/div/a</td>
+	<td>highlight</td>
+	<td>link=Calendar</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[9]/div/div/div/div/div/div/div/div/div/div/div/div/div/div/a</td>
+	<td>link=Calendar</td>
 	<td></td>
 </tr>
 <tr>
@@ -78,12 +73,17 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//form[@id='UICalendars']/div[2]/div[1]/div[2]</td>
+	<td>css=div.ActionsButton</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//form[@id='UICalendars']/div[2]/div[1]/div[2]</td>
+	<td>css=div.ActionsButton</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='tmpMenuElement']//a[@class='ItemIcon AddCalendarIcon']</td>
 	<td></td>
 </tr>
 <tr>
@@ -271,7 +271,6 @@
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>
