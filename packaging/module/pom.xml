@@ -26,6 +26,12 @@
       <version>${org.exoplatform.commons.version}</version>
       <type>jar</type>
     </dependency>
+    <dependency>
+      <groupId>org.exoplatform.commons</groupId>
+      <artifactId>exo.platform.commons.component</artifactId>
+      <version>${org.exoplatform.commons.version}</version>
+      <type>jar</type>
+    </dependency>
    </dependencies>
   <build>
     <plugins>
