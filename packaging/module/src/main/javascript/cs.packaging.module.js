@@ -27,6 +27,7 @@ function getModule(params) {
   module.eXoApplication = {};
   module.eXoApplication.common = new Project("org.exoplatform.cs", "exo.cs.eXoApplication.common", "jar", module.version).
      addDependency(new Project("org.exoplatform.commons", "exo.platform.commons.webui.ext", "jar", "${org.exoplatform.commons.version}"))
+     .addDependency(new Project("org.exoplatform.commons", "exo.platform.commons.component", "jar", "${org.exoplatform.commons.version}"))
     ;
   module.eXoApplication.mail =
     new Project("org.exoplatform.cs", "exo.cs.eXoApplication.mail.webapp", "war", module.version).
