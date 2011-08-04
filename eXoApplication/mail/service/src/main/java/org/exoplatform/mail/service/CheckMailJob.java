@@ -16,12 +16,15 @@
  **/
 package org.exoplatform.mail.service;
 
+import javax.jcr.RepositoryException;
+
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer;
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.config.RepositoryConfigurationException;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.scheduler.JobInfo;
-import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 import org.quartz.InterruptableJob;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
@@ -41,6 +44,8 @@ public class CheckMailJob implements Job, InterruptableJob {
   public static final String FOLDERID        = "folderId";
 
   public static final String MAILSVR         = "mailservice";
+  
+  public static final String REPO_NAME       = "repository";
 
   private static Log         log             = ExoLogger.getLogger("cs.service.job");
 
@@ -58,12 +63,27 @@ public class CheckMailJob implements Job, InterruptableJob {
     PortalContainer container = getPortalContainer(context);
     // MailService mailService = getMailService();
     MailService mailService = (MailService) container.getComponentInstanceOfType(MailService.class);
-
+    RepositoryService repoService = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
+    String currentRepo = null;
     JobDetail jobDetail = context.getJobDetail();
     JobDataMap dataMap = jobDetail.getJobDataMap();
+    
+    try {
+      currentRepo = repoService.getCurrentRepository().getConfiguration().getName();
+    } catch (RepositoryException e) {
+      log.warn("Can't get current repository name", e);
+    }    
     username = dataMap.getString(USERNAME);
     accountId = dataMap.getString(ACCOUNTID);
     folderId = dataMap.getString(FOLDERID);
+    String repoName = dataMap.getString(REPO_NAME);
+    if (repoName != null) {
+      try {
+        repoService.setCurrentRepositoryName(repoName);
+      } catch (RepositoryConfigurationException ex) {
+        log.error(String.format("Can't set current repository name as %s", repoName), ex);
+      }
+    }
     try {
       if (username != null && accountId != null) {
         mailService.checkNewMessage(username, accountId, folderId);
@@ -85,6 +105,13 @@ public class CheckMailJob implements Job, InterruptableJob {
       }
 
     } finally {
+      if (currentRepo != null) {
+        try {
+          repoService.setCurrentRepositoryName(currentRepo);
+        } catch (RepositoryConfigurationException e) {
+          log.error(String.format("Can't set current repository name as %s", currentRepo), e);
+        }
+      }
       if (log.isDebugEnabled()) {
         log.debug("\n\n####  Checking mail of " + context.getJobDetail().getName() + " finished ");
       }

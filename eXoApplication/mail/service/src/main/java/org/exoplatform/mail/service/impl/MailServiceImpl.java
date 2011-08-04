@@ -75,6 +75,7 @@ import javax.mail.util.ByteArrayDataSource;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.mail.connection.Connector;
@@ -142,6 +143,8 @@ public class MailServiceImpl implements MailService, Startable {
   private JobSchedulerService          schedulerService_;
 
   private ContinuationService          continuationService_;
+  
+  private RepositoryService            repositoryService;
 
   private String                       currentUser;
 
@@ -969,23 +972,18 @@ public class MailServiceImpl implements MailService, Startable {
   private JobDetail loadCheckmailJob(String userName, String accountId, String folderId) throws Exception {
     JobInfo info = CheckMailJob.getJobInfo(userName, accountId);
     JobDetail job = findCheckmailJob(userName, accountId);
+    JobDataMap jobData = new JobDataMap();
+    jobData.put(CheckMailJob.REPO_NAME, repositoryService.getCurrentRepository().getConfiguration().getName());
+    jobData.put(CheckMailJob.USERNAME, userName);
+    jobData.put(CheckMailJob.ACCOUNTID, accountId);
+    if (folderId != null && folderId.length() > 0)
+      jobData.put(CheckMailJob.FOLDERID, folderId);    
     if (job == null) {
-      JobDataMap jobData = new JobDataMap();
-      jobData.put(CheckMailJob.USERNAME, userName);
-      jobData.put(CheckMailJob.ACCOUNTID, accountId);
-      if (folderId != null && folderId.length() > 0)
-        jobData.put(CheckMailJob.FOLDERID, folderId);
       PeriodInfo periodInfo = new PeriodInfo(null, null, 0, 24 * 60 * 60 * 1000);
       schedulerService_.addPeriodJob(info, periodInfo, jobData);
     } else {
       JobDetail activeJob = findActiveCheckmailJob(userName, accountId);
-      JobDataMap jobData = new JobDataMap();
-      jobData.put(CheckMailJob.USERNAME, userName);
-      jobData.put(CheckMailJob.ACCOUNTID, accountId);
-      if (folderId != null && folderId.length() > 0)
-        jobData.put(CheckMailJob.FOLDERID, folderId);
       job.setJobDataMap(jobData);
-
       if (activeJob == null) {
         executeJob(job);
       } else {
@@ -996,7 +994,6 @@ public class MailServiceImpl implements MailService, Startable {
       }
     }
     return job;
-
   }
 
   private JobDetail findActiveCheckmailJob(String userName, String accountId) throws Exception {

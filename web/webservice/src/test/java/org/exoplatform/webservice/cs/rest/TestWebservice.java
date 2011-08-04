@@ -184,7 +184,7 @@ public class TestWebservice extends AbstractResourceTest {
     h.putSingle("username", username);
     // data correct
     SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
-    String eventURI = "/private/cs/calendar/getissues/" + username + "/20100624/" + CalendarEvent.TYPE_EVENT;
+    String eventURI = "/cs/calendar/getissues/" + username + "/20100624/" + CalendarEvent.TYPE_EVENT;
     ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
     ContainerResponse response = service("GET", eventURI, baseURI, h, null, writer);
 
@@ -196,7 +196,7 @@ public class TestWebservice extends AbstractResourceTest {
     String username = "root";
     h.putSingle("username", username);
     
-    String eventURI = "/private/cs/calendar/updatestatus/taskid";
+    String eventURI = "/cs/calendar/updatestatus/taskid";
     ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
     ContainerResponse response = service("GET", eventURI, baseURI, h, null, writer);
     
@@ -208,7 +208,7 @@ public class TestWebservice extends AbstractResourceTest {
     String username = "root";
     h.putSingle("username", username);
     
-    String eventURI = "/private/cs/calendar/getevent/eventid";
+    String eventURI = "/cs/calendar/getevent/eventid";
     ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
     ContainerResponse response = service("GET", eventURI, baseURI, h, null, writer);
     
@@ -220,7 +220,7 @@ public class TestWebservice extends AbstractResourceTest {
     String username = "root";
     h.putSingle("username", username);
     
-    String eventURI = "/private/cs/calendar/getcalendars/";
+    String eventURI = "/cs/calendar/getcalendars/";
     ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
     ContainerResponse response = service("GET", eventURI, baseURI, h, null, writer);
     
@@ -233,7 +233,7 @@ public class TestWebservice extends AbstractResourceTest {
     MultivaluedMap<String, String> h = new MultivaluedMapImpl();
     String username = "root";
     h.putSingle("username", username);
-    String mailURI = "/private/cs/mail/unreadMail/accId/folderId/tagId/5";
+    String mailURI = "/cs/mail/unreadMail/accId/folderId/tagId/5";
     ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
     ContainerResponse response = service("GET", mailURI, baseURI, h, null, writer);
     assertNotNull(response);
@@ -246,7 +246,7 @@ public class TestWebservice extends AbstractResourceTest {
     MultivaluedMap<String, String> h = new MultivaluedMapImpl();
     String username = "root";
     h.putSingle("username", username);
-    String mailURI = "/private/cs/mail/getAccounts/";
+    String mailURI = "/cs/mail/getAccounts/";
     ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
     ContainerResponse response = service("GET", mailURI, baseURI, h, null, writer);
     assertNotNull(response);
@@ -259,7 +259,7 @@ public class TestWebservice extends AbstractResourceTest {
     MultivaluedMap<String, String> h = new MultivaluedMapImpl();
     String username = "root";
     h.putSingle("username", username);
-    String mailURI = "/private/cs/mail/getFoldersTags/accId";
+    String mailURI = "/cs/mail/getFoldersTags/accId";
     ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
     ContainerResponse response = service("GET", mailURI, baseURI, h, null, writer);
     assertNotNull(response);
@@ -275,7 +275,7 @@ public class TestWebservice extends AbstractResourceTest {
     String keyword = "joh";
     ContainerResponse response = null;
     ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
-    String mailURI = "/private/cs/mail/searchuser/" + keyword;
+    String mailURI = "/cs/mail/searchuser/" + keyword;
     response = service("GET", mailURI, baseURI, h, null, writer);
     assertNotNull(response);
     

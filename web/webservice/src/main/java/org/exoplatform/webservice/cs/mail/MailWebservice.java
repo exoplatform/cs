@@ -6,6 +6,7 @@ package org.exoplatform.webservice.cs.mail;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
 import javax.security.sasl.Sasl;
 import javax.security.sasl.SaslClient;
 import javax.ws.rs.GET;
@@ -43,7 +44,7 @@ import org.exoplatform.webservice.cs.bean.MessageData;
 /**
  * @author Uoc Nguyen Modified by : Phung Nam (phunghainam@gmail.com)
  */
-@Path("private/cs/mail")
+@Path("/cs/mail")
 public class MailWebservice implements ResourceContainer {
 
   public static final String TEXT_XML          = "text/xml".intern();
@@ -63,6 +64,7 @@ public class MailWebservice implements ResourceContainer {
     
   } 
   @GET
+  @RolesAllowed("users")
   @Path("/checkmail/{username}/{accountId}/{folderId}/")
   public Response checkMail(@PathParam("username") String userName,
                             @PathParam("accountId") String accountId,
@@ -90,6 +92,7 @@ public class MailWebservice implements ResourceContainer {
   }
 
   @GET
+  @RolesAllowed("users")
   @Path("/synchfolders/{username}/{accountId}/")
   public Response synchFolders(@PathParam("username") String userName,
                                @PathParam("accountId") String accountId) throws Exception {
@@ -119,6 +122,7 @@ public class MailWebservice implements ResourceContainer {
   }
 
   @GET
+  @RolesAllowed("users")
   @Path("/stopcheckmail/{username}/{accountId}/")
   public Response stopCheckMail(@PathParam("username") String userName,
                                 @PathParam("accountId") String accountId) throws Exception {
@@ -150,6 +154,7 @@ public class MailWebservice implements ResourceContainer {
   }
 
   @GET
+  @RolesAllowed("users")
   @Path("/checkmailjobinfo/{username}/{accountId}/")
   public Response getCheckMailJobInfo(@PathParam("username") String userName,
                                       @PathParam("accountId") String accountId) throws Exception {
@@ -234,6 +239,7 @@ public class MailWebservice implements ResourceContainer {
    * @return application/json content type
    */
   @GET
+  @RolesAllowed("users")
   @Path("/searchemail/{keywords}")
   @Produces(MediaType.APPLICATION_JSON)
   public Response searchemail(@PathParam("keywords") String keywords) throws Exception {
@@ -275,6 +281,7 @@ public class MailWebservice implements ResourceContainer {
    * @return application/json content type
    */
   @GET
+  @RolesAllowed("users")
   @Path("/unreadMail/{accountId}/{folderId}/{tagId}/{limit}")
   @Produces(MediaType.APPLICATION_JSON)
   public Response unreadMail(@PathParam("accountId") String accountId,
@@ -316,6 +323,7 @@ public class MailWebservice implements ResourceContainer {
    * @return application/json content type
    */
   @GET
+  @RolesAllowed("users")
   @Path("/getAccounts/")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getAccounts() throws Exception {
@@ -339,6 +347,7 @@ public class MailWebservice implements ResourceContainer {
    * @return application/json content type
    */
   @GET
+  @RolesAllowed("users")
   @Path("/getFoldersTags/{accountId}")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getFoldersTags(@PathParam("accountId") String accountId) throws Exception {
@@ -361,6 +370,7 @@ public class MailWebservice implements ResourceContainer {
   }
 
   @GET
+  @RolesAllowed("users")
   @Path("/checkforsupportedtypes/{mechs}/{username}/{protocol}/{host}")
   @Produces(MediaType.APPLICATION_JSON)
   public Response checkForSupportedTypes(@PathParam("mechs") String mechanisms, @PathParam("username") String username,
@@ -397,6 +407,7 @@ public class MailWebservice implements ResourceContainer {
    */
   @SuppressWarnings({"deprecation" })
   @GET
+  @RolesAllowed("users")
   @Path("/searchuser/{keywords}")
   @Produces(MediaType.APPLICATION_JSON)
   public Response searchUser(@PathParam("keywords") String keywords) throws Exception {

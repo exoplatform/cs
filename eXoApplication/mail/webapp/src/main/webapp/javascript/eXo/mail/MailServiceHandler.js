@@ -17,7 +17,7 @@ function MailServiceHandler() {
   this.START_SYNC_FOLDER = 301;
   this.FINISH_SYNC_FOLDER = 302;
   
-  this.SERVICE_BASED_URL = (eXo.cs.restContext)?eXo.env.portal.context+ '/' + eXo.cs.restContext +'/private/cs/mail':'portal/rest/private/cs/mail';
+  this.SERVICE_BASED_URL = (eXo.cs.restContext)?eXo.env.portal.context+ '/' + eXo.cs.restContext +'/cs/mail':'portal/rest/private/cs/mail';
   this.CHECK_MAIL_ACTION = 'check mail action';
   this.SYNCH_FOLDER_ACTION = 'synchronize folder action';
   this.GET_CHECK_MAIL_INFO_ACTION = 'get check mail info action';
