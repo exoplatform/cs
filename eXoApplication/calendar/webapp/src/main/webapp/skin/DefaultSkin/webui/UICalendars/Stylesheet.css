@@ -7,6 +7,7 @@
 .UICalendarPortlet .UICalendars .ContentContainer {
   height: 270px;
   overflow: auto;
+  width: 223px;
 }
 
 .UICalendarPortlet .UICalendars .ActionsButton {
