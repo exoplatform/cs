@@ -30,6 +30,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.exoplatform.rest.client.openfire.Utils.Response;
 import org.jivesoftware.openfire.user.User;
 import org.jivesoftware.openfire.user.UserAlreadyExistsException;
@@ -46,6 +48,8 @@ import org.w3c.dom.NodeList;
  */
 
 public class ExoUserProvider implements UserProvider {
+  private static final Log log = LogFactory.getLog(ExoGroupProvider.class);
+  
   private static final String       FIND_USERS_URL     = "eXo.provider.exoUserProvider.findUsersURL";
 
   private static final String       FIND_USERS_METHHOD = "eXo.provider.exoUserProvider.findUsersMethod";
@@ -178,7 +182,9 @@ public class ExoUserProvider implements UserProvider {
       else
         throw new IllegalStateException("Configuration error, only HTTP methods 'POST' or 'GET' are allowed, " + "but found '" + method + "'.");
     } catch (Exception e) {
-      e.printStackTrace(); // Ignore sonar
+      if (log.isDebugEnabled()) {
+        log.debug("Exception in method findUsers", e);
+      }
       return null;
     }
     if (resp.getStatus() == HttpStatus.SC_OK) {
@@ -214,7 +220,9 @@ public class ExoUserProvider implements UserProvider {
       else
         throw new IllegalStateException("Configuration error, only HTTP methods 'POST' or 'GET' are allowed, " + "but found '" + method + "'.");
     } catch (Exception e) {
-      e.printStackTrace(); // Ignore sonar
+      if (log.isDebugEnabled()) {
+        log.debug("Exception in method getUserCount", e);
+      }
       return -1;
     }
     if (resp.getStatus() == HttpStatus.SC_OK) {
@@ -263,7 +271,9 @@ public class ExoUserProvider implements UserProvider {
       else
         throw new IllegalStateException("Configuration error, only HTTP methods 'POST' or 'GET' are allowed, " + "but found '" + method + "'.");
     } catch (Exception e) {
-      e.printStackTrace(); // Ignore sonar
+      if (log.isDebugEnabled()) {
+        log.debug("Exception in method getUsernames", e);
+      }
       return null;
     }
     if (resp.getStatus() == HttpStatus.SC_OK) {
@@ -313,7 +323,9 @@ public class ExoUserProvider implements UserProvider {
       else
         throw new IllegalStateException("Configuration error, only HTTP methods 'POST' or 'GET' are allowed, " + "but found '" + method + "'.");
     } catch (Exception e) {
-      e.printStackTrace(); // Ignore sonar
+      if (log.isDebugEnabled()) {
+        log.debug("Exception in method loadUser", e);
+      }
       return null;
     }
     if (resp.getStatus() == HttpStatus.SC_OK) {
