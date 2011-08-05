@@ -123,6 +123,9 @@ public class ContactDataInjector extends DataInjector {
     return false;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.bench.DataInjector#initParams(org.exoplatform.container.xml.InitParams)
+   */
   @Override
   public void initParams(InitParams initParams) {
     ValueParam param = initParams.getValueParam("mA");
@@ -131,6 +134,9 @@ public class ContactDataInjector extends DataInjector {
     param = initParams.getValueParam("mC");
     if (param != null)
       maxContacts = Integer.parseInt(param.getValue());
+    param = initParams.getValueParam("rand");
+    if (param != null) 
+      randomize = Boolean.parseBoolean(param.getValue());
   }
 
   @Override

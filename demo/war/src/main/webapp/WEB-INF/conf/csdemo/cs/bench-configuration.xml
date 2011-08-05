@@ -35,12 +35,16 @@
       <description>inject data for Contact</description>
       <init-params>
         <value-param>
-          <name>mA</name>
+          <name>mA</name> <!-- maximum number of address books -->
           <value>5</value>
         </value-param>
         <value-param>
-          <name>mC</name>
+          <name>mC</name> <!-- maximum number of contacts per a address books -->
           <value>10</value>
+        </value-param>
+        <value-param>
+          <name>rand</name> <!-- randomize or not -->
+          <value>false</value>
         </value-param>
       </init-params>
     </component-plugin>
