@@ -49,6 +49,12 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.component.portal</artifactId>
+      <version>${org.exoplatform.portal.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.exoplatform.jcr</groupId>
       <artifactId>exo.jcr.component.core</artifactId>
       <version>${org.exoplatform.jcr.version}</version>
@@ -69,6 +75,12 @@
    <dependency>
       <groupId>org.exoplatform.commons</groupId>
       <artifactId>exo.platform.commons.comet.service</artifactId>
+      <version>${org.exoplatform.commons.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.commons</groupId>
+      <artifactId>exo.platform.commons.component</artifactId>
       <version>${org.exoplatform.commons.version}</version>
       <scope>provided</scope>
     </dependency>

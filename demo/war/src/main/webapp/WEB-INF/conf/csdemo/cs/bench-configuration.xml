@@ -48,5 +48,45 @@
         </value-param>
       </init-params>
     </component-plugin>
+    <component-plugin>
+      <name>CalendarDataInjector</name>
+      <set-method>addInjector</set-method>
+      <type>org.exoplatform.calendar.bench.CalendarDataInjector</type>
+      <description>inject data for Calendar</description>
+      <init-params>
+        <value-param>
+          <name>mCt</name> <!-- maximum number of categories -->
+          <value>5</value>
+        </value-param>
+        <value-param>
+          <name>mEcat</name> <!-- maximum number of event categories -->
+          <value>10</value>
+        </value-param>
+        <value-param>
+          <name>mCal</name> <!-- maximum number of calendars -->
+          <value>10</value>
+        </value-param>
+        <value-param>
+          <name>mEv</name> <!-- maximum number of events -->
+          <value>5</value>
+        </value-param>
+        <value-param>
+          <name>mTa</name> <!-- maximum number of tasks -->
+          <value>5</value>
+        </value-param>
+        <value-param>
+          <name>typeOfInject</name> <!-- type of inject -->
+          <value>all</value> <!-- string all/public/private -->
+        </value-param>
+        <value-param>
+          <name>baseURL</name> <!-- url of calendar portlet -->
+          <value></value> <!-- http://hostname:port/portalcontainer/.../calendar -->
+        </value-param>
+        <value-param>
+          <name>rand</name> <!-- randomize or not -->
+          <value>false</value>
+        </value-param>
+      </init-params>
+    </component-plugin>
   </external-component-plugins>
 </configuration>
