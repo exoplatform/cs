@@ -28,6 +28,7 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.config.RepositoryConfigurationException;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
@@ -56,9 +57,11 @@ public class SynchronizeRemoteCalendarJob implements Job {
 
   public static Boolean       isExecuting                       = false;
 
-  private static Log          log_                              = ExoLogger.getLogger("cs.calendar.job");
+  private static Log          log_                              = ExoLogger.getLogger("cs.calendar.job.synchronizeremote");
 
   public static final String  USERNAME                          = "username";
+  
+  public static final String  REPOSITORY_NAME                   = "repository";
 
   private String              username;
 
@@ -73,6 +76,14 @@ public class SynchronizeRemoteCalendarJob implements Job {
     ExoContainerContext.setCurrentContainer(container);
     SessionProvider provider = SessionProvider.createSystemProvider();
     CalendarService calService = (CalendarService) container.getComponentInstanceOfType(CalendarService.class);
+    RepositoryService repositoryService = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
+    String currentRepo = null;
+    try {
+      currentRepo = repositoryService.getCurrentRepository().getConfiguration().getName();
+    } catch (RepositoryException e) {
+      log_.warn("Can't get current repository name", e);
+    }
+    
     int total = 0;
     int success = 0;
     int failed = 0;
@@ -89,6 +100,7 @@ public class SynchronizeRemoteCalendarJob implements Job {
       if (username == null) {
         return;
       }
+      repositoryService.setCurrentRepositoryName(dataMap.getString(REPOSITORY_NAME));
 
       // get list of remote calendar of current user
       Node userCalendarHome = getUserCalendarHome(provider);
@@ -160,6 +172,13 @@ public class SynchronizeRemoteCalendarJob implements Job {
       provider.close(); // release sessions
       ExoContainerContext.setCurrentContainer(oldContainer);
       isExecuting = false;
+      if (currentRepo != null) {
+        try {
+          repositoryService.setCurrentRepositoryName(currentRepo);
+        } catch (RepositoryConfigurationException e) {
+          log_.error(String.format("Can't set current repository name as %s", currentRepo), e);
+        }
+      }
     }
     long finish = System.currentTimeMillis();
     long spent = (finish - start);
@@ -176,9 +195,27 @@ public class SynchronizeRemoteCalendarJob implements Job {
   }
 
   public static JobInfo getJobInfo(String username) {
-    String jobName = SYNCHRONIZE_REMOTE_CALENDAR_JOB + "_" + username;
-    JobInfo info = new JobInfo(jobName, SYNCHRONIZE_REMOTE_CALENDAR_GROUP, SynchronizeRemoteCalendarJob.class);
+    JobInfo info = new JobInfo(getRemoteCalendarName(username),
+                               SYNCHRONIZE_REMOTE_CALENDAR_GROUP,
+                               SynchronizeRemoteCalendarJob.class);
     return info;
+  }
+
+  public static String getRemoteCalendarName(String username) {
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    RepositoryService repositoryService = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
+    String repoName = null;
+    try {
+      repoName = repositoryService.getCurrentRepository().getConfiguration().getName();
+    } catch (RepositoryException e) {
+      log_.error("Repository is error", e);
+    }
+    StringBuilder jobNameBd = new StringBuilder().append(SYNCHRONIZE_REMOTE_CALENDAR_JOB)
+                                                 .append("_")
+                                                 .append(username)
+                                                 .append("_")
+                                                 .append(repoName);
+    return jobNameBd.toString();
   }
 
   private Node getUserCalendarHome(SessionProvider provider) throws Exception {

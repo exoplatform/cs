@@ -26,6 +26,7 @@ import java.util.ResourceBundle;
 
 import javax.jcr.ItemExistsException;
 import javax.jcr.Node;
+import javax.jcr.RepositoryException;
 
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
@@ -697,6 +698,10 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     if (job == null) {
       JobDataMap jobData = new JobDataMap();
       jobData.put(SynchronizeRemoteCalendarJob.USERNAME, username);
+      RepositoryService repositoryService = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
+      jobData.put(SynchronizeRemoteCalendarJob.REPOSITORY_NAME, repositoryService.getCurrentRepository()
+                                                                                 .getConfiguration()
+                                                                                 .getName());
       PeriodInfo periodInfo = new PeriodInfo(null, null, 0, 5 * 60 * 1000);
       schedulerService.addPeriodJob(info, periodInfo, jobData);
     }
@@ -716,7 +721,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     List<Object> list = schedulerService.getAllJobs();
     for (Object obj : list) {
       JobDetail jobDetail = (JobDetail) obj;
-      if (jobDetail.getName().equals(SynchronizeRemoteCalendarJob.SYNCHRONIZE_REMOTE_CALENDAR_JOB + "_" + username)) {
+      if (jobDetail.getName().equals(SynchronizeRemoteCalendarJob.getRemoteCalendarName(username))) {
         return jobDetail;
       }
     }
