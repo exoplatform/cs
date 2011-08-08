@@ -160,6 +160,7 @@ public class MailServiceImpl implements MailService, Startable {
     storage_ = new JCRDataStorage(nodeHierarchyCreator, reposervice);
     emlImportExport_ = new EMLImportExport(storage_);
     checkingLog_ = new ConcurrentHashMap<String, CheckingInfo>();
+    this.repositoryService = reposervice;
     this.schedulerService_ = schedulerService;
     this.continuationService_ = continuationService;
   }
