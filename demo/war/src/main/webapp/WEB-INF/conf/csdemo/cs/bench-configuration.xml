@@ -79,10 +79,6 @@
           <value>all</value> <!-- string all/public/private -->
         </value-param>
         <value-param>
-          <name>baseURL</name> <!-- url of calendar portlet -->
-          <value></value> <!-- http://hostname:port/portalcontainer/.../calendar -->
-        </value-param>
-        <value-param>
           <name>rand</name> <!-- randomize or not -->
           <value>true</value>
         </value-param>

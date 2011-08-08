@@ -17,6 +17,7 @@
 package org.exoplatform.calendar.bench;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -155,10 +156,10 @@ public class CalendarDataInjector extends DataInjector {
   public void inject() throws Exception {
     initDatas();
     if ("all".equals(typeOfInject)) {
-      initPublicCalendar();
       if (currentUser.length() > 0) {
         initPrivateCalendar();
       }
+      initPublicCalendar();
     } else if ("public".equals(typeOfInject)) {
       initPublicCalendar();
     } else if (currentUser.length() > 0) {
@@ -203,6 +204,7 @@ public class CalendarDataInjector extends DataInjector {
 
   @Override
   public void reject() throws Exception {
+    setHistoryInject();
     if ("all".equals(typeOfInject)) {
       // remove public
       removePublicData();
@@ -266,6 +268,7 @@ public class CalendarDataInjector extends DataInjector {
         calService.saveUserEvent(currentUser, calendar.getId(), event, true);
       }
     }
+    saveHistoryInject();
   }
 
   private List<EventCategory> findEventCategorys() throws Exception {
@@ -328,7 +331,7 @@ public class CalendarDataInjector extends DataInjector {
     setting.setWorkingTimeEnd("18:00");
     setting.setShowWorkingTime(false);
     setting.setLocation("VNM");
-    setting.setTimeZone("Asia/Bangkok");
+    setting.setTimeZone("Asia/Ho_Chi_Minh");
     return setting;
   }
 
@@ -340,9 +343,9 @@ public class CalendarDataInjector extends DataInjector {
     calendar.setName(calRandomWords(5));
     calendar.setDescription(randomWords(20));
     calendar.setCalendarColor(getRandomColor());
-    calendar.setEditPermission(new String[] { currentUser });
-    calendar.setGroups(new String[] { EMPTY });
-    calendar.setViewPermission(new String[] { currentUser });
+    calendar.setEditPermission(new String[] {});
+    calendar.setGroups(new String[] {});
+    calendar.setViewPermission(new String[] {});
     calendar.setPrivateUrl(EMPTY);
     calendar.setPublicUrl(EMPTY);
     calendar.setPublic(false);
@@ -365,7 +368,7 @@ public class CalendarDataInjector extends DataInjector {
     calendar.setPublicUrl(EMPTY);
     calendar.setPublic(true);
     calendar.setLocale("VNM");
-    calendar.setTimeZone("Asia/Bangkok");
+    calendar.setTimeZone("Asia/Ho_Chi_Minh");
     return calendar;
   }
 
@@ -401,13 +404,14 @@ public class CalendarDataInjector extends DataInjector {
     categoryEvent.setInvitation(new String[] { EMPTY });
     categoryEvent.setIsExceptionOccurrence(false);
     categoryEvent.setOriginalReference(EMPTY);
-    categoryEvent.setParticipant(new String[] { EMPTY });
-    categoryEvent.setParticipantStatus(new String[] { EMPTY });
-    categoryEvent.setPriority(EMPTY);
+    categoryEvent.setParticipant(new String[] { currentUser });
+    categoryEvent.setParticipantStatus(new String[] { currentUser+":"});
+    categoryEvent.setPriority(CalendarEvent.PRIORITY_NORMAL);
     categoryEvent.setSendOption(EMPTY);
     categoryEvent.setStatus(EMPTY);
     categoryEvent.setTaskDelegator(EMPTY);
-
+    categoryEvent.setRepeatType(CalendarEvent.RP_NOREPEAT);
+    
     categoryEvent.setSummary(calRandomWords(5));
     categoryEvent.setPrivate(!isPublic);
     return categoryEvent;
@@ -469,4 +473,42 @@ public class CalendarDataInjector extends DataInjector {
     return eventCategory.get(new Random().nextInt(i));
   }
 
+  private void saveHistoryInject() throws Exception {
+    if (baseURL == null || baseURL.trim().length() == 0) {
+      baseURL = publicCalendar.toString();
+      baseURL += ";" + privateCalendar.toString();
+      baseURL += ";[";
+      for (CalendarCategory cat : categories) {
+        baseURL += cat.getId() + ",";
+      }
+      baseURL += " ]";
+      setting.setBaseURL(baseURL);
+      calService.saveCalendarSetting(currentUser, setting);
+    }
+  }
+
+  private void setHistoryInject() {
+    if (privateCalendar.size() == 0) {
+      initDatas();
+      try {
+        String s = calService.getCalendarSetting(currentUser).getBaseURL();
+        String[] strs = s.split(";");
+        publicCalendar.addAll(convertStringToList(strs[0]));
+        privateCalendar.addAll(convertStringToList(strs[1]));
+        CalendarCategory category = new CalendarCategory();
+        for (String string : convertStringToList(strs[2])) {
+          category.setId(string);
+          categories.add(category);
+        }
+      } catch (Exception e) {
+      }
+    }
+  }
+
+  private List<String> convertStringToList(String s) {
+    s = s.replace("[", "").replace("]", "");
+    s = s.trim().replaceAll("(,\\s*)", ",").replaceAll("(\\s*,)", ",");
+    String[] strs = s.split(",");
+    return new ArrayList<String>(Arrays.asList(strs));
+  }
 }
