@@ -1081,6 +1081,8 @@ public class RESTXMPPService implements ResourceContainer, Startable {
   @Path("/history/getmessages/{usernameto}/{isGroupChat}/")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getAllHistory(@PathParam("usernameto") String usernameto, @PathParam("isGroupChat") Boolean isGroupChat, @QueryParam("usernamefrom") String usernamefrom) {
+    usernameto = XMPPSessionImpl.decodeUsername(usernameto);
+    usernamefrom = XMPPSessionImpl.decodeUsername(usernamefrom);
     if (this.rb == null)
       loadResourceBundle();
     if (usernamefrom == null || usernamefrom.length() == 0)
@@ -1119,6 +1121,8 @@ public class RESTXMPPService implements ResourceContainer, Startable {
   @Path("/history/getmessages/{usernameto}/{isGroupChat}/{from}/{to}/")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getHistoryBetweenDate(@PathParam("usernameto") String usernameto, @PathParam("isGroupChat") Boolean isGroupChat, @PathParam("from") String from, @PathParam("to") String to, @QueryParam("usernamefrom") String usernamefrom) {
+    usernameto = XMPPSessionImpl.decodeUsername(usernameto);
+    usernamefrom = XMPPSessionImpl.decodeUsername(usernamefrom);
     if (this.rb == null)
       loadResourceBundle();
     if (usernamefrom == null || usernamefrom.length() == 0)
@@ -1162,6 +1166,8 @@ public class RESTXMPPService implements ResourceContainer, Startable {
   @Path("/history/getmessages/{usernameto}/{isGroupChat}/{from}/")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getHistoryFromDateToNow(@PathParam("usernameto") String usernameto, @PathParam("isGroupChat") Boolean isGroupChat, @PathParam("from") String from, @QueryParam("usernamefrom") String usernamefrom) {
+    usernameto = XMPPSessionImpl.decodeUsername(usernameto);
+    usernamefrom = XMPPSessionImpl.decodeUsername(usernamefrom);
     if (this.rb == null)
       loadResourceBundle();
     if (usernamefrom == null || usernamefrom.length() == 0)
@@ -1226,6 +1232,8 @@ public class RESTXMPPService implements ResourceContainer, Startable {
   @Path("/history/file/getmessages/{usernameto}/{isGroupChat}/{clientTimezoneOffset}/")
   // @OutputTransformer(PassthroughOutputTransformer.class)
   public Response getAllHistoryFile(@PathParam("usernameto") String usernameto, @PathParam("isGroupChat") Boolean isGroupChat, @PathParam("clientTimezoneOffset") String clientTimezoneOffset, @QueryParam("usernamefrom") String usernamefrom) {
+    usernameto = XMPPSessionImpl.decodeUsername(usernameto);
+    usernamefrom = XMPPSessionImpl.decodeUsername(usernamefrom);
     if (this.rb == null)
       loadResourceBundle();
     if (usernamefrom == null || usernamefrom.length() == 0)
@@ -1266,6 +1274,8 @@ public class RESTXMPPService implements ResourceContainer, Startable {
   @Path("/history/file/getmessages/{usernameto}/{isGroupChat}/{from}/{clientTimezoneOffset}/")
   // @OutputTransformer(PassthroughOutputTransformer.class)
   public Response getHistoryFromDateToNowFile(@PathParam("usernameto") String usernameto, @PathParam("isGroupChat") Boolean isGroupChat, @PathParam("from") String from, @PathParam("clientTimezoneOffset") String clientTimezoneOffset, @QueryParam("usernamefrom") String usernamefrom) {
+    usernameto = XMPPSessionImpl.decodeUsername(usernameto);
+    usernamefrom = XMPPSessionImpl.decodeUsername(usernamefrom);
     if (this.rb == null)
       loadResourceBundle();
     try {
@@ -1315,6 +1325,8 @@ public class RESTXMPPService implements ResourceContainer, Startable {
   @Path("/history/file/getmessages/{usernameto}/{isGroupChat}/{from}/{to}/{clientTimezoneOffset}/")
   // @OutputTransformer(PassthroughOutputTransformer.class)
   public Response getHistoryBetweenDateFile(@PathParam("usernameto") String usernameto, @PathParam("isGroupChat") Boolean isGroupChat, @PathParam("from") String from, @PathParam("to") String to, @PathParam("clientTimezoneOffset") String clientTimezoneOffset, @QueryParam("usernamefrom") String usernamefrom) {
+    usernameto = XMPPSessionImpl.decodeUsername(usernameto);
+    usernamefrom = XMPPSessionImpl.decodeUsername(usernamefrom);
     if (this.rb == null)
       loadResourceBundle();
     try {
