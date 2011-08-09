@@ -22,7 +22,7 @@
   <parent>
     <groupId>org.exoplatform.cs</groupId>
     <artifactId>cs</artifactId>
-    <version>1.3.10-SNAPSHOT</version>
+    <version>1.3.10</version>
     <relativePath>../../../pom.xml</relativePath>
   </parent>
   <artifactId>exo.cs.eXoApplication.mail.service</artifactId>
