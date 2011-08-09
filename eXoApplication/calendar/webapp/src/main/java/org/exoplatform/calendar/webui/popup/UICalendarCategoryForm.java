@@ -77,8 +77,8 @@ public class UICalendarCategoryForm extends UIForm {
     CalendarService calService = getApplicationComponent(CalendarService.class) ;
     String username = CalendarUtils.getCurrentUser() ;
     CalendarCategory category = calService.getCalendarCategory(username, categoryId) ;
-    if (category.getId().equals(NewUserListener.DEFAULT_CALENDAR_CATEGORYID) && category.getName().equals(NewUserListener.DEFAULT_CALENDAR_CATEGORYNAME)) {
-      String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_CATEGORYID);
+    if (category.getId().equals(NewUserListener.defaultCalendarCategoryId) && category.getName().equals(NewUserListener.defaultCalendarCategoryName)) {
+      String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarCategoryId, NewUserListener.defaultCalendarCategoryId);
       category.setName(newName);
     }
     setCategoryId(category.getId()) ;

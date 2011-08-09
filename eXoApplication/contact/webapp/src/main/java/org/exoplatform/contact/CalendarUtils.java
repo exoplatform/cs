@@ -26,6 +26,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -40,9 +42,12 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.model.SelectItemOption;
 
 
@@ -86,6 +91,8 @@ public class CalendarUtils {
   public static final String SMALLER_THAN = "<".intern() ;
   public static final String EXTENDEDCHARACTER[] = {SEMICOLON,COMMA,SLASH,BACKSLASH,"'","|",GREATER_THAN,SMALLER_THAN,"\"", "?", "!", "@", "#", "$", "%","^","&","*","+","]","["};
   public static final String SIMPLECHARACTER[] = {GREATER_THAN,SMALLER_THAN};
+  
+  private static Log log = ExoLogger.getLogger(CalendarUtils.class);
   
   static public String[] getUserGroups(String username) throws Exception {
     OrganizationService organization = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
@@ -213,6 +220,21 @@ public class CalendarUtils {
       }
     }
     return null ;
+  }
+  
+  public static String getResourceBundle(String key) {
+    return getResourceBundle(key, null);
+  }
+  
+  public static String getResourceBundle(String key, String defaultValue) {
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    ResourceBundle res = context.getApplicationResourceBundle() ;
+    try {
+      return res.getString(key);
+    } catch (MissingResourceException e) {
+      log.warn("Can not find the resource for key: " + key);
+      return defaultValue;
+    }
   }
   
   public static List<SelectItemOption<String>> getCalendarOption() throws Exception {

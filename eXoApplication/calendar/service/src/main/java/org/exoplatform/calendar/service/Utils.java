@@ -434,7 +434,7 @@ public class Utils {
   }
 
   public static String getDefaultCalendarId(String username) {
-    return new StringBuilder(username).append(MINUS).append(NewUserListener.DEFAULT_CALENDAR_ID).toString();
+    return new StringBuilder(username).append(MINUS).append(NewUserListener.defaultCalendarId).toString();
   }
 
   public static PortalContainer getPortalContainer(JobExecutionContext context) {

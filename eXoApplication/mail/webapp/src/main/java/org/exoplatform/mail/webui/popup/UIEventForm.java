@@ -219,8 +219,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
     SelectOptionGroup privGrp = new SelectOptionGroup("privateCalendar");
     List<org.exoplatform.calendar.service.Calendar> calendars = calendarService.getUserCalendars(username, true) ;
     for(org.exoplatform.calendar.service.Calendar c : calendars) {
-      if (c.getId().equals(org.exoplatform.calendar.service.Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
-        String newName = CalendarUtils.getResourceBundle("UIEventForm.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+      if (c.getId().equals(org.exoplatform.calendar.service.Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.defaultCalendarName)) {
+        String newName = CalendarUtils.getResourceBundle("UIEventForm.label." + NewUserListener.defaultCalendarId);
         c.setName(newName);
       }
       privGrp.addOption(new SelectOption(c.getName(), CalendarUtils.PRIVATE_TYPE + CalendarUtils.COLON + c.getId())) ;
@@ -232,8 +232,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
       SelectOptionGroup sharedGrp = new SelectOptionGroup("sharedCalendar");
       for(org.exoplatform.calendar.service.Calendar c : gcd.getCalendars()) {
         if(CalendarUtils.canEdit(null, org.exoplatform.calendar.service.Utils.getEditPerUsers(c), username)){
-          if (c.getId().equals(org.exoplatform.calendar.service.Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
-            String newName = CalendarUtils.getResourceBundle("UIEventForm.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+          if (c.getId().equals(org.exoplatform.calendar.service.Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.defaultCalendarName)) {
+            String newName = CalendarUtils.getResourceBundle("UIEventForm.label." + NewUserListener.defaultCalendarId);
             c.setName(newName);
           }
           String owner = "" ;
@@ -269,7 +269,17 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<EventCategory> eventCategories = calendarService.getEventCategories(Util.getPortalRequestContext().getRemoteUser()) ;
     for(EventCategory category : eventCategories) {
-      if (category.getId().contains("defaultEventCategoryId") && category.getName().contains("defaultEventCategoryName")) {
+      // Check if EventCategory is default event category
+      boolean isDefaultEventCategory = false;
+      for (int i = 0; i < NewUserListener.defaultEventCategoryIds.length; i++) {
+        if (category.getId().equals(NewUserListener.defaultEventCategoryIds[i])
+            && category.getName().equals(NewUserListener.defaultEventCategoryNames[i])) {
+          isDefaultEventCategory = true;
+          break;
+        }
+      }
+      
+      if (isDefaultEventCategory) {
         String newName = CalendarUtils.getResourceBundle("UIEventForm.label." + category.getId());
         options.add(new SelectItemOption<String>(newName, category.getId())) ;
       } else {

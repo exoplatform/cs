@@ -168,8 +168,8 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     try {
       for(Calendar c : CalendarUtils.getCalendarService().getUserCalendars(CalendarUtils.getCurrentUser(), true)){
-        if (c.getId().equals(Utils.getDefaultCalendarId(CalendarUtils.getCurrentUser())) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
-          String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+        if (c.getId().equals(Utils.getDefaultCalendarId(CalendarUtils.getCurrentUser())) && c.getName().equals(NewUserListener.defaultCalendarName)) {
+          String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
           c.setName(newName);
         }
         options.add(new SelectItemOption<String>(c.getName(), c.getId())) ;
@@ -307,8 +307,8 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
             } 
             List<Calendar> pCals = calendarService.getUserCalendars(username, true) ;
             for(Calendar cal : pCals) {
-              if (cal.getId().equals(Utils.getDefaultCalendarId(username)) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
-                String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+              if (cal.getId().equals(Utils.getDefaultCalendarId(username)) && cal.getName().equals(NewUserListener.defaultCalendarName)) {
+                String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
                 cal.setName(newName);
               }
               if(cal.getName().trim().equalsIgnoreCase(calendarName)) {

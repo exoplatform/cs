@@ -190,8 +190,8 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     List<Calendar> calendars = new ArrayList<Calendar>() ;
     for(GroupCalendarData group : groupCalendars) {      
       for (Calendar calendar : group.getCalendars()) {
-        if (calendar.getId().equals(Utils.getDefaultCalendarId(username)) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
-          String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+        if (calendar.getId().equals(Utils.getDefaultCalendarId(username)) && calendar.getName().equals(NewUserListener.defaultCalendarName)) {
+          String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
           calendar.setName(newName);
         }
         calendars.add(calendar);
@@ -220,8 +220,8 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     List<Calendar> calendars = new ArrayList<Calendar>(); 
     if(groupCalendars != null) {    
       for (Calendar calendar : groupCalendars.getCalendars()) {
-        if (calendar.getId().equals(Utils.getDefaultCalendarId(calendar.getCalendarOwner())) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
-          String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+        if (calendar.getId().equals(Utils.getDefaultCalendarId(calendar.getCalendarOwner())) && calendar.getName().equals(NewUserListener.defaultCalendarName)) {
+          String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
           calendar.setName(newName);
         }
         calendars.add(calendar);

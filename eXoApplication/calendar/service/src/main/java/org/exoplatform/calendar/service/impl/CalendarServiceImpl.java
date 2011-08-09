@@ -555,23 +555,23 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   public void initNewUser(String userName, CalendarSetting defaultCalendarSetting_) throws Exception {
     EventCategory eventCategory = new EventCategory();
     eventCategory.setDataInit(true);
-    for (int id = 0; id < NewUserListener.defaultEventCategoryId.length; id++) {
-      eventCategory.setId(NewUserListener.defaultEventCategoryId[id]);
-      eventCategory.setName(NewUserListener.defaultEventCategoryName[id]);
+    for (int id = 0; id < NewUserListener.defaultEventCategoryIds.length; id++) {
+      eventCategory.setId(NewUserListener.defaultEventCategoryIds[id]);
+      eventCategory.setName(NewUserListener.defaultEventCategoryNames[id]);
       saveEventCategory(userName, eventCategory, true);
     }
 
     // save default calendar category
     CalendarCategory calCategory = new CalendarCategory();
-    calCategory.setId(NewUserListener.DEFAULT_CALENDAR_CATEGORYID);
-    calCategory.setName(NewUserListener.DEFAULT_CALENDAR_CATEGORYNAME);
+    calCategory.setId(NewUserListener.defaultCalendarCategoryId);
+    calCategory.setName(NewUserListener.defaultCalendarCategoryName);
     calCategory.setDataInit(true);
     saveCalendarCategory(userName, calCategory, true);
 
     // save default calendar
     Calendar cal = new Calendar();
     cal.setId(Utils.getDefaultCalendarId(userName));
-    cal.setName(NewUserListener.DEFAULT_CALENDAR_NAME);
+    cal.setName(NewUserListener.defaultCalendarName);
     cal.setCategoryId(calCategory.getId());
     cal.setDataInit(true);
     cal.setCalendarOwner(userName);

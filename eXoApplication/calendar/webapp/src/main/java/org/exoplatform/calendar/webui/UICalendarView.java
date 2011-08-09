@@ -219,8 +219,8 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<String> list = new ArrayList<String>() ;
     for(org.exoplatform.calendar.service.Calendar c : calendarService.getUserCalendars(CalendarUtils.getCurrentUser() , true)) {
-      if (c.getId().equals(Utils.getDefaultCalendarId(CalendarUtils.getCurrentUser())) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
-        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+      if (c.getId().equals(Utils.getDefaultCalendarId(CalendarUtils.getCurrentUser())) && c.getName().equals(NewUserListener.defaultCalendarName)) {
+        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
         c.setName(newName);
       }
       list.add(c.getId()) ;
@@ -309,8 +309,18 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     List<EventCategory> eventCategories = calendarService.getEventCategories(username) ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     for(EventCategory category : eventCategories) {
-      if (category.getId().contains("defaultEventCategoryId") && category.getName().contains("defaultEventCategoryName")) {
-        String newName = CalendarUtils.getResourceBundle("UICalendarView.label." + category.getId());
+      // Check if EventCategory is default event category
+      boolean isDefaultEventCategory = false;
+      for (int i = 0; i < NewUserListener.defaultEventCategoryIds.length; i++) {
+        if (category.getId().equals(NewUserListener.defaultEventCategoryIds[i])
+            && category.getName().equals(NewUserListener.defaultEventCategoryNames[i])) {
+          isDefaultEventCategory = true;
+          break;
+        }
+      }
+      
+      if (isDefaultEventCategory) {
+        String newName = CalendarUtils.getResourceBundle("UICalendarView.label." + category.getId(), category.getId());
         options.add(new SelectItemOption<String>(newName, category.getId())) ;
         category.setName(newName);
       } else {
@@ -320,6 +330,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     UIFormSelectBox categoryInput =   new UIFormSelectBox(EVENT_CATEGORIES, EVENT_CATEGORIES, options) ;
     addUIFormInput(categoryInput) ;
   }
+  
   protected String getSelectedCategory() {
     return getUIFormSelectBox(EVENT_CATEGORIES).getValue() ;
   }
@@ -387,8 +398,18 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       List<EventCategory> eventCategories = calendarService.getEventCategories(username) ;
       List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
       for(EventCategory category : eventCategories) {
-        if (category.getId().contains("defaultEventCategoryId") && category.getName().contains("defaultEventCategoryName")) {
-          String newName = CalendarUtils.getResourceBundle("UICalendarView.label." + category.getId());
+        // Check if EventCategory is default event category
+        boolean isDefaultEventCategory = false;
+        for (int i = 0; i < NewUserListener.defaultEventCategoryIds.length; i++) {
+          if (category.getId().equals(NewUserListener.defaultEventCategoryIds[i])
+              && category.getName().equals(NewUserListener.defaultEventCategoryNames[i])) {
+            isDefaultEventCategory = true;
+            break;
+          }
+        }
+        
+        if (isDefaultEventCategory) {
+          String newName = CalendarUtils.getResourceBundle("UICalendarView.label." + category.getId(), category.getId());
           options.add(new SelectItemOption<String>(newName, category.getId())) ;
         } else {
           options.add(new SelectItemOption<String>(category.getName(), category.getId())) ;        
@@ -1328,22 +1349,22 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           CalendarEvent instanceEvent = new CalendarEvent();
           instanceEvent.setId(eventId);
           if(instanceEvent.getEventType().equalsIgnoreCase("Task")){
-            uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar" + "aaa", null, 1)) ;
+            uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet) ;
           }
           if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
             calendar = calService.getUserCalendar(currentUser, selectedCalendarId) ;
-            if (calendar.getId().equals(Utils.getDefaultCalendarId(currentUser)) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
-              String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+            if (calendar.getId().equals(Utils.getDefaultCalendarId(currentUser)) && calendar.getName().equals(NewUserListener.defaultCalendarName)) {
+              String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
               calendar.setName(newName);
             }
           } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
             GroupCalendarData gCalendarData = calService.getSharedCalendars(currentUser, true) ;
             if(gCalendarData != null) { 
               calendar = gCalendarData.getCalendarById(selectedCalendarId) ;
-              if (calendar.getId().equals(Utils.getDefaultCalendarId(calendar.getCalendarOwner())) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
-                String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+              if (calendar.getId().equals(Utils.getDefaultCalendarId(calendar.getCalendarOwner())) && calendar.getName().equals(NewUserListener.defaultCalendarName)) {
+                String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
                 calendar.setName(newName);
               }
               if(calendar != null && !CalendarUtils.isEmpty(calendar.getCalendarOwner())) calendar.setName(calendar.getCalendarOwner() + "-" + calendar.getName()) ;

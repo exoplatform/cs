@@ -180,8 +180,8 @@ public class UITaskDetailTab extends UIFormInputWithActions {
     String username = CalendarUtils.getCurrentUser() ;
     List<Calendar> calendars = calendarService.getUserCalendars(username, true) ;
     for(Calendar c : calendars) {
-      if (c.getId().equals(Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
-        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+      if (c.getId().equals(Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.defaultCalendarName)) {
+        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
         c.setName(newName);
       }
       options.add(new SelectItemOption<String>(c.getName(), c.getId())) ;

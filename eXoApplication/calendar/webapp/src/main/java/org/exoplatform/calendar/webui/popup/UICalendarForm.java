@@ -191,8 +191,8 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     List<CalendarCategory> categories = calendarService.getCategories(username) ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     for(CalendarCategory category : categories) {
-      if (category.getId().equals(NewUserListener.DEFAULT_CALENDAR_CATEGORYID) && category.getName().equals(NewUserListener.DEFAULT_CALENDAR_CATEGORYNAME)) {
-        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_CATEGORYID);
+      if (category.getId().equals(NewUserListener.defaultCalendarCategoryId) && category.getName().equals(NewUserListener.defaultCalendarCategoryName)) {
+        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarCategoryId, NewUserListener.defaultCalendarCategoryId);
         category.setName(newName);
       }
       options.add(new SelectItemOption<String>(category.getName(), category.getId())) ;
@@ -246,8 +246,8 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     isAddNew_ = false ;
     calendar_ = calendar ;
     UIFormInputWithActions calendarDetail = getChildById(INPUT_CALENDAR);    
-    if (calendar.getId().equals(Utils.getDefaultCalendarId(CalendarUtils.getCurrentUser())) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
-      String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+    if (calendar.getId().equals(Utils.getDefaultCalendarId(CalendarUtils.getCurrentUser())) && calendar.getName().equals(NewUserListener.defaultCalendarName)) {
+      String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
       calendar.setName(newName);
     }
     //    CalendarSetting setting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting();
@@ -553,8 +553,8 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
           calendar.setCategoryId(calendarCategoryId) ;
           List<Calendar> pCals = calendarService.getUserCalendars(username, true) ;
           for(Calendar cal : pCals) {
-            if (cal.getId().equals(Utils.getDefaultCalendarId(username)) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
-              String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+            if (cal.getId().equals(Utils.getDefaultCalendarId(username)) && cal.getName().equals(NewUserListener.defaultCalendarName)) {
+              String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
               cal.setName(newName);
             }
             if(uiForm.isAddNew_) {
