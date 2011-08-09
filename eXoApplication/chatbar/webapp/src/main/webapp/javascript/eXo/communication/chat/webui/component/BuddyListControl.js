@@ -230,13 +230,13 @@ BuddyListControl.prototype.removeBuddy = function(buddyId){
  * @param {BuddyInfo} buddyInfo
  */
 BuddyListControl.prototype.addBuddy = function(buddyInfo){
-  window.jsconsole.warn('Adding new buddy: ' + buddyInfo.user);
-  var buddyItemObj = this.buddyList[buddyInfo.user];
+  window.jsconsole.warn('Adding new buddy: ' + buddyInfo.nickname);
+  var buddyItemObj = this.buddyList[buddyInfo.nickname];
   if (buddyItemObj) {
     window.jsconsole.warn('User existed, skip add buddy');
   } else {
     buddyItemObj = this.getNewInstanceOfBuddyItem(buddyInfo);
-    this.buddyList[buddyInfo.user] = buddyItemObj;
+    this.buddyList[buddyInfo.nickname] = buddyItemObj;
     this.rootNode.appendChild(buddyItemObj.rootNode);
   }
 };
