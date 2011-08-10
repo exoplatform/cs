@@ -726,14 +726,15 @@
 	              } else {
 	             %>
 	             
-	             <div class="UIAction"> 
+	             <div><%=_ctx.appRes(uicomponent.id + ".label.there-are-no-account");%></div>
+	             <div class="UIAction">
 	               <table class="ActionContainer">
 	                 <tr>
 	                   <td class="NoBorder" align="center">
-	                   <%
-	                     String actionLabel = _ctx.appRes(uicomponent.id + ".label.there-are-no-account"); 
-	                     String link = uicomponent.event("AddAccount");
-	                   %>
+	                     <%
+	                       String actionLabel = _ctx.appRes(uicomponent.id + ".label.create-account"); 
+	                       String link = uicomponent.event("AddAccount");
+	                     %>
 	                     <div onclick="$link" class="ActionButton LightBlueStyle">
 	                       <div class="ButtonLeft">
 	                         <div class="ButtonRight">
@@ -747,7 +748,6 @@
 	                 </tr>
 	               </table> 
 	             </div>
-             
              <% 
                }
               %>

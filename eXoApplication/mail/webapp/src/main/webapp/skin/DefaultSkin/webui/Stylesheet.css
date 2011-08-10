@@ -685,7 +685,11 @@
   border-right: none;
 }
 
-.UIMailPortlet .UIMessageList .UIListUsers .Text a {
+.UIMailPortlet .UIMessageList .UIListUsers .MessageNotice {
+  width: 100%;
+}
+
+.UIMailPortlet .UIMessageList .UIListUsers .ActionContainer .Text a {
   color:black;
 }
 
