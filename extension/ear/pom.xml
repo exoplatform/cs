@@ -144,12 +144,7 @@
      </exclusions>
     
     </dependency>
-    <dependency>
-        <groupId>openfire</groupId>
-        <artifactId>openfire</artifactId>
-        <version>${openfire.version}</version>
-    <scope>compile</scope>
-      </dependency>    
+    
     <dependency>
         <groupId>commons-lang</groupId>
         <artifactId>commons-lang</artifactId>
@@ -203,7 +198,6 @@
           <displayName>collaboration-extension</displayName>
           <defaultLibBundleDir>lib</defaultLibBundleDir>
           <modules>
-           
             <jarModule>
               <groupId>org.exoplatform.cs</groupId>
               <artifactId>exo.cs.web.webservice</artifactId>
