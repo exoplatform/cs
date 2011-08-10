@@ -742,9 +742,36 @@
 		<version>${xerces.version}</version>
 		<type>jar</type>
 	</dependency>
-<dependency><groupId>javax.activation</groupId><artifactId>activation</artifactId><version>${javax.activation.version}</version><type>jar</type></dependency><!-- 1.1-->
-<dependency><groupId>commons-httpclient</groupId><artifactId>commons-httpclient</artifactId><version>${commons-httpclient.version}</version><type>jar</type></dependency>
-<dependency><groupId>org.jboss</groupId><artifactId>jboss-common-core</artifactId><version>${org.jboss.version}</version><type>jar</type></dependency>
+	<dependency>
+		<groupId>javax.activation</groupId>
+		<artifactId>activation</artifactId>
+		<version>${javax.activation.version}</version><
+		type>jar</type>
+	</dependency>
+	<dependency>
+		<groupId>commons-httpclient</groupId>
+		<artifactId>commons-httpclient</artifactId>
+		<version>${commons-httpclient.version}</version>
+		<type>jar</type>
+	</dependency>
+	<dependency>
+		<groupId>org.jboss</groupId>
+		<artifactId>jboss-common-core</artifactId>
+		<version>${org.jboss.version}</version>
+		<type>jar</type>
+	</dependency>
+	<dependency>
+		<groupId>org.exoplatform.core</groupId>
+		<artifactId>exo.core.component.organization.jdbc</artifactId>
+		<version>${org.exoplatform.core.version}</version>
+		<type>jar</type>
+	</dependency>
+	<dependency>
+		<groupId>org.exoplatform.kernel</groupId>
+		<artifactId>exo.kernel.component.ext.cache.impl.jboss.v3</artifactId>
+		<version>${org.exoplatform.kernel.version}</version>
+		<type>jar</type>
+	</dependency>
 
   <dependency>
       <groupId>bouncycastle</groupId>
