@@ -626,5 +626,6 @@
     </component-plugin>      
   </external-component-plugins>
 
-    <remove-configuration>org.exoplatform.services.transaction.ExoTransactionService</remove-configuration> 
+    <remove-configuration>org.exoplatform.services.transaction.ExoTransactionService</remove-configuration>
+    <remove-configuration>org.exoplatform.services.deployment.ContentInitializerService</remove-configuration>
 </configuration>
