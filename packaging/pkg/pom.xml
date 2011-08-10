@@ -745,8 +745,8 @@
 	<dependency>
 		<groupId>javax.activation</groupId>
 		<artifactId>activation</artifactId>
-		<version>${javax.activation.version}</version><
-		type>jar</type>
+		<version>${javax.activation.version}</version>
+		<type>jar</type>
 	</dependency>
 	<dependency>
 		<groupId>commons-httpclient</groupId>
