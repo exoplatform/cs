@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
+  xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
+
+  <component>
+    <type>org.exoplatform.cs.statistics.JCRAPIAspectConfig</type>
+    <init-params>
+      <values-param>
+        <name>targetInterfaces</name>
+        <value>org.exoplatform.calendar.service.CalendarService</value>
+        <value>org.exoplatform.contact.service.ContactService</value>
+        <value>org.exoplatform.mail.service.MailService</value>
+        <value>org.exoplatform.services.xmpp.rest.RESTXMPPService</value>
+        <value>org.exoplatform.content.service.ContentDAO</value>
+        <value>org.exoplatform.services.authentication.rest.RESTAuthenticator</value>
+        <value>org.exoplatform.services.organization.rest.json.RESTOrganizationServiceJSONImpl</value>
+        <value>org.exoplatform.services.organization.rest.xml.RESTOrganizationServiceXMLImpl</value>
+        <value>org.exoplatform.services.presence.DefaultPresenceStatus</value>
+        <value>org.exoplatform.services.uistate.rest.UIStateService</value>
+        <value>org.exoplatform.services.xmpp.connection.impl.XMPPMessenger</value>
+        <value>org.exoplatform.services.xmpp.history.impl.jcr.HistoryImpl</value>
+        <value>org.exoplatform.services.xmpp.rest.FileExchangeService</value>
+        <value>org.exoplatform.services.xmpp.userinfo.UserInfoService</value>
+        <value>org.exoplatform.webservice.cs.calendar.CalendarWebservice</value>
+        <value>org.exoplatform.webservice.cs.mail.MailWebservice</value>
+      </values-param>
+    </init-params>
+  </component>
+</configuration>

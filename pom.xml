@@ -44,6 +44,7 @@
      <org.exoplatform.social.version>1.2.1-SNAPSHOT</org.exoplatform.social.version>
 	
     <!-- 3rd parties -->
+    <org.aspectj.version>1.6.10</org.aspectj.version>
     <bouncycastle.version>136</bouncycastle.version>
     <commons-lang.version>2.6</commons-lang.version>
     <commons-chain.version>1.2</commons-chain.version>
@@ -239,6 +240,11 @@
         <groupId>org.exoplatform.tool</groupId>
         <artifactId>exo.tool.framework.junit</artifactId>
         <version>${exo.tool.framework.junit.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.aspectj</groupId>
+        <artifactId>aspectjrt</artifactId>
+        <version>${org.aspectj.version}</version>
       </dependency>
       <dependency>
         <groupId>commons-lang</groupId>
@@ -539,6 +545,7 @@
   </profiles>
 
   <modules>
+    <module>component</module>
     <module>web</module>
     <module>eXoApplication</module>
     <module>extension</module>
