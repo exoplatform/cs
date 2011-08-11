@@ -62,6 +62,9 @@ public class MailDataInjector extends DataInjector {
   
   private int maxMessages = 100;
   
+  /** attachment size in KByte */
+  private int attachmentSize = 100; // KByte
+  
   private boolean randomize = false;
   
   private Random random = new Random();
@@ -160,6 +163,9 @@ public class MailDataInjector extends DataInjector {
     param = initParams.getValueParam("mM");
     if (param != null)
       maxMessages = Integer.parseInt(param.getValue());
+    param = initParams.getValueParam("attSize");
+    if (param != null)
+      attachmentSize = Integer.parseInt(param.getValue());
     param = initParams.getValueParam("rand");
     if (param != null) 
      randomize = Boolean.parseBoolean(param.getValue());
@@ -170,6 +176,7 @@ public class MailDataInjector extends DataInjector {
     String username = ConversationState.getCurrent().getIdentity().getUserId();
     List<Account> accounts = generateAccounts();
     int accSize = accounts.size();
+    byte[] attachment = createTextResource(attachmentSize).getBytes();
     for (int i = 0; i < accSize; i++) {
       log.info("\tCreate account " + (i + 1) + "/" + accSize + " ...... ");
       Account account = accounts.get(i);
@@ -193,7 +200,7 @@ public class MailDataInjector extends DataInjector {
                                                   account.getEmailAddress(),
                                                   randomWords(100),
                                                   randomParagraphs(4),
-                                                  createTextResource(100).getBytes(),
+                                                  attachment,
                                                   "filename" + IdGenerator.generate() + ".txt",
                                                   null);
           }
