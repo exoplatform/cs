@@ -25,14 +25,38 @@
         <value-param>
           <name>defaultEventCategories</name>
           <value>Meeting,Calls,Clients,Holiday,Anniversary</value><!-- Multi value, use coma (,) to split values-->
+          <!-- The event category's name will be get from resource bundle by key "UICalendars.label." + defaultEventCategory's value. 
+               If the key does not exist, the defaultEventCategory's value will be used to display. 
+               Sample: 
+                  If the value is "Meeting" then the resource bundle key is "UICalendars.label.Meeting". 
+                    The value of this key is "Meeting", so "Meeting" will be display as default event category.
+                  If the value is "Not exist key", because this key doesn't exist in resource bundle then 
+                    "Not exist key" will be display as default event category.
+          -->
         </value-param>
         <value-param>
           <name>defaultCalendarCategory</name>
-          <value>My group</value><!-- Single value-->
+          <value>defaultCalendarCategoryId</value><!-- Single value, default calendar category's name is "My group"-->
+          <!-- The calendar category's name will be get from resource bundle by key "UICalendars.label." + defaultCalendarCategory's value. 
+               If the key does not exist, the defaultCalendarCategory's value will be used to display. 
+               Sample:
+                  If the value is "defaultCalendarCategoryId" then the resource bundle key is "UICalendars.label.defaultCalendarCategoryId".
+                    The value of this key is "My group", so "My group" will be display as default calendar category.
+                  If the value is "My calendar category", because this key doesn't exist in resource bundle then
+                    "My calendar category" will be display as default calendar category.
+          -->
         </value-param>
         <value-param>
           <name>defaultCalendar</name>
-          <value>Default</value><!-- Multi value, use coma (,) to split values-->
+          <value>defaultCalendarId</value> <!-- Single value, default calendar's name is "Default"-->
+          <!-- The calendar's name will be get from resource bundle by key "UICalendars.label." + defaultCalendar's value. 
+               If the key does not exist, the defaultCalendar's value will be used to display. 
+               Sample: 
+                  If the value is "defaultCalendarId" then the resource bundle key is "UICalendars.label.defaultCalendarId".
+                    The value of this key is "Default", so "Default" will be display as default calendar.
+                  If the value is "My calendar", because this key doesn't exist in resource bundle then
+                    "My calendar" will be display as default calendar.
+          -->
         </value-param>
         <!--Params for default calendar setting-->
         <value-param>
