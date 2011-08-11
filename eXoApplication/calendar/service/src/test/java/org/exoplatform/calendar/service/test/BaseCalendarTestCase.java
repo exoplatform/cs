@@ -116,7 +116,7 @@ public abstract class BaseCalendarTestCase extends BasicTestCase {
 
   private static void initContainer() {
     try {
-      String containerConf = BaseCalendarTestCase.class.getResource("/conf/portal/test-configuration.xml").toString();
+      String containerConf = BaseCalendarTestCase.class.getResource("/conf/portal/configuration.xml").toString();
       StandaloneContainer.addConfigurationURL(containerConf);
       container = StandaloneContainer.getInstance();
       String loginConf = Thread.currentThread().getContextClassLoader().getResource("conf/portal/login.conf").toString();

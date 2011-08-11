@@ -2,12 +2,6 @@
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
   xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
 
-  <!-- 
-  <component>
-    <type>org.exoplatform.contact.service.impl.JCRDataStorage</type>
-  </component>
-   -->
-
    <component>
     <key>org.exoplatform.calendar.service.CalendarService</key>
     <type>org.exoplatform.calendar.service.impl.CalendarServiceImpl</type>
@@ -18,6 +12,35 @@
       </properties-param>
     </init-params>
   </component>
+  
+  <component>
+    <key>org.exoplatform.services.organization.OrganizationService</key>
+    <type>org.exoplatform.services.organization.hibernate.OrganizationServiceImpl</type>
+  </component>
+  
+  <component>
+    <key>org.exoplatform.services.database.HibernateService</key>
+    <type>org.exoplatform.services.database.impl.HibernateServiceImpl</type>
+    <init-params>
+      <properties-param>
+        <name>hibernate.properties</name>
+        <description>Default Hibernate Service</description>
+        <property name="hibernate.show_sql" value="false" />
+        <property name="hibernate.cglib.use_reflection_optimizer" value="true" />
+        <property name="hibernate.connection.url" value="jdbc:hsqldb:mem:target/temp/data/portal" />
+        <property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver" />
+        <property name="hibernate.connection.autocommit" value="true" />
+        <property name="hibernate.connection.username" value="sa" />
+        <property name="hibernate.connection.password" value="" />
+        <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect" />
+        <property name="hibernate.c3p0.min_size" value="5" />
+        <property name="hibernate.c3p0.max_size" value="20" />
+        <property name="hibernate.c3p0.timeout" value="1800" />
+        <property name="hibernate.c3p0.max_statements" value="50" />
+      </properties-param>
+    </init-params>
+  </component>
+  
   <component>
     <key>org.exoplatform.services.cache.CacheService</key>
     <jmx-name>cache:type=CacheService</jmx-name>
