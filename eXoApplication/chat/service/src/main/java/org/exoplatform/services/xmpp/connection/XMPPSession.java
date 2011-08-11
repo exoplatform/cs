@@ -18,6 +18,7 @@ package org.exoplatform.services.xmpp.connection;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.exoplatform.services.xmpp.bean.ConfigRoomBean;
 import org.exoplatform.services.xmpp.bean.FormBean;
@@ -318,7 +319,7 @@ public interface XMPPSession {
    * @param body the body of message
    * @throws XMPPException the XMPPException
    */
-  void sendMessageToMUC(String room, String body) throws XMPPException;
+  void sendMessageToMUC(String room, String body, Map<String, Object> params) throws XMPPException;
 
   /**
    * Change presence for current user.

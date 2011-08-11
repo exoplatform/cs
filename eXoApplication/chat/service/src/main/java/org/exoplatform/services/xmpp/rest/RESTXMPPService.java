@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
+import javax.jcr.RepositoryException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -46,6 +47,7 @@ import javax.ws.rs.ext.RuntimeDelegate;
 import org.exoplatform.common.http.HTTPStatus;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.presence.DefaultPresenceStatus;
@@ -76,9 +78,11 @@ import org.exoplatform.services.xmpp.history.impl.jcr.HistoryImpl;
 import org.exoplatform.services.xmpp.userinfo.UserInfo;
 import org.exoplatform.services.xmpp.userinfo.UserInfoService;
 import org.exoplatform.services.xmpp.util.CometdChannels;
+import org.exoplatform.services.xmpp.util.HistoryUtils;
 import org.exoplatform.services.xmpp.util.PresenceUtil;
 import org.exoplatform.services.xmpp.util.SearchFormFields;
 import org.exoplatform.services.xmpp.util.TransformUtils;
+import org.exoplatform.services.xmpp.util.XMPPConnectionUtils;
 import org.exoplatform.ws.frameworks.cometd.transport.ContinuationServiceDelegate;
 import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.XMPPConnection;
@@ -163,6 +167,8 @@ public class RESTXMPPService implements ResourceContainer, Startable {
 
   private final ResourceBundleService       rbs;
 
+  private final RepositoryService           repoService;
+
   private ResourceBundle                    rb;
 
   private final static String               BUNDLE_NAME          = "locale.message.chat.serverMessage";
@@ -179,11 +185,12 @@ public class RESTXMPPService implements ResourceContainer, Startable {
 
   }
 
-  public RESTXMPPService(XMPPMessenger messenger, UserInfoService organization, ContinuationServiceDelegate delegate, HistoryImpl history, ResourceBundleService rbs) {
+  public RESTXMPPService(XMPPMessenger messenger, UserInfoService organization, ContinuationServiceDelegate delegate, HistoryImpl history, ResourceBundleService rbs, RepositoryService repoService) {
     this.messenger = messenger;
     this.organization = organization;
     this.delegate = delegate;
     this.history = history;
+    this.repoService = repoService;
     this.rbs = rbs;
   }
 
@@ -1749,6 +1756,15 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       Message message = new Message(messageBean.getTo(), Message.Type.chat);
       message.setFrom(from);
       message.setBody(messageBean.getBody());
+      String repoName = null;
+      try {
+        repoName = this.repoService.getCurrentRepository().getConfiguration().getName();
+      } catch (RepositoryException e) {
+        log.error("Could not get current repository's name",e);
+      }
+      if (repoName != null) {
+        message.setProperty(XMPPConnectionUtils.REPOSITORY_NAME, repoName);
+      }
       session.sendMessage(message);
       return Response.ok().cacheControl(cc).build();
     } else {
@@ -1773,8 +1789,18 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       String room = messageBean.getTo();
       String body = messageBean.getBody();
       XMPPSession session = messenger.getSession(username);
+      Map<String, Object> params = new HashMap<String, Object>();
       if (session != null) {
-        session.sendMessageToMUC(room, body);
+        String repoName = null;
+        try {
+          repoName = this.repoService.getCurrentRepository().getConfiguration().getName();
+        } catch (RepositoryException e) {
+          log.error("Could not get current repository's name", e);
+        }
+        if (repoName != null) {
+          params.put(XMPPConnectionUtils.REPOSITORY_NAME, repoName);
+        }
+        session.sendMessageToMUC(room, body, params);
         return Response.ok().cacheControl(cc).build();
       } else {
         delegate.sendMessage(username, CometdChannels.NOTIFICATION, "session-expired", null);

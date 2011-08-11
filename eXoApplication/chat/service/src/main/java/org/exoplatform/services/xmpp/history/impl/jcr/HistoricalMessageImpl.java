@@ -80,6 +80,11 @@ public class HistoricalMessageImpl implements HistoricalMessage {
    */
   @JcrProperty(name = "lr:messagereceive")
   private Boolean receive;
+  
+  /**
+   * 
+   */  
+  private String repository;
 
   /**
    * 
@@ -198,6 +203,16 @@ public class HistoricalMessageImpl implements HistoricalMessage {
    */
   public void setReceive(Boolean receive) {
     this.receive = receive;
+  }
+
+  @Override
+  public String getRepository() {
+    return repository;
+  }
+
+  @Override
+  public void setRepository(String repository) {
+    this.repository = repository;
   }
 
 }

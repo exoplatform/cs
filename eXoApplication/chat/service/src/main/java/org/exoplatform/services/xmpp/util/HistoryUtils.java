@@ -45,6 +45,7 @@ public class HistoryUtils {
     historicalMessage.setType(message.getType().name());
     historicalMessage.setBody(message.getBody());
     historicalMessage.setReceive(false);
+    historicalMessage.setRepository(message.getProperty(XMPPConnectionUtils.REPOSITORY_NAME).toString());
     Date delayedDate = getDelayedDate(message);
     if (delayedDate != null)
       historicalMessage.setDateSend(new Date(delayedDate.getTime()));

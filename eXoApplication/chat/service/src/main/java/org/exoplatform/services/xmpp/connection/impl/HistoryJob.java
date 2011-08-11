@@ -18,10 +18,14 @@ package org.exoplatform.services.xmpp.connection.impl;
 
 import java.util.Queue;
 
+import javax.jcr.RepositoryException;
+
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer;
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.config.RepositoryConfigurationException;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -48,19 +52,35 @@ public class HistoryJob implements Job {
       return;
     ExoContainer oldContainer = ExoContainerContext.getCurrentContainer();
     ExoContainerContext.setCurrentContainer(container);
+    RepositoryService repoService = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
     SessionProvider provider = SessionProvider.createSystemProvider();
+    String currentRepo = null;
+    try {
+      currentRepo = repoService.getCurrentRepository().getConfiguration().getName();
+    } catch (RepositoryException e1) {
+      log.warn("Could not get current repository name", e1);
+    }
     try {
       JobDataMap jdatamap = context.getJobDetail().getJobDataMap();
       int logBatchSize = Integer.parseInt(jdatamap.getString("logBatchSize"));
       HistoryImpl historyImpl = (HistoryImpl) container.getComponentInstanceOfType(HistoryImpl.class);
 
       HistoricalMessage message;
-      boolean success;
+      boolean success = false;
       Queue<HistoricalMessage> logQueue = historyImpl.getLogQueue();
       for (int index = 0; index <= logBatchSize && !logQueue.isEmpty(); index++) {
         message = logQueue.poll();
         if (message != null) {
-          success = historyImpl.addHistoricalMessage(message, provider);
+          String repoName = message.getRepository();
+          if (repoName != null) {
+            try {
+              repoService.setCurrentRepositoryName(repoName);
+            } catch (RepositoryConfigurationException ex) {
+              log.error(String.format("Could not set current repository name as %s", repoName), ex);
+            }
+          }
+          if (repoName != null)
+            success = historyImpl.addHistoricalMessage(message, provider);
           if (!success) {
             logQueue.add(message);
           }
@@ -70,6 +90,13 @@ public class HistoryJob implements Job {
       log.error("An exception happened when saving chat message", e);
     } finally {
       provider.close(); // release sessions
+      if (currentRepo != null) {
+        try {
+          repoService.setCurrentRepositoryName(currentRepo);
+        } catch (RepositoryConfigurationException e) {
+          log.error(String.format("Could not set current repository name as %s", currentRepo), e);
+        }
+      }
       ExoContainerContext.setCurrentContainer(oldContainer);
     }
 

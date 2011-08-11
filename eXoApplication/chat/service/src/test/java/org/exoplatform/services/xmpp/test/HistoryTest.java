@@ -41,6 +41,7 @@ import org.exoplatform.services.xmpp.history.impl.jcr.HistoricalMessageImpl;
 import org.exoplatform.services.xmpp.history.impl.jcr.HistoryImpl;
 import org.exoplatform.services.xmpp.history.impl.jcr.InterlocutorImpl;
 import org.exoplatform.services.xmpp.util.HistoryUtils;
+import org.exoplatform.services.xmpp.util.XMPPConnectionUtils;
 import org.jivesoftware.smack.packet.Message;
 
 /**
@@ -94,6 +95,7 @@ public class HistoryTest extends AbstractKernelTest {
     Message message = new Message("root@localhost", Message.Type.chat);
     message.setBody("hello");
     message.setFrom("marry@localhost");
+    message.setProperty(XMPPConnectionUtils.REPOSITORY_NAME, "repository");
     log.info("Initial message:");
     log.info("----------------------------------------------------------");
     dumpMessage(message);
@@ -103,6 +105,7 @@ public class HistoryTest extends AbstractKernelTest {
     message = new Message("marry@localhost", Message.Type.chat);
     message.setBody("how are you?");
     message.setFrom("root@localhost");
+    message.setProperty(XMPPConnectionUtils.REPOSITORY_NAME, "repository");
     log.info("Initial message:");
     log.info("----------------------------------------------------------");
     dumpMessage(message);

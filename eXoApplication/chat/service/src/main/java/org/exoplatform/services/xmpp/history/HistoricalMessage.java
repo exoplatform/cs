@@ -56,6 +56,11 @@ public interface HistoricalMessage {
    * @param dateSend the dateSend to set
    */
   void setDateSend(Date dateSend);
+  
+  /**
+   * @param repository the repository to set
+   */
+  void setRepository(String repository);
 
   /**
    * @return the id
@@ -86,5 +91,10 @@ public interface HistoricalMessage {
    * @return the dateSend
    */
   Date getDateSend();
+  
+  /**
+   * @return the repository's name
+   */
+  String getRepository();
 
 }

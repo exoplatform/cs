@@ -54,6 +54,8 @@ import org.jivesoftware.smackx.packet.DiscoverItems.Item;
 public class XMPPConnectionUtils {
 
   private static final Log LOGGER = ExoLogger.getLogger("XMPPConnectionUtils");
+  
+  public static final String REPOSITORY_NAME = "repository";
 
   /**
    * Discovery Server items.

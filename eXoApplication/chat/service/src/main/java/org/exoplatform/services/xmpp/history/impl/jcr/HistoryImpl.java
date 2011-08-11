@@ -46,6 +46,7 @@ import org.exoplatform.services.log.Log;
 import org.exoplatform.services.xmpp.history.HistoricalMessage;
 import org.exoplatform.services.xmpp.history.Interlocutor;
 import org.exoplatform.services.xmpp.util.CodingUtils;
+import org.exoplatform.services.xmpp.util.XMPPConnectionUtils;
 import org.jcrom.Jcrom;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.util.StringUtils;
@@ -248,14 +249,37 @@ public class HistoryImpl implements Startable {
    */
   private void logAllMessages() {
     HistoricalMessage message;
+    String currentRepo = null;
+    try {
+      currentRepo = this.repositoryService.getCurrentRepository().getConfiguration().getName();
+    } catch (RepositoryException e) {
+      log.warn("Can't get current repository name", e);
+    }
     SessionProvider provider = SessionProvider.createSystemProvider();
+
     while (!logQueue.isEmpty()) {
       message = logQueue.poll();
       if (message != null) {
+        String repoName = message.getRepository();
+        if (repoName != null) {
+          try {
+            this.repositoryService.setCurrentRepositoryName(message.getRepository());
+          } catch (RepositoryConfigurationException ex) {
+            log.error(String.format("Can't set current repository name as %s", repoName), ex);
+          }
+        }
+
         this.addHistoricalMessage(message, provider);
       }
     }
     provider.close();
+    if (currentRepo != null) {
+      try {
+        this.repositoryService.setCurrentRepositoryName(currentRepo);
+      } catch (RepositoryConfigurationException e) {
+        log.error(String.format("Can't set current repository name as %s", currentRepo), e);
+      }
+    }
   }
 
   /**

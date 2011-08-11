@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.UUID;
+import java.util.Map.Entry;
 
 import javax.jcr.RepositoryException;
 
@@ -102,8 +103,8 @@ import org.jivesoftware.smack.packet.IQ;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.packet.Presence;
-import org.jivesoftware.smack.packet.Presence.Type;
 import org.jivesoftware.smack.packet.XMPPError;
+import org.jivesoftware.smack.packet.Presence.Type;
 import org.jivesoftware.smackx.Form;
 import org.jivesoftware.smackx.FormField;
 import org.jivesoftware.smackx.ReportedData;
@@ -123,10 +124,10 @@ import org.jivesoftware.smackx.muc.Occupant;
 import org.jivesoftware.smackx.muc.RoomInfo;
 import org.jivesoftware.smackx.muc.SubjectUpdatedListener;
 import org.jivesoftware.smackx.packet.DiscoverInfo;
-import org.jivesoftware.smackx.packet.DiscoverInfo.Identity;
 import org.jivesoftware.smackx.packet.DiscoverItems;
-import org.jivesoftware.smackx.packet.DiscoverItems.Item;
 import org.jivesoftware.smackx.packet.MUCUser;
+import org.jivesoftware.smackx.packet.DiscoverInfo.Identity;
+import org.jivesoftware.smackx.packet.DiscoverItems.Item;
 import org.jivesoftware.smackx.packet.MUCUser.Invite;
 import org.jivesoftware.smackx.search.UserSearchManager;
 
@@ -839,11 +840,16 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
   /**
    * {@inheritDoc}
    */
-  public void sendMessageToMUC(String room, String body) throws XMPPException {
+  public void sendMessageToMUC(String room, String body, Map<String, Object> params) throws XMPPException {
     MultiUserChat chat = multiUserChatManager.getMultiUserChat(room);
     Message message = chat.createMessage();
     message.setBody(body);
     message.setFrom(encodeUserName(getUsername()));
+    Iterator<Entry<String, Object>> iter = params.entrySet().iterator();
+    while (iter.hasNext()) {
+      Entry<String, Object> entry = iter.next();
+      message.setProperty(entry.getKey(), entry.getValue());
+    }
     chat.sendMessage(message);
   }
 
