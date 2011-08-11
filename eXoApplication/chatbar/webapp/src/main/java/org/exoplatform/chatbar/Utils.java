@@ -20,7 +20,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.webui.application.portlet.PortletRequestContext;
+import org.exoplatform.portal.webui.util.Util;
 
 /**
  * Created by The eXo Platform SAS
@@ -32,13 +32,8 @@ public class Utils {
   
   public static final String URL_PATTERN = "((mailto\\:|(news|(ht|f)tp(s?))\\://){1}\\S+)";
   
-  public static String getServerBaseUrl() {
-    PortletRequestContext portletRequestContext = PortletRequestContext.getCurrentInstance() ;
-    String url = portletRequestContext.getRequest().getScheme() + "://" + 
-    portletRequestContext.getRequest().getServerName() + ":" +
-    String.format("%s",portletRequestContext.getRequest().getServerPort()) 
-    + "/" ;
-    return url ;
+  public static String getServerBaseUrl() {    
+    return Util.getPortalRequestContext().getPortalURI() ;
   }
   
   public static String getPortalName() {
