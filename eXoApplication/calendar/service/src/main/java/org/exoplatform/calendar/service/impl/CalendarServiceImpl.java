@@ -556,6 +556,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     EventCategory eventCategory = new EventCategory();
     eventCategory.setDataInit(true);
     for (int id = 0; id < NewUserListener.defaultEventCategoryIds.length; id++) {
+      if (NewUserListener.DEFAULT_EVENTCATEGORY_ID_ALL.equals(id)) continue;
       eventCategory.setId(NewUserListener.defaultEventCategoryIds[id]);
       eventCategory.setName(NewUserListener.defaultEventCategoryNames[id]);
       saveEventCategory(userName, eventCategory, true);

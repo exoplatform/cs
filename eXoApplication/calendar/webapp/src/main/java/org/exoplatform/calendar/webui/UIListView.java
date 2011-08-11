@@ -31,6 +31,7 @@ import org.exoplatform.calendar.service.EventPageList;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Utils;
+import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -118,7 +119,10 @@ public class UIListView extends UICalendarView {
     UIListContainer uiListContainer = getParent() ;
     if (uiListContainer.isDisplaySearchResult()) return ;
     query = new EventQuery() ;
-    if(!CalendarUtils.isEmpty(categoryId_) && !categoryId_.toLowerCase().equals("null")&& !categoryId_.equals("calId")) query.setCategoryId(new String[]{categoryId_}) ;
+    if (!CalendarUtils.isEmpty(categoryId_) && !categoryId_.toLowerCase().equals("null") 
+        && !categoryId_.equals("calId") && !categoryId_.equals(NewUserListener.DEFAULT_EVENTCATEGORY_ID_ALL)) {
+      query.setCategoryId(new String[] { categoryId_ });
+    }
     java.util.Calendar fromcalendar = getBeginDay(new GregorianCalendar(getCurrentYear(),  getCurrentMonth(),  getCurrentDay())) ;
     query.setFromDate(fromcalendar) ;
     java.util.Calendar tocalendar = getEndDay(new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay())) ;
@@ -127,7 +131,6 @@ public class UIListView extends UICalendarView {
     if(!getViewType().equals(TYPE_BOTH)) {
       query.setEventType(getViewType()) ;
     }
-    
     query.setExcludeRepeatEvent(true);
    
     // TODO CS-3152
@@ -138,9 +141,9 @@ public class UIListView extends UICalendarView {
       query.setCalendarId(new String[] {"null"});
     }
     query.setOrderBy(new String[] {Utils.EXO_SUMMARY});
-    
     List<CalendarEvent> allEvents = getAllEvents(query);
-    if(uiListContainer.isDisplaySearchResult())  { update(pageList_) ;
+    if(uiListContainer.isDisplaySearchResult())  { 
+      update(pageList_) ;
     } else {
       update(new EventPageList(allEvents,10)) ;
     }
@@ -245,7 +248,7 @@ public class UIListView extends UICalendarView {
   @SuppressWarnings("unchecked")
   protected void updateCurrentPage(long page) throws Exception{
     getChildren().clear() ;
-    initCategories() ;
+    update();
     UIFormSelectBox uiCategory = getUIFormSelectBox(EVENT_CATEGORIES) ;
     uiCategory.setValue(categoryId_) ;
     uiCategory.setOnChange("Onchange") ;

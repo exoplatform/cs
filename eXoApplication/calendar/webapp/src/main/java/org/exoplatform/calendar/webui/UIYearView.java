@@ -28,6 +28,7 @@ import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventQuery;
+import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -83,8 +84,8 @@ public class UIYearView extends UICalendarView {
     String timezone = CalendarUtils.getCurrentUserCalendarSetting().getTimeZone();
     EventQuery eventQuery = new EventQuery() ;
     
-    if(!CalendarUtils.isEmpty(categoryId_) && !categoryId_.toLowerCase().equals("null")
-        && !categoryId_.equals("calId")) {
+    if (!CalendarUtils.isEmpty(categoryId_) && !categoryId_.toLowerCase().equals("null") 
+        && !categoryId_.equals("calId") && !categoryId_.equals(NewUserListener.DEFAULT_EVENTCATEGORY_ID_ALL)) {
       eventQuery.setCategoryId(new String[]{categoryId_}) ;
     }
     eventQuery.setFromDate(beginYear) ;

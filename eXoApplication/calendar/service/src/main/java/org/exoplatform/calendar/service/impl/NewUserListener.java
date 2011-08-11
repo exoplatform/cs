@@ -148,7 +148,7 @@ public class NewUserListener extends UserEventListener {
       
       for (int i = 0; i < configValue.length; i++) {
         defaultEventCategoryIds[i + 1] = configValue[i].trim();
-        defaultEventCategoryNames[i] = defaultEventCategoryIds[i];
+        defaultEventCategoryNames[i + 1] = configValue[i].trim();
       }
     } else {
       LOG.warn("Config for Default event categories does not exist!");
