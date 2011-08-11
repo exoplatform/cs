@@ -19,8 +19,11 @@ package org.exoplatform.calendar.bench;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
@@ -28,10 +31,7 @@ import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
-import org.exoplatform.calendar.service.Utils;
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
-import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.services.bench.DataInjector;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -75,19 +75,21 @@ public class CalendarDataInjector extends DataInjector {
 
   private List<CalendarCategory> categories         = new ArrayList<CalendarCategory>();
 
-  private List<String>           publicCalendar     = new ArrayList<String>();
+  private Set<String>            eventCategorys     = new HashSet<String>();
 
-  private List<String>           privateCalendar    = new ArrayList<String>();
+  private Set<String>            categoryIds        = new HashSet<String>();
+
+  private Set<String>            publicCalendar     = new HashSet<String>();
+
+  private Set<String>            privateCalendar    = new HashSet<String>();
 
   private List<String>           name               = new ArrayList<String>();
 
-  private List<Integer>          ints               = new ArrayList<Integer>();
-
-  private String[]               groupAdmin         = new String[] { EMPTY };
-
   private String[]               groupShare         = new String[] { EMPTY };
 
-  private Random                 rand               = new Random(1000);
+  private String[]               groups             = new String[] { EMPTY };
+
+  private Random                 rand               = new Random();
 
   public CalendarDataInjector(CalendarService calService, InitParams params) {
     initParams(params);
@@ -95,19 +97,23 @@ public class CalendarDataInjector extends DataInjector {
   }
 
   private void initDatas() {
+    String str = "/:*.*";
+    rand = new Random();
     try {
       Identity identity = ConversationState.getCurrent().getIdentity();
       currentUser = identity.getUserId();
-      groupShare = identity.getGroups().toArray(new String[] {});
+      Set<String> set = new HashSet<String>(identity.getGroups());
+      groupShare = new String[set.size() + 1];
+      int i = 0;
+      for (String string : set) {
+        groupShare[i] = string + str;
+        i++;
+      }
+      groupShare[i] = currentUser;
+      set.add(currentUser);
+      groups = set.toArray(new String[set.size()]);
     } catch (Exception e) {
-      e.printStackTrace();
-    }
-
-    try {
-      UserACL userACL = (UserACL) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(UserACL.class);
-      groupAdmin = new String[] { userACL.getAdminGroups() };
-    } catch (Exception e) {
-      log.debug("Failed to get groups admin of gatein.", e);
+      log.info("Can not inint user...", e);
     }
   }
 
@@ -154,7 +160,8 @@ public class CalendarDataInjector extends DataInjector {
 
   @Override
   public void inject() throws Exception {
-    initDatas();
+    log.info("Start inject datas for calendar....");
+    setHistoryInject();
     if ("all".equals(typeOfInject)) {
       if (currentUser.length() > 0) {
         initPrivateCalendar();
@@ -176,15 +183,21 @@ public class CalendarDataInjector extends DataInjector {
     try {
       log.info(String.format("removing private datas..... \n  removing %s calendars.....", privateCalendar.size()));
       for (String calId : privateCalendar) {
-        calService.removeUserCalendar(currentUser, calId);
+        if (!isEmpty(calId)) {
+          calService.removeUserCalendar(currentUser, calId);
+        }
       }
-      log.info(String.format("removing %s event catetories.....", eventCategory.size()));
-      for (EventCategory evCat : eventCategory) {
-        calService.removeEventCategory(currentUser, evCat.getId());
+      log.info(String.format("removing %s event catetories.....", eventCategorys.size()));
+      for (String evCatId : eventCategorys) {
+        if (!isEmpty(evCatId)) {
+          calService.removeEventCategory(currentUser, evCatId);
+        }
       }
-      log.info(String.format("removing %s catetories.....", categories.size()));
-      for (CalendarCategory cat : categories) {
-        calService.removeCalendarCategory(currentUser, cat.getId());
+      log.info(String.format("removing %s catetories.....", categoryIds.size()));
+      for (String catId : categoryIds) {
+        if (!isEmpty(catId)) {
+          calService.removeCalendarCategory(currentUser, catId);
+        }
       }
     } catch (Exception e) {
       log.debug("Failed to remove private injecter datas", e);
@@ -195,7 +208,9 @@ public class CalendarDataInjector extends DataInjector {
     try {
       log.info(String.format("remove public datas..... \n  removing %s calendars.....", publicCalendar.size()));
       for (String calId : publicCalendar) {
-        calService.removePublicCalendar(calId);
+        if (!isEmpty(calId)) {
+          calService.removePublicCalendar(calId);
+        }
       }
     } catch (Exception e) {
       log.debug("Failed to remove public injecter datas", e);
@@ -219,55 +234,99 @@ public class CalendarDataInjector extends DataInjector {
       // remove private
       removePrivateData();
     }
+    log.info("Complated reject datas..");
+    publicCalendar.clear();
+    privateCalendar.clear();
+    eventCategorys.clear();
+    categoryIds.clear();
+    saveHistoryInject();
   }
 
   private void initPublicCalendar() throws Exception {
     // save public calendar
-    for (Calendar calendar : findCalendars(true)) {
+    List<Calendar> calendars = findCalendars(true);
+    log.info("Inject public datas ....");
+    int index = 0, size = calendars.size(), evsCal, tasCal, evs = 0, tas = 0;
+    long t, t1 = System.currentTimeMillis();
+    for (Calendar calendar : calendars) {
+      t = System.currentTimeMillis();
+      evsCal = tasCal = 0;
       calService.savePublicCalendar(calendar, true);
       publicCalendar.add(calendar.getId());
       // save event in public calendar
       for (CalendarEvent event : findCalendarEvent(calendar.getId(), "2", CalendarEvent.TYPE_EVENT, true)) {
         calService.savePublicEvent(calendar.getId(), event, true);
+        evsCal++;
       }
       // save task in public calendar
       for (CalendarEvent event : findCalendarEvent(calendar.getId(), "2", CalendarEvent.TYPE_TASK, true)) {
         calService.savePublicEvent(calendar.getId(), event, true);
+        tasCal++;
       }
+      log.info(String.format("Saved Calendar %s/%s with %s Events and %s Tasks in %sms",
+                             (++index), size, evsCal, tasCal, (System.currentTimeMillis()) - t));
+      evs += evsCal;
+      tas += tasCal;
     }
+    log.info(String.format("INITIALIZED: Calendars=%s / Events=%s / Tasks=%s in %sms",
+                           publicCalendar.size(), evs, tas, (System.currentTimeMillis() - t1)));
+    saveHistoryInject();
   }
 
   private void initPrivateCalendar() throws Exception {
+    log.info("Inject private datas ....");
     // save setting
     try {
       setting = calService.getCalendarSetting(currentUser);
+      log.info(String.format("Save calendar setting for user %s ....", currentUser));
     } catch (Exception e) {
       setting = newCalendarSetting();
       calService.saveCalendarSetting(currentUser, setting);
     }
+    long t = System.currentTimeMillis(), t1 = t;
     // save category
     for (CalendarCategory cate : findCalendarCategorys()) {
       calService.saveCalendarCategory(currentUser, cate, true);
       categories.add(cate);
+      categoryIds.add(cate.getId());
     }
+    log.info(String.format("Saved %s calendarCategorys in %sms", categories.size(), (System.currentTimeMillis() - t)));
+    t = System.currentTimeMillis();
     // save EventCategoy
-    for (EventCategory evCat : findEventCategorys()) {
+    List<EventCategory> eventCategories = findEventCategorys();
+    for (EventCategory evCat : eventCategories) {
       calService.saveEventCategory(currentUser, evCat, true);
       eventCategory.add(evCat);
+      eventCategorys.add(evCat.getId());
     }
+    log.info(String.format("Saved %s eventCategories in %sms", eventCategories.size(), (System.currentTimeMillis() - t)));
     // save calendar
-    for (Calendar calendar : findCalendars(false)) {
+    List<Calendar> calendars = findCalendars(false);
+    List<CalendarEvent> events;
+    int index = 0, size = calendars.size(), evsCal, evs = 0, tas = 0;
+    for (Calendar calendar : calendars) {
+      t = System.currentTimeMillis();
       calService.saveUserCalendar(currentUser, calendar, true);
       privateCalendar.add(calendar.getId());
       // save Event
-      for (CalendarEvent event : findCalendarEvent(calendar.getId(), "0", CalendarEvent.TYPE_EVENT, false)) {
+      events = findCalendarEvent(calendar.getId(), "0", CalendarEvent.TYPE_EVENT, false);
+      for (CalendarEvent event : events) {
         calService.saveUserEvent(currentUser, calendar.getId(), event, true);
       }
+      evsCal = events.size();
+      evs += evsCal;
       // save Task
-      for (CalendarEvent event : findCalendarEvent(calendar.getId(), "0", CalendarEvent.TYPE_TASK, false)) {
+      events = findCalendarEvent(calendar.getId(), "0", CalendarEvent.TYPE_TASK, false);
+      tas += events.size();
+      for (CalendarEvent event : events) {
         calService.saveUserEvent(currentUser, calendar.getId(), event, true);
       }
+      log.info(String.format("Saved Calendar %s/%s with %s Events and %s Tasks in %sms",
+                             (++index), size, evsCal, events.size(), (System.currentTimeMillis()) - t));
     }
+    log.info(String.format("INITIALIZED CalendarCategorys=%s / EventCategorys=%s / Calendars=%s / Events=%s / Tasks=%s in %sms",
+                           categories.size(), eventCategories.size(), calendars.size(), evs, tas, (System.currentTimeMillis() - t1)));
+    categories.clear();
     saveHistoryInject();
   }
 
@@ -361,8 +420,8 @@ public class CalendarDataInjector extends DataInjector {
     calendar.setName(calRandomWords(5));
     calendar.setDescription(randomWords(20));
     calendar.setCalendarColor(getRandomColor());
-    calendar.setEditPermission(groupAdmin);
-    calendar.setGroups(groupShare);
+    calendar.setEditPermission(groupShare);
+    calendar.setGroups(groups);
     calendar.setViewPermission(new String[] { "*.*" });
     calendar.setPrivateUrl(EMPTY);
     calendar.setPublicUrl(EMPTY);
@@ -390,31 +449,33 @@ public class CalendarDataInjector extends DataInjector {
       categoryEvent.setEventCategoryId(eventCategory.getId());
       categoryEvent.setEventCategoryName(eventCategory.getName());
     }
-    categoryEvent.setEventState(CalendarEvent.ST_BUSY);
+    categoryEvent.setEventState(randomState());
     categoryEvent.setEventType(type);
-
-    Date fromDate = randomDateTime(new Random().nextInt(360), 0);
-    categoryEvent.setFromDateTime(fromDate);
-    categoryEvent.setToDateTime(randomDateTime(new Random().nextInt(4), getOldTime(fromDate)));
+    long time = randomDateTime(rand.nextInt(365), 0);
+    categoryEvent.setFromDateTime(getTime(time));
+    time = randomDateTime(rand.nextInt(5), time);
+    categoryEvent.setToDateTime(getTime(time));
 
     categoryEvent.setLocation(setting.getLocation());
     categoryEvent.setMessage(randomWords(30));
 
-    categoryEvent.setExcludeId(new String[] { EMPTY });
     categoryEvent.setInvitation(new String[] { EMPTY });
-    categoryEvent.setIsExceptionOccurrence(false);
-    categoryEvent.setOriginalReference(EMPTY);
     categoryEvent.setParticipant(new String[] { currentUser });
-    categoryEvent.setParticipantStatus(new String[] { currentUser+":"});
-    categoryEvent.setPriority(CalendarEvent.PRIORITY_NORMAL);
-    categoryEvent.setSendOption(EMPTY);
+    categoryEvent.setParticipantStatus(new String[] { currentUser + ":" });
+    categoryEvent.setPriority(CalendarEvent.PRIORITY[rand.nextInt(CalendarEvent.PRIORITY.length)]);
+    categoryEvent.setSendOption(CalendarSetting.ACTION_NEVER);
     categoryEvent.setStatus(EMPTY);
     categoryEvent.setTaskDelegator(EMPTY);
-    categoryEvent.setRepeatType(CalendarEvent.RP_NOREPEAT);
-    
+    categoryEvent.setRepeatType(CalendarEvent.REPEATTYPES[rand.nextInt(CalendarEvent.REPEATTYPES.length)]);
+
     categoryEvent.setSummary(calRandomWords(5));
     categoryEvent.setPrivate(!isPublic);
     return categoryEvent;
+  }
+
+  private String randomState() {
+    String[] srts = new String[] { CalendarEvent.ST_AVAILABLE, CalendarEvent.ST_BUSY, CalendarEvent.ST_OUTSIDE };
+    return srts[rand.nextInt(srts.length)];
   }
 
   private String calRandomWords(int i) {
@@ -428,39 +489,37 @@ public class CalendarDataInjector extends DataInjector {
     return s;
   }
 
+  private static int clIndex = -1;
+
+  private static int l       = 1;
+
   private String getRandomColor() {
-    int l = Calendar.COLORS.length;
-    if (l == (ints.size() - 5))
-      ints.clear();
-    l = rand.nextInt(l);
-    if (ints.contains(l)) {
-      return getRandomColor();
-    } else {
-      ints.add(l);
+    if (clIndex <= 0) {
+      l = 1;
+    } else if (clIndex >= Calendar.COLORS.length - 1) {
+      l = -1;
     }
-    return Calendar.COLORS[l];
+    clIndex += l;
+    return Calendar.COLORS[clIndex];
   }
 
-  private Date randomDateTime(int days, long oldTime) {
-    java.util.Calendar currentCal = Utils.getGreenwichMeanTime();
-    long time = 0;
-    if (days == 0) {
-      time = new Random(86400).nextLong() * 1000;
-    } else {
-      time = new Random().nextInt(days) * 86400000;
-    }
-    if (time <= 0){
-      time = 720000;
+  private long randomDateTime(long days, long oldTime) {
+    long time = (rand.nextInt(107) + 7) * 600000;
+    if (days > 0) {
+      time = days * 86400000 + (time / 10);
     }
     if (oldTime > 0) {
       time += oldTime;
     }
-    currentCal.setTimeInMillis(currentCal.getTimeInMillis() + time);
-    return currentCal.getTime();
+    return time;
   }
 
-  private long getOldTime(Date date) {
-    return date.getTime() - Utils.getGreenwichMeanTime().getTimeInMillis();
+  private Date getTime(long time) {
+    java.util.Calendar calendar = GregorianCalendar.getInstance();
+    calendar.setLenient(false);
+    long gmtoffset = calendar.get(java.util.Calendar.DST_OFFSET) + calendar.get(java.util.Calendar.ZONE_OFFSET);
+    calendar.setTimeInMillis(System.currentTimeMillis() - gmtoffset + time);
+    return calendar.getTime();
   }
 
   private CalendarCategory randomCategory() {
@@ -474,34 +533,26 @@ public class CalendarDataInjector extends DataInjector {
   }
 
   private void saveHistoryInject() throws Exception {
-    if (baseURL == null || baseURL.trim().length() == 0) {
-      baseURL = publicCalendar.toString();
-      baseURL += ";" + privateCalendar.toString();
-      baseURL += ";[";
-      for (CalendarCategory cat : categories) {
-        baseURL += cat.getId() + ",";
-      }
-      baseURL += " ]";
-      setting.setBaseURL(baseURL);
-      calService.saveCalendarSetting(currentUser, setting);
-    }
+    baseURL = publicCalendar.toString();
+    baseURL += ";" + privateCalendar.toString();
+    baseURL += ";" + eventCategorys.toString();
+    baseURL += ";" + categoryIds.toString();
+    setting.setBaseURL(baseURL);
+    calService.saveCalendarSetting(currentUser, setting);
   }
 
   private void setHistoryInject() {
-    if (privateCalendar.size() == 0) {
-      initDatas();
-      try {
-        String s = calService.getCalendarSetting(currentUser).getBaseURL();
+    initDatas();
+    try {
+      String s = calService.getCalendarSetting(currentUser).getBaseURL();
+      if (!isEmpty(s) && s.indexOf(";") > 0) {
         String[] strs = s.split(";");
         publicCalendar.addAll(convertStringToList(strs[0]));
         privateCalendar.addAll(convertStringToList(strs[1]));
-        CalendarCategory category = new CalendarCategory();
-        for (String string : convertStringToList(strs[2])) {
-          category.setId(string);
-          categories.add(category);
-        }
-      } catch (Exception e) {
+        eventCategorys.addAll(convertStringToList(strs[2]));
+        categoryIds.addAll(convertStringToList(strs[3]));
       }
+    } catch (Exception e) {
     }
   }
 
@@ -510,5 +561,9 @@ public class CalendarDataInjector extends DataInjector {
     s = s.trim().replaceAll("(,\\s*)", ",").replaceAll("(\\s*,)", ",");
     String[] strs = s.split(",");
     return new ArrayList<String>(Arrays.asList(strs));
+  }
+
+  private boolean isEmpty(String s) {
+    return (s == null || s.trim().length() <= 0);
   }
 }
