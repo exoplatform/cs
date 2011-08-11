@@ -41,6 +41,8 @@ import org.exoplatform.services.jcr.config.RepositoryConfigurationException;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.impl.core.NodeImpl;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.xmpp.history.HistoricalMessage;
 import org.exoplatform.services.xmpp.history.Interlocutor;
 import org.exoplatform.services.xmpp.util.CodingUtils;
@@ -48,8 +50,6 @@ import org.jcrom.Jcrom;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.util.StringUtils;
 import org.picocontainer.Startable;
-import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.log.Log;
 
 /**
  * Created by The eXo Platform SAS.
@@ -293,7 +293,7 @@ public class HistoryImpl implements Startable{
         if (conversation != null) {
           conversation.addMessage(historicalMessage);
           conversation.setLastActiveDate(date);
-          updateConversation(conversationNode, conversation, usernameTo);
+          updateConversation(conversationNode, conversation);
         } else {
           conversationId = CodingUtils.encodeToHex(UUID.randomUUID().toString());
           createNewConversation(conversationNode,
@@ -303,6 +303,7 @@ public class HistoryImpl implements Startable{
                                 historicalMessage);
         }
         conversationNode.getSession().save();
+        participantsNode.getSession().save();
       } catch (Exception e) {
         //TODO: find why exception happens
         //e.printStackTrace();
@@ -744,10 +745,9 @@ public class HistoryImpl implements Startable{
    * 
    * @param conversationsNode the node
    * @param conversation the conversation
-   * @param username the username
    * @throws Exception 
    */
-  private void updateConversation(Node conversationsNode, Conversation conversation, String username) throws Exception {
+  private void updateConversation(Node conversationsNode, Conversation conversation) throws Exception {
     try {
       if (conversationsNode.hasNode(conversation.getConversationId())) {
         Node node = conversationsNode.getNode(conversation.getConversationId());

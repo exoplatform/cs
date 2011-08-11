@@ -18,11 +18,9 @@
 package org.exoplatform.services.authentication.rest;
 
 import javax.security.auth.login.LoginContext;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 import org.exoplatform.common.http.HTTPStatus;
@@ -49,6 +47,7 @@ public class RESTAuthenticator implements ResourceContainer {
   public Response authenticate(
 	@FormParam("username") String username,
 	@FormParam("password") String password) {
+    username = decodeUsername(username);
     try {
       LoginContext loginContext = new LoginContext(ExoContainerContext.getCurrentContainer().getContext().getRealmName(),
           new BasicCallbackHandler(username, password.toCharArray()));
@@ -62,6 +61,27 @@ public class RESTAuthenticator implements ResourceContainer {
     }
   }
   
+    /**
+     * Decoding sensitive user names to bypass the limitation in only insensitive user names of Openfire
+     * @param username
+     * @return
+     */
+    public static String decodeUsername(String username) {
+      if (username == null || username.indexOf("s220w748s8xn3btua") < 0) {
+        return username;
+      }
+      String[] tokens = username.split("s220w748s8xn3btua");
+      StringBuilder sb = new StringBuilder("");
+      for (int i = 0; i < tokens.length; i++) {
+        if (i > 0 && tokens[i].length() > 0) {
+          tokens[i] = tokens[i].substring(0, 1).toUpperCase() + tokens[i].substring(1);
+        }
+        sb.append(tokens[i]);
+      }
+      return sb.toString();
+    }
+    
+    
   
 //  @POST
 //  @Path("/organization/authenticate/")

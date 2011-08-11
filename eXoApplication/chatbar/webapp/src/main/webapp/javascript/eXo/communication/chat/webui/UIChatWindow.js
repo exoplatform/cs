@@ -113,13 +113,26 @@ UITabControl.prototype.userLeftRoomEventFired = function(user) {
 UITabControl.prototype.userJoinRoomEventFired = function(user) {
   var userName = user.substr(user.indexOf('/') + 1, user.length-1);
   var fullName = eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[userName];
+  if(!fullName) return;
   //this.writeMsg(this.UIMainChatWindow.UIChatWindow.SYSTEM_INFO, userName + ' just joined the room');
   var msgBuf = this.UIMainChatWindow.ResourceBundle.chat_message_room_user_join.replace('{0}', fullName);
   this.writeMsg(this.UIMainChatWindow.ResourceBundle.chat_message_system_info, msgBuf);
+  // Decode username
+  var tokens = userName.split('s220w748s8xn3btua');
+  var sb = '';
+  for ( var i = 0; i < tokens.length; i++) {
+    if (i > 0 && tokens[i].length > 0) {
+      var firstCharacter = tokens[i].substring(0, 1);
+      firstCharacter = firstCharacter.toUpperCase();
+      tokens[i] = firstCharacter + tokens[i].substring(1);
+    }
+    sb += tokens[i];
+  }
+  //
   userName += '@' + this.UIMainChatWindow.serverInfo.mainServiceName;
   var buddyInfo = {
     presence           : {from: user,mode: null, status: null, type: 'available'},
-    nickname           : user,
+    nickname           : sb,
     fullName		   : fullName,
     groups             : [],
     subscriptionStatus : null,
@@ -187,6 +200,9 @@ UITabControl.prototype.contactUpdateFilter = function(contact) {
     }
     var userName = contactInfo.buddyInfo.user;
     var shortUserName = userName.substring(0, userName.indexOf('@'));
+    if (shortUserName && shortUserName.indexOf('s220w748s8xn3btua') >= 0) {
+      shortUserName = contactInfo.buddyInfo.nickname;
+    }
     if (shortUserName == contact['userName'] ||
         userName == contact['userName']) {
       contact.enabled4Add = false;

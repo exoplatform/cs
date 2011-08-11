@@ -33,12 +33,12 @@ import javax.ws.rs.core.UriInfo;
 
 import org.exoplatform.common.http.HTTPStatus;
 import org.exoplatform.commons.utils.PageList;
+import org.exoplatform.services.authentication.rest.RESTAuthenticator;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.rest.RESTOrganizationServiceAbstractImpl;
-import org.exoplatform.services.organization.rest.json.UserBean;
 import org.exoplatform.services.rest.resource.ResourceContainer;
 
 /**
@@ -70,6 +70,7 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
                             @QueryParam("email") String email,
                             @QueryParam("fromLoginDate") String fromLoginDate,
                             @QueryParam("toLogindate") String toLoginDate) {
+    username = RESTAuthenticator.decodeUsername(username);
     try {
       // TODO : now returned all founded user need be carefully then using
       // wildcard (*)
@@ -123,6 +124,7 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
                                  @QueryParam("toLogindate") String toLoginDate,
                                  @PathParam("from") Integer from,
                                  @PathParam("num") Integer numResult) {
+    username = RESTAuthenticator.decodeUsername(username);
     try {
       Query query = new Query();
       query.setUserName(username);
@@ -220,6 +222,7 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
   @Path("/user/info/{username}/")
   //@OutputTransformer(SerializableTransformer.class)
   public Response getUser(@PathParam("username") String username) {
+    username = RESTAuthenticator.decodeUsername(username);
     try {
       start();
       User user = userHandler.findUserByName(username);
@@ -337,6 +340,7 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
   //@OutputTransformer(SerializableTransformer.class)
   public Response getGroupsOfUser(@Context UriInfo uriInfo,
                                   @QueryParam("username") String username) {
+    username = RESTAuthenticator.decodeUsername(username);
     try {
     	start();
       if (userHandler.findUserByName(username) == null) {

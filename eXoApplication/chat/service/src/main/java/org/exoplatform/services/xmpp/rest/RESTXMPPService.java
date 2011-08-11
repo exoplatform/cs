@@ -1260,11 +1260,15 @@ public class RESTXMPPService implements ResourceContainer, Startable {
   public Response getAllHistory(@PathParam("usernameto") String usernameto,
                                 @PathParam("isGroupChat") Boolean isGroupChat,
                                 @QueryParam("usernamefrom") String usernamefrom) {
+    String ufrom = usernamefrom;
+    usernameto = XMPPSessionImpl.decodeUsername(usernameto);
+    usernamefrom = XMPPSessionImpl.decodeUsername(usernamefrom);
     if (this.rb == null) loadResourceBundle();
     if (usernamefrom == null || usernamefrom.length() == 0)
       return Response.status(HTTPStatus.BAD_REQUEST)
       .entity(rb.getString("chat.message.history.participant.name.not.set"))
       .build();
+    boolean isFromEncoded = !ufrom.equals(usernamefrom) && !isGroupChat;
     try {
       XMPPSession session = messenger.getSession(usernameto);
       if (session != null) {
@@ -1272,6 +1276,13 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         list = session.getAllHistory(usernameto, usernamefrom, isGroupChat);
         List<MessageBean> listBean = new ArrayList<MessageBean>();
         if (!list.isEmpty()) {
+          if (isFromEncoded) {
+            for (HistoricalMessage historicalMessage : list) {
+              if (historicalMessage.getFrom().indexOf(usernamefrom) >= 0) {
+                historicalMessage.setFrom(XMPPSessionImpl.encodeUserName(historicalMessage.getFrom()));
+              }
+            }
+          }
           for (HistoricalMessage historicalMessage : list) {
             listBean.add(TransformUtils.messageToBean(historicalMessage));
           }
@@ -1304,11 +1315,15 @@ public class RESTXMPPService implements ResourceContainer, Startable {
                                         @PathParam("from") String from,
                                         @PathParam("to") String to,
                                         @QueryParam("usernamefrom") String usernamefrom) {
+    String ufrom = usernamefrom;
+    usernameto = XMPPSessionImpl.decodeUsername(usernameto);
+    usernamefrom = XMPPSessionImpl.decodeUsername(usernamefrom);
     if (this.rb == null) loadResourceBundle();
     if (usernamefrom == null || usernamefrom.length() == 0)
       return Response.status(HTTPStatus.BAD_REQUEST)
       .entity(rb.getString("chat.message.history.participant.name.not.set"))
       .build();
+    boolean isFromEncoded = !ufrom.equals(usernamefrom) && !isGroupChat;
     try {
       XMPPSession session = messenger.getSession(usernameto);
       if (session != null) {
@@ -1323,6 +1338,13 @@ public class RESTXMPPService implements ResourceContainer, Startable {
                                                dateFrom,
                                                dateTo);
           if (!list.isEmpty()) {
+            if (isFromEncoded) {
+              for (HistoricalMessage historicalMessage : list) {
+                if (historicalMessage.getFrom().indexOf(usernamefrom) >= 0) {
+                  historicalMessage.setFrom(XMPPSessionImpl.encodeUserName(historicalMessage.getFrom()));
+                }
+              }
+            }
             for (HistoricalMessage historicalMessage : list) {
               listBean.add(TransformUtils.messageToBean(historicalMessage));
             }
@@ -1356,11 +1378,15 @@ public class RESTXMPPService implements ResourceContainer, Startable {
                                           @PathParam("isGroupChat") Boolean isGroupChat,
                                           @PathParam("from") String from,
                                           @QueryParam("usernamefrom") String usernamefrom) {
+    String ufrom = usernamefrom;
+    usernameto = XMPPSessionImpl.decodeUsername(usernameto);
+    usernamefrom = XMPPSessionImpl.decodeUsername(usernamefrom);
     if (this.rb == null) loadResourceBundle();
     if (usernamefrom == null || usernamefrom.length() == 0)
       return Response.status(HTTPStatus.BAD_REQUEST)
       .entity(rb.getString("chat.message.history.participant.name.not.set"))
       .build();
+    boolean isFromEncoded = !ufrom.equals(usernamefrom) && !isGroupChat;
     try {
       XMPPSession session = messenger.getSession(usernameto);
       if (session != null) {
@@ -1370,6 +1396,13 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         if (dateFrom.before(Calendar.getInstance().getTime())) {
           list = session.getHistoryFromDateToNow(usernameto, usernamefrom, isGroupChat, dateFrom);
           if (!list.isEmpty()) {
+            if (isFromEncoded) {
+              for (HistoricalMessage historicalMessage : list) {
+                if (historicalMessage.getFrom().indexOf(usernamefrom) >= 0) {
+                  historicalMessage.setFrom(XMPPSessionImpl.encodeUserName(historicalMessage.getFrom()));
+                }
+              }
+            }
             for (HistoricalMessage historicalMessage : list) {
               listBean.add(TransformUtils.messageToBean(historicalMessage));
             }
@@ -1424,6 +1457,8 @@ public class RESTXMPPService implements ResourceContainer, Startable {
                                     @PathParam("isGroupChat") Boolean isGroupChat,
                                     @PathParam("clientTimezoneOffset") String clientTimezoneOffset,
                                     @QueryParam("usernamefrom") String usernamefrom) {
+    usernameto = XMPPSessionImpl.decodeUsername(usernameto);
+    usernamefrom = XMPPSessionImpl.decodeUsername(usernamefrom);
     if (this.rb == null) loadResourceBundle();
     if (usernamefrom == null || usernamefrom.length() == 0)
       return Response.status(HTTPStatus.BAD_REQUEST)
@@ -1473,6 +1508,8 @@ public class RESTXMPPService implements ResourceContainer, Startable {
                                               @PathParam("from") String from,
                                               @PathParam("clientTimezoneOffset") String clientTimezoneOffset,
                                               @QueryParam("usernamefrom") String usernamefrom) {
+    usernameto = XMPPSessionImpl.decodeUsername(usernameto);
+    usernamefrom = XMPPSessionImpl.decodeUsername(usernamefrom);
     if (this.rb == null) loadResourceBundle();
     try {
       //XMPPSession session = messenger.getSession(usernameto);
@@ -1529,6 +1566,8 @@ public class RESTXMPPService implements ResourceContainer, Startable {
                                             @PathParam("to") String to,
                                             @PathParam("clientTimezoneOffset") String clientTimezoneOffset,
                                             @QueryParam("usernamefrom") String usernamefrom) {
+    usernameto = XMPPSessionImpl.decodeUsername(usernameto);
+    usernamefrom = XMPPSessionImpl.decodeUsername(usernamefrom);
     if (this.rb == null) loadResourceBundle();
     try {
       //XMPPSession session = messenger.getSession(usernameto);

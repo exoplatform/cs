@@ -1,0 +1,841 @@
+Index: eXoApplication/chat/service/src/test/java/org/exoplatform/services/xmpp/test/UtilsTest.java
+===================================================================
+--- eXoApplication/chat/service/src/test/java/org/exoplatform/services/xmpp/test/UtilsTest.java	(revision 0)
++++ eXoApplication/chat/service/src/test/java/org/exoplatform/services/xmpp/test/UtilsTest.java	(revision 0)
+@@ -0,0 +1,45 @@
++/*
++ * Copyright (C) 2003-2011 eXo Platform SAS.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Affero General Public License
++ * as published by the Free Software Foundation; either version 3
++ * of the License, or (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see<http://www.gnu.org/licenses/>.
++ */
++package org.exoplatform.services.xmpp.test;
++
++import junit.framework.TestCase;
++
++import org.exoplatform.services.xmpp.connection.impl.XMPPSessionImpl;
++
++/**
++ * Created by The eXo Platform SAS
++ * Author : viet.nguyen
++ *          viet.nguyen@exoplatform.com
++ * Jun 21, 2011  
++ */
++public class UtilsTest extends TestCase {
++
++  public void testEncodeUsername() {
++    assertEquals("s220w748s8xn3btuajohn", XMPPSessionImpl.encodeUserName("John"));
++    assertEquals("js220w748s8xn3btuaohn", XMPPSessionImpl.encodeUserName("jOhn"));
++    assertEquals("jos220w748s8xn3btuahn", XMPPSessionImpl.encodeUserName("joHn"));
++    assertEquals("johs220w748s8xn3btuan", XMPPSessionImpl.encodeUserName("johN"));
++  }
++
++  public void testDecodeUsername() {
++    assertEquals("John", XMPPSessionImpl.decodeUsername("s220w748s8xn3btuajohn"));
++    assertEquals("jOhn", XMPPSessionImpl.decodeUsername("js220w748s8xn3btuaohn"));
++    assertEquals("joHn", XMPPSessionImpl.decodeUsername("jos220w748s8xn3btuahn"));
++    assertEquals("johN", XMPPSessionImpl.decodeUsername("johs220w748s8xn3btuan"));
++  }
++
++}
+Index: eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/connection/impl/XMPPSessionImpl.java
+===================================================================
+--- eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/connection/impl/XMPPSessionImpl.java	(revision 72289)
++++ eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/connection/impl/XMPPSessionImpl.java	(working copy)
+@@ -17,7 +17,6 @@
+ package org.exoplatform.services.xmpp.connection.impl;
+ 
+ import java.io.File;
+-
+ import java.text.DateFormat;
+ import java.text.MessageFormat;
+ import java.text.SimpleDateFormat;
+@@ -103,8 +102,8 @@
+ import org.jivesoftware.smack.packet.Message;
+ import org.jivesoftware.smack.packet.Packet;
+ import org.jivesoftware.smack.packet.Presence;
++import org.jivesoftware.smack.packet.Presence.Type;
+ import org.jivesoftware.smack.packet.XMPPError;
+-import org.jivesoftware.smack.packet.Presence.Type;
+ import org.jivesoftware.smackx.Form;
+ import org.jivesoftware.smackx.FormField;
+ import org.jivesoftware.smackx.ReportedData;
+@@ -124,10 +123,10 @@
+ import org.jivesoftware.smackx.muc.RoomInfo;
+ import org.jivesoftware.smackx.muc.SubjectUpdatedListener;
+ import org.jivesoftware.smackx.packet.DiscoverInfo;
++import org.jivesoftware.smackx.packet.DiscoverInfo.Identity;
+ import org.jivesoftware.smackx.packet.DiscoverItems;
++import org.jivesoftware.smackx.packet.DiscoverItems.Item;
+ import org.jivesoftware.smackx.packet.MUCUser;
+-import org.jivesoftware.smackx.packet.DiscoverInfo.Identity;
+-import org.jivesoftware.smackx.packet.DiscoverItems.Item;
+ import org.jivesoftware.smackx.packet.MUCUser.Invite;
+ import org.jivesoftware.smackx.search.UserSearchManager;
+ 
+@@ -233,6 +232,8 @@
+                             final ContinuationServiceDelegate delegate,
+                             final HistoryImpl history,
+                             final ResourceBundle rb) throws XMPPException {
++    this.username_ = username;
++    username = encodeUserName(username);
+ 	// 17/06/2010 add start
+ 	if (beanList == null) beanList = new ArrayList<OccupantBean>();
+ 	// 17/06/2010 add end  
+@@ -244,7 +245,6 @@
+     this.uiStateData_ = new UIStateDataBean();
+     this.rb_ = rb;
+     this.connection_ = new XMPPConnection(XMPPMessenger.getConnectionConfiguration());
+-    this.username_ = username;
+     try {
+       connection_.connect();
+       connection_.login(username, password, null);
+@@ -296,10 +296,15 @@
+               packet.setPacketID(CodingUtils.encodeToHex(UUID.randomUUID().toString()));
+             HistoricalMessage historyMsg = HistoryUtils.messageToHistoricalMessage((Message) packet);
+             MessageBean message = TransformUtils.messageToBean(historyMsg);
++            if (Message.Type.groupchat.name().equals(message.getType())) {
++              message.setFrom(decodeUsername(message.getFrom()));
++            }
+             /*history.addHistoricalMessage(HistoryUtils.messageToHistoricalMessage((Message) packet),
+                                          sessionProvider);*/
+             //Fix for CS-3246: contact list in public room is empty in special case
+             //Because persistence operations are massive -> much delay time -> bug ->to solve by using cache
++            historyMsg.setFrom(decodeUsername(historyMsg.getFrom()));
++            historyMsg.setTo(decodeUsername(historyMsg.getTo()));
+             history_.logMessage(historyMsg);
+             EventsBean eventsBean = new EventsBean();
+             eventsBean.addMessage(message);
+@@ -606,6 +611,7 @@
+                               String remoteUser,
+                               String remotePassword,
+                               boolean autoLogin) {
++    remoteUser = encodeUserName(remoteUser);
+     if (!isTransportAvailable(transport) && isTransportSupported(transport)) {
+       try {
+         XMPPConnectionUtils.registerUser(connection_,
+@@ -630,6 +636,7 @@
+    * {@inheritDoc}
+    */
+   public void addBuddy(String username, String nickname, String group) throws XMPPException {
++    username = encodeUserName(username);
+     String jid = username + "@" + connection_.getServiceName();
+     Roster roster = connection_.getRoster();
+     roster.createEntry(jid, nickname, new String[] { group });
+@@ -641,6 +648,7 @@
+    * {@inheritDoc}
+    */
+   public void askForSubscription(String username, String nickname) {
++    username = encodeUserName(username);
+     String jid = username + "@" + connection_.getServiceName();
+     Presence precense = new Presence(Presence.Type.subscribe);
+     precense.setTo(jid);
+@@ -653,6 +661,7 @@
+    * {@inheritDoc}
+    */
+   public RosterEntry getBuddy(String name) {
++    name = encodeUserName(name);
+     String jid = name + "@" + connection_.getServiceName();
+     return connection_.getRoster().getEntry(jid);
+   }
+@@ -661,6 +670,7 @@
+    * {@inheritDoc}
+    */
+   public void updateBuddy(String username, String nickname, String group) throws XMPPException {
++    username = encodeUserName(username);
+     String jid = username + "@" + connection_.getServiceName();
+     Roster roster = connection_.getRoster();
+     RosterEntry entry = roster.getEntry(jid);
+@@ -841,6 +851,7 @@
+    * {@inheritDoc}
+    */
+   public UserInfo getUserInfo(String userID) {
++    userID = decodeUsername(userID);
+     return organization_.getUserInfo(userID);
+   }
+ 
+@@ -891,6 +902,7 @@
+    * {@inheritDoc}
+    */
+   public boolean removeBuddy(String name) throws XMPPException {
++    name = encodeUserName(name);
+     String jid = name + "@" + connection_.getServiceName();
+     Roster buddies = connection_.getRoster();
+     for (RosterEntry re : buddies.getEntries()) {
+@@ -959,6 +971,7 @@
+    * {@inheritDoc}
+    */
+   public void sendMessage(Message message) {
++    message.setFrom(encodeUserName(message.getFrom()));
+     if (connection_.isConnected()) {
+       connection_.sendPacket(message);
+     }
+@@ -971,7 +984,7 @@
+     MultiUserChat chat = multiUserChatManager.getMultiUserChat(room);
+     Message message = chat.createMessage();
+     message.setBody(body);
+-    message.setFrom(getUsername());
++    message.setFrom(encodeUserName(getUsername()));
+     chat.sendMessage(message);
+   }
+ 
+@@ -988,6 +1001,7 @@
+    * {@inheritDoc}
+    */
+   public void subscribeUser(String user) {
++    user = encodeUserName(user);
+     String jid = user + "@" + connection_.getServiceName();
+     Presence precense = new Presence(Presence.Type.subscribed);
+     precense.setTo(jid);
+@@ -998,6 +1012,7 @@
+    * {@inheritDoc}
+    */
+   public void subscribeUser(String toUser, String serviceName) {
++    toUser = encodeUserName(toUser);
+     Presence precense = new Presence(Presence.Type.subscribed);
+     precense.setTo(toUser + "@" + serviceName);
+     sendPresence(precense);
+@@ -1007,6 +1022,7 @@
+    * {@inheritDoc}
+    */
+   public void unsubscribeUser(String user) {
++    user = encodeUserName(user);
+     String jid = user + "@" + connection_.getServiceName();
+     Presence precense = new Presence(Presence.Type.unsubscribed);
+     precense.setTo(jid);
+@@ -1017,6 +1033,7 @@
+    * {@inheritDoc}
+    */
+   public void unsubscribeUser(String toUser, String serviceName) {
++    toUser = encodeUserName(toUser);
+     Presence precense = new Presence(Presence.Type.unsubscribed);
+     precense.setTo(toUser + "@" + serviceName);
+     sendPresence(precense);
+@@ -1052,6 +1069,7 @@
+     MultiUserChat chat = new MultiUserChat(connection_, roomJID);
+     if (nickname == null)
+       nickname = username_;
++    nickname = encodeUserName(nickname);
+     chat.create(nickname);
+     multiUserChatManager.addMultiUserChat(chat);
+     addListeners(chat);
+@@ -1258,6 +1276,7 @@
+   //17/06/2010 add start
+   @Override
+   public void addFullUserNames(String userName, String fullUserName) {
++  userName = encodeUserName(userName);
+ 	OccupantBean bean = new OccupantBean();
+ 	bean.setFullName(fullUserName);
+ 	bean.setNick(userName);
+@@ -1284,8 +1303,10 @@
+ 	}
+ 	// 17/06/2010 add end  
+       
+-    if (nickname == null)
++    if (nickname == null) {
+       nickname = username_;
++    }
++    nickname = encodeUserName(nickname);
+     MultiUserChat chat = getMultiUserChat(room);
+     if (chat == null) {
+       String roomJID = validateRoomJID(room);
+@@ -1417,9 +1438,10 @@
+         OccupantBean occupantBean = new OccupantBean();
+         occupantBean.setAffiliation(occupant.getAffiliation());
+         occupantBean.setJid(occupant.getJid());
+-        occupantBean.setNick(occupant.getNick());
++        String username = decodeUsername(occupant.getNick());
++        occupantBean.setNick(username);
+         occupantBean.setRole(occupant.getRole());
+-        UserInfo userInfo = organization.getUserInfo(occupant.getNick());
++        UserInfo userInfo = organization.getUserInfo(username);
+         occupantBean.setFullName(userInfo.getFirstName() + " " + userInfo.getLastName());
+         occupants.add(occupantBean);
+       }
+@@ -1438,6 +1460,7 @@
+    * {@inheritDoc}
+    */
+   public void declineRoom(String room, String inviter, String reason) {
++    inviter = encodeUserName(inviter);
+     String roomJID = validateRoomJID(room);
+     String inviterJID = inviter + "@" + connection_.getServiceName();
+     MultiUserChat.decline(connection_, roomJID, inviterJID, reason);
+@@ -1447,6 +1470,7 @@
+    * {@inheritDoc}
+    */
+   public Boolean inviteToRoom(String room, String invitee, String reason) throws XMPPException {
++    invitee = encodeUserName(invitee);
+     String inviteeJID = invitee + "@" + connection_.getServiceName();
+     MultiUserChat chat = getMultiUserChat(room);
+     if (chat != null) {
+@@ -1476,6 +1500,7 @@
+    * {@inheritDoc}
+    */
+   public void manageRole(String room, String nickname, String role, String command) throws XMPPException {
++    nickname = encodeUserName(nickname);
+     MultiUserChat chat = getMultiUserChat(room);
+     if (chat == null)
+       throw new XMPPException("Chat not found", new XMPPError(XMPPError.Condition.item_not_found));
+@@ -1507,6 +1532,7 @@
+    * {@inheritDoc}
+    */
+   public void kickUser(String room, String nickname, String reason) throws XMPPException {
++    nickname = encodeUserName(nickname);
+     MultiUserChat chat = getMultiUserChat(room);
+     if (chat == null)
+       throw new XMPPException("Chat not found", new XMPPError(XMPPError.Condition.item_not_found));
+@@ -1517,6 +1543,7 @@
+    * {@inheritDoc}
+    */
+   public void banUser(String room, String nickname, String reason) throws XMPPException {
++    nickname = encodeUserName(nickname);
+     MultiUserChat chat = getMultiUserChat(room);
+     if (chat == null)
+       throw new XMPPException("Chat not found", new XMPPError(XMPPError.Condition.item_not_found));
+@@ -1534,6 +1561,7 @@
+    * {@inheritDoc}
+    */
+   public void changeNickname(String room, String nickname) throws XMPPException {
++    nickname = encodeUserName(nickname);
+     MultiUserChat chat = getMultiUserChat(room);
+     if (chat != null && nickname != null)
+       chat.changeNickname(nickname);
+@@ -1556,6 +1584,7 @@
+    * {@inheritDoc}
+    */
+   public void manageAffiliation(String room, String nickname, String affiliation, String command) throws XMPPException {
++    nickname = encodeUserName(nickname);
+     MultiUserChat chat = getMultiUserChat(room);
+     if (chat == null)
+       throw new XMPPException("Chat not found", new XMPPError(XMPPError.Condition.item_not_found));
+@@ -1612,6 +1641,7 @@
+    * @param isRoom true if file send to the group chat
+    */
+   public void sendFile(String requestor, String path, String description, boolean isRoom) throws Exception{
++    requestor = encodeUserName(requestor);
+       if (!isRoom) {
+         contFileTransfers = 1;
+         String fullJID = connection_.getRoster().getPresence(requestor + "@"
+@@ -2182,7 +2212,54 @@
+     return roomJID;
+   }
+ 
++    
+   /**
++   * Encoding sensitive user names to bypass the limitation in only insensitive user names of Openfire
++   * @param username
++   * @return
++   */
++  public static String encodeUserName(String username) {
++    if (username == null) {
++      return "";
++    }
++    String lusername = username.toLowerCase();
++    if (username.equals(lusername)) {
++      return username;
++    }
++    StringBuilder sb = new StringBuilder("");
++    for (int i = 0; i < username.length(); i++) {
++      char c = username.charAt(i);
++      char lc = lusername.charAt(i);
++      if (c == lc) {
++        sb.append(c);
++      } else {
++        sb.append("s220w748s8xn3btua").append(lc);
++      }
++    }
++    return sb.toString();
++  }
++
++  /**
++   * Decoding sensitive user names to bypass the limitation in only insensitive user names of Openfire
++   * @param username
++   * @return
++   */
++  public static String decodeUsername(String username) {
++    if (username == null || username.indexOf("s220w748s8xn3btua") < 0) {
++      return username;
++    }
++    String[] tokens = username.split("s220w748s8xn3btua");
++    StringBuilder sb = new StringBuilder("");
++    for (int i = 0; i < tokens.length; i++) {
++      if (i > 0 && tokens[i].length() > 0) {
++        tokens[i] = tokens[i].substring(0, 1).toUpperCase() + tokens[i].substring(1);
++      }
++      sb.append(tokens[i]);
++    }
++    return sb.toString();
++  }
++  
++  /**
+    * set/get presence status***/  
+   public String getPresenceStatus_() {
+     return status_;
+Index: eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/history/impl/jcr/HistoryImpl.java
+===================================================================
+--- eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/history/impl/jcr/HistoryImpl.java	(revision 72289)
++++ eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/history/impl/jcr/HistoryImpl.java	(working copy)
+@@ -41,6 +41,8 @@
+ import org.exoplatform.services.jcr.core.ManageableRepository;
+ import org.exoplatform.services.jcr.ext.common.SessionProvider;
+ import org.exoplatform.services.jcr.impl.core.NodeImpl;
++import org.exoplatform.services.log.ExoLogger;
++import org.exoplatform.services.log.Log;
+ import org.exoplatform.services.xmpp.history.HistoricalMessage;
+ import org.exoplatform.services.xmpp.history.Interlocutor;
+ import org.exoplatform.services.xmpp.util.CodingUtils;
+@@ -48,8 +50,6 @@
+ import org.jivesoftware.smack.packet.Message;
+ import org.jivesoftware.smack.util.StringUtils;
+ import org.picocontainer.Startable;
+-import org.exoplatform.services.log.ExoLogger;
+-import org.exoplatform.services.log.Log;
+ 
+ /**
+  * Created by The eXo Platform SAS.
+@@ -293,7 +293,7 @@
+         if (conversation != null) {
+           conversation.addMessage(historicalMessage);
+           conversation.setLastActiveDate(date);
+-          updateConversation(conversationNode, conversation, usernameTo);
++          updateConversation(conversationNode, conversation);
+         } else {
+           conversationId = CodingUtils.encodeToHex(UUID.randomUUID().toString());
+           createNewConversation(conversationNode,
+@@ -303,6 +303,7 @@
+                                 historicalMessage);
+         }
+         conversationNode.getSession().save();
++        participantsNode.getSession().save();
+       } catch (Exception e) {
+         //TODO: find why exception happens
+         //e.printStackTrace();
+@@ -744,10 +745,9 @@
+    * 
+    * @param conversationsNode the node
+    * @param conversation the conversation
+-   * @param username the username
+    * @throws Exception 
+    */
+-  private void updateConversation(Node conversationsNode, Conversation conversation, String username) throws Exception {
++  private void updateConversation(Node conversationsNode, Conversation conversation) throws Exception {
+     try {
+       if (conversationsNode.hasNode(conversation.getConversationId())) {
+         Node node = conversationsNode.getNode(conversation.getConversationId());
+Index: eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/rest/RESTXMPPService.java
+===================================================================
+--- eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/rest/RESTXMPPService.java	(revision 72289)
++++ eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/rest/RESTXMPPService.java	(working copy)
+@@ -1260,11 +1260,15 @@
+   public Response getAllHistory(@PathParam("usernameto") String usernameto,
+                                 @PathParam("isGroupChat") Boolean isGroupChat,
+                                 @QueryParam("usernamefrom") String usernamefrom) {
++    String ufrom = usernamefrom;
++    usernameto = XMPPSessionImpl.decodeUsername(usernameto);
++    usernamefrom = XMPPSessionImpl.decodeUsername(usernamefrom);
+     if (this.rb == null) loadResourceBundle();
+     if (usernamefrom == null || usernamefrom.length() == 0)
+       return Response.status(HTTPStatus.BAD_REQUEST)
+       .entity(rb.getString("chat.message.history.participant.name.not.set"))
+       .build();
++    boolean isFromEncoded = !ufrom.equals(usernamefrom) && !isGroupChat;
+     try {
+       XMPPSession session = messenger.getSession(usernameto);
+       if (session != null) {
+@@ -1272,6 +1276,13 @@
+         list = session.getAllHistory(usernameto, usernamefrom, isGroupChat);
+         List<MessageBean> listBean = new ArrayList<MessageBean>();
+         if (!list.isEmpty()) {
++          if (isFromEncoded) {
++            for (HistoricalMessage historicalMessage : list) {
++              if (historicalMessage.getFrom().indexOf(usernamefrom) >= 0) {
++                historicalMessage.setFrom(XMPPSessionImpl.encodeUserName(historicalMessage.getFrom()));
++              }
++            }
++          }
+           for (HistoricalMessage historicalMessage : list) {
+             listBean.add(TransformUtils.messageToBean(historicalMessage));
+           }
+@@ -1304,11 +1315,15 @@
+                                         @PathParam("from") String from,
+                                         @PathParam("to") String to,
+                                         @QueryParam("usernamefrom") String usernamefrom) {
++    String ufrom = usernamefrom;
++    usernameto = XMPPSessionImpl.decodeUsername(usernameto);
++    usernamefrom = XMPPSessionImpl.decodeUsername(usernamefrom);
+     if (this.rb == null) loadResourceBundle();
+     if (usernamefrom == null || usernamefrom.length() == 0)
+       return Response.status(HTTPStatus.BAD_REQUEST)
+       .entity(rb.getString("chat.message.history.participant.name.not.set"))
+       .build();
++    boolean isFromEncoded = !ufrom.equals(usernamefrom) && !isGroupChat;
+     try {
+       XMPPSession session = messenger.getSession(usernameto);
+       if (session != null) {
+@@ -1323,6 +1338,13 @@
+                                                dateFrom,
+                                                dateTo);
+           if (!list.isEmpty()) {
++            if (isFromEncoded) {
++              for (HistoricalMessage historicalMessage : list) {
++                if (historicalMessage.getFrom().indexOf(usernamefrom) >= 0) {
++                  historicalMessage.setFrom(XMPPSessionImpl.encodeUserName(historicalMessage.getFrom()));
++                }
++              }
++            }
+             for (HistoricalMessage historicalMessage : list) {
+               listBean.add(TransformUtils.messageToBean(historicalMessage));
+             }
+@@ -1356,11 +1378,15 @@
+                                           @PathParam("isGroupChat") Boolean isGroupChat,
+                                           @PathParam("from") String from,
+                                           @QueryParam("usernamefrom") String usernamefrom) {
++    String ufrom = usernamefrom;
++    usernameto = XMPPSessionImpl.decodeUsername(usernameto);
++    usernamefrom = XMPPSessionImpl.decodeUsername(usernamefrom);
+     if (this.rb == null) loadResourceBundle();
+     if (usernamefrom == null || usernamefrom.length() == 0)
+       return Response.status(HTTPStatus.BAD_REQUEST)
+       .entity(rb.getString("chat.message.history.participant.name.not.set"))
+       .build();
++    boolean isFromEncoded = !ufrom.equals(usernamefrom) && !isGroupChat;
+     try {
+       XMPPSession session = messenger.getSession(usernameto);
+       if (session != null) {
+@@ -1370,6 +1396,13 @@
+         if (dateFrom.before(Calendar.getInstance().getTime())) {
+           list = session.getHistoryFromDateToNow(usernameto, usernamefrom, isGroupChat, dateFrom);
+           if (!list.isEmpty()) {
++            if (isFromEncoded) {
++              for (HistoricalMessage historicalMessage : list) {
++                if (historicalMessage.getFrom().indexOf(usernamefrom) >= 0) {
++                  historicalMessage.setFrom(XMPPSessionImpl.encodeUserName(historicalMessage.getFrom()));
++                }
++              }
++            }
+             for (HistoricalMessage historicalMessage : list) {
+               listBean.add(TransformUtils.messageToBean(historicalMessage));
+             }
+@@ -1424,6 +1457,8 @@
+                                     @PathParam("isGroupChat") Boolean isGroupChat,
+                                     @PathParam("clientTimezoneOffset") String clientTimezoneOffset,
+                                     @QueryParam("usernamefrom") String usernamefrom) {
++    usernameto = XMPPSessionImpl.decodeUsername(usernameto);
++    usernamefrom = XMPPSessionImpl.decodeUsername(usernamefrom);
+     if (this.rb == null) loadResourceBundle();
+     if (usernamefrom == null || usernamefrom.length() == 0)
+       return Response.status(HTTPStatus.BAD_REQUEST)
+@@ -1473,6 +1508,8 @@
+                                               @PathParam("from") String from,
+                                               @PathParam("clientTimezoneOffset") String clientTimezoneOffset,
+                                               @QueryParam("usernamefrom") String usernamefrom) {
++    usernameto = XMPPSessionImpl.decodeUsername(usernameto);
++    usernamefrom = XMPPSessionImpl.decodeUsername(usernamefrom);
+     if (this.rb == null) loadResourceBundle();
+     try {
+       //XMPPSession session = messenger.getSession(usernameto);
+@@ -1529,6 +1566,8 @@
+                                             @PathParam("to") String to,
+                                             @PathParam("clientTimezoneOffset") String clientTimezoneOffset,
+                                             @QueryParam("usernamefrom") String usernamefrom) {
++    usernameto = XMPPSessionImpl.decodeUsername(usernameto);
++    usernamefrom = XMPPSessionImpl.decodeUsername(usernamefrom);
+     if (this.rb == null) loadResourceBundle();
+     try {
+       //XMPPSession session = messenger.getSession(usernameto);
+Index: eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js
+===================================================================
+--- eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js	(revision 72289)
++++ eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js	(working copy)
+@@ -113,13 +113,26 @@
+ UITabControl.prototype.userJoinRoomEventFired = function(user) {
+   var userName = user.substr(user.indexOf('/') + 1, user.length-1);
+   var fullName = eXo.communication.chat.webui.UIChatWindow.fullNameMap[userName];
++  if(!fullName) return;
+   //this.writeMsg(this.UIMainChatWindow.UIChatWindow.SYSTEM_INFO, userName + ' just joined the room');
+   var msgBuf = this.UIMainChatWindow.ResourceBundle.chat_message_room_user_join.replace('{0}', fullName);
+   this.writeMsg(this.UIMainChatWindow.ResourceBundle.chat_message_system_info, msgBuf);
++  // Decode username
++  var tokens = userName.split('s220w748s8xn3btua');
++  var sb = '';
++  for ( var i = 0; i < tokens.length; i++) {
++    if (i > 0 && tokens[i].length > 0) {
++      var firstCharacter = tokens[i].substring(0, 1);
++      firstCharacter = firstCharacter.toUpperCase();
++      tokens[i] = firstCharacter + tokens[i].substring(1);
++    }
++    sb += tokens[i];
++  }
++  //
+   userName += '@' + this.UIMainChatWindow.serverInfo.mainServiceName;
+   var buddyInfo = {
+     presence           : {from: user,mode: null, status: null, type: 'available'},
+-    nickname           : user,
++    nickname           : sb,
+     fullName		   : fullName,
+     groups             : [],
+     subscriptionStatus : null,
+@@ -187,6 +200,9 @@
+     }
+     var userName = contactInfo.buddyInfo.user;
+     var shortUserName = userName.substring(0, userName.indexOf('@'));
++    if (shortUserName && shortUserName.indexOf('s220w748s8xn3btua') >= 0) {
++      shortUserName = contactInfo.buddyInfo.nickname;
++    }
+     if (shortUserName == contact['userName'] ||
+         userName == contact['userName']) {
+       contact.enabled4Add = false;
+Index: eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIAddContactPopupWindow.js
+===================================================================
+--- eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIAddContactPopupWindow.js	(revision 72289)
++++ eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIAddContactPopupWindow.js	(working copy)
+@@ -150,6 +150,9 @@
+     }
+     var userName = contactInfo.buddyInfo.user;
+     var shortUserName = userName.substring(0, userName.indexOf('@'));
++    if (shortUserName && shortUserName.indexOf('s220w748s8xn3btua') >= 0) {
++      shortUserName = contactInfo.buddyInfo.nickname;
++    }
+     if (shortUserName == contact['userName'] ||
+         userName == contact['userName']) {
+       contact.enabled4Add = false;
+Index: eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/component/BuddyListControl.js
+===================================================================
+--- eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/component/BuddyListControl.js	(revision 72289)
++++ eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/component/BuddyListControl.js	(working copy)
+@@ -203,13 +203,13 @@
+  * @param {BuddyInfo} buddyInfo
+  */
+ BuddyListControl.prototype.addBuddy = function(buddyInfo){
+-  window.jsconsole.warn('Adding new buddy: ' + buddyInfo.user);
+-  var buddyItemObj = this.buddyList[buddyInfo.user];
++  window.jsconsole.warn('Adding new buddy: ' + buddyInfo.nickname);
++  var buddyItemObj = this.buddyList[buddyInfo.nickname];
+   if (buddyItemObj) {
+     window.jsconsole.warn('User existed, skip add buddy');
+   } else {
+     buddyItemObj = this.getNewInstanceOfBuddyItem(buddyInfo);
+-    this.buddyList[buddyInfo.user] = buddyItemObj;
++    this.buddyList[buddyInfo.nickname] = buddyItemObj;
+     this.rootNode.appendChild(buddyItemObj.rootNode);
+   }
+ };
+Index: eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js
+===================================================================
+--- eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js	(revision 72289)
++++ eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js	(working copy)
+@@ -113,13 +113,26 @@
+ UITabControl.prototype.userJoinRoomEventFired = function(user) {
+   var userName = user.substr(user.indexOf('/') + 1, user.length-1);
+   var fullName = eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[userName];
++  if(!fullName) return;
+   //this.writeMsg(this.UIMainChatWindow.UIChatWindow.SYSTEM_INFO, userName + ' just joined the room');
+   var msgBuf = this.UIMainChatWindow.ResourceBundle.chat_message_room_user_join.replace('{0}', fullName);
+   this.writeMsg(this.UIMainChatWindow.ResourceBundle.chat_message_system_info, msgBuf);
++  // Decode username
++  var tokens = userName.split('s220w748s8xn3btua');
++  var sb = '';
++  for ( var i = 0; i < tokens.length; i++) {
++    if (i > 0 && tokens[i].length > 0) {
++      var firstCharacter = tokens[i].substring(0, 1);
++      firstCharacter = firstCharacter.toUpperCase();
++      tokens[i] = firstCharacter + tokens[i].substring(1);
++    }
++    sb += tokens[i];
++  }
++  //
+   userName += '@' + this.UIMainChatWindow.serverInfo.mainServiceName;
+   var buddyInfo = {
+     presence           : {from: user,mode: null, status: null, type: 'available'},
+-    nickname           : user,
++    nickname           : sb,
+     fullName		   : fullName,
+     groups             : [],
+     subscriptionStatus : null,
+@@ -187,6 +200,9 @@
+     }
+     var userName = contactInfo.buddyInfo.user;
+     var shortUserName = userName.substring(0, userName.indexOf('@'));
++    if (shortUserName && shortUserName.indexOf('s220w748s8xn3btua') >= 0) {
++      shortUserName = contactInfo.buddyInfo.nickname;
++    }
+     if (shortUserName == contact['userName'] ||
+         userName == contact['userName']) {
+       contact.enabled4Add = false;
+Index: eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIAddContactPopupWindow.js
+===================================================================
+--- eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIAddContactPopupWindow.js	(revision 72289)
++++ eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIAddContactPopupWindow.js	(working copy)
+@@ -150,6 +150,9 @@
+     }
+     var userName = contactInfo.buddyInfo.user;
+     var shortUserName = userName.substring(0, userName.indexOf('@'));
++    if (shortUserName && shortUserName.indexOf('s220w748s8xn3btua') >= 0) {
++      shortUserName = contactInfo.buddyInfo.nickname;
++    }
+     if (shortUserName == contact['userName'] ||
+         userName == contact['userName']) {
+       contact.enabled4Add = false;
+Index: eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/component/BuddyListControl.js
+===================================================================
+--- eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/component/BuddyListControl.js	(revision 72289)
++++ eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/component/BuddyListControl.js	(working copy)
+@@ -206,13 +206,13 @@
+  * @param {BuddyInfo} buddyInfo
+  */
+ BuddyListControl.prototype.addBuddy = function(buddyInfo){
+-  window.jsconsole.warn('Adding new buddy: ' + buddyInfo.user);
+-  var buddyItemObj = this.buddyList[buddyInfo.user];
++  window.jsconsole.warn('Adding new buddy: ' + buddyInfo.nickname);
++  var buddyItemObj = this.buddyList[buddyInfo.nickname];
+   if (buddyItemObj) {
+     window.jsconsole.warn('User existed, skip add buddy');
+   } else {
+     buddyItemObj = this.getNewInstanceOfBuddyItem(buddyInfo);
+-    this.buddyList[buddyInfo.user] = buddyItemObj;
++    this.buddyList[buddyInfo.nickname] = buddyItemObj;
+     this.rootNode.appendChild(buddyItemObj.rootNode);
+   }
+ };
+Index: eXoApplication/organization/service/src/main/java/org/exoplatform/services/authentication/rest/RESTAuthenticator.java
+===================================================================
+--- eXoApplication/organization/service/src/main/java/org/exoplatform/services/authentication/rest/RESTAuthenticator.java	(revision 72289)
++++ eXoApplication/organization/service/src/main/java/org/exoplatform/services/authentication/rest/RESTAuthenticator.java	(working copy)
+@@ -18,11 +18,9 @@
+ package org.exoplatform.services.authentication.rest;
+ 
+ import javax.security.auth.login.LoginContext;
+-import javax.ws.rs.Consumes;
+ import javax.ws.rs.FormParam;
+ import javax.ws.rs.POST;
+ import javax.ws.rs.Path;
+-import javax.ws.rs.QueryParam;
+ import javax.ws.rs.core.Response;
+ 
+ import org.exoplatform.common.http.HTTPStatus;
+@@ -49,6 +47,7 @@
+   public Response authenticate(
+ 	@FormParam("username") String username,
+ 	@FormParam("password") String password) {
++    username = decodeUsername(username);
+     try {
+       LoginContext loginContext = new LoginContext(ExoContainerContext.getCurrentContainer().getContext().getRealmName(),
+           new BasicCallbackHandler(username, password.toCharArray()));
+@@ -62,6 +61,27 @@
+     }
+   }
+   
++    /**
++     * Decoding sensitive user names to bypass the limitation in only insensitive user names of Openfire
++     * @param username
++     * @return
++     */
++    public static String decodeUsername(String username) {
++      if (username == null || username.indexOf("s220w748s8xn3btua") < 0) {
++        return username;
++      }
++      String[] tokens = username.split("s220w748s8xn3btua");
++      StringBuilder sb = new StringBuilder("");
++      for (int i = 0; i < tokens.length; i++) {
++        if (i > 0 && tokens[i].length() > 0) {
++          tokens[i] = tokens[i].substring(0, 1).toUpperCase() + tokens[i].substring(1);
++        }
++        sb.append(tokens[i]);
++      }
++      return sb.toString();
++    }
++    
++    
+   
+ //  @POST
+ //  @Path("/organization/authenticate/")
+Index: eXoApplication/organization/service/src/main/java/org/exoplatform/services/organization/rest/xml/RESTOrganizationServiceXMLImpl.java
+===================================================================
+--- eXoApplication/organization/service/src/main/java/org/exoplatform/services/organization/rest/xml/RESTOrganizationServiceXMLImpl.java	(revision 72289)
++++ eXoApplication/organization/service/src/main/java/org/exoplatform/services/organization/rest/xml/RESTOrganizationServiceXMLImpl.java	(working copy)
+@@ -33,12 +33,12 @@
+ 
+ import org.exoplatform.common.http.HTTPStatus;
+ import org.exoplatform.commons.utils.PageList;
++import org.exoplatform.services.authentication.rest.RESTAuthenticator;
+ import org.exoplatform.services.organization.Group;
+ import org.exoplatform.services.organization.OrganizationService;
+ import org.exoplatform.services.organization.Query;
+ import org.exoplatform.services.organization.User;
+ import org.exoplatform.services.organization.rest.RESTOrganizationServiceAbstractImpl;
+-import org.exoplatform.services.organization.rest.json.UserBean;
+ import org.exoplatform.services.rest.resource.ResourceContainer;
+ 
+ /**
+@@ -70,6 +70,7 @@
+                             @QueryParam("email") String email,
+                             @QueryParam("fromLoginDate") String fromLoginDate,
+                             @QueryParam("toLogindate") String toLoginDate) {
++    username = RESTAuthenticator.decodeUsername(username);
+     try {
+       // TODO : now returned all founded user need be carefully then using
+       // wildcard (*)
+@@ -123,6 +124,7 @@
+                                  @QueryParam("toLogindate") String toLoginDate,
+                                  @PathParam("from") Integer from,
+                                  @PathParam("num") Integer numResult) {
++    username = RESTAuthenticator.decodeUsername(username);
+     try {
+       Query query = new Query();
+       query.setUserName(username);
+@@ -220,6 +222,7 @@
+   @Path("/user/info/{username}/")
+   //@OutputTransformer(SerializableTransformer.class)
+   public Response getUser(@PathParam("username") String username) {
++    username = RESTAuthenticator.decodeUsername(username);
+     try {
+       start();
+       User user = userHandler.findUserByName(username);
+@@ -337,6 +340,7 @@
+   //@OutputTransformer(SerializableTransformer.class)
+   public Response getGroupsOfUser(@Context UriInfo uriInfo,
+                                   @QueryParam("username") String username) {
++    username = RESTAuthenticator.decodeUsername(username);
+     try {
+     	start();
+       if (userHandler.findUserByName(username) == null) {
+Index: eXoApplication/organization/service/src/main/java/org/exoplatform/services/organization/rest/json/RESTOrganizationServiceJSONImpl.java
+===================================================================
+--- eXoApplication/organization/service/src/main/java/org/exoplatform/services/organization/rest/json/RESTOrganizationServiceJSONImpl.java	(revision 72289)
++++ eXoApplication/organization/service/src/main/java/org/exoplatform/services/organization/rest/json/RESTOrganizationServiceJSONImpl.java	(working copy)
+@@ -39,8 +39,7 @@
+ 
+ import org.exoplatform.common.http.HTTPStatus;
+ import org.exoplatform.commons.utils.PageList;
+-import org.exoplatform.container.PortalContainer;
+-import org.exoplatform.container.component.ComponentRequestLifecycle;
++import org.exoplatform.services.authentication.rest.RESTAuthenticator;
+ import org.exoplatform.services.organization.OrganizationService;
+ import org.exoplatform.services.organization.Query;
+ import org.exoplatform.services.organization.User;
+@@ -101,6 +100,7 @@
+                             @QueryParam("email") String email,
+                             @QueryParam("fromLoginDate") String fromLoginDate,
+                             @QueryParam("toLogindate") String toLoginDate) {
++    username = RESTAuthenticator.decodeUsername(username);
+     try {
+     //TODO : now returned all founded user need be carefully then using wildcard (*)
+       Query query = new Query();
+@@ -293,6 +293,7 @@
+   @Path("/user/info/{username}/")
+   @Produces(MediaType.APPLICATION_JSON)
+   public Response getUser(@PathParam("username") String username) {
++    username = RESTAuthenticator.decodeUsername(username);
+     try {
+       start() ;
+       User user = userHandler.findUserByName(username);
