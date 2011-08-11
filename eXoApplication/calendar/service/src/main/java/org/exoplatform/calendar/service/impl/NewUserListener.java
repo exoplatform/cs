@@ -134,11 +134,20 @@ public class NewUserListener extends UserEventListener {
 
     // Get default event categories
     if (params.getValueParam(EVENT_CATEGORIES) != null) {
+      // Get config value
       String eventCategoryConfig = params.getValueParam(EVENT_CATEGORIES).getValue();
-      defaultEventCategoryIds = eventCategoryConfig.split(COMA);
+      String[] configValue = eventCategoryConfig.split(COMA);
+      
+      // Create array to store default event categories
+      defaultEventCategoryIds = new String[configValue.length + 1];
       defaultEventCategoryNames = new String[defaultEventCategoryIds.length];
-      for (int i = 0; i < defaultEventCategoryIds.length; i++) {
-        defaultEventCategoryIds[i] = defaultEventCategoryIds[i].trim();
+      
+      // First element is DEFAULT_EVENTCATEGORY_ID_ALL
+      defaultEventCategoryIds[0] = DEFAULT_EVENTCATEGORY_ID_ALL;
+      defaultEventCategoryNames[0] = DEFAULT_EVENTCATEGORY_NAME_ALL;
+      
+      for (int i = 0; i < configValue.length; i++) {
+        defaultEventCategoryIds[i + 1] = configValue[i].trim();
         defaultEventCategoryNames[i] = defaultEventCategoryIds[i];
       }
     } else {

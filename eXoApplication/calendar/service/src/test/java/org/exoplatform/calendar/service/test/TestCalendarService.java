@@ -111,9 +111,11 @@ public class TestCalendarService extends BaseCalendarTestCase {
     organizationService.getUserHandler().createUser(newUser, true);
 
     // Create event category list from config
-    List<String> defaultEventCategories = Arrays.asList(defaultEventCategoriesConfig.split(COMA));
-    for (int i = 0; i < defaultEventCategories.size(); i++) {
-      defaultEventCategories.set(i, defaultEventCategories.get(i).trim());
+    String[] configValues = defaultEventCategoriesConfig.split(COMA);
+    List<String> defaultEventCategories = new ArrayList<String>();
+    defaultEventCategories.add(NewUserListener.DEFAULT_EVENTCATEGORY_ID_ALL);
+    for (int i = 0; i < configValues.length; i++) {
+      defaultEventCategories.add(configValues[i].trim());
     }
 
     // Test default calendar category
