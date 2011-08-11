@@ -26,9 +26,9 @@
     <type>org.exoplatform.services.bench.DataInjectorService</type>
   </component>
   
-  <component>
+  <!--  component>
     <type>org.exoplatform.mail.service.bench.SimpleMailServerInitializer</type>
-  </component>
+  </component -->
 
   <external-component-plugins>
     <target-component>org.exoplatform.services.bench.DataInjectorService</target-component>
@@ -88,29 +88,29 @@
         </value-param>
       </init-params>
     </component-plugin>
-    <component-plugin>
+    <!-- component-plugin>
       <name>MailDataInjector</name>
       <set-method>addInjector</set-method>
       <type>org.exoplatform.mail.service.bench.MailDataInjector</type>
       <description>inject data for Contact</description>
       <init-params>
         <value-param>
-          <name>mA</name> <!-- maximum number of accounts -->
+          <name>mA</name> 
           <value>2</value>
         </value-param>
         <value-param>
-          <name>mM</name> <!-- maximum number of messages on an account -->
+          <name>mM</name> 
           <value>100</value>
         </value-param>
         <value-param>
-          <name>rand</name> <!-- randomize or not -->
+          <name>rand</name> 
           <value>false</value>
         </value-param>
         <value-param>
-          <name>attSize</name> <!-- attachment size -->
+          <name>attSize</name> 
           <value>100</value>
         </value-param>
       </init-params>
-    </component-plugin>
+    </component-plugin -->
   </external-component-plugins>
 </configuration>
