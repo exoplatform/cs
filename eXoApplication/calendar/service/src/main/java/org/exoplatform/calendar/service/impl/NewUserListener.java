@@ -71,14 +71,14 @@ public class NewUserListener extends UserEventListener {
   final public static String DEFAULT_CALENDAR_CATEGORYNAME = "defaultCalendarCategoryName";
   final public static String DEFAULT_CALENDAR_NAME = "defaultCalendarName";
   
-  final public static String DEFAULT_EVENTCATEGORY_ID_ALL = "All";
+  final public static String DEFAULT_EVENTCATEGORY_ID_ALL = "defaultEventCategoryIdAll";
   final public static String DEFAULT_EVENTCATEGORY_ID_MEETING = "Meeting";
   final public static String DEFAULT_EVENTCATEGORY_ID_CALLS = "Calls";
   final public static String DEFAULT_EVENTCATEGORY_ID_CLIENTS = "Clients";
   final public static String DEFAULT_EVENTCATEGORY_ID_HOLIDAY = "Holiday";
   final public static String DEFAULT_EVENTCATEGORY_ID_ANNIVERSARY = "Anniversary";
 
-  final public static String DEFAULT_EVENTCATEGORY_NAME_ALL = "All";
+  final public static String DEFAULT_EVENTCATEGORY_NAME_ALL = "defaultEventCategoryNameAll";
   final public static String DEFAULT_EVENTCATEGORY_NAME_MEETING = "Meeting";
   final public static String DEFAULT_EVENTCATEGORY_NAME_CALLS = "Calls";
   final public static String DEFAULT_EVENTCATEGORY_NAME_CLIENTS = "Clients";
