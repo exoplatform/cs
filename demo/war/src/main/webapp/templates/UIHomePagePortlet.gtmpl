@@ -1,17 +1,27 @@
 <%
   import org.exoplatform.portal.webui.util.Util ;
+  import org.exoplatform.web.url.PortalURL;
+  import org.exoplatform.web.url.navigation.NavigationResource;
+  import org.exoplatform.portal.mop.SiteType;
   
   String signInAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ShowLoginForm', true));" ;
   
-  String toururi = Util.getPortalRequestContext().getPortalURI() + "tour";
+  PortalURL nodeURL = nodeurl();
+  NavigationResource resource = new NavigationResource(SiteType.PORTAL, Util.getPortalRequestContext().getPortalOwner(), "tour");
+  String toururi = nodeURL.setResource(resource).toString();
   def prContext = _ctx.getRequestContext().getParentAppRequestContext();
   String user = prContext.getRemoteUser() ;
-  String calendarUrl = Util.getPortalRequestContext().getPortalURI() + "calendar" ;
-  String mailUrl = Util.getPortalRequestContext().getPortalURI() + "mail" ;
-  String contactUrl = Util.getPortalRequestContext().getPortalURI() + "contact" ;
-  String webosUrl = Util.getPortalRequestContext().getPortalURI() + "webos" ;
+  resource = new NavigationResource(SiteType.PORTAL, Util.getPortalRequestContext().getPortalOwner(), "calendar");
+  String calendarUrl = nodeURL.setResource(resource).toString();
+  resource = new NavigationResource(SiteType.PORTAL, Util.getPortalRequestContext().getPortalOwner(), "mail");
+  String mailUrl = nodeURL.setResource(resource).toString();
+  resource = new NavigationResource(SiteType.PORTAL, Util.getPortalRequestContext().getPortalOwner(), "contact");
+  String contactUrl = nodeURL.setResource(resource).toString();
+  resource = new NavigationResource(SiteType.PORTAL, Util.getPortalRequestContext().getPortalOwner(), "webos");
+  String webosUrl = nodeURL.setResource(resource).toString();
   String chatUrl = "/portal/private/classic/webos" ;
-  String registerUrl = Util.getPortalRequestContext().getPortalURI() + "register" ;
+  resource = new NavigationResource(SiteType.PORTAL, Util.getPortalRequestContext().getPortalOwner(), "register");
+  String registerUrl = nodeURL.setResource(resource).toString();
   if(user == null) {
    calendarUrl = "#" ;
    mailUrl = "#" ;

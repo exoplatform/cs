@@ -1,14 +1,20 @@
 <%
   import org.exoplatform.portal.application.PortalRequestContext;
   import org.exoplatform.portal.webui.util.Util;
+  import org.exoplatform.web.url.PortalURL;
+  import org.exoplatform.web.url.navigation.NavigationResource;
+  import org.exoplatform.portal.mop.SiteType;
   
   def prContext = _ctx.getRequestContext().getParentAppRequestContext();
   
   String loginAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ShowLoginForm', true));" ;
-  String registerURI = Util.getPortalRequestContext().getPortalURI() + "register";
+  PortalURL nodeURL = nodeurl();
+  NavigationResource resource = new NavigationResource(SiteType.PORTAL, Util.getPortalRequestContext().getPortalOwner(), "register");
+  String registerURI = nodeURL.setResource(resource).toString();
   String changeLanguageAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ChangeLanguage', true));" ;
   String portletId = uicomponent.getId() ;  
-    String pageURI = Util.getPortalRequestContext().getPortalURI() + "home";
+  resource = new NavigationResource(SiteType.PORTAL, Util.getPortalRequestContext().getPortalOwner(), "home");
+  String pageURI = nodeURL.setResource(resource).toString();
 %>
 <div id="$portletId" class="UIBannerPortlet UIApplication">   
   <div class="ApplicationMinWidth">
