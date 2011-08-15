@@ -285,42 +285,9 @@
 						</div>
 					</div>
 					<div class="UIAction">
-						<table class="ActionContainer">
-							<tr>
-								<td>
-									<div onclick="javascript:eXo.communication.chat.webui.UIAddContactPopupWindow.reload();"
-										class="ActionButton LightBlueStyle">
-										<div class="ButtonLeft">
-											<div class="ButtonRight">
-												<div class="ButtonMiddle">
-													<a href="#"><%=_ctx.appRes("UIChatPortlet.label.refresh");%></a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div onclick="eXo.communication.chat.webui.UIAddContactPopupWindow.addContactAction();"
-										class="ActionButton LightBlueStyle AddContactButton">
-										<div class="ButtonLeft">
-											<div class="ButtonRight">
-												<div class="ButtonMiddle">
-													<a href="#"><%=_ctx.appRes("UIChatPortlet.label.addContact");%></a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div onclick="javascript:eXo.communication.chat.webui.UIAddContactPopupWindow.setVisible(false);"
-										class="ActionButton LightBlueStyle">
-										<div class="ButtonLeft">
-											<div class="ButtonRight">
-												<div class="ButtonMiddle">
-													<a href="#"><%=_ctx.appRes("UIChatPortlet.label.cancel");%></a>
-												</div>
-											</div>
-										</div>
-									</div>
-								</td>
-							</tr>
-						</table>
+						<a href="#" class="ActionButton LightBlueStyle" onclick="javascript:eXo.communication.chat.webui.UIAddContactPopupWindow.reload();"><%=_ctx.appRes("UIChatPortlet.label.refresh");%></a>
+						<a href="#" class="ActionButton LightBlueStyle AddContactButton" onclick="eXo.communication.chat.webui.UIAddContactPopupWindow.addContactAction();"><%=_ctx.appRes("UIChatPortlet.label.addContact");%></a>
+						<a href="#" class="ActionButton LightBlueStyle" onclick="javascript:eXo.communication.chat.webui.UIAddContactPopupWindow.setVisible(false);"><%=_ctx.appRes("UIChatPortlet.label.cancel");%></a>
 					</div>
 				</div>
 				<!-- end contact -->
@@ -393,40 +360,9 @@
 						</div>
 					</div>
 					<div class="UIAction">
-						<table class="ActionContainer">
-							<tr>
-								<td>
-									<div onclick="javascript:eXo.communication.chat.webui.UIJoinRoomPopupWindow.reloadRoomList();"
-										class="ActionButton LightBlueStyle">
-										<div class="ButtonLeft">
-											<div class="ButtonRight">
-												<div class="ButtonMiddle">
-													<a href="#"><%=_ctx.appRes("UIChatPortlet.label.refresh");%></a>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div onclick="javascript:eXo.communication.chat.webui.UIJoinRoomPopupWindow.joinRoomAction();"
-										class="ActionButton LightBlueStyle JoinRoomButton">
-										<div class="ButtonLeft">
-											<div class="ButtonRight">
-												<div class="ButtonMiddle">
-													<a href="#"><%=_ctx.appRes("UIChatPortlet.label.joinRoom");%></a></div>
-											</div>
-										</div>
-									</div>
-									<div onclick="javascript:eXo.communication.chat.webui.UIJoinRoomPopupWindow.setVisible(false);"
-										class="ActionButton LightBlueStyle">
-										<div class="ButtonLeft">
-											<div class="ButtonRight">
-												<div class="ButtonMiddle">
-													<a href="#"><%=_ctx.appRes("UIChatPortlet.label.cancel");%></a></div>
-											</div>
-										</div>
-									</div>
-								</td>
-							</tr>
-						</table>
+						<a href="#" class="ActionButton LightBlueStyle" onclick="javascript:eXo.communication.chat.webui.UIJoinRoomPopupWindow.reloadRoomList();"><%=_ctx.appRes("UIChatPortlet.label.refresh");%></a>
+						<a href="#" class="ActionButton LightBlueStyle JoinRoomButton" onclick="javascript:eXo.communication.chat.webui.UIJoinRoomPopupWindow.joinRoomAction();"><%=_ctx.appRes("UIChatPortlet.label.joinRoom");%></a>
+						<a href="#" class="ActionButton LightBlueStyle" onclick="javascript:eXo.communication.chat.webui.UIJoinRoomPopupWindow.setVisible(false);"><%=_ctx.appRes("UIChatPortlet.label.cancel");%></a>
 					</div>
 				</div>
 				<!-- end contact -->
@@ -475,30 +411,8 @@
 						</div>
 					</div>
 					<div class="UIAction">
-						<table class="ActionContainer">
-							<tr>
-								<td>
-									<div onclick="javascript:eXo.communication.chat.webui.UICreateNewRoomPopupWindow.createNewRoomAction();"
-										class="ActionButton LightBlueStyle">
-										<div class="ButtonLeft">
-											<div class="ButtonRight">
-												<div class="ButtonMiddle">
-													<a href="#"><%=_ctx.appRes("UIChatPortlet.label.ok");%></a></div>
-											</div>
-										</div>
-									</div>
-									<div onclick="javascript:eXo.communication.chat.webui.UICreateNewRoomPopupWindow.setVisible(false);"
-										class="ActionButton LightBlueStyle">
-										<div class="ButtonLeft">
-											<div class="ButtonRight">
-												<div class="ButtonMiddle">
-													<a href="#"><%=_ctx.appRes("UIChatPortlet.label.cancel");%></a></div>
-											</div>
-										</div>
-									</div>
-								</td>
-							</tr>
-						</table>
+						<a href="#" class="ActionButton LightBlueStyle" onclick="javascript:eXo.communication.chat.webui.UICreateNewRoomPopupWindow.createNewRoomAction();"><%=_ctx.appRes("UIChatPortlet.label.ok");%></a>
+						<a href="#" class="ActionButton LightBlueStyle" onclick="javascript:eXo.communication.chat.webui.UICreateNewRoomPopupWindow.setVisible(false);"><%=_ctx.appRes("UIChatPortlet.label.cancel");%></a>
 					</div>
 				</div>
 				<!-- end contact -->
@@ -689,30 +603,8 @@
 				<div class="BoxForm">
 					<div class="BorderForm">
 						<div class="UIAction">
-							<table class="ActionContainer">
-								<tr>
-									<td>
-										<div onclick="javascript:eXo.communication.chat.webui.UIRoomConfigPopupWindow.okAction();"
-											class="ActionButton LightBlueStyle">
-											<div class="ButtonLeft">
-												<div class="ButtonRight">
-													<div class="ButtonMiddle">
-														<a href="#"><%=_ctx.appRes("UIChatPortlet.label.ok");%></a></div>
-												</div>
-											</div>
-										</div>
-										<div onclick="javascript:eXo.communication.chat.webui.UIRoomConfigPopupWindow.setVisible(false);"
-											class="ActionButton LightBlueStyle">
-											<div class="ButtonLeft">
-												<div class="ButtonRight">
-													<div class="ButtonMiddle">
-														<a href="#"><%=_ctx.appRes("UIChatPortlet.label.cancel");%></a></div>
-												</div>
-											</div>
-										</div>
-									</td>
-								</tr>
-							</table>
+							<a href="#" class="ActionButton LightBlueStyle" onclick="javascript:eXo.communication.chat.webui.UIRoomConfigPopupWindow.okAction();"><%=_ctx.appRes("UIChatPortlet.label.ok");%></a>
+							<a href="#" class="ActionButton LightBlueStyle" onclick="javascript:eXo.communication.chat.webui.UIRoomConfigPopupWindow.setVisible(false);"><%=_ctx.appRes("UIChatPortlet.label.cancel");%></a>
 						</div>
 					</div>
 				</div>

@@ -85,30 +85,12 @@
         </table>      
         <%_ctx.include("app:/templates/calendar/webui/UIPageIterator.gtmpl");%>    
       </div>
-      
     </div>
-
   </div>
-  
-  <div class="UIAction"> 
-    <table class="ActionContainer" align="center">
-      <tr>
-        <td align="center"> 
-        <%for(String action : uicomponent.getActions()){%>
-         <a href="<%=uicomponent.event(action)%>" class="ActionButton LightBlueStyle">
-            <div class="ButtonLeft">
-              <div class="ButtonRight">
-                <div class="ButtonMiddle">
-                  <%=uiform.getLabel(action)%>
-                </div>
-              </div>
-            </div>
-          </a>
-         <%}%>
-        </td>
-      </tr>
-    </table>
-  </div>  
-  
+	<div class="UIAction">
+  		<%for(String action : uicomponent.getActions()){%>
+		<a href="<%=uicomponent.event(action)%>" class="ActionButton LightBlueStyle"><%=uiform.getLabel(action)%></a>
+		<%}%>
+	</div>
 </div>
 <% uiform.end() %>

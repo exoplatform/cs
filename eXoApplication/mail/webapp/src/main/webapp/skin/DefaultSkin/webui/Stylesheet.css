@@ -732,6 +732,10 @@
   overflow: hidden ;
 }
 
+.UIMailPortlet .UIMessageList .UIGrid td .UIAction a{
+	display: inline-block;
+}
+
 .UIMailPortlet .MailWorkingWorkspace .UIGrid .IconTag {
   width: 16px;
   height: 20px;

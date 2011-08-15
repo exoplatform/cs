@@ -652,53 +652,23 @@
                 }
               </style>
               <div class="UIAction Printable"> 
-                <table class="ActionContainer" align="center">
-                  <tr>
-                    <td align="center">
-                      <%  
-                      if (uicomponent.isPrintForm) {
-                        rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactPortlet.printList('"+uiform.id+"') ;") ;
-                      %>  
-                      <a href="#" onclick="javascript:window.print() ;" class="ActionButton LightBlueStyle">
-                        <div class="ButtonLeft">
-                          <div class="ButtonRight">
-                            <div class="ButtonMiddle">
-                            <%=_ctx.appRes("UIContactPreview.action.print")%>
-                            </div>
-                          </div>
-                        </div>
-                       </a>
-                       <% } else { %>
-                       <a href="#" onclick="javascript:eXo.contact.UIContactPortlet.printpreview(this) ;" printLabel="<%=_ctx.appRes("UIContactPreview.action.print")%>" class="ActionButton LightBlueStyle">
-                        <div class="ButtonLeft">
-                          <div class="ButtonRight">
-                            <div class="ButtonMiddle">
-                            <%=_ctx.appRes("UIContactPreview.action.printPreview")%>
-                            </div>
-                          </div>
-                        </div>
-                       </a> 
-                       <% } %>
-                       
-                       <% 
-                         // cs-1648
-                         for(action in uicomponent.getActions()) { 
-                           String actionLabel = _ctx.appRes("UIContactPreview.action." + action) ;
-                           String link = uicomponent.event(action) ;
-                      %>
-                      <a href="$link" class="ActionButton LightBlueStyle">
-                        <div class="ButtonLeft">
-                          <div class="ButtonRight">
-                            <div class="ButtonMiddle">
-                              $actionLabel
-                            </div>
-                          </div>
-                        </div>
-                       </a>
-                      <% } %>          
-                    </td>
-                  </tr>  
-                </table>
+	              <%  
+	              if (uicomponent.isPrintForm) {
+	                rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactPortlet.printList('"+uiform.id+"') ;") ;
+	              %>  
+					<a href="#" onclick="javascript:window.print() ;" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIContactPreview.action.print")%></a>
+                   <% } else { %>
+					<a href="#" onclick="javascript:eXo.contact.UIContactPortlet.printpreview(this) ;" printLabel="<%=_ctx.appRes("UIContactPreview.action.print")%>" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIContactPreview.action.printPreview")%></a> 
+                   <% } %>
+                   
+                   <% 
+                     // cs-1648
+                     for(action in uicomponent.getActions()) { 
+                       String actionLabel = _ctx.appRes("UIContactPreview.action." + action) ;
+                       String link = uicomponent.event(action) ;
+                  %>
+					<a href="$link" class="ActionButton LightBlueStyle">$actionLabel</a>
+                  <% } %>          
               </div>
         <% } %>
 <%} else { %>

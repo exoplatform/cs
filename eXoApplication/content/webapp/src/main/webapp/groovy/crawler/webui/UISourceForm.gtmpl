@@ -53,73 +53,16 @@
               <option value="">1. 2. 3. 4.</option>
             </select>
           </div>
-          <div class="ActionButton">
-            <div class="LightBlueStyle">
-              <div class="ButtonLeft">
-                <div class="ButtonRight">
-                  <div class="ButtonMiddle">                      
-                    <a href="#">Select</a>
-                  </div>
-                </div>
-              </div>                
-            </div>
-          </div>          
+        <a class="ActionButton LightBlueStyle" href="#">Select</a>
        </div>
      </div>
   </form>
-  <div class="ButtonHolder">  
-    <div class="UIAction">                 
-        <div class="ActionContainer">                       
-           
-            <div class="ActionButton">
-              <div class="NormalStyle">
-                <div class="ButtonLeft">
-                  <div class="ButtonRight">
-                    <div class="ButtonMiddle">
-                      <a href="">Cancel</a>
-                    </div>
-                  </div>
-                </div>                
-              </div>
-            </div>
-            
-            <div class="ActionButton">
-              <div class="LightBlueStyle">
-                <div class="ButtonLeft">
-                  <div class="ButtonRight">
-                    <div class="ButtonMiddle">
-                      <a href="">Resert</a>
-                    </div>
-                  </div>
-                </div>                
-              </div>
-            </div>
-            
-            <div class="ActionButton">
-              <div class="LightBlueStyle">
-                <div class="ButtonLeft">
-                  <div class="ButtonRight">
-                    <div class="ButtonMiddle">
-                      <a href="">Save & Load</a>
-                    </div>
-                  </div>
-                </div>                
-              </div>
-            </div>
-          
-            <div class="ActionButton">
-              <div class="LightBlueStyle">
-                <div class="ButtonLeft">
-                  <div class="ButtonRight">
-                    <div class="ButtonMiddle">
-                      <a href="">Save</a>
-                    </div>
-                  </div>
-                </div>                
-              </div>
-            </div>                       
-          
-        </div>
-      </div>
-    </div>  
+	<div class="ButtonHolder">  
+    	<div class="UIAction">                 
+	      <a href="#" class="ActionButton LightBlueStyle">Cancel</a>
+	      <a class="ActionButton LightBlueStyle" href="#">Resert</a>
+	      <a class="ActionButton LightBlueStyle" href="#">Save & Load</a>
+	      <a class="ActionButton LightBlueStyle" href="#">Save</a>
+     	</div>
+	</div>  
 </div>                

@@ -102,36 +102,10 @@
       </div>
     </div>
   </div>  
-        
-  <div class="UIAction"> 
-    <table class="ActionContainer" align="center">
-      <tr>
-        <td align="center">    
-          <a href="<%=uicomponent.event("Save", "all")%>" class="ActionButton LightBlueStyle">
-            <div class="ButtonLeft">
-              <div class="ButtonRight">
-                <div class="ButtonMiddle">  <%=_ctx.appRes(uicomponent.getName() + ".label.exportAll")%>  </div>
-              </div>
-            </div>
-          </a>
-      
-          <a href="<%=uicomponent.event("Save", "selected")%>" class="ActionButton LightBlueStyle">
-            <div class="ButtonLeft">
-              <div class="ButtonRight">
-                <div class="ButtonMiddle">  <%=_ctx.appRes(uicomponent.getName() + ".label.exportSelected")%>  </div>
-              </div>
-            </div>
-          </a>
-          <a href="<%=uicomponent.event("Cancel")%>" class="ActionButton LightBlueStyle">
-            <div class="ButtonLeft">
-              <div class="ButtonRight">
-                <div class="ButtonMiddle">  <%=_ctx.appRes(uicomponent.getName() + ".label.cancel")%>  </div>
-              </div>
-            </div>
-          </a>
-        </td>
-      </tr>
-    </table>
-  </div>        
+	<div class="UIAction">
+		<a href="<%=uicomponent.event("Save", "all")%>" class="ActionButton LightBlueStyle"><%=_ctx.appRes(uicomponent.getName() + ".label.exportAll")%></a>
+		<a href="<%=uicomponent.event("Save", "selected")%>" class="ActionButton LightBlueStyle"><%=_ctx.appRes(uicomponent.getName() + ".label.exportSelected")%></a>
+		<a href="<%=uicomponent.event("Cancel")%>" class="ActionButton LightBlueStyle"><%=_ctx.appRes(uicomponent.getName() + ".label.cancel")%></a>
+	</div>
 </div>
 <%uiform.end()%>  

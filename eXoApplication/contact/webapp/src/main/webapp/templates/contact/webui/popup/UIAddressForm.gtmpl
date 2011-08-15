@@ -76,38 +76,10 @@
     </div>
 
   </div>
-  
-  <div class="UIAction"> 
-    <table class="ActionContainer" align="center">
-      <tr>
-        <td align="center"> 
-      
-         <a href="<%=uicomponent.event("Add")%>" class="ActionButton LightBlueStyle">
-            <div class="ButtonLeft">
-              <div class="ButtonRight">
-                <div class="ButtonMiddle"> <%=_ctx.appRes(uicomponent.id+ ".label.add-address") %> </div>
-              </div>
-            </div>
-          </a>
-          <a href="<%=uicomponent.event("Replace")%>" class="ActionButton LightBlueStyle">
-            <div class="ButtonLeft">
-              <div class="ButtonRight">
-                <div class="ButtonMiddle"> <%=_ctx.appRes(uicomponent.id+ ".label.replace") %> </div>
-              </div>
-            </div>
-          </a>
-          <a href="<%=uicomponent.event("Cancel")%>" class="ActionButton LightBlueStyle">
-
-            <div class="ButtonLeft">
-              <div class="ButtonRight">
-                <div class="ButtonMiddle"> <%=_ctx.appRes(uicomponent.id+ ".label.cancel") %> </div>
-              </div>
-            </div>
-          </a>
-        </td>
-      </tr>
-    </table>
-  </div>  
-  
+	<div class="UIAction">
+		<a href="<%=uicomponent.event("Add")%>" class="ActionButton LightBlueStyle"><%=_ctx.appRes(uicomponent.id+ ".label.add-address") %></a>
+		<a href="<%=uicomponent.event("Replace")%>" class="ActionButton LightBlueStyle"><%=_ctx.appRes(uicomponent.id+ ".label.replace") %></a>
+		<a href="<%=uicomponent.event("Cancel")%>" class="ActionButton LightBlueStyle"><%=_ctx.appRes(uicomponent.id+ ".label.cancel") %></a>
+	</div>
 </div>
 <% uiform.end() %>

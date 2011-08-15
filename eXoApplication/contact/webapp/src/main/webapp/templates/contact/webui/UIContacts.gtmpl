@@ -521,27 +521,12 @@
          
         <%  if(isDisplaySearchResult) {  %>
         <div class="UIAction"> 
-          <table class="ActionContainer" align="center">
-            <tr>
-              <td align="center">
-                <% 
-                     String actionLabel = "Close Search" ; //_ctx.appRes(uicomponent.getName() + ".action." + action) ;
-                     String link = uicomponent.event("CloseSearch") ;
-                %>
-                <a href="$link" class="ActionButton LightBlueStyle">
-                  <div class="ButtonLeft">
-                    <div class="ButtonRight">
-                      <div class="ButtonMiddle">
-                        $actionLabel
-                      </div>
-                    </div>
-                  </div>
-                 </a>
-              </td>
-            </tr>  
-          </table>
+            <% 
+             String actionLabel = "Close Search" ; //_ctx.appRes(uicomponent.getName() + ".action." + action) ;
+             String link = uicomponent.event("CloseSearch") ;
+            %>
+            <a href="$link" class="ActionButton LightBlueStyle">$actionLabel</a>
         </div>  
-
         <% } %>  
         
                   
@@ -944,32 +929,12 @@
         }
       </style>
       <div class="UIAction Printable"> 
-        <table class="ActionContainer" align="center">
-          <tr>
-            <td align="center">
-              
-              <a href="#" onclick = "javascript:window.print()" class="ActionButton LightBlueStyle">
-                <div class="ButtonLeft">
-                  <div class="ButtonRight">
-                    <div class="ButtonMiddle">
-                      <%= _ctx.appRes(uicomponent.getName() + ".action.print") %>
-                    </div>
-                  </div>
-                </div>
-               </a>
-               <a href="<%= uicomponent.event("Cancel") %>" class="ActionButton LightBlueStyle">
-                <div class="ButtonLeft">
-                  <div class="ButtonRight">
-                    <div class="ButtonMiddle">
-                      <%= _ctx.appRes(uicomponent.getName() + ".action.Cancel") %>
-                    </div>
-                  </div>
-                </div>
-               </a>
-                      
-            </td>
-          </tr>  
-        </table>
+	      <a href="#" onclick = "javascript:window.print()" class="ActionButton LightBlueStyle">
+              <%= _ctx.appRes(uicomponent.getName() + ".action.print") %>
+	       </a>
+	       <a href="<%= uicomponent.event("Cancel") %>" class="ActionButton LightBlueStyle">
+              <%= _ctx.appRes(uicomponent.getName() + ".action.Cancel") %>
+	       </a>
       </div>
    <% }
        

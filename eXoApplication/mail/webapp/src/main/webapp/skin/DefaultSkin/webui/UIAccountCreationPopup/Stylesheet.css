@@ -79,8 +79,7 @@
 
 
 .UIMailPortlet .UIAccountCreationWizard .UIAction {
-  float: right;
-  width: 260px;
+	text-align: right;
 }
 
 .UIMailPortlet .UIAccountCreationWizard .UITabPane .TabPaneContent {

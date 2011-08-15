@@ -86,23 +86,11 @@
   <% if(uicomponent.getButtons() != null) { %>
     <div>
       <div class="UIAction"> 
-        <table class="ActionContainer" align="center">
-          <tr>
-            <td align="center">
-            <% for(action in uicomponent.getButtons()) { %>
-              <a href="<%=uicomponent.event(action)%>" class="ActionButton LightBlueStyle" >
-                <div class="ButtonLeft">
-                  <div class="ButtonRight">
-                    <div class="ButtonMiddle">
-                        <%=_ctx.appRes(uicomponent.getId() + ".action." + action)%>
-                    </div>
-                  </div>
-                </div>
-              </a>
-            <% } %>
-            </td>
-          </tr>         
-        </table>
+        <% for(action in uicomponent.getButtons()) { %>
+          <a href="<%=uicomponent.event(action)%>" class="ActionButton LightBlueStyle" >
+            <%=_ctx.appRes(uicomponent.getId() + ".action." + action)%>
+          </a>
+        <% } %>
       </div>
     </div>
   <% }%>

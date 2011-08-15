@@ -81,26 +81,12 @@ rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.is
     </div>
     <%uiform.end();%>
   </div>
-  <div class="UIAction">
-    <table class="ActionContainer">
-      <tr>
-        <td align="center">
-          <% for(action in uicomponent.getActions()) { 
-                   String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
-                   String link = uicomponent.event(action) ;
+	<div class="UIAction">
+	<% for(action in uicomponent.getActions()) { 
+           String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
+           String link = uicomponent.event(action) ;
           %>
-          <div onclick="$link" class="ActionButton LightBlueStyle">
-            <div class="ButtonLeft">
-              <div class="ButtonRight">
-                <div class="ButtonMiddle">
-                  $actionLabel
-                </div>
-              </div>
-            </div>
-          </div>
-          <%}%>
-        </td>
-      </tr>
-    </table>
-  </div>
+		<a onclick="$link" class="ActionButton LightBlueStyle">$actionLabel</a>
+	<%}%>
+	</div>
 </div>

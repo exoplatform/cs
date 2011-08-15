@@ -123,36 +123,14 @@
     .DisablePrint{display:none;}
   </style>
   <div class="UIAction DisablePrint">
-    <table class="ActionContainer" align="center">
-      <tr>
-        <td align="center">
-          <% 
-             String actionLabel = _ctx.appRes(uicomponent.getName() + ".action.Print") ;             
-          %>
-          <a href="javascript:void(0);" onclick="eXo.mail.UIMailPortlet.printMessage()" class="ActionButton LightBlueStyle">
-            <div class="ButtonLeft">
-              <div class="ButtonRight">
-                <div class="ButtonMiddle">
-                  $actionLabel
-                </div>
-              </div>
-            </div>
-          </a>
-          <% 
-            String actionLabel2 = _ctx.appRes(uicomponent.getName() + ".action.Cancel") ;   
-            String link = uicomponent.event("Cancel") ;
-          %>
-          <a href="$link" class="ActionButton LightBlueStyle">
-            <div class="ButtonLeft">
-              <div class="ButtonRight">
-                <div class="ButtonMiddle">
-                  $actionLabel2
-                </div>
-              </div>
-            </div>
-          </a>
-        </td>
-      </tr>
-    </table>
+      <% 
+         String actionLabel = _ctx.appRes(uicomponent.getName() + ".action.Print") ;             
+      %>
+      <a href="javascript:void(0);" onclick="eXo.mail.UIMailPortlet.printMessage()" class="ActionButton LightBlueStyle">$actionLabel</a>
+      <% 
+        String actionLabel2 = _ctx.appRes(uicomponent.getName() + ".action.Cancel") ;   
+        String link = uicomponent.event("Cancel") ;
+      %>
+      <a href="$link" class="ActionButton LightBlueStyle">$actionLabel2</a>
   </div>
 </div>

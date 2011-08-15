@@ -98,23 +98,13 @@ import org.exoplatform.calendar.webui.popup.UIEventForm.ParticipantStatus;
   </table>
   
   <div class="UIAction"> 
-    <table class="ActionContainer" align="center">
-      <tr>
-        <td align="center"> 
-        <%for(String action : uicomponent.getActions()){
-          String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
-        %>
-         <a href="<%=uicomponent.event(action)%>" class="ActionButton LightBlueStyle">
-            <div class="ButtonLeft">
-              <div class="ButtonRight">
-                <div class="ButtonMiddle">$actionLabel</div>
-              </div>
-            </div>
-          </a>
-         <%}%>
-        </td>
-      </tr>
-    </table>
+    <%for(String action : uicomponent.getActions()){
+      String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
+    %>
+		<a href="<%=uicomponent.event(action)%>" class="ActionButton LightBlueStyle">
+           $actionLabel
+		</a>
+     <%}%>
   </div>
   
 </div>

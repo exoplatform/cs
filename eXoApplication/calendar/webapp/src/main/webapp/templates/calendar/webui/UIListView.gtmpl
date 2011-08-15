@@ -176,23 +176,9 @@
     %>
   </div>
   <%if(isDisplaySearchResult) {%>
-  <div class="UIAction"> 
-    <table class="ActionContainer" align="center">
-      <tr>
-        <td align="center">
-          <a href="<%= uicomponent.event('CloseSearch')%>" class="ActionButton LightBlueStyle">
-            <div class="ButtonLeft">
-              <div class="ButtonRight">
-                <div class="ButtonMiddle">
-                  <%=uiform.getLabel('CloseSearch')%> 
-                </div>
-              </div>
-            </div>
-           </a>
-        </td>
-      </tr>  
-    </table>
-  </div>
+	<div class="UIAction">
+		<a href="<%= uicomponent.event('CloseSearch')%>" class="ActionButton LightBlueStyle"><%=uiform.getLabel('CloseSearch')%></a>
+	</div>
   <%}%>
   <% /*Begin Popup Menu*/ %>
   <div class="UIRightClickPopupMenu" id="UIListViewEventRightMenu" exocallback="eXo.calendar.UICalendarPortlet.listViewCallack">
