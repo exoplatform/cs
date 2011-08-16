@@ -1,27 +1,5 @@
-
-.UIWorkingWorkspace {
-  width: auto;
-}
-
-.UIPageBody .VIEW-PAGEBODY .UIPage {
+.UIWorkingWorkspace .UIPageBody .VIEW-PAGEBODY {
   padding:0px;
-}
-
-.UIPageBody .BLPagebody {
-  background:none;
-  height:0px;
-  padding-left:0px;
-}
-
-.UIPageBody .BRPagebody {
-  background:0px;
-  height:0px;
-  padding-right:0px;
-}
-
-.UIPageBody .BMPagebody {
-  background:0px;
-  height:0px;
 }
 
 .UIWorkingWorkspace .UIFooterPortlet {
