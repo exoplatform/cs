@@ -22,6 +22,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.exoplatform.contact.CalendarUtils;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.webui.UIContactPortlet;
@@ -45,9 +46,9 @@ import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
+import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 import org.exoplatform.webui.form.wysiwyg.FCKEditorConfig;
 import org.exoplatform.webui.form.wysiwyg.UIFormWYSIWYGInput;
-import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 
 
 /**
@@ -209,21 +210,15 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       String to = uiForm.getFieldToValue() ;      
       if (ContactUtils.isEmpty(to)) {
-        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.to-field-empty", null,
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
+        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.to-field-empty", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
       }
-      to = to.replaceAll(";", ",") ;
-      String EMAIL_REGEX = 
-        "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+";
-      for (String email : to.split(",")) {
-        if (!ContactUtils.isEmpty(email) && !email.trim().matches(EMAIL_REGEX)) {
-          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.invalid-email", null, 
-              ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;
-        }
+      to = to.replaceAll(CalendarUtils.SEMICOLON, CalendarUtils.COLON);
+      if (!CalendarUtils.isValidEmailAddresses(to)) {
+        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.invalid-email", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
       }
       if (uiForm.isCSMail) {
         UIPopupAction uiChildPopup = uiForm.getAncestorOfType(UIPopupAction.class) ;
