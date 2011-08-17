@@ -47,7 +47,7 @@
     <div class="UIActionbar ClearFix">
 		<div class="StatusArea IconButton" onclick="eXo.communication.chatbar.webui.UIChatBar.showMenu(this,event);">
 			<!-- Right Click Popup Online -->
-				<div class="UIRightClickPopupMenu" style="display: none;">
+				<div class="UIRightClickPopupMenu UIContextMenuContainer" style="display: none;">
 					<ul>
 						<li><a href="#" class="ItemIcon OnlineIcon" onclick="eXo.communication.chatbar.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chatbar.webui.UIMainChatWindow.ONLINE_STATUS, null, event);">
 							<%=_ctx.appRes("UIChatBarPortlet.label.onLine");%></a></li>

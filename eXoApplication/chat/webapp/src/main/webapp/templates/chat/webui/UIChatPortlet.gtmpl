@@ -77,7 +77,7 @@
         <div class="UITabContainer">
             <div class="UIHorizontalTabs ClearFix">
 				<div class="UITab TabUser" onclick="eXo.communication.chat.webui.UIMainChatWindow.setChangeStatusMenuVisible(this, null, event);">
-					<div class="UIRightClickPopupMenu" style="display: none;">
+					<div class="UIRightClickPopupMenu UIContextMenuContainer" style="display: none;">
 						<ul>
 							<li><a href="#" class="ItemIcon OnlineIcon" onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.ONLINE_STATUS, null, event);">
 								<%=_ctx.appRes("UIChatPortlet.label.onLine");%></a></li>
@@ -118,7 +118,7 @@
 </div>
 <!-- End MiniBoxChat -->
 <!-- Start BuddyItem action popup menu -->
-<div class="UIRightClickPopupMenu BuddyItemActionMenu" style="display: none;">
+<div class="UIRightClickPopupMenu UIContextMenuContainer BuddyItemActionMenu" style="display: none;">
 		<a href="#" class="ItemIcon MessageIcon" onclick="javascript:eXo.communication.chat.webui.UIMainChatWindow.postProcessBuddyItemAction(this, eXo.communication.chat.webui.UIMainChatWindow.CREATE_CONVERSATION_ACTION);">
 				<%=_ctx.appRes("UIChatPortlet.label.sendMessage");%>
 		</a>
@@ -746,7 +746,7 @@
 					<a href="#" class="Label DownArrow1Icon"><%=_ctx.appRes("UIChatPortlet.label.history") %></a>
 				  
 				  <% /*Begin Popup Menu*/ %>
-					  <ul class="UIRightClickPopupMenu" style="display: none;">
+					  <ul class="UIRightClickPopupMenu UIContextMenuContainer" style="display: none;">
 						<li class="MenuItem" onclick="eXo.communication.chat.webui.UIChatWindow.getMessageHistory(event,0);" href="#">
 						  <a href="#" class="ItemIcon"><%=_ctx.appRes("UIChatPortlet.label.today");%></a>                                                      
 						</li>
@@ -803,7 +803,7 @@
 					<a href="#" class="Label DownArrow1Icon"><%=_ctx.appRes("UIChatPortlet.label.history") %></a>
 				  
 				  <% /*Begin Popup Menu*/ %>
-					  <ul class="UIRightClickPopupMenu" style="display: none;">
+					  <ul class="UIRightClickPopupMenu UIContextMenuContainer" style="display: none;">
 						<li class="MenuItem" onclick="eXo.communication.chat.webui.UIChatWindow.getMessageHistory(event,0);" href="#">
 						  <a href="#" class="ItemIcon"><%=_ctx.appRes("UIChatPortlet.label.today");%></a>                                   
 						</li>
