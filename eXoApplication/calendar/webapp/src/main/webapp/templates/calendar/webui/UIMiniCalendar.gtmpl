@@ -79,10 +79,9 @@
         <%
         dfs_ = new DateFormatSymbols(locale) ;
         Calendar calendar = uicomponent.getInstanceTempCalendar();
-        String dayStart = uicomponent.getCalendarSetting().getWeekStartOn();
-        calendar.set(Calendar.DAY_OF_WEEK, Integer.parseInt(dayStart));
-        String[] dayNames = dfs_.getWeekdays();
-        for(int i = 1; i < dayNames.length ; i ++) {
+        String[] dayNames = dfs_.getShortWeekdays();
+        calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
+        for(int i = 0; i < 7; i++) {
           cssStyle = "DayTitle" ;
           if(calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) cssStyle = "SundayTitle" ;
         %>

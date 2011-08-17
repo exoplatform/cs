@@ -79,13 +79,13 @@
                   <%
                     dfs_ = new DateFormatSymbols(locale) ;
                     Calendar calendar = uicomponent.getInstanceTempCalendar();
-                    String dayStart = uicomponent.getCalendarSetting().getWeekStartOn();
-                    calendar.set(Calendar.DAY_OF_WEEK, Integer.parseInt(dayStart));
-                    for(int i = 1; i < dfs_.getWeekdays().length ; i ++) {
+                    String[] dayNames = dfs_.getShortWeekdays();
+                    calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
+                    for(int i = 0; i < 7; i++) {
                       cssClass = "DayTitle" ;
                       if(calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) cssClass = "SundayTitle" ;
                     %>
-                  <div class="$cssClass"><%=wf.format(calendar.getTime()).substring(0,1)%></div>
+                  <div class="$cssClass"><%=dayNames[calendar.get(Calendar.DAY_OF_WEEK)].substring(0,1)%></div>
                     <%
                       calendar.add(Calendar.DAY_OF_WEEK, 1);
                     }
