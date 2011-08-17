@@ -16,9 +16,10 @@
 		return (value % div) ;
 	}
 	def rcontext = _ctx.getRequestContext() ;
-	rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.UICalendarPortlet.initCheck("' + uicomponent.id + '") ;') ;
+	def userSettingTimezoneOffset = uicomponent.getUserTimeZone();
+	rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.UICalendarPortlet.initCheck("' + uicomponent.id + '",' + userSettingTimezoneOffset + ') ;') ;
 %>
-<div class="UIAddNewEvent $uicomponent.id" id="$uicomponent.id" serverTimeZone="<%=uicomponent.getServerTimeZone()%>" >
+<div class="UIAddNewEvent $uicomponent.id" id="$uicomponent.id" >
   <div class="NewEventAttendee">
     <div class="UIFormInputSet">
       <div class="UIFormInputSetWithAction">
@@ -76,7 +77,7 @@
                     <a href="<%=uiForm.event("MovePrevious")%>">
                       <img src="/eXoResources/skin/sharedImages/Blank.gif" class="BackIcon" title="<%=_ctx.appRes('UIDayView.label.previousDay')%>"></a>
                     <span class="Title">
-                      <%=df.format(uicomponent.calendar_.getTime())%>
+                      <%=uicomponent.getDateValue()%>
                     </span><a href="<%=uiForm.event("MoveNext")%>">
                       <img src="/eXoResources/skin/sharedImages/Blank.gif" class="NextIcon" title="<%=_ctx.appRes('UIDayView.label.nextDay')%>"></a>
                   </div>
@@ -131,7 +132,7 @@
               	for(String p in uicomponent.getParticipants()) {
               	  fullname = uicomponent.getFullname(p);
               %>
-              <tr busytime="<%=parMap.get(p);%>" userTimeZone="<%=uicomponent.getUserTimeZone(p)%>">
+              <tr busytime="<%=parMap.get(p);%>">
                 <td>
                   <div class="LeftSide">
                     <div class="Input">

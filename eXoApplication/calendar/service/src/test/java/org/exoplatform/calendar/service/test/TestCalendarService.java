@@ -455,6 +455,18 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     calendarService_.removeCalendarCategory(username, calCategory.getId()) ;
   }
 
-
+  public void testIsSameDate() {
+    java.util.Calendar cal = Utils.getInstanceTempCalendar();
+    cal.set(java.util.Calendar.HOUR_OF_DAY, 1);
+    Date date1 = cal.getTime();
+    cal.set(java.util.Calendar.HOUR_OF_DAY, 12);
+    Date date2 = cal.getTime();
+    cal.set(java.util.Calendar.HOUR_OF_DAY, 23);
+    cal.set(java.util.Calendar.MINUTE, 25);
+    Date date3 = cal.getTime();
+    assertTrue(Utils.isSameDate(date1, date2));
+    assertTrue(Utils.isSameDate(date2, date3));
+    assertTrue(Utils.isSameDate(date3, date1));
+  }
 
 }

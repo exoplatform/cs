@@ -18,10 +18,11 @@ package org.exoplatform.calendar.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
-
+import java.util.Calendar;
 import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
@@ -286,6 +287,23 @@ public class Utils {
         }
       }
     return sharedUsers.toArray(new String[sharedUsers.size()]);
+  }
+  
+  /**
+   * Check two dates are in the same day in GMT time zone  
+   * @param value1
+   * @param value2
+   * @return
+   */
+  public static boolean isSameDate(Date value1, Date value2) {
+    Calendar date1 = getInstanceTempCalendar();
+    date1.setTime(value1);
+    Calendar date2 = getInstanceTempCalendar();
+    date2.setTime(value2);
+    return (date1.get(java.util.Calendar.DATE) == date2.get(java.util.Calendar.DATE) &&
+            date1.get(java.util.Calendar.MONTH) == date2.get(java.util.Calendar.MONTH) &&
+            date1.get(java.util.Calendar.YEAR) == date2.get(java.util.Calendar.YEAR)
+           );
   }
   
 }

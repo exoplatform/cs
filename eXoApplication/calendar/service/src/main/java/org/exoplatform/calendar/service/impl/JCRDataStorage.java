@@ -1396,7 +1396,7 @@ public class JCRDataStorage implements DataStorage {
    * @see org.exoplatform.calendar.service.impl.DataStorage#syncRemoveEvent(javax.jcr.Node, java.lang.String)
    */
   public void syncRemoveEvent(Node eventFolder, String rootEventId) throws Exception{
-    QueryManager qm = getSession(createSystemProvider()).getWorkspace().getQueryManager();
+    QueryManager qm = eventFolder.getSession().getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + eventFolder.getParent().getParent().getParent().getPath() 
                                                 + "//element(*,exo:calendarPublicEvent)[@exo:rootEventId='").
                                                 append(rootEventId).
@@ -1452,7 +1452,7 @@ public class JCRDataStorage implements DataStorage {
    * @see org.exoplatform.calendar.service.impl.DataStorage#getDateFolder(javax.jcr.Node, java.util.Date)
    */
   public Node getDateFolder(Node publicApp, Date date) throws Exception {
-    java.util.Calendar fromCalendar = new GregorianCalendar() ;
+    java.util.Calendar fromCalendar = Utils.getInstanceTempCalendar();
     fromCalendar.setTime(date) ;
     Node yearNode;
     Node monthNode;
@@ -2846,11 +2846,26 @@ public class JCRDataStorage implements DataStorage {
   /* (non-Javadoc)
    * @see org.exoplatform.calendar.service.impl.DataStorage#checkFreeBusy(org.exoplatform.calendar.service.EventQuery)
    */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#checkFreeBusy(org.exoplatform.calendar.service.EventQuery)
-   */
   public Map<String, String> checkFreeBusy(EventQuery eventQuery) throws Exception {
-    Node eventFolder = getEventFolder(eventQuery.getFromDate().getTime()) ;
+    Date fromDate = eventQuery.getFromDate().getTime();
+    Date toDate = eventQuery.getToDate().getTime();   
+    Map<String, String> participantMap = new HashMap<String, String>();
+    participantMap.putAll(checkFreeBusy(eventQuery, fromDate));
+    if (!Utils.isSameDate(fromDate, toDate)) {
+      Map<String,String> remainingInfo = checkFreeBusy(eventQuery, toDate);
+      if (remainingInfo.size() > 0) {
+        for (String par : remainingInfo.keySet()) {
+          String newValue = remainingInfo.get(par);
+          if (participantMap.containsKey(par)) newValue += Utils.COMMA + participantMap.get(par);
+          participantMap.put(par, newValue);
+        }
+      }
+    }
+    return participantMap;
+  }
+  
+  public Map<String,String> checkFreeBusy(EventQuery eventQuery, Date date) throws Exception {
+    Node eventFolder = getEventFolder(date);
     Map<String, String> participantMap = new HashMap<String, String>() ;
     eventQuery.setCalendarPath(eventFolder.getPath()) ;
     eventQuery.setOrderBy(new String[]{Utils.EXO_FROM_DATE_TIME}) ;
@@ -2868,13 +2883,13 @@ public class JCRDataStorage implements DataStorage {
       StringBuilder timeValues = new StringBuilder() ;
       while(it.hasNext()) {
         event = it.nextNode() ;
-        if(event.hasProperty(Utils.EXO_EVENT_STATE) && !CalendarEvent.ST_AVAILABLE.equals(event.getProperty(Utils.EXO_EVENT_STATE).getValue().getString()))
+        if(event.hasProperty(Utils.EXO_EVENT_STATE) && !CalendarEvent.ST_AVAILABLE.equals(event.getProperty(Utils.EXO_EVENT_STATE).getValue().getString())) 
         {
           java.util.Calendar fromCal = event.getProperty(Utils.EXO_FROM_DATE_TIME).getDate() ;
           java.util.Calendar toCal = event.getProperty(Utils.EXO_TO_DATE_TIME).getDate() ;
           if(fromCal.getTimeInMillis() < eventQuery.getFromDate().getTimeInMillis())
             from = String.valueOf(eventQuery.getFromDate().getTimeInMillis()) ;
-          else 
+          else
             from = String.valueOf(fromCal.getTimeInMillis()) ;
           if(toCal.getTimeInMillis() > eventQuery.getToDate().getTimeInMillis()){
             GregorianCalendar cal = new GregorianCalendar() ;
@@ -2882,11 +2897,11 @@ public class JCRDataStorage implements DataStorage {
             to = String.valueOf(cal.getTimeInMillis()) ;
           } else to = String.valueOf(toCal.getTimeInMillis()) ;
 
-          if(timeValues != null && timeValues.length() > 0) timeValues.append(",") ;
-          timeValues.append(from).append(",").append(to) ;
+          if (timeValues != null && timeValues.length() > 0) timeValues.append(Utils.COMMA);
+          timeValues.append(from).append(Utils.COMMA).append(to) ;
           participantMap.put(par, timeValues.toString()) ;
         }
-      }    
+      }
     }
     return participantMap ;
   }
