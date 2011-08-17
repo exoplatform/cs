@@ -1,6 +1,6 @@
 Summary
 
-    * Status: 'Repository error' when change name of initial document
+    * Status: Wrong date availability in schedule tab in add/edit event form 
     * CCP Issue: CCP-901, Product Jira Issue: CS-4923.
     * Complexity: N/A
 
