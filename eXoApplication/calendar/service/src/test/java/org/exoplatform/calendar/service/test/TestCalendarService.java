@@ -1029,8 +1029,8 @@ public class TestCalendarService extends BaseCalendarTestCase {
 
       assertEquals(2011, calendar.get(java.util.Calendar.YEAR));
       assertEquals(6, calendar.get(java.util.Calendar.MONTH));
-      assertEquals(24, calendar.get(java.util.Calendar.DATE));
-      assertEquals(7, calendar.get(java.util.Calendar.HOUR));
+      assertEquals(25, calendar.get(java.util.Calendar.DATE));
+      assertEquals(0, calendar.get(java.util.Calendar.HOUR));
       assertEquals(0, calendar.get(java.util.Calendar.MINUTE));
     } catch (Exception e) {
       fail();
