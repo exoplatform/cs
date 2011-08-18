@@ -1,0 +1,179 @@
+Index: eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/CalendarUtils.java
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/CalendarUtils.java	(revision 72553)
++++ eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/CalendarUtils.java	(working copy)
+@@ -35,6 +35,7 @@
+ import java.util.Map;
+ import java.util.MissingResourceException;
+ import java.util.ResourceBundle;
++import java.util.Set;
+ import java.util.TimeZone;
+ import java.util.concurrent.ConcurrentHashMap;
+ 
+@@ -60,6 +61,9 @@
+ import org.exoplatform.services.organization.Group;
+ import org.exoplatform.services.organization.Membership;
+ import org.exoplatform.services.organization.OrganizationService;
++import org.exoplatform.services.security.ConversationState;
++import org.exoplatform.services.security.Identity;
++import org.exoplatform.services.security.MembershipEntry;
+ import org.exoplatform.webui.application.WebuiRequestContext;
+ import org.exoplatform.webui.application.portlet.PortletRequestContext;
+ import org.exoplatform.webui.core.UIComponent;
+@@ -525,22 +529,26 @@
+     return false ;
+   } 
+ 
+-  @SuppressWarnings("unchecked")
+   public static boolean canEdit(OrganizationService oService, String[] savePerms, String username) throws Exception {
+-    StringBuffer sb = new StringBuffer(username) ;
+-    if(oService != null) {
+-      Collection<Group> groups = oService.getGroupHandler().findGroupsOfUser(username) ;
+-      for(Group g : groups) {
+-        sb.append(CalendarUtils.COMMA).append(g.getId()).append(SLASH_COLON).append(ANY) ;
+-        sb.append(CalendarUtils.COMMA).append(g.getId()).append(SLASH_COLON).append(username) ;
+-        Collection<Membership> memberShipsType = oService.getMembershipHandler().findMembershipsByUserAndGroup(username, g.getId()) ;
+-        for(Membership mp : memberShipsType) {
+-          sb.append(CalendarUtils.COMMA).append(g.getId()).append(SLASH_COLON).append(ANY_OF + mp.getMembershipType()) ;
+-        }
+-      }
++    String checkPerms = getCheckPermissionString();
++    return CalendarUtils.hasEditPermission(savePerms, checkPerms.toString().split(CalendarUtils.COMMA)) ;
++  }
++  
++  public static String getCheckPermissionString() throws Exception {
++    Identity identity = ConversationState.getCurrent().getIdentity();
++    StringBuffer sb = new StringBuffer(identity.getUserId());
++    Set<String> groupsId = identity.getGroups();
++    for (String groupId : groupsId) {
++      sb.append(CalendarUtils.COMMA).append(groupId).append(SLASH_COLON).append(ANY);
++      sb.append(CalendarUtils.COMMA).append(groupId).append(SLASH_COLON).append(identity.getUserId());
++     }
++    Collection<MembershipEntry> memberships = identity.getMemberships();
++    for (MembershipEntry membership : memberships) {
++      sb.append(CalendarUtils.COMMA).append(membership.getGroup()).append(SLASH_COLON).append(ANY_OF + membership.getMembershipType());
+     }
+-    return CalendarUtils.hasEditPermission(savePerms, sb.toString().split(CalendarUtils.COMMA)) ;
++    return sb.toString();
+   }
++  
+   public static boolean isMemberShipType(Collection<Membership> mbsh, String value) {
+     if(!isEmpty(value))
+       for (String check : value.split(COMMA)) { 
+@@ -622,11 +630,11 @@
+     List<GroupCalendarData> lgcd = calendarService.getGroupCalendars(CalendarUtils.getUserGroups(username), true, username) ;
+     
+     if(lgcd != null) {
+-      OrganizationService oService = getOrganizationService() ;
+       SelectOptionGroup pubGrp = new SelectOptionGroup(CalendarUtils.PUBLIC_CALENDARS);
++      String[] checkPerms = getCheckPermissionString().split(CalendarUtils.COMMA);
+       for(GroupCalendarData g : lgcd) {
+         for(org.exoplatform.calendar.service.Calendar c : g.getCalendars()){
+-          if(CalendarUtils.canEdit(oService, c.getEditPermission(), username)){
++          if(hasEditPermission(c.getEditPermission(), checkPerms)){
+             if (!hash.containsKey(c.getId())) {
+               hash.put(c.getId(), "");
+               pubGrp.addOption(new SelectOption(c.getName(), CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId())) ;
+Index: eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/UICalendarWorkingContainer.java
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/UICalendarWorkingContainer.java	(revision 72553)
++++ eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/UICalendarWorkingContainer.java	(working copy)
+@@ -17,6 +17,7 @@
+ package org.exoplatform.calendar.webui;
+ 
+ import java.util.Date;
++import java.util.List;
+ 
+ import org.exoplatform.calendar.CalendarUtils;
+ import org.exoplatform.calendar.webui.popup.UIEventForm;
+@@ -25,6 +26,7 @@
+ import org.exoplatform.webui.config.annotation.ComponentConfig;
+ import org.exoplatform.webui.core.UIContainer;
+ import org.exoplatform.webui.core.UIPopupWindow;
++import org.exoplatform.webui.core.model.SelectItem;
+ import org.exoplatform.webui.form.UIFormSelectBoxWithGroups;
+ 
+ /**
+@@ -56,7 +58,8 @@
+     if(uiWindowE == null) uiWindowE = addChild(UIPopupWindowQuick.class, null, "UIQuckAddEventPopupWindow") ;
+     UIQuickAddEvent quickAddForm = (UIQuickAddEvent)uiWindowE.getUIComponent();
+     if(quickAddForm == null) quickAddForm = createUIComponent(UIQuickAddEvent.class, null, null) ; 
+-    ((UIFormSelectBoxWithGroups)quickAddForm.getChildById(UIQuickAddEvent.FIELD_CALENDAR)).setOptions(CalendarUtils.getCalendarOption()) ;
++    List<SelectItem> calendarOption = CalendarUtils.getCalendarOption();
++    ((UIFormSelectBoxWithGroups)quickAddForm.getChildById(UIQuickAddEvent.FIELD_CALENDAR)).setOptions(calendarOption) ;
+     quickAddForm.getUIFormSelectBox(UIQuickAddEvent.FIELD_CATEGORY).setOptions(UIEventForm.getCategory()) ;
+     quickAddForm.setEvent(true) ;
+     quickAddForm.setId("UIQuickAddEvent") ;
+@@ -71,7 +74,7 @@
+     quickAddTask.setEvent(false) ;
+     quickAddTask.setId("UIQuickAddTask") ;
+     quickAddTask.init(CalendarUtils.getCalendarService().getCalendarSetting(CalendarUtils.getCurrentUser()),String.valueOf(new Date().getTime()), String.valueOf(new Date().getTime())) ;
+-    ((UIFormSelectBoxWithGroups)quickAddTask.getChildById(UIQuickAddEvent.FIELD_CALENDAR)).setOptions(CalendarUtils.getCalendarOption()) ;
++    ((UIFormSelectBoxWithGroups)quickAddTask.getChildById(UIQuickAddEvent.FIELD_CALENDAR)).setOptions(calendarOption) ;
+     quickAddTask.getUIFormSelectBox(UIQuickAddEvent.FIELD_CATEGORY).setOptions(UIEventForm.getCategory()) ;
+     uiWindowT.setUIComponent(quickAddTask) ;
+     uiWindowT.setWindowSize(540, 0);
+Index: eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/UICalendars.java
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/UICalendars.java	(revision 72553)
++++ eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/UICalendars.java	(working copy)
+@@ -292,10 +292,14 @@
+     }  
+     return false ;
+   }
+-  public boolean canEdit(String[] savePerms) throws Exception{
+-    return CalendarUtils.canEdit(CalendarUtils.getOrganizationService(), savePerms, CalendarUtils.getCurrentUser()) ;
++  
++  public boolean canEdit(String[] savePerms, String[] checkPerms) throws Exception{
++    return CalendarUtils.hasEditPermission(savePerms, checkPerms);
+   }
+ 
++  public String getCheckPermissionString() throws Exception {
++    return CalendarUtils.getCheckPermissionString();
++  }
+ 
+   static  public class AddCalendarActionListener extends EventListener<UICalendars> {
+     public void execute(Event<UICalendars> event) throws Exception {
+@@ -534,8 +538,9 @@
+         } else  
+         {
+           // cs-4429: fix for group calendar permission
+-          if((CalendarUtils.SHARED_TYPE.equals(calType) && !uiComponent.canEdit(Utils.getEditPerUsers(calendar))) ||
+-             (CalendarUtils.PUBLIC_TYPE.equals(calType) && !uiComponent.canEdit(calendar.getEditPermission()))) 
++          String[] checkPerms = uiComponent.getCheckPermissionString().split(CalendarUtils.COMMA);
++          if((CalendarUtils.SHARED_TYPE.equals(calType) && !uiComponent.canEdit(Utils.getEditPerUsers(calendar), checkPerms)) ||
++             (CalendarUtils.PUBLIC_TYPE.equals(calType) && !uiComponent.canEdit(calendar.getEditPermission(), checkPerms))) 
+           {
+             UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
+             uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null, 1)) ;
+Index: eXoApplication/calendar/webapp/src/main/webapp/templates/calendar/webui/UICalendars.gtmpl
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/webapp/templates/calendar/webui/UICalendars.gtmpl	(revision 72553)
++++ eXoApplication/calendar/webapp/src/main/webapp/templates/calendar/webui/UICalendars.gtmpl	(working copy)
+@@ -7,6 +7,8 @@
+   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkLayout() ;') ;
+   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.getFilterForm("' + uiform.id + '") ;') ;
+   //rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;
++
++  String[] checkPerms = uicomponent.getCheckPermissionString().split(CalendarUtils.COMMA);
+ %>
+ <%uiform.begin()%>
+ 	<div class="UICalendars" >
+@@ -161,7 +163,7 @@
+ 							owner = calendar.getCalendarOwner() + "- " ;
+ 						}
+ 				%>
+-  					<div class="CalendarItem $color CalendarItemShared"  calColor="$color" id="$calId" calType="1"  canEdit="<%=uicomponent.canEdit(Utils.getEditPerUsers(calendar))%>">
++  					<div class="CalendarItem $color CalendarItemShared"  calColor="$color" id="$calId" calType="1"  canEdit="<%=uicomponent.canEdit(Utils.getEditPerUsers(calendar), checkPerms)%>">
+   							<div class="CheckBox"><%uiform.renderField(calendar.getId())%></div>
+   							<div class="CalendarIcon" title="<%=owner + calendar.getName()%>"><span><%=owner + calendar.getName()%></span></div>
+   							<!--<div class="DownArrow1Icon"><span></span></div>-->
+@@ -213,7 +215,7 @@
+ 							calId = calendar.getId() ;
+ 							if(uicomponent.getChildById(calId) != null) {
+ 				%>
+-  					<div class="CalendarItem $calendar.calendarColor CalendarItemPublic"  calColor="$calendar.calendarColor" canEdit="<%=uicomponent.canEdit(calendar.getEditPermission())%>" id="$calId" calType="2" >
++  					<div class="CalendarItem $calendar.calendarColor CalendarItemPublic"  calColor="$calendar.calendarColor" canEdit="<%=uicomponent.canEdit(calendar.getEditPermission(), checkPerms)%>" id="$calId" calType="2" >
+   							<div class="CheckBox"><%uiform.renderField(calendar.getId())%></div>
+   							<div class="CalendarIcon" title="<%=calendar.getName()%>"><span><%=calendar.getName()%></span></div>
+   							<!--<div class="DownArrow1Icon"><span></span></div>-->

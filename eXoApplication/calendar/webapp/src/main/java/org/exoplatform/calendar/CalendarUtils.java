@@ -35,6 +35,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -60,6 +61,9 @@ import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.security.ConversationState;
+import org.exoplatform.services.security.Identity;
+import org.exoplatform.services.security.MembershipEntry;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.core.UIComponent;
@@ -525,22 +529,26 @@ public class CalendarUtils {
     return false ;
   } 
 
-  @SuppressWarnings("unchecked")
   public static boolean canEdit(OrganizationService oService, String[] savePerms, String username) throws Exception {
-    StringBuffer sb = new StringBuffer(username) ;
-    if(oService != null) {
-      Collection<Group> groups = oService.getGroupHandler().findGroupsOfUser(username) ;
-      for(Group g : groups) {
-        sb.append(CalendarUtils.COMMA).append(g.getId()).append(SLASH_COLON).append(ANY) ;
-        sb.append(CalendarUtils.COMMA).append(g.getId()).append(SLASH_COLON).append(username) ;
-        Collection<Membership> memberShipsType = oService.getMembershipHandler().findMembershipsByUserAndGroup(username, g.getId()) ;
-        for(Membership mp : memberShipsType) {
-          sb.append(CalendarUtils.COMMA).append(g.getId()).append(SLASH_COLON).append(ANY_OF + mp.getMembershipType()) ;
-        }
-      }
-    }
-    return CalendarUtils.hasEditPermission(savePerms, sb.toString().split(CalendarUtils.COMMA)) ;
+    String checkPerms = getCheckPermissionString();
+    return CalendarUtils.hasEditPermission(savePerms, checkPerms.toString().split(CalendarUtils.COMMA)) ;
   }
+  
+  public static String getCheckPermissionString() throws Exception {
+    Identity identity = ConversationState.getCurrent().getIdentity();
+    StringBuffer sb = new StringBuffer(identity.getUserId());
+    Set<String> groupsId = identity.getGroups();
+    for (String groupId : groupsId) {
+      sb.append(CalendarUtils.COMMA).append(groupId).append(SLASH_COLON).append(ANY);
+      sb.append(CalendarUtils.COMMA).append(groupId).append(SLASH_COLON).append(identity.getUserId());
+     }
+    Collection<MembershipEntry> memberships = identity.getMemberships();
+    for (MembershipEntry membership : memberships) {
+      sb.append(CalendarUtils.COMMA).append(membership.getGroup()).append(SLASH_COLON).append(ANY_OF + membership.getMembershipType());
+    }
+    return sb.toString();
+  }
+  
   public static boolean isMemberShipType(Collection<Membership> mbsh, String value) {
     if(!isEmpty(value))
       for (String check : value.split(COMMA)) { 
@@ -622,11 +630,11 @@ public class CalendarUtils {
     List<GroupCalendarData> lgcd = calendarService.getGroupCalendars(CalendarUtils.getUserGroups(username), true, username) ;
     
     if(lgcd != null) {
-      OrganizationService oService = getOrganizationService() ;
       SelectOptionGroup pubGrp = new SelectOptionGroup(CalendarUtils.PUBLIC_CALENDARS);
+      String[] checkPerms = getCheckPermissionString().split(CalendarUtils.COMMA);
       for(GroupCalendarData g : lgcd) {
         for(org.exoplatform.calendar.service.Calendar c : g.getCalendars()){
-          if(CalendarUtils.canEdit(oService, c.getEditPermission(), username)){
+          if(hasEditPermission(c.getEditPermission(), checkPerms)){
             if (!hash.containsKey(c.getId())) {
               hash.put(c.getId(), "");
               pubGrp.addOption(new SelectOption(c.getName(), CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId())) ;

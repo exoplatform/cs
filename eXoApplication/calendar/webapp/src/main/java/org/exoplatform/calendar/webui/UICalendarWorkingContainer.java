@@ -17,6 +17,7 @@
 package org.exoplatform.calendar.webui;
 
 import java.util.Date;
+import java.util.List;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.webui.popup.UIEventForm;
@@ -25,6 +26,7 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
+import org.exoplatform.webui.core.model.SelectItem;
 import org.exoplatform.webui.form.UIFormSelectBoxWithGroups;
 
 /**
@@ -56,7 +58,8 @@ public class UICalendarWorkingContainer extends UIContainer  {
     if(uiWindowE == null) uiWindowE = addChild(UIPopupWindowQuick.class, null, "UIQuckAddEventPopupWindow") ;
     UIQuickAddEvent quickAddForm = (UIQuickAddEvent)uiWindowE.getUIComponent();
     if(quickAddForm == null) quickAddForm = createUIComponent(UIQuickAddEvent.class, null, null) ; 
-    ((UIFormSelectBoxWithGroups)quickAddForm.getChildById(UIQuickAddEvent.FIELD_CALENDAR)).setOptions(CalendarUtils.getCalendarOption()) ;
+    List<SelectItem> calendarOption = CalendarUtils.getCalendarOption();
+    ((UIFormSelectBoxWithGroups)quickAddForm.getChildById(UIQuickAddEvent.FIELD_CALENDAR)).setOptions(calendarOption) ;
     quickAddForm.getUIFormSelectBox(UIQuickAddEvent.FIELD_CATEGORY).setOptions(UIEventForm.getCategory()) ;
     quickAddForm.setEvent(true) ;
     quickAddForm.setId("UIQuickAddEvent") ;
@@ -71,7 +74,7 @@ public class UICalendarWorkingContainer extends UIContainer  {
     quickAddTask.setEvent(false) ;
     quickAddTask.setId("UIQuickAddTask") ;
     quickAddTask.init(CalendarUtils.getCalendarService().getCalendarSetting(CalendarUtils.getCurrentUser()),String.valueOf(new Date().getTime()), String.valueOf(new Date().getTime())) ;
-    ((UIFormSelectBoxWithGroups)quickAddTask.getChildById(UIQuickAddEvent.FIELD_CALENDAR)).setOptions(CalendarUtils.getCalendarOption()) ;
+    ((UIFormSelectBoxWithGroups)quickAddTask.getChildById(UIQuickAddEvent.FIELD_CALENDAR)).setOptions(calendarOption) ;
     quickAddTask.getUIFormSelectBox(UIQuickAddEvent.FIELD_CATEGORY).setOptions(UIEventForm.getCategory()) ;
     uiWindowT.setUIComponent(quickAddTask) ;
     uiWindowT.setWindowSize(540, 0);
