@@ -1065,7 +1065,7 @@ public class TestCalendarService extends BaseCalendarTestCase {
 
   public void testCalculateRecurrenceFinishDate() {
     try {
-      TimeZone timeZone = TimeZone.getTimeZone("GMT+7:00");
+      TimeZone timeZone = TimeZone.getTimeZone("GMT");
       
       java.util.Calendar fromCal = java.util.Calendar.getInstance(timeZone);
       fromCal.set(2011, 6, 20, 5, 30);
