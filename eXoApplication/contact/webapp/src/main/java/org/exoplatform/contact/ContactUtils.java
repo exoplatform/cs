@@ -21,26 +21,21 @@ import javax.jcr.RepositoryException;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
-import org.exoplatform.contact.service.DataStorage;
-import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.service.impl.NewUserListener;
-import org.exoplatform.contact.webui.UIAddressBooks;
-import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.mail.Message;
-import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.security.ConversationState;
+import org.exoplatform.services.security.Identity;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.model.SelectItemOption;
-import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.form.UIForm;
 
 /**
  * Created by The eXo Platform SARL
@@ -119,14 +114,9 @@ public class ContactUtils {
   }
   
   public static List<String> getUserGroups() throws Exception {
-    OrganizationService organizationService = 
-      (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
-    Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(getCurrentUser()).toArray() ;
-    List<String> groupIds = new ArrayList<String>() ;
-    for (Object object : objGroupIds) {
-      groupIds.add(((Group)object).getId()) ;
-    }
-    return groupIds ;
+    Identity identity = ConversationState.getCurrent().getIdentity();
+    List<String> groupIds = new ArrayList<String>(identity.getGroups());
+    return groupIds;
   }
   
   public static String getPublicGroupName(String groupId) throws Exception {

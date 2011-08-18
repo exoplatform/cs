@@ -142,11 +142,11 @@ public class UIAddressBooks extends UIComponent {
   }
   
   public List<String> getGroupsOfUser() throws Exception {
-    return ContactUtils.getContactService().getPublicAddressBookIdsOfUser(ContactUtils.getCurrentUser()) ;
+    return ContactUtils.getContactService().getPublicAddressBookIdsOfUser(null) ;
   }
   
   public List<String> getPublicContactGroups() throws Exception {
-    List<String> publicAddressBookIds = ContactUtils.getContactService().getAllsPublicAddressBookIds(ContactUtils.getCurrentUser()) ;
+    List<String> publicAddressBookIds = ContactUtils.getContactService().getAllsPublicAddressBookIds(null) ;
     publicAddressBookIds.removeAll(getGroupsOfUser());
     return publicAddressBookIds;
   }

@@ -97,7 +97,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       options.add(new SelectItemOption<String>(name + sa.getName(), sa.getId())) ;
     }
     
-    List<String> publicAddressBookIds = contactService.getAllsPublicAddressBookIds(CalendarUtils.getCurrentUser());
+    List<String> publicAddressBookIds = contactService.getAllsPublicAddressBookIds(null);
     if (!publicAddressBookIds.isEmpty()) {
       for (String publicCg : publicAddressBookIds) {
         options.add(new SelectItemOption<String>(CalendarUtils.getOrganizationService()
