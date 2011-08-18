@@ -39,16 +39,12 @@ import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
-import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.Value;
-import javax.jcr.ValueFormatException;
-import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
-import javax.jcr.version.VersionException;
 
 import net.fortuna.ical4j.model.DateList;
 import net.fortuna.ical4j.model.DateTime;
@@ -3233,7 +3229,7 @@ public class JCRDataStorage implements DataStorage {
       Recur recur = getICalendarRecur(originalEvent);
 
       vevent.getProperties().add(new RRule(recur));
-      java.util.Calendar calendar = Utils.getInstanceTempCalendar();
+      java.util.Calendar calendar = new GregorianCalendar(2011, 7, 1);
       calendar.set(java.util.Calendar.YEAR, calendar.getMinimum(java.util.Calendar.YEAR));
       DateTime ical4jFrom = new DateTime(calendar.getTime());
       calendar.set(java.util.Calendar.YEAR, calendar.getMaximum(java.util.Calendar.YEAR));
