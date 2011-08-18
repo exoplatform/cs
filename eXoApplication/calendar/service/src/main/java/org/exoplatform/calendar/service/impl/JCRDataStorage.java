@@ -3216,6 +3216,7 @@ public class JCRDataStorage implements DataStorage {
 
       vevent.getProperties().add(new RRule(recur));
       java.util.Calendar calendar = new GregorianCalendar(2011, 7, 1);
+      calendar.setTimeZone(TimeZone.getTimeZone("GMT"));
       calendar.set(java.util.Calendar.YEAR, calendar.getMinimum(java.util.Calendar.YEAR));
       DateTime ical4jFrom = new DateTime(calendar.getTime());
       calendar.set(java.util.Calendar.YEAR, calendar.getMaximum(java.util.Calendar.YEAR));
