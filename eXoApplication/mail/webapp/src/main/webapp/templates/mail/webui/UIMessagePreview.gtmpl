@@ -7,6 +7,7 @@
   import org.exoplatform.download.DownloadService;
   import org.exoplatform.calendar.service.CalendarEvent;
   import javax.mail.internet.MimeUtility;
+  import org.exoplatform.web.application.Parameter;
   import org.exoplatform.webui.application.WebuiRequestContext;
   import java.util.Locale;
   import org.exoplatform.container.PortalContainer;
@@ -433,6 +434,7 @@
                   <%=msg.getMessageBody()%>
                   <div class="ActionBox">
                     <%  
+                      Parameter[] params = [new Parameter("messageId", newId)];
                       String status = uicomponent.getAnswerStatus();
                       display0 = new String("");
                       display1 = new String("");
@@ -454,10 +456,10 @@
                       
                     %>
                     <span style="font-weight: bold ;"><%=_ctx.appRes(uicomponent.id+ ".label." + uicomponent.QUESTION)%> 
-                      <a href="<%=uicomponent.event('AnswerInvitation', '3&messageId=' + newId)%>" style="$display0"><%=_ctx.appRes(uicomponent.id+ ".label." + uicomponent.ANSWER_IMPORT)%></a>
-                      <span style="$display1"> - </span><a href="<%=uicomponent.event('AnswerInvitation', '1&messageId=' + newId)%>" style="$display1"><%=_ctx.appRes(uicomponent.id+ ".label." + uicomponent.ANSWER_YES)%></a>
-                      <span style="$display2"> - </span><a href="<%=uicomponent.event('AnswerInvitation', '0&messageId=' + newId)%>" style="$display2"><%=_ctx.appRes(uicomponent.id+ ".label." + uicomponent.ANSWER_NO)%></a>
-                      <span style="$display3"> - </span><a href="<%=uicomponent.event('AnswerInvitation', '2&messageId=' + newId)%>" style="$display3"><%=_ctx.appRes(uicomponent.id+ ".label." + uicomponent.ANSWER_MAYBE)%></a> 
+                      <a href="<%=uicomponent.event('AnswerInvitation', '3', params)%>" style="$display0"><%=_ctx.appRes(uicomponent.id+ ".label." + uicomponent.ANSWER_IMPORT)%></a>
+                      <span style="$display1"> - </span><a href="<%=uicomponent.event('AnswerInvitation', '1', params)%>" style="$display1"><%=_ctx.appRes(uicomponent.id+ ".label." + uicomponent.ANSWER_YES)%></a>
+                      <span style="$display2"> - </span><a href="<%=uicomponent.event('AnswerInvitation', '0', params)%>" style="$display2"><%=_ctx.appRes(uicomponent.id+ ".label." + uicomponent.ANSWER_NO)%></a>
+                      <span style="$display3"> - </span><a href="<%=uicomponent.event('AnswerInvitation', '2', params)%>" style="$display3"><%=_ctx.appRes(uicomponent.id+ ".label." + uicomponent.ANSWER_MAYBE)%></a> 
                     </span>
                   </div>
                   </div> 

@@ -80,19 +80,19 @@
       <div class="MiddleRightRightClickPopupMenu">
         <div class="UIRightPopupMenuContainer">
           <div class="MenuItem">   
-            <a class="ItemIcon AddFolderIcon" href="<%=uicomponent.event("AddFolder", "id")%>"> <%=_ctx.appRes(uicomponent.id+ ".label.new-folder") %></a>
+            <a class="ItemIcon AddFolderIcon" href="<%=uicomponent.event("AddFolder", "")%>"> <%=_ctx.appRes(uicomponent.id+ ".label.new-folder") %></a>
           </div>
           <div class="MenuItem">   
-            <a class="ItemIcon MarkAll" href="<%=uicomponent.event("MarkRead", "id")%>"> <%=_ctx.appRes(uicomponent.id+ ".label.mark-all-read") %> </a>
+            <a class="ItemIcon MarkAll" href="<%=uicomponent.event("MarkRead", "")%>"> <%=_ctx.appRes(uicomponent.id+ ".label.mark-all-read") %> </a>
           </div>
         
-          <!--<a class="MenuItem" href="<%=uicomponent.event("AddFolder", "id")%>">   
+          <!--<a class="MenuItem" href="<%=uicomponent.event("AddFolder", "")%>">   
             <div class="ItemIcon AddFolderIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.new-folder") %> </div>
           </a>
-          <a class="MenuItem" href="<%=uicomponent.event("MarkRead", "id")%>">   
+          <a class="MenuItem" href="<%=uicomponent.event("MarkRead", "")%>">   
             <div class="ItemIcon MarkAll"> <%=_ctx.appRes(uicomponent.id+ ".label.mark-all-read") %> </div>
           </a>-->
-          <!--<a class="MenuItem" href="<%=uicomponent.event("MoveToTrash", "id")%>">   
+          <!--<a class="MenuItem" href="<%=uicomponent.event("MoveToTrash", "")%>">   
             <div class="ItemIcon MoveToTrash"> <%=_ctx.appRes(uicomponent.id+ ".label.move-all-to-trash") %> </div>
           </a>-->
         </div>
@@ -121,22 +121,22 @@
       <div class="MiddleRightRightClickPopupMenu">
         <div class="UIRightPopupMenuContainer">
           <div class="MenuItem">   
-            <a class="ItemIcon AddFolderIcon" href="<%=uicomponent.event("AddFolder", "id")%>"> <%=_ctx.appRes(uicomponent.id+ ".label.new-folder") %> </a>
+            <a class="ItemIcon AddFolderIcon" href="<%=uicomponent.event("AddFolder", "")%>"> <%=_ctx.appRes(uicomponent.id+ ".label.new-folder") %> </a>
           </div>
           <div class="MenuItem">   
-            <a class="ItemIcon MarkAll" href="<%=uicomponent.event("MarkRead", "id")%>"> <%=_ctx.appRes(uicomponent.id+ ".label.mark-all-read") %> </a>
+            <a class="ItemIcon MarkAll" href="<%=uicomponent.event("MarkRead", "")%>"> <%=_ctx.appRes(uicomponent.id+ ".label.mark-all-read") %> </a>
           </div>
           <div class="MenuItem">   
-            <a class="ItemIcon EmptyIcon" href="<%=uicomponent.event("EmptyFolder", "id")%>"> <%=_ctx.appRes(uicomponent.id+ ".label.empty-trash") %> </a>
+            <a class="ItemIcon EmptyIcon" href="<%=uicomponent.event("EmptyFolder", "")%>"> <%=_ctx.appRes(uicomponent.id+ ".label.empty-trash") %> </a>
           </div>
           <!--
-          <a class="MenuItem" href="<%=uicomponent.event("AddFolder", "id")%>">   
+          <a class="MenuItem" href="<%=uicomponent.event("AddFolder", "")%>">   
             <div class="ItemIcon AddFolderIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.new-folder") %> </div>
           </a>
-          <a class="MenuItem" href="<%=uicomponent.event("MarkRead", "id")%>">   
+          <a class="MenuItem" href="<%=uicomponent.event("MarkRead", "")%>">   
             <div class="ItemIcon MarkAll"> <%=_ctx.appRes(uicomponent.id+ ".label.mark-all-read") %> </div>
           </a>
-          <a class="MenuItem" href="<%=uicomponent.event("EmptyFolder", "id")%>">   
+          <a class="MenuItem" href="<%=uicomponent.event("EmptyFolder", "")%>">   
           <div class="ItemIcon EmptyIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.empty-trash") %> </div>
           </a>-->
         </div>
@@ -168,31 +168,31 @@
       <div class="MiddleRightRightClickPopupMenu">
         <div class="UIRightPopupMenuContainer">
           <div class="MenuItem">   
-            <a class="ItemIcon AddFolderIcon" href="<%=uicomponent.event("AddSubFolder", "id")%>"> <%=_ctx.appRes(uicomponent.id+ ".label.new-subfoder") %> </a>
+            <a class="ItemIcon AddFolderIcon" href="<%=uicomponent.event("AddSubFolder", "")%>"> <%=_ctx.appRes(uicomponent.id+ ".label.new-subfoder") %> </a>
           </div>  
           <div class="MenuItem">   
-            <a class="ItemIcon RenameFolderIcon" href="<%=uicomponent.event("RenameFolder", "id")%>"> <%=_ctx.appRes(uicomponent.id+ ".label.rename") %> </a>
+            <a class="ItemIcon RenameFolderIcon" href="<%=uicomponent.event("RenameFolder", "")%>"> <%=_ctx.appRes(uicomponent.id+ ".label.rename") %> </a>
           </div>
           <div class="MenuItem">   
-            <a class="ItemIcon RemoveFolderIcon" href="<%=uicomponent.event("RemoveFolder", "id")%>"> <%=_ctx.appRes(uicomponent.id+ ".label.remove") %> </a>
+            <a class="ItemIcon RemoveFolderIcon" href="<%=uicomponent.event("RemoveFolder", "")%>"> <%=_ctx.appRes(uicomponent.id+ ".label.remove") %> </a>
           </div>
           <div class="MenuItem">   
-            <a class="ItemIcon MarkAll" href="<%=uicomponent.event("MarkRead", "id")%>"> <%=_ctx.appRes(uicomponent.id+ ".label.mark-all-read") %> </a>
+            <a class="ItemIcon MarkAll" href="<%=uicomponent.event("MarkRead", "")%>"> <%=_ctx.appRes(uicomponent.id+ ".label.mark-all-read") %> </a>
           </div>
           
-          <!--<a class="MenuItem" href="<%=uicomponent.event("AddSubFolder", "id")%>">   
+          <!--<a class="MenuItem" href="<%=uicomponent.event("AddSubFolder", "")%>">   
             <div class="ItemIcon AddFolderIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.new-subfoder") %> </div>
           </a>  
-          <a class="MenuItem" href="<%=uicomponent.event("RenameFolder", "id")%>">   
+          <a class="MenuItem" href="<%=uicomponent.event("RenameFolder", "")%>">   
             <div class="ItemIcon RenameFolderIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.rename") %> </div>
           </a>
-          <a class="MenuItem" href="<%=uicomponent.event("RemoveFolder", "id")%>">   
+          <a class="MenuItem" href="<%=uicomponent.event("RemoveFolder", "")%>">   
             <div class="ItemIcon RemoveFolderIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.remove") %> </div>
           </a>
-          <a class="MenuItem" href="<%=uicomponent.event("MarkRead", "id")%>">   
+          <a class="MenuItem" href="<%=uicomponent.event("MarkRead", "")%>">   
             <div class="ItemIcon MarkAll"> <%=_ctx.appRes(uicomponent.id+ ".label.mark-all-read") %> </div>
           </a>-->
-          <!--<a class="MenuItem" href="<%=uicomponent.event("MoveToTrash", "id")%>">   
+          <!--<a class="MenuItem" href="<%=uicomponent.event("MoveToTrash", "")%>">   
           <div class="ItemIcon MoveToTrash"> <%=_ctx.appRes(uicomponent.id+ ".label.move-all-to-trash") %> </div>
         </a>-->
         </div>

@@ -66,23 +66,23 @@
            <div class="MiddleLeftRightClickPopupMenu">
             <div class="MiddleRightRightClickPopupMenu">
               <div class="UIRightPopupMenuContainer">
-                <a class="MenuItem" href="<%=uicomponent.event("EditTag", "id")%>">   
+                <a class="MenuItem" href="<%=uicomponent.event("EditTag", "")%>">   
                   <div class="ItemIcon EditActionIcon">
                     <%=_ctx.appRes(uicomponent.getName() + ".label.edit")%>
                   </div>
                 </a>
-                <a class="MenuItem" href="<%=uicomponent.event("DeleteTag", "id")%>">   
+                <a class="MenuItem" href="<%=uicomponent.event("DeleteTag", "")%>">   
                   <div class="ItemIcon DeleteIcon">
                     <%=_ctx.appRes(uicomponent.getName() + ".label.delete")%>
                   </div> 
                 </a>
-                <a class="MenuItem" href="<%=uicomponent.event("ExportAddress", "id")%>">   
+                <a class="MenuItem" href="<%=uicomponent.event("ExportAddress", "")%>">   
                   <div class="ItemIcon ExportContactIcon">
                     <%=_ctx.appRes(uicomponent.getName() + ".label.exportContacts")%>
                   </div>
                 </a>
               
-                <a class="MenuItem" href="<%=uicomponent.event("Print", "id")%>">   
+                <a class="MenuItem" href="<%=uicomponent.event("Print", "")%>">   
                   <div class="ItemIcon PrintIcon">
                     <%=_ctx.appRes(uicomponent.getName() + ".label.printContacts")%>
                   </div>

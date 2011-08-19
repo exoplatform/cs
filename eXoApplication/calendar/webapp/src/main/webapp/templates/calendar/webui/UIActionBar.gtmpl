@@ -1,4 +1,5 @@
 <% 
+  import org.exoplatform.web.application.Parameter;
   def rcontext = _ctx.getRequestContext() ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.attachSwapClass("'+ uicomponent.id +'","ControlButton","ControlButtonHover") ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.CalendarScrollManager.load() ;') ;
@@ -34,7 +35,8 @@
       <%for(viewType in uicomponent.getViewTypes()){
             
                   icon = viewType + "Icon" ;
-                  actionLink = uicomponent.event("ChangeView",viewType + "&categoryId=calId") ;
+                  Parameter[] params = [new Parameter("categoryId", "calId")];
+                  actionLink = uicomponent.event("ChangeView",viewType, params) ;
                   String label = _ctx.appRes(uicomponent.id + ".label." + viewType) ;
                   String style = "ControlButton  ActionBarButton" ;
               if(viewType.equals(uicomponent.getCurrentView())) {
