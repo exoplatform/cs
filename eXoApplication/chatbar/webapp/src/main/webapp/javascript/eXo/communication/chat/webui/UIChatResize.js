@@ -47,9 +47,9 @@ UIChatResize.prototype.init = function(event) {
   var resizeWindowTmp = thys.resizeWindowTmp || document.createElement('div');
   var oWidth = thys.portletWindow.offsetWidth;
   var oHeight = thys.portletWindow.offsetHeight;
-  if (DOMUtil.findFirstDescendantByClass(thys.portletWindow, 'div', 'WindowBarLeft')) {
+  if (DOMUtil.findFirstDescendantByClass(thys.portletWindow, 'div', 'OverflowContainer')) {
     oHeight = 0;
-    var windowCompClass = ['WindowBarLeft', 'MiddleDecoratorLeft', 'BottomDecoratorLeft'];
+    var windowCompClass = ['OverflowContainer', 'UIWindowContent'];
     for (var i=0; i<windowCompClass.length; i++) {
       var tmpNode = DOMUtil.findFirstChildByClass(thys.portletWindow, 'div', windowCompClass[i]);
       if (tmpNode) {
@@ -168,14 +168,14 @@ UIChatResize.prototype.endResizeWindowEvt = function(event) {
   window.jsconsole.warn('New height = ' + newHeight);
 
   thys.portletWindow.style.width = newWidth + 'px';
-  thys.portletWindow.style.height = newHeight + 'px';
+  //thys.portletWindow.style.height = newHeight + 'px';
   //if (document.getElementById('UIPageDesktop')) {
     //var UIApplicationNode = eXo.core.DOMUtil.findFirstDescendantByClass(thys.portletWindow, 'div', 'UIApplication1');
     //UIApplicationNode.style.height = newHeight + 'px';
   //}
 
   if (thys.portletWindow.UIWindow) {
-    thys.portletWindow.UIWindow._setSize(newWidth, newHeight);
+    thys.portletWindow.UIWindow._setSize(newWidth, thys.originalHeight);
   }
 
   thys.resizeWindowTmp.style.display = 'none';

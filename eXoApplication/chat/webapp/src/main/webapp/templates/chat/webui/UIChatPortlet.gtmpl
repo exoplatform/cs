@@ -129,96 +129,69 @@
 <!-- End of BuddyItem action popup menu -->
 <!-- Chat window with tab -->
 <div style="position: absolute; top: 115px; left: 255px; width: 655px; height: auto;
-    display: none;" class="UIWindow DefaultTheme UIDragObject UIResizeObject ChatPopup ChatSharedIcons"
+    display: none;visibility:visible" class="UIPopupWindow UIWindow DefaultTheme UIDragObject UIResizeObject ChatPopup ChatSharedIcons"
     minwidth="545px;" minheight="245px;">
-    <div class="WindowBarLeft">
-        <div class="WindowBarRight">
-            <div class="WindowBarCenter">
-                <div class="FixHeight ClearFix">
-                    <div class="WindowPortletControl CategoryDetectPosition">
-                        <div onmouseout="eXo.desktop.UIWindow.onControlOver(this, false);" onmouseover="eXo.desktop.UIWindow.onControlOver(this, true);"
-                            onclick="eXo.communication.chat.webui.UIChatWindow.setVisible(false, event, true);"
-                            title="<%=_ctx.appRes("UIChatPortlet.label.minimizeWindow");%>" class="ControlIcon MinimizedIcon">
-                            <span></span>
-                        </div>
-                    </div>
-                    <div class="WindowPortletInfo ClearFix">
-                        <div class="Icon PortletIcon WindowPortletIcon NovaPortletIcon">
-                            <div class="PortletName">
-                                <span class="UnreadMessage" style="color: red"></span>
-                                <span><%=_ctx.appRes("UIChatPortlet.label.conversation");%></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+		<div class="OverflowContainer ClearFix">
+			<a href="" onclick="eXo.communication.chat.webui.UIChatWindow.setVisible(false, event, true);"
+					title="<%=_ctx.appRes("UIChatPortlet.label.minimizeWindow");%>" class="ControlIcon MinimizedIconChatBar">
+			</a>
+			<span class="UnreadMessage" style="color: red"></span>
+			<span class="PopupTitle"><%=_ctx.appRes("UIChatPortlet.label.conversation");%></span>
+		</div>
+		<div class="UIWindowContent">
+			<div class="PopupContent UIPopupMessages">
+				<div class="UIApplication1">
+						<div class="UIConversation" oncontextmenu="return false;">
+								<div class="UITabPane">
+										<div class="UITabPaneContent">
+												<div class="WorkingArea">
+														<div class="UIHorizontalTabs">
+																<div class="LeftHorizontalTabs">
+																		<div class="RightHorizontalTabs">
+																				<div class="CenterHorizontalTabs">
+																						<div class="TabsContainer">
+																								<div class="ScrollButtons" style="display: block;">
+																										<div class="ScrollLeftButton" title="<%=_ctx.appRes("UIChatPortlet.label.previous");%>">
+																												<div class="ScrollRightButton" title="<%=_ctx.appRes("UIChatPortlet.label.next");%>">
+																														<span></span>
+																												</div>
+																										</div>
+																								</div>
+																						</div>
+																				</div>
+																		</div>
+																</div>
+														</div>
+														<div class="HorizontalLayout" id="HorizontalLayout">
+																<div class="UITabContentContainer">
+																		<span></span>
+																</div>
+														</div>
+												</div>
+										</div>
+								</div>
+						</div>
+				</div>
+			
+				<div>
+					<div title="<%=_ctx.appRes("UIChatPortlet.label.resizeWindow");%>" class="ResizeArea">
+							<span></span>
+					</div>
+					<div class="Information">
+							<%=_ctx.appRes("UIChatPortlet.label.done");%></div>
+				</div>
+			</div>
     </div>
-    <div class="MiddleDecoratorLeft">
-        <div class="MiddleDecoratorRight">
-            <div class="MiddleDecoratorCenter">
-                <div class="UIApplication1">
-                    <div class="UIConversation" oncontextmenu="return false;">
-                        <div class="UITabPane">
-                            <div class="UITabPaneContent">
-                                <div class="WorkingArea">
-                                    <div class="UIHorizontalTabs">
-                                        <div class="LeftHorizontalTabs">
-                                            <div class="RightHorizontalTabs">
-                                                <div class="CenterHorizontalTabs">
-                                                    <div class="TabsContainer">
-                                                        <div class="ScrollButtons" style="display: block;">
-                                                            <div class="ScrollLeftButton" title="<%=_ctx.appRes("UIChatPortlet.label.previous");%>">
-                                                                <div class="ScrollRightButton" title="<%=_ctx.appRes("UIChatPortlet.label.next");%>">
-                                                                    <span></span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="HorizontalLayout" id="HorizontalLayout">
-                                        <div class="UITabContentContainer">
-                                            <span></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="BottomDecoratorLeft">
-        <div class="BottomDecoratorRight">
-            <div class="BottomDecoratorCenter">
-                <div class="FixHeight ClearFix">
-                    <div title="<%=_ctx.appRes("UIChatPortlet.label.resizeWindow");%>" class="ResizeArea">
-                        <span></span>
-                    </div>
-                    <div class="Information">
-                        <%=_ctx.appRes("UIChatPortlet.label.done");%></div>
-                </div>
-            </div>
-        </div>
-    </div>
+		
 </div>
 <!-- Start Add Contact popup -->
-<div class="UIPopupWindow UIDragObject AddContactPopup UIAddContact" style="position: absolute;
-    top: 150px; left: 250px; width: 550px; height: 150px; display: none; visibility: visible;">
-    <div class="ExoMesseageDecorator">
-		<div class="OverflowContainer">
-			<div class="PopupTitleIcon">
-				<span></span>
-			</div>
-			<div class="CloseButton" title="<%=_ctx.appRes("UIChatPortlet.label.closeWindow");%>" onclick="eXo.communication.chat.webui.UIAddContactPopupWindow.setVisible(false);">
-				<span></span>
-			</div>
-			<div class="PopupTitle">
-				<%=_ctx.appRes("UIChatPortlet.label.addContact");%></div>
+<div class="UIPopupWindow ExoMesseageDecorator UIDragObject AddContactPopup UIAddContact" style="position: absolute;
+    top: 150px; left: 250px; width: 550px; display: none; visibility: visible;">
+		<div class="OverflowContainer ClearFix">
+			<a class="CloseButton" title="<%=_ctx.appRes("UIChatPortlet.label.closeWindow");%>" onclick="eXo.communication.chat.webui.UIAddContactPopupWindow.setVisible(false);">
+			</a>
+			<span class="PopupTitle">
+				<%=_ctx.appRes("UIChatPortlet.label.addContact");%></span>
 		</div>
 		<div class="UIWindowContent">
 			<div class="PopupContent">
@@ -293,22 +266,15 @@
 				<!-- end contact -->
 			</div>
 		</div>
-    </div>
 </div>
 <!-- End Add Contact popup -->
 <!-- Popup Join Room -->
-<div class="UIPopupWindow UIDragObject JoinRoomPopup UIJoinRoom" style="position: absolute;
-    top: 150px; left: 250px; width: 550px; height: 150px; display: none; visibility: visible;">
-    <div class="ExoMesseageDecorator">
-		<div class="OverflowContainer">
-			<div class="PopupTitleIcon">
-				<span></span>
-			</div>
-			<div class="CloseButton" title="<%=_ctx.appRes("UIChatPortlet.label.closeWindow");%>" onclick="eXo.communication.chat.webui.UIJoinRoomPopupWindow.setVisible(false);">
-				<span></span>
-			</div>
-			<div class="PopupTitle">
-				<%=_ctx.appRes("UIChatPortlet.label.joinRoom");%></div>
+<div class="UIPopupWindow ExoMesseageDecorator UIDragObject JoinRoomPopup UIJoinRoom" style="position: absolute;
+    top: 150px; left: 250px; width: 550px; display: none; visibility: visible;">
+		<div class="OverflowContainer ClearFix">
+			<a class="CloseButton" title="<%=_ctx.appRes("UIChatPortlet.label.closeWindow");%>" onclick="eXo.communication.chat.webui.UIJoinRoomPopupWindow.setVisible(false);">
+			</a>
+			<span class="PopupTitle"><%=_ctx.appRes("UIChatPortlet.label.joinRoom");%></span>
 		</div>
 		<div class="UIWindowContent">
 			<div class="PopupContent">
@@ -368,22 +334,15 @@
 				<!-- end contact -->
 			</div>
 		</div>
-    </div>
 </div>
 <!--End form join room -->
 <!-- Popup New Room -->
-<div class="UIPopupWindow UIDragObject CreateNewRoomPopup UINewRoom" style="position: absolute;
-    top: 150px; left: 250px; width: 550px; height: 150px; display: none; visibility: visible;">
-    <div class="ExoMesseageDecorator">
-		<div class="OverflowContainer">
-			<div class="PopupTitleIcon">
-				<span></span>
-			</div>
-			<div class="CloseButton" title="<%=_ctx.appRes("UIChatPortlet.label.closeWindow");%>" onclick="eXo.communication.chat.webui.UICreateNewRoomPopupWindow.setVisible(false);">
-				<span></span>
-			</div>
-			<div class="PopupTitle">
-				<%=_ctx.appRes("UIChatPortlet.label.newRoom");%></div>
+<div class="UIPopupWindow ExoMesseageDecorator UIDragObject CreateNewRoomPopup UINewRoom" style="position: absolute;
+    top: 150px; left: 250px; width: 550px; display: none; visibility: visible;">
+		<div class="OverflowContainer ClearFix">
+			<a class="CloseButton" title="<%=_ctx.appRes("UIChatPortlet.label.closeWindow");%>" onclick="eXo.communication.chat.webui.UICreateNewRoomPopupWindow.setVisible(false);">
+			</a>
+			<span class="PopupTitle"><%=_ctx.appRes("UIChatPortlet.label.newRoom");%></span>
 		</div>
 		<div class="UIWindowContent">
 			<div class="PopupContent">
@@ -419,198 +378,193 @@
 				</form>
 			</div>
 		</div>
-    </div>
 </div>
 <!--End New Room -->
 <!--Start room config form-->
-<div class="UIPopupWindow UIDragObject RoomConfigPopup" style="position: absolute;
-    top: 150px; left: 250px; width: 550px; height: 150px; display: none; visibility: visible;">
-    <div class="ExoMesseageDecorator UINewForm">
-		<div class="OverflowContainer">
-			<div class="PopupTitleIcon">
-				<span></span>
-			</div>
-			<div class="CloseButton" title="<%=_ctx.appRes("UIChatPortlet.label.closeWindow");%>" onclick="eXo.communication.chat.webui.UIRoomConfigPopupWindow.setVisible(false);">
-				<span></span>
-			</div>
-			<div class="PopupTitle">
-				<%=_ctx.appRes("UIChatPortlet.label.roomConfiguration");%></div>
+<div class="UIPopupWindow ExoMesseageDecorator UINewForm UIDragObject RoomConfigPopup" style="position: absolute;
+    top: 150px; left: 250px; width: 550px; display: none; visibility: visible;">
+		<div class="OverflowContainer ClearFix">
+			<a class="CloseButton" title="<%=_ctx.appRes("UIChatPortlet.label.closeWindow");%>" onclick="eXo.communication.chat.webui.UIRoomConfigPopupWindow.setVisible(false);">
+			</a>
+			<span class="PopupTitle">
+				<%=_ctx.appRes("UIChatPortlet.label.roomConfiguration");%></span>
 		</div>
 		<div class="UIWindowContent">
-			<form method="post" class="ContainerForm" action="#">
-				<div class="BoxForm">
-					<div class="BorderForm">
-						<fieldset style="color: #333; margin-bottom: 10px; overflow: hidden:height:100%;"
-							maxheight="350">
-							<legend class="StyleLegend"><%=_ctx.appRes("UIChatPortlet.label.general");%></legend>
-							<table class="UIFormGrid" style="visibility: visible;">
-								<tr>
-									<td class="FieldLabel">
-										<label>
-											<%=_ctx.appRes("UIChatPortlet.label.roomName");%>:</label>
-									</td>
-									<td class="FieldComponent">
-										<input type="text" name="roomname" disabled />
-									</td>
-								</tr>
-								<tr>
-									<td class="FieldLabel">
-										<label>
-											<%=_ctx.appRes("UIChatPortlet.label.persistentRoom");%>:</label>
-									</td>
-									<td class="FieldComponent">
-										<input type="checkbox" name="persistentroom" />
-									</td>
-								</tr>
-								<tr>
-									<td class="FieldLabel">
-										<label>
-											<%=_ctx.appRes("UIChatPortlet.label.presenceBroadcast");%>:</label>
-									</td>
-									<td class="FieldComponent">
-										<select name="presencebroadcast" size="3" MULTIPLE>
-											<option value="moderator"><%=_ctx.appRes("UIChatPortlet.label.moderator");%></option>
-											<option value="participant"><%=_ctx.appRes("UIChatPortlet.label.participant");%></option>
-											<option value="visitor"><%=_ctx.appRes("UIChatPortlet.label.visitor");%></option>
-										</select>
-									</td>
-								</tr>
-								<tr>
-									<td class="FieldLabel">
-										<label>
-											<%=_ctx.appRes("UIChatPortlet.label.whoIs");%>:</label>
-									</td>
-									<td class="FieldComponent">
-										<select name="whois" size="3">
-											<option value="anyone"><%=_ctx.appRes("UIChatPortlet.label.anyOne");%></option>
-										</select>
-									</td>
-								</tr>
-								<tr>
-									<td class="FieldLabel">
-										<label>
-											<%=_ctx.appRes("UIChatPortlet.label.roomDescription");%>:</label>
-									</td>
-									<td class="FieldComponent">
-										<textarea name="roomdesc" rows="3" cols="12"></textarea>
-									</td>
-								</tr>
-								<tr>
-									<td class="FieldLabel">
-										<label>
-											<%=_ctx.appRes("UIChatPortlet.label.maxUsers");%>:</label>
-									</td>
-									<td class="FieldComponent">
-										<select name="maxusers">
-											<option value="30">30</option>
-										</select>
-									</td>
-								</tr>
-							</table>
-						</fieldset>
-						<fieldset style="overflow: hidden; height: 20px;" maxheight="350" state="closed">
-							<legend class="StyleLegend"><%=_ctx.appRes("UIChatPortlet.label.showSecurity");%></legend>
-							<table class="UIFormGrid" style="visibility: visible; opacity: 0;">
-								<tr>
-									<td class="FieldLabel">
-										<label>
-											<%=_ctx.appRes("UIChatPortlet.label.publicRoom");%>:</label>
-									</td>
-									<td class="FieldComponent">
-										<input type="checkbox" name="publicroom" />
-									</td>
-								</tr>
-								<tr>
-									<td class="FieldLabel">
-										<label>
-											<%=_ctx.appRes("UIChatPortlet.label.membersOnly");%>:</label>
-									</td>
-									<td class="FieldComponent">
-										<input type="checkbox" name="membersonly" />
-									</td>
-								</tr>
-								<tr>
-									<td class="FieldLabel">
-										<label>
-											<%=_ctx.appRes("UIChatPortlet.label.allowInvites");%>:</label>
-									</td>
-									<td class="FieldComponent">
-										<input type="checkbox" name="allowinvites" />
-									</td>
-								</tr>
-								<tr>
-									<td class="FieldLabel">
-										<label>
-											<%=_ctx.appRes("UIChatPortlet.label.reservedNick");%>:</label>
-									</td>
-									<td class="FieldComponent">
-										<input type="checkbox" name="reservednick" />
-									</td>
-								</tr>
-								<tr>
-									<td class="FieldLabel">
-										<label>
-											<%=_ctx.appRes("UIChatPortlet.label.passwordProtectedRoom");%>:</label>
-									</td>
-									<td class="FieldComponent">
-										<input type="checkbox" name="passwordprotectedroom" />
-									</td>
-								</tr>
-								<tr>
-									<td class="FieldLabel">
-										<label>
-											<%=_ctx.appRes("UIChatPortlet.label.password");%>:</label>
-									</td>
-									<td class="FieldComponent">
-										<input type="password" name="roomsecret" />
-									</td>
-								</tr>
-								<tr>
-									<td class="FieldLabel">
-										<label>
-											<%=_ctx.appRes("UIChatPortlet.label.moderatedRoom");%>:</label>
-									</td>
-									<td class="FieldComponent">
-										<input type="checkbox" name="moderatedroom" />
-									</td>
-								</tr>
-								<tr>
-									<td class="FieldLabel">
-										<label>
-											<%=_ctx.appRes("UIChatPortlet.label.roomAdmins");%>:</label>
-									</td>
-									<td class="FieldComponent">
-										<select name="roomadmins" size="3">
-											<option></option>
-										</select>
-									</td>
-								</tr>
-								<tr>
-									<td class="FieldLabel">
-										<label>
-											<%=_ctx.appRes("UIChatPortlet.label.roomOwners");%>:</label>
-									</td>
-									<td class="FieldComponent">
-										<select name="roomowners" size="3">
-											<option></option>
-										</select>
-									</td>
-								</tr>
-							</table>
-						</fieldset>
-					</div>
-				</div>
-				<div class="BoxForm">
-					<div class="BorderForm">
-						<div class="UIAction">
-							<a href="#" class="ActionButton LightBlueStyle" onclick="javascript:eXo.communication.chat.webui.UIRoomConfigPopupWindow.okAction();"><%=_ctx.appRes("UIChatPortlet.label.ok");%></a>
-							<a href="#" class="ActionButton LightBlueStyle" onclick="javascript:eXo.communication.chat.webui.UIRoomConfigPopupWindow.setVisible(false);"><%=_ctx.appRes("UIChatPortlet.label.cancel");%></a>
+			<div class="PopupContent">
+				<form method="post" class="ContainerForm" action="#">
+					<div class="BoxForm">
+						<div class="BorderForm">
+							<fieldset style="color: #333; margin-bottom: 10px; overflow: hidden:height:100%;"
+								maxheight="350">
+								<legend class="StyleLegend"><%=_ctx.appRes("UIChatPortlet.label.general");%></legend>
+								<table class="UIFormGrid" style="visibility: visible;">
+									<tr>
+										<td class="FieldLabel">
+											<label>
+												<%=_ctx.appRes("UIChatPortlet.label.roomName");%>:</label>
+										</td>
+										<td class="FieldComponent">
+											<input type="text" name="roomname" disabled />
+										</td>
+									</tr>
+									<tr>
+										<td class="FieldLabel">
+											<label>
+												<%=_ctx.appRes("UIChatPortlet.label.persistentRoom");%>:</label>
+										</td>
+										<td class="FieldComponent">
+											<input type="checkbox" name="persistentroom" />
+										</td>
+									</tr>
+									<tr>
+										<td class="FieldLabel">
+											<label>
+												<%=_ctx.appRes("UIChatPortlet.label.presenceBroadcast");%>:</label>
+										</td>
+										<td class="FieldComponent">
+											<select name="presencebroadcast" size="3" MULTIPLE>
+												<option value="moderator"><%=_ctx.appRes("UIChatPortlet.label.moderator");%></option>
+												<option value="participant"><%=_ctx.appRes("UIChatPortlet.label.participant");%></option>
+												<option value="visitor"><%=_ctx.appRes("UIChatPortlet.label.visitor");%></option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<td class="FieldLabel">
+											<label>
+												<%=_ctx.appRes("UIChatPortlet.label.whoIs");%>:</label>
+										</td>
+										<td class="FieldComponent">
+											<select name="whois" size="3">
+												<option value="anyone"><%=_ctx.appRes("UIChatPortlet.label.anyOne");%></option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<td class="FieldLabel">
+											<label>
+												<%=_ctx.appRes("UIChatPortlet.label.roomDescription");%>:</label>
+										</td>
+										<td class="FieldComponent">
+											<textarea name="roomdesc" rows="3" cols="12"></textarea>
+										</td>
+									</tr>
+									<tr>
+										<td class="FieldLabel">
+											<label>
+												<%=_ctx.appRes("UIChatPortlet.label.maxUsers");%>:</label>
+										</td>
+										<td class="FieldComponent">
+											<select name="maxusers">
+												<option value="30">30</option>
+											</select>
+										</td>
+									</tr>
+								</table>
+							</fieldset>
+							<fieldset style="overflow: hidden; height: 20px;" maxheight="350" state="closed">
+								<legend class="StyleLegend"><%=_ctx.appRes("UIChatPortlet.label.showSecurity");%></legend>
+								<table class="UIFormGrid" style="visibility: visible; opacity: 0;">
+									<tr>
+										<td class="FieldLabel">
+											<label>
+												<%=_ctx.appRes("UIChatPortlet.label.publicRoom");%>:</label>
+										</td>
+										<td class="FieldComponent">
+											<input type="checkbox" name="publicroom" />
+										</td>
+									</tr>
+									<tr>
+										<td class="FieldLabel">
+											<label>
+												<%=_ctx.appRes("UIChatPortlet.label.membersOnly");%>:</label>
+										</td>
+										<td class="FieldComponent">
+											<input type="checkbox" name="membersonly" />
+										</td>
+									</tr>
+									<tr>
+										<td class="FieldLabel">
+											<label>
+												<%=_ctx.appRes("UIChatPortlet.label.allowInvites");%>:</label>
+										</td>
+										<td class="FieldComponent">
+											<input type="checkbox" name="allowinvites" />
+										</td>
+									</tr>
+									<tr>
+										<td class="FieldLabel">
+											<label>
+												<%=_ctx.appRes("UIChatPortlet.label.reservedNick");%>:</label>
+										</td>
+										<td class="FieldComponent">
+											<input type="checkbox" name="reservednick" />
+										</td>
+									</tr>
+									<tr>
+										<td class="FieldLabel">
+											<label>
+												<%=_ctx.appRes("UIChatPortlet.label.passwordProtectedRoom");%>:</label>
+										</td>
+										<td class="FieldComponent">
+											<input type="checkbox" name="passwordprotectedroom" />
+										</td>
+									</tr>
+									<tr>
+										<td class="FieldLabel">
+											<label>
+												<%=_ctx.appRes("UIChatPortlet.label.password");%>:</label>
+										</td>
+										<td class="FieldComponent">
+											<input type="password" name="roomsecret" />
+										</td>
+									</tr>
+									<tr>
+										<td class="FieldLabel">
+											<label>
+												<%=_ctx.appRes("UIChatPortlet.label.moderatedRoom");%>:</label>
+										</td>
+										<td class="FieldComponent">
+											<input type="checkbox" name="moderatedroom" />
+										</td>
+									</tr>
+									<tr>
+										<td class="FieldLabel">
+											<label>
+												<%=_ctx.appRes("UIChatPortlet.label.roomAdmins");%>:</label>
+										</td>
+										<td class="FieldComponent">
+											<select name="roomadmins" size="3">
+												<option></option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<td class="FieldLabel">
+											<label>
+												<%=_ctx.appRes("UIChatPortlet.label.roomOwners");%>:</label>
+										</td>
+										<td class="FieldComponent">
+											<select name="roomowners" size="3">
+												<option></option>
+											</select>
+										</td>
+									</tr>
+								</table>
+							</fieldset>
 						</div>
 					</div>
-				</div>
-			</form>
+					<div class="BoxForm">
+						<div class="BorderForm">
+							<div class="UIAction">
+								<a href="#" class="ActionButton LightBlueStyle" onclick="javascript:eXo.communication.chat.webui.UIRoomConfigPopupWindow.okAction();"><%=_ctx.appRes("UIChatPortlet.label.ok");%></a>
+								<a href="#" class="ActionButton LightBlueStyle" onclick="javascript:eXo.communication.chat.webui.UIRoomConfigPopupWindow.setVisible(false);"><%=_ctx.appRes("UIChatPortlet.label.cancel");%></a>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
 		</div>
-    </div>
 </div>
 <!--end room config form -->
 <!-- Start template area -->

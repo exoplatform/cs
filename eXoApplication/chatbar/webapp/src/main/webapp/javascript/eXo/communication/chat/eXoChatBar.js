@@ -63,7 +63,7 @@ eXo.communication.chatbar.eXoChatBar = {
       eXo.communication.chatbar.webui.UIMainChatWindow.init(thys.applicationId, eXoToken, userName, thys.cometdcontextname);
       eXo.communication.chatbar.webui.UIChatDragDrop.init(
         eXo.communication.chatbar.webui.UIMainChatWindow.chatWindowsContainerNode,
-        [{className:'WindowBarLeft', tagName: 'div'}, {className: 'PopupTitle', tagName: 'div'}]);
+        [{className:'OverflowContainer', tagName: 'div'}, {className: 'PopupTitle', tagName: 'span'}]);
       eXo.communication.chatbar.webui.UIMainChatWindow.xLogin(userName);
 	  eXo.communication.chatbar.eXoChatBar.setWidth();
 	  var div = document.createElement("div");

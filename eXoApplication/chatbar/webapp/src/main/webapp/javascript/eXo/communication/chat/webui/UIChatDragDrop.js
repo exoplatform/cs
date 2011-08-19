@@ -52,7 +52,8 @@ UIChatDragDrop.prototype.regDnDItem = function(rootNode, dragableNodeInfos) {
 UIChatDragDrop.prototype.mouseDownTrigger = function(event) {
   event = event ? event : window.event ;
   var srcElement = event.srcElement || event.target;
-  if (srcElement.className.toLowerCase().indexOf('controlicon') != -1) {
+  var srcElementName = srcElement.className.toLowerCase();
+  if (srcElementName.indexOf('controlicon') != -1 || srcElementName.indexOf('closebutton')!= -1) {
     window.jsconsole.info('Invalid element: ' + srcElement.className);
     return;
   }
@@ -80,9 +81,9 @@ UIChatDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, eve
   var uiDragObjectNode = this.DOMUtil.findAncestorByClass(dragBlock, 'UIDragObject');
   var oWidth = uiDragObjectNode.offsetWidth;
   var oHeight = uiDragObjectNode.offsetHeight;
-  if (this.DOMUtil.findFirstDescendantByClass(uiDragObjectNode, 'div', 'WindowBarLeft')) {
+  if (this.DOMUtil.findFirstDescendantByClass(uiDragObjectNode, 'div', 'OverflowContainer')) {
     oHeight = 0;
-    var windowCompClass = ['WindowBarLeft', 'MiddleDecoratorLeft', 'BottomDecoratorLeft'];
+    var windowCompClass = ['OverflowContainer', 'UIWindowContent'];
     for (var i=0; i<windowCompClass.length; i++) {
       var tmpNode = this.DOMUtil.findFirstDescendantByClass(uiDragObjectNode, 'div', windowCompClass[i]);
       if (tmpNode) {

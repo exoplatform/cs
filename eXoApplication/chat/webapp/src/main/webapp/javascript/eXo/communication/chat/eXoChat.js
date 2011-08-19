@@ -70,7 +70,7 @@ eXo.communication.chat.eXoChat = {
       eXo.communication.chat.webui.UIMainChatWindow.init(thys.applicationId, eXoToken, userName, thys.cometdcontextname);
       eXo.communication.chat.webui.UIChatDragDrop.init(
         eXo.communication.chat.webui.UIMainChatWindow.chatWindowsContainerNode,
-        [{className:'WindowBarLeft', tagName: 'div'}, {className: 'PopupTitle', tagName: 'div'}]);
+        [{className:'OverflowContainer', tagName: 'div'}, {className: 'PopupTitle', tagName: 'span'}]);
       eXo.communication.chat.webui.UIMainChatWindow.xLogin(userName);
     } catch (e) {
       throw (new Error('Error while loading chat application.'));

@@ -1219,6 +1219,15 @@ form {
 	margin: 0px 4px;
 }	
 
+.UIPopupWindow .OverflowContainer .MinimizedIconChatBar{
+	background: url('DefaultSkin/skinIcons/MinimizedIcon.png') no-repeat;
+	cursor: pointer;
+	float: right;
+	height: 18px;
+	margin: 5px 3px 0 0;
+	width: 18px;
+}
+
 /**************************** MiniBoxChat*****************************/
 .MiniBoxChat {
 	width: 215px;

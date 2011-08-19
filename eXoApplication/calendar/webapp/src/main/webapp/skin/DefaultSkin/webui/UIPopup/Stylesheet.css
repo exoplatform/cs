@@ -30,9 +30,6 @@
 }
 
 /********************* UIExportForm ***************************/
-.UICalendarPortlet .UIExportForm {
-  padding: 10px;
-}
 
 .UICalendarPortlet .UIExportForm .HorizontalLayout {
   border: none;
@@ -99,4 +96,24 @@
 
 .UICalendarPortlet .UIQuickAddEvent {
   min-width: 400px;
+	background: #EBEBEB;
+	-moz-border-radius: 5px 5px 0px 0px;
+	-webkit-border-radius: 5px 5px 0px 0px;
+	border-radius: 5px 5px 0px 0px;
+}
+
+.UICalendarPortlet .UIPopupAddEventContainer{
+	background: #EBEBEB;
+}
+
+.UICalendarPortlet .UIPopupAddTaskContainer{
+	background: #EBEBEB;
+}
+
+.UICalendarPortlet .UIPopupAddCalendarContainer{
+	background: #EBEBEB;
+}
+
+.UICalendarPortlet .UIPopupCalendarSettingContainer{
+	background: #EBEBEB;
 }

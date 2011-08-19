@@ -72,7 +72,7 @@
 		</div>
 		<div class="RoomArea IconButton" onclick="eXo.communication.chatbar.webui.UIChatBar.showMenu(this,event);">
 			<!-- Right Click Popup Group -->
-				<div class="UIRightClickPopupMenu" style="display: none;">
+				<div class="UIRightClickPopupMenu UIContextMenuContainer" style="display: none;">
 						<ul class="ScrollGroup RoomData"></ul>
 						<span class="Split"></span>
 						<div class="Icon JoinRoomIcon" onclick="eXo.communication.chatbar.webui.UIJoinRoomPopupWindow.setVisible(true);">
@@ -86,7 +86,7 @@
 		<div class="ContactArea IconButton" onclick="eXo.communication.chatbar.webui.UIChatBar.showMenu(this,event);" >
 			<% _ctx.include("app:/templates/chatbar/webui/UITooltipAtTop.gtmpl"); %>
 			<!-- Right Click Popup Contact -->
-				<div class="UIRightClickPopupMenu" style="display: none;">
+				<div class="UIRightClickPopupMenu UIContextMenuContainer" style="display: none;">
 					<ul class="ScrollGroup BuddyList"></ul>
 					<span class="Split"></span>
 					<div class="Icon AddContactIcon">
@@ -126,7 +126,7 @@
 	</div>
 <!-- End UIChat -->
 <!-- Start BuddyItem action popup menu -->
-<div class="UIRightClickPopupMenu BuddyItemActionMenu" style="display: none;">
+<div class="UIRightClickPopupMenu BuddyItemActionMenu UIContextMenuContainer" style="display: none;">
 	<a href="#" class="ItemIcon MessageIcon" onclick="javascript:eXo.communication.chatbar.webui.UIMainChatWindow.postProcessBuddyItemAction(this, eXo.communication.chatbar.webui.UIMainChatWindow.CREATE_CONVERSATION_ACTION);">
 			<%=_ctx.appRes("UIChatBarPortlet.label.sendMessage");%>
 	</a>
@@ -137,96 +137,69 @@
 <!-- End of BuddyItem action popup menu -->
 <!-- Chat window with tab -->
 <div style="position: absolute; top: 115px; left: 255px; width: 655px; height: auto;
-    display: none;" class="UIWindow DefaultTheme UIDragObject UIResizeObject ChatPopup ChatSharedIcons"
+    display: none; visibility:visible" class="UIPopupWindow DefaultTheme UIDragObject UIResizeObject ChatPopup ChatSharedIcons"
     minwidth="545px" minheight="245px">
-    <div class="WindowBarLeft">
-        <div class="WindowBarRight">
-            <div class="WindowBarCenter">
-                <div class="FixHeight ClearFix">
-                    <div class="WindowPortletControl CategoryDetectPosition">
-                        <div onmouseout="eXo.desktop.UIWindow.onControlOver(this, false);" onmouseover="eXo.desktop.UIWindow.onControlOver(this, true);"
-                            onclick="eXo.communication.chatbar.webui.UIChatWindow.setVisible(false, event, true)"
-                            title="<%=_ctx.appRes("UIChatBarPortlet.label.minimizeWindow");%>" class="ControlIcon MinimizedIcon">
-                            <span></span>
-                        </div>
-                    </div>
-                    <div class="WindowPortletInfo">
-                        <div class="Icon PortletIcon WindowPortletIcon NovaPortletIcon">
-                            <div class="PortletName">
-                                <span class="UnreadMessage" style="color: red"></span>
-                                <span><%=_ctx.appRes("UIChatBarPortlet.label.conversation");%></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="OverflowContainer ClearFix">
+				<a onclick="eXo.communication.chatbar.webui.UIChatWindow.setVisible(false, event, true)"
+						title="<%=_ctx.appRes("UIChatBarPortlet.label.minimizeWindow");%>" class="ControlIcon MinimizedIconChatBar">
+				</a>
+				<span class="UnreadMessage" style="color: red"></span>
+				<span class="PopupTitle"><%=_ctx.appRes("UIChatBarPortlet.label.conversation");%></span>
     </div>
-    <div class="MiddleDecoratorLeft">
-        <div class="MiddleDecoratorRight">
-            <div class="MiddleDecoratorCenter">
-                <div class="UIApplication1">
-                    <div class="UIConversation" oncontextmenu="return false;">
-                        <div class="UITabPane">
-                            <div class="UITabPaneContent">
-                                <div class="WorkingArea">
-                                    <div class="UIHorizontalTabs">
-                                        <div class="LeftHorizontalTabs">
-                                            <div class="RightHorizontalTabs">
-                                                <div class="CenterHorizontalTabs">
-                                                    <div class="TabsContainer">
-                                                        <div class="ScrollButtons" style="display: block;">
-                                                            <div class="ScrollLeftButton" title="<%=_ctx.appRes("UIChatBarPortlet.label.previous");%>">
-                                                                <div class="ScrollRightButton" title="<%=_ctx.appRes("UIChatBarPortlet.label.next");%>">
-                                                                    <span></span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="HorizontalLayout" id="HorizontalLayout">
-                                        <div class="UITabContentContainer">
-                                            <span></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="BottomDecoratorLeft">
-        <div class="BottomDecoratorRight">
-            <div class="BottomDecoratorCenter">
-                <div class="FixHeight ClearFix">
-                    <div title="<%=_ctx.appRes("UIChatBarPortlet.label.resizeWindow");%>" class="ResizeArea">
-                        <span></span>
-                    </div>
-                    <div class="Information">
-                        <%=_ctx.appRes("UIChatBarPortlet.label.done");%></div>
-                </div>
-            </div>
-        </div>
-    </div>
+		<div class="UIWindowContent">
+			<div class="PopupContent UIPopupMessages">
+				<div class="UIApplication1">
+						<div class="UIConversation" oncontextmenu="return false;">
+								<div class="UITabPane">
+										<div class="UITabPaneContent">
+												<div class="WorkingArea">
+														<div class="UIHorizontalTabs">
+																<div class="LeftHorizontalTabs">
+																		<div class="RightHorizontalTabs">
+																				<div class="CenterHorizontalTabs">
+																						<div class="TabsContainer">
+																								<div class="ScrollButtons" style="display: block;">
+																										<div class="ScrollLeftButton" title="<%=_ctx.appRes("UIChatBarPortlet.label.previous");%>">
+																												<div class="ScrollRightButton" title="<%=_ctx.appRes("UIChatBarPortlet.label.next");%>">
+																														<span></span>
+																												</div>
+																										</div>
+																								</div>
+																						</div>
+																				</div>
+																		</div>
+																</div>
+														</div>
+														<div class="HorizontalLayout" id="HorizontalLayout">
+																<div class="UITabContentContainer">
+																		<span></span>
+																</div>
+														</div>
+												</div>
+										</div>
+								</div>
+						</div>
+				</div>
+			
+				<div >
+					<div title="<%=_ctx.appRes("UIChatBarPortlet.label.resizeWindow");%>" class="ResizeArea">
+					</div>
+					<div class="Information">
+							<%=_ctx.appRes("UIChatBarPortlet.label.done");%>
+					</div>
+				</div>
+			</div>
+		</div>
+		
 </div>
 <!-- Start Add Contact popup -->
-<div class="UIPopupWindow UIDragObject AddContactPopup UIAddContact" style="position: absolute;
-    top: 150px; left: 250px; width: 550px; height: 150px; display: none; visibility: visible">
-    <div class="ExoMesseageDecorator">
-		<div class="OverflowContainer">
-			<div class="PopupTitleIcon">
-				<span></span>
-			</div>
-			<div class="CloseButton" title="<%=_ctx.appRes("UIChatBarPortlet.label.closeWindow");%>" onclick="eXo.communication.chatbar.webui.UIAddContactPopupWindow.setVisible(false);">
-				<span></span>
-			</div>
-			<div class="PopupTitle">
-				<%=_ctx.appRes("UIChatBarPortlet.label.addContact");%></div>
+<div class="UIPopupWindow ExoMesseageDecorator UIDragObject AddContactPopup UIAddContact" style="position: absolute;
+    top: 150px; left: 250px; width: 550px; display: none; visibility: visible">
+		<div class="OverflowContainer ClearFix">
+			<a class="CloseButton" title="<%=_ctx.appRes("UIChatBarPortlet.label.closeWindow");%>" onclick="eXo.communication.chatbar.webui.UIAddContactPopupWindow.setVisible(false);">
+			</a>
+			<span class="PopupTitle">
+				<%=_ctx.appRes("UIChatBarPortlet.label.addContact");%></span>
 		</div>
 		<div class="UIWindowContent">
 			<div class="PopupContent">
@@ -301,22 +274,16 @@
 				<!-- end contact -->
 			</div>
 		</div>
-    </div>
 </div>
 <!-- End Add Contact popup -->
 <!-- Popup Join Room -->
-<div class="UIPopupWindow UIDragObject JoinRoomPopup UIJoinRoom" style="position: absolute;
-    top: 150px; left: 250px; width: 550px; height: 150px; display: none; visibility: visible;">
-    <div class="ExoMesseageDecorator">
-		<div class="OverflowContainer">
-			<div class="PopupTitleIcon">
-				<span></span>
-			</div>
-			<div class="CloseButton" title="<%=_ctx.appRes("UIChatBarPortlet.label.closeWindow");%>" onclick="eXo.communication.chatbar.webui.UIJoinRoomPopupWindow.setVisible(false);">
-				<span></span>
-			</div>
-			<div class="PopupTitle">
-				<%=_ctx.appRes("UIChatBarPortlet.label.joinRoom");%></div>
+<div class="UIPopupWindow ExoMesseageDecorator UIDragObject JoinRoomPopup UIJoinRoom" style="position: absolute;
+    top: 150px; left: 250px; width: 550px; display: none; visibility: visible;">
+		<div class="OverflowContainer ClearFix">
+			<a class="CloseButton" title="<%=_ctx.appRes("UIChatBarPortlet.label.closeWindow");%>" onclick="eXo.communication.chatbar.webui.UIJoinRoomPopupWindow.setVisible(false);">
+			</a>
+			<span class="PopupTitle">
+				<%=_ctx.appRes("UIChatBarPortlet.label.joinRoom");%></span>
 		</div>
 		<div class="UIWindowContent">
 			<div class="PopupContent">
@@ -376,22 +343,16 @@
 				<!-- end contact -->
 			</div>
 		</div>
-    </div>
 </div>
 <!--End form join room -->
 <!-- Popup New Room -->
-<div class="UIPopupWindow UIDragObject CreateNewRoomPopup UINewRoom" style="position: absolute;
-    top: 150px; left: 250px; width: 550px; height: 150px; display: none; visibility: visible">
-    <div class="ExoMesseageDecorator">
-		<div class="OverflowContainer">
-			<div class="PopupTitleIcon">
-				<span></span>
-			</div>
-			<div class="CloseButton" title="<%=_ctx.appRes("UIChatBarPortlet.label.closeWindow");%>" onclick="eXo.communication.chatbar.webui.UICreateNewRoomPopupWindow.setVisible(false);">
-				<span></span>
-			</div>
-			<div class="PopupTitle">
-				<%=_ctx.appRes("UIChatBarPortlet.label.newRoom");%></div>
+<div class="UIPopupWindow ExoMesseageDecorator UIDragObject CreateNewRoomPopup UINewRoom" style="position: absolute;
+    top: 150px; left: 250px; width: 550px; display: none; visibility: visible">
+		<div class="OverflowContainer ClearFix">
+			<a class="CloseButton" title="<%=_ctx.appRes("UIChatBarPortlet.label.closeWindow");%>" onclick="eXo.communication.chatbar.webui.UICreateNewRoomPopupWindow.setVisible(false);">
+			</a>
+			<span class="PopupTitle">
+				<%=_ctx.appRes("UIChatBarPortlet.label.newRoom");%></span>
 		</div>
 		<div class="UIWindowContent">
 			<div class="PopupContent">
@@ -427,24 +388,19 @@
 				</form>
 			</div>
 		</div>
-    </div>
 </div>
 <!--End New Room -->
 <!--Start room config form-->
-<div class="UIPopupWindow UIDragObject RoomConfigPopup UIRoomConfig" style="position: absolute;
-    top: 150px; left: 250px; width: 550px; height: 150px; display: none; visibility: visible;">
-    <div class="ExoMesseageDecorator UINewForm">
-		<div class="OverflowContainer">
-			<div class="PopupTitleIcon">
-				<span></span>
-			</div>
-			<div class="CloseButton" title="<%=_ctx.appRes("UIChatBarPortlet.label.closeWindow");%>" onclick="eXo.communication.chatbar.webui.UIRoomConfigPopupWindow.setVisible(false);">
-				<span></span>
-			</div>
-			<div class="PopupTitle">
-				<%=_ctx.appRes("UIChatBarPortlet.label.roomConfiguration");%></div>
+<div class="UIPopupWindow ExoMesseageDecorator UINewForm UIDragObject RoomConfigPopup UIRoomConfig" style="position: absolute;
+    top: 150px; left: 250px; width: 550px; display: none; visibility: visible;">
+		<div class="OverflowContainer ClearFix">
+			<a class="CloseButton" title="<%=_ctx.appRes("UIChatBarPortlet.label.closeWindow");%>" onclick="eXo.communication.chatbar.webui.UIRoomConfigPopupWindow.setVisible(false);">
+			</a>
+			<span class="PopupTitle">
+				<%=_ctx.appRes("UIChatBarPortlet.label.roomConfiguration");%></span>
 		</div>
 		<div class="UIWindowContent">
+		<div class="PopupContent">
 			<form method="post" class="ContainerForm" action="#">
 				<div class="BoxForm">
 					<div class="BorderForm">
@@ -617,110 +573,87 @@
 					</div>
 				</div>
 			</form>
+			</div>
 		</div>
-    </div>
 </div>
 <!--end room config form -->
 <!-- Start popup messages form -->
-<div class="UIPopupWindow UIDragObject MessagesPopup"  style="position: absolute; top: 150px; left: 250px; width: 550px; display: none; visibility: visible; ">
-    <div class="ExoMessageDecorator">
-      <div class="TopLeftCornerDecorator">
-        <div class="TopRightCornerDecorator">
-          <div class="TopCenterDecorator">
-            <div class="OverflowContainer">
-              <div class="PopupTitleIcon"><span></span></div>
-              <div onclick="eXo.communication.chatbar.webui.UIPopupMessages.setVisible(false);" title="Close Window" class="CloseButton"><span></span></div>
-              <div class="PopupTitle">eXo Messages</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="MiddleLeftSideDecorator">
-        <div class="MiddleRightSideDecorator">
-          <div class="MiddleCenterDecorator">
-            <div class="UIWindowContent">
-              <div class="PopupContent">
-                <div class="UIPopupMessages">  
-                  <div class="UIHorizontalTabs">
-                    <div class="TabsContainer">
-                      <div class="UITab MessageTabDialog">
-                        <div class="DisabledTab">
-                          <div class="LeftTab">
-                            <div class="RightTab">
-                              <div class="MiddleTab"><div class="TabIcon ErrorIcon">Error</div></div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="UITab MessageTabDialog">
-                        <div class="SelectedTab">
-                          <div class="LeftTab">
-                            <div class="RightTab">
-                              <div onclick="" class="MiddleTab"><div class="TabIcon WarningIcon">Warning</div></div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="UITab MessageTabDialog">
-                        <div class="DisabledTab">
-                          <div class="LeftTab">
-                            <div class="RightTab">
-                              <div class="MiddleTab"><div class="TabIcon InfoIcon">Information</div></div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="UITabContentContainer">
-                    <div style="display: none;" class="UITabContent">
-                       <div class="PopupMessageBox">
-                          <div class="ErrorMessage">
-                              <div class="PopupMessageContainer">
-                               </div>
-                           </div>
-                        </div>
-                    </div>
-                    <div class="UITabContent">
-                       <div class="PopupMessageBox">
-                          <div class="WarningMessage">
-                              <div class="PopupMessageContainer">
-                                <div class="MessageContainer ClearFix">
-                                  <div class="PopupIcon WarningMessageIcon"><span></span></div>
-                                  <div class="PopupMessage">
-                                 </div>
-                               </div>
-                               </div>
-                           </div>
-                        </div>
-                     </div>
-                    <div style="display: none;" class="UITabContent">
-                       <div class="PopupMessageBox">
-                          <div class="InfoMessage">
-                              <div class="PopupMessageContainer">
-                               </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="MessageActionBar">
-                    <div class="UIAction">
-                		<a href="javascript:void(0);" class="ActionButton LightBlueStyle" onclick="eXo.communication.chatbar.webui.UIPopupMessages.setVisible(false);">OK</a>
-                    </div>
-                  </div>
-                </div>
-              </div>            
-            </div>
-          </div>
-        </div>
-      </div>
-      <div><span></span></div>
-      <div class="BottomLeftCornerDecorator">
-        <div class="BottomRightCornerDecorator">
-          <div class="BottomCenterDecorator"><span></span></div>
-        </div>
-      </div>
-    </div>
+<div class="UIPopupWindow ExoMessageDecorator UIDragObject MessagesPopup"  style="position: absolute; top: 150px; left: 250px; width: 550px; display: none; visibility: visible; ">
+			<div class="OverflowContainer ClearFix">
+				<a onclick="eXo.communication.chatbar.webui.UIPopupMessages.setVisible(false);" title="Close Window" class="CloseButton"></a>
+				<span class="PopupTitle">eXo Messages</span>
+			</div>
+			<div class="UIWindowContent">
+				<div class="PopupContent UIPopupMessages">
+						<div class="UIHorizontalTabs">
+							<div class="TabsContainer">
+								<div class="UITab MessageTabDialog">
+									<div class="DisabledTab">
+										<div class="LeftTab">
+											<div class="RightTab">
+												<div class="MiddleTab"><div class="TabIcon ErrorIcon">Error</div></div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="UITab MessageTabDialog">
+									<div class="SelectedTab">
+										<div class="LeftTab">
+											<div class="RightTab">
+												<div onclick="" class="MiddleTab"><div class="TabIcon WarningIcon">Warning</div></div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="UITab MessageTabDialog">
+									<div class="DisabledTab">
+										<div class="LeftTab">
+											<div class="RightTab">
+												<div class="MiddleTab"><div class="TabIcon InfoIcon">Information</div></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="UITabContentContainer">
+							<div style="display: none;" class="UITabContent">
+								 <div class="PopupMessageBox">
+										<div class="ErrorMessage">
+												<div class="PopupMessageContainer">
+												 </div>
+										 </div>
+									</div>
+							</div>
+							<div class="UITabContent">
+								 <div class="PopupMessageBox">
+										<div class="WarningMessage">
+												<div class="PopupMessageContainer">
+													<div class="MessageContainer ClearFix">
+														<div class="PopupIcon WarningMessageIcon"><span></span></div>
+														<div class="PopupMessage">
+													 </div>
+												 </div>
+												 </div>
+										 </div>
+									</div>
+							 </div>
+							<div style="display: none;" class="UITabContent">
+								 <div class="PopupMessageBox">
+										<div class="InfoMessage">
+												<div class="PopupMessageContainer">
+												 </div>
+										 </div>
+									</div>
+							 </div>
+						</div>
+						<div class="MessageActionBar">
+							<div class="UIAction">
+							<a href="javascript:void(0);" class="ActionButton LightBlueStyle" onclick="eXo.communication.chatbar.webui.UIPopupMessages.setVisible(false);">OK</a>
+							</div>
+						</div>
+				</div>            
+			</div>
   </div>
 <!-- end popup messages form -->
 <!-- Start template area -->
@@ -859,7 +792,7 @@
 					<a href="#" class="Label DownArrow1Icon"><%=_ctx.appRes("UIChatBarPortlet.label.history") %></a>
 				  
 				  <% /*Begin Popup Menu*/ %>
-				  <ul class="UIRightClickPopupMenu" style="display: none;">
+				  <ul class="UIRightClickPopupMenu UIContextMenuContainer" style="display: none;">
 						<li class="MenuItem" onclick="eXo.communication.chatbar.webui.UIChatWindow.getMessageHistory(event,0);" href="#">
 						  <a href="#" class="ItemIcon"><%=_ctx.appRes("UIChatBarPortlet.label.today");%></a>
 						</li>
@@ -917,7 +850,7 @@
 					<a href="#" class="Label DownArrow1Icon"><%=_ctx.appRes("UIChatBarPortlet.label.history") %></a>
 				  
 				  <% /*Begin Popup Menu*/ %>
-					  <ul class="UIRightClickPopupMenu" style="display: none;">
+					  <ul class="UIRightClickPopupMenu UIContextMenuContainer" style="display: none;">
 						<li class="MenuItem" onclick="eXo.communication.chatbar.webui.UIChatWindow.getMessageHistory(event,0);" href="#">
 						  <a href="#" class="ItemIcon"><%=_ctx.appRes("UIChatBarPortlet.label.today");%></a>
 						</li>

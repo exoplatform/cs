@@ -210,8 +210,7 @@ UIStateManager.prototype._ajaxUpdate = function(ajaxHandler, state, requestObjec
         this.data = _data;
         if (action == this.RELOAD_DATA_AJAX_ACTION) {
           this.reloadAllWindows();
-          eXo.communication.chatbar.webui.UIChatWindow.rootNode.style.width = _data.UIChatWindow.width;
-          eXo.communication.chatbar.webui.UIChatWindow.rootNode.style.height = _data.UIChatWindow.height;
+          eXo.communication.chatbar.webui.UIChatWindow.rootNode.style.width = _data.UIChatWindow.width;          
           eXo.communication.chatbar.webui.UIChatWindow.rootNode.style.top = _data.UIChatWindow.top;
           eXo.communication.chatbar.webui.UIChatWindow.rootNode.style.left = _data.UIChatWindow.left;
         }
