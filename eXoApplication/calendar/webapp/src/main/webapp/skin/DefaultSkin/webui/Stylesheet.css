@@ -266,6 +266,19 @@
   margin: 0px;
 }
 
+
+.UICalendarPortlet .UIGrid {
+	border-collapse: collapse;
+}
+
+.UICalendarPortlet .UIGrid td {
+	border: none;
+	vertical-align: top;
+	border-left: 1px solid #c7c7c7;
+	border-right: 1px solid #c7c7c7;
+	border-collapse: collapse;
+}
+
 .UICalendarPortlet .UIForm .UIFormGrid td.FieldComponent {
   white-space: nowrap;
 }

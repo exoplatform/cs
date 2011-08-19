@@ -51,8 +51,10 @@
   border-left: none ;
 }
 
-.UIDayView .TdTime{
+.UICalendarPortlet .UIDayView .TdTime{
   text-align: right;
+  border-left: 1px solid #c7c7c7;
+  border-right: 1px solid #c7c7c7;
   width: 55px;
   -moz-user-select: none ;
 }
@@ -238,21 +240,26 @@
    color:#0796d2;
 }
 
-.UIWeekView .TdLine {
+.UICalendarPortlet .UIWeekView .TdLine {
   border-top:  1px solid #c7c7c7;
+  border-left: 1px solid #c7c7c7;
+  border-right: 1px solid #c7c7c7;
   width: 13.2%;
   *width: 14%;
 }
 
-.UIWeekView .TdDotLine  {
+.UICalendarPortlet .UIWeekView .TdDotLine  {
   border-top:  1px dotted #c7c7c7;
+  border-left: 1px solid #c7c7c7;
+  border-right: 1px solid #c7c7c7;
   width: 13.2%;
   *width: 14%;
 }
 
-.UIWeekView .TdTime {
-  text-align: right; /* orientation=lt */
-  text-align: left; /* orientation=rt */
+.UICalendarPortlet .UIWeekView .TdTime {
+  text-align: right;
+  border-left: 1px solid #c7c7c7;
+  border-right: 1px solid #c7c7c7;
   width: 55px;
   -moz-user-select : none ;
 }
@@ -546,7 +553,7 @@
   *width: auto;
 }
 
-.UIYearView .UIGrid td {
+.UICalendarPortlet .UIYearView .UIGrid td {
   border-top: 1px solid #c7c7c7;
 }
 
