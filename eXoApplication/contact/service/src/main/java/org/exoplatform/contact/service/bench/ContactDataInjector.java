@@ -17,6 +17,7 @@
 package org.exoplatform.contact.service.bench;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.Stack;
@@ -41,8 +42,6 @@ import org.exoplatform.services.security.ConversationState;
 public class ContactDataInjector extends DataInjector {
 
   private static Log log = ExoLogger.getExoLogger(ContactDataInjector.class);
-  
-  private static String markedAddrBookId = "MarkedAddressBook123456789";
   
   private ContactService contactService;
   
@@ -116,17 +115,10 @@ public class ContactDataInjector extends DataInjector {
   public Log getLog() {
     return log;
   }
-
-  @Override
-  public boolean isInitialized() {
-    // allow multi-injecting.
-    return false;
-  }
-
+  
   /* (non-Javadoc)
    * @see org.exoplatform.services.bench.DataInjector#initParams(org.exoplatform.container.xml.InitParams)
    */
-  @Override
   public void initParams(InitParams initParams) {
     ValueParam param = initParams.getValueParam("mA");
     if (param != null)
@@ -140,7 +132,7 @@ public class ContactDataInjector extends DataInjector {
   }
 
   @Override
-  public void inject() throws Exception {
+  public void inject(HashMap<String, String> queryParams) throws Exception {
     String userId = ConversationState.getCurrent().getIdentity().getUserId();
     catsStack.clear();
     List<AddressBook> addressBooks = generateAddressBooks();
@@ -162,11 +154,16 @@ public class ContactDataInjector extends DataInjector {
   }
 
   @Override
-  public void reject() throws Exception {
+  public void reject(HashMap<String, String> queryParams) throws Exception {
     String userId = ConversationState.getCurrent().getIdentity().getUserId();
     while (!catsStack.isEmpty()) {
       contactService.removeAddressBook(userId, catsStack.pop());
     }
+  }
+
+  @Override
+  public Object execute(HashMap<String, String> arg0) throws Exception {
+    return new Object();
   }
   
 }

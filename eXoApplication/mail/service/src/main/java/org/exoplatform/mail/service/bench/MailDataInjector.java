@@ -17,6 +17,7 @@
 package org.exoplatform.mail.service.bench;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.Stack;
@@ -150,12 +151,6 @@ public class MailDataInjector extends DataInjector {
     return log;
   }
 
-  @Override
-  public boolean isInitialized() {
-    return false;
-  }
-
-  @Override
   public void initParams(InitParams initParams) {
     ValueParam param = initParams.getValueParam("mA");
     if (param != null) 
@@ -172,7 +167,7 @@ public class MailDataInjector extends DataInjector {
   }
 
   @Override
-  public void inject() throws Exception {
+  public void inject(HashMap<String, String> queryParams) throws Exception {
     String username = ConversationState.getCurrent().getIdentity().getUserId();
     List<Account> accounts = generateAccounts();
     int accSize = accounts.size();
@@ -213,7 +208,7 @@ public class MailDataInjector extends DataInjector {
   }
 
   @Override
-  public void reject() throws Exception {
+  public void reject(HashMap<String, String> queryParams) throws Exception {
     String username = ConversationState.getCurrent().getIdentity().getUserId();
     while (!accountsStack.isEmpty()) {
       String accId = accountsStack.pop();
@@ -221,5 +216,10 @@ public class MailDataInjector extends DataInjector {
       mailService.removeAccount(username, accId);
     }
     log.info("\tAccounts have been removed successfully!");
+  }
+
+  @Override
+  public Object execute(HashMap<String, String> arg0) throws Exception {
+    return new Object();
   }
 }

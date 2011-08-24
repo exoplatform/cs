@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -146,7 +147,6 @@ public class CalendarDataInjector extends DataInjector {
     }
   }
 
-  @Override
   public void initParams(InitParams initParams) {
     maxCategories = getParam(initParams, "mCt", maxCategories);
     maxEventCategories = getParam(initParams, "mEcat", maxEventCategories);
@@ -159,7 +159,7 @@ public class CalendarDataInjector extends DataInjector {
   }
 
   @Override
-  public void inject() throws Exception {
+  public void inject(HashMap<String, String> queryParams) throws Exception {
     log.info("Start inject datas for calendar....");
     setHistoryInject();
     if ("all".equals(typeOfInject)) {
@@ -172,11 +172,6 @@ public class CalendarDataInjector extends DataInjector {
     } else if (currentUser.length() > 0) {
       initPrivateCalendar();
     }
-  }
-
-  @Override
-  public boolean isInitialized() {
-    return false;
   }
 
   private void removePrivateData() throws Exception {
@@ -218,7 +213,7 @@ public class CalendarDataInjector extends DataInjector {
   }
 
   @Override
-  public void reject() throws Exception {
+  public void reject(HashMap<String, String> queryParams) throws Exception {
     setHistoryInject();
     if ("all".equals(typeOfInject)) {
       // remove public
@@ -565,5 +560,10 @@ public class CalendarDataInjector extends DataInjector {
 
   private boolean isEmpty(String s) {
     return (s == null || s.trim().length() <= 0);
+  }
+
+  @Override
+  public Object execute(HashMap<String, String> arg0) throws Exception {
+    return new Object();
   }
 }
