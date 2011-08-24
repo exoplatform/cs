@@ -222,8 +222,8 @@ public class CalendarUtils {
     options.add(new SelectItemOption<String>(CalendarUtils.PRIVATE_CALENDARS, "")) ;
     List<org.exoplatform.calendar.service.Calendar> calendars = calendarService.getUserCalendars(username, true) ;
     for(org.exoplatform.calendar.service.Calendar c : calendars) {
-      if (c.getId().equals(Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
-        String newName = CalendarUtils.getResourceBundle("UIEventForm.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+      if (c.getId().equals(Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.defaultCalendarName)) {
+        String newName = CalendarUtils.getResourceBundle("UIEventForm.label." + NewUserListener.defaultCalendarId);
         c.setName(newName);
       }
       options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE  + c.getName(), CalendarUtils.PRIVATE_TYPE + CalendarUtils.COLON + c.getId())) ;
@@ -233,8 +233,8 @@ public class CalendarUtils {
       options.add(new SelectItemOption<String>(CalendarUtils.SHARED_CALENDARS, "")) ;
       for(org.exoplatform.calendar.service.Calendar c : gcd.getCalendars()) {
         if(CalendarUtils.canEdit(null, Utils.getEditPerUsers(c), username)){
-          if (c.getId().equals(Utils.getDefaultCalendarId(c.getCalendarOwner())) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
-            String newName = CalendarUtils.getResourceBundle("UIEventForm.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+          if (c.getId().equals(Utils.getDefaultCalendarId(c.getCalendarOwner())) && c.getName().equals(NewUserListener.defaultCalendarName)) {
+            String newName = CalendarUtils.getResourceBundle("UIEventForm.label." + NewUserListener.defaultCalendarId);
             c.setName(newName);
           }
           options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE  + c.getName(), CalendarUtils.SHARED_TYPE + CalendarUtils.COLON + c.getId())) ;

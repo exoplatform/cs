@@ -33,7 +33,12 @@ import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.RssData;
 import org.exoplatform.calendar.service.Utils;
+import org.exoplatform.calendar.service.impl.NewUserListener;
+import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.services.jcr.util.IdGenerator;
+import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.User;
 
 /**
  * Created by The eXo Platform SARL
@@ -41,24 +46,77 @@ import org.exoplatform.services.jcr.util.IdGenerator;
  *          hung.nguyen@exoplatform.com
  * July 3, 2008  
  */
-
-
-public class TestCalendarService extends BaseCalendarServiceTestCase{
+public class TestCalendarService extends BaseCalendarServiceTestCase {
+  public static final String COMA     = ",".intern();
+  
+  private OrganizationService organizationService;
+  
   private CalendarService calendarService_ ;
+  
   private static String  username = "root";
-
-  //private JCRDataStorage datastorage;
 
   public TestCalendarService() throws Exception {
     super();
     calendarService_ = (CalendarService) container.getComponentInstanceOfType(CalendarService.class);
-    //datastorage = (JCRDataStorage) container.getComponentInstanceOfType(JCRDataStorage.class);
+    organizationService = (OrganizationService) container.getComponentInstanceOfType(OrganizationService.class);
   }
 
   public void setUp() throws Exception {
     super.setUp();
   }
+  
+  public void testDefaultData() throws Exception {
+    String defaultEventCategoriesConfig = "Birthday,Memo,Wedding,DayOff";
+    String defaultCalendarId = "NewCalendarId";
+    String defaultCalendarCategoryId = "NewCalendarCategoryId";
 
+    // Create valueParam
+    ValueParam defaultCalendarIdParam = new ValueParam();
+    ValueParam defaultCalendarCategoryIdParam = new ValueParam();
+    ValueParam defaultEventCategoriesConfigParam = new ValueParam();
+    defaultCalendarIdParam.setValue(defaultCalendarId);
+    defaultCalendarCategoryIdParam.setValue(defaultCalendarCategoryId);
+    defaultEventCategoriesConfigParam.setValue(defaultEventCategoriesConfig);
+
+    // Init config
+    InitParams params = new InitParams();
+    params.put(NewUserListener.CALENDAR_CATEGORY, defaultCalendarCategoryIdParam);
+    params.put(NewUserListener.CALENDAR_NAME, defaultCalendarIdParam);
+    params.put(NewUserListener.EVENT_CATEGORIES, defaultEventCategoriesConfigParam);
+    NewUserListener newUserListener = new NewUserListener(calendarService_, params);
+    organizationService.addListenerPlugin(newUserListener);
+
+    // Create new user
+    String newUserName = "testUser";
+    User newUser = organizationService.getUserHandler().createUserInstance(newUserName);
+    organizationService.getUserHandler().createUser(newUser, true);
+
+    // Create event category list from config
+    String[] configValues = defaultEventCategoriesConfig.split(COMA);
+    List<String> defaultEventCategories = new ArrayList<String>();
+    defaultEventCategories.add(NewUserListener.DEFAULT_EVENTCATEGORY_ID_ALL);
+    for (int i = 0; i < configValues.length; i++) {
+      defaultEventCategories.add(configValues[i].trim());
+    }
+
+    // Test default calendar category
+    List<GroupCalendarData> categories = calendarService_.getCalendarCategories(newUserName, true);
+    assertEquals(1, categories.size());
+    assertEquals(defaultCalendarCategoryId, categories.get(0).getId());
+
+    // Test default calendar
+    List<Calendar> calendars = calendarService_.getUserCalendars(newUserName, true);
+    assertEquals(1, calendars.size());
+    assertEquals(newUserName + "_" + defaultCalendarId, calendars.get(0).getId());
+
+    // Test default event categories
+    List<EventCategory> eventCategories = calendarService_.getEventCategories(newUserName);
+    assertEquals(defaultEventCategories.size(), eventCategories.size());
+    for (EventCategory eventCategory : eventCategories) {
+      assertTrue(defaultEventCategories.contains(eventCategory.getId()));
+    }
+  }
+    
   public void testCalendar() throws Exception {
     CalendarCategory calCategory = new CalendarCategory() ;
     calCategory.setName("categoryName") ;
@@ -128,8 +186,6 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     setting.setLocation("location") ;
     calendarService_.saveCalendarSetting(username, setting) ;
     assertEquals("url",calendarService_.getCalendarSetting(username).getBaseURL()) ;
-
-
   }
 
   public void testSharedCalendar() throws Exception {

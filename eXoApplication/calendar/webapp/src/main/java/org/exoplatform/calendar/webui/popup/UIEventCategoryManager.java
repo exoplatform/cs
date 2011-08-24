@@ -100,8 +100,18 @@ public class UIEventCategoryManager extends UIContainer implements UIPopupCompon
     List<EventCategory>  categories = calService.getEventCategories(username) ;
     defaultEventCategoriesMap.clear();
     for (EventCategory category : categories) {
-      if (category.getId().contains("defaultEventCategoryId") && category.getName().contains("defaultEventCategoryName")) {
-        String newName = CalendarUtils.getResourceBundle("UICalendarView.label." + category.getId());
+      // Check if EventCategory is default event category
+      boolean isDefaultEventCategory = false;
+      for (int i = 0; i < NewUserListener.defaultEventCategoryIds.length; i++) {
+        if (category.getId().equals(NewUserListener.defaultEventCategoryIds[i])
+            && category.getName().equals(NewUserListener.defaultEventCategoryNames[i])) {
+          isDefaultEventCategory = true;
+          break;
+        }
+      }
+      
+      if (isDefaultEventCategory) {
+        String newName = CalendarUtils.getResourceBundle("UICalendarView.label." + category.getId(), category.getId());
         category.setName(newName);
         defaultEventCategoriesMap.put(category.getId(), newName);
       }

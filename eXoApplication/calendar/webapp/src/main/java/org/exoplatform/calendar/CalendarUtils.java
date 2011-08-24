@@ -49,7 +49,6 @@ import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.service.impl.NewUserListener;
-import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.popup.UIAddressForm.ContactData;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
@@ -596,8 +595,8 @@ public class CalendarUtils {
     SelectOptionGroup privGrp = new SelectOptionGroup(CalendarUtils.PRIVATE_CALENDARS);
     List<org.exoplatform.calendar.service.Calendar> calendars = calendarService.getUserCalendars(username, true) ;
     for(org.exoplatform.calendar.service.Calendar c : calendars) {
-      if (c.getId().equals(Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
-        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+      if (c.getId().equals(Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.defaultCalendarName)) {
+        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
         c.setName(newName);
       }
       if (!hash.containsKey(c.getId())) {
@@ -612,8 +611,8 @@ public class CalendarUtils {
       SelectOptionGroup sharedGrp = new SelectOptionGroup(CalendarUtils.SHARED_CALENDARS);
       for(org.exoplatform.calendar.service.Calendar c : gcd.getCalendars()) {
         if(CalendarUtils.canEdit(null, Utils.getEditPerUsers(c), username)){
-          if (c.getId().equals(Utils.getDefaultCalendarId(c.getCalendarOwner())) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
-            String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+          if (c.getId().equals(Utils.getDefaultCalendarId(c.getCalendarOwner())) && c.getName().equals(NewUserListener.defaultCalendarName)) {
+            String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
             c.setName(newName);
           }
           String owner = "" ;
@@ -657,8 +656,8 @@ public class CalendarUtils {
     if(groupPrivateCalendars != null) {
       SelectOptionGroup privGrp = new SelectOptionGroup(CalendarUtils.PRIVATE_CALENDARS);
       for(GroupCalendarData group: groupPrivateCalendars){
-        if (group.getId().equals(NewUserListener.DEFAULT_CALENDAR_CATEGORYID) && group.getName().equals(NewUserListener.DEFAULT_CALENDAR_CATEGORYNAME)) {
-          String newName = CalendarUtils.getResourceBundle("UICalendars.label." + group.getId());
+        if (group.getId().equals(NewUserListener.defaultCalendarCategoryId) && group.getName().equals(NewUserListener.defaultCalendarCategoryName)) {
+          String newName = CalendarUtils.getResourceBundle("UICalendars.label." + group.getId(), group.getId());
           group.setName(newName);
         }        
         privGrp.addOption(new SelectOption(group.getName(),CalendarUtils.PRIVATE_TYPE + CalendarUtils.COLON + group.getId()));
@@ -693,8 +692,8 @@ public class CalendarUtils {
     String username = getCurrentUser() ;
     List<org.exoplatform.calendar.service.Calendar> calendars = calendarService.getUserCalendars(username, true) ;
     for(org.exoplatform.calendar.service.Calendar c : calendars) {
-      if (c.getId().equals(Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
-        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+      if (c.getId().equals(Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.defaultCalendarName)) {
+        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
         c.setName(newName);
       }
       list.add(c) ;
@@ -703,8 +702,8 @@ public class CalendarUtils {
     if(gcd != null) {
       for(org.exoplatform.calendar.service.Calendar c : gcd.getCalendars()) {
         if(CalendarUtils.canEdit(null, Utils.getEditPerUsers(c), username)){
-          if (c.getId().equals(Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
-            String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+          if (c.getId().equals(Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.defaultCalendarName)) {
+            String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
             c.setName(newName);
           }
           list.add(c) ;
@@ -878,13 +877,17 @@ public class CalendarUtils {
   }
 
   public static String getResourceBundle(String key) {
+    return getResourceBundle(key, null);
+  }
+  
+  public static String getResourceBundle(String key, String defaultValue) {
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
     ResourceBundle res = context.getApplicationResourceBundle() ;
     try {
-      return  res.getString(key);
-    } catch (MissingResourceException e) {      
-      e.printStackTrace() ;
-      return null ;
+      return res.getString(key);
+    } catch (MissingResourceException e) {
+      log.warn("Can not find the resource for key: " + key);
+      return defaultValue;
     }
   }
 

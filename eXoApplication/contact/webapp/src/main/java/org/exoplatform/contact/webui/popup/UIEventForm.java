@@ -31,6 +31,7 @@ import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.service.Utils;
+import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.contact.CalendarUtils;
 import org.exoplatform.contact.webui.Selector;
 import org.exoplatform.container.PortalContainer;
@@ -215,7 +216,22 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<EventCategory> eventCategories = calendarService.getEventCategories(Util.getPortalRequestContext().getRemoteUser()) ;
     for(EventCategory category : eventCategories) {
-      options.add(new SelectItemOption<String>(category.getName(), category.getId())) ;
+      // Check if EventCategory is default event category
+      boolean isDefaultEventCategory = false;
+      for (int i = 0; i < NewUserListener.defaultEventCategoryIds.length; i++) {
+        if (category.getId().equals(NewUserListener.defaultEventCategoryIds[i])
+            && category.getName().equals(NewUserListener.defaultEventCategoryNames[i])) {
+          isDefaultEventCategory = true;
+          break;
+        }
+      }
+      
+      if (isDefaultEventCategory) {
+        String newName = CalendarUtils.getResourceBundle("UICalendarView.label." + category.getId(), category.getId());
+        options.add(new SelectItemOption<String>(newName, category.getId())) ;
+      } else {
+        options.add(new SelectItemOption<String>(category.getName(), category.getId())) ;        
+      }
     }
     return options ;
   }

@@ -252,7 +252,7 @@ public class Utils {
   } 
   
   public static String getDefaultCalendarId(String username) {
-    return new StringBuilder(username).append("_").append(NewUserListener.DEFAULT_CALENDAR_ID).toString();
+    return new StringBuilder(username).append("_").append(NewUserListener.defaultCalendarId).toString();
   }
   
   public static PortalContainer getPortalContainer(JobExecutionContext context){

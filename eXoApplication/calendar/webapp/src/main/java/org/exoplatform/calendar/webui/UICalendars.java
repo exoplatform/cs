@@ -173,15 +173,15 @@ public class UICalendars extends UIForm  {
     boolean dontShowAll = false;
     List<GroupCalendarData> groupCalendars = calendarService.getCalendarCategories(username, dontShowAll) ;
     for(GroupCalendarData group : groupCalendars) {
-      if (group.getId().equals(NewUserListener.DEFAULT_CALENDAR_CATEGORYID) && group.getName().equals(NewUserListener.DEFAULT_CALENDAR_CATEGORYNAME)) {
-        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + group.getId());
+      if (group.getId().equals(NewUserListener.defaultCalendarCategoryId) && group.getName().equals(NewUserListener.defaultCalendarCategoryName)) {
+        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + group.getId(), group.getId());
         group.setName(newName);
       }      
       List<Calendar> calendars = group.getCalendars() ;
       if(calendars != null) {
         for(Calendar calendar : calendars) {
-          if (calendar.getId().equals(Utils.getDefaultCalendarId(username)) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
-            String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+          if (calendar.getId().equals(Utils.getDefaultCalendarId(username)) && calendar.getName().equals(NewUserListener.defaultCalendarName)) {
+            String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
             calendar.setName(newName);
           }
           colorMap_.put(Calendar.TYPE_PRIVATE + CalendarUtils.COLON + calendar.getId(), calendar.getCalendarColor()) ;
@@ -249,8 +249,8 @@ public class UICalendars extends UIForm  {
     if(groupCalendars != null) {
       List<Calendar> calendars = groupCalendars.getCalendars() ;
       for(Calendar calendar : calendars) {
-        if (calendar.getId().equals(Utils.getDefaultCalendarId(calendar.getCalendarOwner())) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
-          String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+        if (calendar.getId().equals(Utils.getDefaultCalendarId(calendar.getCalendarOwner())) && calendar.getName().equals(NewUserListener.defaultCalendarName)) {
+          String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
           calendar.setName(newName);
         }
         String color = map.get(calendar.getId()) ;
@@ -719,8 +719,8 @@ public class UICalendars extends UIForm  {
         if(gCalendarData != null) { 
           calendar = gCalendarData.getCalendarById(selectedCalendarId) ;
           if(calendar != null && !CalendarUtils.isEmpty(calendar.getCalendarOwner())){
-            if (calendar.getId().equals(Utils.getDefaultCalendarId(currentUser)) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
-              String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+            if (calendar.getId().equals(Utils.getDefaultCalendarId(currentUser)) && calendar.getName().equals(NewUserListener.defaultCalendarName)) {
+              String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
               calendar.setName(newName);
             }
             calendar.setName(calendar.getCalendarOwner() + "-" + calendar.getName()) ;
@@ -914,8 +914,8 @@ public class UICalendars extends UIForm  {
       CalendarService calService = CalendarUtils.getCalendarService() ;
       String username = CalendarUtils.getCurrentUser() ;
       Calendar cal = calService.getUserCalendar(username, selectedCalendarId) ;
-      if (cal.getId().equals(Utils.getDefaultCalendarId(username)) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
-        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+      if (cal.getId().equals(Utils.getDefaultCalendarId(username)) && cal.getName().equals(NewUserListener.defaultCalendarName)) {
+        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
         cal.setName(newName);
       }
       uiAddNewEditPermission.init(null, cal, true) ;

@@ -1373,11 +1373,11 @@
       <dateFrom>Từ</dateFrom>
       <dateTo>Đến</dateTo>
       <defaultEventCategoryIdAll>Tất cả</defaultEventCategoryIdAll>
-      <defaultEventCategoryIdMeeting>Họp</defaultEventCategoryIdMeeting>
-      <defaultEventCategoryIdCalls>Cuộc gọi</defaultEventCategoryIdCalls>
-      <defaultEventCategoryIdClients>Khách</defaultEventCategoryIdClients>
-      <defaultEventCategoryIdHoliday>Ngày nghỉ</defaultEventCategoryIdHoliday>
-      <defaultEventCategoryIdAnniversary>Lễ kỷ niệm</defaultEventCategoryIdAnniversary>
+      <Meeting>Họp</Meeting>
+      <Calls>Cuộc gọi</Calls>
+      <Clients>Khách</Clients>
+      <Holiday>Ngày nghỉ</Holiday>
+      <Anniversary>Lễ kỷ niệm</Anniversary>
       <defaultCalendarCategoryId>Nhóm của tôi</defaultCalendarCategoryId>
       <defaultCalendarId>Mặc định</defaultCalendarId>
     </label>

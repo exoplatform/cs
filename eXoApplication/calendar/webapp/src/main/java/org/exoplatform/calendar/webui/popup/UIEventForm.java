@@ -42,6 +42,7 @@ import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Reminder;
+import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
@@ -371,8 +372,18 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<EventCategory> eventCategories = calendarService.getEventCategories(CalendarUtils.getCurrentUser()) ;
     for(EventCategory category : eventCategories) {
-      if (category.getId().contains("defaultEventCategoryId") && category.getName().contains("defaultEventCategoryName")) {
-        String newName = CalendarUtils.getResourceBundle("UICalendarView.label." + category.getId());
+      // Check if EventCategory is default event category
+      boolean isDefaultEventCategory = false;
+      for (int i = 0; i < NewUserListener.defaultEventCategoryIds.length; i++) {
+        if (category.getId().equals(NewUserListener.defaultEventCategoryIds[i])
+            && category.getName().equals(NewUserListener.defaultEventCategoryNames[i])) {
+          isDefaultEventCategory = true;
+          break;
+        }
+      }
+      
+      if (isDefaultEventCategory) {
+        String newName = CalendarUtils.getResourceBundle("UICalendarView.label." + category.getId(), category.getId());
         options.add(new SelectItemOption<String>(newName, category.getId())) ;
       } else {
         options.add(new SelectItemOption<String>(category.getName(), category.getId())) ;        

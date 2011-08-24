@@ -82,8 +82,8 @@ public class UICalendarCategoryManager extends UIContainer implements UIPopupCom
     String username = CalendarUtils.getCurrentUser() ;
     List<CalendarCategory> categories = calService.getCategories(username) ;
     for (CalendarCategory calendarCategory : categories)
-      if (calendarCategory.getId().equals(NewUserListener.DEFAULT_CALENDAR_CATEGORYID) && calendarCategory.getName().equals(NewUserListener.DEFAULT_CALENDAR_CATEGORYNAME)) {
-        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_CATEGORYID);
+      if (calendarCategory.getId().equals(NewUserListener.defaultCalendarCategoryId) && calendarCategory.getName().equals(NewUserListener.defaultCalendarCategoryName)) {
+        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarCategoryId, NewUserListener.defaultCalendarCategoryId);
         calendarCategory.setName(newName);
       }
     UIGrid uiGrid = getChild(UIGrid.class) ; 

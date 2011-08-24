@@ -1,0 +1,2330 @@
+Index: eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/popup/UIEventForm.java
+===================================================================
+--- eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/popup/UIEventForm.java	(revision 72783)
++++ eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/popup/UIEventForm.java	(working copy)
+@@ -212,8 +212,8 @@
+     SelectOptionGroup privGrp = new SelectOptionGroup("privateCalendar");
+     List<org.exoplatform.calendar.service.Calendar> calendars = calendarService.getUserCalendars(username, true) ;
+     for(org.exoplatform.calendar.service.Calendar c : calendars) {
+-      if (c.getId().equals(org.exoplatform.calendar.service.Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+-        String newName = CalendarUtils.getResourceBundle("UIEventForm.label." + NewUserListener.DEFAULT_CALENDAR_ID);
++      if (c.getId().equals(org.exoplatform.calendar.service.Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.defaultCalendarName)) {
++        String newName = CalendarUtils.getResourceBundle("UIEventForm.label." + NewUserListener.defaultCalendarId);
+         c.setName(newName);
+       }
+       privGrp.addOption(new SelectOption(c.getName(), CalendarUtils.PRIVATE_TYPE + CalendarUtils.COLON + c.getId())) ;
+@@ -225,8 +225,8 @@
+       SelectOptionGroup sharedGrp = new SelectOptionGroup("sharedCalendar");
+       for(org.exoplatform.calendar.service.Calendar c : gcd.getCalendars()) {
+         if(CalendarUtils.canEdit(null, org.exoplatform.calendar.service.Utils.getEditPerUsers(c), username)){
+-          if (c.getId().equals(org.exoplatform.calendar.service.Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+-            String newName = CalendarUtils.getResourceBundle("UIEventForm.label." + NewUserListener.DEFAULT_CALENDAR_ID);
++          if (c.getId().equals(org.exoplatform.calendar.service.Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.defaultCalendarName)) {
++            String newName = CalendarUtils.getResourceBundle("UIEventForm.label." + NewUserListener.defaultCalendarId);
+             c.setName(newName);
+           }
+           String owner = "" ;
+@@ -260,7 +260,17 @@
+     CalendarService calendarService = CalendarUtils.getCalendarService() ;
+     List<EventCategory> eventCategories = calendarService.getEventCategories(Util.getPortalRequestContext().getRemoteUser()) ;
+     for(EventCategory category : eventCategories) {
+-      if (category.getId().contains("defaultEventCategoryId") && category.getName().contains("defaultEventCategoryName")) {
++      // Check if EventCategory is default event category
++      boolean isDefaultEventCategory = false;
++      for (int i = 0; i < NewUserListener.defaultEventCategoryIds.length; i++) {
++        if (category.getId().equals(NewUserListener.defaultEventCategoryIds[i])
++            && category.getName().equals(NewUserListener.defaultEventCategoryNames[i])) {
++          isDefaultEventCategory = true;
++          break;
++        }
++      }
++      
++      if (isDefaultEventCategory) {
+         String newName = CalendarUtils.getResourceBundle("UIEventForm.label." + category.getId());
+         options.add(new SelectItemOption<String>(newName, category.getId())) ;
+       } else {
+Index: eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/CalendarUtils.java
+===================================================================
+--- eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/CalendarUtils.java	(revision 72783)
++++ eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/CalendarUtils.java	(working copy)
+@@ -222,8 +222,8 @@
+     options.add(new SelectItemOption<String>(CalendarUtils.PRIVATE_CALENDARS, "")) ;
+     List<org.exoplatform.calendar.service.Calendar> calendars = calendarService.getUserCalendars(username, true) ;
+     for(org.exoplatform.calendar.service.Calendar c : calendars) {
+-      if (c.getId().equals(Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+-        String newName = CalendarUtils.getResourceBundle("UIEventForm.label." + NewUserListener.DEFAULT_CALENDAR_ID);
++      if (c.getId().equals(Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.defaultCalendarName)) {
++        String newName = CalendarUtils.getResourceBundle("UIEventForm.label." + NewUserListener.defaultCalendarId);
+         c.setName(newName);
+       }
+       options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE  + c.getName(), CalendarUtils.PRIVATE_TYPE + CalendarUtils.COLON + c.getId())) ;
+@@ -233,8 +233,8 @@
+       options.add(new SelectItemOption<String>(CalendarUtils.SHARED_CALENDARS, "")) ;
+       for(org.exoplatform.calendar.service.Calendar c : gcd.getCalendars()) {
+         if(CalendarUtils.canEdit(null, Utils.getEditPerUsers(c), username)){
+-          if (c.getId().equals(Utils.getDefaultCalendarId(c.getCalendarOwner())) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+-            String newName = CalendarUtils.getResourceBundle("UIEventForm.label." + NewUserListener.DEFAULT_CALENDAR_ID);
++          if (c.getId().equals(Utils.getDefaultCalendarId(c.getCalendarOwner())) && c.getName().equals(NewUserListener.defaultCalendarName)) {
++            String newName = CalendarUtils.getResourceBundle("UIEventForm.label." + NewUserListener.defaultCalendarId);
+             c.setName(newName);
+           }
+           options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE  + c.getName(), CalendarUtils.SHARED_TYPE + CalendarUtils.COLON + c.getId())) ;
+Index: eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_de.properties
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_de.properties	(revision 72783)
++++ eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_de.properties	(working copy)
+@@ -986,11 +986,11 @@
+ UIEventForm.optionGroup.label.publicCalendar=Gruppenkalender
+ 
+ UIEventForm.label.defaultEventCategoryIdAll=All
+-UIEventForm.label.defaultEventCategoryIdMeeting=Meeting
+-UIEventForm.label.defaultEventCategoryIdCalls=Calls
+-UIEventForm.label.defaultEventCategoryIdClients=Clients
+-UIEventForm.label.defaultEventCategoryIdHoliday=Holiday
+-UIEventForm.label.defaultEventCategoryIdAnniversary=Anniversary
++UIEventForm.label.Meeting=Meeting
++UIEventForm.label.Calls=Calls
++UIEventForm.label.Clients=Clients
++UIEventForm.label.Holiday=Holiday
++UIEventForm.label.Anniversary=Anniversary
+ 
+ 
+ UIEventForm.label.defaultCalendarCategoryId=My group
+Index: eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_nl.properties
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_nl.properties	(revision 72783)
++++ eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_nl.properties	(working copy)
+@@ -985,11 +985,11 @@
+ UIEventForm.optionGroup.label.publicCalendar=Groep kalenders
+ 
+ UIEventForm.label.defaultEventCategoryIdAll=All
+-UIEventForm.label.defaultEventCategoryIdMeeting=Meeting
+-UIEventForm.label.defaultEventCategoryIdCalls=Calls
+-UIEventForm.label.defaultEventCategoryIdClients=Clients
+-UIEventForm.label.defaultEventCategoryIdHoliday=Holiday
+-UIEventForm.label.defaultEventCategoryIdAnniversary=Anniversary
++UIEventForm.label.Meeting=Meeting
++UIEventForm.label.Calls=Calls
++UIEventForm.label.Clients=Clients
++UIEventForm.label.Holiday=Holiday
++UIEventForm.label.Anniversary=Anniversary
+ 
+ 
+ UIEventForm.label.defaultCalendarCategoryId=My group
+Index: eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_it.properties
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_it.properties	(revision 72783)
++++ eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_it.properties	(working copy)
+@@ -825,11 +825,11 @@
+ UIEventForm.optionGroup.label.sharedCalendar=Calendari condivisi
+ UIEventForm.optionGroup.label.publicCalendar=Calendari di gruppo
+ UIEventForm.label.defaultEventCategoryIdAll=Tutti
+-UIEventForm.label.defaultEventCategoryIdMeeting=Incontri
+-UIEventForm.label.defaultEventCategoryIdCalls=Chiamate
+-UIEventForm.label.defaultEventCategoryIdClients=Clienti
+-UIEventForm.label.defaultEventCategoryIdHoliday=Ferie
+-UIEventForm.label.defaultEventCategoryIdAnniversary=Anniversari
++UIEventForm.label.Meeting=Incontri
++UIEventForm.label.Calls=Chiamate
++UIEventForm.label.Clients=Clienti
++UIEventForm.label.Holiday=Ferie
++UIEventForm.label.Anniversary=Anniversari
+ UIEventForm.label.defaultCalendarCategoryId=Il mio gruppo
+ UIEventForm.label.defaultCalendarId=Default
+ UIEventCategoryForm.label.eventCategoryName=Categoria
+Index: eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet.properties
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet.properties	(revision 72783)
++++ eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet.properties	(working copy)
+@@ -998,11 +998,11 @@
+ UIEventForm.optionGroup.label.publicCalendar=Group calendars
+ 
+ UIEventForm.label.defaultEventCategoryIdAll=All
+-UIEventForm.label.defaultEventCategoryIdMeeting=Meeting
+-UIEventForm.label.defaultEventCategoryIdCalls=Calls
+-UIEventForm.label.defaultEventCategoryIdClients=Clients
+-UIEventForm.label.defaultEventCategoryIdHoliday=Holiday
+-UIEventForm.label.defaultEventCategoryIdAnniversary=Anniversary
++UIEventForm.label.Meeting=Meeting
++UIEventForm.label.Calls=Calls
++UIEventForm.label.Clients=Clients
++UIEventForm.label.Holiday=Holiday
++UIEventForm.label.Anniversary=Anniversary
+ 
+ 
+ UIEventForm.label.defaultCalendarCategoryId=My group
+Index: eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_en.properties
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_en.properties	(revision 72783)
++++ eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_en.properties	(working copy)
+@@ -996,11 +996,11 @@
+ UIEventForm.optionGroup.label.publicCalendar=Group calendars
+ 
+ UIEventForm.label.defaultEventCategoryIdAll=All
+-UIEventForm.label.defaultEventCategoryIdMeeting=Meeting
+-UIEventForm.label.defaultEventCategoryIdCalls=Calls
+-UIEventForm.label.defaultEventCategoryIdClients=Clients
+-UIEventForm.label.defaultEventCategoryIdHoliday=Holiday
+-UIEventForm.label.defaultEventCategoryIdAnniversary=Anniversary
++UIEventForm.label.Meeting=Meeting
++UIEventForm.label.Calls=Calls
++UIEventForm.label.Clients=Clients
++UIEventForm.label.Holiday=Holiday
++UIEventForm.label.Anniversary=Anniversary
+ 
+ 
+ UIEventForm.label.defaultCalendarCategoryId=My group
+Index: eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_vi.xml
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_vi.xml	(revision 72783)
++++ eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_vi.xml	(working copy)
+@@ -1373,11 +1373,11 @@
+       <dateFrom>Từ</dateFrom>
+       <dateTo>Đến</dateTo>
+       <defaultEventCategoryIdAll>Tất cả</defaultEventCategoryIdAll>
+-      <defaultEventCategoryIdMeeting>Họp</defaultEventCategoryIdMeeting>
+-      <defaultEventCategoryIdCalls>Cuộc gọi</defaultEventCategoryIdCalls>
+-      <defaultEventCategoryIdClients>Khách</defaultEventCategoryIdClients>
+-      <defaultEventCategoryIdHoliday>Ngày nghỉ</defaultEventCategoryIdHoliday>
+-      <defaultEventCategoryIdAnniversary>Lễ kỷ niệm</defaultEventCategoryIdAnniversary>
++      <Meeting>Họp</Meeting>
++      <Calls>Cuộc gọi</Calls>
++      <Clients>Khách</Clients>
++      <Holiday>Ngày nghỉ</Holiday>
++      <Anniversary>Lễ kỷ niệm</Anniversary>
+       <defaultCalendarCategoryId>Nhóm của tôi</defaultCalendarCategoryId>
+       <defaultCalendarId>Mặc định</defaultCalendarId>
+     </label>
+Index: eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_ar.xml
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_ar.xml	(revision 72783)
++++ eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_ar.xml	(working copy)
+@@ -1386,11 +1386,11 @@
+       <dateFrom>From</dateFrom>
+       <dateTo>To</dateTo>
+       <defaultEventCategoryIdAll>All</defaultEventCategoryIdAll>
+-      <defaultEventCategoryIdMeeting>Meeting</defaultEventCategoryIdMeeting>
+-      <defaultEventCategoryIdCalls>Calls</defaultEventCategoryIdCalls>
+-      <defaultEventCategoryIdClients>Clients</defaultEventCategoryIdClients>
+-      <defaultEventCategoryIdHoliday>Holiday</defaultEventCategoryIdHoliday>
+-      <defaultEventCategoryIdAnniversary>Anniversary</defaultEventCategoryIdAnniversary>
++      <Meeting>Meeting</Meeting>
++      <Calls>Calls</Calls>
++      <Clients>Clients</Clients>
++      <Holiday>Holiday</Holiday>
++      <Anniversary>Anniversary</Anniversary>
+       <defaultCalendarCategoryId>My group</defaultCalendarCategoryId>
+       <defaultCalendarId>Default</defaultCalendarId>
+     </label>
+Index: eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_fr.properties
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_fr.properties	(revision 72783)
++++ eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_fr.properties	(working copy)
+@@ -988,11 +988,11 @@
+ UIEventForm.optionGroup.label.publicCalendar=Calendriers de groupe
+ 
+ UIEventForm.label.defaultEventCategoryIdAll=tout
+-UIEventForm.label.defaultEventCategoryIdMeeting=meeting
+-UIEventForm.label.defaultEventCategoryIdCalls=cri
+-UIEventForm.label.defaultEventCategoryIdClients=client
+-UIEventForm.label.defaultEventCategoryIdHoliday=vacances
+-UIEventForm.label.defaultEventCategoryIdAnniversary=anniversaire
++UIEventForm.label.Meeting=Réunion
++UIEventForm.label.Calls=Appels
++UIEventForm.label.Clients=Clients
++UIEventForm.label.Holiday=Vacance
++UIEventForm.label.Anniversary=Anniversaire
+ 
+ 
+ UIEventForm.label.defaultCalendarCategoryId=mon groupe
+Index: eXoApplication/calendar/service/src/test/java/conf/portal/configuration.properties
+===================================================================
+--- eXoApplication/calendar/service/src/test/java/conf/portal/configuration.properties	(revision 0)
++++ eXoApplication/calendar/service/src/test/java/conf/portal/configuration.properties	(revision 0)
+@@ -0,0 +1,58 @@
++#
++# Copyright (C) 2009 eXo Platform SAS.
++#
++# This is free software; you can redistribute it and/or modify it
++# under the terms of the GNU Lesser General Public License as
++# published by the Free Software Foundation; either version 2.1 of
++# the License, or (at your option) any later version.
++#
++# This software is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++# Lesser General Public License for more details.
++#
++# You should have received a copy of the GNU Lesser General Public
++# License along with this software; if not, write to the Free
++# Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
++# 02110-1301 USA, or see the FSF site: http://www.fsf.org.
++#
++
++# Data
++gatein.data.dir=../gatein/data
++
++# DB
++gatein.db.data.dir=${gatein.data.dir}/db
++
++# JCR
++gatein.jcr.config.type=local
++gatein.jcr.datasource.name=jdbcjcr
++gatein.jcr.datasource.dialect=auto
++gatein.jcr.datasource.driver=org.hsqldb.jdbcDriver
++gatein.jcr.datasource.url=jdbc:hsqldb:file:${gatein.db.data.dir}/data/jdbcjcr_${name}
++gatein.jcr.datasource.username=sa
++gatein.jcr.datasource.password=
++
++gatein.jcr.data.dir=${gatein.data.dir}/jcr
++gatein.jcr.storage.data.dir=${gatein.jcr.data.dir}/values
++gatein.jcr.index.data.dir=${gatein.jcr.data.dir}/lucene
++gatein.jcr.index.changefilterclass=org.exoplatform.services.jcr.impl.core.query.DefaultChangesFilter
++
++# IDM
++gatein.idm.datasource.name=jdbcidm
++gatein.idm.datasource.driver=org.hsqldb.jdbcDriver
++gatein.idm.datasource.url=jdbc:hsqldb:file:${gatein.db.data.dir}/data/jdbcidm_${name}
++gatein.idm.datasource.username=sa
++gatein.idm.datasource.password=
++
++# Arjuna configuration
++com.arjuna.ats.arjuna.objectstore.objectStoreDir=${gatein.data.dir}/jta
++
++# EMail
++gatein.email.smtp.username=
++gatein.email.smtp.password=
++gatein.email.smtp.host=smtp.gmail.com
++gatein.email.smtp.port=465
++gatein.email.smtp.starttls.enable=true
++gatein.email.smtp.auth=true
++gatein.email.smtp.socketFactory.port=465
++gatein.email.smtp.socketFactory.class=javax.net.ssl.SSLSocketFactory
+\ No newline at end of file
+Index: eXoApplication/calendar/service/src/test/java/conf/portal/test-configuration.xml
+===================================================================
+--- eXoApplication/calendar/service/src/test/java/conf/portal/test-configuration.xml	(revision 72783)
++++ eXoApplication/calendar/service/src/test/java/conf/portal/test-configuration.xml	(working copy)
+@@ -1,13 +1,36 @@
+ <?xml version="1.0" encoding="ISO-8859-1"?>
++
+ <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
+ 	xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
+-
+-  <!-- 
+-  <component>
+-    <type>org.exoplatform.contact.service.impl.JCRDataStorage</type>
++   
++   <component>
++     <key>org.exoplatform.services.organization.OrganizationService</key>
++     <type>org.exoplatform.services.organization.hibernate.OrganizationServiceImpl</type>
++   </component>
++   
++   <component>
++    <key>org.exoplatform.services.database.HibernateService</key>
++    <type>org.exoplatform.services.database.impl.HibernateServiceImpl</type>
++    <init-params>
++      <properties-param>
++        <name>hibernate.properties</name>
++        <description>Default Hibernate Service</description>
++        <property name="hibernate.show_sql" value="false" />
++        <property name="hibernate.cglib.use_reflection_optimizer" value="true" />
++        <property name="hibernate.connection.url" value="jdbc:hsqldb:mem:target/temp/data/portal" />
++        <property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver" />
++        <property name="hibernate.connection.autocommit" value="true" />
++        <property name="hibernate.connection.username" value="sa" />
++        <property name="hibernate.connection.password" value="" />
++        <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect" />
++        <property name="hibernate.c3p0.min_size" value="5" />
++        <property name="hibernate.c3p0.max_size" value="20" />
++        <property name="hibernate.c3p0.timeout" value="1800" />
++        <property name="hibernate.c3p0.max_statements" value="50" />
++      </properties-param>
++    </init-params>
+   </component>
+-   -->
+-
++   
+    <component>
+   	<key>org.exoplatform.calendar.service.CalendarService</key>
+   	<type>org.exoplatform.calendar.service.impl.CalendarServiceImpl</type>
+@@ -215,9 +238,29 @@
+ 	      </object-param>
+ 	    </init-params>
+ 	  	</component-plugin>
+-	  	</component-plugins>
+-	  </component>
+-<external-component-plugins>
++	 </component-plugins>
++	</component>
++    
++    <external-component-plugins>
++      <target-component>org.exoplatform.services.database.HibernateService</target-component>
++      <component-plugin>
++        <name>add.hibernate.mapping</name>
++        <set-method>addPlugin</set-method>
++        <type>org.exoplatform.services.database.impl.AddHibernateMappingPlugin</type>
++        <init-params>
++          <values-param>
++            <name>hibernate.mapping</name>
++            <value>org/exoplatform/services/organization/impl/UserImpl.hbm.xml</value>
++            <value>org/exoplatform/services/organization/impl/MembershipImpl.hbm.xml</value>
++            <value>org/exoplatform/services/organization/impl/GroupImpl.hbm.xml</value>
++            <value>org/exoplatform/services/organization/impl/MembershipTypeImpl.hbm.xml</value>
++            <value>org/exoplatform/services/organization/impl/UserProfileData.hbm.xml</value>
++          </values-param>
++        </init-params>
++      </component-plugin>
++    </external-component-plugins>
++    
++  <external-component-plugins>
+     <target-component>org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator</target-component>
+     <component-plugin>
+ 	    <name>addPaths</name>
+@@ -357,24 +400,6 @@
+ 	    </init-params>            
+ 	  </component-plugin>
+ 	</external-component-plugins>
+-  <external-component-plugins>
+-    <target-component>org.exoplatform.services.database.HibernateService</target-component>
+-    <component-plugin> 
+-      <name>add.hibernate.mapping</name>
+-      <set-method>addPlugin</set-method>
+-      <type>org.exoplatform.services.database.impl.AddHibernateMappingPlugin</type>
+-      <init-params>
+-        <values-param>
+-          <name>hibernate.mapping</name>
+-          <value>org/exoplatform/services/organization/impl/UserImpl.hbm.xml</value>
+-          <value>org/exoplatform/services/organization/impl/MembershipImpl.hbm.xml</value>
+-          <value>org/exoplatform/services/organization/impl/GroupImpl.hbm.xml</value>
+-          <value>org/exoplatform/services/organization/impl/MembershipTypeImpl.hbm.xml</value>
+-          <value>org/exoplatform/services/organization/impl/UserProfileData.hbm.xml</value>
+-        </values-param>
+-      </init-params>
+-    </component-plugin>
+-  </external-component-plugins>
+   
+ 	<external-component-plugins>
+     <target-component>org.exoplatform.services.naming.InitialContextInitializer</target-component>
+Index: eXoApplication/calendar/service/src/test/java/conf/portal/configuration.xml
+===================================================================
+--- eXoApplication/calendar/service/src/test/java/conf/portal/configuration.xml	(revision 0)
++++ eXoApplication/calendar/service/src/test/java/conf/portal/configuration.xml	(revision 0)
+@@ -0,0 +1,28 @@
++<?xml version="1.0" encoding="ISO-8859-1"?>
++<!--
++
++    Copyright (C) 2009 eXo Platform SAS.
++
++    This is free software; you can redistribute it and/or modify it
++    under the terms of the GNU Lesser General Public License as
++    published by the Free Software Foundation; either version 2.1 of
++    the License, or (at your option) any later version.
++
++    This software is distributed in the hope that it will be useful,
++    but WITHOUT ANY WARRANTY; without even the implied warranty of
++    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++    Lesser General Public License for more details.
++
++    You should have received a copy of the GNU Lesser General Public
++    License along with this software; if not, write to the Free
++    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
++    02110-1301 USA, or see the FSF site: http://www.fsf.org.
++
++-->
++<configuration
++   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
++   xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
++   xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
++  <import>jar:/conf/portal/organization-configuration.xml</import>
++  <import>jar:/conf/portal/test-configuration.xml</import>
++</configuration>
+\ No newline at end of file
+Index: eXoApplication/calendar/service/src/test/java/conf/portal/organization-configuration.xml
+===================================================================
+--- eXoApplication/calendar/service/src/test/java/conf/portal/organization-configuration.xml	(revision 0)
++++ eXoApplication/calendar/service/src/test/java/conf/portal/organization-configuration.xml	(revision 0)
+@@ -0,0 +1,270 @@
++<?xml version="1.0" encoding="ISO-8859-1"?>
++<!--
++
++    Copyright (C) 2009 eXo Platform SAS.
++    
++    This is free software; you can redistribute it and/or modify it
++    under the terms of the GNU Lesser General Public License as
++    published by the Free Software Foundation; either version 2.1 of
++    the License, or (at your option) any later version.
++    
++    This software is distributed in the hope that it will be useful,
++    but WITHOUT ANY WARRANTY; without even the implied warranty of
++    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++    Lesser General Public License for more details.
++    
++    You should have received a copy of the GNU Lesser General Public
++    License along with this software; if not, write to the Free
++    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
++    02110-1301 USA, or see the FSF site: http://www.fsf.org.
++
++-->
++
++<configuration
++   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
++   xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
++   xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
++  <external-component-plugins>
++    <target-component>org.exoplatform.services.organization.OrganizationService</target-component>
++    <component-plugin>
++      <name>init.service.listener</name>
++      <set-method>addListenerPlugin</set-method>
++      <type>org.exoplatform.services.organization.OrganizationDatabaseInitializer</type>
++      <description>this listener populate organization data for the first launch</description>
++      <init-params>      
++        <value-param>
++          <name>checkDatabaseAlgorithm</name>
++          <description>check database</description>
++          <value>entry</value>
++        </value-param>      
++        <value-param>
++          <name>printInformation</name>
++          <description>Print information init database</description>
++          <value>false</value>
++        </value-param> 
++        <object-param>
++          <name>configuration</name>
++          <description>description</description>
++          <object type="org.exoplatform.services.organization.OrganizationConfig">
++          
++            <field  name="membershipType">
++              <collection type="java.util.ArrayList">
++              	<value>
++                  <object type="org.exoplatform.services.organization.OrganizationConfig$MembershipType">
++                    <field  name="type"><string>manager</string></field>
++                    <field  name="description"><string>manager membership type</string></field>
++                  </object>
++                </value>
++                <value>
++                  <object type="org.exoplatform.services.organization.OrganizationConfig$MembershipType">
++                    <field  name="type"><string>member</string></field>
++                    <field  name="description"><string>member membership type</string></field>
++                  </object>
++                </value>                
++                <value>
++                  <object type="org.exoplatform.services.organization.OrganizationConfig$MembershipType">
++                    <field  name="type"><string>validator</string></field>
++                    <field  name="description"><string>validator membership type</string></field>
++                  </object>
++                </value>
++              </collection>
++            </field>
++
++            <field  name="group">
++              <collection type="java.util.ArrayList">             
++                <value>
++                  <object type="org.exoplatform.services.organization.OrganizationConfig$Group">
++                    <field  name="name"><string>platform</string></field>
++                    <field  name="parentId"><string></string></field>
++                    <field  name="description"><string>the /platform group</string></field>
++                    <field  name="label"><string>Platform</string></field>                    
++                  </object>
++                </value>
++                <value>
++                  <object type="org.exoplatform.services.organization.OrganizationConfig$Group">
++                    <field  name="name"><string>administrators</string></field>
++                    <field  name="parentId"><string>/platform</string></field>
++                    <field  name="description"><string>the /platform/administrators group</string></field>
++                    <field  name="label"><string>Administrators</string></field>
++                  </object>
++                </value>
++                <value>
++                  <object type="org.exoplatform.services.organization.OrganizationConfig$Group">
++                    <field  name="name"><string>users</string></field>
++                    <field  name="parentId"><string>/platform</string></field>
++                    <field  name="description"><string>the /platform/users group</string></field>
++                    <field  name="label"><string>Users</string></field>
++                  </object>
++                </value>
++                <value>
++                  <object type="org.exoplatform.services.organization.OrganizationConfig$Group">
++                    <field  name="name"><string>guests</string></field>
++                    <field  name="parentId"><string>/platform</string></field>
++                    <field  name="description"><string>the /platform/guests group</string></field>
++                    <field  name="label"><string>Guests</string></field>
++                  </object>
++                </value>
++                <value>
++                  <object type="org.exoplatform.services.organization.OrganizationConfig$Group">
++                    <field  name="name"><string>organization</string></field>
++                    <field  name="parentId"><string></string></field>
++                    <field  name="description"><string>the organization group</string></field>
++                    <field  name="label"><string>Organization</string></field>
++                  </object>
++                </value>
++                <value>
++                  <object type="org.exoplatform.services.organization.OrganizationConfig$Group">
++                    <field  name="name"><string>management</string></field>
++                    <field  name="parentId"><string>/organization</string></field>
++                    <field  name="description"><string>the /organization/management group</string></field>
++                    <field  name="label"><string>Management</string></field>
++                  </object>
++                </value>
++                <value>
++                  <object type="org.exoplatform.services.organization.OrganizationConfig$Group">
++                    <field  name="name"><string>executive-board</string></field>
++                    <field  name="parentId"><string>/organization/management</string></field>
++                    <field  name="description"><string>the /organization/management/executive-board group</string></field>
++                    <field  name="label"><string>Executive Board</string></field>
++                  </object>
++                </value>
++                <value>
++                  <object type="org.exoplatform.services.organization.OrganizationConfig$Group">
++                    <field  name="name"><string>human-resources</string></field>
++                    <field  name="parentId"><string>/organization/management</string></field>
++                    <field  name="description"><string>the /organization/management/human-resource group</string></field>
++                    <field  name="label"><string>Human Resources</string></field>
++                  </object>
++                </value>
++                <value>
++                  <object type="org.exoplatform.services.organization.OrganizationConfig$Group">
++                    <field  name="name"><string>communication</string></field>
++                    <field  name="parentId"><string>/organization</string></field>
++                    <field  name="description"><string>the /organization/communication group</string></field>
++                    <field  name="label"><string>Communication</string></field>
++                  </object>
++                </value>
++                <value>
++                  <object type="org.exoplatform.services.organization.OrganizationConfig$Group">
++                    <field  name="name"><string>marketing</string></field>
++                    <field  name="parentId"><string>/organization/communication</string></field>
++                    <field  name="description"><string>the /organization/communication/marketing group</string></field>
++                    <field  name="label"><string>Marketing</string></field>
++                  </object>
++                </value>
++                <value>
++                  <object type="org.exoplatform.services.organization.OrganizationConfig$Group">
++                    <field  name="name"><string>press-and-media</string></field>
++                    <field  name="parentId"><string>/organization/communication</string></field>
++                    <field  name="description"><string>the /organization/communication/press-and-media group</string></field>
++                    <field  name="label"><string>Press and Media</string></field>
++                  </object>
++                </value>
++                <value>
++                  <object type="org.exoplatform.services.organization.OrganizationConfig$Group">
++                    <field  name="name"><string>operations</string></field>
++                    <field  name="parentId"><string>/organization</string></field>
++                    <field  name="description"><string>the /organization/operations and media group</string></field>
++                    <field  name="label"><string>Operations</string></field>
++                  </object>
++                </value>
++                <value>
++                  <object type="org.exoplatform.services.organization.OrganizationConfig$Group">
++                    <field  name="name"><string>sales</string></field>
++                    <field  name="parentId"><string>/organization/operations</string></field>
++                    <field  name="description"><string>the /organization/operations/sales group</string></field>
++                    <field  name="label"><string>Sales</string></field>
++                  </object>
++                </value>
++                <value>
++                  <object type="org.exoplatform.services.organization.OrganizationConfig$Group">
++                    <field  name="name"><string>finances</string></field>
++                    <field  name="parentId"><string>/organization/operations</string></field>
++                    <field  name="description"><string>the /organization/operations/finances group</string></field>
++                    <field  name="label"><string>Finances</string></field>
++                  </object>
++                </value>
++                <value>
++                  <object type="org.exoplatform.services.organization.OrganizationConfig$Group">
++                    <field  name="name"><string>customers</string></field>
++                    <field  name="parentId"><string></string></field>
++                    <field  name="description"><string>the /customers group</string></field>
++                    <field  name="label"><string>Customers</string></field>
++                  </object>
++                </value>                
++                <value>
++                  <object type="org.exoplatform.services.organization.OrganizationConfig$Group">
++                    <field  name="name"><string>partners</string></field>
++                    <field  name="parentId"><string></string></field>
++                    <field  name="description"><string>the /partners group</string></field>
++                    <field  name="label"><string>Partners</string></field>
++                  </object>
++                </value>                
++              </collection>
++            </field>
++
++            <field  name="user">
++              <collection type="java.util.ArrayList">
++                <value>
++                  <object type="org.exoplatform.services.organization.OrganizationConfig$User">
++                    <field  name="userName"><string>root</string></field>
++                    <field  name="password"><string>gtn</string></field>
++                    <field  name="firstName"><string>Root</string></field>
++                    <field  name="lastName"><string>Root</string></field>
++                    <field  name="email"><string>root@localhost</string></field>
++                    <field  name="groups">
++                      <string>
++                      	manager:/platform/administrators,member:/platform/users,
++                      	member:/organization/management/executive-board
++                      </string>
++                    </field>
++                  </object>
++                </value>
++                
++                <value>
++                  <object type="org.exoplatform.services.organization.OrganizationConfig$User">
++                    <field  name="userName"><string>john</string></field>
++                    <field  name="password"><string>gtn</string></field>
++                    <field  name="firstName"><string>John</string></field>
++                    <field  name="lastName"><string>Anthony</string></field>
++                    <field  name="email"><string>john@localhost</string></field>
++                    <field  name="groups">
++                      <string>
++                      	member:/platform/administrators,member:/platform/users,
++                      	manager:/organization/management/executive-board
++                      </string>
++                    </field>
++                  </object>
++                </value>                                                        
++                <value>
++                  <object type="org.exoplatform.services.organization.OrganizationConfig$User">
++                    <field  name="userName"><string>mary</string></field>
++                    <field  name="password"><string>gtn</string></field>
++                    <field  name="firstName"><string>Mary</string></field>
++                    <field  name="lastName"><string>Kelly</string></field>
++                    <field  name="email"><string>mary@localhost</string></field>
++                    <field  name="groups">
++                      <string>member:/platform/users</string>
++                    </field>
++                  </object>
++                </value>
++                <value>
++                  <object type="org.exoplatform.services.organization.OrganizationConfig$User">
++                    <field  name="userName"><string>demo</string></field>
++                    <field  name="password"><string>gtn</string></field>
++                    <field  name="firstName"><string>Demo</string></field>
++                    <field  name="lastName"><string>gtn</string></field>
++                    <field  name="email"><string>demo@localhost</string></field>
++                    <field  name="groups">
++                      <string>member:/platform/guests,member:/platform/users</string>
++                    </field>
++                  </object>
++                </value>                       
++              </collection>
++            </field>
++          </object>
++        </object-param>
++      </init-params>
++    </component-plugin>
++  </external-component-plugins>
++</configuration>
+Index: eXoApplication/calendar/service/src/test/java/org/exoplatform/calendar/service/test/BaseCalendarServiceTestCase.java
+===================================================================
+--- eXoApplication/calendar/service/src/test/java/org/exoplatform/calendar/service/test/BaseCalendarServiceTestCase.java	(revision 72783)
++++ eXoApplication/calendar/service/src/test/java/org/exoplatform/calendar/service/test/BaseCalendarServiceTestCase.java	(working copy)
+@@ -109,7 +109,7 @@
+   }
+   private static void initContainer() {
+     try {
+-      String containerConf = BaseCalendarServiceTestCase.class.getResource("/conf/portal/test-configuration.xml").toString();
++      String containerConf = BaseCalendarServiceTestCase.class.getResource("/conf/portal/configuration.xml").toString();
+       StandaloneContainer.addConfigurationURL(containerConf);
+       container = StandaloneContainer.getInstance();      
+       String loginConf = Thread.currentThread().getContextClassLoader().getResource("conf/portal/login.conf").toString();
+Index: eXoApplication/calendar/service/src/test/java/org/exoplatform/calendar/service/test/TestCalendarService.java
+===================================================================
+--- eXoApplication/calendar/service/src/test/java/org/exoplatform/calendar/service/test/TestCalendarService.java	(revision 72783)
++++ eXoApplication/calendar/service/src/test/java/org/exoplatform/calendar/service/test/TestCalendarService.java	(working copy)
+@@ -33,7 +33,12 @@
+ import org.exoplatform.calendar.service.GroupCalendarData;
+ import org.exoplatform.calendar.service.RssData;
+ import org.exoplatform.calendar.service.Utils;
++import org.exoplatform.calendar.service.impl.NewUserListener;
++import org.exoplatform.container.xml.InitParams;
++import org.exoplatform.container.xml.ValueParam;
+ import org.exoplatform.services.jcr.util.IdGenerator;
++import org.exoplatform.services.organization.OrganizationService;
++import org.exoplatform.services.organization.User;
+ 
+ /**
+  * Created by The eXo Platform SARL
+@@ -41,24 +46,77 @@
+  *          hung.nguyen@exoplatform.com
+  * July 3, 2008  
+  */
+-
+-
+-public class TestCalendarService extends BaseCalendarServiceTestCase{
++public class TestCalendarService extends BaseCalendarServiceTestCase {
++  public static final String COMA     = ",".intern();
++  
++  private OrganizationService organizationService;
++  
+   private CalendarService calendarService_ ;
++  
+   private static String  username = "root";
+ 
+-  //private JCRDataStorage datastorage;
+-
+   public TestCalendarService() throws Exception {
+     super();
+     calendarService_ = (CalendarService) container.getComponentInstanceOfType(CalendarService.class);
+-    //datastorage = (JCRDataStorage) container.getComponentInstanceOfType(JCRDataStorage.class);
++    organizationService = (OrganizationService) container.getComponentInstanceOfType(OrganizationService.class);
+   }
+ 
+   public void setUp() throws Exception {
+     super.setUp();
+   }
++  
++  public void testDefaultData() throws Exception {
++    String defaultEventCategoriesConfig = "Birthday,Memo,Wedding,DayOff";
++    String defaultCalendarId = "NewCalendarId";
++    String defaultCalendarCategoryId = "NewCalendarCategoryId";
+ 
++    // Create valueParam
++    ValueParam defaultCalendarIdParam = new ValueParam();
++    ValueParam defaultCalendarCategoryIdParam = new ValueParam();
++    ValueParam defaultEventCategoriesConfigParam = new ValueParam();
++    defaultCalendarIdParam.setValue(defaultCalendarId);
++    defaultCalendarCategoryIdParam.setValue(defaultCalendarCategoryId);
++    defaultEventCategoriesConfigParam.setValue(defaultEventCategoriesConfig);
++
++    // Init config
++    InitParams params = new InitParams();
++    params.put(NewUserListener.CALENDAR_CATEGORY, defaultCalendarCategoryIdParam);
++    params.put(NewUserListener.CALENDAR_NAME, defaultCalendarIdParam);
++    params.put(NewUserListener.EVENT_CATEGORIES, defaultEventCategoriesConfigParam);
++    NewUserListener newUserListener = new NewUserListener(calendarService_, params);
++    organizationService.addListenerPlugin(newUserListener);
++
++    // Create new user
++    String newUserName = "testUser";
++    User newUser = organizationService.getUserHandler().createUserInstance(newUserName);
++    organizationService.getUserHandler().createUser(newUser, true);
++
++    // Create event category list from config
++    String[] configValues = defaultEventCategoriesConfig.split(COMA);
++    List<String> defaultEventCategories = new ArrayList<String>();
++    defaultEventCategories.add(NewUserListener.DEFAULT_EVENTCATEGORY_ID_ALL);
++    for (int i = 0; i < configValues.length; i++) {
++      defaultEventCategories.add(configValues[i].trim());
++    }
++
++    // Test default calendar category
++    List<GroupCalendarData> categories = calendarService_.getCalendarCategories(newUserName, true);
++    assertEquals(1, categories.size());
++    assertEquals(defaultCalendarCategoryId, categories.get(0).getId());
++
++    // Test default calendar
++    List<Calendar> calendars = calendarService_.getUserCalendars(newUserName, true);
++    assertEquals(1, calendars.size());
++    assertEquals(newUserName + "_" + defaultCalendarId, calendars.get(0).getId());
++
++    // Test default event categories
++    List<EventCategory> eventCategories = calendarService_.getEventCategories(newUserName);
++    assertEquals(defaultEventCategories.size(), eventCategories.size());
++    for (EventCategory eventCategory : eventCategories) {
++      assertTrue(defaultEventCategories.contains(eventCategory.getId()));
++    }
++  }
++    
+   public void testCalendar() throws Exception {
+     CalendarCategory calCategory = new CalendarCategory() ;
+     calCategory.setName("categoryName") ;
+@@ -128,8 +186,6 @@
+     setting.setLocation("location") ;
+     calendarService_.saveCalendarSetting(username, setting) ;
+     assertEquals("url",calendarService_.getCalendarSetting(username).getBaseURL()) ;
+-
+-
+   }
+ 
+   public void testSharedCalendar() throws Exception {
+Index: eXoApplication/calendar/service/src/main/java/org/exoplatform/calendar/service/Utils.java
+===================================================================
+--- eXoApplication/calendar/service/src/main/java/org/exoplatform/calendar/service/Utils.java	(revision 72783)
++++ eXoApplication/calendar/service/src/main/java/org/exoplatform/calendar/service/Utils.java	(working copy)
+@@ -252,7 +252,7 @@
+   } 
+   
+   public static String getDefaultCalendarId(String username) {
+-    return new StringBuilder(username).append("_").append(NewUserListener.DEFAULT_CALENDAR_ID).toString();
++    return new StringBuilder(username).append("_").append(NewUserListener.defaultCalendarId).toString();
+   }
+   
+   public static PortalContainer getPortalContainer(JobExecutionContext context){
+Index: eXoApplication/calendar/service/src/main/java/org/exoplatform/calendar/service/impl/CalendarServiceImpl.java
+===================================================================
+--- eXoApplication/calendar/service/src/main/java/org/exoplatform/calendar/service/impl/CalendarServiceImpl.java	(revision 72783)
++++ eXoApplication/calendar/service/src/main/java/org/exoplatform/calendar/service/impl/CalendarServiceImpl.java	(working copy)
+@@ -568,23 +568,23 @@
+   public void initNewUser(String userName, CalendarSetting defaultCalendarSetting_) throws Exception {
+     EventCategory eventCategory = new EventCategory();
+     eventCategory.setDataInit(true);
+-    for (int id = 0; id < NewUserListener.defaultEventCategoryId.length; id ++) {
+-      eventCategory.setId(NewUserListener.defaultEventCategoryId[id]);
+-      eventCategory.setName(NewUserListener.defaultEventCategoryName[id]);
++    for (int id = 0; id < NewUserListener.defaultEventCategoryIds.length; id ++) {
++      eventCategory.setId(NewUserListener.defaultEventCategoryIds[id]);
++      eventCategory.setName(NewUserListener.defaultEventCategoryNames[id]);
+       saveEventCategory(userName, eventCategory, true);
+     }
+ 
+     // save default calendar category
+     CalendarCategory calCategory = new CalendarCategory();
+-    calCategory.setId(NewUserListener.DEFAULT_CALENDAR_CATEGORYID);
+-    calCategory.setName(NewUserListener.DEFAULT_CALENDAR_CATEGORYNAME);
++    calCategory.setId(NewUserListener.defaultCalendarCategoryId);
++    calCategory.setName(NewUserListener.defaultCalendarCategoryName);
+     calCategory.setDataInit(true) ;
+     saveCalendarCategory(userName,	calCategory, true);
+ 
+     // save default calendar
+     Calendar cal = new Calendar();
+     cal.setId(Utils.getDefaultCalendarId(userName));
+-    cal.setName(NewUserListener.DEFAULT_CALENDAR_NAME);
++    cal.setName(NewUserListener.defaultCalendarName);
+     cal.setCategoryId(calCategory.getId());
+     cal.setDataInit(true) ;
+     cal.setCalendarOwner(userName) ;
+Index: eXoApplication/calendar/service/src/main/java/org/exoplatform/calendar/service/impl/NewUserListener.java
+===================================================================
+--- eXoApplication/calendar/service/src/main/java/org/exoplatform/calendar/service/impl/NewUserListener.java	(revision 72783)
++++ eXoApplication/calendar/service/src/main/java/org/exoplatform/calendar/service/impl/NewUserListener.java	(working copy)
+@@ -36,9 +36,10 @@
+ 	private static final Log LOG = ExoLogger.getLogger(NewUserListener.class);
+ 	
+   //Calendar params
+-  //final public static String CALENDAR_CATEGORIES = "defaultCalendarCategory".intern() ;
+-  //final public static String CALENDAR_NAME  = "defaultCalendar".intern() ;
+-  final public static String COMA = ",".intern() ;
++  final public static String CALENDAR_CATEGORY = "defaultCalendarCategory".intern();
++  final public static String CALENDAR_NAME  = "defaultCalendar".intern();
++  final public static String EVENT_CATEGORIES = "defaultEventCategories".intern();
++  final public static String COMA = ",".intern();
+ 
+   //Calendar Setting params
+   final public static String ST_VIEW_TYPE = "viewType".intern() ;
+@@ -54,13 +55,6 @@
+   final public static String ST_TIME_END = "workingTimeEnd".intern() ;
+   final public static String ST_USER_IGNORE = "ignoredUsers".intern() ;
+ 
+-
+-  private CalendarService cservice_;
+-  //private String defaultCalendarCategory_;
+-  //private String[] defaultCalendar_;
+-  private List<String> ignore_users_ ;
+-  private CalendarSetting defaultCalendarSetting_ ;
+-
+   final public static String DEFAULT_CALENDAR_CATEGORYID = "defaultCalendarCategoryId";
+   final public static String DEFAULT_CALENDAR_ID = "defaultCalendarId";
+   
+@@ -68,35 +62,94 @@
+   final public static String DEFAULT_CALENDAR_NAME = "defaultCalendarName";
+   
+   final public static String DEFAULT_EVENTCATEGORY_ID_ALL = "defaultEventCategoryIdAll";
+-  final public static String DEFAULT_EVENTCATEGORY_ID_MEETING = "defaultEventCategoryIdMeeting";
+-  final public static String DEFAULT_EVENTCATEGORY_ID_CALLS = "defaultEventCategoryIdCalls";
+-  final public static String DEFAULT_EVENTCATEGORY_ID_CLIENTS = "defaultEventCategoryIdClients";
+-  final public static String DEFAULT_EVENTCATEGORY_ID_HOLIDAY = "defaultEventCategoryIdHoliday";
+-  final public static String DEFAULT_EVENTCATEGORY_ID_ANNIVERSARY = "defaultEventCategoryIdAnniversary";
+-  public static String[] defaultEventCategoryId = {DEFAULT_EVENTCATEGORY_ID_ALL, DEFAULT_EVENTCATEGORY_ID_MEETING, DEFAULT_EVENTCATEGORY_ID_CALLS
+-    , DEFAULT_EVENTCATEGORY_ID_CLIENTS, DEFAULT_EVENTCATEGORY_ID_HOLIDAY, DEFAULT_EVENTCATEGORY_ID_ANNIVERSARY} ;
+- 
++  final public static String DEFAULT_EVENTCATEGORY_ID_MEETING = "Meeting";
++  final public static String DEFAULT_EVENTCATEGORY_ID_CALLS = "Calls";
++  final public static String DEFAULT_EVENTCATEGORY_ID_CLIENTS = "Clients";
++  final public static String DEFAULT_EVENTCATEGORY_ID_HOLIDAY = "Holiday";
++  final public static String DEFAULT_EVENTCATEGORY_ID_ANNIVERSARY = "Anniversary";
++  
+   final public static String DEFAULT_EVENTCATEGORY_NAME_ALL = "defaultEventCategoryNameAll";
+-  final public static String DEFAULT_EVENTCATEGORY_NAME_MEETING = "defaultEventCategoryNameMeeting";
+-  final public static String DEFAULT_EVENTCATEGORY_NAME_CALLS = "defaultEventCategoryNameCalls";
+-  final public static String DEFAULT_EVENTCATEGORY_NAME_CLIENTS = "defaultEventCategoryNameClients";
+-  final public static String DEFAULT_EVENTCATEGORY_NAME_HOLIDAY = "defaultEventCategoryNameHoliday";
+-  final public static String DEFAULT_EVENTCATEGORY_NAME_ANNIVERSARY = "defaultEventCategoryNameAnniversary";
+-  public static String[] defaultEventCategoryName = {DEFAULT_EVENTCATEGORY_NAME_ALL, DEFAULT_EVENTCATEGORY_NAME_MEETING, DEFAULT_EVENTCATEGORY_NAME_CALLS
+-    , DEFAULT_EVENTCATEGORY_NAME_CLIENTS, DEFAULT_EVENTCATEGORY_NAME_HOLIDAY, DEFAULT_EVENTCATEGORY_NAME_ANNIVERSARY} ;
++  final public static String DEFAULT_EVENTCATEGORY_NAME_MEETING = "Meeting";
++  final public static String DEFAULT_EVENTCATEGORY_NAME_CALLS = "Calls";
++  final public static String DEFAULT_EVENTCATEGORY_NAME_CLIENTS = "Clients";
++  final public static String DEFAULT_EVENTCATEGORY_NAME_HOLIDAY = "Holiday";
++  final public static String DEFAULT_EVENTCATEGORY_NAME_ANNIVERSARY = "Anniversary";
++  
++  private CalendarService cservice_;
++  public static String defaultCalendarCategoryId;
++  public static String defaultCalendarCategoryName;
++  
++  public static String defaultCalendarId;
++  public static String defaultCalendarName;
++  
++  public static String[] defaultEventCategoryIds;
++  public static String[] defaultEventCategoryNames;
++  private List<String> ignore_users_ ;
++  private CalendarSetting defaultCalendarSetting_ ;
+ 
+   public NewUserListener() {};
++  
+   /**
+    * 
+    * @param cservice : pass throw create object 
+    * @param params : given by config xml
+    * @throws Exception
+    */
+-  
+   @SuppressWarnings("unchecked")
+-  public NewUserListener(CalendarService cservice, InitParams params)
+-  throws Exception {
++  public NewUserListener(CalendarService cservice, InitParams params) throws Exception {
+     cservice_ = cservice;
++    
++    // Get default calendar category
++    if(params.getValueParam(CALENDAR_CATEGORY) != null) {
++      defaultCalendarCategoryId = params.getValueParam(CALENDAR_CATEGORY).getValue().trim();
++      defaultCalendarCategoryName = defaultCalendarCategoryId;
++    } else {
++      LOG.warn("Config for Default calendar category does not exist!");
++      
++      defaultCalendarCategoryId = DEFAULT_CALENDAR_CATEGORYID;
++      defaultCalendarCategoryName = DEFAULT_CALENDAR_CATEGORYNAME;
++    }
++    
++    // Get default calendars
++    if(params.getValueParam(CALENDAR_NAME) != null) {
++      defaultCalendarId = params.getValueParam(CALENDAR_NAME).getValue().trim();
++      defaultCalendarName = defaultCalendarId;
++    } else {
++      LOG.warn("Config for Default calendar does not exist!");
++      
++      defaultCalendarId = DEFAULT_CALENDAR_ID;
++      defaultCalendarName = DEFAULT_CALENDAR_NAME;
++    }
++    
++    // Get default event categories
++    if(params.getValueParam(EVENT_CATEGORIES) != null) {
++      // Get config value
++      String eventCategoryConfig = params.getValueParam(EVENT_CATEGORIES).getValue();
++      String[] configValue = eventCategoryConfig.split(COMA);
++      
++      // Create array to store default event categories
++      defaultEventCategoryIds = new String[configValue.length + 1];
++      defaultEventCategoryNames = new String[defaultEventCategoryIds.length];
++      
++      // First element is DEFAULT_EVENTCATEGORY_ID_ALL
++      defaultEventCategoryIds[0] = DEFAULT_EVENTCATEGORY_ID_ALL;
++      defaultEventCategoryNames[0] = DEFAULT_EVENTCATEGORY_NAME_ALL;
++      
++      for (int i = 0; i < configValue.length; i++) {
++        defaultEventCategoryIds[i + 1] = configValue[i].trim();
++        defaultEventCategoryNames[i + 1] = configValue[i].trim();
++      }
++    } else {
++      LOG.warn("Config for Default event categories does not exist!");
++      
++      // If there is no config then use default event category list
++      defaultEventCategoryIds = new String[] {DEFAULT_EVENTCATEGORY_ID_ALL, DEFAULT_EVENTCATEGORY_ID_MEETING, DEFAULT_EVENTCATEGORY_ID_CALLS
++          , DEFAULT_EVENTCATEGORY_ID_CLIENTS, DEFAULT_EVENTCATEGORY_ID_HOLIDAY, DEFAULT_EVENTCATEGORY_ID_ANNIVERSARY};
++      defaultEventCategoryNames = new String[] {DEFAULT_EVENTCATEGORY_NAME_ALL, DEFAULT_EVENTCATEGORY_NAME_MEETING, DEFAULT_EVENTCATEGORY_NAME_CALLS
++          , DEFAULT_EVENTCATEGORY_NAME_CLIENTS, DEFAULT_EVENTCATEGORY_NAME_HOLIDAY, DEFAULT_EVENTCATEGORY_NAME_ANNIVERSARY};
++    }
++    
++    // Get calendar setting
+     defaultCalendarSetting_ = new CalendarSetting() ;
+     if(params.getValueParam(ST_VIEW_TYPE) != null) {
+       defaultCalendarSetting_.setViewType(params.getValueParam(ST_VIEW_TYPE).getValue()) ;
+Index: eXoApplication/calendar/service/pom.xml
+===================================================================
+--- eXoApplication/calendar/service/pom.xml	(revision 72783)
++++ eXoApplication/calendar/service/pom.xml	(working copy)
+@@ -43,6 +43,12 @@
+       <scope>provided</scope>
+     </dependency>
+     <dependency>
++      <groupId>org.exoplatform.core</groupId>
++      <artifactId>exo.core.component.organization.jdbc</artifactId>
++      <version>${org.exoplatform.core.version}</version>
++      <scope>provided</scope>
++    </dependency>
++    <dependency>
+       <groupId>org.exoplatform.portal</groupId>
+       <artifactId>exo.portal.component.resources</artifactId>
+       <version>${org.exoplatform.portal.version}</version>
+@@ -147,5 +153,12 @@
+       <version>${org.exoplatform.kernel.version}</version>
+       <scope>provided</scope>
+     </dependency>
++    <!--javassist is the necessary dependency for the HibernateService component used in unit test -->
++    <dependency>
++      <groupId>org.javassist</groupId>
++      <artifactId>javassist</artifactId>
++      <version>${org.javassist.version}</version>
++      <scope>test</scope>
++    </dependency>
+   </dependencies>
+ </project>
+Index: eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/CalendarUtils.java
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/CalendarUtils.java	(revision 72783)
++++ eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/CalendarUtils.java	(working copy)
+@@ -49,7 +49,6 @@
+ import org.exoplatform.calendar.service.GroupCalendarData;
+ import org.exoplatform.calendar.service.Utils;
+ import org.exoplatform.calendar.service.impl.NewUserListener;
+-import org.exoplatform.calendar.webui.UICalendarPortlet;
+ import org.exoplatform.calendar.webui.popup.UIAddressForm.ContactData;
+ import org.exoplatform.container.PortalContainer;
+ import org.exoplatform.download.DownloadService;
+@@ -596,8 +595,8 @@
+     SelectOptionGroup privGrp = new SelectOptionGroup(CalendarUtils.PRIVATE_CALENDARS);
+     List<org.exoplatform.calendar.service.Calendar> calendars = calendarService.getUserCalendars(username, true) ;
+     for(org.exoplatform.calendar.service.Calendar c : calendars) {
+-      if (c.getId().equals(Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+-        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
++      if (c.getId().equals(Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.defaultCalendarName)) {
++        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
+         c.setName(newName);
+       }
+       if (!hash.containsKey(c.getId())) {
+@@ -612,8 +611,8 @@
+       SelectOptionGroup sharedGrp = new SelectOptionGroup(CalendarUtils.SHARED_CALENDARS);
+       for(org.exoplatform.calendar.service.Calendar c : gcd.getCalendars()) {
+         if(CalendarUtils.canEdit(null, Utils.getEditPerUsers(c), username)){
+-          if (c.getId().equals(Utils.getDefaultCalendarId(c.getCalendarOwner())) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+-            String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
++          if (c.getId().equals(Utils.getDefaultCalendarId(c.getCalendarOwner())) && c.getName().equals(NewUserListener.defaultCalendarName)) {
++            String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
+             c.setName(newName);
+           }
+           String owner = "" ;
+@@ -657,8 +656,8 @@
+     if(groupPrivateCalendars != null) {
+       SelectOptionGroup privGrp = new SelectOptionGroup(CalendarUtils.PRIVATE_CALENDARS);
+       for(GroupCalendarData group: groupPrivateCalendars){
+-        if (group.getId().equals(NewUserListener.DEFAULT_CALENDAR_CATEGORYID) && group.getName().equals(NewUserListener.DEFAULT_CALENDAR_CATEGORYNAME)) {
+-          String newName = CalendarUtils.getResourceBundle("UICalendars.label." + group.getId());
++        if (group.getId().equals(NewUserListener.defaultCalendarCategoryId) && group.getName().equals(NewUserListener.defaultCalendarCategoryName)) {
++          String newName = CalendarUtils.getResourceBundle("UICalendars.label." + group.getId(), group.getId());
+           group.setName(newName);
+         }        
+         privGrp.addOption(new SelectOption(group.getName(),CalendarUtils.PRIVATE_TYPE + CalendarUtils.COLON + group.getId()));
+@@ -693,8 +692,8 @@
+     String username = getCurrentUser() ;
+     List<org.exoplatform.calendar.service.Calendar> calendars = calendarService.getUserCalendars(username, true) ;
+     for(org.exoplatform.calendar.service.Calendar c : calendars) {
+-      if (c.getId().equals(Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+-        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
++      if (c.getId().equals(Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.defaultCalendarName)) {
++        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
+         c.setName(newName);
+       }
+       list.add(c) ;
+@@ -703,8 +702,8 @@
+     if(gcd != null) {
+       for(org.exoplatform.calendar.service.Calendar c : gcd.getCalendars()) {
+         if(CalendarUtils.canEdit(null, Utils.getEditPerUsers(c), username)){
+-          if (c.getId().equals(Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+-            String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
++          if (c.getId().equals(Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.defaultCalendarName)) {
++            String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
+             c.setName(newName);
+           }
+           list.add(c) ;
+@@ -878,13 +877,17 @@
+   }
+ 
+   public static String getResourceBundle(String key) {
++    return getResourceBundle(key, null);
++  }
++  
++  public static String getResourceBundle(String key, String defaultValue) {
+     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+     ResourceBundle res = context.getApplicationResourceBundle() ;
+     try {
+-      return  res.getString(key);
+-    } catch (MissingResourceException e) {      
+-      e.printStackTrace() ;
+-      return null ;
++      return res.getString(key);
++    } catch (MissingResourceException e) {
++      log.warn("Can not find the resource for key: " + key);
++      return defaultValue;
+     }
+   }
+ 
+Index: eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/UICalendarView.java
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/UICalendarView.java	(revision 72783)
++++ eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/UICalendarView.java	(working copy)
+@@ -228,8 +228,8 @@
+     CalendarService calendarService = CalendarUtils.getCalendarService() ;
+     List<String> list = new ArrayList<String>() ;
+     for(org.exoplatform.calendar.service.Calendar c : calendarService.getUserCalendars(CalendarUtils.getCurrentUser() , true)) {
+-      if (c.getId().equals(Utils.getDefaultCalendarId(CalendarUtils.getCurrentUser())) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+-        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
++      if (c.getId().equals(Utils.getDefaultCalendarId(CalendarUtils.getCurrentUser())) && c.getName().equals(NewUserListener.defaultCalendarName)) {
++        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
+         c.setName(newName);
+       }
+       list.add(c.getId()) ;
+@@ -317,8 +317,18 @@
+     List<EventCategory> eventCategories = calendarService.getEventCategories(username) ;
+     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+     for(EventCategory category : eventCategories) {
+-      if (category.getId().contains("defaultEventCategoryId") && category.getName().contains("defaultEventCategoryName")) {
+-        String newName = CalendarUtils.getResourceBundle("UICalendarView.label." + category.getId());
++      // Check if EventCategory is default event category
++      boolean isDefaultEventCategory = false;
++      for (int i = 0; i < NewUserListener.defaultEventCategoryIds.length; i++) {
++        if (category.getId().equals(NewUserListener.defaultEventCategoryIds[i])
++            && category.getName().equals(NewUserListener.defaultEventCategoryNames[i])) {
++          isDefaultEventCategory = true;
++          break;
++        }
++      }
++      
++      if (isDefaultEventCategory) {
++        String newName = CalendarUtils.getResourceBundle("UICalendarView.label." + category.getId(), category.getId());
+         options.add(new SelectItemOption<String>(newName, category.getId())) ;
+         category.setName(newName);
+       } else {
+@@ -329,6 +339,7 @@
+     addUIFormInput(categoryInput) ;
+     //categoryInput.setValue("Meeting") ;
+   }
++  
+   protected String getSelectedCategory() {
+     //if("all".equals(getUIFormSelectBox(EVENT_CATEGORIES).getValue())) return null ;
+     return getUIFormSelectBox(EVENT_CATEGORIES).getValue() ;
+@@ -397,8 +408,18 @@
+       List<EventCategory> eventCategories = calendarService.getEventCategories(username) ;
+       List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+       for(EventCategory category : eventCategories) {
+-        if (category.getId().contains("defaultEventCategoryId") && category.getName().contains("defaultEventCategoryName")) {
+-          String newName = CalendarUtils.getResourceBundle("UICalendarView.label." + category.getId());
++        // Check if EventCategory is default event category
++        boolean isDefaultEventCategory = false;
++        for (int i = 0; i < NewUserListener.defaultEventCategoryIds.length; i++) {
++          if (category.getId().equals(NewUserListener.defaultEventCategoryIds[i])
++              && category.getName().equals(NewUserListener.defaultEventCategoryNames[i])) {
++            isDefaultEventCategory = true;
++            break;
++          }
++        }
++        
++        if (isDefaultEventCategory) {
++          String newName = CalendarUtils.getResourceBundle("UICalendarView.label." + category.getId(), category.getId());
+           options.add(new SelectItemOption<String>(newName, category.getId())) ;
+         } else {
+           options.add(new SelectItemOption<String>(category.getName(), category.getId())) ;        
+@@ -1281,16 +1302,16 @@
+           }
+ 		      if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
+ 		        calendar = calService.getUserCalendar(currentUser, selectedCalendarId) ;
+-            if (calendar.getId().equals(Utils.getDefaultCalendarId(currentUser)) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+-              String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
++            if (calendar.getId().equals(Utils.getDefaultCalendarId(currentUser)) && calendar.getName().equals(NewUserListener.defaultCalendarName)) {
++              String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
+               calendar.setName(newName);
+             }
+ 		      } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
+ 		        GroupCalendarData gCalendarData = calService.getSharedCalendars(currentUser, true) ;
+ 		        if(gCalendarData != null) { 
+ 		          calendar = gCalendarData.getCalendarById(selectedCalendarId) ;
+-              if (calendar.getId().equals(Utils.getDefaultCalendarId(calendar.getCalendarOwner())) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+-                String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
++              if (calendar.getId().equals(Utils.getDefaultCalendarId(calendar.getCalendarOwner())) && calendar.getName().equals(NewUserListener.defaultCalendarName)) {
++                String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
+                 calendar.setName(newName);
+               }
+ 		          if(calendar != null && !CalendarUtils.isEmpty(calendar.getCalendarOwner())) calendar.setName(calendar.getCalendarOwner() + "-" + calendar.getName()) ;
+Index: eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UIEventCategoryManager.java
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UIEventCategoryManager.java	(revision 72783)
++++ eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UIEventCategoryManager.java	(working copy)
+@@ -100,8 +100,18 @@
+     List<EventCategory>  categories = calService.getEventCategories(username) ;
+     defaultEventCategoriesMap.clear();
+     for (EventCategory category : categories) {
+-      if (category.getId().contains("defaultEventCategoryId") && category.getName().contains("defaultEventCategoryName")) {
+-        String newName = CalendarUtils.getResourceBundle("UICalendarView.label." + category.getId());
++      // Check if EventCategory is default event category
++      boolean isDefaultEventCategory = false;
++      for (int i = 0; i < NewUserListener.defaultEventCategoryIds.length; i++) {
++        if (category.getId().equals(NewUserListener.defaultEventCategoryIds[i])
++            && category.getName().equals(NewUserListener.defaultEventCategoryNames[i])) {
++          isDefaultEventCategory = true;
++          break;
++        }
++      }
++      
++      if (isDefaultEventCategory) {
++        String newName = CalendarUtils.getResourceBundle("UICalendarView.label." + category.getId(), category.getId());
+         category.setName(newName);
+         defaultEventCategoriesMap.put(category.getId(), newName);
+       }
+Index: eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UITaskDetailTab.java
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UITaskDetailTab.java	(revision 72783)
++++ eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UITaskDetailTab.java	(working copy)
+@@ -180,8 +180,8 @@
+     String username = CalendarUtils.getCurrentUser() ;
+     List<Calendar> calendars = calendarService.getUserCalendars(username, true) ;
+     for(Calendar c : calendars) {
+-      if (c.getId().equals(Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+-        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
++      if (c.getId().equals(Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.defaultCalendarName)) {
++        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
+         c.setName(newName);
+       }
+       options.add(new SelectItemOption<String>(c.getName(), c.getId())) ;
+Index: eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UIImportForm.java
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UIImportForm.java	(revision 72783)
++++ eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UIImportForm.java	(working copy)
+@@ -191,8 +191,8 @@
+     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+     try {
+       for(Calendar c : CalendarUtils.getCalendarService().getUserCalendars(CalendarUtils.getCurrentUser(), true)){
+-        if (c.getId().equals(Utils.getDefaultCalendarId(CalendarUtils.getCurrentUser())) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+-          String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
++        if (c.getId().equals(Utils.getDefaultCalendarId(CalendarUtils.getCurrentUser())) && c.getName().equals(NewUserListener.defaultCalendarName)) {
++          String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
+           c.setName(newName);
+         }
+         options.add(new SelectItemOption<String>(c.getName(), c.getId())) ;
+@@ -335,8 +335,8 @@
+             }*/
+             List<Calendar> pCals = calendarService.getUserCalendars(username, true) ;
+             for(Calendar cal : pCals) {
+-              if (cal.getId().equals(Utils.getDefaultCalendarId(username)) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+-                String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
++              if (cal.getId().equals(Utils.getDefaultCalendarId(username)) && cal.getName().equals(NewUserListener.defaultCalendarName)) {
++                String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
+                 cal.setName(newName);
+               }
+               if(cal.getName().trim().equalsIgnoreCase(calendarName)) {
+Index: eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UICalendarCategoryManager.java
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UICalendarCategoryManager.java	(revision 72783)
++++ eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UICalendarCategoryManager.java	(working copy)
+@@ -82,8 +82,8 @@
+     String username = CalendarUtils.getCurrentUser() ;
+     List<CalendarCategory> categories = calService.getCategories(username) ;
+     for (CalendarCategory calendarCategory : categories)
+-      if (calendarCategory.getId().equals(NewUserListener.DEFAULT_CALENDAR_CATEGORYID) && calendarCategory.getName().equals(NewUserListener.DEFAULT_CALENDAR_CATEGORYNAME)) {
+-        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_CATEGORYID);
++      if (calendarCategory.getId().equals(NewUserListener.defaultCalendarCategoryId) && calendarCategory.getName().equals(NewUserListener.defaultCalendarCategoryName)) {
++        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarCategoryId, NewUserListener.defaultCalendarCategoryId);
+         calendarCategory.setName(newName);
+       }
+     UIGrid uiGrid = getChild(UIGrid.class) ; 
+Index: eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UIEventForm.java
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UIEventForm.java	(revision 72783)
++++ eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UIEventForm.java	(working copy)
+@@ -42,6 +42,7 @@
+ import org.exoplatform.calendar.service.EventQuery;
+ import org.exoplatform.calendar.service.GroupCalendarData;
+ import org.exoplatform.calendar.service.Reminder;
++import org.exoplatform.calendar.service.impl.NewUserListener;
+ import org.exoplatform.calendar.webui.CalendarView;
+ import org.exoplatform.calendar.webui.UICalendarPortlet;
+ import org.exoplatform.calendar.webui.UICalendarViewContainer;
+@@ -371,8 +372,18 @@
+     CalendarService calendarService = CalendarUtils.getCalendarService() ;
+     List<EventCategory> eventCategories = calendarService.getEventCategories(CalendarUtils.getCurrentUser()) ;
+     for(EventCategory category : eventCategories) {
+-      if (category.getId().contains("defaultEventCategoryId") && category.getName().contains("defaultEventCategoryName")) {
+-        String newName = CalendarUtils.getResourceBundle("UICalendarView.label." + category.getId());
++      // Check if EventCategory is default event category
++      boolean isDefaultEventCategory = false;
++      for (int i = 0; i < NewUserListener.defaultEventCategoryIds.length; i++) {
++        if (category.getId().equals(NewUserListener.defaultEventCategoryIds[i])
++            && category.getName().equals(NewUserListener.defaultEventCategoryNames[i])) {
++          isDefaultEventCategory = true;
++          break;
++        }
++      }
++      
++      if (isDefaultEventCategory) {
++        String newName = CalendarUtils.getResourceBundle("UICalendarView.label." + category.getId(), category.getId());
+         options.add(new SelectItemOption<String>(newName, category.getId())) ;
+       } else {
+         options.add(new SelectItemOption<String>(category.getName(), category.getId())) ;        
+Index: eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UIEditFeed.java
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UIEditFeed.java	(revision 72783)
++++ eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UIEditFeed.java	(working copy)
+@@ -151,8 +151,8 @@
+     String username = CalendarUtils.getCurrentUser() ;    
+     for(Calendar cal : calendarService.getUserCalendars(username, true)) {
+       if (feedCalendars.containsKey(cal.getId())) continue;
+-      if (cal.getId().equals(Utils.getDefaultCalendarId(username)) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+-        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
++      if (cal.getId().equals(Utils.getDefaultCalendarId(username)) && cal.getName().equals(NewUserListener.defaultCalendarName)) {
++        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
+         cal.setName(newName);
+       }
+       options.add(new SelectItemOption<String>(cal.getName(), Utils.PRIVATE_TYPE + Utils.COLON + cal.getId())) ;
+@@ -171,8 +171,8 @@
+     if(sharedData != null) {
+       for(Calendar cal : sharedData.getCalendars()) {
+         if (feedCalendars.containsKey(cal.getId())) continue;       
+-        if (cal.getId().equals(Utils.getDefaultCalendarId(cal.getCalendarOwner())) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+-          String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
++        if (cal.getId().equals(Utils.getDefaultCalendarId(cal.getCalendarOwner())) && cal.getName().equals(NewUserListener.defaultCalendarName)) {
++          String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
+           cal.setName(newName);
+         }
+         options.add(new SelectItemOption<String>(Utils.getDisplaySharedCalendar(
+@@ -212,8 +212,8 @@
+       try {
+         calendar = calendarService.getUserCalendar(username, calendarId) ;
+         if (calendar != null) {
+-          if (calendar.getId().equals(Utils.getDefaultCalendarId(username)) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+-            String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
++          if (calendar.getId().equals(Utils.getDefaultCalendarId(username)) && calendar.getName().equals(NewUserListener.defaultCalendarName)) {
++            String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
+             calendar.setName(newName);
+           }          
+           feedCalendars.put(Utils.PRIVATE_TYPE + Utils.COLON +  calendar.getId() , calendar.getName());
+@@ -222,8 +222,8 @@
+             calendar = calendarService.getSharedCalendars(username, false).getCalendarById(calendarId);
+           } catch (NullPointerException e) {}
+           if (calendar != null) {
+-            if (calendar.getId().equals(Utils.getDefaultCalendarId(calendar.getCalendarOwner())) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+-              String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
++            if (calendar.getId().equals(Utils.getDefaultCalendarId(calendar.getCalendarOwner())) && calendar.getName().equals(NewUserListener.defaultCalendarName)) {
++              String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
+               calendar.setName(newName);
+             }
+             feedCalendars.put(Utils.SHARED_TYPE + Utils.COLON + calendar.getId()
+@@ -263,14 +263,14 @@
+       try {
+         if (type.equals(Utils.PRIVATE_TYPE + "")) {
+           cal = calendarService.getUserCalendar(username, calendarId);
+-          if (cal.getId().equals(Utils.getDefaultCalendarId(username)) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+-            String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
++          if (cal.getId().equals(Utils.getDefaultCalendarId(username)) && cal.getName().equals(NewUserListener.defaultCalendarName)) {
++            String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
+             cal.setName(newName);
+           } 
+         } else if (type.equals(Utils.SHARED_TYPE + "")) {
+           cal = calendarService.getSharedCalendars(username, false).getCalendarById(calendarId);
+-          if (cal.getId().equals(Utils.getDefaultCalendarId(cal.getCalendarOwner())) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+-            String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
++          if (cal.getId().equals(Utils.getDefaultCalendarId(cal.getCalendarOwner())) && cal.getName().equals(NewUserListener.defaultCalendarName)) {
++            String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
+             cal.setName(newName);
+           }
+           cal.setName(Utils.getDisplaySharedCalendar(cal.getCalendarOwner(), cal.getName()));
+Index: eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UIAdvancedSearchForm.java
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UIAdvancedSearchForm.java	(revision 72783)
++++ eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UIAdvancedSearchForm.java	(working copy)
+@@ -95,8 +95,8 @@
+     CalendarService cservice = CalendarUtils.getCalendarService() ;
+     options.add(new SelectItemOption<String>("", "")) ;
+     for(Calendar cal : cservice.getUserCalendars(username, true)) {
+-      if (cal.getId().equals(Utils.getDefaultCalendarId(username)) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+-        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
++      if (cal.getId().equals(Utils.getDefaultCalendarId(username)) && cal.getName().equals(NewUserListener.defaultCalendarName)) {
++        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
+         cal.setName(newName);
+       }
+       options.add(new SelectItemOption<String>(cal.getName(), Calendar.TYPE_PRIVATE + CalendarUtils.COLON + cal.getId())) ;
+@@ -112,8 +112,8 @@
+     GroupCalendarData sharedData  = cservice.getSharedCalendars(CalendarUtils.getCurrentUser(), true) ;
+     if(sharedData != null) {
+       for(Calendar cal : sharedData.getCalendars()) {
+-        if (cal.getId().equals(Utils.getDefaultCalendarId(cal.getCalendarOwner())) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+-          String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
++        if (cal.getId().equals(Utils.getDefaultCalendarId(cal.getCalendarOwner())) && cal.getName().equals(NewUserListener.defaultCalendarName)) {
++          String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
+           cal.setName(newName);
+         }
+         String owner = "" ;
+@@ -124,11 +124,23 @@
+     addChild(new UIFormSelectBox(CALENDAR, CALENDAR, options)) ;
+     options = new ArrayList<SelectItemOption<String>>() ;
+     options.add(new SelectItemOption<String>("", "")) ;
++    
++    
+     for(EventCategory cat : cservice.getEventCategories(CalendarUtils.getCurrentUser())) {
+-      if (cat.getId().contains("defaultEventCategoryId") && cat.getName().contains("defaultEventCategoryName")) {
+-        String newName = CalendarUtils.getResourceBundle("UICalendarView.label." + cat.getId());
+-        options.add(new SelectItemOption<String>(newName, cat.getId())) ;
+-        cat.setName(newName);
++      // Check if EventCategory is default event category
++      boolean isDefaultEventCategory = false;
++      for (int i = 0; i < NewUserListener.defaultEventCategoryIds.length; i++) {
++        if (cat.getId().equals(NewUserListener.defaultEventCategoryIds[i])
++            && cat.getName().equals(NewUserListener.defaultEventCategoryNames[i])) {
++          isDefaultEventCategory = true;
++          break;
++        }
++      }
++      
++      if (isDefaultEventCategory) {
++        String eventCategoryName = CalendarUtils.getResourceBundle("UICalendarView.label." + cat.getId(), cat.getId());
++        options.add(new SelectItemOption<String>(eventCategoryName, cat.getId())) ;
++        cat.setName(eventCategoryName);
+       } else {
+         options.add(new SelectItemOption<String>(cat.getName(), cat.getId())) ;        
+       }
+Index: eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UITaskForm.java
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UITaskForm.java	(revision 72783)
++++ eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UITaskForm.java	(working copy)
+@@ -37,6 +37,7 @@
+ import org.exoplatform.calendar.service.GroupCalendarData;
+ import org.exoplatform.calendar.service.Reminder;
+ import org.exoplatform.calendar.service.Utils;
++import org.exoplatform.calendar.service.impl.NewUserListener;
+ import org.exoplatform.calendar.webui.CalendarView;
+ import org.exoplatform.calendar.webui.UICalendarPortlet;
+ import org.exoplatform.calendar.webui.UICalendarViewContainer;
+@@ -271,8 +272,18 @@
+     CalendarService calendarService = CalendarUtils.getCalendarService() ;
+     List<EventCategory> eventCategories = calendarService.getEventCategories(CalendarUtils.getCurrentUser()) ;
+     for(EventCategory category : eventCategories) {
+-      if (category.getId().contains("defaultEventCategoryId") && category.getName().contains("defaultEventCategoryName")) {
+-        String newName = CalendarUtils.getResourceBundle("UICalendarView.label." + category.getId());
++      // Check if EventCategory is default event category
++      boolean isDefaultEventCategory = false;
++      for (int i = 0; i < NewUserListener.defaultEventCategoryIds.length; i++) {
++        if (category.getId().equals(NewUserListener.defaultEventCategoryIds[i])
++            && category.getName().equals(NewUserListener.defaultEventCategoryNames[i])) {
++          isDefaultEventCategory = true;
++          break;
++        }
++      }
++      
++      if (isDefaultEventCategory) {
++        String newName = CalendarUtils.getResourceBundle("UICalendarView.label." + category.getId(), category.getId());
+         options.add(new SelectItemOption<String>(newName, category.getId())) ;
+       } else {
+         options.add(new SelectItemOption<String>(category.getName(), category.getId())) ;        
+Index: eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UICalendarCategoryForm.java
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UICalendarCategoryForm.java	(revision 72783)
++++ eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UICalendarCategoryForm.java	(working copy)
+@@ -73,8 +73,8 @@
+     CalendarService calService = getApplicationComponent(CalendarService.class) ;
+     String username = CalendarUtils.getCurrentUser() ;
+     CalendarCategory category = calService.getCalendarCategory(username, categoryId) ;
+-    if (category.getId().equals(NewUserListener.DEFAULT_CALENDAR_CATEGORYID) && category.getName().equals(NewUserListener.DEFAULT_CALENDAR_CATEGORYNAME)) {
+-      String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_CATEGORYID);
++    if (category.getId().equals(NewUserListener.defaultCalendarCategoryId) && category.getName().equals(NewUserListener.defaultCalendarCategoryName)) {
++      String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarCategoryId, NewUserListener.defaultCalendarCategoryId);
+       category.setName(newName);
+     }
+     setCategoryId(category.getId()) ;
+Index: eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UICalendarSettingForm.java
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UICalendarSettingForm.java	(revision 72783)
++++ eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UICalendarSettingForm.java	(working copy)
+@@ -186,8 +186,8 @@
+     List<Calendar> calendars = new ArrayList<Calendar>() ;
+     for(GroupCalendarData group : groupCalendars) {      
+       for (Calendar calendar : group.getCalendars()) {
+-        if (calendar.getId().equals(Utils.getDefaultCalendarId(username)) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+-          String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
++        if (calendar.getId().equals(Utils.getDefaultCalendarId(username)) && calendar.getName().equals(NewUserListener.defaultCalendarName)) {
++          String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
+           calendar.setName(newName);
+         }
+         calendars.add(calendar);
+@@ -216,8 +216,8 @@
+     List<Calendar> calendars = new ArrayList<Calendar>(); 
+     if(groupCalendars != null) {    
+       for (Calendar calendar : groupCalendars.getCalendars()) {
+-        if (calendar.getId().equals(Utils.getDefaultCalendarId(calendar.getCalendarOwner())) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+-          String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
++        if (calendar.getId().equals(Utils.getDefaultCalendarId(calendar.getCalendarOwner())) && calendar.getName().equals(NewUserListener.defaultCalendarName)) {
++          String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
+           calendar.setName(newName);
+         }
+         calendars.add(calendar);
+Index: eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UICalendarForm.java
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UICalendarForm.java	(revision 72783)
++++ eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UICalendarForm.java	(working copy)
+@@ -187,8 +187,8 @@
+     List<CalendarCategory> categories = calendarService.getCategories(username) ;
+     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+     for(CalendarCategory category : categories) {
+-      if (category.getId().equals(NewUserListener.DEFAULT_CALENDAR_CATEGORYID) && category.getName().equals(NewUserListener.DEFAULT_CALENDAR_CATEGORYNAME)) {
+-        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_CATEGORYID);
++      if (category.getId().equals(NewUserListener.defaultCalendarCategoryId) && category.getName().equals(NewUserListener.defaultCalendarCategoryName)) {
++        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarCategoryId, NewUserListener.defaultCalendarCategoryId);
+         category.setName(newName);
+       }
+       options.add(new SelectItemOption<String>(category.getName(), category.getId())) ;
+@@ -242,8 +242,8 @@
+     isAddNew_ = false ;
+     calendar_ = calendar ;
+     UIFormInputWithActions calendarDetail = getChildById(INPUT_CALENDAR);    
+-    if (calendar.getId().equals(Utils.getDefaultCalendarId(CalendarUtils.getCurrentUser())) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+-      String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
++    if (calendar.getId().equals(Utils.getDefaultCalendarId(CalendarUtils.getCurrentUser())) && calendar.getName().equals(NewUserListener.defaultCalendarName)) {
++      String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
+       calendar.setName(newName);
+     }
+     //    CalendarSetting setting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting();
+@@ -590,8 +590,8 @@
+           calendar.setCategoryId(calendarCategoryId) ;
+           List<Calendar> pCals = calendarService.getUserCalendars(username, true) ;
+           for(Calendar cal : pCals) {
+-            if (cal.getId().equals(Utils.getDefaultCalendarId(username)) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+-              String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
++            if (cal.getId().equals(Utils.getDefaultCalendarId(username)) && cal.getName().equals(NewUserListener.defaultCalendarName)) {
++              String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
+               cal.setName(newName);
+             }
+             if(uiForm.isAddNew_) {
+Index: eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/UICalendars.java
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/UICalendars.java	(revision 72783)
++++ eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/UICalendars.java	(working copy)
+@@ -173,15 +173,15 @@
+     boolean dontShowAll = false;
+     List<GroupCalendarData> groupCalendars = calendarService.getCalendarCategories(username, dontShowAll) ;
+     for(GroupCalendarData group : groupCalendars) {
+-      if (group.getId().equals(NewUserListener.DEFAULT_CALENDAR_CATEGORYID) && group.getName().equals(NewUserListener.DEFAULT_CALENDAR_CATEGORYNAME)) {
+-        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + group.getId());
++      if (group.getId().equals(NewUserListener.defaultCalendarCategoryId) && group.getName().equals(NewUserListener.defaultCalendarCategoryName)) {
++        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + group.getId(), group.getId());
+         group.setName(newName);
+       }      
+       List<Calendar> calendars = group.getCalendars() ;
+       if(calendars != null) {
+         for(Calendar calendar : calendars) {
+-          if (calendar.getId().equals(Utils.getDefaultCalendarId(username)) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+-            String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
++          if (calendar.getId().equals(Utils.getDefaultCalendarId(username)) && calendar.getName().equals(NewUserListener.defaultCalendarName)) {
++            String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
+             calendar.setName(newName);
+           }
+           colorMap_.put(Calendar.TYPE_PRIVATE + CalendarUtils.COLON + calendar.getId(), calendar.getCalendarColor()) ;
+@@ -249,8 +249,8 @@
+     if(groupCalendars != null) {
+       List<Calendar> calendars = groupCalendars.getCalendars() ;
+       for(Calendar calendar : calendars) {
+-        if (calendar.getId().equals(Utils.getDefaultCalendarId(calendar.getCalendarOwner())) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+-          String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
++        if (calendar.getId().equals(Utils.getDefaultCalendarId(calendar.getCalendarOwner())) && calendar.getName().equals(NewUserListener.defaultCalendarName)) {
++          String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
+           calendar.setName(newName);
+         }
+         String color = map.get(calendar.getId()) ;
+@@ -719,8 +719,8 @@
+         if(gCalendarData != null) { 
+           calendar = gCalendarData.getCalendarById(selectedCalendarId) ;
+           if(calendar != null && !CalendarUtils.isEmpty(calendar.getCalendarOwner())){
+-            if (calendar.getId().equals(Utils.getDefaultCalendarId(currentUser)) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+-              String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
++            if (calendar.getId().equals(Utils.getDefaultCalendarId(currentUser)) && calendar.getName().equals(NewUserListener.defaultCalendarName)) {
++              String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
+               calendar.setName(newName);
+             }
+             calendar.setName(calendar.getCalendarOwner() + "-" + calendar.getName()) ;
+@@ -914,8 +914,8 @@
+       CalendarService calService = CalendarUtils.getCalendarService() ;
+       String username = CalendarUtils.getCurrentUser() ;
+       Calendar cal = calService.getUserCalendar(username, selectedCalendarId) ;
+-      if (cal.getId().equals(Utils.getDefaultCalendarId(username)) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+-        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
++      if (cal.getId().equals(Utils.getDefaultCalendarId(username)) && cal.getName().equals(NewUserListener.defaultCalendarName)) {
++        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
+         cal.setName(newName);
+       }
+       uiAddNewEditPermission.init(null, cal, true) ;
+Index: eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_en.properties
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_en.properties	(revision 72783)
++++ eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_en.properties	(working copy)
+@@ -357,11 +357,11 @@
+ UICalendarView.msg.can-not-delete-all-event=Impossible to delete events (tasks) because you have no edit permission.
+ UICalendarView.msg.feed-list-empty=You need to generate a feed first.
+ UICalendarView.label.defaultEventCategoryIdAll=All
+-UICalendarView.label.defaultEventCategoryIdMeeting=Meeting
+-UICalendarView.label.defaultEventCategoryIdCalls=Calls
+-UICalendarView.label.defaultEventCategoryIdClients=Clients
+-UICalendarView.label.defaultEventCategoryIdHoliday=Holiday
+-UICalendarView.label.defaultEventCategoryIdAnniversary=Anniversary
++UICalendarView.label.Meeting=Meeting
++UICalendarView.label.Calls=Calls
++UICalendarView.label.Clients=Clients
++UICalendarView.label.Holiday=Holiday
++UICalendarView.label.Anniversary=Anniversary
+ 
+ #org.exoplatform.calendar.webui.UISearchForm
+ UISearchForm.label.value=Search:
+Index: eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_fr.properties
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_fr.properties	(revision 72783)
++++ eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_fr.properties	(working copy)
+@@ -359,11 +359,11 @@
+ UICalendarView.msg.can-not-delete-all-event=Vous n'êtes pas autorisé à supprimer ces événements.
+ UICalendarView.msg.feed-list-empty=Vous n'avez pas encore généré de flux.
+ UICalendarView.label.defaultEventCategoryIdAll=tout
+-UICalendarView.label.defaultEventCategoryIdMeeting=meeting
+-UICalendarView.label.defaultEventCategoryIdCalls=cri
+-UICalendarView.label.defaultEventCategoryIdClients=client
+-UICalendarView.label.defaultEventCategoryIdHoliday=vacances
+-UICalendarView.label.defaultEventCategoryIdAnniversary=anniversaire
++UICalendarView.label.Meeting=Réunion
++UICalendarView.label.Calls=Appels
++UICalendarView.label.Clients=Clients
++UICalendarView.label.Holiday=Vacance
++UICalendarView.label.Anniversary=Anniversaire
+ 
+ #org.exoplatform.calendar.webui.UISearchForm
+ UISearchForm.label.value=Recherche
+Index: eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_de.properties
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_de.properties	(revision 72783)
++++ eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_de.properties	(working copy)
+@@ -357,11 +357,11 @@
+ UICalendarView.msg.can-not-delete-all-event=Unm&ouml;glich Events zu l&ouml;schen, da sie daf&uuml;r keine Genehmigung besitzen.
+ UICalendarView.msg.feed-list-empty=Sie m&uuml;ssen erst eine Eingabe erzeugen.
+ UICalendarView.label.defaultEventCategoryIdAll=All
+-UICalendarView.label.defaultEventCategoryIdMeeting=Meeting
+-UICalendarView.label.defaultEventCategoryIdCalls=Calls
+-UICalendarView.label.defaultEventCategoryIdClients=Clients
+-UICalendarView.label.defaultEventCategoryIdHoliday=Holiday
+-UICalendarView.label.defaultEventCategoryIdAnniversary=Anniversary
++UICalendarView.label.Meeting=Meeting
++UICalendarView.label.Calls=Calls
++UICalendarView.label.Clients=Clients
++UICalendarView.label.Holiday=Holiday
++UICalendarView.label.Anniversary=Anniversary
+ 
+ #org.exoplatform.calendar.webui.UISearchForm
+ UISearchForm.label.value=Suchen:
+Index: eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_nl.properties
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_nl.properties	(revision 72783)
++++ eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_nl.properties	(working copy)
+@@ -357,11 +357,11 @@
+ UICalendarView.msg.can-not-delete-all-event=Onmogelijk om events te verwijderen omdat u daarvoor geen rechten hebt.
+ UICalendarView.msg.feed-list-empty=U moet eerst feed genereren.
+ UICalendarView.label.defaultEventCategoryIdAll=All
+-UICalendarView.label.defaultEventCategoryIdMeeting=Meeting
+-UICalendarView.label.defaultEventCategoryIdCalls=Calls
+-UICalendarView.label.defaultEventCategoryIdClients=Clients
+-UICalendarView.label.defaultEventCategoryIdHoliday=Holiday
+-UICalendarView.label.defaultEventCategoryIdAnniversary=Anniversary
++UICalendarView.label.Meeting=Meeting
++UICalendarView.label.Calls=Calls
++UICalendarView.label.Clients=Clients
++UICalendarView.label.Holiday=Holiday
++UICalendarView.label.Anniversary=Anniversary
+ 
+ #org.exoplatform.calendar.webui.UISearchForm
+ UISearchForm.label.value=Zoeken:
+Index: eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_it.properties
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_it.properties	(revision 72783)
++++ eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_it.properties	(working copy)
+@@ -325,11 +325,11 @@
+ UICalendarView.msg.can-not-delete-all-event=Impossibile eliminare eventi (attivit\u00e0), perch\u00e9 non hai il permesso di modificare.
+ UICalendarView.msg.feed-list-empty=Devi generare un feed prima.
+ UICalendarView.label.defaultEventCategoryIdAll=Tutti
+-UICalendarView.label.defaultEventCategoryIdMeeting=Incontro
+-UICalendarView.label.defaultEventCategoryIdCalls=Chiamate
+-UICalendarView.label.defaultEventCategoryIdClients=Clienti
+-UICalendarView.label.defaultEventCategoryIdHoliday=Vacanze
+-UICalendarView.label.defaultEventCategoryIdAnniversary=Anniversario
++UICalendarView.label.Meeting=Incontro
++UICalendarView.label.Calls=Chiamate
++UICalendarView.label.Clients=Clienti
++UICalendarView.label.Holiday=Vacanze
++UICalendarView.label.Anniversary=Anniversario
+ UISearchForm.label.value=Ricerca:
+ UISearchForm.label.AdvancedSearch=Ricerca avanzata
+ UISearchForm.label.Search=Ricerca
+Index: eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet.properties
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet.properties	(revision 72783)
++++ eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet.properties	(working copy)
+@@ -359,11 +359,11 @@
+ UICalendarView.msg.can-not-delete-all-event=Impossible to delete events (tasks) because you have no edit permission.
+ UICalendarView.msg.feed-list-empty=You need to generate a feed first.
+ UICalendarView.label.defaultEventCategoryIdAll=All
+-UICalendarView.label.defaultEventCategoryIdMeeting=Meeting
+-UICalendarView.label.defaultEventCategoryIdCalls=Calls
+-UICalendarView.label.defaultEventCategoryIdClients=Clients
+-UICalendarView.label.defaultEventCategoryIdHoliday=Holiday
+-UICalendarView.label.defaultEventCategoryIdAnniversary=Anniversary
++UICalendarView.label.Meeting=Meeting
++UICalendarView.label.Calls=Calls
++UICalendarView.label.Clients=Clients
++UICalendarView.label.Holiday=Holiday
++UICalendarView.label.Anniversary=Anniversary
+ 
+ #org.exoplatform.calendar.webui.UISearchForm
+ UISearchForm.label.value=Search:
+Index: eXoApplication/contact/webapp/src/main/java/org/exoplatform/contact/CalendarUtils.java
+===================================================================
+--- eXoApplication/contact/webapp/src/main/java/org/exoplatform/contact/CalendarUtils.java	(revision 72783)
++++ eXoApplication/contact/webapp/src/main/java/org/exoplatform/contact/CalendarUtils.java	(working copy)
+@@ -26,6 +26,8 @@
+ import java.util.Date;
+ import java.util.GregorianCalendar;
+ import java.util.List;
++import java.util.MissingResourceException;
++import java.util.ResourceBundle;
+ 
+ import javax.mail.internet.AddressException;
+ import javax.mail.internet.InternetAddress;
+@@ -40,9 +42,12 @@
+ import org.exoplatform.download.DownloadService;
+ import org.exoplatform.download.InputStreamDownloadResource;
+ import org.exoplatform.portal.webui.util.Util;
++import org.exoplatform.services.log.ExoLogger;
++import org.exoplatform.services.log.Log;
+ import org.exoplatform.services.organization.Group;
+ import org.exoplatform.services.organization.Membership;
+ import org.exoplatform.services.organization.OrganizationService;
++import org.exoplatform.webui.application.WebuiRequestContext;
+ import org.exoplatform.webui.core.model.SelectItemOption;
+ 
+ 
+@@ -87,6 +92,8 @@
+   public static final String EXTENDEDCHARACTER[] = {SEMICOLON,COMMA,SLASH,BACKSLASH,"'","|",GREATER_THAN,SMALLER_THAN,"\"", "?", "!", "@", "#", "$", "%","^","&","*","+","]","["};
+   public static final String SIMPLECHARACTER[] = {GREATER_THAN,SMALLER_THAN};
+   
++  private static Log log = ExoLogger.getLogger(CalendarUtils.class);
++  
+   static public String[] getUserGroups(String username) throws Exception {
+     OrganizationService organization = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+     Object[] objs = organization.getGroupHandler().findGroupsOfUser(username).toArray() ;
+@@ -215,6 +222,21 @@
+     return null ;
+   }
+   
++  public static String getResourceBundle(String key) {
++    return getResourceBundle(key, null);
++  }
++  
++  public static String getResourceBundle(String key, String defaultValue) {
++    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
++    ResourceBundle res = context.getApplicationResourceBundle() ;
++    try {
++      return res.getString(key);
++    } catch (MissingResourceException e) {
++      log.warn("Can not find the resource for key: " + key);
++      return defaultValue;
++    }
++  }
++  
+   public static List<SelectItemOption<String>> getCalendarOption() throws Exception {
+     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+     CalendarService calendarService = CalendarUtils.getCalendarService() ;
+Index: eXoApplication/contact/webapp/src/main/java/org/exoplatform/contact/webui/popup/UIEventForm.java
+===================================================================
+--- eXoApplication/contact/webapp/src/main/java/org/exoplatform/contact/webui/popup/UIEventForm.java	(revision 72783)
++++ eXoApplication/contact/webapp/src/main/java/org/exoplatform/contact/webui/popup/UIEventForm.java	(working copy)
+@@ -31,6 +31,7 @@
+ import org.exoplatform.calendar.service.GroupCalendarData;
+ import org.exoplatform.calendar.service.Reminder;
+ import org.exoplatform.calendar.service.Utils;
++import org.exoplatform.calendar.service.impl.NewUserListener;
+ import org.exoplatform.contact.CalendarUtils;
+ import org.exoplatform.contact.webui.Selector;
+ import org.exoplatform.container.PortalContainer;
+@@ -215,7 +216,22 @@
+     CalendarService calendarService = CalendarUtils.getCalendarService() ;
+     List<EventCategory> eventCategories = calendarService.getEventCategories(Util.getPortalRequestContext().getRemoteUser()) ;
+     for(EventCategory category : eventCategories) {
+-      options.add(new SelectItemOption<String>(category.getName(), category.getId())) ;
++      // Check if EventCategory is default event category
++      boolean isDefaultEventCategory = false;
++      for (int i = 0; i < NewUserListener.defaultEventCategoryIds.length; i++) {
++        if (category.getId().equals(NewUserListener.defaultEventCategoryIds[i])
++            && category.getName().equals(NewUserListener.defaultEventCategoryNames[i])) {
++          isDefaultEventCategory = true;
++          break;
++        }
++      }
++      
++      if (isDefaultEventCategory) {
++        String newName = CalendarUtils.getResourceBundle("UICalendarView.label." + category.getId(), category.getId());
++        options.add(new SelectItemOption<String>(newName, category.getId())) ;
++      } else {
++        options.add(new SelectItemOption<String>(category.getName(), category.getId())) ;        
++      }
+     }
+     return options ;
+   }
+Index: demo/war/src/main/webapp/WEB-INF/conf/csdemo/cs/calendar/calendar-service-configuration.xml
+===================================================================
+--- demo/war/src/main/webapp/WEB-INF/conf/csdemo/cs/calendar/calendar-service-configuration.xml	(revision 72783)
++++ demo/war/src/main/webapp/WEB-INF/conf/csdemo/cs/calendar/calendar-service-configuration.xml	(working copy)
+@@ -22,84 +22,109 @@
+ 	    <type>org.exoplatform.calendar.service.impl.NewUserListener</type>
+ 	    <description>description</description>
+ 	    <init-params>
+-        <value-param>
+-        	<name>defaultEventCategories</name>
+-        	<value>Meeting,Calls,Clients,Holiday,Anniversary</value><!-- Multi value, use coma (,) to split values-->
+-        </value-param>
+-        <value-param>
+-        	<name>defaultCalendarCategory</name>
+-        	<value>My group</value><!-- Single value-->
+-        </value-param>
+-        <value-param>
+-        	<name>defaultCalendar</name>
+-        	<value>Default</value><!-- Multi value, use coma (,) to split values-->
+-        </value-param>
+-        <!--Params for default calendar setting-->
+-        <value-param>
+-         <name>viewType</name>
+-         <value>1</value><!-- DAY_VIEW = "0" ; WEEK_VIEW = "1" ; MONTH_VIEW = "2" ; YEAR_VIEW = "3" ; LIST_VIEW = "4" ; SCHEDULE_VIEW = "5" ; WORKING_VIEW = "6" ;-->
+-        </value-param>
++      
++          <value-param>
++            <name>defaultEventCategories</name>
++            <value>Meeting,Calls,Clients,Holiday,Anniversary</value><!-- Multi value, use coma (,) to split values-->
++            <!-- The event category's name will be get from resource bundle by key "UICalendars.label." + defaultEventCategory's value. 
++               If the key does not exist, the defaultEventCategory's value will be used to display. 
++               Sample: 
++                  If the value is "Meeting" then the resource bundle key is "UICalendars.label.Meeting". 
++                    The value of this key is "Meeting", so "Meeting" will be display as default event category.
++                  If the value is "Not exist key", because this key doesn't exist in resource bundle then 
++                    "Not exist key" will be display as default event category.
++            -->
++          </value-param>
++          <value-param>
++            <name>defaultCalendarCategory</name>
++            <value>defaultCalendarCategoryId</value><!-- Single value, default calendar category's name is "My group"-->
++            <!-- The calendar category's name will be get from resource bundle by key "UICalendars.label." + defaultCalendarCategory's value. 
++               If the key does not exist, the defaultCalendarCategory's value will be used to display. 
++               Sample:
++                  If the value is "defaultCalendarCategoryId" then the resource bundle key is "UICalendars.label.defaultCalendarCategoryId".
++                    The value of this key is "My group", so "My group" will be display as default calendar category.
++                  If the value is "My calendar category", because this key doesn't exist in resource bundle then
++                    "My calendar category" will be display as default calendar category.
++            -->
++          </value-param>
++          <value-param>
++            <name>defaultCalendar</name>
++            <value>defaultCalendarId</value> <!-- Single value, default calendar's name is "Default"-->
++            <!-- The calendar's name will be get from resource bundle by key "UICalendars.label." + defaultCalendar's value. 
++               If the key does not exist, the defaultCalendar's value will be used to display. 
++               Sample: 
++                  If the value is "defaultCalendarId" then the resource bundle key is "UICalendars.label.defaultCalendarId".
++                    The value of this key is "Default", so "Default" will be display as default calendar.
++                  If the value is "My calendar", because this key doesn't exist in resource bundle then
++                    "My calendar" will be display as default calendar.
++             -->
++          </value-param>
++          
++          <!--Params for default calendar setting-->
++          <value-param>
++           <name>viewType</name>
++           <value>1</value><!-- DAY_VIEW = "0" ; WEEK_VIEW = "1" ; MONTH_VIEW = "2" ; YEAR_VIEW = "3" ; LIST_VIEW = "4" ; SCHEDULE_VIEW = "5" ; WORKING_VIEW = "6" ;-->
++          </value-param>
++          
++          <value-param>
++           <name>timeInterval</name>
++           <value>15</value><!-- in minutes -->
++          </value-param>
++          
++          <value-param>
++           <name>weekStartOn</name>
++           <value>2</value><!--SUNDAY = "1" ; MONDAY = "2" ; TUESDAY = "3" ; WEDNESDAY = "4" ; THURSDAY = "5" ; FRIDAY = "6" ;SATURDAY = "7" ;-->
++          </value-param>
++          
++          <value-param>
++           <name>dateFormat</name>
++           <value>MM/dd/yyyy</value>
++          </value-param>
++          
++          <value-param>
++           <name>timeFormat</name>
++           <value>HH:mm</value> <!-- HH:mm/hh:mm a -->
++          </value-param>
++          
++          <value-param>
++           <name>localeId</name>
++           <value>BEL</value><!-- see more locale ids http://userpage.chemie.fu-berlin.de/diverse/doc/ISO_3166.html -->
++          </value-param>
++          
++           <value-param>
++           <name>timezoneId</name>
++           <value>Europe/Brussels</value><!-- see more for timeZone ids http://www.unicode.org/cldr/data/docs/design/formatting/zone_log.html#windows_ids -->
++          </value-param>
++          
++           <value-param>
++           <name>baseUrlForRss</name>
++           <value></value>
++          </value-param>
++          
++           <value-param>
++           <name>isShowWorkingTime</name>
++           <value>false</value><!-- boolean true/false -->
++          </value-param>
++          
++           <value-param>
++           <name>workingTimeBegin</name>
++           <value>08:00</value><!--  -->
++          </value-param>
++          
++           <value-param>
++  	         <name>workingTimeEnd</name>
++  	         <value>18:00</value><!--  -->
++          </value-param>
++          
++          <values-param>
++  	        <name>ignoredUsers</name>
++  	        <description>Definition users to ignore create default calendar</description>
++  	        <!-- 
++  	        <value>demo</value> 
++  	        <value>marry</value>
++  	         -->
++          </values-param>
+         
+-        <value-param>
+-         <name>timeInterval</name>
+-         <value>15</value><!-- in minutes -->
+-        </value-param>
+-        
+-        <value-param>
+-         <name>weekStartOn</name>
+-         <value>2</value><!--SUNDAY = "1" ; MONDAY = "2" ; TUESDAY = "3" ; WEDNESDAY = "4" ; THURSDAY = "5" ; FRIDAY = "6" ;SATURDAY = "7" ;-->
+-        </value-param>
+-        
+-        <value-param>
+-         <name>dateFormat</name>
+-         <value>MM/dd/yyyy</value>
+-        </value-param>
+-        
+-        <value-param>
+-         <name>timeFormat</name>
+-         <value>HH:mm</value> <!-- HH:mm/hh:mm a -->
+-        </value-param>
+-        
+-        <value-param>
+-         <name>localeId</name>
+-         <value>BEL</value><!-- see more locale ids http://userpage.chemie.fu-berlin.de/diverse/doc/ISO_3166.html -->
+-        </value-param>
+-        
+-         <value-param>
+-         <name>timezoneId</name>
+-         <value>Europe/Brussels</value><!-- see more for timeZone ids http://www.unicode.org/cldr/data/docs/design/formatting/zone_log.html#windows_ids -->
+-        </value-param>
+-        
+-         <value-param>
+-         <name>baseUrlForRss</name>
+-         <value></value>
+-        </value-param>
+-        
+-         <value-param>
+-         <name>isShowWorkingTime</name>
+-         <value>false</value><!-- boolean true/false -->
+-        </value-param>
+-        
+-         <value-param>
+-         <name>workingTimeBegin</name>
+-         <value>08:00</value><!--  -->
+-        </value-param>
+-        
+-         <value-param>
+-	         <name>workingTimeEnd</name>
+-	         <value>18:00</value><!--  -->
+-        </value-param>
+-        
+-        <values-param>
+-	        <name>ignoredUsers</name>
+-	        <description>Definition users to ignore create default calendar</description>
+-	        <!-- 
+-	        <value>demo</value> 
+-	        <value>marry</value>
+-	         -->
+-        </values-param>
+-        
+-        
+ 	    </init-params>    
+ 	  </component-plugin>
+ 	  
+Index: pom.xml
+===================================================================
+--- pom.xml	(revision 72783)
++++ pom.xml	(working copy)
+@@ -84,6 +84,7 @@
+     <!--exo.cs.eXoApplication.calendar.service-->
+     <ical4j.version>1.0-beta5</ical4j.version>
+     <jcrom.version>1.2</jcrom.version>
++    <org.javassist.version>3.14.0-GA</org.javassist.version>
+     <!--exo.cs.eXoApplication.chat.service-->
+     <jivesoftware.smack.version>3.1.0</jivesoftware.smack.version>
+     <jivesoftware.smackx.version>3.1.0</jivesoftware.smackx.version>
+Index: extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/calendar/calendar-service-configuration.xml
+===================================================================
+--- extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/calendar/calendar-service-configuration.xml	(revision 72783)
++++ extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/calendar/calendar-service-configuration.xml	(working copy)
+@@ -22,125 +22,150 @@
+ 	    <type>org.exoplatform.calendar.service.impl.NewUserListener</type>
+ 	    <description>description</description>
+ 	    <init-params>
+-        <value-param>
+-        	<name>defaultEventCategories</name>
+-        	<value>Meeting,Calls,Clients,Holiday,Anniversary</value><!-- Multi value, use coma (,) to split values-->
+-        </value-param>
+-        <value-param>
+-        	<name>defaultCalendarCategory</name>
+-        	<value>My group</value><!-- Single value-->
+-        </value-param>
+-        <value-param>
+-        	<name>defaultCalendar</name>
+-        	<value>Default</value><!-- Multi value, use coma (,) to split values-->
+-        </value-param>
+-        <!--Params for default calendar setting-->
+-        <value-param>
+-         <name>viewType</name>
+-         <value>1</value><!-- DAY_VIEW = "0" ; WEEK_VIEW = "1" ; MONTH_VIEW = "2" ; YEAR_VIEW = "3" ; LIST_VIEW = "4" ; SCHEDULE_VIEW = "5" ; WORKING_VIEW = "6" ;-->
+-        </value-param>
++      
++          <value-param>
++            <name>defaultEventCategories</name>
++            <value>Meeting,Calls,Clients,Holiday,Anniversary</value><!-- Multi value, use coma (,) to split values-->
++            <!-- The event category's name will be get from resource bundle by key "UICalendars.label." + defaultEventCategory's value. 
++               If the key does not exist, the defaultEventCategory's value will be used to display. 
++               Sample: 
++                  If the value is "Meeting" then the resource bundle key is "UICalendars.label.Meeting". 
++                    The value of this key is "Meeting", so "Meeting" will be display as default event category.
++                  If the value is "Not exist key", because this key doesn't exist in resource bundle then 
++                    "Not exist key" will be display as default event category.
++            -->
++          </value-param>
++          <value-param>
++            <name>defaultCalendarCategory</name>
++            <value>defaultCalendarCategoryId</value><!-- Single value, default calendar category's name is "My group"-->
++            <!-- The calendar category's name will be get from resource bundle by key "UICalendars.label." + defaultCalendarCategory's value. 
++               If the key does not exist, the defaultCalendarCategory's value will be used to display. 
++               Sample:
++                  If the value is "defaultCalendarCategoryId" then the resource bundle key is "UICalendars.label.defaultCalendarCategoryId".
++                    The value of this key is "My group", so "My group" will be display as default calendar category.
++                  If the value is "My calendar category", because this key doesn't exist in resource bundle then
++                    "My calendar category" will be display as default calendar category.
++            -->
++          </value-param>
++          <value-param>
++            <name>defaultCalendar</name>
++            <value>defaultCalendarId</value> <!-- Single value, default calendar's name is "Default"-->
++            <!-- The calendar's name will be get from resource bundle by key "UICalendars.label." + defaultCalendar's value. 
++               If the key does not exist, the defaultCalendar's value will be used to display. 
++               Sample: 
++                  If the value is "defaultCalendarId" then the resource bundle key is "UICalendars.label.defaultCalendarId".
++                    The value of this key is "Default", so "Default" will be display as default calendar.
++                  If the value is "My calendar", because this key doesn't exist in resource bundle then
++                    "My calendar" will be display as default calendar.
++             -->
++          </value-param>
++          
++          <!--Params for default calendar setting-->
++          <value-param>
++            <name>viewType</name>
++            <value>1</value><!-- DAY_VIEW = "0" ; WEEK_VIEW = "1" ; MONTH_VIEW = "2" ; YEAR_VIEW = "3" ; LIST_VIEW = "4" ; SCHEDULE_VIEW = "5" ; WORKING_VIEW = "6" ;-->
++          </value-param>
++          
++          <value-param>
++           <name>timeInterval</name>
++           <value>15</value><!-- in minutes -->
++          </value-param>
++          
++          <value-param>
++           <name>weekStartOn</name>
++           <value>2</value><!--SUNDAY = "1" ; MONDAY = "2" ; TUESDAY = "3" ; WEDNESDAY = "4" ; THURSDAY = "5" ; FRIDAY = "6" ;SATURDAY = "7" ;-->
++          </value-param>
++          
++          <value-param>
++           <name>dateFormat</name>
++           <value>MM/dd/yyyy</value>
++          </value-param>
++          
++          <value-param>
++           <name>timeFormat</name>
++           <value>HH:mm</value> <!-- HH:mm/hh:mm a -->
++          </value-param>
++          
++          <value-param>
++           <name>localeId</name>
++           <value>BEL</value><!-- see more locale ids http://userpage.chemie.fu-berlin.de/diverse/doc/ISO_3166.html -->
++          </value-param>
++          
++           <value-param>
++           <name>timezoneId</name>
++           <value>Europe/Brussels</value><!-- see more for timeZone ids http://www.unicode.org/cldr/data/docs/design/formatting/zone_log.html#windows_ids -->
++          </value-param>
++          
++           <value-param>
++           <name>baseUrlForRss</name>
++           <value></value>
++          </value-param>
++          
++           <value-param>
++           <name>isShowWorkingTime</name>
++           <value>false</value><!-- boolean true/false -->
++          </value-param>
++          
++           <value-param>
++           <name>workingTimeBegin</name>
++           <value>08:00</value><!--  -->
++          </value-param>
++          
++           <value-param>
++  	         <name>workingTimeEnd</name>
++  	         <value>18:00</value><!--  -->
++          </value-param>
++          
++          <values-param>
++  	        <name>ignoredUsers</name>
++  	        <description>Definition users to ignore create default calendar</description>
++  	        <!-- 
++  	        <value>demo</value> 
++  	        <value>marry</value>
++  	         -->
++          </values-param>
++          
++          
++  	    </init-params>    
++  	  </component-plugin>
++  	  
++  	  <component-plugin>
++  	    <name>calendar.new.group.event.listener</name>
++  	    <set-method>addListenerPlugin</set-method>
++  	    <type>org.exoplatform.calendar.service.impl.NewGroupListener</type>
++  	    <description>description</description>
++  	    <init-params>
++          <value-param>
++          	<name>defaultEditPermission</name>
++          	<value>*.*</value><!-- Multi value membership, use coma (,) to split values-->
++          </value-param>
++          <value-param>
++          	<name>defaultViewPermission</name>
++          	<value>*.*</value><!-- Multi value membership, use coma (,) to split values-->
++          </value-param>
++          
++          <value-param>
++  	      	<name>defaultLocale</name>
++  	        <value>BEL</value><!-- see more locale ids http://userpage.chemie.fu-berlin.de/diverse/doc/ISO_3166.html -->
++        	</value-param>
+         
+-        <value-param>
+-         <name>timeInterval</name>
+-         <value>15</value><!-- in minutes -->
+-        </value-param>
++        	<value-param>
++  	      	<name>defaultTimeZone</name>
++  	      	<value>Europe/Brussels</value><!-- see more for timeZone ids http://www.unicode.org/cldr/data/docs/design/formatting/zone_log.html#windows_ids -->
++        	</value-param>	
+         
+-        <value-param>
+-         <name>weekStartOn</name>
+-         <value>2</value><!--SUNDAY = "1" ; MONDAY = "2" ; TUESDAY = "3" ; WEDNESDAY = "4" ; THURSDAY = "5" ; FRIDAY = "6" ;SATURDAY = "7" ;-->
+-        </value-param>
++          <values-param>
++  	        <name>ignoredGroups</name>
++  	        <description>Definition group to ignore create default calendar</description>
++  	        <!-- 
++  	        <value>/platform/guests</value>
++  	         -->
++  	        <value>/spaces/*</value> <!--  single value, use more <value> tags to add more group -->
++          </values-param>
+         
+-        <value-param>
+-         <name>dateFormat</name>
+-         <value>MM/dd/yyyy</value>
+-        </value-param>
+-        
+-        <value-param>
+-         <name>timeFormat</name>
+-         <value>HH:mm</value> <!-- HH:mm/hh:mm a -->
+-        </value-param>
+-        
+-        <value-param>
+-         <name>localeId</name>
+-         <value>BEL</value><!-- see more locale ids http://userpage.chemie.fu-berlin.de/diverse/doc/ISO_3166.html -->
+-        </value-param>
+-        
+-         <value-param>
+-         <name>timezoneId</name>
+-         <value>Europe/Brussels</value><!-- see more for timeZone ids http://www.unicode.org/cldr/data/docs/design/formatting/zone_log.html#windows_ids -->
+-        </value-param>
+-        
+-         <value-param>
+-         <name>baseUrlForRss</name>
+-         <value></value>
+-        </value-param>
+-        
+-         <value-param>
+-         <name>isShowWorkingTime</name>
+-         <value>false</value><!-- boolean true/false -->
+-        </value-param>
+-        
+-         <value-param>
+-         <name>workingTimeBegin</name>
+-         <value>08:00</value><!--  -->
+-        </value-param>
+-        
+-         <value-param>
+-	         <name>workingTimeEnd</name>
+-	         <value>18:00</value><!--  -->
+-        </value-param>
+-        
+-        <values-param>
+-	        <name>ignoredUsers</name>
+-	        <description>Definition users to ignore create default calendar</description>
+-	        <!-- 
+-	        <value>demo</value> 
+-	        <value>marry</value>
+-	         -->
+-        </values-param>
+-        
+-        
+ 	    </init-params>    
+ 	  </component-plugin>
+-	  
+ 	  <component-plugin>
+-	    <name>calendar.new.group.event.listener</name>
+-	    <set-method>addListenerPlugin</set-method>
+-	    <type>org.exoplatform.calendar.service.impl.NewGroupListener</type>
+-	    <description>description</description>
+-	    <init-params>
+-        <value-param>
+-        	<name>defaultEditPermission</name>
+-        	<value>*.*</value><!-- Multi value membership, use coma (,) to split values-->
+-        </value-param>
+-        <value-param>
+-        	<name>defaultViewPermission</name>
+-        	<value>*.*</value><!-- Multi value membership, use coma (,) to split values-->
+-        </value-param>
+-        
+-        <value-param>
+-	      	<name>defaultLocale</name>
+-	        <value>BEL</value><!-- see more locale ids http://userpage.chemie.fu-berlin.de/diverse/doc/ISO_3166.html -->
+-      	</value-param>
+-      
+-      	<value-param>
+-	      	<name>defaultTimeZone</name>
+-	      	<value>Europe/Brussels</value><!-- see more for timeZone ids http://www.unicode.org/cldr/data/docs/design/formatting/zone_log.html#windows_ids -->
+-      	</value-param>	
+-      
+-        <values-param>
+-	        <name>ignoredGroups</name>
+-	        <description>Definition group to ignore create default calendar</description>
+-	        <!-- 
+-	        <value>/platform/guests</value>
+-	         -->
+-	        <value>/spaces/*</value> <!--  single value, use more <value> tags to add more group -->
+-        </values-param>
+-        
+-        
+-	    </init-params>    
+-	  </component-plugin>
+-	  <component-plugin>
+ 	    <name>calendar.new.membership.event.listener</name>
+ 	    <set-method>addListenerPlugin</set-method>
+ 	    <type>org.exoplatform.calendar.service.impl.NewMembershipListener</type>

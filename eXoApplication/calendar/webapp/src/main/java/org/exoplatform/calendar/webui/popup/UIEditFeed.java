@@ -151,8 +151,8 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
     String username = CalendarUtils.getCurrentUser() ;    
     for(Calendar cal : calendarService.getUserCalendars(username, true)) {
       if (feedCalendars.containsKey(cal.getId())) continue;
-      if (cal.getId().equals(Utils.getDefaultCalendarId(username)) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
-        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+      if (cal.getId().equals(Utils.getDefaultCalendarId(username)) && cal.getName().equals(NewUserListener.defaultCalendarName)) {
+        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
         cal.setName(newName);
       }
       options.add(new SelectItemOption<String>(cal.getName(), Utils.PRIVATE_TYPE + Utils.COLON + cal.getId())) ;
@@ -171,8 +171,8 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
     if(sharedData != null) {
       for(Calendar cal : sharedData.getCalendars()) {
         if (feedCalendars.containsKey(cal.getId())) continue;       
-        if (cal.getId().equals(Utils.getDefaultCalendarId(cal.getCalendarOwner())) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
-          String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+        if (cal.getId().equals(Utils.getDefaultCalendarId(cal.getCalendarOwner())) && cal.getName().equals(NewUserListener.defaultCalendarName)) {
+          String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
           cal.setName(newName);
         }
         options.add(new SelectItemOption<String>(Utils.getDisplaySharedCalendar(
@@ -212,8 +212,8 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
       try {
         calendar = calendarService.getUserCalendar(username, calendarId) ;
         if (calendar != null) {
-          if (calendar.getId().equals(Utils.getDefaultCalendarId(username)) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
-            String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+          if (calendar.getId().equals(Utils.getDefaultCalendarId(username)) && calendar.getName().equals(NewUserListener.defaultCalendarName)) {
+            String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
             calendar.setName(newName);
           }          
           feedCalendars.put(Utils.PRIVATE_TYPE + Utils.COLON +  calendar.getId() , calendar.getName());
@@ -222,8 +222,8 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
             calendar = calendarService.getSharedCalendars(username, false).getCalendarById(calendarId);
           } catch (NullPointerException e) {}
           if (calendar != null) {
-            if (calendar.getId().equals(Utils.getDefaultCalendarId(calendar.getCalendarOwner())) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
-              String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+            if (calendar.getId().equals(Utils.getDefaultCalendarId(calendar.getCalendarOwner())) && calendar.getName().equals(NewUserListener.defaultCalendarName)) {
+              String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
               calendar.setName(newName);
             }
             feedCalendars.put(Utils.SHARED_TYPE + Utils.COLON + calendar.getId()
@@ -263,14 +263,14 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
       try {
         if (type.equals(Utils.PRIVATE_TYPE + "")) {
           cal = calendarService.getUserCalendar(username, calendarId);
-          if (cal.getId().equals(Utils.getDefaultCalendarId(username)) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
-            String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+          if (cal.getId().equals(Utils.getDefaultCalendarId(username)) && cal.getName().equals(NewUserListener.defaultCalendarName)) {
+            String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
             cal.setName(newName);
           } 
         } else if (type.equals(Utils.SHARED_TYPE + "")) {
           cal = calendarService.getSharedCalendars(username, false).getCalendarById(calendarId);
-          if (cal.getId().equals(Utils.getDefaultCalendarId(cal.getCalendarOwner())) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
-            String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+          if (cal.getId().equals(Utils.getDefaultCalendarId(cal.getCalendarOwner())) && cal.getName().equals(NewUserListener.defaultCalendarName)) {
+            String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
             cal.setName(newName);
           }
           cal.setName(Utils.getDisplaySharedCalendar(cal.getCalendarOwner(), cal.getName()));

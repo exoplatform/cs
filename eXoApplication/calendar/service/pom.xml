@@ -43,6 +43,12 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>org.exoplatform.core</groupId>
+      <artifactId>exo.core.component.organization.jdbc</artifactId>
+      <version>${org.exoplatform.core.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.component.resources</artifactId>
       <version>${org.exoplatform.portal.version}</version>
@@ -146,6 +152,13 @@
       <artifactId>exo.kernel.component.command</artifactId>
       <version>${org.exoplatform.kernel.version}</version>
       <scope>provided</scope>
+    </dependency>
+    <!--javassist is the necessary dependency for the HibernateService component used in unit test -->
+    <dependency>
+      <groupId>org.javassist</groupId>
+      <artifactId>javassist</artifactId>
+      <version>${org.javassist.version}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>
