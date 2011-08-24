@@ -233,7 +233,7 @@
           <tr class="$style">
             <td class="TdTime">
               <div class="TdTime">
-                <%if(!flag) {println display;}%>
+                <%if(!flag) {println display;} else {println "&nbsp;";} %>
               </div>
             </td>
             <%

@@ -1,0 +1,53 @@
+Index: eXoApplication/calendar/webapp/src/main/webapp/skin/DefaultSkin/webui/UICalendarView/Stylesheet.css
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/webapp/skin/DefaultSkin/webui/UICalendarView/Stylesheet.css	(revision 72573)
++++ eXoApplication/calendar/webapp/src/main/webapp/skin/DefaultSkin/webui/UICalendarView/Stylesheet.css	(working copy)
+@@ -71,10 +71,9 @@
+ }
+ 
+ .UIDayView .EventDayContent .UIGrid td{
+-	padding: 0px;
+-	height: 30px ;
+-	border-left: none ;
+-	*height: 29px ; /* fixed for IE */
++  border-left: none ;
++  padding:0px;
++  line-height: 29px;
+ }
+ 
+ .UIDayView .EventDayContent .UIGrid td{ /* fix for Safari */
+@@ -267,19 +266,10 @@
+ }
+ 
+ .UIWeekView .UIGrid td {
+-	padding: 0px;
+-	height: 30px ;
++  padding:0px;
++  line-height: 30px;
+ }
+ 
+-.UIWeekView .UIGrid td { /* fix for Safari */
+-	[
+-	height: 29px ;
+-	height: 29px ;
+-	#
+-	height:30px;
+-	]
+-}
+-
+ .UIWeekView .EventAllday {
+ 	position:relative;
+ 	background: #DFE6F8;
+Index: eXoApplication/calendar/webapp/src/main/webapp/templates/calendar/webui/UIWeekView.gtmpl
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/webapp/templates/calendar/webui/UIWeekView.gtmpl	(revision 72573)
++++ eXoApplication/calendar/webapp/src/main/webapp/templates/calendar/webui/UIWeekView.gtmpl	(working copy)
+@@ -233,7 +233,7 @@
+           <tr class="$style">
+             <td class="TdTime">
+               <div class="TdTime">
+-                <%if(!flag) {println display;}%>
++                <%if(!flag) {println display;} else {println "&nbsp;";} %>
+               </div>
+             </td>
+             <%
