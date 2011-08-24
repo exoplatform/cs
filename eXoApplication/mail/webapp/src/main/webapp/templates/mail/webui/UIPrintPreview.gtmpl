@@ -68,7 +68,7 @@
         DownloadService dservice = uicomponent.getDownloadService() ;
         String attLink ;
         for (Attachment attach : msg.getAttachments()) {
-          attLink = "/"+ PortalContainer.getInstance().getRestContextName() + "/private/jcr/" +uicomponent.getRepository() + attach.getPath() ;
+          attLink = "/"+ PortalContainer.getInstance().getRestContextName() + "/jcr/" +uicomponent.getRepository() + attach.getPath() ;
           //attLink = MailUtils.getImageSource(attach, dservice) ;
           boolean isImage = false ;
           boolean isSupportedIcon = false ;

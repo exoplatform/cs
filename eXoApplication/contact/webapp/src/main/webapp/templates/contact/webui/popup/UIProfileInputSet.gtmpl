@@ -143,7 +143,7 @@
         ContactAttachment att = contact.getAttachment() ;
         if (att != null) {  
           try {
-            imageLink = "/"+ PortalContainer.getInstance().getRestContextName() + "/private/jcr/" +uiForm.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
+            imageLink = "/"+ PortalContainer.getInstance().getRestContextName() + "/jcr/" +uiForm.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
             imageLink = imageLink + "?rnd=" + System.currentTimeMillis();
           } catch (Exception e) {}
         }
@@ -151,7 +151,6 @@
     %>
     <div class="Avatar">
       <img src='$imageLink' width="63px" height="81px" />
-        <!--<div class="Avatar"  style="background:transparent url('D:\\java\\exo-working\\exo-tomcat\\temp\\portal\\eXoUpload\\4020402.11copy2.jpg') no-repeat;width:53px; height:81px;"><span></span></div>-->
     </div>
     
     <div class="Action">  

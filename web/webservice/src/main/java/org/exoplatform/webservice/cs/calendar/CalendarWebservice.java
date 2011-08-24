@@ -81,7 +81,7 @@ public class CalendarWebservice implements ResourceContainer{
   public final static String BASE_RSS_URL = BASE_URL + "/feed".intern();
   public final static String BASE_EVENT_URL = BASE_URL + "/event".intern();
   final public static String BASE_URL_PUBLIC = "/cs/calendar/subscribe/".intern();
-  final public static String BASE_URL_PRIVATE = BASE_URL + "/private/".intern();
+  final public static String BASE_URL_PRIVATE = BASE_URL + "/".intern();
   private Log log = ExoLogger.getExoLogger("calendar.webservice");
 
   public CalendarWebservice() {}
@@ -372,7 +372,7 @@ public class CalendarWebservice implements ResourceContainer{
    */
   @GET
   @RolesAllowed("users")
-  @Path("/private/{username}/{calendarId}/{type}")
+  @Path("/{username}/{calendarId}/{type}")
   public Response privateProcess(@PathParam("username")
                                  String username, @PathParam("calendarId")
                                  String calendarId, @PathParam("type")

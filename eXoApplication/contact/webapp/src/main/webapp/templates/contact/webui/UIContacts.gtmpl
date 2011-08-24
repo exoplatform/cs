@@ -661,7 +661,7 @@
                 ContactAttachment att = contact.getAttachment() ;
                 if (att != null) {  
                   try {  
-                    img = "/"+ PortalContainer.getInstance().getRestContextName() + "/private/jcr/" +uicomponent.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
+                    img = "/"+ PortalContainer.getInstance().getRestContextName() + "/jcr/" +uicomponent.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
                     img = img + "?rnd=" + System.currentTimeMillis();
                   } catch (Exception e) {}
                 }
@@ -830,7 +830,7 @@
                 att = contact.getAttachment() ;
                 if (att != null) {  
                   try {
-                    img = "/"+ PortalContainer.getInstance().getRestContextName() + "/private/jcr/" +uicomponent.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
+                    img = "/"+ PortalContainer.getInstance().getRestContextName() + "/jcr/" +uicomponent.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
                     img = img + "?rnd=" + System.currentTimeMillis();
                   } catch (Exception e) {}
                 }

@@ -162,7 +162,7 @@
                       ContactAttachment att = selectedContact.getAttachment() ;
                       if (att != null) {  
                         try {
-                          imageLink = "/"+ PortalContainer.getInstance().getRestContextName() + "/private/jcr/" +uicomponent.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
+                          imageLink = "/"+ PortalContainer.getInstance().getRestContextName() + "/jcr/" +uicomponent.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
                           imageLink = imageLink + "?rnd=" + System.currentTimeMillis();
                         } catch (Exception e) {}
                       }

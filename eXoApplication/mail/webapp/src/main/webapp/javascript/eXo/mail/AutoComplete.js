@@ -5,7 +5,7 @@ eXo.require("eXo.core.JSON");
 eXo.require("eXo.core.Keyboard");
 
 function AutoComplete(){
-	this.REST_URL = eXo.env.portal.context + "/rest/private/cs/mail/searchemail/";
+	this.REST_URL = eXo.env.portal.context + "/rest/cs/mail/searchemail/";
 	this.elm = null;
 	this.ACTION_SEARCH_EMAIL = false;
 	this.ACTION_SEARCH_USER = false;
@@ -18,7 +18,7 @@ AutoComplete.prototype.init = function(ids){
 	this.ACTION_SEARCH_EMAIL = true;
 	this.ACTION_SEARCH_USER = false;
 	var me = eXo.mail.AutoComplete;
-	if(eXo.cs.restContext) this.REST_URL = eXo.env.portal.context + "/" + eXo.cs.restContext + "/private/cs/mail/searchemail/";  
+	if(eXo.cs.restContext) this.REST_URL = eXo.env.portal.context + "/" + eXo.cs.restContext + "/cs/mail/searchemail/";  
 	var i = ids.length;
 	var input;
 	while(i--){
@@ -35,7 +35,7 @@ AutoComplete.prototype.initUserSeach = function(ids){
 	this.ACTION_SEARCH_USER = true;
 	this.ACTION_SEARCH_EMAIL = false
 	var me = eXo.mail.AutoComplete;
-	this.REST_URL = (eXo.cs.restContext)?eXo.env.portal.context+ '/' + eXo.cs.restContext +'/private/cs/mail/searchuser/':'portal/rest/private/cs/mail/searchuser/';
+	this.REST_URL = (eXo.cs.restContext)?eXo.env.portal.context+ '/' + eXo.cs.restContext +'/cs/mail/searchuser/':'portal/rest/cs/mail/searchuser/';
 	var i = ids.length;
 	var input;
 	while(i--){

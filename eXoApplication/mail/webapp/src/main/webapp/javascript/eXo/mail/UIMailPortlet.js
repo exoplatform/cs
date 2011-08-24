@@ -810,7 +810,7 @@ UIMailPortlet.prototype.checkForSupportedType = function(element){
 	var parentElm = eXo.core.DOMUtil.findAncestorByClass(element, PARENT_CLASS);
 	var cbos = eXo.core.DOMUtil.findFirstDescendantByClass(parentElm, "select", "selectbox");
 	if(cbos == null || parentElm == null) return
-	var url = (eXo.cs.restContext)?eXo.env.portal.context+ '/' + eXo.cs.restContext +'/private/cs/mail':'portal/rest/private/cs/mail';
+	var url = (eXo.cs.restContext)?eXo.env.portal.context+ '/' + eXo.cs.restContext +'/cs/mail':'portal/rest/cs/mail';
 	url = url + '/checkforsupportedtypes/' + mechs.replace('/','-') + '/' + username + '/' +  protocol + '/' + host;
 	var request = new eXo.portal.AjaxRequest('GET', url, null);
 	request.onSuccess = function(request){

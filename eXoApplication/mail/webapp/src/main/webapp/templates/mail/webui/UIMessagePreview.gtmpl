@@ -486,7 +486,7 @@
                           if (attLink != null ) {
                             if (attach.getMimeType().toLowerCase().indexOf("image") > -1) {
                               isImage = true ; 
-                              attLink = "/"+ PortalContainer.getInstance().getRestContextName() + "/private/jcr/" +uicomponent.getRepository() + attach.getPath() ;
+                              attLink = "/"+ PortalContainer.getInstance().getRestContextName() + "/jcr/" +uicomponent.getRepository() + attach.getPath() ;
                             } else if (attach.getMimeType().indexOf("msword") > -1) {
                               isSupportedIcon = true ;
                               attLink = "/mail/skin/DefaultSkin/webui/skinIcons/24x24/icons/WordIcon.gif";

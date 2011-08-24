@@ -19,7 +19,7 @@
   String contactUrl = nodeURL.setResource(resource).toString();
   resource = new NavigationResource(SiteType.PORTAL, Util.getPortalRequestContext().getPortalOwner(), "webos");
   String webosUrl = nodeURL.setResource(resource).toString();
-  String chatUrl = "/portal/private/classic/webos" ;
+  String chatUrl = "/portal/classic/webos" ;
   resource = new NavigationResource(SiteType.PORTAL, Util.getPortalRequestContext().getPortalOwner(), "register");
   String registerUrl = nodeURL.setResource(resource).toString();
   if(user == null) {
@@ -32,7 +32,7 @@
    chatUrl = "#" ;  
   
   String portalRequestContext = Util.getPortalRequestContext().getRequestContextPath();
-  String autoLoginLink = portalRequestContext + "/" + "login?username=root&amp;password=gtn&amp;initialURI=" + portalRequestContext + "/private/classic";
+  String autoLoginLink = portalRequestContext + "/" + "login?username=root&amp;password=gtn&amp;initialURI=" + portalRequestContext + "/classic";
   
 %>
 <div class="UIHomePagePorlet">

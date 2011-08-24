@@ -21,7 +21,7 @@ eXoMessageGadget.prototype.moveOut = function(){
 }
 
 eXoMessageGadget.prototype.showAccounts = function(){
-  var subscribeurl = "/portal/rest/private/cs/mail/getAccounts" ;
+  var subscribeurl = "/portal/rest/cs/mail/getAccounts" ;
   subscribeurl += "?rnd=" + (new Date()).getTime();
   this.ajaxAsyncGetRequest(subscribeurl,eXoMessageGadget.renderAccounts);
   if(typeof(requestInterval) == "undefined") requestInterval = setInterval(eXoMessageGadget.getData,300000);
@@ -51,7 +51,7 @@ eXoMessageGadget.prototype.renderAccounts = function(data){
 eXoMessageGadget.prototype.getFoldersTags = function(){
   var frmSetting = document.getElementById("SettingMessage");
   var accountId = frmSetting["account"].options[frmSetting["account"].selectedIndex].value;
-  var subscribeurl = "/portal/rest/private/cs/mail/getFoldersTags/" +  accountId;
+  var subscribeurl = "/portal/rest/cs/mail/getFoldersTags/" +  accountId;
   subscribeurl += "?rnd=" + (new Date()).getTime();
   this.ajaxAsyncGetRequest(subscribeurl,eXoMessageGadget.renderFoldersTags);
   if(typeof(requestInterval) == "undefined") requestInterval = setInterval(eXoMessageGadget.getData,300000);
@@ -131,7 +131,7 @@ eXoMessageGadget.prototype.setLink = function(){
 	baseUrlField.value = (url)? url : "/mail";
 	var subscribeurlField = frmSetting["subscribeurlMessage"];
 	var subscribeurl   = eXoMessageGadget.getPrefs().subscribeurl;
-	subscribeurlField.value = (subscribeurl)? subscribeurl : "/portal/rest/private/cs/mail/unreadMail" ;
+	subscribeurlField.value = (subscribeurl)? subscribeurl : "/portal/rest/cs/mail/unreadMail" ;
 	var baseUrl = "http://" +  top.location.host + parent.eXo.env.portal.context + "/" + parent.eXo.env.portal.accessMode + "/" + parent.eXo.env.portal.portalName;
 	var a = document.getElementById("ShowAllMessage");
 	url = (url)?baseUrl + url: baseUrl + "/mail";
@@ -144,7 +144,7 @@ eXoMessageGadget.prototype.createRequestUrl = function(){
   var account =  (prefs.account)? prefs.account:"_";
   var folder=  (prefs.folder)? prefs.folder:"_";
   var tag=  (prefs.tag)? prefs.tag:"_";
-  var subscribeurl = (prefs.subscribeurl)?prefs.subscribeurl: "/portal/rest/private/cs/mail/unreadMail" ;
+  var subscribeurl = (prefs.subscribeurl)?prefs.subscribeurl: "/portal/rest/cs/mail/unreadMail" ;
   subscribeurl +=  "/" + account ;
   subscribeurl +=  "/" + folder;
   subscribeurl +=  "/" + tag;
@@ -155,7 +155,7 @@ eXoMessageGadget.prototype.createRequestUrl = function(){
 eXoMessageGadget.prototype.getPrefs = function(){
   var prefs = new gadgets.Prefs();
   var setting = prefs.getString("setting");
-  if(setting == "") setting = ["/mail","/portal/rest/private/cs/mail/unreadMail","_","_","_", 5];
+  if(setting == "") setting = ["/mail","/portal/rest/cs/mail/unreadMail","_","_","_", 5];
   else setting = setting.split("::");
   return {
   	"url"  : setting[0],
