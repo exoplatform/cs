@@ -13,31 +13,41 @@
 }
 
 .UIChatBarPortlet .UIActionbar {
-	background: #e2ddc7;
+	background: #e6e6e6;
 	margin-bottom: 0px;
+}
+
+.UIChatBarPortlet .UIContextMenuContainer {
+	background: #fff;
+	margin: 1px;
+	padding: 5px;
+	border: 1px solid #dbdbdb;
+	-moz-box-shadow: 2px 2px 1px #dbdbdb;
+	-webkit-box-shadow: 2px 2px 1px #dbdbdb;
+	box-shadow: 2px 2px 1px #dbdbdb;
 }
 
 .UIContextMenuContainer {
 	background: #F6F6F6;
-    margin: 1px;
-    padding: 5px 0;
+	margin: 1px;
+	padding: 5px 0;
 	border: 1px solid #7E7E7F;
 }
 
 .UIChatBarPortlet .AddContactIcon {
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -225px; /* orientation=lt */
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right -225px; /* orientation=rt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat left -227px; /* orientation=lt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat right -227px; /* orientation=rt */
 	
 }
 
 .UIChatBarPortlet .NewRoomIcon {
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -175px; /* orientation=lt */
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right -175px; /* orientation=rt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat left -174px; /* orientation=lt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat right -174px; /* orientation=rt */
 }
 
 .UIChatBarPortlet .JoinRoomIcon {
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -200px; /* orientation=lt */
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right -200px; /* orientation=rt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat left -202px; /* orientation=lt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat right -202px; /* orientation=rt */
 }
 
 /* Down menu status */
@@ -53,8 +63,7 @@
 }
 
 .UIChatBarPortlet .UIRightClickPopupMenu .ItemIcon:hover {
-	color: orange;
-	background-color: #DEE4F2;
+	color: #f7941d;
 }
 
 /* ====================== User status shared Icons =================== */
@@ -70,68 +79,67 @@
 }
 
 .UIChatBarPortlet .UIRightClickPopupMenu .IconChat:hover {
-	color: orange;
-	background-color: #DEE4F2;
+	color: #F7941D;
 }
 
 
 .UIChatBarPortlet .OnlineIcon {
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -365px; /* orientation=lt */
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right -365px; /* orientation=rt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat left -365px; /* orientation=lt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat right -365px; /* orientation=rt */
 }
 
 .UIChatBarPortlet .OfflineIcon {
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -74px; /* orientation=lt */
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right -74px; /* orientation=rt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat left -73px; /* orientation=lt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat right -73px; /* orientation=rt */
 }
 
 .UIChatBarPortlet .AwayIcon {
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -25px; /* orientation=lt */
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right -25px; /* orientation=rt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat left -25px; /* orientation=lt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat right -25px; /* orientation=rt */
 }
 
 .UIChatBarPortlet .ExtendAwayIcon {
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -300px; /* orientation=lt */
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right -300px; /* orientation=rt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat left -297px; /* orientation=lt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat right -297px; /* orientation=rt */
 }
 
 .UIChatBarPortlet .FreeToChat {
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -50px; /* orientation=lt */
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right -50px; /* orientation=rt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat left -50px; /* orientation=lt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat right -50px; /* orientation=rt */
 }
 
 /* ====================== User status shared Icons =================== */
 
 .ChatContainer .RightPage .OnlineIcon {
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left 0px; /* orientation=lt */
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right 0px; /* orientation=rt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat left 0px; /* orientation=lt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat right 0px; /* orientation=rt */
 }
 
 .ChatContainer .RightPage .OfflineIcon {
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -75px; /* orientation=lt */
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right -75px; /* orientation=rt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat left -75px; /* orientation=lt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat right -75px; /* orientation=rt */
 }
 
 .ChatContainer .RightPage .AwayIcon {
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -25px; /* orientation=lt */
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right -25px; /* orientation=rt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat left -25px; /* orientation=lt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat right -25px; /* orientation=rt */
 }
 
 .ChatContainer .RightPage .ExtendAwayIcon {
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -300px; /* orientation=lt */
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right -300px; /* orientation=rt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat left -300px; /* orientation=lt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat right -300px; /* orientation=rt */
 }
 
 .ChatContainer .RightPage .FreeToChat {
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -50px; /* orientation=lt */
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right -50px; /* orientation=rt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat left -50px; /* orientation=lt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat right -50px; /* orientation=rt */
 }
 
 
 /* For normal page */
-.ResizeArea {
-	background: url('DefaultSkin/background/ResizeArea18x18.gif') no-repeat left top; /* orientation=lt */
-	background: url('DefaultSkin/background/ResizeArea18x18-rt.gif') no-repeat right top; /* orientation=rt */
+.UIPopupWindow .UIWindowContent .ResizeArea {
+	background: url('DefaultSkin/background/ResizeBtn.png') no-repeat left top; /* orientation=lt */
+	background: url('DefaultSkin/background/ResizeBtn-rt.png') no-repeat right top; /* orientation=rt */
 	cursor:nw-resize;
 	float:right; /* orientation=lt */
 	float:left; /* orientation=rt */
@@ -141,22 +149,24 @@
 
 /* PopUp menu right click of member */
 .BuddyItemActionMenu .ItemIcon {
-    cursor: pointer;
-    display: block;
-    line-height: 16px;
+	cursor: pointer;
+	display: block;
+	line-height: 16px;
 	margin: 0 5px;
-    padding: 5px 0 5px 26px; /* orientation=lt */
+	padding: 5px 0 5px 26px; /* orientation=lt */
 	padding: 5px 26px 5px 0; /* orientation=rt */
-    white-space: nowrap;
-    width: auto;
+	white-space: nowrap;
+	width: auto;
 }
 
 .BuddyItemActionMenu .RemoveIcon {
-	background: url('DefaultSkin/skinIcons/ActionMenuIconRemove.gif') no-repeat left center;
+	background: url('DefaultSkin/skinIcons/ActionMenuIconRemove.gif') no-repeat left center; /* orientation=lt */
+	background: url('DefaultSkin/skinIcons/ActionMenuIconRemove.gif') no-repeat right center; /* orientation=rt */
 }
 
 .BuddyItemActionMenu .MessageIcon {
-	background: url('DefaultSkin/skinIcons/ActionMenuIconSend.gif') no-repeat left center;
+	background: url('DefaultSkin/skinIcons/ActionMenuIconSend.gif') no-repeat left center; /* orientation=lt */
+	background: url('DefaultSkin/skinIcons/ActionMenuIconSend.gif') no-repeat right center; /* orientation=rt */
 }
 
  /* Form Join Room */
@@ -251,49 +261,47 @@ form {
 }
 
 .UIConversation .UIActionbar {
-	background: url('DefaultSkin/background/Background.gif') repeat-x center top;
-	border-left: 1px solid #aeadad;
-	border-right: 1px solid #aeadad;
 	line-height: 30px;
 	margin-bottom: 10px;
-	font-weight: bold;
 	padding-left: 8px; /* orientation=lt */
 	padding-right: 8px; /* orientation=rt */
+	color: #4c4c4c;
+	font-size: 10px;
 }
 
 .UIConversation .UIActionbar .SeperatorLine {
-	background: url('DefaultSkin/background/Background.gif') no-repeat left -420px;	/* orientation=lt */
-	background: url('DefaultSkin/background/Background-rt.gif') no-repeat right -420px;	/* orientation=rt */
-	line-height: 30px; height: 30px;
-	width: 2px;
+	background: #e7e7e7;
+	width: 1px;
+	line-height: 22px;
+	height: 22px;
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
 	margin: 0px 7px;
 }
 
 .UIConversation .UIActionbar .ExportMessageIcon {
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -275px; /* orientation=lt */
-	background: url('DefaultSkin/skinIcons/SmallChatIcons-rt.gif') no-repeat right -275px; /* orientation=rt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat left -275px; /* orientation=lt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons-rt.png') no-repeat right -275px; /* orientation=rt */
 }
 
 .UIConversation .UIActionbar .AddChatIcon {
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -100px; /* orientation=lt */
-	background: url('DefaultSkin/skinIcons/SmallChatIcons-rt.gif') no-repeat right -100px; /* orientation=rt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat left -100px; /* orientation=lt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons-rt.png') no-repeat right -100px; /* orientation=rt */
 }
 
 .UIConversation .UIActionbar .LeaveIcon {
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -125px; /* orientation=lt */
-	background: url('DefaultSkin/skinIcons/SmallChatIcons-rt.gif') no-repeat right -125px; /* orientation=rt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat left -125px; /* orientation=lt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons-rt.png') no-repeat right -125px; /* orientation=rt */
 }
 
 .UIConversation .UIActionbar .OptionsIcon {
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -150px; /* orientation=lt */
-	background: url('DefaultSkin/skinIcons/SmallChatIcons-rt.gif') no-repeat right -150px; /* orientation=rt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat left -150px; /* orientation=lt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons-rt.png') no-repeat right -150px; /* orientation=rt */
 }
 
 .UIConversation .UIActionbar .SendFileIcon {
-	background: url('DefaultSkin/skinIcons/SendFile.gif') no-repeat left top; /* orientation=lt */
-	background: url('DefaultSkin/skinIcons/SendFile-rt.gif') no-repeat right top; /* orientation=rt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat left -249px; /* orientation=lt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons-rt.png') no-repeat right -249px; /* orientation=rt */
 	height: 25px;
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
@@ -330,31 +338,31 @@ form {
 .UIConversation .UIAction .SendButton {
 	float: right; /* orientation=lt */
 	float: left; /* orientation=rt */
-	width: 6%;
+	width: 9%;
 	border: 1px solid #ACACAC;
-	background: url('DefaultSkin/background/BgButton.gif') repeat-x center; /* orientation=lt */
-	background: url('DefaultSkin/background/BgButton-rt.gif') repeat-x center; /* orientation=rt */
-}
-
-.UIConversation .UIAction .SendButton .IconSend {
-	background: url('DefaultSkin/skinIcons/ButtonSend.gif') no-repeat center; /* orientation=lt */
-	background: url('DefaultSkin/skinIcons/ButtonSend-rt.gif') no-repeat center; /* orientation=rt */
-	height: 68px;
-	display: block;
-	border: 1px solid white;
+	background: url('DefaultSkin/background/BgButton.png') repeat-x center; /* orientation=lt */
+	background: url('DefaultSkin/background/BgButton-rt.png') repeat-x center; /* orientation=rt */
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	height: 25px;
+	border: solid 1px #acacac;
+	line-height: 23px;
+	color: #4c4c4c;
 }
 
 .UIConversation .UIAction .MsgBox{
-	width: 92%; overflow-y: auto;
+	width: 89%; 
+	overflow-y: auto;
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
-	height: 68px;
+	height: 25px;
 	margin: 0px;
 }
 
 .UIConversation .UIActionbar .HistoryIcon {
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -422px; /* orientation=lt */
-	background: url('DefaultSkin/skinIcons/SmallChatIcons-rt.gif') no-repeat right -422px; /* orientation=rt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat left -422px; /* orientation=lt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons-rt.png') no-repeat right -422px; /* orientation=rt */
 	position: relative;
 }
 
@@ -625,7 +633,8 @@ form {
 .ChatContainer .RightPage .StatusIcon {	
 	float: left;  /* orientation=lt */
 	float: right;  /* orientation=rt */
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left 0px;
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat left 0px;  /* orientation=lt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat right 0px;  /* orientation=rt */
 	height: 25px; line-height: 25px;
 }
 
@@ -658,14 +667,22 @@ form {
 	padding: 8px;
 }
 
+.ChatContainer .UserMessage {
+	border-top: solid 1px #e6e6e6;
+}
+
 .ChatContainer .UserMessage .ChatName {
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
 	font-weight: bold;
-	color: #ff9d03;
-	font-style: italic;
+	color: #4c4c4c;
 	width: 35%;
-	height: 24px; line-height: 24px;
+	height: 24px; 
+	line-height: 24px;
+}
+
+.ChatContainer .GuestMessage {
+	border-top: solid 1px #e6e6e6;
 }
 
 .ChatContainer .GuestMessage .ChatName {
@@ -673,49 +690,53 @@ form {
 	float: right; /* orientation=rt */
 	width: 35%;
 	font-weight: bold;
-	color: #0473c0;
-	font-style: italic;
-	height: 24px; line-height: 24px;
+	color: #005caa;
+	height: 24px; 
+	line-height: 24px;
 }
 
 .ChatContainer .ChatTime {
-	background: #E1E1E1;
-    border-radius: 10px;
+	background: #eeeeee;
+	border-radius: 10px;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
-    float: right; /* orientation=lt */
+	float: right; /* orientation=lt */
 	float: left; /* orientation=rt */
-    padding: 2px 10px;
-    text-align: center;
-    width: 145px;
+	padding: 2px 10px;
+	text-align: center;
+	width: 70px;
+	margin: 0px 1px;
 }
 
-.ChatContainer .ChatTimeHistory {
-	background: #E1E1E1;
-    border-radius: 10px;
+.ChatContainer .ChatDate {
+	background: #eeeeee;
+	border-radius: 10px;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
-    float: right; /* orientation=lt */
+	float: right; /* orientation=lt */
 	float: left; /* orientation=rt */
-    padding: 2px 10px;
-    text-align: center;
-    width: 145px;
+	margin: 0px 1px;
+	padding: 2px 10px;
+	text-align: center;
+	width: 70px;
 }
 
 .ChatContainer .UserMessage .ChatIcon {
-	background: url(DefaultSkin/skinIcons/ChatIcon.gif) no-repeat left -24px; /* orientation=lt */
-	background: url(DefaultSkin/skinIcons/ChatIcon-rt.gif) no-repeat right -24px; /* orientation=rt */
-	padding-left: 28px;/* orientation=lt */
-	padding-right: 28px;/* orientation=rt */
+	background: url(DefaultSkin/skinIcons/AvatarChatBar.png) no-repeat left top; /* orientation=lt */
+	background: url(DefaultSkin/skinIcons/AvatarChatBar-rt.png) no-repeat right top; /* orientation=rt */
+	padding-left: 40px;/* orientation=lt */
+	padding-right: 40px;/* orientation=rt */
 	display: block;
+	height: 32px;
 }
 
 .ChatContainer .GuestMessage .ChatIcon {
-	background: url('DefaultSkin/skinIcons/ChatIcon.gif') no-repeat left top; /* orientation=lt */
-	background: url('DefaultSkin/skinIcons/ChatIcon-rt.gif') no-repeat right top; /* orientation=rt */
-	padding-left: 28px; /* orientation=lt */
-	padding-right: 28px; /* orientation=rt */
+	background: url('DefaultSkin/skinIcons/AvatarChatBar.png') no-repeat left -33px; /* orientation=lt */
+	background: url('DefaultSkin/skinIcons/AvatarChatBar-rt.png') no-repeat right -33px; /* orientation=rt */
+	padding-left: 40px; /* orientation=lt */
+	padding-right: 40px; /* orientation=rt */
 	display: block;
+	height: 32px;
 }
 
 .ChatContainer .UserMessage .MessageBody {
@@ -723,68 +744,8 @@ form {
 	position: static;
 }
 
-.ChatContainer .UserMessage .MessageBody .TLBoxMessage {
-	background: url('DefaultSkin/background/TipUserChat.gif') no-repeat left top; /* orientation=lt */
-	background: url('DefaultSkin/background/TipUserChat-rt.gif') no-repeat right top; /* orientation=rt */
-	padding-left: 109px; /* orientation=lt */
-	padding-right: 109px; /* orientation=rt */
-	height: 20px; line-height: 20px;
-}
-
-.ChatContainer .UserMessage .MessageBody .TRBoxMessage {
-	background: url('DefaultSkin/background/Background.gif') no-repeat right -275px; /* orientation=lt */
-	background: url('DefaultSkin/background/Background-rt.gif') no-repeat left -275px; /* orientation=rt */
-	padding-right: 7px; /* orientation=lt */
-	padding-left: 7px; /* orientation=rt */
-	height: 20px; line-height: 20px;
-}
-
-.ChatContainer .UserMessage .MessageBody .TCBoxMessage {
-	background: url('DefaultSkin/background/Background.gif') repeat-x center -295px; /* orientation=lt */
-	background: url('DefaultSkin/background/Background-rt.gif') repeat-x center -295px; /* orientation=rt */
-	height: 20px; line-height: 20px;
-}
-
-.ChatContainer .UserMessage .MessageBody .MLBoxMessage {
-	background: url('DefaultSkin/background/LeftMiddeUserChat4x1.gif') repeat-y left; /* orientation=lt */
-	background: url('DefaultSkin/background/LeftMiddeUserChat4x1.gif') repeat-y right; /* orientation=rt */
-	padding-left: 4px; /* orientation=lt */
-	padding-right: 4px; /* orientation=rt */
-}
-
-.ChatContainer .UserMessage .MessageBody .MRBoxMessage {
-	background: url('DefaultSkin/background/RightMiddeUserChat4x1.gif') repeat-y right; /* orientation=lt */
-	background: url('DefaultSkin/background/RightMiddeUserChat4x1-rt.gif') repeat-y left; /* orientation=rt */
-	padding-right: 4px; /* orientation=lt */
-	padding-left: 4px; /* orientation=rt */
-}
-
-.ChatContainer .UserMessage .MessageBody .BLBoxMessage {
-	background: url('DefaultSkin/background/Background.gif') no-repeat left -315px; /* orientation=lt */
-	background: url('DefaultSkin/background/Background-rt.gif') no-repeat right -315px; /* orientation=rt */
-	padding-left: 7px; /* orientation=lt */
-	padding-right: 7px; /* orientation=rt */
-	height: 7px; line-height: 7px;
-}
-
-.ChatContainer .UserMessage .MessageBody .BRBoxMessage {
-	background: url('DefaultSkin/background/Background.gif') no-repeat right -322px; /* orientation=lt */
-	background: url('DefaultSkin/background/Background-rt.gif') no-repeat left -322px; /* orientation=rt */
-	padding-right: 7px; /* orientation=lt */
-	padding-left: 7px; /* orientation=rt */
-	height: 7px; line-height: 7px;
-}
-
-.ChatContainer .UserMessage .MessageBody .BCBoxMessage {
-	background: url('DefaultSkin/background/Background.gif') repeat-x center -329px; /* orientation=lt */
-	background: url('DefaultSkin/background/Background-rt.gif') repeat-x center -329px; /* orientationrt */
-	height: 7px; line-height: 7px;
-}
-
-.ChatContainer .UserMessage .MessageBody .ContextChat {
-	background: #fef2b7 url('DefaultSkin/background/BgCenterMiddle1x52.gif') repeat-x top; /* orientation=lt */
-	background: #fef2b7 url('DefaultSkin/background/BgCenterMiddle1x52-rt.gif') repeat-x top; /* orientation=rt */
-	padding: 10px 15px;
+.ChatContainer .UserMessage .ContextChat {
+	padding: 5px 15px 10px 40px;
 	line-height: 20px;
 }
 
@@ -793,99 +754,42 @@ form {
 	position: static;
 }
 
-.ChatContainer .GuestMessage .MessageBody .TLBoxMessage {
-	background: url('DefaultSkin/background/TipGuestChat.gif') no-repeat left top; /* orientation=lt */
-	background: url('DefaultSkin/background/TipGuestChat-rt.gif') no-repeat right top; /* orientation=rt */
-	padding-left: 109px; /* orientation=lt */
-	padding-right: 109px; /* orientation=rt */
-	height: 21px; line-height: 21px;
-}
-
-.ChatContainer .GuestMessage .MessageBody .TRBoxMessage {
-	background: url('DefaultSkin/background/Background.gif') no-repeat right -357px; /* orientation=lt */
-	background: url('DefaultSkin/background/Background-rt.gif') no-repeat left -357px; /* orientation=rt */
-	padding-right: 6px; /* orientation=lt */
-	padding-left: 6px; /* orientation=rt */
-	height: 21px; line-height: 21px;}
-
-.ChatContainer .GuestMessage .MessageBody .TCBoxMessage {
-	background: url('DefaultSkin/background/Background.gif') repeat-x center -378px; /* orientation=lt */
-	background: url('DefaultSkin/background/Background-rt.gif') repeat-x center -378px; /* orientation=rt */
-	height: 21px; line-height: 21px;
-}
-
-.ChatContainer .GuestMessage .MessageBody .MLBoxMessage {
-	background: url('DefaultSkin/background/LeftMiddleGuestChat3x1.gif') repeat-y left; /* orientation=lt */
-	background: url('DefaultSkin/background/LeftMiddleGuestChat3x1-rt.gif') repeat-y right; /* orientation=rt */
-	padding-left: 3px; /* orientation=lt */
-	padding-right: 3px; /* orientation=rt */
-}
-
-.ChatContainer .GuestMessage .MessageBody .MRBoxMessage {
-	background: url('DefaultSkin/background/RightMiddleGuestChat4x1.gif') repeat-y right; /* orientation=lt */
-	background: url('DefaultSkin/background/RightMiddleGuestChat4x1-rt.gif') repeat-y left; /* orientation=rt */
-	padding-right: 4px; /* orientation=lt */
-	padding-left: 4px; /* orientation=rt */
-}
-
-.ChatContainer .GuestMessage .MessageBody .BLBoxMessage{
-	background: url('DefaultSkin/background/Background.gif') no-repeat left -399px; /* orientation=lt */
-	background: url('DefaultSkin/background/Background-rt.gif') no-repeat right -399px; /* orientation=rt */
-	padding-left: 6px; /* orientation=lt */
-	padding-right: 6px; /* orientation=rt */
-	height: 7px; line-height: 7px;
-}
-
-.ChatContainer .GuestMessage .MessageBody .BRBoxMessage {
-	background: url('DefaultSkin/background/Background.gif') no-repeat right -406px; /* orientation=lt */
-	background: url('DefaultSkin/background/Background-rt.gif') no-repeat left -406px; /* orientation=rt */
-	padding-right: 6px; /* orientation=lt */
-	padding-left: 6px; /* orientation=rt */
-	height: 7px; line-height: 7px;
-}
-
-.ChatContainer .GuestMessage .MessageBody .BCBoxMessage {
-	background: url('DefaultSkin/background/Background.gif') repeat-x center -413px; /* orientation=lt */
-	background: url('DefaultSkin/background/Background-rt.gif') repeat-x center -413px; /* orientation=rt */
-	height: 7px; line-height: 7px;
-}
-
-.ChatContainer .GuestMessage .MessageBody .ContextChat {
-	background: #d0d8fe url('DefaultSkin/background/BgCenterGuestChat1x67.gif') repeat-x top; /* orientation=lt */
-	background: #d0d8fe url('DefaultSkin/background/BgCenterGuestChat1x67-rt.gif') repeat-x top; /* orientation=rt */
-	padding: 10px 15px;
+.ChatContainer .GuestMessage .ContextChat {
+	padding: 5px 15px 10px 40px;
+	line-height: 20px;
 }
 
 
 /**************************** MiniBoxChat*****************************/
 .NormalMiniBoxChat {
-	height: 23px; line-height: 23px;
-	background: #f6f6f6;
-	border: 1px solid #a0a0a0;
-	border-bottom: none;
-	border-radius: 3px 3px 1px 1px;
-	-moz-border-radius: 3px 3px 1px 1px;
-	-webkit-border-radius: 3px 3px 1px 1px;
+	height: 22px; 
+	line-height: 22px;
+	background: url('DefaultSkin/skinIcons/OnlineNotice.png') repeat-x left -30px;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	position: relative;
 }		
 
 .HightLightMiniBoxChat {
-	height: 23px; line-height: 23px;
-	background: #fcce50;
-	border: 1px solid #dea405;
+	position: relative;
+	height: 22px; 
+	line-height: 22px;
+	background: url('DefaultSkin/skinIcons/OnlineNotice.png') repeat-x left top;
 	border-bottom: none;
-	border-radius: 3px 3px 1px 1px;
-	-moz-border-radius: 3px 3px 1px 1px;
-	-webkit-border-radius: 3px 3px 1px 1px;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 }
 
-.MiniBoxChat .ControlIconChat {
+.MiniBoxChat .CloseIcon {
+	background: url('DefaultSkin/skinIcons/OnlineNotice.png') no-repeat left -60px;
+	width: 6px;
+	height: 6px;
+	margin: 3px 3px 0px 0px;
+	cursor: pointer;
 	float: right; /* orientation=lt */
 	float: left; /* orientation=rt */
-	background: url('DefaultSkin/skinIcons/ControlIcon.gif') no-repeat;
-	width: 16px;
-	height: 16px;
-	margin: 3px 1px 0px 1px;
-	cursor: pointer;
 }
 
 .MiniBoxChat .RestoreIcon {
@@ -894,10 +798,6 @@ form {
 
 .MiniBoxChat .OverRestoreIcon {
 	background-position: right top;
-}
-
-.MiniBoxChat .CloseIcon {
-	background-position: left -16px;
 }
 
 .MiniBoxChat .OverCloseIcon {
@@ -1043,30 +943,22 @@ form {
 .UIChatBarPortlet .MiniBoxChat{
 	float: right; /* orientation=lt */
 	float: left; /* orientation=rt */
-	margin-top:4px;
-	width:56px;
-}
-
-.UIChatBarPortlet .OnlineNoticeIcon {
-	background:url('DefaultSkin/skinIcons/OnlineNotice25x23.gif') no-repeat left top; /* orientation=lt */
-	background:url('DefaultSkin/skinIcons/OnlineNotice25x23.gif') no-repeat right top; /* orientation=rt */
-	float:left; /* orientation=lt */
-	float:left; /* orientation=rt */
-	margin-left:3px; /* orientation=lt */
-	margin-right:3px; /* orientation=rt */
-	width:25px;
-	height:23px;
-	text-align:center;
-	color:white;
-	line-height:18px;
+	margin-top:2px;
+	width:35px;
+	font-size: 10px;
+	font-weight: bold;
+	text-align: center;
+	color: #fff;
+	margin-right: 5px;
+	font-family: Verdana, Lucida Sans, Arial, sans-serif;
 }
 
 .UIChatBarPortlet .UIActionbar .IconHolder {
 	margin-left:0px;
 	display:block;
 	white-space:nowrap;
-	padding-left: 25px; /* orientation=lt */
-	padding-right: 25px; /* orientation=rt */
+	padding-left: 30px; /* orientation=lt */
+	padding-right: 30px; /* orientation=rt */
 	height: 26px;
 	text-align: left; /* orientation=lt */
 	text-align: right; /* orientation=rt */
@@ -1090,7 +982,7 @@ form {
 	right: 0; /* orientation=lt */
 	left: 0; /* orientation=rt */
 	width: 200px; 
-	bottom: 27px; 
+	bottom: 35px; 
 }
 
 .UIChatBarPortlet .UIActionbar .RoomArea {
@@ -1101,7 +993,16 @@ form {
 .UIChatBarPortlet .UIActionbar .RoomArea .UIRightClickPopupMenu {
 	right: 0; /* orientation=lt */
 	left: 0; /* orientation=rt */
-	width: 200px; bottom: 27px;
+	width: 200px; 
+	bottom: 35px;
+}
+
+.UIChatBarPortlet .UIActionbar .UIRightClickPopupMenu a{
+	color: #666666;
+}
+
+.UIChatBarPortlet .UIActionbar .UIRightClickPopupMenu a:hover{
+	color: #f7941d;
 }
 
 .UIChatBarPortlet .UIActionbar .RoomArea {
@@ -1112,7 +1013,8 @@ form {
 .UIChatBarPortlet .UIActionbar .StatusArea .UIRightClickPopupMenu {
 	right: 0; /* orientation=lt */
 	left: 0; /* orientation=rt */
-	width: 150px; bottom: 27px; 
+	width: 150px; 
+	bottom: 35px; 
 }
 
 .UIChatBarPortlet .SeperatorLine {
@@ -1130,8 +1032,16 @@ form {
 	background: url('DefaultSkin/skinIcons/ChatIcon.png') no-repeat left -1px;
 }
 
+.UIChatBarPortlet .UIActionbar a:hover.ContactManageIcon {
+	background: url('DefaultSkin/skinIcons/ChatIcon.png') no-repeat left -114px;
+}
+
 .UIChatBarPortlet .UIActionbar .RoomManageIcon {
 	background: url('DefaultSkin/skinIcons/ChatIcon.png') no-repeat left -33px;
+}
+
+.UIChatBarPortlet .UIActionbar a:hover.RoomManageIcon {
+	background: url('DefaultSkin/skinIcons/ChatIcon.png') no-repeat left -147px;
 }
 
 .UIChatBarPortlet .UIActionbar .OnlineStatusIcon {
@@ -1150,6 +1060,35 @@ form {
 	background:none;
 }
 
+
+.UIChatBarPortlet .UIActionbar .UIRightClickPopupMenu .ArrowRightclick{
+	background: url('DefaultSkin/skinIcons/Arrow.png') no-repeat left bottom;
+	position: absolute;
+	bottom: -11px;
+	right: 10px;
+	height: 11px;
+	width: 11px;
+}
+
+.HightLightMiniBoxChat .ArrowMiniBoxChat{
+	background: url('DefaultSkin/skinIcons/OnlineNotice.png') no-repeat left -23px;
+	position: absolute;
+	height: 6px;
+	width: 5px;
+	bottom: -6px;
+	left: 10px;
+}
+
+.NormalMiniBoxChat .ArrowMiniBoxChat{
+	background: url('DefaultSkin/skinIcons/OnlineNotice.png') no-repeat left -53px;
+	position: absolute;
+	height: 6px;
+	width: 5px;
+	bottom: -6px;
+	left: 10px;
+}
+
+
 /**************************** Pop up Group *****************************/
 
 .UIChatBarPortlet .Icon {
@@ -1159,6 +1098,7 @@ form {
 	line-height: 25px;
 	height: 25px;
 	margin: 2px;
+	display: block;
 }
 
 .UIChatBarPortlet .UIRightClickPopupMenu .Split{
@@ -1170,20 +1110,25 @@ form {
 .UIChatBarPortlet .UIRightClickPopupMenu .RoomData li {
 	cursor:pointer;
 	line-height: 25px;
-	padding: 0px 5px;
-	color:#058EE6;
+	color:#4a73c2;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 0px 5px 0px 30px; /* orientation=lt */
+	padding: 0px 30px 0px 5px; /* orientation=rt */
 	display: block;
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat left -448px; /* orientation=lt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat left -448px; /* orientation=rt */
 }
 
 .UIChatBarPortlet .UIRightClickPopupMenu .RoomData li:hover{
-	background: #dee4f2;
-	color: orange;
+	color: #f7941d;
 }
 
 .UIChatBarPortlet .UIRightClickPopupMenu .ScrollGroup{
 	overflow: auto;
 	height: 150px;
 	min-width:120px;
+	border-bottom: solid 1px #e2e2e2;
 }
 
 /* App portlet */
@@ -1201,12 +1146,24 @@ form {
 	background: url('DefaultSkin/skinIcons/AppIcon.png') no-repeat left 3px;
 }
 
+.UIChatBarPortlet .UIActionbar a:hover.Email {
+	background: url('DefaultSkin/skinIcons/AppIcon.png') no-repeat left -88px;
+}
+
 .UIChatBarPortlet .UIActionbar .Contact {
 	background: url('DefaultSkin/skinIcons/AppIcon.png') no-repeat left -30px;
 }
 
+.UIChatBarPortlet .UIActionbar a:hover.Contact {
+	background: url('DefaultSkin/skinIcons/AppIcon.png') no-repeat left -116px;
+}
+
 .UIChatBarPortlet .UIActionbar .Calendar {
 	background: url('DefaultSkin/skinIcons/AppIcon.png') no-repeat left -62px;
+}
+
+.UIChatBarPortlet .UIActionbar a:hover.Calendar {
+	background: url('DefaultSkin/skinIcons/AppIcon.png') no-repeat left -148px;
 }
 
 .UIPopupWindow .OverflowContainer .MinimizedIconChatBar{
@@ -1218,9 +1175,23 @@ form {
 	width: 18px;
 }
 
-.UIPopupWindow .OverflowContainer .PopupTitle{
-	display: inline-block;
+.UIPopupWindow .UIWindowContent .SelectedTab .CloseTabButton{
+	display: inline; 
+	color: #757575; 
+	margin-left: 10px;
 }
+
+.UIPopupWindow .UIWindowContent .NormalTab .CloseTabButton{
+	display: inline; 
+	color: #EBEBEB; 
+	margin-left: 10px;
+}
+
+.UIPopupWindow .UIWindowContent .NormalTab .MiddleTab:hover .CloseTabButton{
+	color: #757575; 
+}
+
+
 /* Copyright */
 .UIChatBarPortlet .Copyright {
 	margin: 0 auto;

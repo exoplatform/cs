@@ -139,7 +139,7 @@
 			<span class="PopupTitle"><%=_ctx.appRes("UIChatPortlet.label.conversation");%></span>
 		</div>
 		<div class="UIWindowContent">
-			<div class="PopupContent UIPopupMessages">
+			<div class="PopupContent">
 				<div class="UIApplication1">
 						<div class="UIConversation" oncontextmenu="return false;">
 								<div class="UITabPane">
@@ -173,13 +173,9 @@
 						</div>
 				</div>
 			
-				<div>
-					<div title="<%=_ctx.appRes("UIChatPortlet.label.resizeWindow");%>" class="ResizeArea">
-							<span></span>
-					</div>
-					<div class="Information">
-							<%=_ctx.appRes("UIChatPortlet.label.done");%></div>
-				</div>
+					<span title="<%=_ctx.appRes("UIChatPortlet.label.resizeWindow");%>" class="ResizeArea">
+					</span>
+					<span class="Information"><%=_ctx.appRes("UIChatPortlet.label.done");%></span>
 			</div>
     </div>
 		
@@ -581,69 +577,39 @@
     <!-- User message -->
     <div class="Message UserMessage">
         <div class="MessageTitle ClearFix">
-            <h5 class="ChatName IconStatus ChatIcon">
-				<span></span>
-            </h5>
-            <div class="ChatTime">
-                 <span></span>
-            </div>
-        </div>
-        <div class="MessageBody">
-			<div class="TLBoxMessage">
-				<div class="TRBoxMessage">
-					<div class="TCBoxMessage">
-							<span></span>
-					</div>
-				</div>
-			</div>
-			<div class="MLBoxMessage">
-				<div class="MRBoxMessage">
-						<div class="ContextChat">
-							<span></span>
-						</div>
-				</div>
-			</div>
-			<div class="BLBoxMessage">
-				<div class="BRBoxMessage">
-					<div class="BCBoxMessage">
+					<h5 class="ChatName IconStatus ChatIcon">
+						<span></span>
+					</h5>
+					<div class="ChatDate">
 						<span></span>
 					</div>
-				</div>
-			</div>
+					<div class="ChatTime">
+						<span></span>
+					</div>
+        </div>
+        <div class="MessageBody">
+					<div class="ContextChat">
+						<span></span>
+					</div>
         </div>
     </div>
     <!-- Guest message -->
     <div class="Message GuestMessage">
         <div class="MessageTitle ClearFix">
-            <h5 class="ChatName IconStatus ChatIcon">
-				<span></span>
-            </h5>
-            <div class="ChatTime">
-				<span></span>
-            </div>
-        </div>
-        <div class="MessageBody">
-			<div class="TLBoxMessage">
-				<div class="TRBoxMessage">
-					<div class="TCBoxMessage">
-							<span></span>
-					</div>
-				</div>
-			</div>
-			<div class="MLBoxMessage">
-				<div class="MRBoxMessage">
-						<div class="ContextChat">
-							<span></span>
-						</div>
-				</div>
-			</div>
-			<div class="BLBoxMessage">
-				<div class="BRBoxMessage">
-					<div class="BCBoxMessage">
+					<h5 class="ChatName IconStatus ChatIcon">
+						<span></span>
+					</h5>
+					<div class="ChatDate">
 						<span></span>
 					</div>
-				</div>
-			</div>
+					<div class="ChatTime">
+						<span></span>
+					</div>
+        </div>
+        <div class="MessageBody">
+					<div class="ContextChat">
+						<span></span>
+					</div>
         </div>
     </div>
     <!-- FileExchange -->
@@ -673,9 +639,8 @@
                             <span class="UnreadMessage" style="color: red;"></span><span class="ContactName">
                             </span>
                         </div>
-                        <div class="CloseTabButton" style="display: inline; color: red; margin-left: 10px;"
-                            title="<%=_ctx.appRes("UIChatPortlet.label.clickToRemoveThisTab");%>!">
-                            x</div>
+                        <a class="CloseTabButton" title="<%=_ctx.appRes("UIChatPortlet.label.clickToRemoveThisTab");%>!">
+                            x</a>
                     </div>
                 </div>
             </div>
@@ -733,9 +698,7 @@
 				</div>
 			</div>
 			<div class="UIAction ClearFix">
-				<div class="SendButton">
-					<a href="#" class="IconSend"></a>
-				</div>
+				 <a href="#" class="SendButton">Send</a>
 				<textarea rows="3" name="msg" cols="6" class="MsgBox"></textarea>
 			</div>
         </div>
@@ -789,9 +752,7 @@
 				</div>
 			</div>
 			<div class="UIAction ClearFix">
-				<div class="SendButton">
-					<a href="#" class="IconSend"></a>
-				</div>
+				<a href="#" class="SendButton">Send</a>
 				<textarea rows="3" name="msg" cols="6" class="MsgBox"></textarea>
 			</div>
         </div>
