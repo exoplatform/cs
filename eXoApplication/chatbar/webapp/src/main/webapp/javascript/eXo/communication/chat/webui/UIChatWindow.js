@@ -30,6 +30,7 @@ function UITabControl(tabId, isGroupChat, UIMainChatWindow) {
     loadingIcon           : 'LoadingIcon',
     chatIconStatus        : 'IconStatus ChatIcon',
     chatTime              : 'ChatTime',
+		chatDate              : 'ChatDate',
     chatTimeHistory       : 'ChatTimeHistory',
     chatTimeCenter        : 'CenterTime',
     contextChat           : 'ContextChat',
@@ -440,7 +441,7 @@ UITabControl.prototype.initUI = function(buddyId) {
   this.tabNameNode.onclick = this.focusTabWrapper;
   this.tabNode.style.display = 'block';
 
-  var closeTabButtonNode = DOMUtil.findFirstDescendantByClass(this.tabNode, 'div', this.CSS_CLASS.closeTabButton);
+  var closeTabButtonNode = DOMUtil.findFirstDescendantByClass(this.tabNode, 'a', this.CSS_CLASS.closeTabButton);
   closeTabButtonNode.onclick = this.closeTabWrapper;
 
   var tabContentCSSClass = this.CSS_CLASS.uiTabContent;
@@ -454,7 +455,7 @@ UITabControl.prototype.initUI = function(buddyId) {
   var msgBoxNode = DOMUtil.findFirstDescendantByClass(this.tabPaneNode, 'textarea', this.CSS_CLASS.messageBox);
   msgBoxNode.onkeypress = this.msgBoxKBHandler;
   this.msgTypingBox = msgBoxNode;
-  var sendButtonNode = DOMUtil.findFirstDescendantByClass(this.tabPaneNode, 'div', this.CSS_CLASS.sendMessageButton);
+  var sendButtonNode = DOMUtil.findFirstDescendantByClass(this.tabPaneNode, 'a', this.CSS_CLASS.sendMessageButton);
   sendButtonNode.onclick = this.sendMessageWrapper;
   this.tabPaneNode.style.display = 'block';
   this.messageContainerNode = DOMUtil.findFirstDescendantByClass(this.tabPaneNode, 'div', this.CSS_CLASS.messagesContainer);
@@ -683,7 +684,7 @@ UITabControl.prototype.scrollMessageBox = function() {
  * @param {String} buddyId
  * @param {Message} msgObj
  */
-UITabControl.prototype.createNewMsgNode = function(buddyId, msgObj) {
+ UITabControl.prototype.createNewMsgNode = function(buddyId, msgObj) {
   var DOMUtil = eXo.core.DOMUtil;
   var messageNode = false;
   if (buddyId == this.tabId.owner) {
@@ -700,12 +701,13 @@ UITabControl.prototype.createNewMsgNode = function(buddyId, msgObj) {
     fullName = fullNameMap[fullName] ;
   }
   if(fullName.length > this.MAX_TAB_TITLE_LEN) {
-    msgTitleNode.innerHTML = fullName.substr(0, this.MAX_TAB_TITLE_LEN - 3) + '...';  		
+    msgTitleNode.innerHTML = fullName.substr(0, this.MAX_TAB_TITLE_LEN - 3) + '...';    
   } else {
     msgTitleNode.innerHTML = fullName ;
   }
   
   var chatTimeBoxNode = DOMUtil.findFirstDescendantByClass(messageNode, 'div', this.CSS_CLASS.chatTime);
+  var chatDateBoxNode = DOMUtil.findFirstDescendantByClass(messageNode, 'div', this.CSS_CLASS.chatDate);
   if (this.updatingHistoryMessage ||
       msgObj['dateSend']) {
     //var chatTimeBoxNode = DOMUtil.findAncestorByClass(chatTimeNode, this.CSS_CLASS.chatTime);
@@ -713,31 +715,41 @@ UITabControl.prototype.createNewMsgNode = function(buddyId, msgObj) {
       chatTimeBoxNode.className += ' ' + this.CSS_CLASS.chatTimeHistory;
       //chatTimeNode = DOMUtil.findFirstDescendantByClass(messageNode, 'div', this.CSS_CLASS.chatTimeCenter);
     }
+		if (chatDateBoxNode) {
+      chatDateBoxNode.className += ' ' + this.CSS_CLASS.chatTimeHistory;
+      //chatTimeNode = DOMUtil.findFirstDescendantByClass(messageNode, 'div', this.CSS_CLASS.chatTimeCenter);
+    }
   }
-  var timeStamp = msgObj['dateSend'];
-  if (!timeStamp) {
-    timeStamp = new Date();
-    //timeStamp = timeStamp.getHours() + ':' + timeStamp.getMinutes() + ':' + timeStamp.getSeconds();
-    timeStamp = timeStamp.format('dd/mm/yyyy - HH:MM:ss');
-  } else {
-    window.jsconsole.warn('timeStamp before process: ' + timeStamp);
-    /*timeStamp = timeStamp.replace('ICT', ''); // Remove ICT if exist
-    window.jsconsole.warn('timeStamp after process: ' + timeStamp);
-    var regexObj = /GMT(\+|\-)?\d{2}:\d{2}/g;
-    timeStamp = timeStamp.replace(regexObj, function(m) {return m.replace(/:\d{2}/, '');});*/
-    var time = timeStamp;
-    timeStamp = new Date();
-    timeStamp.setTime(time);
-    timeStamp = timeStamp.format('dd/mm/yyyy - HH:MM:ss');
-    //timeStamp = timeStamp.getDate() + '/' + (timeStamp.getMonth() + 1) + '/' + timeStamp.getFullYear() +
-                //' - ' + 
-                //timeStamp.getHours() + ':' + (timeStamp.getMinutes() + 1) + ':' + timeStamp.getSeconds();
-  }
-  chatTimeBoxNode.innerHTML = timeStamp;
+  var dateTimeStamp = msgObj['dateSend'];
+  var dateStamp;
+  var timeStamp;
+  if (!dateTimeStamp) {
+    dateTimeStamp = new Date();
+    //dateTimeStamp = dateTimeStamp.getHours() + ':' + dateTimeStamp.getMinutes() + ':' + dateTimeStamp.getSeconds();
+    dateStamp = dateTimeStamp.format('dd/mm/yyyy');
+    timeStamp = dateTimeStamp.format('HH:MM:ss');
     
+   
+  } else {
+    window.jsconsole.warn('dateTimeStamp before process: ' + dateTimeStamp);
+    /*dateTimeStamp = dateTimeStamp.replace('ICT', ''); // Remove ICT if exist
+    window.jsconsole.warn('dateTimeStamp after process: ' + dateTimeStamp);
+    var regexObj = /GMT(\+|\-)?\d{2}:\d{2}/g;
+    dateTimeStamp = dateTimeStamp.replace(regexObj, function(e) {return m.replace(/:\d{2}/, '');});*/
+    var time = dateTimeStamp;
+    dateTimeStamp = new Date();
+    dateTimeStamp.setTime(time);
+    dateStamp = dateTimeStamp.format('dd/mm/yyyy');
+    timeStamp = dateTimeStamp.format('HH:MM:ss');
+    //dateTimeStamp = dateTimeStamp.getDate() + '/' + (dateTimeStamp.getMonth() + 1) + '/' + dateTimeStamp.getFullYear() +
+                //' - ' + 
+                //dateTimeStamp.getHours() + ':' + (dateTimeStamp.getMinutes() + 1) + ':' + dateTimeStamp.getSeconds();
+  
+  }
+  chatTimeBoxNode.innerHTML = dateStamp;
+  chatDateBoxNode.innerHTML = timeStamp;    
   return messageNode;
 };
-
 /**
  * This method will do: become keyboard handler for input text box
  *
@@ -888,14 +900,14 @@ UIChatWindow.prototype.init = function(rootNode, UIMainChatWindow) {
   this.tabContainerNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', this.CSS_CLASS.tabsContainer);
   this.tabPaneContainerNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', this.CSS_CLASS.tabContentContainer);
   // Register resizearea to for resizeable window.
-  var resizeArea = DOMUtil.findFirstDescendantByClass(this.rootNode, "div", "ResizeArea") ;
+  var resizeArea = DOMUtil.findFirstDescendantByClass(this.rootNode, "span", "ResizeArea") ;
   this.UIMainChatWindow.UIChatResize.register(resizeArea, this.resizeCallback, true);
   with (resizeArea.style) {
     display = 'block';
     width   = '18px';
     height  = '18px';
   };
-  this.tabContainerNode.style.overflow = 'hidden';
+  //this.tabContainerNode.style.overflow = 'hidden';
   this.fileChooserNode = false;
   this.initFileExchange();
   this.initSession();

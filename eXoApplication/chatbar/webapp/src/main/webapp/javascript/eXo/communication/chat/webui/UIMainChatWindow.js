@@ -271,9 +271,9 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName,
 
   this.LocalTemplateEngine = eXo.communication.chatbar.core.LocalTemplateEngine;
   this.addContactIconNode = DOMUtil.findFirstDescendantByClass(this.rootNode,
-      'div', 'AddContactIcon');
+      'a', 'AddContactIcon');
   this.statusIconNode = DOMUtil.findFirstDescendantByClass(this.rootNode,
-      'div', 'StatusIcon');
+      'a', 'StatusIcon');
   this.statusNode = DOMUtil.findAncestorByClass(this.statusIconNode,
       'StatusArea');
   this.roomAreaNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div',
@@ -1370,9 +1370,7 @@ UIMainChatWindow.prototype.preChangeStatus = function(status, skipCheck, event) 
       this.UIJoinRoomPopupWindow.setVisible(false);
       this.buddyListControlObj.cleanup();
       this.addContactIconNode.onclick = null;
-      var userStatusIconNode = DOMUtil.findAncestorByTagName(
-          this.statusIconNode, 'div');
-      userStatusIconNode.className = 'IconHolder' + ' ' + 'OfflineIcon';
+      this.statusIconNode.className = 'IconHolder' + ' ' + 'OfflineIcon';
       // this.jabberLogout();
       this.jabberLogout(this.OFFLINE_STATUS);
     }
@@ -1405,8 +1403,6 @@ UIMainChatWindow.prototype.postChangeStatus = function(status, eventId) {
   // 'div', 'Text');
   // userNameNode.innerHTML =
   // this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
-  var userStatusIconNode = DOMUtil.findAncestorByTagName(this.statusIconNode,
-      'div');
   window.jsconsole.warn('User changed status: ' + this.userStatus + ' -> '
       + status);
   var lastStatus = this.userStatus;
@@ -1460,7 +1456,7 @@ UIMainChatWindow.prototype.postChangeStatus = function(status, eventId) {
     // this.unsubscribeCometdTopics();
     this.buddyListControlObj.cleanup();
     this.addContactIconNode.onclick = null;
-    userStatusIconNode.className = 'IconHolder' + ' ' + 'OfflineIcon';
+    this.statusIconNode.className = 'IconHolder' + ' ' + 'OfflineIcon';
     break;
   default:
     break;
@@ -1468,19 +1464,19 @@ UIMainChatWindow.prototype.postChangeStatus = function(status, eventId) {
   // set status icon
   switch (this.userStatus) {
   case this.ONLINE_STATUS:
-    userStatusIconNode.className = 'IconHolder' + ' ' + 'OnlineIcon';
+    this.statusIconNode.className = 'IconHolder' + ' ' + 'OnlineIcon';
     break;
   case this.AWAY_STATUS:
-    userStatusIconNode.className = 'IconHolder' + ' ' + 'AwayIcon';
+    this.statusIconNode.className = 'IconHolder' + ' ' + 'AwayIcon';
     break;
   case this.EXTEND_AWAY_STATUS:
-    userStatusIconNode.className = 'IconHolder' + ' ' + 'ExtendAwayIcon';
+    this.statusIconNode.className = 'IconHolder' + ' ' + 'ExtendAwayIcon';
     break;
   case this.FREE_TO_CHAT_STATUS:
-    userStatusIconNode.className = 'IconHolder' + ' ' + 'FreeToChat';
+    this.statusIconNode.className = 'IconHolder' + ' ' + 'FreeToChat';
     break;
   case this.OFFLINE_STATUS:
-    userStatusIconNode.className = 'IconHolder' + ' ' + 'OfflineIcon';
+    this.statusIconNode.className = 'IconHolder' + ' ' + 'OfflineIcon';
     break;
   }
   eXo.core.DOMUtil.cleanUpHiddenElements();
