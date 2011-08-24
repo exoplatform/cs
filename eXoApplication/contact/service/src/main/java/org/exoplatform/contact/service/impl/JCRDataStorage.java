@@ -91,7 +91,7 @@ public class JCRDataStorage implements DataStorage {
 
   final private static String  PERSONAL_ADDRESS_BOOKS = "contactGroup".intern();
 
-  final private static String  GROUP_ADDRESS_BOOKS    = "GroupAdSdress".intern();
+  final private static String  GROUP_ADDRESS_BOOKS    = "GroupAddress".intern();
 
   final private static String  TAGS                   = "tags".intern();
 
