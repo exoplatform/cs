@@ -18,6 +18,7 @@ package org.exoplatform.cs.common.webui;
 
 import javax.jcr.Session;
 
+import org.apache.commons.lang.StringUtils;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
@@ -27,10 +28,12 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.commons.UIDocumentSelector;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupComponent;
@@ -103,21 +106,19 @@ public class UIAddAttachment extends UIContainer implements UIPopupComponent {
   }
 
   static public class AttachFileActionListener extends GenericAttachActionListener {
-    public void execute(Event<UIAddAttachment> event) throws Exception {
+    public void processEvent(Event<UIAddAttachment> event) throws Exception {
       event.getRequestContext().setAttribute(SELECTEDFILE, getSelectedFile(event));
       event.getRequestContext().setAttribute(ISATTACHFILE, true);
-      executeEvent(event);
     }
 
   }
 
   static public class AttachLinkActionListener extends GenericAttachActionListener {
-    public void execute(Event<UIAddAttachment> event) throws Exception {
+    public void processEvent(Event<UIAddAttachment> event) throws Exception {
       UIAddAttachment component = event.getSource();
       event.getRequestContext().setAttribute(SELECTEDFILE,
                                              component.getFileURL(getSelectedFile(event)));
       event.getRequestContext().setAttribute(ISATTACHFILE, false);
-      executeEvent(event);
     }
   }
   
@@ -128,7 +129,7 @@ public class UIAddAttachment extends UIContainer implements UIPopupComponent {
       return event.getSource().getChild(UIDocumentSelector.class).getSeletedFile();
     }
     
-    public void executeEvent(Event<UIAddAttachment> event) throws Exception {      
+    public void execute(Event<UIAddAttachment> event) throws Exception {      
       UIAddAttachment component = event.getSource();
       EventUIComponent eventUIComponent = component.getTargetAttachEvent();
       UIPortletApplication portlet = component.getAncestorOfType(UIPortletApplication.class);
@@ -136,6 +137,14 @@ public class UIAddAttachment extends UIContainer implements UIPopupComponent {
       Event<UIComponent> xEvent = targerComponent.createEvent(eventUIComponent.getEventName(),
                                                               Event.Phase.PROCESS,
                                                               event.getRequestContext());
+      if (!StringUtils.isEmpty(getSelectedFile(event))) {
+        processEvent(event);
+      } else {
+        UIApplication uiApp = event.getSource().getAncestorOfType(UIApplication.class);
+        uiApp.addMessage(new ApplicationMessage("UIAddAttachment.msg.not-a-file", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
+      }
       if (xEvent != null) {
         xEvent.broadcast();
       }
@@ -144,10 +153,10 @@ public class UIAddAttachment extends UIContainer implements UIPopupComponent {
       uiPopupWindow.setRendered(false);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupWindow.getParent());
     }
-
-    @Override
-    public void execute(Event<UIAddAttachment> event) throws Exception {
+    
+    public void processEvent(Event<UIAddAttachment> event) throws Exception {
     }
+    
   }
   
   public String getFileURL(String path) throws Exception {
