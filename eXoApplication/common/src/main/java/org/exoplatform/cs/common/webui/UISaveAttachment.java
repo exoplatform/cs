@@ -17,15 +17,18 @@
 package org.exoplatform.cs.common.webui;
 
 import java.util.GregorianCalendar;
+import java.util.StringTokenizer;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.Value;
 
+import org.apache.commons.lang.StringUtils;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.datamodel.IllegalNameException;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -42,7 +45,6 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
-import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 /**
  * Created by The eXo Platform SAS
@@ -74,9 +76,11 @@ public class UISaveAttachment extends UIForm implements UIPopupComponent {
   
   private String                fileName           = "";
   
+  private static final String   invalidCharacters  = ": @ / \\ | ^ # ; [ ] { } < > * ' \" + ? &";
+  
   public UISaveAttachment() {
     try {
-      addUIFormInput(new UIFormStringInput(FIELD_INPUT, null, null).addValidator(MandatoryValidator.class));
+      addUIFormInput(new UIFormStringInput(FIELD_INPUT, null, null));
       UIDocumentSelector documentSelector = addChild(UIDocumentSelector.class, null, UIDOCUMENTSELECTOR);
       documentSelector.setAllowAddFolder(true);
       documentSelector.setAllowDeleteItem(true);
@@ -140,7 +144,22 @@ public class UISaveAttachment extends UIForm implements UIPopupComponent {
         String mimeType = srcContent.getProperty("jcr:mimeType").getString();
         srcSession.logout();
         Session desSession = component.getDefaultSession();
+        String selectedFolder = selector.getSeletedFolder();
+        if (StringUtils.isEmpty(selectedFolder)) {
+          uiApp.addMessage(new ApplicationMessage("UISaveAttachment.msg.not-a-folder", null, ApplicationMessage.WARNING));
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          return;
+        }
         Node desNode = (Node) desSession.getItem(selector.getSeletedFolder());
+        try {
+          validate(fileName);
+        } catch (IllegalNameException e) {
+          uiApp.addMessage(new ApplicationMessage("UISaveAttachment.msg.not-valid-name",
+                                                  new String[] { invalidCharacters },
+                                                  ApplicationMessage.WARNING));
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          return;
+        }
         Node file = desNode.addNode(fileName, "nt:file");
         Node jcrContent = file.addNode("jcr:content", "nt:resource");
         jcrContent.setProperty("jcr:data", value);
@@ -152,7 +171,9 @@ public class UISaveAttachment extends UIForm implements UIPopupComponent {
         UIPopupWindow uiPopupWindow = event.getSource().getParent();
         uiPopupWindow.setShow(false);
         uiPopupWindow.setRendered(false);
+        uiApp.addMessage(new ApplicationMessage("UISaveAttachment.msg.saved-successfully", null, ApplicationMessage.INFO));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupWindow.getParent());
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
       }
     }
   }
@@ -173,6 +194,29 @@ public class UISaveAttachment extends UIForm implements UIPopupComponent {
                                                                        .getComponentInstanceOfType(RepositoryService.class);
     return repoService.getCurrentRepository();
   }
+  
+  public static void validate(String s) throws IllegalNameException {
+    StringTokenizer tokens;
+    if (s == null || s.trim().length() == 0) {
+      throw new IllegalNameException();
+    }
+    for (int i = 0; i < s.length(); i++) {
+      tokens = new StringTokenizer(invalidCharacters);
+      char c = s.charAt(i);
+      boolean isInvalid = false;
+      while (tokens.hasMoreTokens()) {
+        String test = tokens.nextToken();
+        isInvalid = test.equals(String.valueOf(c));
+        if (isInvalid == true)
+          break;
+      }
+      if (Character.isLetter(c) || Character.isDigit(c) || (!isInvalid)) {
+        continue;
+      } else {
+        throw new IllegalNameException(invalidCharacters);
+      }
+    }     
+  }  
   
   @Override
   public void activate() throws Exception {
