@@ -228,7 +228,6 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName,
   this.UICreateNewRoomPopupWindow = eXo.communication.chatbar.webui.UICreateNewRoomPopupWindow;
   this.UIRoomConfigPopupWindow = eXo.communication.chatbar.webui.UIRoomConfigPopupWindow;
   this.UIJoinRoomPopupWindow = eXo.communication.chatbar.webui.UIJoinRoomPopupWindow;
-  this.UIPopupMessages = eXo.communication.chatbar.webui.UIPopupMessages;
   this.UIChatResize = eXo.communication.chatbar.webui.UIChatResize;
   this.UISlideAlert = eXo.communication.chatbar.webui.UISlideAlert;
 
@@ -315,15 +314,12 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName,
       this.chatWindowsContainerNode, 'div', 'RoomConfigPopup');
   this.joinRoomPopupNode = DOMUtil.findFirstDescendantByClass(
       this.chatWindowsContainerNode, 'div', 'JoinRoomPopup');
-  this.messagesPopupNode = DOMUtil.findFirstDescendantByClass(
-      this.chatWindowsContainerNode, 'div', 'MessagesPopup');
 
   this.UIChatWindow.init(this.chatPopupNode, this);
   this.UIAddContactPopupWindow.init(this.addContactPopupNode, this);
   this.UICreateNewRoomPopupWindow.init(this.createNewRoomPopupNode, this);
   this.UIRoomConfigPopupWindow.init(this.roomConfigPopupNode, this);
   this.UIJoinRoomPopupWindow.init(this.joinRoomPopupNode, this);
-  this.UIPopupMessages.init(this.messagesPopupNode, this);
 
   // this.UISlideAlert.init(this, this.notificationNode);
 
@@ -334,7 +330,6 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName,
   this.UIPopupManager.addItem(this.UICreateNewRoomPopupWindow);
   this.UIPopupManager.addItem(this.UIRoomConfigPopupWindow);
   this.UIPopupManager.addItem(this.UIJoinRoomPopupWindow);
-  this.UIPopupManager.addItem(this.UIPopupMessages);
 
   this.userStatus = false;
   this.lastStatusSent = false;
@@ -806,7 +801,6 @@ UIMainChatWindow.prototype.processErrorAction = function(requestObj, action) {
       // window.alert('Your secret key to join room is not valid.\nPlease try
       // again later.');
       window.alert(this.ResourceBundle.chat_message_room_password_error);
-      // this.UIPopupMessages.warning(this.ResourceBundle.chat_message_room_password_error);
       break;
     case 403:
     case 404:
