@@ -565,81 +565,79 @@
 <!--end room config form -->
 <!-- Start popup messages form -->
 <div class="UIPopupWindow ExoMessageDecorator UIDragObject MessagesPopup"  style="position: absolute; top: 150px; left: 250px; width: 550px; display: none; visibility: visible; ">
-			<div class="OverflowContainer ClearFix">
-				<a href="JavaScript:void(0);" onclick="eXo.communication.chatbar.webui.UIPopupMessages.setVisible(false);" title="Close Window" class="CloseButton"></a>
-				<span class="PopupTitle">eXo Messages</span>
-			</div>
-			<div class="UIWindowContent">
-				<div class="PopupContent">
-						<div class="UIHorizontalTabs">
-							<div class="TabsContainer">
-								<div class="UITab MessageTabDialog">
-									<div class="DisabledTab">
-										<div class="LeftTab">
-											<div class="RightTab">
-												<div class="MiddleTab"><div class="TabIcon ErrorIcon">Error</div></div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="UITab MessageTabDialog">
-									<div class="SelectedTab">
-										<div class="LeftTab">
-											<div class="RightTab">
-												<div onclick="" class="MiddleTab"><div class="TabIcon WarningIcon">Warning</div></div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="UITab MessageTabDialog">
-									<div class="DisabledTab">
-										<div class="LeftTab">
-											<div class="RightTab">
-												<div class="MiddleTab"><div class="TabIcon InfoIcon">Information</div></div>
-											</div>
-										</div>
+	<div class="OverflowContainer ClearFix">
+		<a href="JavaScript:void(0);" onclick="eXo.communication.chatbar.webui.UIPopupMessages.setVisible(false);" title="Close Window" class="CloseButton"></a>
+		<span class="PopupTitle">eXo Messages</span>
+	</div>
+	<div class="UIWindowContent">
+		<div class="PopupContent UIPopupMessages">
+				<div class="UIHorizontalTabs">
+					<div class="TabsContainer">
+						<div class="UITab MessageTabDialog">
+							<div class="DisabledTab">
+								<div class="LeftTab">
+									<div class="RightTab">
+										<div class="MiddleTab"><div class="TabIcon ErrorIcon">Error</div></div>
 									</div>
 								</div>
 							</div>
 						</div>
-						<div class="UITabContentContainer">
-							<div style="display: none;" class="UITabContent">
-								 <div class="PopupMessageBox">
-										<div class="ErrorMessage">
-												<div class="PopupMessageContainer">
-												 </div>
-										 </div>
+						<div class="UITab MessageTabDialog">
+							<div class="SelectedTab">
+								<div class="LeftTab">
+									<div class="RightTab">
+										<div onclick="" class="MiddleTab"><div class="TabIcon WarningIcon">Warning</div></div>
 									</div>
-							</div>
-							<div class="UITabContent">
-								 <div class="PopupMessageBox">
-										<div class="WarningMessage">
-												<div class="PopupMessageContainer">
-													<div class="MessageContainer ClearFix">
-														<div class="PopupIcon WarningMessageIcon"><span></span></div>
-														<div class="PopupMessage">
-													 </div>
-												 </div>
-												 </div>
-										 </div>
-									</div>
-							 </div>
-							<div style="display: none;" class="UITabContent">
-								 <div class="PopupMessageBox">
-										<div class="InfoMessage">
-												<div class="PopupMessageContainer">
-												 </div>
-										 </div>
-									</div>
-							 </div>
-						</div>
-						<div class="MessageActionBar">
-							<div class="UIAction">
-							<a href="javascript:void(0);" class="ActionButton LightBlueStyle" onclick="eXo.communication.chatbar.webui.UIPopupMessages.setVisible(false);">OK</a>
+								</div>
 							</div>
 						</div>
-				</div>            
-			</div>
+						<div class="UITab MessageTabDialog">
+							<div class="DisabledTab">
+								<div class="LeftTab">
+									<div class="RightTab">
+										<div class="MiddleTab"><div class="TabIcon InfoIcon">Information</div></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="UITabContentContainer">
+					<div style="display: none;" class="UITabContent">
+						 <div class="PopupMessageBox">
+								<div class="ErrorMessage">
+										<div class="PopupMessageContainer">
+										 </div>
+								 </div>
+							</div>
+					</div>
+					<div class="UITabContent">
+						 <div class="PopupMessageBox">
+								<div class="WarningMessage">
+										<div class="PopupMessageContainer">
+											<div class="MessageContainer ClearFix">
+												<div class="PopupIcon WarningMessageIcon"><span></span></div>
+												<div class="PopupMessage">
+											 </div>
+										 </div>
+										 </div>
+								 </div>
+							</div>
+					 </div>
+					<div style="display: none;" class="UITabContent">
+						 <div class="PopupMessageBox">
+								<div class="InfoMessage">
+										<div class="PopupMessageContainer">
+										 </div>
+								 </div>
+							</div>
+					 </div>
+				</div>
+				<div class="UIAction MessageActionBar">
+					<a href="javascript:void(0);" class="ActionButton LightBlueStyle" onclick="eXo.communication.chatbar.webui.UIPopupMessages.setVisible(false);">OK</a>
+				</div>
+		</div>            
+	</div>
   </div>
 <!-- end popup messages form -->
 <!-- Start template area -->

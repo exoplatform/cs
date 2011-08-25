@@ -1178,17 +1178,19 @@ form {
 .UIPopupWindow .UIWindowContent .SelectedTab .CloseTabButton{
 	display: inline; 
 	color: #757575; 
-	margin-left: 10px;
+	margin-left: 5px;
 }
 
 .UIPopupWindow .UIWindowContent .NormalTab .CloseTabButton{
-	display: inline; 
-	color: #EBEBEB; 
-	margin-left: 10px;
+	display: inline;
+	visibility: hidden;
+	margin-left: 5px;
 }
 
 .UIPopupWindow .UIWindowContent .NormalTab .MiddleTab:hover .CloseTabButton{
-	color: #757575; 
+	color: #757575;
+	display: inline;
+	visibility: visible;
 }
 
 
