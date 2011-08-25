@@ -475,8 +475,9 @@
                       for (Attachment attach : msg.getAttachments()) {
                       if (!attach.isShownInBody()) {
                         if (attach.isLoadedProperly()) {
-                        String downloadAction = uicomponent.event("DownloadAttachment", newId + "&attachId=" + MailUtils.encodeURL(attach.getId()));
-                        String saveToDMSAction = uicomponent.event("SaveAttachmentToDMS", newId + "&attachId=" + MailUtils.encodeURL(attach.getId()));
+                        Parameter[] params = [new Parameter("attachId", MailUtils.encodeURL(attach.getId()))];
+                        String downloadAction = uicomponent.event("DownloadAttachment", newId, params);
+                        String saveToDMSAction = uicomponent.event("SaveAttachmentToDMS", newId, params);
                     %>
                       <div class="AttachmentContent">
                         <%

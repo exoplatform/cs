@@ -278,6 +278,7 @@ public class UIMessagePreview extends UIContainer{
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
       msgId = Utils.decodeMailId(msgId);
       String attId = event.getRequestContext().getRequestParameter("attachId");
+      attId = MailUtils.decodeURL(attId);
       UIMailPortlet portlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
 
       Message msg = uiMsgPreview.getShowedMessageById(msgId);
@@ -318,6 +319,7 @@ public class UIMessagePreview extends UIContainer{
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
       msgId = Utils.decodeMailId(msgId);
       String attId = event.getRequestContext().getRequestParameter("attachId");
+      attId = MailUtils.decodeURL(attId);
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
       Message msg = uiMsgPreview.getShowedMessageById(msgId);
       if (msg != null) {
