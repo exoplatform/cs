@@ -18,12 +18,12 @@ package org.exoplatform.mail.service.bench;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-import java.util.Stack;
 
 import org.exoplatform.container.xml.InitParams;
-import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
@@ -32,7 +32,7 @@ import org.exoplatform.services.bench.DataInjector;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
-import org.exoplatform.services.security.ConversationState;
+import org.exoplatform.services.organization.OrganizationService;
 
 /**
  * Created by The eXo Platform SAS
@@ -41,17 +41,34 @@ import org.exoplatform.services.security.ConversationState;
  */
 public class MailDataInjector extends DataInjector {
   
+  enum CONSTANTS {
+    POP3("pop3"), IMAP("imap");
+    
+    private final String name; 
+    
+    CONSTANTS(String name) {
+      this.name = name;
+    }
+    
+    public String getName() {
+      return name;
+    }
+    
+  }
+  
   private static Log log = ExoLogger.getExoLogger(MailDataInjector.class);
   
-  final static public String   FD_INBOX        = "Inbox".intern();
+  public static final String          ARRAY_SPLIT     = ",";
+  
+  final static public String          FD_INBOX        = "Inbox".intern();
 
-  final static public String   FD_DRAFTS       = "Drafts".intern();
+  final static public String          FD_DRAFTS       = "Drafts".intern();
 
-  final static public String   FD_SENT         = "Sent".intern();
+  final static public String          FD_SENT         = "Sent".intern();
 
-  final static public String   FD_SPAM         = "Spam".intern();
+  final static public String          FD_SPAM         = "Spam".intern();
 
-  final static public String   FD_TRASH        = "Trash".intern();
+  final static public String          FD_TRASH        = "Trash".intern();
 
   final static public String[] defaultFolders_ = { FD_INBOX, FD_DRAFTS, FD_SENT, FD_SPAM, FD_TRASH };
   
@@ -59,46 +76,50 @@ public class MailDataInjector extends DataInjector {
   
   private SimpleMailServerInitializer mailServerInitializer;
   
-  private int maxAccounts = 2;
-  
-  private int maxMessages = 100;
-  
-  /** attachment size in KByte */
-  private int attachmentSize = 100; // KByte
-  
-  private boolean randomize = false;
-  
-  private Random random = new Random();
-  
-  private Stack<String> accountsStack = new Stack<String>();
-  
-  public MailDataInjector(MailService mailService, SimpleMailServerInitializer mailServerInitializer, InitParams initParams) {
+  private OrganizationService organizationService;
+
+  public MailDataInjector(MailService mailService, SimpleMailServerInitializer mailServerInitializer, OrganizationService organizationService, InitParams initParams) {
     this.mailService = mailService;
     this.mailServerInitializer = mailServerInitializer;
-    initParams(initParams);
+    this.organizationService = organizationService;
   }
   
-  private Account newAccount(Account previous) {
-    String username = IdGenerator.generate();
-    String email = username + "@example.com";
+  private void printInputParameters(HashMap<String, String> params) {
+    StringBuilder sb = new StringBuilder();
+    sb.append("PARAMS: \n");
+    Iterator<String> keys = params.keySet().iterator();
+    while (keys.hasNext()) {
+      String key = keys.next();
+      sb.append(String.format("%1$10s    :    %2$10s \n", key, params.get(key)));
+    }
+    log.info(sb.toString());
+  }
+  
+  private String makeAccountId(String prefix, String userId, int order) {
+    return prefix + "_" + userId + "_" + order;
+  }
+  
+  private String makeEmailAddress(String username) {
+    return username + "@example.com";
+  }
+  
+  private Account newAccount(String accountId, String incomingProtocol) {
+    String email = makeEmailAddress(accountId);
     Account account = new Account();
+    account.setId(accountId);
     account.setIncomingUser(email);
-    account.setLabel(username);
+    account.setLabel(accountId);
     account.setIncomingPassword("password");
     account.setUseIncomingForAuthentication(true);
     account.setEmailAddress(email);
     account.setIncomingHost(mailServerInitializer.getHost());
-    if (previous != null) {
-      if (previous.getProtocol().equals("imap")) {
-        account.setProtocol("pop3");
-        account.setIncomingPort(mailServerInitializer.getPop3Port());
-      } else {
-        account.setProtocol("imap");
-        account.setIncomingPort(mailServerInitializer.getImapPort());
-      }
-    } else {
+    
+    if (CONSTANTS.POP3.getName().equals(incomingProtocol)) {
       account.setProtocol("pop3");
       account.setIncomingPort(mailServerInitializer.getPop3Port());
+    } else {
+      account.setProtocol("imap");
+      account.setIncomingPort(mailServerInitializer.getImapPort());
     }
     account.setOutgoingHost(mailServerInitializer.getHost());
     account.setOutgoingPort(mailServerInitializer.getSmtpPort());
@@ -116,18 +137,58 @@ public class MailDataInjector extends DataInjector {
     return account;
   }
   
-  private int maxAccounts() {
-    return randomize ? random.nextInt(maxAccounts) : maxAccounts;
+  private List<String> readUsers(HashMap<String, String> queryParams) {
+    List<String> users = new LinkedList<String>();
+    String value = queryParams.get("users");
+    String[] usersString = value.split(ARRAY_SPLIT);
+    for (String user : usersString) {
+      users.add(user);
+    }
+    return users;
   }
   
-  private int maxMessages() {
-    return randomize ? random.nextInt(maxMessages) : maxMessages;
+  private int readNumOfAccounts(HashMap<String, String> queryParams) {
+    String value = queryParams.get("accounts");
+    String num = value.split(ARRAY_SPLIT)[0];
+    return Integer.parseInt(num);
   }
   
-  private List<Folder> generateDefaultFolders() {
+  private String readPrefix(HashMap<String, String> queryParams) {
+    String value = queryParams.get("accounts");
+    return value.split(ARRAY_SPLIT)[1];
+  }
+  
+  private String readInComingProtocol(HashMap<String, String> queryParams) {
+    return queryParams.get("inPro");
+  }
+  
+  private boolean readCheckNow(HashMap<String, String> queryParams) {
+    return Boolean.parseBoolean(queryParams.get("check"));
+  }
+  
+  private int readNumberOfMessages(HashMap<String, String> queryParams) {
+    return Integer.parseInt(queryParams.get("msgs"));
+  }
+  
+  private int readAttachmentSize(HashMap<String, String> queryParams) {
+    return Integer.parseInt(queryParams.get("attSize"));
+  }
+  
+  private void validateUsers(List<String> users) throws Exception {
+    for (String user : users) {
+      if (organizationService.getUserHandler().findUserByName(user) == null) {
+        log.info(String.format("\t Validate User: %s does not exist!", user));
+        users.remove(user);
+      }
+    }
+  }
+  
+  private List<Folder> generateDefaultFolders(String accountId) {
     List<Folder> folders = new ArrayList<Folder>();
     for (String folderName : defaultFolders_) {
+      String folderId = Utils.generateFID(accountId, folderName, false);
       Folder folder = new Folder();
+      folder.setId(folderId);
       folder.setName(folderName);
       folder.setPersonalFolder(false);
       folders.add(folder);
@@ -135,64 +196,46 @@ public class MailDataInjector extends DataInjector {
     return folders;
   }
   
-  private List<Account> generateAccounts() {
-    List<Account> accounts = new ArrayList<Account>();
-    Account previous = null;
-    for (int i = 0; i < maxAccounts(); i++) {
-      Account account = newAccount(previous);
-      accounts.add(account);
-      previous = account;
-    }
-    return accounts;
-  }
-  
   @Override
   public Log getLog() {
     return log;
   }
-
-  public void initParams(InitParams initParams) {
-    ValueParam param = initParams.getValueParam("mA");
-    if (param != null) 
-      maxAccounts = Integer.parseInt(param.getValue());
-    param = initParams.getValueParam("mM");
-    if (param != null)
-      maxMessages = Integer.parseInt(param.getValue());
-    param = initParams.getValueParam("attSize");
-    if (param != null)
-      attachmentSize = Integer.parseInt(param.getValue());
-    param = initParams.getValueParam("rand");
-    if (param != null) 
-     randomize = Boolean.parseBoolean(param.getValue());
-  }
-
+  
   @Override
   public void inject(HashMap<String, String> queryParams) throws Exception {
-    String username = ConversationState.getCurrent().getIdentity().getUserId();
-    List<Account> accounts = generateAccounts();
-    int accSize = accounts.size();
-    byte[] attachment = createTextResource(attachmentSize).getBytes();
-    for (int i = 0; i < accSize; i++) {
-      log.info("\tCreate account " + (i + 1) + "/" + accSize + " ...... ");
-      Account account = accounts.get(i);
-      mailService.createAccount(username, account);
-      mailServerInitializer.addUser(account.getEmailAddress(), account.getIncomingPassword());
-      accountsStack.push(account.getId());
-      List<Folder> folders = generateDefaultFolders();
-      int folderSize = folders.size();
-      for (int j = 0; j < folderSize; j++) {
-        Folder folder = folders.get(j);
-        log.info("\t\tCreate Folder " + folder.getName() + " ....... ");
-        folder.setId(Utils.generateFID(account.getId(), folder.getName(), false));
-        mailService.saveFolder(username, account.getId(), folder);
-        
-        if (folder.getName().equalsIgnoreCase(FD_INBOX)) {
-          int msgsNum = maxMessages();
-          log.info("\t\t\t Pouring " + msgsNum + " messages into INBOX folder .........");
-          for (int k = 0; k < msgsNum; k++) {
-            log.info("\t\t\t\t Sending message " + k + "/" + msgsNum + " .........");
+    log.info("Start to inject data ................. ");
+    printInputParameters(queryParams);
+    List<String> users = readUsers(queryParams);
+    validateUsers(users);
+    int numOfAccounts = readNumOfAccounts(queryParams);
+    String accPref = readPrefix(queryParams);
+    String incProtocol = readInComingProtocol(queryParams);
+    int numOfMsgs = readNumberOfMessages(queryParams);
+    int attSize = readAttachmentSize(queryParams);
+    boolean checkNow = readCheckNow(queryParams);
+    for (String userId : users) {
+      log.info("\t Process user: " + userId + " .....................");
+      for (int i = 0; i < numOfAccounts; i++) {
+        String accId = makeAccountId(accPref, userId, i + 1);
+        Account account = mailService.getAccountById(userId, accId);
+        if (account == null) {
+          account = newAccount(accId, incProtocol);
+          mailService.createAccount(userId, account);
+          mailServerInitializer.addUser(account.getEmailAddress(), account.getIncomingPassword());
+        }
+        List<Folder> folders = generateDefaultFolders(accId);
+        for (Folder folder : folders) {
+          mailService.saveFolder(userId, accId, folder);
+        }
+        Random rand = new Random();
+        byte[] attachment = createTextResource(attSize).getBytes();
+        log.info("\t\t\t Pouring " + numOfMsgs + " messages into account: " + accId + " .............. ");
+        for (int j = 0; j < numOfMsgs; j++) {
+          if (attSize == 0) {
+            mailServerInitializer.sendMailMessage(account.getEmailAddress(), makeEmailAddress(makeAccountId(accPref, userId, rand.nextInt())), randomWords(100), randomParagraphs(4));
+          } else {
             mailServerInitializer.sendMailMessage(account.getEmailAddress(),
-                                                  account.getEmailAddress(),
+                                                  makeEmailAddress(makeAccountId(accPref, userId, rand.nextInt())),
                                                   randomWords(100),
                                                   randomParagraphs(4),
                                                   attachment,
@@ -200,22 +243,42 @@ public class MailDataInjector extends DataInjector {
                                                   null);
           }
         }
+        
+        if (checkNow) {
+          log.info("\t\t\t Pulling messages from mail server to eXo Mail ........");
+          mailService.checkNewMessage(userId, account.getId(), FD_INBOX);
+          log.info(String.format("\tAccount %1$s has been created successfully!", account.getEmailAddress()));
+        }
+        
       }
-      log.info("\t\t\t Pulling messages from mail server to eXo Mail ........");
-      mailService.checkNewMessage(username, account.getId(), FD_INBOX);
-      log.info(String.format("\tAccount %1$s has been created successfully!", account.getEmailAddress()));
     }
+    
   }
+
 
   @Override
   public void reject(HashMap<String, String> queryParams) throws Exception {
-    String username = ConversationState.getCurrent().getIdentity().getUserId();
-    while (!accountsStack.isEmpty()) {
-      String accId = accountsStack.pop();
-      log.info("\tRemove account " + accId + " ............. ");
-      mailService.removeAccount(username, accId);
+    log.info("Start to reject data ................. ");
+    printInputParameters(queryParams);
+    List<String> users = readUsers(queryParams);
+    validateUsers(users);
+    int numOfAccounts = readNumOfAccounts(queryParams);
+    String accPref = readPrefix(queryParams);
+    for (String user : users) {
+      log.info("\t Process user: " + user + " .....................");
+      for (int i = 0; i < numOfAccounts; i++) {
+        String accId = makeAccountId(accPref, user, i + 1);
+        Account acc = mailService.getAccountById(user, accId);
+        if (acc != null) {
+          log.info(String.format("Remove account: %1$s of %2$s ...........", accId, user));
+          long t1 = System.currentTimeMillis();
+          mailService.removeAccount(user, accId);
+          long t2 = System.currentTimeMillis() - t1;
+          log.info("Account has been removed in " + t2 + " (ms)!");
+        }
+      }
     }
-    log.info("\tAccounts have been removed successfully!");
+    log.info("Data has been rejected successfully!");
   }
 
   @Override

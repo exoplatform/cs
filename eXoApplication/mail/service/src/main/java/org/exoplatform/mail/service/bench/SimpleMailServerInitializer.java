@@ -104,6 +104,10 @@ public class SimpleMailServerInitializer implements Startable {
     Transport.send(message, tos);
   }
   
+  public void sendMailMessage(String to, String from, String subject, String body) {
+    GreenMailUtil.sendTextEmail(to, from, subject, body, ServerSetupTest.SMTP);
+  }
+  
   public String getImapPort() {
     return String.valueOf(ServerSetupTest.IMAP.getPort());
   }
