@@ -564,15 +564,17 @@
 <!--end room config form -->
 <!-- Start template area -->
 <div id="templateArea" style="display: none;">
-    <!-- BuddyItem  -->
-    <li class="TitleIconChat">
-		<a href="JavaScript:void(0);" class="IconChat"></a>
-    </li>
-    <!-- End BuddyItem -->
-    <!-- BuddyItem for group chat -->
-    <li class="GroupNick">
-		<a href="JavaScript:void(0);" class="StatusIcon NameId"></a>
-    </li>
+	<ul>
+		<!-- BuddyItem  -->
+		<li class="TitleIconChat">
+			<a href="JavaScript:void(0);" class="IconChat"></a>
+		</li>
+		<!-- End BuddyItem -->
+		<!-- BuddyItem for group chat -->
+		<li class="GroupNick">
+			<a href="JavaScript:void(0);" class="StatusIcon NameId"></a>
+		</li>
+	</ul>
     <!-- Message -->
     <!-- User message -->
     <div class="Message UserMessage">
@@ -716,7 +718,7 @@
 						<a href="JavaScript:void(0);" class="Label DownArrow1Icon"><%=_ctx.appRes("UIChatBarPortlet.label.history") %></a>
 						
 						<% /*Begin Popup Menu*/ %>
-							<ul class="UIRightClickPopupMenu UIContextMenuContainer" style="display: none;">
+						<ul class="UIRightClickPopupMenu UIContextMenuContainer" style="display: none;">
 							<li class="MenuItem" onclick="eXo.communication.chatbar.webui.UIChatWindow.getMessageHistory(event,0);" href="JavaScript:void(0);">
 								<a href="JavaScript:void(0);" class="ItemIcon"><%=_ctx.appRes("UIChatBarPortlet.label.today");%></a>
 							</li>
@@ -736,11 +738,12 @@
 				<div class="ChatContainer ClearFix">
 					<div class="RightPage">
 						<ul class="OverflowGroupNick">
+							<li></li>
 						</ul>
 					</div>
 					<div class="MessagesContainer LeftPane">
 						<div class="OverflowMessagesContainer MessagesBox">
-								<span></span>
+							<span></span>
 						</div>
 					</div>
 				</div>
