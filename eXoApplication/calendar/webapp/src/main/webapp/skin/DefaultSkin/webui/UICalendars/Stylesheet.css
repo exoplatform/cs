@@ -30,6 +30,8 @@
   font-weight: bold;
   margin-left: 6px; /* orientation=lt */
   margin-right: 6px; /* orientation=rt */
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 
 .UICalendarPortlet .UICalendars .Label {
