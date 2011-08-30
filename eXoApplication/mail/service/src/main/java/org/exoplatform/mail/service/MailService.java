@@ -507,7 +507,7 @@ public interface MailService {
    * @return List<Message>
    * @throws Exception
    */
-  public List<Message> checkNewMessage(String username, String accountId) throws Exception;
+  public void checkNewMessage(String username, String accountId) throws Exception;
 
   /**
    * This method should check for the new message in the mail server, download
@@ -519,7 +519,7 @@ public interface MailService {
    * @return List<Message>
    * @throws Exception
    */
-  public List<Message> checkNewMessage(String username, String accountId, String folderId) throws Exception;
+  public void checkNewMessage(String username, String accountId, String folderId) throws Exception;
 
   public void removeCheckingInfo(String username, String accountId) throws Exception;
 

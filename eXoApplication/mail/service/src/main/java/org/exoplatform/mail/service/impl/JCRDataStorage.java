@@ -90,6 +90,8 @@ import org.exoplatform.ws.frameworks.json.value.JsonValue;
  */
 public class JCRDataStorage implements DataStorage {
   private static final Log     logger        = ExoLogger.getLogger("cs.mail.service");
+  
+  public static final String MAIL_HAS_ATTACHMENT_MIME_TYPE = "multipart/mixed";
 
   private NodeHierarchyCreator nodeHierarchyCreator_;
 
@@ -1169,7 +1171,11 @@ public class JCRDataStorage implements DataStorage {
         node.setProperty(Utils.MSG_HEADERS, values.toArray(new String[] {}));
         long priority = MimeMessageParser.getPriority(msg);
         node.setProperty(Utils.EXO_PRIORITY, priority);
-        node.setProperty(Utils.EXO_HASATTACH, false);
+        if (msg.isMimeType(MAIL_HAS_ATTACHMENT_MIME_TYPE)) {
+          node.setProperty(Utils.EXO_HASATTACH, true);
+        } else {
+          node.setProperty(Utils.EXO_HASATTACH, false);
+        }
         node.save();
 
         if (infoObj != null && continuation != null)

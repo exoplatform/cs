@@ -45,6 +45,7 @@ import javax.activation.MailcapCommandMap;
 import javax.jcr.Node;
 import javax.mail.AuthenticationFailedException;
 import javax.mail.Flags;
+import javax.mail.Flags.Flag;
 import javax.mail.Header;
 import javax.mail.MessagingException;
 import javax.mail.Part;
@@ -52,14 +53,13 @@ import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.Transport;
 import javax.mail.URLName;
-import javax.mail.Flags.Flag;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMessage.RecipientType;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeUtility;
-import javax.mail.internet.MimeMessage.RecipientType;
 import javax.mail.search.AndTerm;
 import javax.mail.search.BodyTerm;
 import javax.mail.search.ComparisonTerm;
@@ -75,7 +75,6 @@ import javax.mail.util.ByteArrayDataSource;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.mail.connection.Connector;
@@ -131,6 +130,8 @@ import com.sun.mail.util.MailSSLSocketFactory;
  * tuan.nguyen@exoplatform.com Jun 23, 2007
  */
 public class MailServiceImpl implements MailService, Startable {
+  
+  public static final String COMMA = ",";
 
   private static final Log             logger         = ExoLogger.getLogger("cs.mail.service");
 
@@ -1903,8 +1904,8 @@ public class MailServiceImpl implements MailService, Startable {
     return msgMap;
   }
 
-  public List<Message> checkNewMessage(String userName, String accountId) throws Exception {
-    return checkNewMessage(userName, accountId, null);
+  public void checkNewMessage(String userName, String accountId) throws Exception {
+    checkNewMessage(userName, accountId, null);
   }
 
   public String getCurrentUserName() {
@@ -1915,7 +1916,7 @@ public class MailServiceImpl implements MailService, Startable {
     this.currentUser = username;
   }
 
-  public List<Message> checkNewMessage(String username, String accountId, String folderId) throws Exception {
+  public void checkNewMessage(String username, String accountId, String folderId) throws Exception {
     currentUser = username;
     String reciever = username;
     Account dAccount = getDelegatedAccount(username, accountId);
@@ -1923,11 +1924,10 @@ public class MailServiceImpl implements MailService, Startable {
       reciever = dAccount.getDelegateFrom();
     }
     Account account = getAccountById(reciever, accountId);
-    List<Message> messageList = new ArrayList<Message>();
     if (account != null) {
       try {
         if (account.getProtocol().equals(Utils.POP3)) {
-          return checkPop3Server(reciever, accountId);
+          checkPop3Server(reciever, accountId);
         } else if (account.getProtocol().equals(Utils.IMAP)) {
           if (reciever != null) {
             boolean synchFolder = !(getFolders(reciever, accountId, true).size() > 0);
@@ -1959,14 +1959,11 @@ public class MailServiceImpl implements MailService, Startable {
         }
       }
     }
-
-    return messageList;
   }
 
   // TODO: refactor code for checking mail from POP3 server.
-  public List<Message> checkPop3Server(String userName, String accountId) throws Exception {
+  public void checkPop3Server(String userName, String accountId) throws Exception {
     Account account = getAccountById(userName, accountId);
-    List<Message> messageList = new ArrayList<Message>();
     if (account != null) {
       CheckingInfo info = null;
       info = getCheckingInfo(userName, accountId);
@@ -1983,7 +1980,7 @@ public class MailServiceImpl implements MailService, Startable {
       if (Utils.isEmptyField(account.getIncomingPassword())) {
         info.setStatusCode(CheckingInfo.RETRY_PASSWORD);
         updateCheckingMailStatusByCometd(userName, accountId, info);
-        return messageList;
+        return;
       }
       logger.debug(" #### Getting mail from " + account.getIncomingHost() + " ... !");
       info.setStatusCode(CheckingInfo.START_CHECKMAIL_STATUS);
@@ -1996,7 +1993,7 @@ public class MailServiceImpl implements MailService, Startable {
 
       POP3Store store = openPOPConnection(userName, account, info);
       if (store == null) {
-        return messageList;
+        return;
       }
 
       if (info.isRequestStop()) {
@@ -2018,7 +2015,7 @@ public class MailServiceImpl implements MailService, Startable {
 
           updateCheckingMailStatusByCometd(userName, accountId, info);
           store.close();
-          return messageList;
+          return;
         } else {
           logger.debug(" #### Getting mails from folder " + incomingFolder + " !");
           info.setStatusCode(CheckingInfo.DOWNLOADING_MAIL_STATUS);
@@ -2105,7 +2102,7 @@ public class MailServiceImpl implements MailService, Startable {
           if (info != null) {
             info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
             updateCheckingMailStatusByCometd(userName, accountId, info);
-            return messageList;
+            return;
           }
         }
       } finally {
@@ -2117,7 +2114,6 @@ public class MailServiceImpl implements MailService, Startable {
       logger.debug("/////////////////////////////////////////////////////////////");
       logger.debug("/////////////////////////////////////////////////////////////");
     }
-    return messageList;
   }
 
   private String makeStoreFolder(String userName, String accountId, String incomingFolder) throws Exception {
@@ -2833,7 +2829,9 @@ public class MailServiceImpl implements MailService, Startable {
       folderIds = folderList.toArray(new String[] {});
     }
     for (int k = 0; k < folderIds.length; k++) {
-      folderStr += folderIds[k] + ",";
+      if (folderStr.indexOf(folderIds[k] + COMMA) == -1) {
+        folderStr += folderIds[k] + COMMA;
+      }
     }
 
     Info infoObj = new Info();
