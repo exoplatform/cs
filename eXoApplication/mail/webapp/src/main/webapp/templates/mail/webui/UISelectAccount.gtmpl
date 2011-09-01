@@ -12,7 +12,7 @@
     <div class="AddAccountIcon" title="<%=_ctx.appRes(uicomponent.id+ ".label.manage-accounts")%>" onclick="eXo.cs.Utils.show(this, event);">
     <% /*Begin Popup Menu*/ %>
         <div style="position: relative;">
-          <ul class="UIRightClickPopupMenu" style="display: none;">
+          <ul class="UIRightClickPopupMenu UIContextMenuContainer" style="display: none;">
             <%
                 //uicomponent.getActions()
                String[] actions = uicomponent.getActions() ;

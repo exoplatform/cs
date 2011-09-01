@@ -12,7 +12,7 @@
     <div class="ActionIcon" onclick="eXo.cs.Utils.show(this, event);">
       <% /*Begin Popup Menu*/ %>
       <div style="position: relative;height:1px;">
-        <ul class="UIRightClickPopupMenu" style="display: none;">
+        <ul class="UIRightClickPopupMenu UIContextMenuContainer" style="display: none;">
           <%
              for(action in uicomponent.getActions()) {
              String nameItem = _ctx.appRes(uicomponent.getName() + ".action." + action);
