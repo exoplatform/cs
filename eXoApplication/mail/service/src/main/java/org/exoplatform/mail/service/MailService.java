@@ -504,7 +504,6 @@ public interface MailService {
    * 
    * @param username
    * @param account
-   * @return List<Message>
    * @throws Exception
    */
   public void checkNewMessage(String username, String accountId) throws Exception;
@@ -516,7 +515,6 @@ public interface MailService {
    * @param username
    * @param folderId
    * @param account
-   * @return List<Message>
    * @throws Exception
    */
   public void checkNewMessage(String username, String accountId, String folderId) throws Exception;
