@@ -34,6 +34,7 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.organization.Group;
@@ -522,4 +523,10 @@ public class Utils {
     ManageableRepository currentRepo = repositoryService.getCurrentRepository();
     return sprovider.getSession(currentRepo.getConfiguration().getDefaultWorkspaceName(), currentRepo);
   }
+  
+  public static SessionProvider createSystemProvider() {
+    SessionProviderService sessionProviderService = (SessionProviderService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(SessionProviderService.class);
+    return sessionProviderService.getSystemSessionProvider(null);
+  }
+
 }

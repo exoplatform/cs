@@ -26,6 +26,9 @@ import javax.jcr.Node;
 import javax.jcr.Value;
 import javax.mail.internet.InternetAddress;
 
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.services.jcr.ext.app.SessionProviderService;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 
@@ -261,6 +264,11 @@ public class Utils {
     } catch (Exception e) {
     }
     return strs.toString();
+  }
+  
+  public static SessionProvider createSystemProvider() {
+    SessionProviderService sessionProviderService = (SessionProviderService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(SessionProviderService.class);
+    return sessionProviderService.getSystemSessionProvider(null);
   }
 
 }

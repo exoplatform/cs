@@ -58,18 +58,13 @@ public class MessagePageList extends JCRPageList {
     long totalPage = 0;
     Node currentNode;
     Session session = getJCRSession(username);
-
-    try {
-      QueryImpl queryImpl = createXPathQuery(session, username, value_);
-      if (page > 1)
-        queryImpl.setOffset((page - 1) * pageSize);
-      queryImpl.setLimit(pageSize);
-      QueryResult result = queryImpl.execute();
-      iter_ = result.getNodes();
-      totalPage = ((QueryResultImpl) result).getTotalSize();
-    } finally {
-      session.logout();
-    }
+    QueryImpl queryImpl = createXPathQuery(session, username, value_);
+    if (page > 1)
+      queryImpl.setOffset((page - 1) * pageSize);
+    queryImpl.setLimit(pageSize);
+    QueryResult result = queryImpl.execute();
+    iter_ = result.getNodes();
+    totalPage = ((QueryResultImpl) result).getTotalSize();
     setAvailablePage(totalPage);
 
     currentListPage_ = new LinkedHashMap<String, Message>();
@@ -273,7 +268,7 @@ public class MessagePageList extends JCRPageList {
   @SuppressWarnings("deprecation")
   private Session getJCRSession(String username) throws Exception {
     RepositoryService repositoryService = (RepositoryService) PortalContainer.getComponent(RepositoryService.class);
-    SessionProvider sessionProvider = SessionProvider.createSystemProvider();
+    SessionProvider sessionProvider = Utils.createSystemProvider();
     String defaultWS = repositoryService.getCurrentRepository().getConfiguration().getDefaultWorkspaceName();
     return sessionProvider.getSession(defaultWS, repositoryService.getCurrentRepository());
   }

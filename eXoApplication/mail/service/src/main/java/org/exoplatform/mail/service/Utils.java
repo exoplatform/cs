@@ -42,7 +42,11 @@ import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeUtility;
 import javax.mail.util.ByteArrayDataSource;
 
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.services.jcr.ext.app.SessionProviderService;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.scheduler.JobSchedulerService;
@@ -1104,4 +1108,25 @@ public class Utils {
     if (id == null) return "";
     return id.replaceAll(PLUS_ENCODE, "+").replaceAll(EQUAL_ENCODE, "=").replaceAll(AND_ENCODE, "&");
   }
+
+  public static SessionProvider createSessionProvider() {
+    ExoContainer container = null;
+    try {
+      container = PortalContainer.getInstance();
+    } catch (IllegalStateException ie) {
+      container = ExoContainerContext.getCurrentContainer();
+    }
+    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
+    SessionProvider provider = service.getSessionProvider(null);
+    if (provider == null)
+      provider = service.getSystemSessionProvider(null);
+
+    return provider;
+  }
+
+  public static SessionProvider createSystemProvider() {
+    SessionProviderService sessionProviderService = (SessionProviderService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(SessionProviderService.class);
+    return sessionProviderService.getSystemSessionProvider(null);
+  }
+
 }

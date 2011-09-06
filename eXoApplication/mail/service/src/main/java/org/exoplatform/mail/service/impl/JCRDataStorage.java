@@ -18,7 +18,6 @@ package org.exoplatform.mail.service.impl;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -43,7 +42,6 @@ import javax.jcr.nodetype.NodeType;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
-import javax.mail.BodyPart;
 import javax.mail.Header;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
@@ -128,7 +126,7 @@ public class JCRDataStorage implements DataStorage {
   }
 
   private Node getDelegationHomeNode() throws Exception {
-    SessionProvider sProvider = SessionProvider.createSystemProvider();
+    SessionProvider sProvider = Utils.createSystemProvider();
     Node publicApp = getNodeByPath(nodeHierarchyCreator_.getPublicApplicationNode(sProvider).getPath(), sProvider);
     Node node = null;
     try {
@@ -136,8 +134,6 @@ public class JCRDataStorage implements DataStorage {
     } catch (PathNotFoundException e) {
       node = publicApp.addNode(MAIL_DELEGATE, NT_UNSTRUCTURED);
       publicApp.getSession().save();
-    } finally {
-      sProvider.close();
     }
     return node;
   }
@@ -151,8 +147,6 @@ public class JCRDataStorage implements DataStorage {
       Value[] values = {};
       if (accountNode.isNodeType(EXO_SHARED_MIXIN))
         values = accountNode.getProperty(EXO_SHARED_ID).getValues();
-      else
-        accountNode.addMixin(EXO_SHARED_MIXIN);
       List<Value> valueList = new ArrayList<Value>();
       for (Value v : values) {
         valueList.add(v);
@@ -180,6 +174,9 @@ public class JCRDataStorage implements DataStorage {
         valueList.add(newValue);
       }
       if (valueList.size() > 0) {
+        if(!accountNode.isNodeType(EXO_SHARED_MIXIN)){
+          accountNode.addMixin(EXO_SHARED_MIXIN);
+        }
         accountNode.setProperty(EXO_SHARED_ID, valueList.toArray(new Value[valueList.size()]));
         accountNode.getSession().save();
         getDelegationHomeNode().getSession().save();
@@ -188,10 +185,7 @@ public class JCRDataStorage implements DataStorage {
       if (logger.isDebugEnabled())
         logger.debug(" Delegate account error :  " + e.getMessage());
 
-    } finally {
-      sProvider.close();
     }
-
   }
 
   public List<Account> getDelegateAccounts(String userId) throws Exception {
@@ -210,8 +204,6 @@ public class JCRDataStorage implements DataStorage {
       } catch (Exception e) {
         if (logger.isDebugEnabled())
           logger.debug(e.getMessage());
-      } finally {
-        sProvider.close();
       }
     }
     return accList;
@@ -2819,7 +2811,7 @@ public class JCRDataStorage implements DataStorage {
    * @edit on 26/10/2010: using system provider instead.
    */
   public SessionProvider createSessionProvider() {
-    SessionProvider provider = SessionProvider.createSystemProvider();
+    SessionProvider provider = Utils.createSystemProvider();
     // ExoContainer container = null;
     // try {
     // container = PortalContainer.getInstance();
@@ -2864,28 +2856,23 @@ public class JCRDataStorage implements DataStorage {
   }
 
   public BufferAttachment getAttachmentFromDMS(String userName, String relPath) throws Exception {
-    SessionProvider sProvider = SessionProvider.createSystemProvider();
-    try {
-      Node node = nodeHierarchyCreator_.getUserNode(sProvider, userName);
+    SessionProvider sProvider = Utils.createSystemProvider();
+    Node node = nodeHierarchyCreator_.getUserNode(sProvider, userName);
 
-      Node fileNode = node.getNode(relPath);
+    Node fileNode = node.getNode(relPath);
 
-      if (!fileNode.getPrimaryNodeType().getName().equals("nt:file"))
-        return null;
-      Node fileContentNode = fileNode.getNode(Utils.JCR_CONTENT);
-      BufferAttachment attachFile = new BufferAttachment();
-      attachFile.setId("Attachment" + IdGenerator.generate());
-      String fileName = fileNode.getName();
+    if (!fileNode.getPrimaryNodeType().getName().equals("nt:file"))
+      return null;
+    Node fileContentNode = fileNode.getNode(Utils.JCR_CONTENT);
+    BufferAttachment attachFile = new BufferAttachment();
+    attachFile.setId("Attachment" + IdGenerator.generate());
+    String fileName = fileNode.getName();
 
-      attachFile.setName(fileName);
-      attachFile.setInputStream(fileContentNode.getProperty(Utils.JCR_DATA).getStream());
-      attachFile.setMimeType(fileContentNode.getProperty(Utils.JCR_MIMETYPE).getString());
+    attachFile.setName(fileName);
+    attachFile.setInputStream(fileContentNode.getProperty(Utils.JCR_DATA).getStream());
+    attachFile.setMimeType(fileContentNode.getProperty(Utils.JCR_MIMETYPE).getString());
 
-      return attachFile;
-    } finally {
-      sProvider.close();
-    }
-
+    return attachFile;
   }
 
   public String[] getDMSDataInfo(String userName) throws Exception {
@@ -2895,20 +2882,16 @@ public class JCRDataStorage implements DataStorage {
     arr[0] = service.getCurrentRepository().getConfiguration().getName();
 
     // service.getCurrentRepository().getConfiguration().getDefaultWorkspaceName();
-    SessionProvider sProvider = SessionProvider.createSystemProvider();
-    try {
-      Node node = nodeHierarchyCreator_.getUserNode(SessionProvider.createSystemProvider(), userName);
+    SessionProvider sProvider = Utils.createSystemProvider();
+    Node node = nodeHierarchyCreator_.getUserNode(sProvider, userName);
 
-      arr[1] = node.getSession().getWorkspace().getName();
-      arr[2] = node.getPath();
-      return arr;
-    } finally {
-      sProvider.close();
-    }
+    arr[1] = node.getSession().getWorkspace().getName();
+    arr[2] = node.getPath();
+    return arr;
   }
 
   public Node getDMSSelectedNode(String userName, String relPath) throws Exception {
-    SessionProvider sProvider = SessionProvider.createSystemProvider();
+    SessionProvider sProvider = Utils.createSystemProvider();
     Node userNode = nodeHierarchyCreator_.getUserNode(sProvider, userName);
     try {
       Node folderNode = userNode.getNode(relPath);

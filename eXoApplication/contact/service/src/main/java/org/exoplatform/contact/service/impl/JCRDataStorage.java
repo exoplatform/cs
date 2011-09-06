@@ -538,7 +538,6 @@ public class JCRDataStorage implements DataStorage {
     Node contactHomeNode = getPersonalContactsHome(username);
     contactToNode(contactHomeNode, contact, isNew);
     contactHomeNode.getSession().save();
-    contactHomeNode.getSession().logout();
   }
 
   private void saveContactUser(String username, Contact contact, boolean isNew) throws Exception {
