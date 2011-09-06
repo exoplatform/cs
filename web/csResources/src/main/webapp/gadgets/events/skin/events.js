@@ -198,7 +198,6 @@ eXoEventGadget.prototype.showDetail = function(obj){
 eXoEventGadget.prototype.onLoadHander = function(){
 	eXoEventGadget.getPrefs();
 	eXoEventGadget.getCalendars();
-	eXoEventGadget.trigger();
 	setTimeout(eXoEventGadget.adjustHeight,500);
 }
 eXoEventGadget.prototype.ajaxAsyncGetRequest = function(url, callback) {
@@ -310,24 +309,6 @@ eXoEventGadget.prototype.selectedValue = function(selectbox,value){
 	}
 }
 
-eXoEventGadget.prototype.trigger = function(){
-	this.moreButton = document.getElementById("ShowAll");
-  this.settingButton = document.getElementById("SettingButton");
-  this.hiddenTimeout = null;
-  this.moreButton.onmouseover = this.moveOver;
-  this.moreButton.onmouseout = this.moveOut;
-  this.settingButton.onmouseover = this.moveOver;
-  this.settingButton.onmouseout = this.moveOut;
-}
-eXoEventGadget.prototype.moveOver = function(){
-  if(eXoEventGadget.hiddenTimeout) window.clearTimeout(eXoEventGadget.hiddenTimeout);  
-  eXoEventGadget.settingButton.style.display = "block";
-}
-eXoEventGadget.prototype.moveOut = function(){
-  eXoEventGadget.hiddenTimeout = window.setTimeout(function(){
-    eXoEventGadget.settingButton.style.display = "none";
-  },200);
-}
 
 eXoEventGadget =  new eXoEventGadget();
 
