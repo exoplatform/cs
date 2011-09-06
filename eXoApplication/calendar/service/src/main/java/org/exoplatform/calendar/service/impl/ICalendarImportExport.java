@@ -125,7 +125,6 @@ public class ICalendarImportExport implements CalendarImportExport {
       } else if (CalendarComponent.VTODO.equals(componentType)) {
         event = new VToDo(new DateTime(start), new DateTime(end), summary);
       }
-      event.getProperties().getProperty(Property.DTEND).getParameters().add(net.fortuna.ical4j.model.parameter.Value.DATE_TIME);
     } else {
       if (CalendarComponent.VEVENT.equals(componentType)) {
         event = new VEvent(new DateTime(start), summary);

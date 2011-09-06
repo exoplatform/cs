@@ -814,6 +814,9 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
       exoEvent.setSummary(task.getSummary().getValue());
     if (task.getDescription() != null)
       exoEvent.setDescription(task.getDescription().getValue());
+    if (task.getProperty(Utils.X_STATUS) != null) {
+      exoEvent.setEventState(task.getProperty(Utils.X_STATUS).getValue());
+    }
     if (task.getStatus() != null)
       exoEvent.setStatus(task.getStatus().getValue());
     exoEvent.setEventType(CalendarEvent.TYPE_TASK);
