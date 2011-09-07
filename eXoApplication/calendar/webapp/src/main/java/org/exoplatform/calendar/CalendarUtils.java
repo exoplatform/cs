@@ -173,13 +173,15 @@ public class CalendarUtils {
   private static Log log = ExoLogger.getLogger(CalendarUtils.class);
   
   public static final String[] getUserGroups(String username) throws Exception {
-    OrganizationService organization = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
-    Object[] objs = organization.getGroupHandler().findGroupsOfUser(username).toArray() ;
-    String[] groups = new String[objs.length] ;
-    for(int i = 0; i < objs.length ; i ++) {
-      groups[i] = ((Group)objs[i]).getId() ;
+    ConversationState conversationState = ConversationState.getCurrent();
+    Identity identity = conversationState.getIdentity();
+    Set<String> objs = identity.getGroups();
+    String[] groups = new String[objs.size()];
+    int i = 0;
+    for (String obj : objs) {
+      groups[i++] = obj;
     }
-    return groups ;
+    return groups;
   }
   static public String[] getAllGroups() throws Exception {
     Object[] objs = getOrganizationService().getGroupHandler().getAllGroups().toArray() ;
