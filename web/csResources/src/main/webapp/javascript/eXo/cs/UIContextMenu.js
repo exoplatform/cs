@@ -136,9 +136,11 @@ UIContextMenu.prototype.changeAction = function(obj, id) {
 		for(var i = 0 ; i < len ; i++) {
 			href = String(actions[i].href) ;
 			if(href.indexOf('&ajaxRequest=true') > 0){
-				actions[i].href = href.replace('&ajaxRequest=true', '&objectId=' + id + '&ajaxRequest=true');
-			}else if(href.indexOf('&objectId=')){
-				actions[i].href = href.replace('&objectId=', '&objectId=' + id);
+			  if (href.indexOf('&objectId=') < 0) {
+			    actions[i].href = href.replace('&ajaxRequest=true', '&objectId=' + id + '&ajaxRequest=true');
+			  }
+			}else if(href.indexOf('&objectId=id') > 0){
+				actions[i].href = href.replace('&objectId=id', '&objectId=' + id);
 			}
 		}
 	} else if (typeof(id) == "object") {

@@ -30,47 +30,47 @@
                 <div class="MiddleRightRightClickPopupMenu">
                   <div class="UIRightPopupMenuContainer">
                     <div class="MenuItem">   
-                      <a class="ItemIcon EditActionIcon" href="<%=uiContacts.event("EditContact", "")%>">
+                      <a class="ItemIcon EditActionIcon" href="<%=uiContacts.event("EditContact", "id")%>">
                         <%=_ctx.appRes(uiContacts.getName() + ".label.edit")%>
                       </a>
                     </div>                    
                     <div class="MenuItem">   
-                      <a class="ItemIcon CopyContactIcon" href="<%=uiContacts.event("CopyContact", "")%>">
+                      <a class="ItemIcon CopyContactIcon" href="<%=uiContacts.event("CopyContact", "id")%>">
                         <%=_ctx.appRes(uiContacts.getName() + ".label.copy")%>
                       </a>
                     </div>                    
                     <div class="MenuItem">   
-                      <a class="ItemIcon ShareIcon" href="<%=uiContacts.event("SharedContacts", "")%>">
+                      <a class="ItemIcon ShareIcon" href="<%=uiContacts.event("SharedContacts", "id")%>">
                         <%=_ctx.appRes(uiContacts.getName() + ".label.shared")%>
                       </a>
                     </div>                    
                     <div class="MenuItem">  
-                      <a class="ItemIcon EmailIcon" href="<%=uiContacts.event("SendEmail", "")%>">
+                      <a class="ItemIcon EmailIcon" href="<%=uiContacts.event("SendEmail", "id")%>">
                         <%=_ctx.appRes(uiContacts.getName() + ".label.sendEmail")%>
                       </a>
                     </div>             
                     <div class="MenuItem">   
-                      <a class="ItemIcon VioletTag" href="<%=uiContacts.event("Tag", "")%>">
+                      <a class="ItemIcon VioletTag" href="<%=uiContacts.event("Tag", "id")%>">
                         <%=_ctx.appRes(uiContacts.getName() + ".label.tag")%>
                       </a>
                     </div>
                     <div class="MenuItem">   
-                      <a class="ItemIcon MoveIcon" href="<%=uiContacts.event("MoveContacts", "")%>">
+                      <a class="ItemIcon MoveIcon" href="<%=uiContacts.event("MoveContacts", "id")%>">
                         <%=_ctx.appRes(uiContacts.getName() + ".label.move")%>
                       </a>
                     </div>
                     <div class="MenuItem">   
-                      <a class="ItemIcon DeleteContactIcon" href="<%=uiContacts.event("DeleteContacts", uiContacts.id, "")%>">
+                      <a class="ItemIcon DeleteContactIcon" href="<%=uiContacts.event("DeleteContacts", uiContacts.id, "id")%>">
                         <%=_ctx.appRes(uiContacts.getName() + ".label.delete")%>
                       </a> 
                     </div>
                     <div class="MenuItem">   
-                      <a class="ItemIcon PrintIcon" href="<%=uiContacts.event("PrintDetails", "")%>">
+                      <a class="ItemIcon PrintIcon" href="<%=uiContacts.event("PrintDetails", "id")%>">
                         <%=_ctx.appRes(uiContacts.getName() + ".label.print") %>
                       </a>
                     </div>
                     <div class="MenuItem">   
-                      <a class="ItemIcon ExportContactIcon" href="<%=uiContacts.event("ExportContact", "")%>">
+                      <a class="ItemIcon ExportContactIcon" href="<%=uiContacts.event("ExportContact", "id")%>">
                         <%=_ctx.appRes(uiContacts.getName() + ".label.export")%>
                       </a>
                     </div>
