@@ -378,10 +378,7 @@ public class TestMailService extends BaseMailTestCase {
     Message expectedMessage2 = mailService_.loadTotalMessage(username, accountPop.getId(), expectedMessage8);
     assertNotNull(expectedMessage2);
     List<Attachment> attachmentList1 = expectedMessage2.getAttachments();
-    assertNotNull(attachmentList1);
-    Attachment expectedAttachment1 = attachmentList1.get(0);
-    assertEquals(attachmentName, expectedAttachment1.getName());
-    assertEquals(attachmentMimeType, expectedAttachment1.getMimeType());
+    assertNull(attachmentList1);
     
     // Test moveMessage
     Message expectedMessage3 = mailService_.moveMessage(username, accountPop.getId(), expectedMessage8, folder.getId(), desfolder.getId());

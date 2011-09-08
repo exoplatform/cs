@@ -29,6 +29,7 @@ import javax.mail.URLName;
 import javax.mail.Flags.Flag;
 import javax.mail.internet.MimeMessage;
 
+import org.apache.commons.lang.StringUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.Message;
@@ -155,27 +156,28 @@ public class ImapConnector extends BaseConnector {
   }
 
   public List<Message> createMessage(List<Message> msgs, Folder folder) throws Exception {
-    if (msgs == null || msgs.size() == 0 || folder == null)
+    if (msgs == null || msgs.size() == 0 || folder == null) {
       return null;
+    }
+    
+    // In the case the message already exist, then delete old message
+    List<Message> messagesToDelete = new ArrayList<Message>();
+    for (Message message : msgs) {
+      if (!StringUtils.isEmpty(message.getUID())) {
+        messagesToDelete.add(message);
+      }
+    }
+    if (messagesToDelete.size() > 0) {
+      deleteMessage(messagesToDelete, folder);
+    }
+    
+    // Create new messages
     List<Message> successList = new ArrayList<Message>();
-    IMAPFolder remoteFolder = null;
-    URLName remoteURL = new URLName(folder.getURLName());
-    try {
-      remoteFolder = (IMAPFolder) ((IMAPStore) store_).getFolder(remoteURL);
-    } catch (Exception e) {
-      logger.warn("Cannot get \"" + folder.getName() + "\" folder. It will be created on server immediate.");
-      remoteFolder = (IMAPFolder) this.createFolder(folder);
+    IMAPFolder remoteFolder = openImapFolder(folder);
+    if (remoteFolder == null) {
+      return null;
     }
-    try {
-      if (remoteFolder != null && !remoteFolder.isOpen())
-        remoteFolder.open(javax.mail.Folder.READ_WRITE);
-      else if (remoteFolder == null)
-        return null;
-    } catch (Exception e) {
-      logger.warn("Cannot open \"" + folder.getName() + "\" folder. It will be created on server.");
-      remoteFolder = (IMAPFolder) this.createFolder(folder);
-      remoteFolder.open(javax.mail.Folder.READ_WRITE);
-    }
+    
     Properties props = System.getProperties();
     Session session = Session.getInstance(props, null);
     javax.mail.Message[] messages = new javax.mail.Message[msgs.size()];
@@ -185,6 +187,7 @@ public class ImapConnector extends BaseConnector {
       mimeMessage = Utils.mergeToMimeMessage(msgs.get(i), mimeMessage);
       messages[i] = (javax.mail.Message) mimeMessage;
     }
+    
     if (remoteFolder.isOpen()) {
       try {
         createdMsgs = remoteFolder.addMessages(messages);
@@ -209,26 +212,60 @@ public class ImapConnector extends BaseConnector {
           successList.add(msgs.get(l));
         }
         remoteFolder.close(true);
-      } else
+      } else {
         logger.warn("Not all messages are synchronized with server.");
+      }
     }
     return successList;
+  }
+  
+  public IMAPFolder openImapFolder(Folder folder) throws Exception {
+    IMAPFolder remoteFolder = null;
+    URLName remoteURL = new URLName(folder.getURLName());
+    try {
+      remoteFolder = (IMAPFolder) ((IMAPStore) store_).getFolder(remoteURL);
+    } catch (Exception e) {
+      logger.warn("Cannot get \"" + folder.getName() + "\" folder. It will be created on server immediate.");
+      remoteFolder = (IMAPFolder) createFolder(folder);
+      folder.setURLName(remoteFolder.getURLName().toString());
+    }
+    
+    if (remoteFolder == null) {
+      return null;
+    }
+    
+    try {
+      if (remoteFolder != null && !remoteFolder.isOpen()) {
+        remoteFolder.open(javax.mail.Folder.READ_WRITE);
+      } 
+    } catch (Exception e) {
+      logger.warn("Cannot open \"" + folder.getName() + "\" folder. It will be created on server.");
+      remoteFolder = (IMAPFolder) createFolder(folder);
+      folder.setURLName(remoteFolder.getURLName().toString());
+      remoteFolder.open(javax.mail.Folder.READ_WRITE);
+    }
+    return remoteFolder;
   }
 
   public boolean deleteMessage(List<Message> msgs, Folder folder) throws Exception {
     try {
-      URLName url = new URLName(folder.getURLName());
-      IMAPFolder inFolder = (IMAPFolder) ((IMAPStore) store_).getFolder(url);
-      boolean isOpen = inFolder.isOpen();
-      if (!isOpen)
-        inFolder.open(javax.mail.Folder.READ_WRITE);
+      IMAPFolder remoteFolder = openImapFolder(folder);
+      if (remoteFolder == null) {
+        return false;
+      }
+      
+      if (!remoteFolder.isOpen()) {
+        remoteFolder.open(javax.mail.Folder.READ_WRITE);
+      }
+      
       javax.mail.Message message;
       for (Message msg : msgs) {
-        message = inFolder.getMessageByUID(Long.valueOf(msg.getUID()));
-        if (message != null)
+        message = remoteFolder.getMessageByUID(Long.valueOf(msg.getUID()));
+        if (message != null) {
           message.setFlag(Flags.Flag.DELETED, true);
+        }
       }
-      inFolder.close(true);
+      remoteFolder.close(true);
       return true;
     } catch (Exception e) {
       return false;

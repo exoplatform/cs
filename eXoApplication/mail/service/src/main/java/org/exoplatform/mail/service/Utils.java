@@ -42,6 +42,7 @@ import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeUtility;
 import javax.mail.util.ByteArrayDataSource;
 
+import org.apache.commons.lang.StringUtils;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
@@ -685,16 +686,16 @@ public class Utils {
     }
     mimeMessage.setFrom(addressFrom);
 
-    if (message.getMessageTo() != null) {
+    if (!StringUtils.isEmpty(message.getMessageTo())) {
       mimeMessage.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(message.getMessageTo()));
     }
-    if (message.getMessageCc() != null) {
+    if (!StringUtils.isEmpty(message.getMessageCc())) {
       mimeMessage.setRecipients(javax.mail.Message.RecipientType.CC, InternetAddress.parse(message.getMessageCc(), true));
     }
-    if (message.getMessageBcc() != null) {
+    if (!StringUtils.isEmpty(message.getMessageBcc())) {
       mimeMessage.setRecipients(javax.mail.Message.RecipientType.BCC, InternetAddress.parse(message.getMessageBcc(), false));
     }
-    if (message.getReplyTo() != null) {
+    if (!StringUtils.isEmpty(message.getReplyTo())) {
       mimeMessage.setReplyTo(Utils.getInternetAddress(message.getReplyTo()));
     }
     String subject = message.getSubject();

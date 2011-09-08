@@ -963,29 +963,55 @@ public class JCRDataStorage implements DataStorage {
           values.add(key + "=" + message.getHeaders().get(key));
         }
         nodeMsg.setProperty(Utils.MSG_HEADERS, values.toArray(new String[message.getHeaders().size()]));
+        
+        // Get attachment home
+        Node attHome = null;
+        try {
+          attHome = nodeMsg.getNode(Utils.KEY_ATTACHMENT);
+        } catch (PathNotFoundException pne) {
+          attHome = nodeMsg.addNode(Utils.KEY_ATTACHMENT, Utils.NT_UNSTRUCTURED);
+        }
 
+        boolean isMailHasAttachment = false; 
         List<Attachment> attachments = message.getAttachments();
+        Session session = mailHome.getSession();
         if (attachments != null && attachments.size() > 0) {
+          
+          // Check to remove attachment
+          Map<String, JCRMessageAttachment> attachmentInJcrMap = getAttachments(nodeMsg);
+          for (JCRMessageAttachment jcrMessageAttachment : attachmentInJcrMap.values()) {
+            boolean isExistInMail = false;
+            for (Attachment attachment : attachments) {
+              if (jcrMessageAttachment.getId().equals(attachment.getId())) {
+                isExistInMail = true;
+                attachments.remove(attachment);
+                break;
+              }
+            }
+            
+            if (!isExistInMail) {
+              Node attachmentNodeToRemove = (Node) session.getItem(jcrMessageAttachment.getId());
+              if (attachmentNodeToRemove != null) {
+                attachmentNodeToRemove.remove();
+              }
+            }
+          }
+          
+          // Add new attactment to jcr
           Iterator<Attachment> it = attachments.iterator();
           boolean makeNewAtt = isNew;
           while (it.hasNext()) {
             Attachment file = it.next();
             Node nodeFile = null;
-            Session session = mailHome.getSession();
             try {
-              if (!isNew)
+              if (!isNew) {
                 nodeFile = (Node) session.getItem(file.getId());
+              }
             } catch (Exception e) {
               makeNewAtt = true;
             }
 
             if (makeNewAtt) {
-              Node attHome = null;
-              try {
-                attHome = nodeMsg.getNode(Utils.KEY_ATTACHMENT);
-              } catch (Exception pne) {
-                attHome = nodeMsg.addNode(Utils.KEY_ATTACHMENT, Utils.NT_UNSTRUCTURED);
-              }
               nodeFile = attHome.addNode("Attachment" + IdGenerator.generate(), Utils.EXO_MAIL_ATTACHMENT);
               nodeFile.setProperty(Utils.EXO_ATT_NAME, file.getName());
             }
@@ -999,21 +1025,27 @@ public class JCRDataStorage implements DataStorage {
             nodeContent.setProperty(Utils.JCR_MIMETYPE, file.getMimeType());
             nodeContent.setProperty(Utils.JCR_DATA, file.getInputStream());
             nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance().getTimeInMillis());
-            /*
-             * nodeFile.setProperty(Utils.ATT_IS_SHOWN_IN_BODY, false); nodeMsg.setProperty(Utils.EXO_HASATTACH, true);
-             */
             nodeFile.setProperty(Utils.ATT_IS_SHOWN_IN_BODY, file.isShownInBody());
-            nodeMsg.setProperty(Utils.EXO_HASATTACH, !file.isShownInBody());
+            
+            if (!file.isShownInBody()) {
+              isMailHasAttachment = true;
+            }
           }
+        } else {
+          // If there is no attachment in mail then remove attachment home
+          attHome.remove();
         }
+        
+        // Store the value refer mail has attachment or not
+        nodeMsg.setProperty(Utils.EXO_HASATTACH, isMailHasAttachment);
 
-        if (nodeMsg.canAddMixin("mix:referenceable"))
+        if (nodeMsg.canAddMixin("mix:referenceable")) {
           nodeMsg.addMixin("mix:referenceable");
+        }
         nodeMsg.setProperty(Utils.EXO_SUBJECT, message.getSubject());
         nodeMsg.setProperty(Utils.IS_LOADED, message.isLoaded());
         nodeMsg.save();
       }
-
     } catch (Exception e) {
       if (logger.isDebugEnabled()) {
         logger.debug("Exception in method saveMessages", e);
