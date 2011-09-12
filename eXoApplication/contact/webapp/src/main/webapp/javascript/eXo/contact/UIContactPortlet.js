@@ -783,7 +783,7 @@ UIContactPortlet.prototype.fitStringToWidth = function (id, str,index) {
 	var td = document.getElementById(id);
 	var width = td.offsetWidth;
 
-	var span = document.createElement("spannnn");
+	var span = document.createElement("span");
 	span.className=td.className;
 	span.style.display='inline';
 	span.style.visibility = 'hidden';
