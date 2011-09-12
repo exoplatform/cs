@@ -64,6 +64,7 @@
       <UIComfirmPassword>Xác nhận mật khẩu</UIComfirmPassword>
       <UIEnterPasswordDialog>Nhập mật khẩu</UIEnterPasswordDialog>
       <UIAskmeReturnReceipt>Confirm return receipt</UIAskmeReturnReceipt>
+      <UISaveAttachment>Lưu file đính kèm</UISaveAttachment>
     </title>
   </UIPopupWindow>
   <UIAccountCreation>

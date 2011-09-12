@@ -64,6 +64,7 @@
       <UIComfirmPassword>أدخل كلمة السر</UIComfirmPassword>
       <UIEnterPasswordDialog>أدخل كلمة السر</UIEnterPasswordDialog>
       <UIAskmeReturnReceipt>Confirm return receipt</UIAskmeReturnReceipt>
+      <UISaveAttachment>Save attachment</UISaveAttachment>
     </title>
   </UIPopupWindow>
   <UIAccountCreation>
