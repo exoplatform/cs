@@ -12,7 +12,7 @@
     <Locale lang="vi" messages="/csResources/gadgets/tasks/locale/vi.xml" />
     <Require feature="setprefs"/>
     <Require feature="dynamic-height"/>
-    <UserPref name="setting" default_value="/calendar;/portal/rest/private/cs/calendar/getissues;10;AM/PM;Default" datatype="hidden" />
+    <UserPref name="setting" default_value="/calendar;/rest/cs/calendar/getissues;10;AM/PM;Default" datatype="hidden" />
   </ModulePrefs>
   <Content type="html">
     <![CDATA[

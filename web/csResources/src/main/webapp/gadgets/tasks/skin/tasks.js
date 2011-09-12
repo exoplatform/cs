@@ -120,7 +120,7 @@ function eXoEventGadget(){
 
 eXoEventGadget.prototype.getPrefs = function(){
 	var setting = (new gadgets.Prefs()).getString("setting");
-	if(setting =="") setting = ["","/portal/rest/cs/calendar/getissues","10","AM/PM","defaultCalendarName"];
+	if(setting =="") setting = ["","/rest/cs/calendar/getissues","10","AM/PM","defaultCalendarName"];
 	else {
 		setting = setting.split(";");
 	}
@@ -145,7 +145,7 @@ eXoEventGadget.prototype.setLink = function(){
 eXoEventGadget.prototype.createRequestUrl = function(){
 	var prefs = eXoEventGadget.prefs || eXoEventGadget.getPrefs();
 	var limit = (prefs.limit && (parseInt(prefs.limit) > 0))? prefs.limit:0;
-	var subscribeurl = (prefs.subscribeurl)?prefs.subscribeurl: "/portal/rest/cs/calendar/getissues" ;
+	var subscribeurl = (prefs.subscribeurl)?prefs.subscribeurl: "/rest/cs/calendar/getissues" ;
 	subscribeurl +=  "/" + DateTimeFormater.format((new Date()),"yyyymmdd") + "/Task/" + limit ;
 	subscribeurl += "?rnd=" + (new Date()).getTime();
 	return subscribeurl;
