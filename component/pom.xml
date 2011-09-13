@@ -10,6 +10,7 @@
   <packaging>pom</packaging>
   <name>eXo CS Components</name>
   <modules>
+    <module>upgrade</module>
     <module>statistics</module>
   </modules>
 </project>

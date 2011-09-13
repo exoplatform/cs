@@ -50,6 +50,7 @@
           <value>war:/conf/csdemo/cs/content/content-nodetypes.xml</value>
           <value>war:/conf/csdemo/cs/mail/mail-nodetypes.xml</value>
           <value>war:/conf/csdemo/cs/webservice/webservice-nodetype-config.xml</value>
+          <value>war:/conf/csdemo/cs/upgrade-nodetypes.xml</value>
         </values-param>
       </init-params>
     </component-plugin>

@@ -149,9 +149,19 @@
 	  </dependency>
 	  <dependency>
 		<groupId>org.exoplatform.commons</groupId>
-		<artifactId>exo.platform.commons.comet.service</artifactId>
+		<artifactId>exo.platform.commons.component.upgrade</artifactId>
 		<version>${org.exoplatform.commons.version}</version>
 	  </dependency>
+    <dependency>
+    <groupId>org.exoplatform.commons</groupId>
+    <artifactId>exo.platform.commons.component.product</artifactId>
+    <version>${org.exoplatform.commons.version}</version>
+    </dependency>
+    <dependency>
+    <groupId>org.exoplatform.commons</groupId>
+    <artifactId>exo.platform.commons.comet.service</artifactId>
+    <version>${org.exoplatform.commons.version}</version>
+    </dependency>
     <dependency>
     <groupId>org.exoplatform.commons</groupId>
     <artifactId>exo.platform.commons.comet.webapp</artifactId>
@@ -561,6 +571,12 @@
 	</dependency>
 
 	<!-- test -->
+  <dependency>
+    <groupId>org.exoplatform.cs</groupId>
+    <artifactId>exo.cs.component.upgrade</artifactId>
+    <version>${project.version}</version>
+    <type>jar</type>
+  </dependency>   
 	<dependency>
 		<groupId>org.exoplatform.cs</groupId>
 		<artifactId>exo.cs.server.tomcat.patch</artifactId>
