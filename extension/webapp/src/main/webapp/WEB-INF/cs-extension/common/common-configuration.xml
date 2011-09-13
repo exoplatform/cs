@@ -24,7 +24,6 @@
           <value>locale.navigation.group.platform.users</value>
           <value>locale.navigation.group.platform.guests</value>
           <value>locale.message.chat.serverMessage</value>
-          <value>locale.message.cs.integration.integration</value>
         </values-param>
         <values-param>
           <name>portal.resource.names</name>
@@ -33,7 +32,6 @@
           <value>locale.portal.custom</value>
           <value>locale.portal.webui</value>
           <value>locale.message.chat.serverMessage</value>
-          <value>locale.message.cs.integration.integration</value>
         </values-param>
       </init-params>
     </component-plugin>
