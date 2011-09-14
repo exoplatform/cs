@@ -1,11 +1,7 @@
-.UIContactPortlet .AddNewContact {
-  padding: 10px 20px;
-  min-width: 600px;
-}
-
 .UIContactPortlet .AddNewContact .AddContact .HorizontalLayout {
   border: none;
   padding: 0px;
+  background: none;
 }
 
 .UIContactPortlet .AddNewContact .AddContact .HorizontalLayout .UIFormInputSet {

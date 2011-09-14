@@ -199,7 +199,7 @@
 }
 
 .UICalendarPortlet .UIAddNewEvent .NewEventAttendee .UIGrid td {
-  border-top:1px solid #cccccc;
+  border:1px solid #cccccc;
   height: 24px;
   padding: 0px;
 }

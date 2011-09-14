@@ -269,6 +269,7 @@
 
 .UICalendarPortlet .UIGrid {
 	border-collapse: collapse;
+	table-layout: fixed;
 }
 
 .UICalendarPortlet .UIGrid td {
@@ -277,6 +278,11 @@
 	border-left: 1px solid #c7c7c7;
 	border-right: 1px solid #c7c7c7;
 	border-collapse: collapse;
+}
+
+.UICalendarPortlet .UIPopupWindow  .UIGrid td {
+	border-left: 1px solid #ffffff;
+	border-right: 1px solid #ffffff;
 }
 
 .UICalendarPortlet .UIForm .UIFormGrid td.FieldComponent {
