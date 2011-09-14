@@ -808,24 +808,11 @@
 		<version>${org.exoplatform.kernel.version}</version>
 		<type>jar</type>
 	</dependency>
-
-  <dependency>
-      <groupId>org.bouncycastle</groupId>
-      <artifactId>bcmail-jdk15</artifactId>
-      <version>${org.bouncycastle.version}</version>
-      <type>jar</type>
-    </dependency>
-    <dependency>
-      <groupId>org.bouncycastle</groupId>
-      <artifactId>bcprov-jdk15</artifactId>
-      <version>${org.bouncycastle.version}</version>
-      <type>jar</type>
-    </dependency>
 	<dependency>
-      <groupId>caja</groupId>
-      <artifactId>json_simple</artifactId>
-      <version>${caja.version}</version>
-      <type>jar</type>
+          <groupId>caja</groupId>
+          <artifactId>json_simple</artifactId>
+          <version>${caja.version}</version>
+          <type>jar</type>
     </dependency>
 	
   </dependencies>
