@@ -73,6 +73,7 @@
       rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.setting(' + timeStep + ', "' + workingStart + '", "' + timeFormat +'", "'+uicomponent.id+'") ;') ;
       rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showContextMenu("'+ uicomponent.id +'") ;') ;
       rcontext.getJavascriptManager().importJavascript('eXo.calendar.Highlighter','/calendar/javascript/') ;
+      rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarContainer','/calendar/javascript/') ;
       rcontext.getJavascriptManager().importJavascript('eXo.core.JSON') ;       
       //rcontext.getJavascriptManager().addJavascript('if(eXo.core.Cometd) delete eXo.core.Cometd;') ;
       //rcontext.getJavascriptManager().addJavascript('eXo.require("eXo.core.Cometd","/cometd/javascript/");') ;

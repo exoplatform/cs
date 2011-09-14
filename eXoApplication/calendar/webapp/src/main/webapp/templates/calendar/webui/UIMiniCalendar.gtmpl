@@ -32,7 +32,7 @@
   Map data = uicomponent.getData() ;
 %>
 <div class="UIMiniCalendar">
-  <div class="MiniCalendarContainer">
+  <div class="MiniCalendarContainer" style="display:none;">
     <div class="YearSelector">
       <div onclick="$linkDayNext" class="RightControlButton">
         <div class="NextYearSelector" title="<%=_ctx.appRes('UIMonthView.label.nextMonth')%>"><span></span></div>
@@ -177,5 +177,6 @@
     </div>
     
   </div>
+  <div class="DownArrow1Icon UIMiniCalendarToggleButton" style="background-position:center;cursor:pointer;" onclick="javascript:eXo.calendar.UICalendarContainer.toggleMiniCalendar();" title="<%=_ctx.appRes('UIMiniCalendar.label.toggle-mini-calendar')%>" upCssClass="UpArrow1Icon" downCssClass="DownArrow1Icon">&nbsp;</div>
 </div>
 <%uiform.end();%>
