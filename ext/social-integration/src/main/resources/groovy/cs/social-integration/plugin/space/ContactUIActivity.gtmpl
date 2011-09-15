@@ -137,7 +137,7 @@
   }
 %>
 
-<div class="UIActivity">
+<div class="UIActivity ContactActivity">
   <script type="text/javascript">
     function initUIActivity${activity.id}() {
       new eXo.social.webui.UIActivity($params);
@@ -158,6 +158,7 @@
         <span onclick="<%= uicomponent.event("DeleteActivity", uicomponent.getId(), ""); %>" class="CloseContentBoxNormal" id="DeleteActivityButton${activity.id}"></span>
       <%}%>
       </h5>
+	  <div class=" BoxGray">
       <p class="Content">
         <%
 				  def labelContactActivity = "";
@@ -173,6 +174,7 @@
 				  <div><a style="cursor: pointer;" onclick="<%=uicomponent.event("MoreContactInfo");%>" id="MoreContactInfo${activity.id}"><%=_ctx.appRes("CalendarUIActivity.label.more-info")%></a></div>
 				  <br />
 
+      </p>
 				  <%
 				  if (uicomponent.isDisplayMoreInfo()) {
 				  %>
@@ -182,7 +184,7 @@
 				  <%=_ctx.appRes("ContactUIActivity.label.Phone") + uicomponent.getPhone();%> <br>
 				  </div>
 				  <% } %>
-      </p>
+	  </div>
       <div class="DefaultActivityIcon">
         <span class="DateTime">$activityPostedTime *</span>
       <% def toggleDisplayCommentAction = uicomponent.event('ToggleDisplayCommentForm', null, false);
