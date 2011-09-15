@@ -5,7 +5,7 @@
 }
 
 .UICalendarPortlet .UICalendars .ContentContainer {
-  height: 432px;
+  height: 280px;
   overflow: auto;
   width: 223px;
 }
@@ -309,4 +309,14 @@
 
 .UICalendarPortlet .UICalendars ul{
 	margin: 0px;
+}
+
+.UICalendarPortlet .UICalendars .UICalendarsToggleButton {
+	background-position: center;
+	background-color: #F3F3F3;
+	float: none;
+	margin-left: 0px;
+	margin-right: 0px;
+	width: auto;
+	cursor: pointer;
 }

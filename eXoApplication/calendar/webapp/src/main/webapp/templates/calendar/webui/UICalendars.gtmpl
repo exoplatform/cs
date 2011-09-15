@@ -379,7 +379,7 @@
 			</div>
 		</div>
     <% /*End Popup Menu*/ %>
-    
+    <div class="DownArrow1Icon UICalendarsToggleButton ClearFix" onclick="javascript:eXo.calendar.UICalendarPortlet.switchLayout(3);" title="<%=_ctx.appRes('UICalendars.label.toggle-calendars')%>" upCssClass="UpArrow1Icon" downCssClass="DownArrow1Icon">&nbsp;</div>
   </div>
  
 <%uiform.end()%>

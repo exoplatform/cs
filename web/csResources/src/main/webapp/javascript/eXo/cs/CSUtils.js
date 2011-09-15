@@ -662,8 +662,13 @@ LayoutManager.prototype.check = function(){
 LayoutManager.prototype.switchLayout = function(layout){
 	var layoutcookie = eXo.core.Browser.getCookie(this.layoutId) ;
 	var status = this.setValue(layout,layoutcookie);
-	if (!status) this.layouts[layout-1].style.display = "none" ;
-	else this.layouts[layout-1].style.display = "block" ;
+	if (!status) {
+    if (this.layouts[layout-1]) 
+      this.layouts[layout-1].style.display = "none" ;
+  } else {
+    if (this.layouts[layout-1]) 
+      this.layouts[layout-1].style.display = "block" ;
+  }
 	if(this.switchCallback) this.switchCallback(layout,status);
 };
 

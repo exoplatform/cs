@@ -620,111 +620,59 @@ UICalendarPortlet.prototype.calendarMenuCallback = function(evt){
 } ;
 
 UICalendarPortlet.prototype.switchLayoutCallback = function(layout,status){
-	var layoutMan = eXo.calendar.LayoutManager ;
-	var panelWorking = eXo.core.DOMUtil.findNextElementByTagName(layoutMan.layouts[0], "div");
-	var layoutcookie = eXo.core.Browser.getCookie(layoutMan.layoutId);
-	
-	if((layout == 2) || (layout == 3)){
-		if(layoutcookie.indexOf('1') >= 0) return ;
-	}
-	if(!status) {
-		layoutMan.layouts[layout-1].style.display = "none" ;
-		if(layout == 1){			
-			layoutMan.layouts[layout].style.display = "none" ;
-			layoutMan.layouts[layout+1].style.display = "none" ;
-			if (eXo.core.I18n.isRT()) {
-				panelWorking.style.marginRight = "0px" ;
-			}else{
-				panelWorking.style.marginLeft = "0px" ;
-			}
-			if(layoutcookie.indexOf('2') < 0) layoutcookie = layoutcookie.concat(2) ;
-			if(layoutcookie.indexOf('3') < 0) layoutcookie = layoutcookie.concat(3) ;
-			eXo.core.Browser.setCookie(layoutMan.layoutId,layoutcookie,1);
-		}
-		
-	} else {		
-		layoutMan.layouts[layout-1].style.display = "block" ;
-		if(layout == 1){			
-			layoutMan.layouts[layout].style.display = "block" ;
-			layoutMan.layouts[layout+1].style.display = "block" ;
-			if (eXo.core.I18n.isRT()) {
-				panelWorking.style.marginRight = "243px" ;
-			}else{
-				panelWorking.style.marginLeft = "243px" ;
-			}
-			if(layoutcookie.indexOf('2') >= 0) layoutcookie = layoutcookie.replace('2','') ;
-			if(layoutcookie.indexOf('3') >= 0) layoutcookie = layoutcookie.replace('3','') ;
-			eXo.core.Browser.setCookie(layoutMan.layoutId,layoutcookie,1);
-		}
-	}
-	if(eXo.core.Browser.isFF() && eXo.calendar.UICalendarPortlet.getElementById("UIWeekView") && (layout == 1)) eXo.calendar.UIWeekView.onResize();
-	if(eXo.core.Browser.isFF() && eXo.calendar.UICalendarPortlet.getElementById("UIMonthView") && (layout == 1)) eXo.calendar.UICalendarMan.initMonth();
+  var UICalendarPortlet = eXo.calendar.UICalendarPortlet;
+  var layoutMan = eXo.calendar.LayoutManager;
+  var layoutcookie = eXo.core.Browser.getCookie(layoutMan.layoutId);
+  UICalendarPortlet.checkLayoutCallback(layoutcookie);
+  if(eXo.core.Browser.isFF() && UICalendarPortlet.getElementById("UIWeekView") && (layout == 1)) eXo.calendar.UIWeekView.onResize();
+  if(eXo.core.Browser.isFF() && UICalendarPortlet.getElementById("UIMonthView") && (layout == 1)) eXo.calendar.UICalendarMan.initMonth();
 };
 
 UICalendarPortlet.prototype.checkLayoutCallback = function(layoutcookie){
-	if (layoutcookie.indexOf("1") >=0) {
-		var workingarea = eXo.core.DOMUtil.findNextElementByTagName(eXo.calendar.LayoutManager.layouts[0], "div");
-		if (eXo.core.I18n.isRT()) {
-			workingarea.style.marginRight = "0px";
-		}else{
-			workingarea.style.marginLeft = "0px";
-		}
-	}
+  var UICalendarContainer = eXo.calendar.UICalendarContainer;
+  UICalendarContainer.init();
+  if (layoutcookie.indexOf("1") >= 0) {
+    UICalendarContainer.collapseCalendarContainer();
+  } else {
+    UICalendarContainer.expandCalendarContainer();
+  }    
+
+  if (layoutcookie.indexOf("2") >= 0) {
+    UICalendarContainer.expandMiniCalendar();
+  } else {
+    UICalendarContainer.collapseMiniCalendar();
+  }
+  
+  if (layoutcookie.indexOf("3") >= 0) {
+    UICalendarContainer.collapseUICalendars();
+  } else {
+    UICalendarContainer.expandUICalendars();
+  }
 };
 
 UICalendarPortlet.prototype.resetSpaceDefaultLayout = function(){
-	var workingarea = eXo.core.DOMUtil.findNextElementByTagName(eXo.calendar.LayoutManager.layouts[0], "div");
-	eXo.calendar.LayoutManager.layouts[0].style.display = "none";
-	if(eXo.calendar.UICalendarPortlet.isSpace != "null") eXo.core.Browser.setCookie(eXo.calendar.LayoutManager.layoutId,"1",1);
-	if (eXo.core.I18n.isRT()) {
-		workingarea.style.marginRight = "0px";
-	}else{
-		workingarea.style.marginLeft = "0px";
-	}
-	if(eXo.core.Browser.isFF() && eXo.calendar.UICalendarPortlet.getElementById("UIWeekView")) eXo.calendar.UIWeekView.onResize();
-	if(eXo.core.Browser.isFF() && eXo.calendar.UICalendarPortlet.getElementById("UIMonthView")) eXo.calendar.UICalendarMan.initMonth();
-};
-
-UICalendarPortlet.prototype.resetSpaceDefaultLayout = function() {
-  var workingarea = eXo.core.DOMUtil.findNextElementByTagName(eXo.calendar.LayoutManager.layouts[0], "div");
-  eXo.calendar.LayoutManager.layouts[0].style.display = "none";
-  if(eXo.calendar.UICalendarPortlet.isSpace != "null") eXo.core.Browser.setCookie(eXo.calendar.LayoutManager.layoutId,"1",1);
-  if (eXo.core.I18n.isRT()) {
-    workingarea.style.marginRight = "0px";
-  } else {
-    workingarea.style.marginLeft = "0px";
-  }
-  if(eXo.core.Browser.isFF() && document.getElementById("UIWeekView")) eXo.calendar.UIWeekView.onResize();
-  if(eXo.core.Browser.isFF() && document.getElementById("UIMonthView")) eXo.calendar.UICalendarMan.initMonth();
+  eXo.calendar.UICalendarPortlet.switchLayout(1);
 };
 
 UICalendarPortlet.prototype.resetLayoutCallback = function(){
-  if(eXo.calendar.UICalendarPortlet.isSpace != "null") {
-    eXo.calendar.UICalendarPortlet.resetSpaceDefaultLayout();
+  var UICalendarPortlet = eXo.calendar.UICalendarPortlet;
+  if(UICalendarPortlet.isSpace != "null") {
+    UICalendarPortlet.resetSpaceDefaultLayout();
     return;
   }
-	var workingarea = eXo.core.DOMUtil.findNextElementByTagName(eXo.calendar.LayoutManager.layouts[0], "div");
-	if (eXo.core.I18n.isRT()) {
-	  workingarea.style.marginRight = "243px";
-	} else {
-	  workingarea.style.marginLeft = "243px";
-	}
-	if(eXo.core.Browser.isFF() && eXo.calendar.UICalendarPortlet.getElementById("UIWeekView")) eXo.calendar.UIWeekView.onResize();
-	if(eXo.core.Browser.isFF() && eXo.calendar.UICalendarPortlet.getElementById("UIMonthView")) eXo.calendar.UICalendarMan.initMonth();
+  var layoutMan = eXo.calendar.LayoutManager;
+  var layoutcookie = eXo.core.Browser.getCookie(layoutMan.layoutId);
+  UICalendarPortlet.checkLayoutCallback(layoutcookie);
+  if(eXo.core.Browser.isFF() && eXo.calendar.UICalendarPortlet.getElementById("UIWeekView")) eXo.calendar.UIWeekView.onResize();
+  if(eXo.core.Browser.isFF() && eXo.calendar.UICalendarPortlet.getElementById("UIMonthView")) eXo.calendar.UICalendarMan.initMonth();  
 };
 
 /**
  * Check layout configuration when page load to render a right layout
  */
 UICalendarPortlet.prototype.checkLayout = function(){
-	var	layout1 = eXo.calendar.UICalendarPortlet.getElementById("UICalendarContainer") ;
-	var	layout2 = eXo.calendar.UICalendarPortlet.getElementById("UIMiniCalendar") ;
-	var	layout3 = eXo.calendar.UICalendarPortlet.getElementById("UICalendars") ;
 	if(eXo.calendar.UICalendarPortlet.isSpace != "null") eXo.core.Browser.setCookie(eXo.calendar.LayoutManager.layoutId,"1",1);
 	eXo.calendar.LayoutManager.layouts = [] ;
-	eXo.calendar.LayoutManager.layouts.push(layout1);
-	eXo.calendar.LayoutManager.layouts.push(layout2);
-	eXo.calendar.LayoutManager.layouts.push(layout3);
 	eXo.calendar.LayoutManager.switchCallback = eXo.calendar.UICalendarPortlet.switchLayoutCallback;
 	eXo.calendar.LayoutManager.callback = eXo.calendar.UICalendarPortlet.checkLayoutCallback;
 	eXo.calendar.LayoutManager.resetCallback = eXo.calendar.UICalendarPortlet.resetLayoutCallback;
