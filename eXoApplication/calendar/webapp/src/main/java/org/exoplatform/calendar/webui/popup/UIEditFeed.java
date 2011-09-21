@@ -93,10 +93,9 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
   private boolean isNew_ = false;  
   private static String DEFAULT_FEED_NAME = "defaultFeedName".intern();
   
-  private String getURL(String feedName) throws Exception {     
-    String portalName = CalendarUtils.getServerBaseUrl() + PortalContainer.getCurrentPortalContainerName();
+  private String getURL(String feedName) throws Exception {
     String restName = PortalContainer.getCurrentRestContextName();
-    return portalName + Utils.SLASH + restName + CalendarWebservice.BASE_RSS_URL  + Utils.SLASH 
+    return Utils.SLASH + restName + CalendarWebservice.PRIVATE + CalendarWebservice.BASE_RSS_URL  + Utils.SLASH 
     + CalendarUtils.getCurrentUser() + Utils.SLASH + feedName + Utils.SLASH + IdGenerator.generate() + Utils.RSS_EXT ;
   }
   

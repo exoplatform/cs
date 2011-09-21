@@ -19,6 +19,7 @@ package org.exoplatform.webservice.cs.calendar;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,8 +33,10 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.CacheControl;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.calendar.service.Calendar;
@@ -77,6 +80,7 @@ import com.sun.syndication.io.XmlReader;
 
 @Path("/cs/calendar")
 public class CalendarWebservice implements ResourceContainer{
+  public final static String PRIVATE = "/private";
   public final static String BASE_URL = "/cs/calendar".intern();
   public final static String BASE_RSS_URL = BASE_URL + "/feed".intern();
   public final static String BASE_EVENT_URL = BASE_URL + "/event".intern();
@@ -208,7 +212,7 @@ public class CalendarWebservice implements ResourceContainer{
   public Response feed(@PathParam("username")
                        String username, @PathParam("feedname")
                        String feedname, @PathParam("filename")
-                       String filename) throws Exception {
+                       String filename, @Context UriInfo uri) throws Exception {
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
@@ -259,7 +263,7 @@ public class CalendarWebservice implements ResourceContainer{
       if(events.size() == 0) {
         return Response.status(HTTPStatus.NOT_FOUND).entity("Feed " + feedname + "is removed").cacheControl(cacheControl).build();
       } 
-      return Response.ok(makeFeed(username, events, feed), MediaType.APPLICATION_XML).cacheControl(cacheControl).build();
+      return Response.ok(makeFeed(username, events, feed, uri), MediaType.APPLICATION_XML).cacheControl(cacheControl).build();
     } catch (Exception e) {
       if(log.isDebugEnabled()) log.debug(e.getMessage());
       return Response.status(HTTPStatus.INTERNAL_ERROR).entity(e).cacheControl(cacheControl).build();
@@ -273,13 +277,15 @@ public class CalendarWebservice implements ResourceContainer{
    * @return
    * @throws Exception
    */
-  private String makeFeed(String author, List<CalendarEvent> events, FeedData feedData) throws Exception{
-    String baseURL = feedData.getUrl().split(BASE_RSS_URL)[0];
+  private String makeFeed(String author, List<CalendarEvent> events, FeedData feedData, UriInfo uri) throws Exception{
+    URI baseUri = uri.getBaseUri();
+    String baseURL = baseUri.getScheme() + "://" + baseUri.getHost() + ":" + Integer.toString(baseUri.getPort());
+    String baseRestURL = baseUri.toString();
 
     SyndFeed feed = new SyndFeedImpl();      
     feed.setFeedType("rss_2.0");
     feed.setTitle(feedData.getTitle());
-    feed.setLink(feedData.getUrl());
+    feed.setLink(baseURL + feedData.getUrl());
     feed.setDescription(feedData.getTitle());     
     List<SyndEntry> entries = new ArrayList<SyndEntry>();
     SyndEntry entry;
@@ -288,7 +294,7 @@ public class CalendarWebservice implements ResourceContainer{
       if (Utils.EVENT_NUMBER > 0 && Utils.EVENT_NUMBER <= entries.size()) break;
       entry = new SyndEntryImpl();
       entry.setTitle(event.getSummary());
-      entry.setLink(baseURL + BASE_EVENT_URL + Utils.SLASH + author + Utils.SLASH + event.getId() 
+      entry.setLink(baseRestURL + BASE_EVENT_URL + Utils.SLASH + author + Utils.SLASH + event.getId() 
                     + Utils.SPLITTER + event.getCalType() + Utils.ICS_EXT);    
       entry.setAuthor(author) ;
       description = new SyndContentImpl();

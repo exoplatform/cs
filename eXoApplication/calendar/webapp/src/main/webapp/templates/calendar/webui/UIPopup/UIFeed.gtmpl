@@ -1,3 +1,8 @@
+<%
+  import org.exoplatform.calendar.CalendarUtils;
+  
+  String serverBaseUrl = CalendarUtils.getServerBaseUrl();
+%>
 <%uiform.begin()%>
   <div class="UIFeed">
      <div class="FeedContent">
@@ -10,9 +15,10 @@
          <%
          }else {
            for(feed in feeds) {
+             String feedUrl = serverBaseUrl + feed.getUrl().substring(1);
              %>
-               <a href="<%=feed.getUrl()%>" class="Icon IconFeed" target="_blank"><%=feed.getTitle()%></a> 
-               <div class="FeedLink">(<%=feed.getUrl()%>)</div>
+               <a href="<%=feedUrl%>" class="Icon IconFeed" target="_blank"><%=feed.getTitle()%></a> 
+               <div class="FeedLink">(<%=feedUrl%>)</div>
              <%
            }
          }
