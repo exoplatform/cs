@@ -176,6 +176,7 @@ UIWeekView.prototype.dragStart = function(evt) {
 } ;
 
 UIWeekView.prototype.drag = function(evt) {
+  var UICalendarPortlet = eXo.calendar.UICalendarPortlet;
 	eXo.calendar.EventTooltip.disable(evt);
 	var _e = window.event || evt ;
 	var src = _e.srcElement || _e.target ;
@@ -188,22 +189,19 @@ UIWeekView.prototype.drag = function(evt) {
 	var currentTop =  UIWeekView.mousePos(_e).y - UIWeekView.offset.y - UIWeekView.containerOffset.y;
 	var maxTop = UIWeekView.dragElement.offsetParent.scrollHeight - height; 
 	if(currentTop >= 0 && currentTop <= maxTop){
-		/*
-		if (deltaY % eXo.calendar.UICalendarPortlet.interval == 0) {
-			UIWeekView.dragElement.style.top = currentTop + "px" ;
-		}*/
 		UIWeekView.dragElement.style.top = (currentTop - currentTop%eXo.calendar.UICalendarPortlet.interval) + "px" ;
 		if (UIWeekView.isCol(_e)) {
 			var posX = eXo.core.Browser.findPosXInContainer(UIWeekView.currentCol, UIWeekView.dragElement.offsetParent) ;
 			UIWeekView.dragElement.style.left = posX + "px" ;
 		}
 	}
-	eXo.calendar.UICalendarPortlet.updateTitle(UIWeekView.dragElement, posY) ;
+	UICalendarPortlet.updateTitle(UIWeekView.dragElement, posY);
 	UIWeekView.dragElement.style.width = (UIWeekView.dragElement.parentNode.offsetWidth - 10) + "px";
 } ;
 
 UIWeekView.prototype.dropCallback = function() {
 	var me = eXo.calendar.UIWeekView ;
+	var UICalendarPortlet = eXo.calendar.UICalendarPortlet;
 	var dragElement = me.dragElement ;
 	var start = parseInt(dragElement.getAttribute("startTime")) ;
 	var end = parseInt(dragElement.getAttribute("endTime")) ;
@@ -213,7 +211,7 @@ UIWeekView.prototype.dropCallback = function() {
 	var workingStart = 0 ;
 	if (end == 0) end = 1440 ;
 	var delta = end - start  ;
-	var currentStart = dragElement.offsetTop + workingStart ;
+	var currentStart = UICalendarPortlet.pixelsToMins(dragElement.offsetTop)  + workingStart ;
 	var currentEnd = currentStart + delta ;
 	var currentDate = me.currentCol.getAttribute("startTime").toString() ;
 	var isOccur = dragElement.getAttribute("isoccur");
@@ -350,12 +348,12 @@ UIWeekView.prototype.initResize = function(evt) {
 } ;
 
 UIWeekView.prototype.resizeCallback = function(evt) {
+  var UICalendarPortlet = eXo.calendar.UICalendarPortlet;
 	var UIResizeEvent = eXo.calendar.UIResizeEvent ;
 	var eventBox = UIResizeEvent.outerElement ;
 	var start =  parseInt(eventBox.getAttribute("startTime")) ;
-	var end =  start + eventBox.offsetHeight ;
+	var end =  start + UICalendarPortlet.pixelsToMins(eventBox.offsetHeight);
 	var calType = parseInt(eventBox.getAttribute("calType")) ;
-	
 	var isOccur = eventBox.getAttribute("isoccur");
     var recurId = eventBox.getAttribute("recurid");
     if (recurId == "null") recurId = "";
@@ -807,10 +805,11 @@ UIHorizontalResize.prototype.end = function(evt) {
 
 // For user selection 
 
-UIWeekView.prototype.initSelection = function() {	
+UIWeekView.prototype.initSelection = function() {
+  var UICalendarPortlet = eXo.calendar.UICalendarPortlet;
 	var UISelection = eXo.calendar.UISelection ;
 	var container = document.getElementById("UIWeekViewGrid") ;
-	UISelection.step = 30 ;	
+	UISelection.step = UICalendarPortlet.CELL_HEIGHT;	
 	UISelection.block = document.createElement("div");
 	UISelection.block.className = "UserSelectionBlock" ;
 	UISelection.container = container ;

@@ -57,6 +57,7 @@
   border-right: 1px solid #c7c7c7;
   width: 55px;
   -moz-user-select: none ;
+  border-bottom: 1px solid #FFFFFF;
 }
 
 .UIDayView .EventDayContent .TdDotLine{
@@ -73,7 +74,7 @@
 .UIDayView .EventDayContent .UIGrid td{
   border-left: none ;
   padding:0px;
-  line-height: 29px;
+  line-height: 19px;
 }
 
 .UIDayView .EventDayContent .HourPoint {
@@ -272,7 +273,7 @@
 
 .UIWeekView .UIGrid td {
   padding:0px;
-  line-height: 30px;
+  line-height: 20px;
 }
 
 .UIWeekView .EventAllday {

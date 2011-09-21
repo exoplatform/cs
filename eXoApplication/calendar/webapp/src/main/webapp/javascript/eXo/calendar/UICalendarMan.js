@@ -689,10 +689,11 @@ GUIMan.prototype.setOverWeek = function(eventNode,startTime,endTime){
 	}
 };
 
-GUIMan.prototype.initSelectionDayEvent = function() { 
+GUIMan.prototype.initSelectionDayEvent = function() {
+  var UICalendarPortlet = eXo.calendar.UICalendarPortlet;
   var UISelection = eXo.calendar.UISelection ;
   var container = document.getElementById("UIWeekViewGrid") ;
-  UISelection.step = 30 ; 
+  UISelection.step = UICalendarPortlet.CELL_HEIGHT; 
   UISelection.block = document.createElement("div") ;
   UISelection.block.className = "UserSelectionBlock" ;
   UISelection.container = container ;

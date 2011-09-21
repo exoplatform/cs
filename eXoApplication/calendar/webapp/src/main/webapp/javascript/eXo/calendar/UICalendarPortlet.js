@@ -8,7 +8,29 @@ function UICalendarPortlet(){
 	this.clickone = 0 ;
 	this.portletId = "calendars";
 	this.currentDate = 0;
+	this.CELL_HEIGHT = 20;
+	this.MINUTE_PER_CELL = 30;
+	this.PIXELS_PER_MINUTE = this.CELL_HEIGHT / this.MINUTE_PER_CELL; 
+	this.MINUTES_PER_PIXEL = this.MINUTE_PER_CELL / this.CELL_HEIGHT;
 }
+
+/**
+ * compute minutes from pixels in height of a event.
+ */
+UICalendarPortlet.prototype.pixelsToMins = function(pixels) {
+  var UICalendarPortlet = eXo.calendar.UICalendarPortlet;
+  return Math.ceil(pixels * UICalendarPortlet.MINUTES_PER_PIXEL);
+};
+
+/**
+ * compute pixels in height of a event from minutes.
+ */
+UICalendarPortlet.prototype.minsToPixels = function(minutes) {
+  var UICalendarPortlet = eXo.calendar.UICalendarPortlet;
+  return Math.ceil(minutes * UICalendarPortlet.PIXELS_PER_MINUTE);
+};
+
+
 
 /**
  * Set stylesheet for a DOM element
@@ -436,6 +458,7 @@ UICalendarPortlet.prototype.setting = function(){
     // paras 1: time interval, paras 2: working time, paras 3: time format type, paras 4: portletid
     var UICalendarPortlet = eXo.calendar.UICalendarPortlet;
     this.interval = ((arguments.length > 0) && (isNaN(parseInt(arguments[0])) == false)) ? parseInt(arguments[0]) : parseInt(15);
+    this.interval = this.minsToPixels(this.interval);
     var workingStart = ((arguments.length > 1) && (isNaN(parseInt(arguments[1])) == false) && (arguments[1] != "null")) ? arguments[1] : "";
     workingStart = Date.parse("1/1/2007 " + workingStart);
     this.workingStart = UICalendarPortlet.timeToMin(workingStart);
@@ -763,25 +786,33 @@ UICalendarPortlet.prototype.getBlockElements = function(elements){
  */
 UICalendarPortlet.prototype.setSize = function(obj){
 	var domUtil = eXo.core.DOMUtil;
+	var UICalendarPortlet = eXo.calendar.UICalendarPortlet;
     var start = parseInt(obj.getAttribute("startTime"));
+  var topY = UICalendarPortlet.minsToPixels(start);
     var end = parseInt(obj.getAttribute("endTime"));
     var eventContainer = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "EventContainer");
     if (end == 0) 
         end = 1440;
     end = (end != 0) ? end : 1440;
-    height = Math.abs(start - end);
-    if (height < 30) 
-        height = 30;
+    height = UICalendarPortlet.minsToPixels(Math.abs(start - end));
+    if (height <= UICalendarPortlet.CELL_HEIGHT) {
+      height = UICalendarPortlet.CELL_HEIGHT;
+    } 
     var styles = {
-        "top": start + "px",
+        "top": topY + "px",
         "height": (height - 2) + "px"
     };
-    eXo.calendar.UICalendarPortlet.setStyle(obj, styles);
+  UICalendarPortlet.setStyle(obj, styles);
 	var busyIcon = domUtil.getChildrenByTagName(obj,"div")[0] ;
 	if(!busyIcon ||  (busyIcon.offsetHeight <= 5)) busyIcon = domUtil.findFirstDescendantByClass(obj,"div","EventContainerBar") ;
 	var extraHeight = busyIcon.offsetHeight + domUtil.findFirstDescendantByClass(obj,"div","ResizeEventContainer").offsetHeight;
     height -= (extraHeight + 5);
-	eventContainer.style.height = height + "px";
+    if (height <= 0) 
+      eventContainer.style.display = "none";
+    else {
+      eventContainer.style.height = height + "px";
+      eventContainer.style.display = "block";
+    }
 };
 
 /**
@@ -1110,6 +1141,7 @@ UIResizeEvent.prototype.end = function(evt){
  * @param {Object} evt Mouse object
  */
 UIResizeEvent.prototype.resizeCallback = function(evt){
+  var UICalendarPortlet = eXo.calendar.UICalendarPortlet;
     var UIResizeEvent = eXo.calendar.UIResizeEvent;
     var eventBox = UIResizeEvent.outerElement;
     var start = parseInt(eventBox.getAttribute("startTime"));
@@ -1117,7 +1149,7 @@ UIResizeEvent.prototype.resizeCallback = function(evt){
     var isOccur = eventBox.getAttribute("isoccur");
     var recurId = eventBox.getAttribute("recurid");
     if (recurId == "null") recurId = "";
-    var end = start + eventBox.offsetHeight;
+    var end = start + UICalendarPortlet.pixelsToMins(eventBox.offsetHeight);
     if (eventBox.offsetHeight != UIResizeEvent.beforeHeight) {
 		var actionLink = eventBox.getAttribute("actionLink");
 		var params = [
@@ -1127,8 +1159,8 @@ UIResizeEvent.prototype.resizeCallback = function(evt){
 			{name:"isOccur",value:isOccur},
 			{name:"recurId",value:recurId}
 		];
-		eXo.calendar.UICalendarPortlet.setTimeValue(eventBox,start,end);
-		eXo.calendar.UICalendarPortlet.showEvent();
+		UICalendarPortlet.setTimeValue(eventBox,start,end);
+		UICalendarPortlet.showEvent();
 		ajaxAsyncGetRequest(eXo.cs.Utils.createUrl(actionLink,params), false) ;
     }
 	UIResizeEvent.innerElement = null;
@@ -1222,9 +1254,10 @@ UICalendarPortlet.prototype.dragStart = function(evt){
 /**
  * Updates title of event when dragging calendar event
  * @param {Object} events DOM elemnt contains a calendar event
- * @param {Object} min Time in minutes
+ * @param {Object} posY Position of the event
  */
-UICalendarPortlet.prototype.updateTitle = function(events, min, type){
+UICalendarPortlet.prototype.updateTitle = function(events, posY, type){
+  var min = this.pixelsToMins(posY);
     var timeFormat = events.getAttribute("timeFormat");
     var title = eXo.core.DOMUtil.findDescendantsByTagName(events, "p")[0];
 		var delta = parseInt(events.getAttribute("endTime")) - parseInt(events.getAttribute("startTime")) ;
@@ -1233,7 +1266,7 @@ UICalendarPortlet.prototype.updateTitle = function(events, min, type){
         pm: "PM"
     };
 		if (type == 1) {
-			title.innerHTML = this.minToTime(min, timeFormat) + " - " + this.minToTime(min + events.offsetHeight, timeFormat);
+			title.innerHTML = this.minToTime(min, timeFormat) + " - " + this.minToTime(min + this.pixelsToMins(events.offsetHeight), timeFormat);
 			return ;
 		}	
     title.innerHTML = this.minToTime(min, timeFormat) + " - " + this.minToTime(min + delta, timeFormat);
@@ -1269,7 +1302,7 @@ UICalendarPortlet.prototype.dayviewDropCallback = function(){
     if (end == 0) 
         end = 1440;
     var delta = end - start;
-    var currentStart = dragObject.offsetTop;
+    var currentStart = UICalendarPortlet.pixelsToMins(dragObject.offsetTop);
     var currentEnd = currentStart + delta;
     var eventDayContainer = eXo.core.DOMUtil.findAncestorByClass(dragObject, "EventDayContainer");
     //var eventTop = UICalendarPortlet.eventTop;
@@ -2171,9 +2204,10 @@ UICalendarPortlet.prototype.autoShowRepeatEvent = function(){
  * Sets up dragging selection for calendar view
  */
 UICalendarPortlet.prototype.initSelection = function(){
+  var UICalendarPortlet = eXo.calendar.UICalendarPortlet;
     var UISelection = eXo.calendar.UISelection;
     var container = eXo.core.DOMUtil.findFirstDescendantByClass(eXo.calendar.UICalendarPortlet.getElementById("UIDayViewGrid"), "div", "EventBoard");
-    UISelection.step = 30;
+    UISelection.step = UICalendarPortlet.CELL_HEIGHT;
     UISelection.container = container;
     UISelection.block = document.createElement("div");
     UISelection.block.className = "UserSelectionBlock";
@@ -2267,8 +2301,9 @@ UISelection.prototype.execute = function(evt){
  * Ends dragging selection, this method clean up some unused properties and execute callback function
  */
 UISelection.prototype.clear = function(){
+  var UICalendarPortlet = eXo.calendar.UICalendarPortlet;
     var UISelection = eXo.calendar.UISelection;
-    var endTime = UISelection.block.offsetHeight * 60 * 1000 + parseInt(UISelection.startTime);
+    var endTime = UICalendarPortlet.pixelsToMins(UISelection.block.offsetHeight) * 60 * 1000 + parseInt(UISelection.startTime);
     var startTime = UISelection.startTime;
 		var bottom = UISelection.block.offsetHeight + UISelection.block.offsetTop;
 
@@ -2277,8 +2312,8 @@ UISelection.prototype.clear = function(){
         endTime = parseInt(UISelection.startTime) + UISelection.step * 60 * 1000;
     }
 		if(bottom >= UISelection.container.offsetHeight) endTime -= 1;
-	var container = eXo.calendar.UICalendarPortlet.getElementById("UICalendarViewContainer");	
-	eXo.calendar.UICalendarPortlet.addQuickShowHiddenWithTime(container, 1, startTime, endTime) ;
+	var container = UICalendarPortlet.getElementById("UICalendarViewContainer");	
+	UICalendarPortlet.addQuickShowHiddenWithTime(container, 1, startTime, endTime) ;
     //eXo.webui.UIForm.submitEvent(UISelection.viewType, 'QuickAdd', '&objectId=Event&startTime=' + startTime + '&finishTime=' + endTime);
     eXo.core.DOMUtil.listHideElements(UISelection.block);
 		UISelection.startTime = null;
