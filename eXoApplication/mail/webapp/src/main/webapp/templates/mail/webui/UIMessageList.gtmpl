@@ -716,31 +716,28 @@
       %>
           <tbody id="TbodyMessageList" viewing="<%=uicomponent.viewing_%>">
             <tr>
-              <td class="NoBorder" colspan="8">
-                <div class="MessageNotice">
-	            <% 
-	              if (uicomponent.getAccountId()) {
-	             %>
-	            <%=_ctx.appRes(uicomponent.id+ ".label.there-are-no-messages") %>
-	            <% 
-	              } else {
-	             %>
-	             
-	             <div><%=_ctx.appRes(uicomponent.id + ".label.there-are-no-account");%></div>
-	             <div class="UIAction">
-	                 <%
-	                   String actionLabel = _ctx.appRes(uicomponent.id + ".label.create-account"); 
-	                   String link = uicomponent.event("AddAccount");
-	                 %>
-                	<a href="javascript:void(0);" onclick="$link" class="ActionButton LightBlueStyle">$actionLabel</a>
-	             </div>
-             <% 
-               }
-              %>
-             </div>
-           </td>
-         </tr>
-       </tbody>
+              <td class="" colspan="9" style="height:auto">
+                <% 
+                  if (uicomponent.getAccountId()) {
+                %>
+                <div class="MessageNotice"><%=_ctx.appRes(uicomponent.id+ ".label.there-are-no-messages") %></div>
+                <% 
+                  } else {
+                %>
+                <div class="MessageNotice"><%=_ctx.appRes(uicomponent.id + ".label.there-are-no-account");%></div>
+                <div class="UIAction">
+                <%
+                  String actionLabel = _ctx.appRes(uicomponent.id + ".label.create-account"); 
+                  String link = uicomponent.event("AddAccount");
+                %>
+                  <a href="javascript:void(0);" onclick="$link" class="ActionButton LightBlueStyle">$actionLabel</a>
+                </div>
+                <% 
+                  }
+                %>
+              </td>
+           </tr>
+         </tbody>
       <%
         }
       %>
