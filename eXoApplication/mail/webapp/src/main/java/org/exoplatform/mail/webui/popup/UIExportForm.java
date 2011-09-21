@@ -26,6 +26,7 @@ import org.exoplatform.cs.common.webui.UIPopupComponent;
 import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
+import org.exoplatform.mail.DataCache;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
@@ -90,20 +91,24 @@ public class UIExportForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UIExportForm> event) throws Exception {
       UIExportForm uiExportForm = event.getSource();
       UIMailPortlet uiPortlet = uiExportForm.getAncestorOfType(UIMailPortlet.class);
+      DataCache dataCache = uiPortlet.getDataCache();
+      
       Message msgExport = uiExportForm.getExportMessage();
       String username = MailUtils.getCurrentUser();
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      String accountId = dataCache.getSelectedAccountId();
       MailService mailSrv = MailUtils.getMailService();      
       ByteArrayOutputStream outputStream = (ByteArrayOutputStream)mailSrv.exportMessage(username, accountId, msgExport);
       ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
       String fileName = uiExportForm.getUIStringInput(EXPORT_FILE_NAME).getValue();
-      //    Verify
+      
+      // Verify
       if (fileName == null || "".equals(fileName.trim())) {        
         UIApplication uiApp = uiExportForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.export-name-blank", null, ApplicationMessage.INFO)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
       }
+      
       String type = uiExportForm.getUIFormSelectBox(EXPORT_FILE_TYPE).getValue();
       DownloadResource dresource = new InputStreamDownloadResource(inputStream, type);
       DownloadService dservice = (DownloadService)PortalContainer.getInstance().getComponentInstanceOfType(DownloadService.class);

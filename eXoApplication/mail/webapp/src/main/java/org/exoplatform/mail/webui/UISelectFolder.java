@@ -19,11 +19,13 @@ package org.exoplatform.mail.webui;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.mail.DataCache;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.model.SelectItem;
 import org.exoplatform.webui.core.model.SelectOption;
 import org.exoplatform.webui.core.model.SelectOptionGroup;
@@ -78,16 +80,18 @@ public class UISelectFolder extends UIFormInputSet {
     return subFolders ;
   }
 
-  public List<Folder> getFolders(boolean isPersonal) throws Exception{
-    List<Folder> folders = new ArrayList<Folder>() ;
-    MailService mailSvr = getApplicationComponent(MailService.class) ;
-    String username = MailUtils.getCurrentUser() ;
+  public List<Folder> getFolders(boolean isPersonal) throws Exception {
+    DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
+    List<Folder> folders = new ArrayList<Folder>();
+    String username = MailUtils.getCurrentUser();
     try {
-      folders.addAll(mailSvr.getFolders(username, accountId_, isPersonal)) ;
-    } catch (Exception e){
-      //e.printStackTrace() ;
+      folders.addAll(dataCache.getFolders(username, accountId_, isPersonal));
+    } catch (Exception e) {
+      if (log.isDebugEnabled()) {
+        log.debug("Exception in method getFolders", e);
+      }
     }
-    return folders ;
+    return folders;
   }
   
   public SelectOptionGroup addChildOption(String folderPath,  SelectOptionGroup optionList) throws Exception {

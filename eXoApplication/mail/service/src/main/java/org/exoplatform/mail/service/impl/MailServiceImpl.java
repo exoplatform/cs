@@ -147,8 +147,6 @@ public class MailServiceImpl implements MailService, Startable {
   
   private RepositoryService            repositoryService;
 
-  private String                       currentUser;
-
   private String                       folderStr      = "";
 
   Map<String, MailSettingConfigPlugin> settingPlugins = new HashMap<String, MailSettingConfigPlugin>();
@@ -172,13 +170,11 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public void removeCheckingInfo(String userName, String accountId) throws Exception {
-    // if(!Utils.isEmptyField(getCurrentUserName())) userName = this.getCurrentUserName();
     String key = userName + ":" + accountId;
     checkingLog_.remove(key);
   }
 
   public CheckingInfo getCheckingInfo(String userName, String accountId) {
-    // if(!Utils.isEmptyField(getCurrentUserName())) userName = this.getCurrentUserName();
     String key = userName + ":" + accountId;
     CheckingInfo info = checkingLog_.get(key);
     return info;
@@ -1193,13 +1189,9 @@ public class MailServiceImpl implements MailService, Startable {
           info = new CheckingInfo();
           checkingLog_.put(key, info);
         }
-        // info.setStatusCode(CheckingInfo.START_SYNC_FOLDER);
         info.setSyncFolderStatus(CheckingInfo.FINISH_SYNC_FOLDER);
         synchImapFolders(uId, accountId, null, store.getDefaultFolder().list());
-        // info.setRequestStop(true);
-        // info.setStatusCode(CheckingInfo.FINISH_SYNC_FOLDER);
         info.setSyncFolderStatus(CheckingInfo.FINISH_SYNC_FOLDER);
-        // checkingLog_.put(key, info);
       }
     } catch (Exception e) {
       if (logger.isDebugEnabled()) {
@@ -1209,8 +1201,9 @@ public class MailServiceImpl implements MailService, Startable {
       if (store != null && store.isConnected()) {
         store.close();
       }
-      if (info != null)
+      if (info != null) {
         info.setSyncFolderStatus(CheckingInfo.FINISH_SYNC_FOLDER);
+      }
     }
   }
 
@@ -1908,16 +1901,7 @@ public class MailServiceImpl implements MailService, Startable {
     checkNewMessage(userName, accountId, null);
   }
 
-  public String getCurrentUserName() {
-    return currentUser;
-  }
-
-  public void setCurrentUserName(String username) {
-    this.currentUser = username;
-  }
-
   public void checkNewMessage(String username, String accountId, String folderId) throws Exception {
-    currentUser = username;
     String reciever = username;
     Account dAccount = getDelegatedAccount(username, accountId);
     if (isDelegatedAccount(username, accountId)) {
@@ -2212,74 +2196,52 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public List<Folder> getFolders(String userName, String accountId) throws Exception {
-    return storage_.getFolders(userName, accountId);
+    List<Folder> gottenFolderList = storage_.getFolders(userName, accountId);
+    CheckingInfo info = getCheckingInfo(userName, accountId);
+    
+    if (info != null) {
+      Store store = null;
+      for (Folder folder : gottenFolderList) {
+        String urlName = folder.getURLName();
+        if (!folder.isPersonalFolder() && Utils.isEmptyField(urlName)) {
+          if (store == null) {
+            Account account = getAccountById(userName, accountId);
+            store = openConnection(userName, account, info);
+          }
+
+          if ((store != null) && store.isConnected()) {
+            javax.mail.Folder fd = store.getFolder(folder.getName());
+            folder.setURLName(fd.getURLName().toString());
+            storage_.saveFolder(userName, accountId, folder);
+          }
+        }
+      }
+    }
+    return gottenFolderList;
   }
 
   public List<Folder> getFolders(String userName, String accountId, boolean isPersonal) throws Exception {
-    if (isDelegatedAccount(userName, accountId))
-      userName = getDelegatedAccount(userName, accountId).getDelegateFrom();
-    List<Folder> folders = new ArrayList<Folder>();
-    List<Folder> gottenFolderList = storage_.getFolders(userName, accountId);
-    Account account = getAccountById(userName, accountId);
-    CheckingInfo info = getCheckingInfo(userName, accountId);
-    Store store = null;
-    List<Folder> defaultFolders = new ArrayList<Folder>();
-    for (Folder folder : gottenFolderList) {
-      if (isPersonal) {
-        if (folder.isPersonalFolder()) {
-          folders.add(folder);
-        }
-      } else {
-        defaultFolders.add(folder);
+    List<Folder> folders = getFolders(userName, accountId);
+    List<Folder> resultList = new ArrayList<Folder>();
+    
+    for (Folder folder : folders) {
+      if (folder.isPersonalFolder() == isPersonal) {
+        resultList.add(folder);
       }
     }
-    // if (info != null && account.getProtocol().equals(Utils.POP3)) {
-    // store = openPOPConnection(userName, account, info);
-    // } else if (info != null && account.getProtocol().equals(Utils.IMAP)) {
-    // store = openIMAPConnection(userName, account, info);
-    // }
-    // for (Folder folder : defaultFolders) {
-    // String urlName = folder.getURLName();
-    // if (!folder.isPersonalFolder()) {
-    // if (Utils.isEmptyField(urlName)) {
-    // if (store != null) {
-    // javax.mail.Folder fd = store.getFolder(folder.getName());
-    // folder.setURLName(fd.getURLName().toString());
-    // storage_.saveFolder(userName, accountId, folder);
-    // } else {
-    // break;
-    // }
-    // }
-    // folders.add(folder);
-    // }
-    // }
-    if (info != null) {
-      if (account.getProtocol().equals(Utils.POP3)) {
-        store = openPOPConnection(userName, account, info);
-      } else if (account.getProtocol().equals(Utils.IMAP)) {
-        store = openIMAPConnection(userName, account, info);
-      }
-      for (Folder folder : defaultFolders) {
-        String urlName = folder.getURLName();
-        if (!folder.isPersonalFolder()) {
-          if (Utils.isEmptyField(urlName)) {
-            if (store != null) {
-              javax.mail.Folder fd = store.getFolder(folder.getName());
-              folder.setURLName(fd.getURLName().toString());
-              storage_.saveFolder(userName, accountId, folder);
-            }
-          }
-          folders.add(folder);
-        }
-      }
-    } else {
-      for (Folder folder : defaultFolders) {
-        if (!folder.isPersonalFolder()) {
-          folders.add(folder);
-        }
-      }
+    return resultList;
+  }
+  
+  private Store openConnection(String userName, Account account, CheckingInfo info) {
+    if (Utils.POP3.equalsIgnoreCase(account.getProtocol())) {
+      return openPOPConnection(userName, account, info);
+    } 
+    
+    if (Utils.IMAP.equalsIgnoreCase(account.getProtocol())) {
+      return openIMAPConnection(userName, account, info);
     }
-    return folders;
+    
+    return null;
   }
 
   public void addTag(String userName, String accountId, Tag tag) throws Exception {
@@ -2524,8 +2486,6 @@ public class MailServiceImpl implements MailService, Startable {
           }
         }
       } else if (account.getProtocol().equals(Utils.POP3)) {
-        CheckingInfo info = getCheckingInfo(userName, accountId);
-        store = openPOPConnection(userName, account, info);
         msg = storage_.loadTotalMessage(userName, accountId, msg);
       }
     } catch (Exception e) {
@@ -2708,14 +2668,11 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public void updateCheckingMailStatusByCometd(String userName, String accountId, CheckingInfo info) {
-    if (!Utils.isEmptyField(getCurrentUserName()))
-      userName = this.getCurrentUserName();
     if (info != null && info.hasChanged()) {
       try {
         JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
         JsonValue json = generatorImpl.createJsonObject(info.getStatus());
         continuationService_.sendMessage(userName, "/eXo/Application/mail/ckmailsts/" + accountId, json);
-        // logger.info("client [ " + userName + ":" + accountId + " ] is sent message: " + info.getStatus().getStatusMsg());
         info.setHasChanged(false);
       } catch (JsonException je) {
         logger.warn("can not send cometd message to client [ " + userName + " ]!", je);
@@ -2808,7 +2765,6 @@ public class MailServiceImpl implements MailService, Startable {
     List<String> tagList = new ArrayList<String>();
     List<String> filterList = msgMap.get(msg);
     SpamFilter spamFilter;
-    String currentUserName = getCurrentUserName();
     boolean saved = false;
     if (filterList != null && filterList.size() > 0) {
       String tagId;
@@ -2841,9 +2797,9 @@ public class MailServiceImpl implements MailService, Startable {
       spamFilter = getSpamFilter(username, getAccountById(username, accountId).getId());
       if (isImap) {
         long msgUID = ((IMAPFolder) folder).getUID(msg);
-        saved = storage_.saveMessage(username, accountId, msgUID, msg, folderIds, tagList, spamFilter, infoObj, this.continuationService_, false, currentUserName);
+        saved = storage_.saveMessage(username, accountId, msgUID, msg, folderIds, tagList, spamFilter, infoObj, this.continuationService_, false, username);
       } else {
-        saved = storage_.savePOP3Message(username, accountId, msg, folderIds, tagList, spamFilter, infoObj, continuationService_, currentUserName);
+        saved = storage_.savePOP3Message(username, accountId, msg, folderIds, tagList, spamFilter, infoObj, continuationService_, username);
       }
     } catch (Exception e) {
       if (logger.isDebugEnabled())

@@ -40,6 +40,7 @@ import org.exoplatform.cs.common.webui.UIPopupAction;
 import org.exoplatform.cs.common.webui.UIPopupActionContainer;
 import org.exoplatform.cs.common.webui.UIPopupComponent;
 import org.exoplatform.download.DownloadService;
+import org.exoplatform.mail.DataCache;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIMailPortlet;
@@ -48,6 +49,7 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -458,11 +460,8 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
   static public class DeleteContactActionListener extends EventListener<UIAddressBookForm> {
     public void execute(Event<UIAddressBookForm> event) throws Exception {
       UIAddressBookForm uiAddressBook = event.getSource();
-      boolean isSelectAll = uiAddressBook.getUIFormCheckBoxInput(UIAddressBookForm.SELECT_ALL)
-      .isChecked();
-      SelectOptionGroup privateGroups = (SelectOptionGroup) uiAddressBook.getChild(UIFormSelectBoxWithGroups.class)
-      .getOptions()
-      .get(0);
+      boolean isSelectAll = uiAddressBook.getUIFormCheckBoxInput(UIAddressBookForm.SELECT_ALL).isChecked();
+      SelectOptionGroup privateGroups = (SelectOptionGroup) uiAddressBook.getChild(UIFormSelectBoxWithGroups.class).getOptions().get(0);
       Contact selectedContact = uiAddressBook.getSelectedContact();
       List<Contact> contactList = new ArrayList<Contact>();
       if (isSelectAll) {
@@ -477,8 +476,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
       UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class);
 
       if (contactList.size() == 0) {
-        uiApp.addMessage(new ApplicationMessage("UIAddressBookForm.msg.no-selected-contact-to-delete",
-                                                null));
+        uiApp.addMessage(new ApplicationMessage("UIAddressBookForm.msg.no-selected-contact-to-delete", null));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }
@@ -509,6 +507,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
                   }
                 }
               }
+              
               if (!isPrivate) {
                 if (((UIFormSelectBoxWithGroups) uiAddressBook.getChildById(SELECT_GROUP)).getValue()
                     .equals(uiAddressBook.sharedContacts_)) {
@@ -548,10 +547,11 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
       UIAddressBookForm uiAddressBook = event.getSource();
       String selectedGroupId = ((UIFormSelectBoxWithGroups) uiAddressBook.getChildById(SELECT_GROUP)).getValue();
       Contact contact = uiAddressBook.getSelectedContact();
-      if (contact != null)
+      if (contact != null) {
         uiAddressBook.refrestContactList(selectedGroupId, contact);
-      else
+      } else {
         uiAddressBook.refrestContactList(selectedGroupId, null);
+      }
 
       ((UIFormSelectBoxWithGroups) uiAddressBook.getChildById(SELECT_GROUP)).setValue(selectedGroupId);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
@@ -568,41 +568,17 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
   static public class SendEmailActionListener extends EventListener<UIAddressBookForm> {
     public void execute(Event<UIAddressBookForm> event) throws Exception {
       UIAddressBookForm uiForm = event.getSource();
+      
       String email = event.getRequestContext().getRequestParameter(OBJECTID);
       if (!MailUtils.isFieldEmpty(email)) {
-        UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class);
-        String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+        DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
+        String accId = dataCache.getSelectedAccountId();
         if (Utils.isEmptyField(accId)) {
           UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class);
           uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null));
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
           return;
         }
-        /*
-         * UIPopupActionContainer uiPopupContainer =
-         * uiForm.getAncestorOfType(UIPopupActionContainer.class) ;
-         * UIPopupAction popupAction =
-         * uiPopupContainer.getChild(UIPopupAction.class) ;
-         * //uiPopupContainer.setId("UIPopupActionComposeContainer") ;
-         * UIComposeForm uiComposeForm =
-         * popupAction.activate(UIComposeForm.class, MailUtils.MAX_POPUP_WIDTH);
-         * uiComposeForm.init(accId, null, 0) ;
-         * uiComposeForm.setFieldToValue(email) ;
-         * event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-         */
-        /*
-         * UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class)
-         * ; UIPopupActionContainer uiPopupContainer =
-         * uiPopupAction.createUIComponent(UIPopupActionContainer.class, null,
-         * "UIPopupActionComposeContainer") ;
-         * uiPopupAction.activate(uiPopupContainer, MailUtils.MAX_POPUP_WIDTH,
-         * 0, true); UIComposeForm uiComposeForm =
-         * uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
-         * uiComposeForm.init(accId, null, 0);
-         * uiPopupContainer.addChild(uiComposeForm) ;
-         * event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction)
-         * ;
-         */
 
         UIPopupActionContainer uiActionContainer = uiForm.getParent();
         UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class);
@@ -613,11 +589,10 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
         uiComposeForm.init(accId, null, 0);
         uiComposeForm.setFieldToValue(email);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup);
-
       }
-
     }
   }
+  
   static public class CheckAllContactActionListener extends EventListener<UIAddressBookForm> {
     public void execute(Event<UIAddressBookForm> event) throws Exception {
       UIAddressBookForm uiAddressBook = event.getSource();
@@ -625,10 +600,12 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
     }
   }
+  
   static public class SendMultiEmailActionListener extends EventListener<UIAddressBookForm> {
     public void execute(Event<UIAddressBookForm> event) throws Exception {
       UIAddressBookForm uiForm = event.getSource();
       Set<String> emailSet = new TreeSet<String>();
+      
       boolean isSelectAll = uiForm.getUIFormCheckBoxInput(UIAddressBookForm.SELECT_ALL).isChecked();
       if (isSelectAll) {
         for (Contact contact : uiForm.contactList_) {
@@ -646,9 +623,10 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
           }
         }
       }
+      
       if (!emailSet.isEmpty()) {
-        UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class);
-        String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+        DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
+        String accId = dataCache.getSelectedAccountId();
         if (Utils.isEmptyField(accId)) {
           UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class);
           uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null));

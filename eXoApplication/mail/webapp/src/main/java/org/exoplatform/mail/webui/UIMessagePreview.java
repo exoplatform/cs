@@ -35,6 +35,7 @@ import org.exoplatform.cs.common.webui.UISaveAttachment;
 import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
+import org.exoplatform.mail.DataCache;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
@@ -181,14 +182,15 @@ public class UIMessagePreview extends UIContainer{
 
   public boolean isShowBcc(Message msg) throws Exception {
     UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
-    String selectedFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class)
-    .getSelectedFolder();
-    String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+    DataCache dataCache = uiPortlet.getDataCache();
+    
+    String selectedFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class).getSelectedFolder();
+    String accId = dataCache.getSelectedAccountId();
     String username = MailUtils.getCurrentUser();
-    MailService mailServ = uiPortlet.getApplicationComponent(MailService.class);
-    Account account = mailServ.getAccountById(username, accId);
+    Account account = dataCache.getAccountById(username, accId);
     InternetAddress[] fromAddress = Utils.getInternetAddress(msg.getFrom());
     InternetAddress from = fromAddress[0];
+    
     return (!MailUtils.isFieldEmpty(selectedFolder)
         && selectedFolder.equals(Utils.generateFID(accId, Utils.FD_SENT, false))
         && !MailUtils.isFieldEmpty(msg.getMessageBcc()) && (account != null) && from.getAddress()
@@ -248,25 +250,29 @@ public class UIMessagePreview extends UIContainer{
 
   public String getAnswerStatus() throws Exception {
     CalendarEvent calEvent = getEvent(getMessage());
-    if (calEvent == null)
+    if (calEvent == null) {
       return null;
+    }
+    
     String[] parStatus = calEvent.getParticipantStatus();
     UIMailPortlet uiPortlet = this.getAncestorOfType(UIMailPortlet.class);
+    DataCache dataCache = uiPortlet.getDataCache();
     String username = uiPortlet.getCurrentUser();
-    String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-    MailService mailSvr = uiPortlet.getApplicationComponent(MailService.class);
-    Account account = mailSvr.getAccountById(username, accId);
+    String accId = dataCache.getSelectedAccountId();
+    Account account = dataCache.getAccountById(username, accId);
     String currentEmail = "";
-    if (account != null)
+    if (account != null) {
       currentEmail = account.getEmailAddress();
+    }
 
     for (String par : parStatus) {
       String[] entry = par.split(":");
       if (entry[0].equalsIgnoreCase(username) || entry[0].equalsIgnoreCase(currentEmail)) {
-        if (entry.length > 1)
+        if (entry.length > 1) {
           return entry[1];
-        else
+        } else {
           return new String("");
+        }
       }
     }
     return null;
@@ -388,11 +394,14 @@ public class UIMessagePreview extends UIContainer{
   static public class ForwardActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
+      UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
+      DataCache dataCache = uiPortlet.getDataCache();
+      
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
       msgId = Utils.decodeMailId(msgId);
-      UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
-      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      if(!MailUtils.isFull(accId)) {
+      
+      String accId = dataCache.getSelectedAccountId();
+      if(!MailUtils.isFull(accId, dataCache)) {
         uiMsgPreview.showMessage(event);
         return;
       }
@@ -413,18 +422,19 @@ public class UIMessagePreview extends UIContainer{
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
         }
       }
-
     }
   }
 
   static public class CreateFilterActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
+      UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
+      DataCache dataCache = uiPortlet.getDataCache();
+      
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
       msgId = Utils.decodeMailId(msgId);
-      UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
-      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      if(MailUtils.isDelegated(accId)) {
+      String accId = dataCache.getSelectedAccountId();
+      if(MailUtils.isDelegated(accId, dataCache)) {
         uiMsgPreview.showMessage(event);
         return;
       }
@@ -464,11 +474,13 @@ public class UIMessagePreview extends UIContainer{
   static public class DeleteActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
+      UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
+      DataCache dataCache = uiPortlet.getDataCache();
+      
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
       msgId = Utils.decodeMailId(msgId);
-      UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      if(!MailUtils.isFull(accountId)) {
+      String accountId = dataCache.getSelectedAccountId();
+      if(!MailUtils.isFull(accountId, dataCache)) {
         uiMsgPreview.showMessage(event);
         return;
       }
@@ -496,7 +508,6 @@ public class UIMessagePreview extends UIContainer{
         List<Message> showedMsgList = uiMsgPreview.getShowedMessages();
         if (showedMsgList != null && showedMsgList.size() > 1) {
           showedMsgList.remove(msg);
-          uiMsgPreview.setShowedMessages(showedMsgList);
         } else {
           uiMsgPreview.setMessage(null);
           uiMsgPreview.setShowedMessages(null);
@@ -515,21 +526,19 @@ public class UIMessagePreview extends UIContainer{
   static public class PrintActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
+      UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
+      DataCache dataCache = uiPortlet.getDataCache();
+      
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
       msgId = Utils.decodeMailId(msgId);
-      UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
       Message msg = uiMsgPreview.getShowedMessageById(msgId);
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
       UIPrintPreview uiPrintPreview = uiPopup.activate(UIPrintPreview.class, 700);
-      String username = MailUtils.getCurrentUser();
-      MailService mailSrv = MailUtils.getMailService();
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class)
-      .getSelectedValue();
-      String uid = username;
-      if(MailUtils.isDelegated(accountId)) {
-        uid = mailSrv.getDelegatedAccount(username, accountId).getDelegateFrom();
-      }
-      Account acc = mailSrv.getAccountById(uid, accountId);
+      String accountId = dataCache.getSelectedAccountId();
+      
+      String username = MailUtils.getDelegateFrom(accountId, dataCache);
+      
+      Account acc = dataCache.getAccountById(username, accountId);
       if (acc != null) {
         uiPrintPreview.setAcc(acc);
         uiPrintPreview.setPrintMessage(msg);
@@ -601,21 +610,22 @@ public class UIMessagePreview extends UIContainer{
   static public class MoveMessagesActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
+      UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
+      DataCache dataCache = uiPortlet.getDataCache();
+      
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
       msgId = Utils.decodeMailId(msgId);
-      UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class)
-      .getSelectedValue();
-      if(MailUtils.isDelegated(accountId)) {
+      
+      String accountId = dataCache.getSelectedAccountId();
+      if (MailUtils.isDelegated(accountId, uiPortlet.getDataCache())) {
         uiMsgPreview.showMessage(event);
         return;
       }
+      
       Message msg = uiMsgPreview.getShowedMessageById(msgId);
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
       if (msg != null) {
-        UIMoveMessageForm uiMoveMessageForm = uiMsgPreview.createUIComponent(UIMoveMessageForm.class,
-                                                                             null,
-                                                                             null);
+        UIMoveMessageForm uiMoveMessageForm = uiMsgPreview.createUIComponent(UIMoveMessageForm.class, null, null);
         uiMoveMessageForm.init(accountId);
         List<Message> msgList = new ArrayList<Message>();
         msgList.add(msg);
@@ -630,20 +640,19 @@ public class UIMessagePreview extends UIContainer{
   static public class AnswerInvitationActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
+      UIMailPortlet uiMailPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
+      
       String answer = event.getRequestContext().getRequestParameter(OBJECTID);
       String msgId = event.getRequestContext().getRequestParameter("messageId");
       msgId = Utils.decodeMailId(msgId);
       CalendarService calService = uiMsgPreview.getApplicationComponent(CalendarService.class);
       Message msg = uiMsgPreview.getShowedMessageById(msgId);
       String fromUserId = MailUtils.getEventFrom(msg);
-      // String toUserId = MailUtils.getEventTo(msg) ;
-      // TODO cs-764
-      UIMailPortlet uiMailPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
+      
       UISelectAccount uiSelectAcc = uiMailPortlet.findFirstComponentOfType(UISelectAccount.class);
       String accId = uiSelectAcc.getSelectedValue();
-      MailService mailSvr = uiSelectAcc.getApplicationComponent(MailService.class);
       String confirmingUser = uiMailPortlet.getCurrentUser();
-      Account account = mailSvr.getAccountById(confirmingUser, accId);
+      Account account = uiMailPortlet.getDataCache().getAccountById(confirmingUser, accId);
       String confirmingEmail = "";
       if (account != null) {
         confirmingEmail = account.getEmailAddress();
@@ -658,8 +667,8 @@ public class UIMessagePreview extends UIContainer{
           List<CalendarEvent> eventList = new ArrayList<CalendarEvent>();
           for (Attachment att : attList) {
             if (att.getMimeType() != null && att.getMimeType().equalsIgnoreCase("TEXT/CALENDAR")) {
-              eventList.addAll(calService.getCalendarImportExports(CalendarServiceImpl.ICALENDAR)
-                               .getEventObjects(att.getInputStream()));
+              eventList.addAll(calService.getCalendarImportExports(CalendarServiceImpl.ICALENDAR).getEventObjects(
+                  att.getInputStream()));
             } else {
               org.exoplatform.calendar.service.Attachment a = new org.exoplatform.calendar.service.Attachment();
               a.setId(att.getId());
@@ -681,35 +690,20 @@ public class UIMessagePreview extends UIContainer{
             calEvent.setAttachment(attachment);
             UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
             UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
-            UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class,
-                                                                                      null,
-            "UIPopupActionEventContainer");
+            UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null,
+                "UIPopupActionEventContainer");
             uiPopupAction.activate(uiPopupContainer, 600, 0, true);
-            UIEventForm uiEventForm = uiPopupContainer.createUIComponent(UIEventForm.class,
-                                                                         null,
-                                                                         null);
+            UIEventForm uiEventForm = uiPopupContainer.createUIComponent(UIEventForm.class, null, null);
             uiPopupContainer.addChild(uiEventForm);
-            uiEventForm.initForm(calService.getCalendarSetting(MailUtils.getCurrentUser()),
-                                 calEvent);
+            uiEventForm.initForm(calService.getCalendarSetting(MailUtils.getCurrentUser()), calEvent);
             uiEventForm.isAddNew_ = true;
             uiEventForm.update(CalendarUtils.PRIVATE_TYPE, null);
             event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
-            calService.confirmInvitation(fromUserId,
-                                         confirmingEmail,
-                                         confirmingUser,
-                                         calType,
-                                         calendarId,
-                                         eventId,
-                                         1);
+            calService.confirmInvitation(fromUserId, confirmingEmail, confirmingUser, calType, calendarId, eventId, 1);
           }
         } else {
-          calService.confirmInvitation(fromUserId,
-                                       confirmingEmail,
-                                       confirmingUser,
-                                       calType,
-                                       calendarId,
-                                       eventId,
-                                       Integer.parseInt(answer));
+          calService.confirmInvitation(fromUserId, confirmingEmail, confirmingUser, calType, calendarId, eventId,
+              Integer.parseInt(answer));
         }
       } catch (Exception e) {
         if (log.isDebugEnabled()) {
@@ -772,14 +766,18 @@ public class UIMessagePreview extends UIContainer{
   
   static void reply(Event<UIMessagePreview> event, boolean isReplyAll) throws Exception{
     UIMessagePreview uiMsgPreview = event.getSource();
+    UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
+    DataCache dataCache = uiPortlet.getDataCache();
+    
     String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
     msgId = Utils.decodeMailId(msgId);
-    UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
-    String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-    if(!MailUtils.isFull(accId)) {
+    
+    String accId = dataCache.getSelectedAccountId();
+    if(!MailUtils.isFull(accId, dataCache)) {
       uiMsgPreview.showMessage(event);
       return;
     }
+    
     UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
     if (msgId != null) {
       Message msg = uiMsgPreview.getShowedMessageById(msgId);
@@ -787,14 +785,14 @@ public class UIMessagePreview extends UIContainer{
         UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null, "UIPopupActionComposeContainer");
         uiPopupAction.activate(uiPopupContainer, MailUtils.MAX_POPUP_WIDTH, 0, true);
         UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
-        if(!isReplyAll)
+        if(!isReplyAll) {
           uiComposeForm.init(accId, msg, uiComposeForm.MESSAGE_REPLY);
-        else
+        } else {
           uiComposeForm.init(accId, msg, uiComposeForm.MESSAGE_REPLY_ALL);
+        }
         uiPopupContainer.addChild(uiComposeForm);
       }
     }
     event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
   }
-  
 }

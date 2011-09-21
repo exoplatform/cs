@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.cs.common.webui.UIPopupComponent;
+import org.exoplatform.mail.DataCache;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;
@@ -228,14 +229,16 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
 
   static  public class SearchActionListener extends EventListener<UIAdvancedSearchForm> {
     public void execute(Event<UIAdvancedSearchForm> event) throws Exception {
-      UIAdvancedSearchForm uiSearchForm = event.getSource() ;   
+      UIAdvancedSearchForm uiSearchForm = event.getSource();
       UIMailPortlet uiPortlet = uiSearchForm.getAncestorOfType(UIMailPortlet.class);
-      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);  
-      UIApplication uiApp = uiSearchForm.getAncestorOfType(UIApplication.class) ;
+      DataCache dataCache = uiPortlet.getDataCache();
+
+      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
+      UIApplication uiApp = uiSearchForm.getAncestorOfType(UIApplication.class);
       String username = uiPortlet.getCurrentUser();
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      String accountId = dataCache.getSelectedAccountId();
       MailService mailService = uiPortlet.getApplicationComponent(MailService.class);
-      String to = uiSearchForm.getFieldEmailTo() ;
+      String to = uiSearchForm.getFieldEmailTo();
       String from = uiSearchForm.getFieldEmailFrom();
       String subject = uiSearchForm.getSubject();
       String body = uiSearchForm.getMessageBody();
@@ -243,53 +246,58 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       Calendar toDate = uiSearchForm.getToDate();
       String fromDateText = uiSearchForm.getInputFromDate();
       String toDateText = uiSearchForm.getInputToDate();
-      if(!MailUtils.isFieldEmpty(fromDateText)) {
-        if(!MailUtils.isDate(fromDateText,"MM/dd/yyyy")){
-          uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.invalid-date", null)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      
+      if (!MailUtils.isFieldEmpty(fromDateText)) {
+        if (!MailUtils.isDate(fromDateText, "MM/dd/yyyy")) {
+          uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.invalid-date", null));
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
           return;
         }
-      }else if(!MailUtils.isFieldEmpty(toDateText)) {
-        if(!MailUtils.isDate(toDateText,"MM/dd/yyyy")){
-          uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.invalid-date", null)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      } else if (!MailUtils.isFieldEmpty(toDateText)) {
+        if (!MailUtils.isDate(toDateText, "MM/dd/yyyy")) {
+          uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.invalid-date", null));
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
           return;
         }
       }
-      if(!MailUtils.isFieldEmpty(fromDateText) && !MailUtils.isFieldEmpty(toDateText)){
-        if(!MailUtils.isDate(fromDateText,"MM/dd/yyyy") || !MailUtils.isDate(toDateText,"MM/dd/yyyy")){
-          uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.invalid-date", null)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+
+      if (!MailUtils.isFieldEmpty(fromDateText) && !MailUtils.isFieldEmpty(toDateText)) {
+        if (!MailUtils.isDate(fromDateText, "MM/dd/yyyy") || !MailUtils.isDate(toDateText, "MM/dd/yyyy")) {
+          uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.invalid-date", null));
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
           return;
         }
-        if(fromDate.after(toDate)){
-          uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.date-time-invalid", null)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;
+        if (fromDate.after(toDate)) {
+          uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.date-time-invalid", null));
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          return;
         }
-      }  
-      
+      }
+
       boolean hasStar = uiSearchForm.hasStar();
       boolean hasAttach = uiSearchForm.hasAttachment();
       long priority = uiSearchForm.getPriority();
       String folder = uiSearchForm.getSelectedFolder();
-      if (Utils.isEmptyField(folder) && Utils.isEmptyField(from) && Utils.isEmptyField(to) && Utils.isEmptyField(subject) && (fromDate == null) && 
-          (toDate == null) && Utils.isEmptyField(body) && !hasStar && !hasAttach && (priority == 0)) {
-        uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.search-query-invalid", null, ApplicationMessage.INFO)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      if (Utils.isEmptyField(folder) && Utils.isEmptyField(from) && Utils.isEmptyField(to) && Utils.isEmptyField(subject)
+          && (fromDate == null) && (toDate == null) && Utils.isEmptyField(body) && !hasStar && !hasAttach && (priority == 0)) {
+        uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.search-query-invalid", null, ApplicationMessage.INFO));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
-      } else if(!MailUtils.isSearchValid(from, MailUtils.SPECIALCHARACTER) || !MailUtils.isSearchValid(to, MailUtils.SPECIALCHARACTER)
-          || !MailUtils.isSearchValid(subject, MailUtils.SPECIALCHARACTER) || !MailUtils.isSearchValid(body, MailUtils.SPECIALCHARACTER)) {
-        uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.search-query-invalid", null
-                                                , ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
+      } else if (!MailUtils.isSearchValid(from, MailUtils.SPECIALCHARACTER)
+          || !MailUtils.isSearchValid(to, MailUtils.SPECIALCHARACTER)
+          || !MailUtils.isSearchValid(subject, MailUtils.SPECIALCHARACTER)
+          || !MailUtils.isSearchValid(body, MailUtils.SPECIALCHARACTER)) {
+        uiApp
+            .addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.search-query-invalid", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
       }
+      
       MessageFilter filter = new MessageFilter("Search");
       filter.setAccountId(accountId);
       String selectedFolderId = uiSearchForm.getSelectedFolder();
       if (!Utils.isEmptyField(selectedFolderId)) {
-        filter.setFolder(new String[] {folder});
+        filter.setFolder(new String[] { folder });
       }
       filter.setTo(to);
       filter.setToCondition(Integer.valueOf(uiSearchForm.getToCondition()));
@@ -308,22 +316,23 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       uiMessageList.setSelectedTagId(null);
       filter.setHasStructure(uiMessageList.getMessageFilter().hasStructure());
       uiMessageList.setMessageFilter(filter);
+      
       try {
         uiMessageList.setMessagePageList(mailService.getMessagePageList(username, filter));
         uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);
         UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
         uiFolderContainer.setSelectedFolder(null);
-        UITagContainer uiTagContainer = uiPortlet.findFirstComponentOfType(UITagContainer.class); 
+        UITagContainer uiTagContainer = uiPortlet.findFirstComponentOfType(UITagContainer.class);
         uiTagContainer.setSelectedTagId(null);
         uiPortlet.cancelAction();
         event.getRequestContext().addUIComponentToUpdateByAjax(uiTagContainer);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
-      } catch(Exception e) {
-        uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.search-query-invalid", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      } 
+      } catch (Exception e) {
+        uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.search-query-invalid", null));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
+      }
     }
   }
   

@@ -18,6 +18,7 @@ package org.exoplatform.mail.webui;
 
 import javax.jcr.PathNotFoundException;
 
+import org.exoplatform.mail.DataCache;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.CheckingInfo;
 import org.exoplatform.mail.service.MailService;
@@ -169,23 +170,28 @@ public class UIFetchingBar extends UIForm {
     public void execute(Event<UIFetchingBar> event) throws Exception {
       UIFetchingBar uiFetchingBar = event.getSource();
       UIMailPortlet uiPortlet = uiFetchingBar.getAncestorOfType(UIMailPortlet.class);
-      UIMessageList uiMsgList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;    
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      if (accountId == null) return ;
-      //cs-2127 
+      DataCache dataCache = uiPortlet.getDataCache();
+
+      UIMessageList uiMsgList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
+      String accountId = dataCache.getSelectedAccountId();
+      if (accountId == null) {
+        return;
+      }
+      
       try {
         uiMsgList.init(accountId);
       } catch (PathNotFoundException e) {
-        uiMsgList.setMessagePageList(null) ;
+        uiMsgList.setMessagePageList(null);
         uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
-        uiPortlet.findFirstComponentOfType(UISelectAccount.class).setSelectedValue(null) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet); 
-        
-        UIApplication uiApp = uiMsgList.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIFetchingBar.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return;        
+        uiPortlet.findFirstComponentOfType(UISelectAccount.class).setSelectedValue(null);
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
+
+        UIApplication uiApp = uiMsgList.getAncestorOfType(UIApplication.class);
+        uiApp.addMessage(new ApplicationMessage("UIFetchingBar.msg.deleted_account", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
       }
+      
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class));
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgList.getParent());
       UIFolderContainer folderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
@@ -198,40 +204,42 @@ public class UIFetchingBar extends UIForm {
     public void execute(Event<UIFetchingBar> event) throws Exception {
       UIFetchingBar uiFetchingBar = event.getSource();
       UIMailPortlet uiPortlet = uiFetchingBar.getAncestorOfType(UIMailPortlet.class);
-      UIMessageList uiMsgList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;    
-      String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      DataCache dataCache = uiPortlet.getDataCache();
+      
+      UIMessageList uiMsgList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
+      String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
       MailService mailSrv = uiMsgList.getApplicationComponent(MailService.class);
       String username = uiPortlet.getCurrentUser();
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      Message msg = null ;
+      String accountId = dataCache.getSelectedAccountId();
+      Message msg = null;
       try {
         msg = mailSrv.getMessageById(username, accountId, msgId);
-      }  catch (PathNotFoundException e) {
+      } catch (PathNotFoundException e) {
 
-        uiMsgList.setMessagePageList(null) ;
+        uiMsgList.setMessagePageList(null);
         uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet); 
-        
-        UIApplication uiApp = uiMsgList.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIFetchingBar.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return;        
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
+
+        UIApplication uiApp = uiMsgList.getAncestorOfType(UIApplication.class);
+        uiApp.addMessage(new ApplicationMessage("UIFetchingBar.msg.deleted_account", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
       }
       UIFormCheckBoxInput<Boolean> uiCheckBox = new UIFormCheckBoxInput<Boolean>(msg.getId(), msg.getId(), false);
       uiMsgList.addUIFormInput(uiCheckBox);
-      boolean updateList = false ;
+      boolean updateList = false;
       if (msg.getFolders() != null && msg.getFolders().length >= 1) {
         for (int i = 0; i < msg.getFolders().length; i++) {
-          if (uiMsgList.getSelectedFolderId() != null && msg.getFolders()[i].equals(uiMsgList.getSelectedFolderId())) 
-            updateList = true ;
+          if (uiMsgList.getSelectedFolderId() != null && msg.getFolders()[i].equals(uiMsgList.getSelectedFolderId()))
+            updateList = true;
         }
       }
-      if (updateList){
-        //uiMsgList.updateMessagePageList(accountId,uiMsgList.getSelectedFolderId());
+      if (updateList) {
+        // uiMsgList.updateMessagePageList(accountId,uiMsgList.getSelectedFolderId());
         uiMsgList.messageList_.put(msg.getId(), msg);
       }
-      
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgList);   
+
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgList);
     }
   }
   

@@ -23,6 +23,7 @@ import javax.jcr.PathNotFoundException;
 
 import org.exoplatform.cs.common.webui.UIPopupAction;
 import org.exoplatform.cs.common.webui.UIPopupComponent;
+import org.exoplatform.mail.DataCache;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
@@ -34,6 +35,8 @@ import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.UISelectFolder;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -59,6 +62,8 @@ import org.exoplatform.webui.form.UIForm;
     }
 )
 public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
+  private static final Log log = ExoLogger.getExoLogger(UIMoveMessageForm.class);
+  
   final public static String FIELD_NAME = "folderName" ;
   final public static String SELECT_FOLDER = "folder" ;
   public static String folderId="";
@@ -84,54 +89,66 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
   
   static public class SaveActionListener extends EventListener<UIMoveMessageForm> {
     public void execute(Event<UIMoveMessageForm> event) throws Exception {
-      UIMoveMessageForm uiMoveMessageForm = event.getSource() ;
-      MailService mailSrv = uiMoveMessageForm.getApplicationComponent(MailService.class) ;
-      UIMailPortlet uiPortlet = uiMoveMessageForm.getAncestorOfType(UIMailPortlet.class) ;
+      UIMoveMessageForm uiMoveMessageForm = event.getSource();
+      UIMailPortlet uiPortlet = uiMoveMessageForm.getAncestorOfType(UIMailPortlet.class);
+      DataCache dataCache = uiPortlet.getDataCache();
+
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType((UIMessageList.class));
       UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class);
-      String username = uiPortlet.getCurrentUser() ;
-      String accountId =  uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      String username = uiPortlet.getCurrentUser();
+      String accountId = dataCache.getSelectedAccountId();
       String destFolderId = uiMoveMessageForm.getChild(UISelectFolder.class).getSelectedValue();
-      Folder destFolder =  null ;
-      
-      if(MailUtils.isDelegated(accountId)) {
-        username = mailSrv.getDelegatedAccount(username, accountId).getDelegateFrom();
-      }
-      
+      Folder destFolder = null;
+      username = MailUtils.getDelegateFrom(accountId, dataCache);
+
       List<Message> successes = new ArrayList<Message>();
       try {
-        destFolder =  mailSrv.getFolder(username, accountId, destFolderId);
-      } catch (PathNotFoundException e) { }
-      if (destFolder == null) {
-        UIApplication uiApp = uiMoveMessageForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIMoveMessageForm.msg.selected-folder-is-not-exits-any-more", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        uiPortlet.cancelAction();
-        return ;
+        destFolder = uiPortlet.getDataCache().getFolder(username, accountId, destFolderId);
+      } catch (PathNotFoundException e) {
+        if (log.isDebugEnabled()) {
+          log.debug("PathNotFoundException in getting des folder", e);
+        }
       }
-      List<Message> appliedMsgList = uiMoveMessageForm.getMessageList() ;
-      UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class) ;
-      String fromFolderId = uiFolderContainer.getSelectedFolder() ;
+      
+      if (destFolder == null) {
+        UIApplication uiApp = uiMoveMessageForm.getAncestorOfType(UIApplication.class);
+        uiApp.addMessage(new ApplicationMessage("UIMoveMessageForm.msg.selected-folder-is-not-exits-any-more", null));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        uiPortlet.cancelAction();
+        return;
+      }
+      
+      List<Message> appliedMsgList = uiMoveMessageForm.getMessageList();
+      UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
+      MailService mailSrv = uiMoveMessageForm.getApplicationComponent(MailService.class);
+      String fromFolderId = uiFolderContainer.getSelectedFolder();
       if (fromFolderId != null) {
-        successes = mailSrv.moveMessages(username, accountId, uiMoveMessageForm.getMessageList(), fromFolderId, destFolderId) ;
+        successes = mailSrv.moveMessages(username, accountId, uiMoveMessageForm.getMessageList(), fromFolderId, destFolderId);
       } else {
         for (Message message : uiMoveMessageForm.getMessageList()) {
           Message m = mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], destFolderId);
-          if(m == null) successes.add(null);
+          if (m == null) {
+            successes.add(null);
+          }
         }
       }
-      if(successes == null || (successes.size() > 0 && successes.size() < uiMoveMessageForm.getMessageList().size()) ||
-          successes.contains(null) || successes.size() == 0){
-        UIApplication uiApp = uiMoveMessageForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIMoveMessageForm.msg.move_delete_not_successful", null, ApplicationMessage.INFO)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      
+      if (successes == null || (successes.size() > 0 && successes.size() < uiMoveMessageForm.getMessageList().size())
+          || successes.contains(null) || successes.size() == 0) {
+        UIApplication uiApp = uiMoveMessageForm.getAncestorOfType(UIApplication.class);
+        uiApp
+            .addMessage(new ApplicationMessage("UIMoveMessageForm.msg.move_delete_not_successful", null, ApplicationMessage.INFO));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
       }
-      uiMessageList.updateList(); 
+      uiMessageList.updateList();
+      
       Message msgPreview = uiMsgPreview.getMessage();
-      if (msgPreview != null && appliedMsgList.contains(msgPreview)) uiMsgPreview.setMessage(null);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMoveMessageForm.getAncestorOfType(UIPopupAction.class)) ;     
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));  
+      if (msgPreview != null && appliedMsgList.contains(msgPreview)) {
+        uiMsgPreview.setMessage(null);
+      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMoveMessageForm.getAncestorOfType(UIPopupAction.class));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
       uiPortlet.cancelAction();
     }
   }

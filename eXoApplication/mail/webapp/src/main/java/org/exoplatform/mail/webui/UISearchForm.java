@@ -17,6 +17,7 @@
 package org.exoplatform.mail.webui;
 
 import org.exoplatform.cs.common.webui.UIPopupAction;
+import org.exoplatform.mail.DataCache;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;
@@ -64,42 +65,50 @@ public class UISearchForm extends UIForm {
   static  public class SearchActionListener extends EventListener<UISearchForm> {
     public void execute(Event<UISearchForm> event) throws Exception {
       UISearchForm uiSearchForm = event.getSource();
-      UIMailPortlet uiPortlet = uiSearchForm.getAncestorOfType(UIMailPortlet.class) ;
-      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);  
+      UIMailPortlet uiPortlet = uiSearchForm.getAncestorOfType(UIMailPortlet.class);
+      DataCache dataCache = uiPortlet.getDataCache();
+      
+      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       String text = uiSearchForm.getUIStringInput(FIELD_SEARCHVALUE).getValue();
-      MessageFilter filter = new MessageFilter("Search"); 
+      MessageFilter filter = new MessageFilter("Search");
       filter.setHasStructure(uiMessageList.getMessageFilter().hasStructure());
-      UIApplication uiApp = uiSearchForm.getAncestorOfType(UIApplication.class) ;
-      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
-      if(Utils.isEmptyField(accId)) {
-        uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.account-list-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
+      UIApplication uiApp = uiSearchForm.getAncestorOfType(UIApplication.class);
+      
+      String accId = dataCache.getSelectedAccountId();
+      if (Utils.isEmptyField(accId)) {
+        uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.account-list-empty", null));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
       }
-      if(MailUtils.isFieldEmpty(text)) {
-        uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.no-text-to-search", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      } else if(!MailUtils.isSearchValid(text, MailUtils.SPECIALCHARACTER)) {
-        uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.contain-special-characters", null
-                                                , ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
+      
+      if (MailUtils.isFieldEmpty(text)) {
+        uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.no-text-to-search", null));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
+      } else if (!MailUtils.isSearchValid(text, MailUtils.SPECIALCHARACTER)) {
+        uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.contain-special-characters", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
       } else {
         filter.setText(text);
       }
-      filter.setAccountId(accId);      
-      String spamFolderId = Utils.generateFID(accId, Utils.FD_SPAM, false) ;
-      String trashFolderId = Utils.generateFID(accId, Utils.FD_TRASH, false) ;
-      String currentFolder = uiMessageList.getSelectedFolderId() ;
+      filter.setAccountId(accId);
+      
+      String spamFolderId = Utils.generateFID(accId, Utils.FD_SPAM, false);
+      String trashFolderId = Utils.generateFID(accId, Utils.FD_TRASH, false);
+      String currentFolder = uiMessageList.getSelectedFolderId();
       if (currentFolder != null) {
-        if (currentFolder.equals(spamFolderId)) filter.setFolder(new String[] {spamFolderId}) ;
-        else if (currentFolder.equals(trashFolderId)) filter.setFolder(new String[] {trashFolderId}) ;
-        else filter.setExcludeFolders(new String[] {spamFolderId, trashFolderId}) ;
+        if (currentFolder.equals(spamFolderId)) {
+          filter.setFolder(new String[] { spamFolderId });
+        } else if (currentFolder.equals(trashFolderId)) {
+          filter.setFolder(new String[] { trashFolderId });
+        } else {
+          filter.setExcludeFolders(new String[] { spamFolderId, trashFolderId });
+        }
       } else {
-        filter.setExcludeFolders(new String[] {spamFolderId, trashFolderId}) ;
+        filter.setExcludeFolders(new String[] { spamFolderId, trashFolderId });
       }
-          
+
       String username = uiPortlet.getCurrentUser();
       try {
         MailService mailService = uiPortlet.getApplicationComponent(MailService.class);
@@ -110,35 +119,38 @@ public class UISearchForm extends UIForm {
         uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);
         UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
         uiFolderContainer.setSelectedFolder(null);
-        UITagContainer uiTagContainer = uiPortlet.findFirstComponentOfType(UITagContainer.class); 
+        UITagContainer uiTagContainer = uiPortlet.findFirstComponentOfType(UITagContainer.class);
         uiTagContainer.setSelectedTagId(null);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiTagContainer);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
-      } catch(Exception e) {
-        uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.contain-special-characters", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
+      } catch (Exception e) {
+        uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.contain-special-characters", null));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
       }
     }
   }
  
   static  public class AdvancedActionListener extends EventListener<UISearchForm> {
     public void execute(Event<UISearchForm> event) throws Exception {
-      UISearchForm uiSearchForm = event.getSource() ;
-      UIMailPortlet uiPortlet = uiSearchForm.getAncestorOfType(UIMailPortlet.class) ;
-      UIApplication uiApp = uiSearchForm.getAncestorOfType(UIApplication.class) ;
-      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
-      if(Utils.isEmptyField(accId)) {
-        uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.account-list-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
+      UISearchForm uiSearchForm = event.getSource();
+      UIMailPortlet uiPortlet = uiSearchForm.getAncestorOfType(UIMailPortlet.class);
+      DataCache dataCache = uiPortlet.getDataCache();
+      UIApplication uiApp = uiSearchForm.getAncestorOfType(UIApplication.class);
+
+      String accId = dataCache.getSelectedAccountId();
+      if (Utils.isEmptyField(accId)) {
+        uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.account-list-empty", null));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
       }
-      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+
+      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
       UIAdvancedSearchForm uiAdvanceSearch = uiPopupAction.createUIComponent(UIAdvancedSearchForm.class, null, null);
-      uiPopupAction.activate(uiAdvanceSearch, 600, 0 , false);    
+      uiPopupAction.activate(uiAdvanceSearch, 600, 0, false);
       uiAdvanceSearch.init(accId);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;     
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
     }
   } 
 }

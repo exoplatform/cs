@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.exoplatform.cs.common.webui.UIPopupAction;
 import org.exoplatform.cs.common.webui.UIPopupActionContainer;
+import org.exoplatform.mail.DataCache;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
@@ -40,6 +41,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -370,40 +372,41 @@ public class UIAccountSetting extends UIFormTabPane {
   }
   
   public void fillField() throws Exception {
-    MailService mailSrv = getApplicationComponent(MailService.class) ;
-    String username = Util.getPortalRequestContext().getRemoteUser() ;
-    Account account = mailSrv.getAccountById(username, getSelectedAccountId());
-    UIFormInputWithActions uiIdentityInput = getChildById(TAB_IDENTITY_SETTINGS) ;
-    uiIdentityInput.getUIStringInput(FIELD_ACCOUNT_NAME).setValue(account.getLabel()) ;
-    uiIdentityInput.getUIStringInput(FIELD_DISPLAY_NAME).setValue(account.getUserDisplayName()) ;
-    uiIdentityInput.getUIStringInput(FIELD_EMAIL_ADDRESS).setValue(account.getEmailAddress()) ;
-    uiIdentityInput.getUIStringInput(FIELD_REPLYTO_ADDRESS).setValue(account.getEmailReplyAddress()) ;
-    uiIdentityInput.getUIFormTextAreaInput(FIELD_MAIL_SIGNATURE).setValue(account.getSignature()) ;
-    
-    UIFormInputWithActions uiIncomingInput = getChildById(TAB_INCOMING) ;
-    uiIncomingInput.getUIStringInput(FIELD_INCOMING_SERVER).setValue(account.getIncomingHost()) ;
-    uiIncomingInput.getUIStringInput(FIELD_INCOMING_PORT).setValue(account.getIncomingPort()) ;
-    uiIncomingInput.getUIFormCheckBoxInput(FIELD_IS_INCOMING_SSL).setChecked(account.isIncomingSsl()) ;
-    if(this.getFieldIsSSL()){
+    DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
+    String username = Util.getPortalRequestContext().getRemoteUser();
+    Account account = dataCache.getAccountById(username, getSelectedAccountId());
+    UIFormInputWithActions uiIdentityInput = getChildById(TAB_IDENTITY_SETTINGS);
+    uiIdentityInput.getUIStringInput(FIELD_ACCOUNT_NAME).setValue(account.getLabel());
+    uiIdentityInput.getUIStringInput(FIELD_DISPLAY_NAME).setValue(account.getUserDisplayName());
+    uiIdentityInput.getUIStringInput(FIELD_EMAIL_ADDRESS).setValue(account.getEmailAddress());
+    uiIdentityInput.getUIStringInput(FIELD_REPLYTO_ADDRESS).setValue(account.getEmailReplyAddress());
+    uiIdentityInput.getUIFormTextAreaInput(FIELD_MAIL_SIGNATURE).setValue(account.getSignature());
+
+    UIFormInputWithActions uiIncomingInput = getChildById(TAB_INCOMING);
+    uiIncomingInput.getUIStringInput(FIELD_INCOMING_SERVER).setValue(account.getIncomingHost());
+    uiIncomingInput.getUIStringInput(FIELD_INCOMING_PORT).setValue(account.getIncomingPort());
+    uiIncomingInput.getUIFormCheckBoxInput(FIELD_IS_INCOMING_SSL).setChecked(account.isIncomingSsl());
+    if (this.getFieldIsSSL()) {
       uiIncomingInput.getUIFormSelectBox(FIELD_SECURE_AUTHENTICATION_INCOMING).setValue(account.getSecureAuthsIncoming());
       uiIncomingInput.getUIFormSelectBox(FIELD_AUTHENTICATIONS_MECHANISM).setValue(account.getAuthMechsIncoming());
-    }else{
+    } else {
       uiIncomingInput.getUIFormSelectBox(FIELD_SECURE_AUTHENTICATION_INCOMING).setValue(account.getSecureAuthsIncoming());
       uiIncomingInput.getUIFormSelectBox(FIELD_AUTHENTICATIONS_MECHANISM).setValue(account.getAuthMechsIncoming());
     }
-    
-    uiIncomingInput.getUIStringInput(FIELD_INCOMING_ACCOUNT).setValue(account.getIncomingUser()) ;
-    uiIncomingInput.getUIStringInput(FIELD_INCOMING_PASSWORD).setValue(account.getIncomingPassword()) ;
-    uiIncomingInput.getUIFormCheckBoxInput(FIELD_IS_SAVE_PASSWORD).setChecked(account.isSavePassword()) ;
-    
-    UIFormInputWithActions uiOutgoingInput = getChildById(TAB_OUTGOING) ;
-    uiOutgoingInput.getUIStringInput(FIELD_OUTGOING_SERVER).setValue(account.getOutgoingHost()) ;
-    uiOutgoingInput.getUIStringInput(FIELD_OUTGOING_PORT).setValue(account.getOutgoingPort()) ;
-    uiOutgoingInput.getUIFormCheckBoxInput(FIELD_IS_OUTGOING_SSL).setChecked(account.isOutgoingSsl()) ;
+
+    uiIncomingInput.getUIStringInput(FIELD_INCOMING_ACCOUNT).setValue(account.getIncomingUser());
+    uiIncomingInput.getUIStringInput(FIELD_INCOMING_PASSWORD).setValue(account.getIncomingPassword());
+    uiIncomingInput.getUIFormCheckBoxInput(FIELD_IS_SAVE_PASSWORD).setChecked(account.isSavePassword());
+
+    UIFormInputWithActions uiOutgoingInput = getChildById(TAB_OUTGOING);
+    uiOutgoingInput.getUIStringInput(FIELD_OUTGOING_SERVER).setValue(account.getOutgoingHost());
+    uiOutgoingInput.getUIStringInput(FIELD_OUTGOING_PORT).setValue(account.getOutgoingPort());
+    uiOutgoingInput.getUIFormCheckBoxInput(FIELD_IS_OUTGOING_SSL).setChecked(account.isOutgoingSsl());
     uiOutgoingInput.getUIFormCheckBoxInput(IS_OUTGOING_AUTHENTICATION).setChecked(account.isOutgoingAuthentication());
-    if(isOutgoingAuthen()){
-       uiOutgoingInput.getUIFormCheckBoxInput(USE_INCOMINGSETTING_FOR_OUTGOING_AUTHEN).setEnable(true);
-       uiOutgoingInput.getUIFormCheckBoxInput(USE_INCOMINGSETTING_FOR_OUTGOING_AUTHEN).setChecked(account.useIncomingSettingForOutgoingAuthent());
+    if (isOutgoingAuthen()) {
+      uiOutgoingInput.getUIFormCheckBoxInput(USE_INCOMINGSETTING_FOR_OUTGOING_AUTHEN).setEnable(true);
+      uiOutgoingInput.getUIFormCheckBoxInput(USE_INCOMINGSETTING_FOR_OUTGOING_AUTHEN).setChecked(
+          account.useIncomingSettingForOutgoingAuthent());
       if (account.useIncomingSettingForOutgoingAuthent()) {
         uiOutgoingInput.getUIStringInput(OUTGOING_USERNAME).setEnable(false).setValue(account.getIncomingUser());
         uiOutgoingInput.getUIStringInput(OUTGOING_PASSWORD).setEnable(false).setValue(account.getIncomingPassword());
@@ -411,22 +414,23 @@ public class UIAccountSetting extends UIFormTabPane {
         uiOutgoingInput.getUIStringInput(OUTGOING_USERNAME).setValue(account.getOutgoingUserName());
         uiOutgoingInput.getUIStringInput(OUTGOING_PASSWORD).setValue(account.getOutgoingPassword());
       }
-    }else{
+    } else {
       uiOutgoingInput.getUIFormCheckBoxInput(USE_INCOMINGSETTING_FOR_OUTGOING_AUTHEN).setEnable(false);
-      uiOutgoingInput.getUIFormCheckBoxInput(USE_INCOMINGSETTING_FOR_OUTGOING_AUTHEN).setChecked(account.useIncomingSettingForOutgoingAuthent());
+      uiOutgoingInput.getUIFormCheckBoxInput(USE_INCOMINGSETTING_FOR_OUTGOING_AUTHEN).setChecked(
+          account.useIncomingSettingForOutgoingAuthent());
       uiOutgoingInput.getUIStringInput(OUTGOING_USERNAME).setEnable(false).setValue(account.getIncomingUser());
       uiOutgoingInput.getUIStringInput(OUTGOING_PASSWORD).setEnable(false).setValue(account.getIncomingPassword());
     }
-   
-    if(getFieldOutgoingSSL()){
+
+    if (getFieldOutgoingSSL()) {
       uiOutgoingInput.getUIFormSelectBox(FIELD_SECURE_AUTHENTICATION_OUTGOING).setValue(account.getSecureAuthsOutgoing());
       uiOutgoingInput.getUIFormSelectBox(FIELD_AUTHENTICATIONS_MECHANISM_OUTGOING).setValue(account.getAuthMechsOutgoing());
-    }else{
+    } else {
       uiOutgoingInput.getUIFormSelectBox(FIELD_SECURE_AUTHENTICATION_OUTGOING).setValue(account.getSecureAuthsOutgoing());
       uiOutgoingInput.getUIFormSelectBox(FIELD_AUTHENTICATIONS_MECHANISM_OUTGOING).setValue(account.getAuthMechsOutgoing());
     }
 
-    UIFormInputWithActions uifetchOptionsInput = getChildById(TAB_FETCH_OPTIONS) ;
+    UIFormInputWithActions uifetchOptionsInput = getChildById(TAB_FETCH_OPTIONS);
     uifetchOptionsInput.getUIFormCheckBoxInput(CHECK_FROM_DATE).setChecked(!account.isCheckAll());
     if (account.isCheckAll()) {
       ((UIFormDateTimePicker) uifetchOptionsInput.getChildById(FROM_DATE)).setEditable(false);
@@ -435,24 +439,25 @@ public class UIAccountSetting extends UIFormTabPane {
       cal.setTime(account.getCheckFromDate());
       ((UIFormDateTimePicker) uifetchOptionsInput.getChildById(FROM_DATE)).setCalendar(cal);
     }
-    
+
     uifetchOptionsInput.getUIFormCheckBoxInput(IS_CUSTOM_INBOX).setChecked(account.isCustomInbox());
     if (isCustomInbox()) {
-      uifetchOptionsInput.getUIStringInput(FIELD_INCOMING_FOLDER).setEnable(true).setValue(account.getIncomingFolder()) ;
+      uifetchOptionsInput.getUIStringInput(FIELD_INCOMING_FOLDER).setEnable(true).setValue(account.getIncomingFolder());
     } else {
-      uifetchOptionsInput.getUIStringInput(FIELD_INCOMING_FOLDER).setEnable(false).setValue(account.getIncomingFolder()) ;
+      uifetchOptionsInput.getUIStringInput(FIELD_INCOMING_FOLDER).setEnable(false).setValue(account.getIncomingFolder());
     }
-    uiIncomingInput.getUIFormSelectBox(FIELD_SERVER_TYPE).setValue(account.getProtocol()) ;
-    uifetchOptionsInput.getUIFormCheckBoxInput(FIELD_CHECKMAIL_AUTO).setChecked(account.checkedAuto()) ;
-    uifetchOptionsInput.getUIFormCheckBoxInput(FIELD_LEAVE_ON_SERVER).setChecked(Boolean.valueOf(account.getServerProperties().get(Utils.SVR_LEAVE_ON_SERVER))) ;
-  } 
+    uiIncomingInput.getUIFormSelectBox(FIELD_SERVER_TYPE).setValue(account.getProtocol());
+    uifetchOptionsInput.getUIFormCheckBoxInput(FIELD_CHECKMAIL_AUTO).setChecked(account.checkedAuto());
+    uifetchOptionsInput.getUIFormCheckBoxInput(FIELD_LEAVE_ON_SERVER).setChecked(
+        Boolean.valueOf(account.getServerProperties().get(Utils.SVR_LEAVE_ON_SERVER)));
+  }
   
   public String[] getActions() {return new String[]{"Save", "Cancel"};}
   
   public List<Account> getAccounts() throws Exception {
-    MailService mailSrv = getApplicationComponent(MailService.class);
+    DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
     String username = Util.getPortalRequestContext().getRemoteUser();
-    return mailSrv.getAccounts(username);
+    return dataCache.getAccounts(username);
   }
   
   static  public class SelectAccountActionListener extends EventListener<UIAccountSetting> {
@@ -478,142 +483,153 @@ public class UIAccountSetting extends UIFormTabPane {
   
   static  public class DeleteAccountActionListener extends EventListener<UIAccountSetting> {
     public void execute(Event<UIAccountSetting> event) throws Exception {
-      UIAccountSetting uiAccSetting = event.getSource() ;
-      UIMailPortlet uiPortlet = uiAccSetting.getAncestorOfType(UIMailPortlet.class) ;
-      UIMessageList uiMsgList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
-      UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class) ;
-      UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
+      UIAccountSetting uiAccSetting = event.getSource();
+      UIMailPortlet uiPortlet = uiAccSetting.getAncestorOfType(UIMailPortlet.class);
+      DataCache dataCache = uiPortlet.getDataCache();
+      
+      UIMessageList uiMsgList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
+      UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class);
+      UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class);
       String username = uiPortlet.getCurrentUser();
-      MailService mailSvr = uiPortlet.getApplicationComponent(MailService.class) ;
+      MailService mailSvr = uiPortlet.getApplicationComponent(MailService.class);
       try {
-        String removedAccId = uiAccSetting.getSelectedAccountId() ; 
-        mailSvr.removeAccount(username, removedAccId) ;
-        MailSetting mailSetting = mailSvr.getMailSetting(username) ;
+        String removedAccId = uiAccSetting.getSelectedAccountId();
+        mailSvr.removeAccount(username, removedAccId);
+        MailSetting mailSetting = mailSvr.getMailSetting(username);
         if (uiAccSetting.getAccounts().size() > 0) {
-          String newSelectedAcc = uiAccSetting.getAccounts().get(0).getId() ;
-          uiAccSetting.setSelectedAccountId(newSelectedAcc) ;
-          uiSelectAccount.updateAccount() ;
-          if (removedAccId.equals(uiSelectAccount.getSelectedValue()))
-            uiSelectAccount.setSelectedValue(newSelectedAcc) ;
+          String newSelectedAcc = uiAccSetting.getAccounts().get(0).getId();
+          uiAccSetting.setSelectedAccountId(newSelectedAcc);
+          uiSelectAccount.updateAccount();
+          if (removedAccId.equals(dataCache.getSelectedAccountId()))
+            uiSelectAccount.setSelectedValue(newSelectedAcc);
           String defaultAcc = mailSetting.getDefaultAccount();
           if (removedAccId.equals(defaultAcc)) {
-            mailSetting.setDefaultAccount(newSelectedAcc) ;
-            mailSvr.saveMailSetting(username, mailSetting) ;
+            mailSetting.setDefaultAccount(newSelectedAcc);
+            mailSvr.saveMailSetting(username, mailSetting);
           }
-          uiAccSetting.fillField() ;
+          uiAccSetting.fillField();
           uiMsgList.setMessageFilter(null);
           uiMsgList.init(newSelectedAcc);
           uiMsgPreview.setMessage(null);
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiAccSetting.getAncestorOfType(UIPopupActionContainer.class)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiAccSetting.getAncestorOfType(UIPopupActionContainer.class));
         } else {
-          uiSelectAccount.updateAccount() ;
-          uiSelectAccount.setSelectedValue(null) ;
-          mailSetting.setDefaultAccount(null) ;
-          mailSvr.saveMailSetting(username, mailSetting) ;
-          event.getSource().getAncestorOfType(UIMailPortlet.class).cancelAction() ;
+          uiSelectAccount.updateAccount();
+          uiSelectAccount.setSelectedValue(null);
+          mailSetting.setDefaultAccount(null);
+          mailSvr.saveMailSetting(username, mailSetting);
+          event.getSource().getAncestorOfType(UIMailPortlet.class).cancelAction();
           uiMsgList.init(null);
           uiMsgPreview.setMessage(null);
         }
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectAccount) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgList.getAncestorOfType(UIMessageArea.class)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectAccount.getAncestorOfType(UINavigationContainer.class)) ;
-      } catch(Exception e) {
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectAccount);
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgList.getAncestorOfType(UIMessageArea.class));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectAccount.getAncestorOfType(UINavigationContainer.class));
+      } catch (Exception e) {
         if (log.isDebugEnabled()) {
           log.debug("Exception in method execute of class DeleteAccountActionListener", e);
         }
-      } 
+      }
     }
   }
   
-  static  public class SaveActionListener extends EventListener<UIAccountSetting> {
+  static public class SaveActionListener extends EventListener<UIAccountSetting> {
     public void execute(Event<UIAccountSetting> event) throws Exception {
-      UIAccountSetting uiSetting = event.getSource() ;
-      UIMailPortlet uiPortlet = uiSetting.getAncestorOfType(UIMailPortlet.class) ;
-      UIApplication uiApp = uiSetting.getAncestorOfType(UIApplication.class) ;
-      MailService mailSrv = uiSetting.getApplicationComponent(MailService.class) ;
-      String username = Util.getPortalRequestContext().getRemoteUser() ;
-      String editedAccountId = uiSetting.getSelectedAccountId() ;
-      Account acc = mailSrv.getAccountById(username, editedAccountId) ;
-      String userName = uiSetting.getFieldIncomingAccount() ;
-      String email = uiSetting.getFieldMailAddress() ;
-      String reply = uiSetting.getFieldReplyAddress() ;
-      String incomingPort = uiSetting.getFieldIncomingPort() ;
-      String outgoingPort = uiSetting.getFieldOutgoingPort() ;
-      String password = uiSetting.getFieldIncomingPassword() ;
+      UIAccountSetting uiSetting = event.getSource();
+      UIMailPortlet uiPortlet = uiSetting.getAncestorOfType(UIMailPortlet.class);
+      DataCache dataCache = uiPortlet.getDataCache();
+
+      UIApplication uiApp = uiSetting.getAncestorOfType(UIApplication.class);
+      MailService mailSrv = uiSetting.getApplicationComponent(MailService.class);
+      String username = Util.getPortalRequestContext().getRemoteUser();
+      String editedAccountId = uiSetting.getSelectedAccountId();
+      Account acc = dataCache.getAccountById(username, editedAccountId);
+      
+      String userName = uiSetting.getFieldIncomingAccount();
+      String email = uiSetting.getFieldMailAddress();
+      String reply = uiSetting.getFieldReplyAddress();
+      String incomingPort = uiSetting.getFieldIncomingPort();
+      String outgoingPort = uiSetting.getFieldOutgoingPort();
+      String password = uiSetting.getFieldIncomingPassword();
       String secureAuthIncoming = uiSetting.getFieldSecureAuthInComing();
       String secureAuthOutgoing = uiSetting.getFieldSecureAuthOutgoing();
       String secureAuthMechIncoming = uiSetting.getFieldAuthMechInComing();
       String secureAuthMechOutgoing = uiSetting.getFieldAuthMechOutgoing();
-      
+
       if (!MailUtils.isValidEmailAddresses(email)) {
-        uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.email-address-is-invalid", null, ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      } 
+        uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.email-address-is-invalid", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
+      }
+      
       if (!MailUtils.isFieldEmpty(reply) && !MailUtils.isValidEmailAddresses(reply)) {
-        uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.reply-address-is-invalid", null, ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
+        uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.reply-address-is-invalid", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
       }
+      
       if (!Utils.isNumber(incomingPort)) {
-        uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.incoming-port-is-not-number", null, ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
+        uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.incoming-port-is-not-number", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
       }
+      
       if (!Utils.isNumber(outgoingPort)) {
-        uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.outgoing-port-is-not-number", null, ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
+        uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.outgoing-port-is-not-number", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
       }
-      
+
       if (MailUtils.isFieldEmpty(password)) {
-        uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.field-password-is-required", null, ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
+        uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.field-password-is-required", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
       }
-      
-      acc.setProtocol(uiSetting.getFieldProtocol()) ;
-      acc.setLabel(uiSetting.getFieldAccountNameValue()) ;
-      acc.setUserDisplayName(uiSetting.getDisplayName()) ;
-      acc.setEmailAddress(email) ;
-      acc.setEmailReplyAddress(reply) ;
-      acc.setSignature(uiSetting.getFieldMailSignature()) ;
-      acc.setCheckedAuto(uiSetting.getFieldCheckMailAuto()) ;
-      acc.setIncomingUser(userName) ; 
-      if (uiSetting.isSavePassword()) acc.setIncomingPassword(password) ;
-      else acc.setIncomingPassword("") ;
-      acc.setIncomingHost(uiSetting.getFieldIncomingServer()) ;
-      acc.setIncomingPort(incomingPort) ;
-      acc.setIncomingSsl(uiSetting.getFieldIsSSL()) ;
-      if(uiSetting.getFieldIsSSL()){
+
+      acc.setProtocol(uiSetting.getFieldProtocol());
+      acc.setLabel(uiSetting.getFieldAccountNameValue());
+      acc.setUserDisplayName(uiSetting.getDisplayName());
+      acc.setEmailAddress(email);
+      acc.setEmailReplyAddress(reply);
+      acc.setSignature(uiSetting.getFieldMailSignature());
+      acc.setCheckedAuto(uiSetting.getFieldCheckMailAuto());
+      acc.setIncomingUser(userName);
+      if (uiSetting.isSavePassword()) {
+        acc.setIncomingPassword(password);
+      } else {
+        acc.setIncomingPassword("");
+      }
+      acc.setIncomingHost(uiSetting.getFieldIncomingServer());
+      acc.setIncomingPort(incomingPort);
+      acc.setIncomingSsl(uiSetting.getFieldIsSSL());
+      if (uiSetting.getFieldIsSSL()) {
         acc.setSecureAuthsIncoming(secureAuthIncoming);
         acc.setAuthMechsIncoming(secureAuthMechIncoming);
       }
       acc.setOutgoingSsl(uiSetting.getFieldOutgoingSSL());
-      if(uiSetting.getFieldOutgoingSSL()){
+      if (uiSetting.getFieldOutgoingSSL()) {
         acc.setSecureAuthsOutgoing(secureAuthOutgoing);
         acc.setAuthMechsOutgoing(secureAuthMechOutgoing);
       }
-      acc.setIncomingFolder(uiSetting.getFieldIncomingFolder()) ;
-      acc.setOutgoingHost(uiSetting.getFieldOutgoingServer()) ;
-      acc.setOutgoingPort(outgoingPort) ;
+      acc.setIncomingFolder(uiSetting.getFieldIncomingFolder());
+      acc.setOutgoingHost(uiSetting.getFieldOutgoingServer());
+      acc.setOutgoingPort(outgoingPort);
       acc.setIsOutgoingAuthentication(uiSetting.isOutgoingAuthen());
       acc.setUseIncomingForAuthentication(uiSetting.useIncomingSettingForOutgoingAuthen());
       if (!uiSetting.useIncomingSettingForOutgoingAuthen()) {
         acc.setOutgoingUserName(uiSetting.getOutgoingUser());
         acc.setOutgoingPassword(uiSetting.getOutgoingPassword());
       }
-      acc.setIsSavePassword(uiSetting.isSavePassword()) ;
-      acc.setServerProperty(Utils.SVR_SMTP_USER, userName) ;
+      acc.setIsSavePassword(uiSetting.isSavePassword());
+      acc.setServerProperty(Utils.SVR_SMTP_USER, userName);
       acc.setIsCustomInbox(uiSetting.isCustomInbox());
-      
+
       if (acc.getProtocol().equals(Utils.IMAP)) {
         acc.setCheckAll(!uiSetting.getFieldCheckFromDate());
         if (uiSetting.getFieldCheckFrom() != null) {
           acc.setCheckFromDate(uiSetting.getFieldCheckFrom().getTime());
-        } else if(!acc.isCheckAll()) {
-          uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.please-choose-specified-date", null)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        } else if (!acc.isCheckAll()) {
+          uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.please-choose-specified-date", null));
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
           return;
         }
         if (acc.isCheckAll()) {
@@ -621,27 +637,27 @@ public class UIAccountSetting extends UIFormTabPane {
         }
       }
       if (Utils.isUserAllowedLeaveOnServer()) {
-        boolean leaveOnServer = uiSetting.getFieldLeaveOnServer() ;
-        acc.setServerProperty(Utils.SVR_LEAVE_ON_SERVER, String.valueOf(leaveOnServer)) ;        
+        boolean leaveOnServer = uiSetting.getFieldLeaveOnServer();
+        acc.setServerProperty(Utils.SVR_LEAVE_ON_SERVER, String.valueOf(leaveOnServer));
       }
       try {
-        mailSrv.updateAccount(username, acc) ;
-        UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
-        String accountId = uiSelectAccount.getSelectedValue();
-        uiSelectAccount.updateAccount() ;
-        uiSelectAccount.setSelectedValue(accountId) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectAccount) ;
-        
-        uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.edit-acc-successfully", null)) ;
+        mailSrv.updateAccount(username, acc);
+        UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class);
+        String accountId = dataCache.getSelectedAccountId();
+        uiSelectAccount.updateAccount();
+        uiSelectAccount.setSelectedValue(accountId);
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectAccount);
+
+        uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.edit-acc-successfully", null));
         event.getSource().getAncestorOfType(UIMailPortlet.class).cancelAction();
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-      } catch(Exception e) {
-        uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.edit-acc-unsuccessfully", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+      } catch (Exception e) {
+        uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.edit-acc-unsuccessfully", null));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         if (log.isDebugEnabled()) {
           log.debug("Exception in method execute of class SaveActionListener", e);
         }
-        return ;
+        return;
       }
     }
   }

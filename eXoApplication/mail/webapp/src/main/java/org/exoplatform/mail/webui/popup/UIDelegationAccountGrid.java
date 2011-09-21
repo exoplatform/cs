@@ -21,14 +21,17 @@ import java.util.List;
 
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccessImpl;
+import org.exoplatform.mail.DataCache;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.AccountDelegation;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -66,11 +69,11 @@ public class UIDelegationAccountGrid extends UIGrid {
   }
 
   public void updateGrid(){
+    DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
     List<AccountDelegation> delegation = new ArrayList<AccountDelegation>();
-    MailService mailSvr = getApplicationComponent(MailService.class) ;
     try {
       String currentuser = MailUtils.getCurrentUser();
-      List<Account> acclist =  mailSvr.getAccounts(currentuser);
+      List<Account> acclist =  dataCache.getAccounts(currentuser);
       for(Account a : acclist) {
         if(a.getPermissions() != null && a.getPermissions().keySet() != null)
           for (String receiver : a.getPermissions().keySet()) {

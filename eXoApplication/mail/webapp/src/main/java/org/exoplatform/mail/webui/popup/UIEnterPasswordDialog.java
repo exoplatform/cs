@@ -22,6 +22,7 @@ import javax.mail.internet.AddressException;
 
 import org.exoplatform.cs.common.webui.UIPopupAction;
 import org.exoplatform.cs.common.webui.UIPopupComponent;
+import org.exoplatform.mail.DataCache;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
@@ -31,6 +32,7 @@ import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -92,72 +94,76 @@ public class UIEnterPasswordDialog extends UIForm implements UIPopupComponent{
   public String getAccountId() { return accId_; }
   
   public Account getAccount() throws Exception {
-    MailService mailSrv = getApplicationComponent(MailService.class);
+    DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
     String username = MailUtils.getCurrentUser();
-    return mailSrv.getAccountById(username, getAccountId());
+    return dataCache.getAccountById(username, getAccountId());
   }
   
   public boolean showWarning() { return showWarning_; }
   public void setShowWarning(boolean b) { showWarning_ = b; }
   
-  static  public class OkActionListener extends EventListener<UIEnterPasswordDialog> {
+  static public class OkActionListener extends EventListener<UIEnterPasswordDialog> {
     public void execute(Event<UIEnterPasswordDialog> event) throws Exception {
-      UIEnterPasswordDialog uiForm = event.getSource() ;
-      UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
+      UIEnterPasswordDialog uiForm = event.getSource();
+      UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class);
+      DataCache dataCache = uiPortlet.getDataCache();
+      
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
       UIComposeForm composeForm = uiPortlet.findFirstComponentOfType(UIComposeForm.class);
-      String newPw = uiForm.getUIStringInput(FIELD_PASSWORD).getValue() ;
-      boolean isSavePw = uiForm.getUIFormCheckBoxInput(FIELD_SAVED_PASSWORD).isChecked() ;
+      String newPw = uiForm.getUIStringInput(FIELD_PASSWORD).getValue();
+      boolean isSavePw = uiForm.getUIFormCheckBoxInput(FIELD_SAVED_PASSWORD).isChecked();
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
       String username = uiPortlet.getCurrentUser();
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      Account acc = mailSrv.getAccountById(username, accountId) ;
-      acc.setIsSavePassword(isSavePw) ;
-      acc.setIncomingPassword(newPw) ;
-      
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-      
+      String accountId = dataCache.getSelectedAccountId();
+      Account acc = dataCache.getAccountById(username, accountId);
+      acc.setIsSavePassword(isSavePw);
+      acc.setIncomingPassword(newPw);
+
+      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class);
+
       try {
         mailSrv.sendMessage(username, acc, uiForm.getSendMessage());
       } catch (AddressException e) {
-        uiApp.addMessage(new ApplicationMessage("UIEnterPasswordDialog.msg.there-was-an-error-parsing-the-addresses-sending-failed", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        uiApp.addMessage(new ApplicationMessage(
+            "UIEnterPasswordDialog.msg.there-was-an-error-parsing-the-addresses-sending-failed", null));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       } catch (AuthenticationFailedException e) {
         uiForm.setShowWarning(true);
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
         return;
       } catch (SMTPSendFailedException e) {
-        uiApp.addMessage(new ApplicationMessage("UIEnterPasswordDialog.msg.sorry-there-was-an-error-sending-the-message-sending-failed", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        uiApp.addMessage(new ApplicationMessage(
+            "UIEnterPasswordDialog.msg.sorry-there-was-an-error-sending-the-message-sending-failed", null));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       } catch (MessagingException e) {
-        uiApp.addMessage(new ApplicationMessage("UIEnterPasswordDialog.msg.there-was-an-unexpected-error-sending-falied", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
+        uiApp.addMessage(new ApplicationMessage("UIEnterPasswordDialog.msg.there-was-an-unexpected-error-sending-falied", null));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
       }
-      
+
       try {
-        if(!composeForm.saveToSentFolder(username, acc, uiForm.getSendMessage())){
-          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.cannot-send", null, ApplicationMessage.INFO)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        if (!composeForm.saveToSentFolder(username, acc, uiForm.getSendMessage())) {
+          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.cannot-send", null, ApplicationMessage.INFO));
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         }
-        UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
+        UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
         uiMessageList.updateList();
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class));
       } catch (Exception e) {
-        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-sent-error", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
+        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-sent-error", null));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        uiForm.getAncestorOfType(UIPopupAction.class).deActivate();
       }
-      
+
       if (isSavePw) {
-        mailSrv.updateAccount(username, acc) ;
+        mailSrv.updateAccount(username, acc);
       }
-      
+
       uiPopup.deActivate();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
     }
   }
   

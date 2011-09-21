@@ -20,6 +20,7 @@ import java.io.InputStream;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.cs.common.webui.UIPopupComponent;
+import org.exoplatform.mail.DataCache;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
@@ -80,6 +81,8 @@ public class UIImportForm extends UIForm implements UIPopupComponent {
       UIImportForm uiImport = event.getSource();
       MailService mailSrv = MailUtils.getMailService();
       UIMailPortlet uiPortlet = uiImport.getAncestorOfType(UIMailPortlet.class);
+      DataCache dataCache = uiPortlet.getDataCache();
+      
       UIFormUploadInput uiUploadInput = (UIFormUploadInput) uiImport.getUIInput(CHOOSE_MIME_MESSAGE);
       UploadResource uploadResource = uiUploadInput.getUploadResource();
       UIApplication  uiApp = uiImport.getAncestorOfType(UIApplication.class);
@@ -106,7 +109,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent {
       }
       InputStream inputStream = uiUploadInput.getUploadDataAsStream();
       String type = uploadResource.getMimeType();
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
+      String accountId = dataCache.getSelectedAccountId();
       String username = uiPortlet.getCurrentUser() ;
       String folderId = uiImport.getChild(UISelectFolder.class).getSelectedValue();
       if (!mailSrv.importMessage(username, accountId, folderId, inputStream, type)) {

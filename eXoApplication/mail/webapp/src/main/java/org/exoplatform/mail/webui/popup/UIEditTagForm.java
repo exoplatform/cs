@@ -22,6 +22,7 @@ import javax.jcr.PathNotFoundException;
 
 import org.exoplatform.cs.common.webui.UIPopupAction;
 import org.exoplatform.cs.common.webui.UIPopupComponent;
+import org.exoplatform.mail.DataCache;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Tag;
@@ -33,6 +34,7 @@ import org.exoplatform.mail.webui.UITagContainer;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -87,15 +89,16 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
   public void setTag(String tagId) throws Exception {
     this.tagId = tagId;
     
+    DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
+    String accountId = dataCache.getSelectedAccountId();
+    String username = MailUtils.getDelegateFrom(accountId, dataCache);
+    
     MailService mailSrv = getApplicationComponent(MailService.class);
-    String username = MailUtils.getCurrentUser();
-    String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-    if(MailUtils.isDelegated(accountId)) {
-      username = mailSrv.getDelegatedAccount(username, accountId).getDelegateFrom();
-    }
     List<Tag> tagList= mailSrv.getTags(username, accountId);
     
-    if (tagList.isEmpty()) return;   
+    if (tagList.isEmpty()) {
+      return;   
+    }
     
     for (Tag tag : tagList) {      
       if (tag.getId().equals(tagId)){
@@ -113,25 +116,15 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UIEditTagForm> event) throws Exception {
       UIEditTagForm editTagForm  = event.getSource() ;
       UIMailPortlet uiPortlet = editTagForm.getAncestorOfType(UIMailPortlet.class);
+      DataCache dataCache = uiPortlet.getDataCache();
       MailService mailService = editTagForm.getApplicationComponent(MailService.class);
 
-      String username = uiPortlet.getCurrentUser() ;
-      String accountId =  uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
+      String accountId = dataCache.getSelectedAccountId();
       String tagId = editTagForm.getTagId();
       String newTagName = editTagForm.getUIStringInput(NEW_TAG_NAME).getValue().trim() ;
+      String username = MailUtils.getDelegateFrom(accountId, dataCache);
       
-      if(MailUtils.isDelegated(accountId)) {
-        username = mailService.getDelegatedAccount(username, accountId).getDelegateFrom();
-      }
-//    CS-3009
       newTagName = MailUtils.reduceSpace(newTagName) ;
-      /*if (!MailUtils.isNameValid(newTagName, MailUtils.SIMPLECHARACTER)) {
-        UIApplication uiApp = editTagForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIEditTagForm.msg.tagname-invalid", MailUtils.SIMPLECHARACTER, ApplicationMessage.WARNING) ) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return;
-      }
-      */
       String description = editTagForm.getUIFormTextAreaInput(DESCRIPTION).getValue() ;
       String color = editTagForm.getSelectedColor(); 
       UIApplication uiApp = editTagForm.getAncestorOfType(UIApplication.class) ;

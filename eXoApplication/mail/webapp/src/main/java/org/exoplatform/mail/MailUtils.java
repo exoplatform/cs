@@ -102,10 +102,6 @@ public class MailUtils {
     return Util.getPortalRequestContext().getRemoteUser();
   }
 
-  /*
-   * public static boolean isNameValid(String name, String[] regex) { for(String
-   * c : regex){ if(name.contains(c)) return false ;} return true ; }
-   */
   public static String getImageSource(Contact contact, DownloadService dservice) throws Exception {
     ContactAttachment contactAttachment = contact.getAttachment();
     if (contactAttachment != null) {
@@ -199,23 +195,6 @@ public class MailUtils {
   public static boolean isFieldEmpty(String s) {
     return (s == null || s.trim().length() == 0);
   }
-
-  // public static boolean isChecking(String username, String accountId) throws
-  // Exception {
-  // try {
-  // ExoContainer container = ExoContainerContext.getCurrentContainer();
-  // JobSchedulerService schedulerService =
-  // (JobSchedulerService)
-  // container.getComponentInstanceOfType(JobSchedulerService.class);
-  // List allJobs = schedulerService.getAllJobs() ;
-  // for(Object obj : allJobs) {
-  // if(((JobDetail)obj).getName().equals(username + ":" + accountId)) return
-  // true ;
-  // }
-  // } catch(Exception e) { }
-  //
-  // return false ;
-  // }
 
   public static String formatDate(String format, Date date, Locale locale) {
     Format formatter = new SimpleDateFormat(format, locale);
@@ -481,6 +460,20 @@ public class MailUtils {
   public static String getGroupCalendarName(String groupName, String calendarName) {
     return groupName + MINUS + calendarName;
   }
+  
+  public static boolean isDelegated(String accountId, DataCache dataCache) throws Exception {
+    String username = MailUtils.getCurrentUser();
+    return dataCache.getDelegatedAccount(username, accountId) != null;
+  }
+  
+  public static String getDelegateFrom(String accountId, DataCache dataCache) throws Exception {
+    String username = MailUtils.getCurrentUser();
+    Account account = dataCache.getDelegatedAccount(username, accountId);
+    if(account != null) {
+      username = account.getDelegateFrom();
+    }
+    return username;
+  }
 
   public static boolean isDelegatedAccount(Account acc, String recieve) {
     return (acc != null && acc.getDelegateFrom() != null && recieve != null && !recieve.equalsIgnoreCase(acc.getDelegateFrom()));
@@ -490,12 +483,11 @@ public class MailUtils {
     return (user != null && perms != null) && Utils.SEND_RECIEVE.equalsIgnoreCase(perms);
   }
 
-  public static boolean isFull(String accountId) {
+  public static boolean isFull(String accountId, DataCache dataCache) {
     try {
-      MailService mService = getMailService();
       String uid = getCurrentUser();
-      if (mService.getAccountById(uid, accountId) == null) {
-        Account dAccount = mService.getDelegatedAccount(uid, accountId);
+      if (dataCache.getAccountById(uid, accountId) == null) {
+        Account dAccount = dataCache.getDelegatedAccount(uid, accountId);
         return (isDelegatedAccount(dAccount, uid) && isFull(uid, dAccount.getPermissions().get(uid)));
       }
       return true;
@@ -503,15 +495,6 @@ public class MailUtils {
       if (log.isDebugEnabled()) {
         log.debug("Exception when check isFull by accountId", e);
       }
-      return false;
-    }
-  }
-
-  public static boolean isDelegated(String id) {
-    try {
-      String uid = getCurrentUser();
-      return getMailService().getDelegatedAccount(uid, id) != null;
-    } catch (Exception e) {
       return false;
     }
   }

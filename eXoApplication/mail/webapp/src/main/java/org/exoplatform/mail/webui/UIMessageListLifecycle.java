@@ -23,6 +23,7 @@ import java.util.Map.Entry;
 
 import javax.portlet.PortletRequest;
 
+import org.exoplatform.mail.DataCache;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
@@ -45,7 +46,6 @@ public class UIMessageListLifecycle extends UIFormLifecycle {
 
   @Override
   public void processDecode(UIForm uicomponent, WebuiRequestContext context) throws Exception {
-
     uicomponent.setSubmitAction(null);
 
     processNormalRequest(uicomponent, context);
@@ -74,7 +74,6 @@ public class UIMessageListLifecycle extends UIFormLifecycle {
   }
 
   private void processNormalRequest(UIForm uiForm, WebuiRequestContext context) throws Exception {
-
     uiForm.setSubmitAction(context.getRequestParameter(UIForm.ACTION));
     PortletRequest request = context.getRequest();
     Iterator<Entry<String, String[]>> paramsIter = request.getParameterMap().entrySet().iterator();
@@ -82,14 +81,15 @@ public class UIMessageListLifecycle extends UIFormLifecycle {
       Entry<String, String[]> entry = paramsIter.next();
       String paramName = entry.getKey();
       String[] paramValue = entry.getValue();
+      
       if (paramName.contains("@")) {
         String msgId = Utils.decodeMailId(paramName);
         UIFormCheckBoxInput<Boolean> uiCheckBox = uiForm.getChildById(paramName);
         if (uiCheckBox == null) {
           MailService mailSrv = MailUtils.getMailService();
           String username = MailUtils.getCurrentUser();
-          UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class);
-          String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+          DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
+          String accountId = dataCache.getSelectedAccountId();
           Message message = mailSrv.getMessageById(username, accountId, msgId);
           if (message != null) {
             UIMessageList uiMsgList = UIMessageList.class.cast(uiForm);
@@ -100,6 +100,7 @@ public class UIMessageListLifecycle extends UIFormLifecycle {
         }
       }
     }
+    
     List<UIFormInputBase> inputs = new ArrayList<UIFormInputBase>();
     uiForm.findComponentOfType(inputs, UIFormInputBase.class);
     for (UIFormInputBase input : inputs) {
@@ -113,5 +114,4 @@ public class UIMessageListLifecycle extends UIFormLifecycle {
       input.decode(inputValue, context);
     }
   }
-
 }

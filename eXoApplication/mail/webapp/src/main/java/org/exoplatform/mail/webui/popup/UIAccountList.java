@@ -23,6 +23,7 @@ import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.cs.common.webui.UIPopupAction;
 import org.exoplatform.cs.common.webui.UIPopupComponent;
+import org.exoplatform.mail.DataCache;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
@@ -36,6 +37,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -68,10 +70,11 @@ public class UIAccountList extends UIGrid  implements UIPopupComponent{
   }
 
   public void updateGrid() throws Exception {
+    DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
+    
     List<AccountData> accounts = new ArrayList<AccountData>() ;
     String userId = Util.getPortalRequestContext().getRemoteUser() ;
-    MailService mailSvr = getApplicationComponent(MailService.class) ;
-    for(Account acc : mailSvr.getAccounts(userId)) {
+    for(Account acc : dataCache.getAccounts(userId)) {
       accounts.add(new AccountData(acc.getId(), acc.getLabel(), acc.getEmailAddress(), 
           acc.getServerProperties().get(Utils.SVR_INCOMING_HOST), acc.getProtocol())) ;
     }
@@ -110,16 +113,18 @@ public class UIAccountList extends UIGrid  implements UIPopupComponent{
 
   static  public class DeleteActionListener extends EventListener<UIAccountList> {
     public void execute(Event<UIAccountList> event) throws Exception {
-      UIAccountList uiAccountList = event.getSource() ;
-      UIMailPortlet uiPortlet = uiAccountList.getAncestorOfType(UIMailPortlet.class) ;
-      UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
+      UIAccountList uiAccountList = event.getSource();
+      UIMailPortlet uiPortlet = uiAccountList.getAncestorOfType(UIMailPortlet.class);
+      DataCache dataCache = uiPortlet.getDataCache();
+      
+      UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       UIMessagePreview uiMessagePreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class);
-      String currAccountId = uiSelectAccount.getSelectedValue();
-      String accId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      UIApplication uiApp = uiAccountList.getAncestorOfType(UIApplication.class) ;
-      MailService mailSvr = uiAccountList.getApplicationComponent(MailService.class) ;
-      String username = event.getRequestContext().getRemoteUser() ;
+      String currAccountId = dataCache.getSelectedAccountId();
+      String accId = event.getRequestContext().getRequestParameter(OBJECTID);
+      UIApplication uiApp = uiAccountList.getAncestorOfType(UIApplication.class);
+      MailService mailSvr = uiAccountList.getApplicationComponent(MailService.class);
+      String username = event.getRequestContext().getRemoteUser();
 
       try {
         mailSvr.removeAccount(username, accId) ;
@@ -127,7 +132,7 @@ public class UIAccountList extends UIGrid  implements UIPopupComponent{
         uiAccountList.updateGrid() ;
         MailSetting mailSetting = mailSvr.getMailSetting(username) ;
         if (currAccountId.equals(accId)) {
-          List<Account> accounts = mailSvr.getAccounts(username);
+          List<Account> accounts = dataCache.getAccounts(username);
           if (accounts.size() == 0) {
             uiSelectAccount.setSelectedValue(null);
             mailSetting.setDefaultAccount(null) ;
@@ -158,6 +163,7 @@ public class UIAccountList extends UIGrid  implements UIPopupComponent{
       }
     }
   }
+  
   static  public class CloseActionListener extends EventListener<UIAccountList> {
     public void execute(Event<UIAccountList> event) throws Exception {
       UIPopupAction uiPopup = event.getSource().getAncestorOfType(UIPopupAction.class);

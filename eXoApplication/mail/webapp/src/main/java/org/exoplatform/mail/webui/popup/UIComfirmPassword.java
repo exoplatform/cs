@@ -18,6 +18,8 @@ package org.exoplatform.mail.webui.popup;
 
 import org.exoplatform.cs.common.webui.UIPopupAction;
 import org.exoplatform.cs.common.webui.UIPopupComponent;
+import org.exoplatform.mail.DataCache;
+import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.webui.UIMailPortlet;
@@ -62,18 +64,18 @@ public class UIComfirmPassword extends UIForm implements UIPopupComponent{
   
   static  public class CheckActionListener extends EventListener<UIComfirmPassword> {
     public void execute(Event<UIComfirmPassword> event) throws Exception {
-      UIComfirmPassword uiForm = event.getSource() ;
-      UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
+      UIComfirmPassword uiForm = event.getSource();
+      UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class);
+      DataCache dataCache = uiPortlet.getDataCache();
+      
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
       String newPw = uiForm.getUIStringInput(FIELD_PASSWORD).getValue() ;
       boolean isSavePw = uiForm.getUIFormCheckBoxInput(FIELD_SAVED_PASSWORD).isChecked() ;
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
-      String username = uiPortlet.getCurrentUser();
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      Account dAccount = mailSrv.getDelegatedAccount(username, accountId);
-      if(dAccount != null) username = dAccount.getDelegateFrom();
+      String accountId = dataCache.getSelectedAccountId();
+      String username = MailUtils.getDelegateFrom(accountId, dataCache);
       
-      Account acc = mailSrv.getAccountById(username, accountId) ;
+      Account acc = dataCache.getAccountById(username, accountId) ;
       acc.setIsSavePassword(isSavePw) ;
       acc.setIncomingPassword(newPw) ;
       mailSrv.updateErrorAccount(username, acc) ;
@@ -93,5 +95,4 @@ public class UIComfirmPassword extends UIForm implements UIPopupComponent{
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
     }
   }
-
 }

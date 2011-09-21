@@ -19,11 +19,13 @@ package org.exoplatform.mail.webui.popup;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.mail.DataCache;
 import org.exoplatform.mail.service.Account;
-import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.WizardStep;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormSelectBox;
@@ -60,16 +62,17 @@ public class UIAccountWizardStepIntro extends UIFormInputSet implements WizardSt
     return infoMessage_ ;
   } 
 
-  public List<SelectItemOption<String>> getAccounts() throws Exception  {
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    if(!isCreateNew()) {
-      MailService mailSvr = getApplicationComponent(MailService.class) ;
-      String username = Util.getPortalRequestContext().getRemoteUser() ;
-      for(Account acc : mailSvr.getAccounts(username)) {
-        options.add(new SelectItemOption<String>(acc.getUserDisplayName(), acc.getId())) ;
-      }  
+  public List<SelectItemOption<String>> getAccounts() throws Exception {
+    DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
+    
+    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
+    if (!isCreateNew()) {
+      String username = Util.getPortalRequestContext().getRemoteUser();
+      for (Account acc : dataCache.getAccounts(username)) {
+        options.add(new SelectItemOption<String>(acc.getUserDisplayName(), acc.getId()));
+      }
     }
-    return options ;
+    return options;
   }
 
   protected void lockFields(boolean isLock) {

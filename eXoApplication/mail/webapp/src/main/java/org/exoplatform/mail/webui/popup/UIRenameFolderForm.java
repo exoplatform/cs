@@ -18,6 +18,7 @@ package org.exoplatform.mail.webui.popup;
 
 import org.exoplatform.cs.common.webui.UIPopupAction;
 import org.exoplatform.cs.common.webui.UIPopupComponent;
+import org.exoplatform.mail.DataCache;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
@@ -31,6 +32,7 @@ import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -61,73 +63,82 @@ import org.exoplatform.webui.form.UIFormStringInput;
 public class UIRenameFolderForm extends UIForm implements UIPopupComponent {
   private static final Log log = ExoLogger.getExoLogger(UIRenameFolderForm.class);
   
-  final public static String CUR_FOLDER_NAME = "curFolderName" ;
-  final public static String NEW_FOLDER_NAME = "newFolderName" ;
+  final public static String CUR_FOLDER_NAME = "curFolderName";
+  
+  final public static String NEW_FOLDER_NAME = "newFolderName";
+  
   private String folderId;
+  
   public UIRenameFolderForm() {    
-    addUIFormInput(new UIFormInputInfo(CUR_FOLDER_NAME, CUR_FOLDER_NAME, null)) ;
-    addUIFormInput(new UIFormStringInput(NEW_FOLDER_NAME, NEW_FOLDER_NAME, null)) ;
+    addUIFormInput(new UIFormInputInfo(CUR_FOLDER_NAME, CUR_FOLDER_NAME, null));
+    addUIFormInput(new UIFormStringInput(NEW_FOLDER_NAME, NEW_FOLDER_NAME, null));
   }
 
-  public String getFolderId() throws Exception { return folderId; }
+  public String getFolderId() throws Exception { 
+    return folderId; 
+  }
+  
   public void setFolderId(String folderId) throws Exception {
-    this.folderId = folderId;
-    MailService mailSrv = getApplicationComponent(MailService.class);
-    String username = MailUtils.getCurrentUser();
-    String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-    Account account = mailSrv.getDelegatedAccount(username, accountId);
-    if(MailUtils.isDelegatedAccount(account, username)) username = account.getDelegateFrom();
+    DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
     
-    Folder folder = mailSrv.getFolder(username, accountId, folderId);
+    this.folderId = folderId;
+    String accountId = dataCache.getSelectedAccountId();
+    String username = MailUtils.getDelegateFrom(accountId, dataCache);
+    
+    Folder folder = dataCache.getFolder(username, accountId, folderId);
     getUIFormInputInfo(CUR_FOLDER_NAME).setValue(folder.getName());    
   }
 
   static  public class SaveActionListener extends EventListener<UIRenameFolderForm> {
     public void execute(Event<UIRenameFolderForm> event) throws Exception {
-      UIRenameFolderForm uiForm = event.getSource() ;
-      MailService mailService = uiForm.getApplicationComponent(MailService.class) ;
+      UIRenameFolderForm uiForm = event.getSource();
+      MailService mailService = uiForm.getApplicationComponent(MailService.class);
       UIMailPortlet uiMailPortlet = uiForm.getAncestorOfType(UIMailPortlet.class);
-      String username = uiMailPortlet.getCurrentUser() ;
-      String accountId =  uiMailPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
-      String folderId = uiForm.getFolderId();
-      String newFolderName = uiForm.getUIStringInput(NEW_FOLDER_NAME).getValue() ;
-//    CS-3009
-      newFolderName = MailUtils.reduceSpace(newFolderName) ;
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-      UIFolderContainer uiFolderContainer = uiMailPortlet.findFirstComponentOfType(UIFolderContainer.class) ;
+      DataCache dataCache = uiMailPortlet.getDataCache();
 
-      if(Utils.isEmptyField(newFolderName)) {
-        uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.name-required", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
+      String username = uiMailPortlet.getCurrentUser();
+      String accountId = dataCache.getSelectedAccountId();
+      String folderId = uiForm.getFolderId();
+      String newFolderName = uiForm.getUIStringInput(NEW_FOLDER_NAME).getValue();
       
+      // CS-3009
+      newFolderName = MailUtils.reduceSpace(newFolderName);
+      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class);
+      UIFolderContainer uiFolderContainer = uiMailPortlet.findFirstComponentOfType(UIFolderContainer.class);
+
+      if (Utils.isEmptyField(newFolderName)) {
+        uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.name-required", null));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
+      }
+
       try {
-        if(MailUtils.isDelegated(accountId)) username = mailService.getDelegatedAccount(username, accountId).getDelegateFrom();
-        String folderParentId =  mailService.getFolderParentId(username, accountId, folderId) ;
+        username = MailUtils.getDelegateFrom(accountId, uiMailPortlet.getDataCache());
+        String folderParentId = mailService.getFolderParentId(username, accountId, folderId);
         if (!mailService.isExistFolder(username, accountId, folderParentId, newFolderName)) {
-          mailService.renameFolder(username, accountId, newFolderName, folderId) ;
+          mailService.renameFolder(username, accountId, newFolderName, folderId);
         } else {
-          uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.folder-exist", new Object[]{newFolderName})) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;
+          uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.folder-exist", new Object[] { newFolderName }));
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          return;
         }
-      } catch (Exception e){
-        uiApp.addMessage(new ApplicationMessage("UIRenameFolderForm.msg.error-rename-folder", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      } catch (Exception e) {
+        uiApp.addMessage(new ApplicationMessage("UIRenameFolderForm.msg.error-rename-folder", null));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         if (log.isDebugEnabled()) {
           log.debug("Exception in method execute of class SaveActionListener", e);
         }
-        return ;
+        return;
       }
+      
       uiMailPortlet.cancelAction();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMailPortlet.getChild(UIPopupAction.class)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer) ;
-      UIMessageList uiMsgList = uiMailPortlet.findFirstComponentOfType(UIMessageList.class) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMailPortlet.getChild(UIPopupAction.class));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
+      UIMessageList uiMsgList = uiMailPortlet.findFirstComponentOfType(UIMessageList.class);
       if (uiMsgList.getMessageFilter().getName().equals("Search")) {
-        uiMsgList.updateList() ;
+        uiMsgList.updateList();
       }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMailPortlet.findFirstComponentOfType(UIMessageArea.class)) ;      
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMailPortlet.findFirstComponentOfType(UIMessageArea.class));
     }
   }
   static  public class CancelActionListener extends EventListener<UIRenameFolderForm> {

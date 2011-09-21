@@ -50,6 +50,7 @@ import org.exoplatform.cs.common.webui.UIPopupComponent;
 import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
+import org.exoplatform.mail.DataCache;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
@@ -80,15 +81,15 @@ import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputInfo;
+import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
-import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 import org.exoplatform.webui.form.wysiwyg.FCKEditorConfig;
 import org.exoplatform.webui.form.wysiwyg.UIFormWYSIWYGInput;
 
@@ -212,11 +213,12 @@ import com.sun.mail.smtp.SMTPSendFailedException;
 
   @SuppressWarnings("deprecation")
   public void init(String accountId, Message msg, int composeType) throws Exception {
+    DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
+    
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
     String username = MailUtils.getCurrentUser();
     accountId_ = accountId;
-    MailService mailSrv = getApplicationComponent(MailService.class);
-    // img
+    
     if (msg != null) {
       if (msg.getAttachments() != null) {
         try {
@@ -237,9 +239,11 @@ import com.sun.mail.smtp.SMTPSendFailedException;
           logger.warn("Error when get attachment link of mail message", e);
         }
       }
-    } else if(composeType != UIComposeForm.MESSAGE_NEW)
+    } else if(composeType != UIComposeForm.MESSAGE_NEW) {
       logger.info("The message is null or attachment(s) message hasn't damaged");
-    for (Account acc : mailSrv.getAccounts(username)) {
+    }
+    
+    for (Account acc : dataCache.getAccounts(username)) {
       SelectItemOption<String> itemOption = new SelectItemOption<String>(acc.getUserDisplayName()
           + " &lt;" + acc.getEmailAddress() + "&gt;", acc.getId());
       if (acc.getId().equals(accountId)) {
@@ -247,7 +251,8 @@ import com.sun.mail.smtp.SMTPSendFailedException;
       }
       options.add(itemOption);
     }
-    for(Account acc : mailSrv.getDelegatedAccounts(username)) {
+    
+    for(Account acc : dataCache.getDelegatedAccounts(username)) {
       if(MailUtils.isFull(username, acc.getPermissions().get(username))) {
         SelectItemOption<String> itemOption = new SelectItemOption<String>(acc.getUserDisplayName() + "("+getLabel("delegated")+")"
             + " &lt;" + acc.getEmailAddress() + "&gt;", acc.getId());
@@ -257,6 +262,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
         options.add(itemOption);
       }
     }
+    
     UIComposeInput toSet = new UIComposeInput(FIELD_TO_SET);
     toSet.addUIFormInput(new UIFormSelectBox(FIELD_FROM, FIELD_FROM, options));
     toSet.addUIFormInput(new UIFormStringInput(FIELD_TO, null, null));
@@ -277,6 +283,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
 
     addUIFormInput(toSet);
 
+    MailService mailSrv = getApplicationComponent(MailService.class);
     MailSetting mailSetting = mailSrv.getMailSetting(username);
     isVisualEditor = mailSetting.useWysiwyg();
     if (isVisualEditor) {
@@ -290,6 +297,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
     } else {
       addUIFormInput(new UIFormTextAreaInput(FIELD_MESSAGECONTENT, FIELD_MESSAGECONTENT, null));
     }
+    
     setPriority(Utils.PRIORITY_NORMAL);
     setMessage(msg, composeType);
   }
@@ -432,13 +440,9 @@ import com.sun.mail.smtp.SMTPSendFailedException;
     if (attachments_.size() > 0) {
       for (ActionData actionData : getUploadFileList()) {
         if (actionData.getActionParameter().equals(originalAttId))
-          inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(),
-              null,
-              null).setChecked(true));
+          inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(), null, null).setChecked(true));
         else
-          inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(),
-              null,
-              null));
+          inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(), null, null));
       }
       refreshUploadFileList();
     }
@@ -474,9 +478,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
         }
         if (attachments_.size() > 0) {
           for (ActionData actionData : getUploadFileList()) {
-            inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(),
-                null,
-                null).setChecked(true));
+            inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(), null, null).setChecked(true));
           }
           refreshUploadFileList();
         }
@@ -505,11 +507,9 @@ import com.sun.mail.smtp.SMTPSendFailedException;
       String msgTo = (msg.getMessageTo() != null) ? msg.getMessageTo() : "";
       InternetAddress[] msgToAdds = Utils.getInternetAddress(msgTo);
 
-      String uid = MailUtils.getCurrentUser();
-      if(MailUtils.isDelegated(accountId_)) {
-        uid = mailSrv.getDelegatedAccount(MailUtils.getCurrentUser(), accountId_).getDelegateFrom();
-      }
-      Account account = mailSrv.getAccountById(uid, accountId_);
+      DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
+      String username = MailUtils.getDelegateFrom(accountId_, dataCache);
+      Account account = dataCache.getAccountById(username, accountId_);
       for (int i = 0; i < msgToAdds.length; i++) {
         if (msgToAdds[i] != null
             && !msgToAdds[i].getAddress().equalsIgnoreCase(account.getEmailAddress())
@@ -594,9 +594,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
       }
       refreshUploadFileList();
       for (ActionData actionData : getUploadFileList()) {
-        inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(),
-            null,
-            null).setChecked(true));
+        inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(), null, null).setChecked(true));
       }
       setFieldContentValue(forwardTxt.toString());
       break;
@@ -730,12 +728,10 @@ import com.sun.mail.smtp.SMTPSendFailedException;
   }
 
   public void setFieldContentValue(String value) throws Exception {
-    String username = MailUtils.getCurrentUser();
-    MailService mailSrv = getApplicationComponent(MailService.class);
-
-    Account account = mailSrv.getDelegatedAccount(username, accountId_);
-    if(MailUtils.isDelegatedAccount(account, username)) username = account.getDelegateFrom();
-    account =  mailSrv.getAccountById(username, accountId_);
+    DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
+    
+    String username = MailUtils.getDelegateFrom(accountId_, dataCache);
+    Account account =  dataCache.getAccountById(username, accountId_);
     if (isVisualEditor) {
       if (!MailUtils.isFieldEmpty(account.getSignature()) && !fromDrafts()) {
         value += "<br><br> -- <br >" + account.getSignature().replace("\n", "<br>") + "";
@@ -767,31 +763,35 @@ import com.sun.mail.smtp.SMTPSendFailedException;
   }
 
   private Message getNewMessage() throws Exception {
+    DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
+    
     Message message = getMessage();
     if (!fromDrafts()) {
-      if (message != null)
+      if (message != null) {
         parentPath_ = message.getPath();
+      }
       message = new Message();
     }
-    String usename = MailUtils.getCurrentUser();
-    MailService mailSvr = this.getApplicationComponent(MailService.class);
-    Account account = mailSvr.getDelegatedAccount(usename, accountId_);
-    if(MailUtils.isDelegatedAccount(account, usename)) usename = account.getDelegateFrom();
-    account = mailSvr.getAccountById(usename, this.getFieldFromValue());
+    
+    String usename = MailUtils.getDelegateFrom(accountId_, dataCache);
+    Account account = dataCache.getAccountById(usename, this.getFieldFromValue());
     String from = account.getUserDisplayName() + "<" + account.getEmailAddress() + ">";
     String subject = getFieldSubjectValue();
 
     String to = getFieldToValue();
-    if (to != null && to.indexOf(";") > -1)
+    if (to != null && to.indexOf(";") > -1) {
       to = to.replace(';', ',');
+    }
     to = addAllMailFromGroup(to, FIELD_TO_GROUP);
     String cc = getFieldCcValue();
-    if (cc != null && cc.indexOf(";") > -1)
+    if (cc != null && cc.indexOf(";") > -1) {
       cc = cc.replace(';', ',');
+    }
     cc = addAllMailFromGroup(cc, FIELD_CC_GROUP);
     String bcc = getFieldBccValue();
-    if (bcc != null && bcc.indexOf(";") > -1)
+    if (bcc != null && bcc.indexOf(";") > -1) {
       bcc = bcc.replace(';', ',');
+    }
     bcc = addAllMailFromGroup(bcc, FIELD_BCC_GROUP);
 
     String body = getFieldContentValue();
@@ -964,23 +964,25 @@ import com.sun.mail.smtp.SMTPSendFailedException;
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiComposeForm = event.getSource();
       UIMailPortlet uiPortlet = uiComposeForm.getAncestorOfType(UIMailPortlet.class);
+      DataCache dataCache = uiPortlet.getDataCache();
+      
       MailService mailSvr = uiComposeForm.getApplicationComponent(MailService.class);
       String accountId = uiComposeForm.getFieldFromValue();
       String usename = uiPortlet.getCurrentUser();
       Message message = uiComposeForm.getNewMessage();
-      Account acctemp = mailSvr.getDelegatedAccount(usename, accountId);
+      
+      Account acctemp = dataCache.getDelegatedAccount(usename, accountId);
       UIApplication uiApp = uiComposeForm.getAncestorOfType(UIApplication.class);
       if(MailUtils.isDelegatedAccount(acctemp, usename))
-        if ( !MailUtils.isFull(usename, acctemp.getPermissions().get(usename))) {
-          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.please-check-permission",
-                                                  null));
+        if (!MailUtils.isFull(usename, acctemp.getPermissions().get(usename))) {
+          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.please-check-permission", null));
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
           return;
         } else {
           usename = acctemp.getDelegateFrom();
         }
 
-      acctemp = mailSvr.getAccountById(usename, accountId);
+      acctemp = dataCache.getAccountById(usename, accountId);
       String emailAddr = acctemp.getIncomingUser();
       if (!uiComposeForm.validateMessage(event, message))
         return;
@@ -1004,14 +1006,14 @@ import com.sun.mail.smtp.SMTPSendFailedException;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       } catch (AuthenticationFailedException e) {
-        Account dAcc = mailSvr.getDelegatedAccount(usename, accountId);
+        Account dAcc = dataCache.getDelegatedAccount(usename, accountId);
         if(MailUtils.isDelegatedAccount(dAcc, usename)){
           uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.please-check-permission",
                                                   null));
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
           return;
         }
-        Account acc = mailSvr.getAccountById(usename, accountId);
+        Account acc = dataCache.getAccountById(usename, accountId);
         if (acc.isOutgoingAuthentication() && acc.useIncomingSettingForOutgoingAuthent()) {
           UIPopupActionContainer uiActionContainer = uiComposeForm.getAncestorOfType(UIPopupActionContainer.class);
           UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class);
@@ -1047,11 +1049,9 @@ import com.sun.mail.smtp.SMTPSendFailedException;
         return;
       }
 
-      // save to Sent folder and update the number of total messages in
-      // Sent
-      // folder
+      // save to Sent folder and update the number of total messages in Sent folder
       try {
-        Account account = mailSvr.getAccountById(usename, accountId);
+        Account account = dataCache.getAccountById(usename, accountId);
         if(!uiComposeForm.saveToSentFolder(usename, account, message)){
           uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.cannot-send", null, ApplicationMessage.INFO)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -1082,11 +1082,11 @@ import com.sun.mail.smtp.SMTPSendFailedException;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         uiComposeForm.getAncestorOfType(UIPopupAction.class).deActivate();
       }
-
     }
   }
 
   public boolean saveToSentFolder(String usename, Account account, Message message) throws Exception {
+    UIMailPortlet mailPortlet = getAncestorOfType(UIMailPortlet.class);
     MailService mailSvr = getApplicationComponent(MailService.class);
     MailSetting setting = mailSvr.getMailSetting(usename);
     boolean isSaved = setting.saveMessageInSent();
@@ -1099,9 +1099,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
       message.setFolders(new String[] { Utils.generateFID(account.getId(), Utils.FD_SENT, false) });
       saveMsgSuccess = mailSvr.saveMessage(usename, account, parentPath_, message, true);
     } else if (fromDrafts) {
-      Folder drafts = mailSvr.getFolder(usename,
-                                        account.getId(),
-                                        Utils.generateFID(account.getId(), Utils.FD_DRAFTS, false));
+      Folder drafts = mailPortlet.getDataCache().getFolder(usename, account.getId(), Utils.generateFID(account.getId(), Utils.FD_DRAFTS, false));
       if (isSaved) {
         message.setFolders(new String[] { Utils.generateFID(account.getId(), Utils.FD_SENT, false) });
         saveMsgSuccess = mailSvr.saveMessage(usename, account, parentPath_, message, false);
@@ -1118,13 +1116,13 @@ import com.sun.mail.smtp.SMTPSendFailedException;
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm composeForm = event.getSource();
       UIMailPortlet uiPortlet = composeForm.getAncestorOfType(UIMailPortlet.class);
+      DataCache dataCache = uiPortlet.getDataCache();
+      
       UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
       MailService mailSvr = composeForm.getApplicationComponent(MailService.class);
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class)
-      .getSelectedValue();
-      String usename = uiPortlet.getCurrentUser();
-      if(MailUtils.isDelegated(accountId)) usename = mailSvr.getDelegatedAccount(usename, accountId).getDelegateFrom();
-      
+      String accountId = dataCache.getSelectedAccountId();
+      String username = MailUtils.getDelegateFrom(accountId, dataCache);
+
       UIPopupAction uiChildPopup = composeForm.getAncestorOfType(UIPopupAction.class);
       Message message = composeForm.getNewMessage();
       // verify message
@@ -1138,25 +1136,19 @@ import com.sun.mail.smtp.SMTPSendFailedException;
         message.setIsLoaded(true);
         boolean saveMsgSuccess = false;
         if (!composeForm.fromDrafts()) {
-          saveMsgSuccess = mailSvr.saveMessage(usename,
-                                               mailSvr.getAccountById(usename, accountId),
-                                               composeForm.parentPath_,
-                                               message,
-                                               true);
-          Folder drafts = mailSvr.getFolder(usename, accountId, draftFolderId);
+          saveMsgSuccess = mailSvr.saveMessage(username, dataCache.getAccountById(username, accountId), composeForm.parentPath_,
+              message, true);
+          Folder drafts = dataCache.getFolder(username, accountId, draftFolderId);
           drafts.setTotalMessage(drafts.getTotalMessage() + 1);
-          mailSvr.saveFolder(usename, accountId, drafts);
+          mailSvr.saveFolder(username, accountId, drafts);
         } else {
-          saveMsgSuccess = mailSvr.saveMessage(usename,
-                                               mailSvr.getAccountById(usename, accountId),
-                                               composeForm.parentPath_,
-                                               message,
-                                               false);
+          saveMsgSuccess = mailSvr.saveMessage(username, dataCache.getAccountById(username, accountId), composeForm.parentPath_,
+              message, false);
         }
-        if(!saveMsgSuccess){
-          composeForm.getAncestorOfType(UIApplication.class).addMessage(new ApplicationMessage("UIMoveMessageForm.msg.create-massage-not-successful",
-                                                                                               null, ApplicationMessage.INFO)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(composeForm.getAncestorOfType(UIApplication.class)) ;
+        if (!saveMsgSuccess) {
+          composeForm.getAncestorOfType(UIApplication.class).addMessage(
+              new ApplicationMessage("UIMoveMessageForm.msg.create-massage-not-successful", null, ApplicationMessage.INFO));
+          event.getRequestContext().addUIComponentToUpdateByAjax(composeForm.getAncestorOfType(UIApplication.class));
         }
       }
       // CS-4462
@@ -1165,8 +1157,8 @@ import com.sun.mail.smtp.SMTPSendFailedException;
           logger.debug("AuthenticationFailedException in method execute of class SaveDraftActionListener", e);
         }
         UIApplication uiApp = composeForm.getAncestorOfType(UIApplication.class);
-        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.the-username-or-password-may-be-wrong-save-draft-error",
-                                                null));
+        uiApp
+            .addMessage(new ApplicationMessage("UIComposeForm.msg.the-username-or-password-may-be-wrong-save-draft-error", null));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       } catch (Exception e) {
@@ -1179,12 +1171,10 @@ import com.sun.mail.smtp.SMTPSendFailedException;
       }
       // update ui
       String selectedFolder = uiFolderContainer.getSelectedFolder();
-      if (selectedFolder != null
-          && selectedFolder.equals(Utils.generateFID(accountId, Utils.FD_DRAFTS, false))) {
+      if (selectedFolder != null && selectedFolder.equals(Utils.generateFID(accountId, Utils.FD_DRAFTS, false))) {
         UIMessageList uiMsgList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
         UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class);
-        uiMsgList.setMessagePageList(mailSvr.getMessagePageList(usename,
-                                                                uiMsgList.getMessageFilter()));
+        uiMsgList.setMessagePageList(mailSvr.getMessagePageList(username, uiMsgList.getMessageFilter()));
         List<Message> showedMsg = uiMsgPreview.getShowedMessages();
         try {
           if (showedMsg != null && showedMsg.size() > 0) {
@@ -1192,11 +1182,8 @@ import com.sun.mail.smtp.SMTPSendFailedException;
               if (message.getId().equals(msg.getId())) {
                 int index = showedMsg.indexOf(msg);
                 showedMsg.remove(index);
-                message = mailSvr.loadTotalMessage(usename,
-                                                   accountId,
-                                                   mailSvr.getMessageById(usename,
-                                                                          accountId,
-                                                                          message.getId()));
+                message = mailSvr.loadTotalMessage(username, accountId,
+                    mailSvr.getMessageById(username, accountId, message.getId()));
                 showedMsg.add(index, message);
               }
             }
@@ -1207,8 +1194,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
       for (Attachment a : composeForm.getAttachFileList()) {
-        UIAttachFileForm.removeUploadTemp(composeForm.getApplicationComponent(UploadService.class),
-                                          a.getResoureId());
+        UIAttachFileForm.removeUploadTemp(composeForm.getApplicationComponent(UploadService.class), a.getResoureId());
       }
 
       uiChildPopup.deActivate();

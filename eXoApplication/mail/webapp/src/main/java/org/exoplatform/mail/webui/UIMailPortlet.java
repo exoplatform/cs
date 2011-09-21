@@ -16,7 +16,6 @@
  */
 package org.exoplatform.mail.webui;
 
-
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.cs.common.webui.UIPopupAction;
+import org.exoplatform.mail.DataCache;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
@@ -58,10 +58,16 @@ import org.mortbay.cometd.continuation.EXoContinuationBayeux;
    template = "app:/templates/mail/webui/UIMailPortlet.gtmpl"
 )
 public class UIMailPortlet extends UIPortletApplication {
-  private static final Log log = ExoLogger.getExoLogger(UIMailPortlet.class);
+  public static final Log log = ExoLogger.getExoLogger(UIMailPortlet.class);
   
   private String formId = "";
   
+  private DataCache dataCache = new DataCache();
+  
+  public DataCache getDataCache() {
+    return dataCache;
+  }
+
   public String getFormId() {
     return formId;
   }
@@ -71,34 +77,39 @@ public class UIMailPortlet extends UIPortletApplication {
   }
 
   public UIMailPortlet() throws Exception {
-    addChild(UIActionBar.class, null, null) ;
-    addChild(UINavigationContainer.class, null, null) ;
-    String accId = getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue();
-    MailService mailSvr = Utils.getMailService();
-    String username = MailUtils.getCurrentUser();
+    dataCache.setMailPortlet(this);
+    addChild(UIActionBar.class, null, null);
+    addChild(UINavigationContainer.class, null, null);
+    String accId = dataCache.getSelectedAccountId();
     UIMessageArea uiMessageArea = createUIComponent(UIMessageArea.class, null, null);
     uiMessageArea.init(accId);
     uiMessageArea.setMailSetting(getMailSetting());
     addChild(uiMessageArea);
-    addChild(UIPopupAction.class, null, null) ;
+    addChild(UIPopupAction.class, null, null);
   }
   
   @Override
   public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception {
+    context.setAttribute(DataCache.class, dataCache);
+    dataCache.clearCache();
+    
     PortalRequestContext portalContext = Util.getPortalRequestContext();
     String isAjax = portalContext.getRequestParameter("ajaxRequest");
     if(isAjax != null && Boolean.parseBoolean(isAjax)) {
       super.processRender(app, context);
       return;
     }
+    
     String url = ((HttpServletRequest)portalContext.getRequest()).getRequestURL().toString();
     try {
-      MailService mailService = MailUtils.getMailService();
       String username = MailUtils.getCurrentUser();
       String[] content = url.split("/");
       int length = content.length;
       String account = content[length-4];
-      if (mailService.getAccountById(username, account) == null) throw new PathNotFoundException();
+      if (dataCache.getAccountById(username, account) == null) {
+        throw new PathNotFoundException();
+      }
+      
       String folder = content[length-3];
       String tag = content[length-2];
       String msgId = URLDecoder.decode(content[length-1], "UTF-8");
@@ -106,6 +117,7 @@ public class UIMailPortlet extends UIPortletApplication {
       uiSelectAccount.setSelectedValue(account);
       UIMessageArea uiMessageArea = getChild(UIMessageArea.class);
       uiMessageArea.init(account);
+      
       MessageFilter filter = new MessageFilter("Folder");
       if (!Utils.isEmptyField(folder) && !folder.equals("_")) {
         UIFolderContainer uiFolderContainer = findFirstComponentOfType(UIFolderContainer.class);
@@ -118,7 +130,8 @@ public class UIMailPortlet extends UIPortletApplication {
       }
       UIMessageList uiMessageList = findFirstComponentOfType(UIMessageList.class);
       boolean isFound = false;
-            
+      
+      MailService mailService = MailUtils.getMailService();
       filter.setAccountId(account) ;
       MessagePageList currentPageList = mailService.getMessagePageList(username, filter) ;
       uiMessageList.setMessagePageList(currentPageList);
@@ -157,8 +170,29 @@ public class UIMailPortlet extends UIPortletApplication {
     }   
   }
   
+  @Override
+  public void processDecode(WebuiRequestContext context) throws Exception {
+    context.setAttribute(DataCache.class, dataCache);
+    dataCache.clearCache();
+    super.processDecode(context);
+  }
+
+  @Override
+  public void processRender(WebuiRequestContext context) throws Exception {
+    context.setAttribute(DataCache.class, dataCache);
+    dataCache.clearCache();
+    super.processRender(context);
+  }
+
+  @Override
+  public void processAction(WebuiRequestContext context) throws Exception {
+    context.setAttribute(DataCache.class, dataCache);
+    dataCache.clearCache();
+    super.processAction(context);
+  }
+
   public String getAccountId() {
-    return getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue();
+    return dataCache.getSelectedAccountId();
   }
   
   public String getCurrentUser() {
@@ -212,5 +246,4 @@ public class UIMailPortlet extends UIPortletApplication {
     }
     return cometdContextName;
   }
-  
 } 

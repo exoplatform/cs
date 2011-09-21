@@ -804,10 +804,6 @@ public interface MailService {
    */
   public void removeDelegateAccount(String userId, String receiver, String accountId) throws Exception;
 
-  public String getCurrentUserName();
-
-  public void setCurrentUserName(String username);
-
   public String getDelegatorUserName(String currentUserName, String accountId) throws Exception;
 
   public void addPlugin(ComponentPlugin plugin);

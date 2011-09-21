@@ -20,6 +20,7 @@ import javax.jcr.PathNotFoundException;
 
 import org.exoplatform.cs.common.webui.UIPopupAction;
 import org.exoplatform.cs.common.webui.UIPopupComponent;
+import org.exoplatform.mail.DataCache;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
@@ -72,61 +73,61 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
 
   static  public class SaveActionListener extends EventListener<UIFolderForm> {
     public void execute(Event<UIFolderForm> event) throws Exception {
-      UIFolderForm uiForm = event.getSource() ;
-      MailService mailSvr = uiForm.getApplicationComponent(MailService.class) ;
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-      String folderName = uiForm.getUIStringInput(FIELD_NAME).getValue() ;
-//    CS-3009
-      folderName = MailUtils.reduceSpace(folderName) ;
-      UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
-      String username = uiPortlet.getCurrentUser() ;
-      String accountId =  uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
-      UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class) ;
+      UIFolderForm uiForm = event.getSource();
+      UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class);
+      DataCache dataCache = uiPortlet.getDataCache();
+      
+      MailService mailSvr = uiForm.getApplicationComponent(MailService.class);
+      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class);
+      String folderName = uiForm.getUIStringInput(FIELD_NAME).getValue();
+      folderName = MailUtils.reduceSpace(folderName);
+      String username = uiPortlet.getCurrentUser();
+      String accountId = dataCache.getSelectedAccountId();
+      UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
       folderName = folderName.trim();
+
       boolean issaved = false;
-      /*if(!MailUtils.isNameValid(folderName, MailUtils.SIMPLECHARACTER)) {
-        uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.name-invalid", MailUtils.SIMPLECHARACTER, ApplicationMessage.WARNING) ) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return;
-      }*/
-      String folderId = Utils.KEY_FOLDERS + IdGenerator.generate() ;
-      Folder folder = null ;
+      String folderId = Utils.KEY_FOLDERS + IdGenerator.generate();
+      Folder folder = null;
       try {
-        if(MailUtils.isDelegated(accountId)) username = mailSvr.getDelegatedAccount(username, accountId).getDelegateFrom();
+        username = MailUtils.getDelegateFrom(accountId, dataCache);
         if (mailSvr.isExistFolder(username, accountId, uiForm.getParentPath(), folderName)) {
-          uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.folder-exist", new Object[]{folderName})) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;
+          uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.folder-exist", new Object[] { folderName }));
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          return;
         }
-      } catch(Exception e) { }
-      folder = new Folder() ;
-      folder.setId(folderId);
-      folder.setName(folderName) ;
-      if (uiForm.getParentPath() != null && !"".equals(uiForm.getParentPath().trim())) {
-        issaved = mailSvr.saveFolderImapOnline(username, accountId, uiForm.getParentPath(), folder) ;
-      } else {
-        try {
-          issaved = mailSvr.saveFolderImapOnline(username, accountId, folder) ;
-        } catch (PathNotFoundException e) {
-          uiPortlet.findFirstComponentOfType(UIMessageList.class).setMessagePageList(null) ;
-          uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet); 
-          
-          uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;
-        }
-      }
-      if(!issaved){
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.cannot-save-folder", null, ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;  
+      } catch (Exception e) {
       }
       
-      uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class)) ;
+      folder = new Folder();
+      folder.setId(folderId);
+      folder.setName(folderName);
+      if (uiForm.getParentPath() != null && !"".equals(uiForm.getParentPath().trim())) {
+        issaved = mailSvr.saveFolderImapOnline(username, accountId, uiForm.getParentPath(), folder);
+      } else {
+        try {
+          issaved = mailSvr.saveFolderImapOnline(username, accountId, folder);
+        } catch (PathNotFoundException e) {
+          uiPortlet.findFirstComponentOfType(UIMessageList.class).setMessagePageList(null);
+          uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
+
+          uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING));
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          return;
+        }
+      }
+      
+      if (!issaved) {
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.cannot-save-folder", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
+      }
+
+      uiForm.getAncestorOfType(UIPopupAction.class).deActivate();
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class));
     }
   }
 

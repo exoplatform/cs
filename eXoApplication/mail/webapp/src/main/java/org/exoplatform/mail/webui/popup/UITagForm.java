@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.cs.common.webui.UIPopupComponent;
+import org.exoplatform.mail.DataCache;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
@@ -32,13 +33,14 @@ import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.UITagContainer;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputInfo;
@@ -105,28 +107,29 @@ public class UITagForm extends UIForm implements UIPopupComponent {
 
   public void setMessageList(List<Message> messageList) throws Exception {
     messageMap.clear();
-    UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
-    String username = uiPortlet.getCurrentUser();
-    String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+    DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
+    String username = MailUtils.getCurrentUser();
+    String accountId = dataCache.getSelectedAccountId();
     MailService mailSrv = getApplicationComponent(MailService.class);
+    
     for (Message msg : messageList) {
       String subject = (msg.getSubject() != null) ? msg.getSubject() : "";
-      String mesSub = getLabel("subject") + " : "
-          + ((subject.length() >= 30) ? (subject.substring(0, 30) + "...") : subject);
+      String mesSub = getLabel("subject") + " : " + ((subject.length() >= 30) ? (subject.substring(0, 30) + "...") : subject);
       UIFormInputInfo uiTags = new UIFormInputInfo(TAG_MESSAGE, TAG_MESSAGE, null);
       String tags = "";
       if (msg.getTags() != null && msg.getTags().length > 0) {
         checkedTagList = new ArrayList<String>();
-
         for (int i = 0; i < msg.getTags().length; i++) {
-          if (i > 0)
+          if (i > 0) {
             tags += ", ";
+          }
           Tag tag = mailSrv.getTag(username, accountId, msg.getTags()[i]);
           tags += "[" + tag.getName() + "]";
           checkedTagList.add(tag.getName());
         }
-      } else
+      } else {
         tags = getLabel("no-tag");
+      }
 
       uiTags.setName(mesSub);
       uiTags.setValue(tags);

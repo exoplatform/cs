@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.cs.common.webui.UIPopupAction;
+import org.exoplatform.mail.DataCache;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
@@ -29,6 +30,7 @@ import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIEditTagForm;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -158,22 +160,21 @@ public class UITagContainer extends UIForm {
 
   static public class ChangeTagActionListener extends EventListener<UITagContainer> {
     public void execute(Event<UITagContainer> event) throws Exception {
-      String tagId = event.getRequestContext().getRequestParameter(OBJECTID);
       UITagContainer uiTags = event.getSource();
       UIMailPortlet uiPortlet = uiTags.getAncestorOfType(UIMailPortlet.class);
+      DataCache dataCache = uiPortlet.getDataCache();
+      
+      String tagId = event.getRequestContext().getRequestParameter(OBJECTID);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       UIMessagePreview uiMessagePreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class);
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
-      String username = uiPortlet.getCurrentUser();
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class)
-                                  .getSelectedValue();
-      if(!MailUtils.isFull(accountId)) {
+      String accountId = dataCache.getSelectedAccountId();
+      if(!MailUtils.isFull(accountId, dataCache)) {
         uiTags.showMessage(event); 
         return;
       }
-      if(MailUtils.isDelegated(accountId)) {
-        username = mailSrv.getDelegatedAccount(username, accountId).getDelegateFrom();
-      } 
+      String username = MailUtils.getDelegateFrom(accountId, dataCache);
+      
       uiMessageList.setMessagePageList(mailSrv.getMessagePagelistByTag(username, accountId, tagId));
       MessageFilter filter = new MessageFilter("Tag");
       filter.setTag(new String[] { tagId });
@@ -181,8 +182,8 @@ public class UITagContainer extends UIForm {
       uiMessageList.setMessageFilter(filter);
       uiMessageList.setSelectedTagId(tagId);
       uiMessageList.setSelectedFolderId(null);
-      uiMessageList.viewing_ = uiMessageList.VIEW_ALL;
-      uiMessageList.viewMode = uiMessageList.MODE_LIST;
+      uiMessageList.viewing_ = UIMessageList.VIEW_ALL;
+      uiMessageList.viewMode = UIMessageList.MODE_LIST;
       uiMessagePreview.setMessage(null);
       UIFolderContainer uiFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
       uiFolder.setSelectedFolder(null);
@@ -206,14 +207,17 @@ public class UITagContainer extends UIForm {
     public void execute(Event<UITagContainer> event) throws Exception {
       UITagContainer uiTag = event.getSource();
       UIMailPortlet uiPortlet = uiTag.getAncestorOfType(UIMailPortlet.class);
-      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      DataCache dataCache = uiPortlet.getDataCache();
+      
+      String accId = dataCache.getSelectedAccountId();
       if (Utils.isEmptyField(accId)) {
         UIApplication uiApp = uiTag.getAncestorOfType(UIApplication.class);
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }
-      if(!MailUtils.isFull(accId)) {
+      
+      if(!MailUtils.isFull(accId, dataCache)) {
         uiTag.showMessage(event); 
         return;
       }
@@ -226,14 +230,14 @@ public class UITagContainer extends UIForm {
 
   static public class EditTagActionListener extends EventListener<UITagContainer> {
     public void execute(Event<UITagContainer> event) throws Exception {
-      String tagId = event.getRequestContext().getRequestParameter(OBJECTID);
       UITagContainer uiTag = event.getSource();
-      UIPopupAction uiPopup = uiTag.getAncestorOfType(UIMailPortlet.class)
-                                   .getChild(UIPopupAction.class);
-      UIMailPortlet uiPortlet = uiTag.getAncestorOfType(UIMailPortlet.class);
-      MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      if(!MailUtils.isFull(accountId)) {
+      DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
+      
+      String tagId = event.getRequestContext().getRequestParameter(OBJECTID);
+      UIPopupAction uiPopup = uiTag.getAncestorOfType(UIMailPortlet.class).getChild(UIPopupAction.class);
+      
+      String accountId = dataCache.getSelectedAccountId();
+      if(!MailUtils.isFull(accountId, dataCache)) {
         uiTag.showMessage(event); 
         return;
       }
@@ -246,50 +250,44 @@ public class UITagContainer extends UIForm {
 
   static public class RemoveTagActionListener extends EventListener<UITagContainer> {
     public void execute(Event<UITagContainer> event) throws Exception {
-      String tagId = event.getRequestContext().getRequestParameter(OBJECTID);
       UITagContainer uiTag = event.getSource();
       UIMailPortlet uiPortlet = uiTag.getAncestorOfType(UIMailPortlet.class);
-      // TODO start: fix fox CS-3790
+      DataCache dataCache = uiPortlet.getDataCache();
+      
+      String tagId = event.getRequestContext().getRequestParameter(OBJECTID);
       UIMessagePreview uiMessagePreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class);
       uiMessagePreview.setMessage(null);
-      // TODO end: fix fox CS-3790
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
-      String username = uiPortlet.getCurrentUser();
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class)
-                                  .getSelectedValue();
-      if(!MailUtils.isFull(accountId)) {
+      String accountId = dataCache.getSelectedAccountId();
+      String username = MailUtils.getDelegateFrom(accountId, dataCache);
+      if(!MailUtils.isFull(accountId, dataCache)) {
         uiTag.showMessage(event); 
         return;
-      }
-      if(MailUtils.isDelegated(accountId)) {
-        username = mailSrv.getDelegatedAccount(username, accountId).getDelegateFrom();
       }
 
       mailSrv.removeTag(username, accountId, tagId);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       uiMessageList.updateList();
-      event.getRequestContext()
-           .addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTag);
     }
   }
 
   static public class EmptyTagActionListener extends EventListener<UITagContainer> {
     public void execute(Event<UITagContainer> event) throws Exception {
-      String tagId = event.getRequestContext().getRequestParameter(OBJECTID);
       UITagContainer uiTag = event.getSource();
       UIMailPortlet uiPortlet = uiTag.getAncestorOfType(UIMailPortlet.class);
+      DataCache dataCache = uiPortlet.getDataCache();
+      
+      String tagId = event.getRequestContext().getRequestParameter(OBJECTID);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
-      // TODO start: fix fox CS-3790
       UIMessagePreview uiMessagePreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class);
       uiMessagePreview.setMessage(null);
-      // TODO end: fix fox CS-3790
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
       String username = uiPortlet.getCurrentUser();
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class)
-                                  .getSelectedValue();
+      String accountId = dataCache.getSelectedAccountId();
 
-      if(!MailUtils.isFull(accountId)) {
+      if(!MailUtils.isFull(accountId, dataCache)) {
         uiTag.showMessage(event); 
         return;
       }
@@ -306,21 +304,20 @@ public class UITagContainer extends UIForm {
   static public class ChangeColorActionListener extends EventListener<UITagContainer> {
     public void execute(Event<UITagContainer> event) throws Exception {
       UITagContainer uiTag = event.getSource();
+      UIMailPortlet uiPortlet = uiTag.getAncestorOfType(UIMailPortlet.class);
+      DataCache dataCache = uiPortlet.getDataCache();
+      
       String tagId = event.getRequestContext().getRequestParameter(OBJECTID);
       String color = event.getRequestContext().getRequestParameter("color");
-      UIMailPortlet uiPortlet = uiTag.getAncestorOfType(UIMailPortlet.class);
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
-      String username = uiPortlet.getCurrentUser();
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class)
-                                  .getSelectedValue();
-      if(!MailUtils.isFull(accountId)) {
+      String accountId = dataCache.getSelectedAccountId();
+      String username = MailUtils.getDelegateFrom(accountId, dataCache);
+      if(!MailUtils.isFull(accountId, dataCache)) {
         uiTag.showMessage(event); 
         return;
       }
-      if(MailUtils.isDelegated(accountId)) {
-        username = mailSrv.getDelegatedAccount(username, accountId).getDelegateFrom();
-      }
+      
       Tag tag = mailSrv.getTag(username, accountId, tagId);
       tag.setColor(color);
       mailSrv.updateTag(username, accountId, tag);

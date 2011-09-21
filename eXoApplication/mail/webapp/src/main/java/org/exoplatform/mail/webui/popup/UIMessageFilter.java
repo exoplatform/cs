@@ -21,6 +21,7 @@ import java.util.List;
 import org.exoplatform.cs.common.webui.UIPopupAction;
 import org.exoplatform.cs.common.webui.UIPopupActionContainer;
 import org.exoplatform.cs.common.webui.UIPopupComponent;
+import org.exoplatform.mail.DataCache;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
@@ -33,6 +34,7 @@ import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -103,10 +105,11 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
   }
   
   public Folder getFolder() throws Exception {
+    DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
+    
     String username = MailUtils.getCurrentUser();
     String accountId = getAncestorOfType(UIMailPortlet.class).getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue() ;
-    MailService mailSrv = MailUtils.getMailService();
-    return mailSrv.getFolder(username, accountId, getSelectedFilter().getApplyFolder());
+    return dataCache.getFolder(username, accountId, getSelectedFilter().getApplyFolder());
   }
   
   public Tag getTag() throws Exception {
@@ -155,11 +158,12 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
   static  public class AddFilterActionListener extends EventListener<UIMessageFilter> {
     public void execute(Event<UIMessageFilter> event) throws Exception {
       UIMessageFilter uiMessageFilter = event.getSource() ;
-      UIMailPortlet mailPortlet = uiMessageFilter.getAncestorOfType(UIMailPortlet.class);
+      DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
+      
       UIPopupActionContainer uiActionContainer = uiMessageFilter.getAncestorOfType(UIPopupActionContainer.class) ;
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
       UIAddMessageFilter uiAddMessageFilter = uiChildPopup.createUIComponent(UIAddMessageFilter.class, null, null);
-      String accountId = mailPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      String accountId = dataCache.getSelectedAccountId();
       uiAddMessageFilter.init(accountId);
       uiChildPopup.activate(uiAddMessageFilter, 650, 0, false) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
@@ -168,23 +172,25 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
   
   static  public class EditFilterActionListener extends EventListener<UIMessageFilter> {
     public void execute(Event<UIMessageFilter> event) throws Exception {
-      UIMessageFilter uiMessageFilter = event.getSource() ;
+      UIMessageFilter uiMessageFilter = event.getSource();
+      
       MessageFilter filter = uiMessageFilter.getSelectedFilter();
-      UIApplication uiApp = uiMessageFilter.getAncestorOfType(UIApplication.class) ;
-      if(filter == null) {
-        uiApp.addMessage(new ApplicationMessage("UIMessageFilter.msg.select-no-filter", null, ApplicationMessage.INFO)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      UIApplication uiApp = uiMessageFilter.getAncestorOfType(UIApplication.class);
+      if (filter == null) {
+        uiApp.addMessage(new ApplicationMessage("UIMessageFilter.msg.select-no-filter", null, ApplicationMessage.INFO));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }
-      UIPopupActionContainer uiActionContainer = uiMessageFilter.getAncestorOfType(UIPopupActionContainer.class) ;
-      UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
+      
+      UIPopupActionContainer uiActionContainer = uiMessageFilter.getAncestorOfType(UIPopupActionContainer.class);
+      UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class);
       UIAddMessageFilter uiEditMessageFilter = uiChildPopup.createUIComponent(UIAddMessageFilter.class, null, null);
-      UIMailPortlet mailPortlet = uiMessageFilter.getAncestorOfType(UIMailPortlet.class);
-      String accountId = mailPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
+      String accountId = dataCache.getSelectedAccountId();
       uiEditMessageFilter.init(accountId);
-      uiChildPopup.activate(uiEditMessageFilter, 650, 0, false) ;
+      uiChildPopup.activate(uiEditMessageFilter, 650, 0, false);
       uiEditMessageFilter.setCurrentFilter(filter);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer);
     }
   }
   
@@ -192,9 +198,11 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
     public void execute(Event<UIMessageFilter> event) throws Exception {
       UIMessageFilter uiMessageFilter = event.getSource() ;
       UIMailPortlet mailPortlet = uiMessageFilter.getAncestorOfType(UIMailPortlet.class);
+      DataCache dataCache = mailPortlet.getDataCache();
+      
       String filterId = uiMessageFilter.getSelectedFilterId();
       String username = MailUtils.getCurrentUser();
-      String accountId = mailPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      String accountId = dataCache.getSelectedAccountId();
       MailService mailServ = MailUtils.getMailService();
       try {
         mailServ.removeFilter(username, accountId, filterId);

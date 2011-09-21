@@ -22,6 +22,7 @@ import java.util.List;
 import org.exoplatform.cs.common.webui.UIPopupAction;
 import org.exoplatform.cs.common.webui.UIPopupActionContainer;
 import org.exoplatform.cs.common.webui.UIPopupComponent;
+import org.exoplatform.mail.DataCache;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;
@@ -249,8 +250,10 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
     public void execute(Event<UIAddMessageFilter> event) throws Exception {
       UIAddMessageFilter uiAddFilter = event.getSource();
       UIMailPortlet uiPortlet = uiAddFilter.getAncestorOfType(UIMailPortlet.class);
+      DataCache dataCache = uiPortlet.getDataCache();
+      
       String username = MailUtils.getCurrentUser();
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      String accountId = dataCache.getSelectedAccountId();
       MailService mailSrv = MailUtils.getMailService();
       String filterName = uiAddFilter.getFilterName();
       String from = uiAddFilter.getFrom();

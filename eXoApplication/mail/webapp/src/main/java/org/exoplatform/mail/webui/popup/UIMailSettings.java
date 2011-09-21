@@ -24,6 +24,7 @@ import javax.jcr.PathNotFoundException;
 
 import org.exoplatform.cs.common.webui.UIPopupAction;
 import org.exoplatform.cs.common.webui.UIPopupComponent;
+import org.exoplatform.mail.DataCache;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.AccountDelegation;
@@ -41,14 +42,15 @@ import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormRadioBoxInput;
@@ -165,14 +167,14 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
   }
 
   public List<SelectItemOption<String>> getAccounts() throws Exception {
+    DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
-    MailService mailSrv = getApplicationComponent(MailService.class);
     String username = Util.getPortalRequestContext().getRemoteUser();
-    for(Account acc : mailSrv.getAccounts(username)) {
+    for (Account acc : dataCache.getAccounts(username)) {
       SelectItemOption<String> itemOption = new SelectItemOption<String>(acc.getLabel() + " &lt;" + acc.getEmailAddress() + "&gt;", acc.getId());
-      options.add(itemOption) ;
+      options.add(itemOption);
     }
-    return options ;
+    return options;
   }
 
   public void fillData() throws Exception {    
@@ -314,26 +316,28 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
     }
   }
 
-  public List<SelectItemOption<String>> getOwnerAccs(String username){
+  public List<SelectItemOption<String>> getOwnerAccs(String username) {
+    DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
     List<Account> accs = null;
     try {
-      accs = MailUtils.getMailService().getAccounts(username);
+      accs = dataCache.getAccounts(username);
     } catch (Exception e) {
       if (log.isDebugEnabled()) {
         log.debug("Exception in method getOwnerAccs", e);
       }
       return null;
     }
+    
     List<SelectItemOption<String>> ownAccs = new ArrayList<SelectItemOption<String>>();
     SelectItemOption<String> accountOpt = null;
-    if(accs != null && accs.size()>0){
-      for(Account acc:accs){
+    if (accs != null && accs.size() > 0) {
+      for (Account acc : accs) {
         accountOpt = new SelectItemOption<String>(acc.getUserDisplayName(), acc.getId());
         ownAccs.add(accountOpt);
       }
     }
     return ownAccs;
-  } 
+  }
 
   static  public class AddAccountActionListener extends EventListener<UIMailSettings> {
     public void execute(Event<UIMailSettings> event) throws Exception {
