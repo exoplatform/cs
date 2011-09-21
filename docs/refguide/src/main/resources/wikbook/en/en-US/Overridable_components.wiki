@@ -1,8 +1,8 @@
-There are some overridable components in eXo Collaboration so that you can control how these components work by implementing or extending default implementations and then reconfigure these new components in the file configuration.xml.
+There are some overridable components in eXo Collaboration so that you can control how these components work by implementing or extending default implementations and then reconfigure these new components in the _configuration.xml_ file.
 
 h1. ContentDAO {anchor:id=CSref.ExtensionPoints.ContentDAO}
 
-{{ContentDAO}} is an overridable component used in the Content application ( or called RSS reader) of eXo Collaboration.
+_ContentDAO_ is an overridable component used in the Content application (or called RSS reader) of eXo Collaboration.
 
 You can find the configuration file at _WEB-INF/cs-extension/cs/content/content-service-configuration.xml_ with the declaration as below:
 
@@ -35,9 +35,10 @@ The example below is an example of plugin configuration:
 
 
 h1. ContactLifeCycle {anchor:id=CSref.ExtensionPoints.ContactLifeCycle}
-{{ContactLifeCycle}} is an interface to extend the capabilities of eXo Platform. A {{ContactLifeCycle}} lets you be notified during the lifecycle of an address book's contact when a contact is added or modified.
 
-An example of {{ContactLifeCycle}} has been implemented to integrate the Address Book application in the eXo Social's Spaces. See the following configuration at:  _ext/social-integration/src/main/resources/conf/portal/configuration.xml._
+_ContactLifeCycle_ is an interface to extend the capabilities of eXo Platform. The _ContactLifeCycle_ lets you be notified during the lifecycle of an address book's contact when a contact is added or modified.
+
+An example of _ContactLifeCycle_ has been implemented to integrate the Address Book application in the eXo Social's Spaces. See the following configuration at: _ext/social-integration/src/main/resources/conf/portal/configuration.xml._
 
 See the following example:
 
@@ -58,17 +59,17 @@ Details:
 
 h1. Transport {anchor:id=CSref.ExtensionPoints.Transport}
 
-{{Transport}} is an overridable component used in the Chat application of eXo Collaboration.
+_Transport_ is an overridable component used in the Chat application of eXo Collaboration.
 
 This overridable component is used to help users add the protocol to the Chat application, such as: ICQ, YAHOO, MSN, XMPP, AIM, GTALk.
 
-The Chat application of eXo Collaboration only uses the XMPP protocol that is implemented in this object "{{XMPPTransport}}".
+The Chat application of eXo Collaboration only uses the XMPP protocol that is implemented in the _XMPPTransport_ object.
 
 
 h1. EventLifeCycle {anchor:id=CSref.ExtensionPoints.EventLifeCycle}
 
-{{EventLifeCycle}} is an extension point used in the Calendar application of eXo Collaboration.
-You can find the configuration file of this component at:  _ext/social-integration/src/main/resources/conf/portal/configuration.xml_.
+_EventLifeCycle_ is an extension point used in the Calendar application of eXo Collaboration.
+You can find the configuration file of this component at: _ext/social-integration/src/main/resources/conf/portal/configuration.xml_.
 
 See the following example:
 {code:xml}

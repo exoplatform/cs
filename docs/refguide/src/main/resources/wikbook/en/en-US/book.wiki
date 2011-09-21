@@ -24,4 +24,3 @@ h2. Extension points {anchor:id=CSref.ExtensionPoints}
 
 h2. Public REST APIs {anchor:id=CSref.PublicREST_APIs}
 {include:document="public_rest_api.wiki"}
-

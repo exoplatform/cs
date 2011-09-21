@@ -1,13 +1,11 @@
-
-eXo Collaboration consists of three gadgets: eventslist, taskslist and messageslist. They are packaged in the csResources.war file.
-
+eXo Collaboration consists of three gadgets: eventslist, taskslist and messageslist. They are packaged in the _csResources.war_ file.
 
 h1. Eventslist {anchor:id=CSref.Gadgets.Evenslist}
 
 h2. Description  {anchor:id=CSref.Gadgets.Eventlist.Description}
 Eventslist lists the maximum number of upcoming events, that is configurable by users. For example, they can set the preference list to 5 or 10 events.
 
-See the preferences of this gadget in the following sample code:
+See preferences of this gadget in the following sample code:
 
 {code:xml}
 <UserPref name="url" display_name="__MSG_baseurl__" datatype="string" value="/calendar" required="true" />
@@ -19,21 +17,21 @@ See the preferences of this gadget in the following sample code:
 
 Details:
 || Preferences || Description ||
-| *url* | link to Calendar portlet |
-| *Subscribeurl* | link to upcoming events |
-| *limit* | The maximum number of upcoming events |
-| *timeformat* | The time format for upcoming events |
+| *url* | Link to the Calendar portlet. |
+| *Subscribeurl* | Link to the upcoming events. |
+| *limit* | The maximum number of upcoming events. |
+| *timeformat* | The time format for upcoming events. |
 
-For more details on the preferences of gadgets, see [here|http://code.google.com/apis/gadgets/docs/basic.html#Userprefs]
+For more details on the preferences of gadgets, see [here.|http://code.google.com/apis/gadgets/docs/basic.html#Userprefs]
 
 h2. Links to used REST services {anchor:id=CSref.Gadgets.Eventslist.LinksToUsedRESTServices}
 
-It uses upcomingEvent service in the following package:
-_org.exoplatform.webservice.cs.calendar.CalendarWebservice.java_
+It uses the _upcomingEvent_ service in the following package:
+_org.exoplatform.webservice.cs.calendar.CalendarWebservice.java_.
 
 
 h1. Taskslist {anchor:id=CSref.Gadgets.Taskslist}
-Taskslist list the maximum number of upcoming tasks that is configurable by users. For example, they can set the preference list to 5 or 10 tasks.
+Taskslist lists the maximum number of upcoming tasks that is configurable by users. For example, they can set the preference list to 5 or 10 tasks.
 
 h2. Description {anchor:id=CSref.Gadgets.Taskslist.Description}
 See the preferences of this gadget in the following sample code:
@@ -42,12 +40,11 @@ See the preferences of this gadget in the following sample code:
 <UserPref name="setting" default_value="/calendar:/portal/rest/private/cs/calendar/upcoming:10:AM/PM:Default" datatype="hidden" />
 {code}
 
-Details:
-Setting: It collects all the configuration of upcoming tasks and add some more functions to help developers change the configuration of the default skin.  
+Accordingly, _setting_ collects all the configuration of upcoming tasks and add some more functions to help developers change the configuration of the default skin.
 
 h2. Links to used REST services  {anchor:id=CSref.Gadgets.Taskslist.LinksToUsedRESTServices}
 It uses upcomingEvent service in the following package:
-_org.exoplatform.webservice.cs.calendar.CalendarWebservice.java_
+_org.exoplatform.webservice.cs.calendar.CalendarWebservice.java_.
 
 h1. Messageslist {anchor:id=CSref.Gadgets.Messageslist}
 It lists the maximum number of unread messages, that is configurable by users.
@@ -68,14 +65,14 @@ See the prefereces of this gadget in the following sample code:
 
 Details:
 || Preferences || Description ||
-| *Url* | The Url of Mail Application. |
+| *Url* | The URL of the Mail Application. |
 | *Subscribeurl* | The link to upcoming messages.  |
 | *Limit* | The number of displayed unread messages that is set by users. |
 | *Account* | The mail account in the Mail application. |
-| *Folder* | The folder consists of unread messages. |
+| *Folder* | The folder which consists of unread messages. |
 | *Tag* | The tags in all unread messages. |
 
 h2. Links to used REST services {anchor:id=CSref.Gadgets.LinksToUsedRESTServices}
 
 It uses the unreadMail service in the following package:
-_org.exoplatform.webservice.cs.mail.MailWebservice.java_
+_org.exoplatform.webservice.cs.mail.MailWebservice.java_.

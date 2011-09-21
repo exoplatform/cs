@@ -426,7 +426,7 @@ The node type *{noformat}exo:mailtag{noformat}* has the following properties:
 | exo:id | String | Tag id of the mail. |
 | exo:name | String | Name of the tag. |
 | exo:description | String | Brief description of the mail tag. |
-| exo:color | String | Color of the tag which is defined in the _org.exoplatform.webui.form.ext__ .UIFormColorPicker class. |
+| exo:color | String | Color of the tag which is defined in the _org.exoplatform.webui.form.ext.UIFormColorPicker_ class. |
 
 The node type *{noformat}exo:filter{noformat}* has the following properties:
 
