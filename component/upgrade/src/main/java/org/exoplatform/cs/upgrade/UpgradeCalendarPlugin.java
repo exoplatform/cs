@@ -61,32 +61,38 @@ public class UpgradeCalendarPlugin extends UpgradeProductPlugin {
   }
 
   public void processUpgrade(String oldVersion, String newVersion) {
-    // Upgrade from CS 2.1.x to 2.2.2
+    // Upgrade from CS 2.1.x to 2.2.3
     try {
-      Node publicCalendarHome = getOldRssHome();
-      if (publicCalendarHome == null) {
+      Node oldRssHome = getOldRssHome();
+      if (oldRssHome == null) {
         //There is nothing to migrate so return
         log.info("[UpgradeCalendarPlugin] There is nothing to migrate for Calendar.");
         return;
       }
-      NodeIterator iterator = publicCalendarHome.getNodes();
+      NodeIterator iterator = oldRssHome.getNodes();
       while (iterator.hasNext()) {
         Node feedNode = iterator.nextNode();
         String url = feedNode.getProperty(Utils.EXO_BASE_URL).getString();
         String username = url.substring(url.indexOf("/cs/calendar/feed/") + 18);
         username = username.substring(0, username.indexOf("/"));
         Node rssHome = getRssHome(username);
+        url = url.substring(url.indexOf(":") + 3);
+        url = url.substring(url.indexOf("/"));
+        url = url.substring(url.indexOf("/"));
+        feedNode.setProperty(Utils.EXO_BASE_URL, url);
+        feedNode.save();
         Session session = feedNode.getSession();
         session.move(feedNode.getPath(), rssHome.getPath() + "/" + feedNode.getName());
         session.save();
       }
     } catch (Exception e) {
-      log.warn("[UpgradeCalendarPlugin] Exception when migrate data from 2.1.x to 2.2.2 for Calendar.", e);
+      log.warn("[UpgradeCalendarPlugin] Exception when migrate data from 2.1.x to 2.2.3 for Calendar.", e);
     }
   }
 
   public boolean shouldProceedToUpgrade(String newVersion, String previousVersion) {
-    boolean doUpgrade = (VersionComparator.isSame("2.2.2-SNAPSHOT", newVersion)) || (VersionComparator.isSame("2.2.2", newVersion));
+    boolean doUpgrade = VersionComparator.isSame("0", previousVersion)
+        && ((VersionComparator.isSame("2.2.3-SNAPSHOT", newVersion)) || (VersionComparator.isSame("2.2.3", newVersion)));
     return doUpgrade;
   }
 
