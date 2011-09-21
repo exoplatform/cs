@@ -160,7 +160,6 @@ public class UIMessageList extends UIForm {
       filter = new MessageFilter("Folder");
     if (viewMode == MODE_THREAD || viewMode == MODE_CONVERSATION) {
       filter.setOrderBy(Utils.EXO_LAST_UPDATE_TIME);
-      filter.setHasStructure(true);
     }
     
     UIMailPortlet mailPortlet = getAncestorOfType(UIMailPortlet.class);
