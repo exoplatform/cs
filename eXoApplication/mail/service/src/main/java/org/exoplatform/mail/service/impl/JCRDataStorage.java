@@ -673,10 +673,12 @@ public class JCRDataStorage implements DataStorage {
         }
       }
       try {
-        if (currentFolderNode != null)
-          currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() - deUnreadNumber));
-        if (destFolderNode != null)
-          destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (destFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + inUnreadNumber));
+        if (currentFolderNode != null){
+          currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, decreaseNumber(currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong(), deUnreadNumber));
+        }
+        if (destFolderNode != null){
+          destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES,increaseNumber(destFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong(), inUnreadNumber));
+        }
       } catch (Exception e) {
         if (logger.isDebugEnabled()) {
           logger.debug("Exception in method moveMessages", e);
@@ -684,10 +686,12 @@ public class JCRDataStorage implements DataStorage {
       }
 
       try {
-        if (currentFolderNode != null)
-          currentFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (currentFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() - deTotalMessage));
-        if (destFolderNode != null)
-          destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (destFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + inTotalMessage));
+        if (currentFolderNode != null){
+          currentFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, decreaseNumber(currentFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong(), deTotalMessage));
+        }
+        if (destFolderNode != null){
+          destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, increaseNumber(destFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong(), inTotalMessage));
+        }
       } catch (Exception e) {
         if (logger.isDebugEnabled()) {
           logger.debug("Exception in method moveMessages", e);
@@ -750,20 +754,20 @@ public class JCRDataStorage implements DataStorage {
 
       try {
         if (currentFolderNode != null) {
-          currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() - inUnreadNumber));
+          currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, decreaseNumber(currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong(), inUnreadNumber));
         }
         if (destFolderNode != null) {
-          destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (destFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + inUnreadNumber));
+          destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, increaseNumber(destFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong(), inUnreadNumber));
         }
       } catch (Exception e) {
       }
 
       try {
         if (currentFolderNode != null) {
-          currentFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (currentFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() - inTotalMessage));
+          currentFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, decreaseNumber(currentFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong(), inTotalMessage));
         }
         if (destFolderNode != null) {
-          destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (destFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + inTotalMessage));
+          destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, increaseNumber(destFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong(), inTotalMessage));
         }
       } catch (Exception e) {
       }
@@ -2182,9 +2186,9 @@ public class JCRDataStorage implements DataStorage {
           Node currentFolderNode = getFolderNodeById(sProvider, accountNode, msgNode.getProperty(Utils.MSG_FOLDERS).getValues()[0].getString());
           if (currentFolderNode != null) {
             if (!value) {
-              currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() - 1));
+              currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, decreaseNumber(currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong(), 1));
             } else {
-              currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + 1));
+              currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, increaseNumber(currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong(), 1));
             }
             currentFolderNode.save();
           }
@@ -3109,5 +3113,27 @@ public class JCRDataStorage implements DataStorage {
       closeSessionProvider(sProvider);
     }
     return strList;
+  }
+  
+  /*
+   * getIncreaseNumber
+   * @param initNumber
+   * @param intervalNum
+   * @return IncreaseNumber
+   */
+  private long increaseNumber(long initNumber, long intervalNum) {
+    initNumber = initNumber > 0 ? initNumber : 0;
+    return initNumber + intervalNum;
+  }
+
+  /**
+   * @param initNumber
+   * @param intervalNum
+   * @return DecreaseNumber
+   */
+  private long decreaseNumber(long initNumber, long intervalNum) {
+    initNumber = initNumber - intervalNum;
+    initNumber = initNumber > 0 ? initNumber : 0;
+    return initNumber;
   }
 }

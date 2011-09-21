@@ -2036,7 +2036,7 @@ public class MailServiceImpl implements MailService, Startable {
           Date lastFromDate = null;
           Date receivedDate = null;
           List<javax.mail.Message> msgList = new ArrayList<javax.mail.Message>(msgMap.keySet());
-          String folderId = makeStoreFolder(userName, accountId, incomingFolder);
+          String folderId = makeStoreFolder(userName, accountId, incomingFolder, totalNew);
           updateCheckingMailStatusByCometd(userName, accountId, info);
           while (i < totalNew) {
             if (info != null && info.isRequestStop()) {
@@ -2100,7 +2100,7 @@ public class MailServiceImpl implements MailService, Startable {
     }
   }
 
-  private String makeStoreFolder(String userName, String accountId, String incomingFolder) throws Exception {
+  private String makeStoreFolder(String userName, String accountId, String incomingFolder, int unReadMsg) throws Exception {
     String folderId = Utils.generateFID(accountId, incomingFolder, false);
     Folder storeFolder = storage_.getFolder(userName, accountId, folderId);
     if (storeFolder == null) {
@@ -2111,10 +2111,19 @@ public class MailServiceImpl implements MailService, Startable {
       } else {
         storeFolder = new Folder();
       }
+      storeFolder.setNumberOfUnreadMessage(unReadMsg);
       storeFolder.setId(folderId);
       storeFolder.setName(incomingFolder);
       storeFolder.setPersonalFolder(true);
       storage_.saveFolder(userName, accountId, storeFolder);
+    }else{
+      if(unReadMsg > 0){
+        long numUnReadMsg = 0;
+        numUnReadMsg = storeFolder.getNumberOfUnreadMessage();
+        numUnReadMsg = numUnReadMsg > 0 ? numUnReadMsg : 0;
+        storeFolder.setNumberOfUnreadMessage(numUnReadMsg + unReadMsg);
+        storage_.saveFolder(userName, accountId, storeFolder);
+      }
     }
     return folderId;
   }
