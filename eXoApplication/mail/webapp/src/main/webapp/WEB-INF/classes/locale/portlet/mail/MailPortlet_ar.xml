@@ -1386,12 +1386,18 @@
       <minutes>دقائق</minutes>
       <dateFrom>From</dateFrom>
       <dateTo>To</dateTo>
+      
       <defaultEventCategoryIdAll>All</defaultEventCategoryIdAll>
       <Meeting>Meeting</Meeting>
       <Calls>Calls</Calls>
       <Clients>Clients</Clients>
       <Holiday>Holiday</Holiday>
       <Anniversary>Anniversary</Anniversary>
+      <defaultEventCategoryIdMeeting>Meeting</defaultEventCategoryIdMeeting>
+      <defaultEventCategoryIdCalls>Calls</defaultEventCategoryIdCalls>
+      <defaultEventCategoryIdClients>Clients</defaultEventCategoryIdClients>
+      <defaultEventCategoryIdHoliday>Holiday</defaultEventCategoryIdHoliday>
+      <defaultEventCategoryIdAnniversary>Anniversary</defaultEventCategoryIdAnniversary>
       <defaultCalendarCategoryId>My group</defaultCalendarCategoryId>
       <defaultCalendarId>Default</defaultCalendarId>
     </label>

@@ -570,6 +570,11 @@
     </msg>
     <label>
       <defaultEventCategoryIdAll>All</defaultEventCategoryIdAll>
+      <Meeting>Meeting</Meeting>
+      <Calls>Calls</Calls>
+      <Clients>Clients</Clients>
+      <Holiday>Holiday</Holiday>
+      <Anniversary>Anniversary</Anniversary>
       <defaultEventCategoryIdMeeting>Meeting</defaultEventCategoryIdMeeting>
       <defaultEventCategoryIdCalls>Calls</defaultEventCategoryIdCalls>
       <defaultEventCategoryIdClients>Clients</defaultEventCategoryIdClients>

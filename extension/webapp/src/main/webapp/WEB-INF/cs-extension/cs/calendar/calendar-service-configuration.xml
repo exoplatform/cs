@@ -24,11 +24,11 @@
       <init-params>
         <value-param>
           <name>defaultEventCategories</name>
-          <value>Meeting,Calls,Clients,Holiday,Anniversary</value><!-- Multi value, use coma (,) to split values-->
+          <value>defaultEventCategoryIdMeeting,defaultEventCategoryIdCalls,defaultEventCategoryIdClients,defaultEventCategoryIdHoliday,defaultEventCategoryIdAnniversary</value><!-- Multi value, use coma (,) to split values-->
           <!-- The event category's name will be get from resource bundle by key "UICalendars.label." + defaultEventCategory's value. 
                If the key does not exist, the defaultEventCategory's value will be used to display. 
                Sample: 
-                  If the value is "Meeting" then the resource bundle key is "UICalendars.label.Meeting". 
+                  If the value is "defaultEventCategoryIdMeeting" then the resource bundle key is "UICalendars.label.defaultEventCategoryIdMeeting". 
                     The value of this key is "Meeting", so "Meeting" will be display as default event category.
                   If the value is "Not exist key", because this key doesn't exist in resource bundle then 
                     "Not exist key" will be display as default event category.

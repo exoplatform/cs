@@ -599,6 +599,11 @@
     </msg>
     <label>
       <defaultEventCategoryIdAll>Tất cả</defaultEventCategoryIdAll>
+      <Meeting>Hội họp</Meeting>
+      <Calls>Liên lạc</Calls>
+      <Clients>Khách hàng</Clients>
+      <Holiday>Kỳ Nghỉ</Holiday>
+      <Anniversary>Kỉ niệm</Anniversary>
       <defaultEventCategoryIdMeeting>Hội họp</defaultEventCategoryIdMeeting>
       <defaultEventCategoryIdCalls>Liên lạc</defaultEventCategoryIdCalls>
       <defaultEventCategoryIdClients>Khách hàng</defaultEventCategoryIdClients>
