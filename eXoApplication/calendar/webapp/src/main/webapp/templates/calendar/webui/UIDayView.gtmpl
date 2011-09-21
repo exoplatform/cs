@@ -95,15 +95,22 @@
         <tr>
           <%
             int size = uicomponent.getAllDayEvents().size() ;
-            for(ce in uicomponent.getAllDayEvents()) {
-             actionLink =  uicomponent.event("SaveEvent",ce.getId()+"&calendarId="+ce.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
+            for(ce in uicomponent.getAllDayEvents()) {             
+            actionLink = uicomponent.event("UpdateEvent",ce.id);
             long precent = (99 / size) ;
             color = uicomponent.getColors().get(ce.calType +CalendarUtils.COLON+ ce.getCalendarId()) ;
             Boolean isOccur = (ce.getRepeatType() != null && !CalendarEvent.RP_NOREPEAT.equals(ce.getRepeatType()) && (ce.getIsExceptionOccurrence() == null || !ce.getIsExceptionOccurrence()));
             String recurId = ce.getRecurrenceId();
           %>
            <td width="$precent%">
-            <div unselectable="on" class="EventContainerBorder EventBoxes $color" style="height:20px;border:solid 1px white;" calType="$ce.calType" eventCat="$ce.eventCategoryId" eventid="<%=ce.getId()%>" calid="<%=ce.getCalendarId()%>" actionlink="$actionLink" isOccur="$isOccur" recurId="$recurId">
+            <div unselectable="on" class="EventContainerBorder EventBoxes $color" style="height:20px;border:solid 1px white;" calType="$ce.calType" eventCat="$ce.eventCategoryId" eventid="$ce.id" calid="$ce.calendarId" actionlink="$actionLink" isOccur="$isOccur" recurId="$recurId">
+              <input type="hidden" name="${ce.id}calType" value="$ce.calType" />
+              <input type="hidden" name="${ce.id}calendarId" value="$ce.calendarId" />          
+              <input type="hidden" name="${ce.id}startTime" value="" />
+              <input type="hidden" name="${ce.id}finishTime" value="" />
+              <input type="hidden" name="${ce.id}isOccur" value="$isOccur" />
+              <input type="hidden" name="${ce.id}recurId" value="$recurId" />
+              <input type="hidden" name="${ce.id}currentDate" value="" />
               <div class="EventContainer"  title="<%=dtf.format(ce.getFromDateTime())%>:-><%=dtf.format(ce.getToDateTime())%>">
                 <%=ce.getSummary()%>
               </div>
@@ -157,13 +164,19 @@
                   long   beginTime = cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;
                   cal.setTime(ce.getToDateTime()) ;
                   long  endTime = cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;
-                   color = uicomponent.getColors().get(ce.calType +CalendarUtils.COLON+ ce.getCalendarId()) ;
-                   //actionLink =  uicomponent.event("SaveEvent",ce.id+"&calendarId="+ce.calendarId+"&startTime=beginTime&finishTime=endTime") ;
-                  actionLink = uicomponent.url("SaveEvent",ce.id);
+                   color = uicomponent.getColors().get(ce.calType +CalendarUtils.COLON+ ce.getCalendarId()) ;                   
+                  actionLink = uicomponent.event("UpdateEvent",ce.id);
                   Boolean isOccur = (ce.getRepeatType() != null && !CalendarEvent.RP_NOREPEAT.equals(ce.getRepeatType()) && (ce.getIsExceptionOccurrence() == null || !ce.getIsExceptionOccurrence()));
                   String recurId = ce.getRecurrenceId();
                   %>
                   <div class="EventContainerBorder EventBoxes $color" calType="$ce.calType" eventCat="$ce.eventCategoryId" eventid="$ce.id" calid="$ce.calendarId" actionlink="$actionLink"  startTime="$beginTime" endTime="$endTime" isOccur="$isOccur" recurId="$recurId">
+                    <input type="hidden" name="${ce.id}calType" value="$ce.calType" />
+                    <input type="hidden" name="${ce.id}calendarId" value="$ce.calendarId" />          
+                    <input type="hidden" name="${ce.id}startTime" value="" />
+                    <input type="hidden" name="${ce.id}finishTime" value="" />
+                    <input type="hidden" name="${ce.id}isOccur" value="$isOccur" />
+                    <input type="hidden" name="${ce.id}recurId" value="$recurId" />
+                    <input type="hidden" name="${ce.id}currentDate" value="" />
                     <div class="<%=ce.eventState%>Icon">
                       <div class="<%=ce.getPriority()%>PriorityIcon" style="float:left;"><span></span></div>
                     </div>

@@ -27,7 +27,6 @@ import java.util.Map;
 
 import javax.jcr.PathNotFoundException;
 
-
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
@@ -67,7 +66,7 @@ import org.exoplatform.webui.event.EventListener;
       @EventConfig(listeners = UICalendarView.MovePreviousActionListener.class),
       @EventConfig(listeners = UIWeekView.UpdateEventActionListener.class),
       @EventConfig(listeners = UICalendarView.ExportEventActionListener.class),
-      @EventConfig(listeners = UIWeekView.SaveEventActionListener.class),
+      @EventConfig(listeners = UIWeekView.UpdateAllDayEventActionListener.class),
       @EventConfig(listeners = UICalendarView.ConfirmDeleteOnlyInstance.class),
       @EventConfig(listeners = UICalendarView.ConfirmDeleteAllSeries.class),
       @EventConfig(listeners = UICalendarView.ConfirmDeleteCancel.class)
@@ -76,13 +75,15 @@ import org.exoplatform.webui.event.EventListener;
 public class UIWeekView extends UICalendarView {
   private static final Log log = ExoLogger.getExoLogger(UIWeekView.class);
 
+  public static final String    CURRENT_DATE     = "currentDate"; 
+
   protected Map<String, List<CalendarEvent>> eventData_ = new HashMap<String, List<CalendarEvent>>() ;
   protected List<CalendarEvent> allDayEvent = new ArrayList<CalendarEvent>();
   protected LinkedHashMap<String, CalendarEvent> dataMap_ = new LinkedHashMap<String,  CalendarEvent>() ;
   protected  List<CalendarEvent> daysData_  = new ArrayList<CalendarEvent>() ;
   protected boolean isShowCustomView_ = false ;
   protected Date beginDate_ ;
-  protected Date endDate_ ;
+  protected Date endDate_ ; 
 
   public UIWeekView() throws Exception {
     super() ;
@@ -194,21 +195,22 @@ public class UIWeekView extends UICalendarView {
   static  public class UpdateEventActionListener extends EventListener<UIWeekView> {
     public void execute(Event<UIWeekView> event) throws Exception {
       UIWeekView calendarview = event.getSource() ;
-      UICalendarPortlet uiCalendarPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
-      String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
-      String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
-      String startTime = event.getRequestContext().getRequestParameter("startTime") ;
-      String finishTime = event.getRequestContext().getRequestParameter("finishTime") ;
-      String currentDate = event.getRequestContext().getRequestParameter("currentDate") ;
+      
+      UICalendarPortlet uiCalendarPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class);
+      String eventId = event.getRequestContext().getRequestParameter(OBJECTID);
+      String calendarId = event.getRequestContext().getRequestParameter(eventId + CALENDARID);
+      String calType = event.getRequestContext().getRequestParameter(eventId + CALTYPE);
+      String startTime = event.getRequestContext().getRequestParameter(eventId + START_TIME);
+      String finishTime = event.getRequestContext().getRequestParameter(eventId + FINISH_TIME);
+      String currentDate = event.getRequestContext().getRequestParameter(eventId + CURRENT_DATE);
       
       Boolean isOccur = false;
-      if (!Utils.isEmpty(event.getRequestContext().getRequestParameter(ISOCCUR))) {
-        isOccur = Boolean.parseBoolean(event.getRequestContext().getRequestParameter(ISOCCUR));
+      if (!Utils.isEmpty(event.getRequestContext().getRequestParameter(eventId+ ISOCCUR))) {
+        isOccur = Boolean.parseBoolean(event.getRequestContext().getRequestParameter(eventId + ISOCCUR));
       }
-      // need to get recurrence-id
       String recurId = null;
-      if (isOccur) recurId = event.getRequestContext().getRequestParameter(RECURID);
+      if (isOccur)
+        recurId = event.getRequestContext().getRequestParameter(eventId+ RECURID);
       
       String username = CalendarUtils.getCurrentUser() ;
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
@@ -299,20 +301,21 @@ public class UIWeekView extends UICalendarView {
     }
   }
 
-  static  public class SaveEventActionListener extends EventListener<UIWeekView> {
+  static  public class UpdateAllDayEventActionListener extends EventListener<UIWeekView> {
     public void execute(Event<UIWeekView> event) throws Exception {
       UIWeekView calendarview = event.getSource() ;
-      String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
-      String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
-      String startTime = event.getRequestContext().getRequestParameter("startTime") ;
-      String finishTime = event.getRequestContext().getRequestParameter("finishTime") ;
+      String eventId = event.getRequestContext().getRequestParameter(OBJECTID);
+      String calendarId = event.getRequestContext().getRequestParameter(eventId + CALENDARID);
+      String calType = event.getRequestContext().getRequestParameter(eventId + CALTYPE);
+      String startTime = event.getRequestContext().getRequestParameter(eventId + START_TIME);
+      String finishTime = event.getRequestContext().getRequestParameter(eventId + FINISH_TIME);
       Boolean isOccur = false;
-      if (!Utils.isEmpty(event.getRequestContext().getRequestParameter(ISOCCUR))) {
-        isOccur = Boolean.parseBoolean(event.getRequestContext().getRequestParameter(ISOCCUR));
+      if (!Utils.isEmpty(event.getRequestContext().getRequestParameter(eventId + ISOCCUR))) {
+        isOccur = Boolean.parseBoolean(event.getRequestContext().getRequestParameter(eventId + ISOCCUR));
       }
       String recurId = null;
-      if (isOccur) recurId = event.getRequestContext().getRequestParameter(RECURID);
+      if (isOccur)
+        recurId = event.getRequestContext().getRequestParameter(eventId + RECURID);
       
       try {
         String username = CalendarUtils.getCurrentUser() ;

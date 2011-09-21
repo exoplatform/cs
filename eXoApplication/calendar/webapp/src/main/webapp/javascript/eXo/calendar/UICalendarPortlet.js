@@ -1147,21 +1147,18 @@ UIResizeEvent.prototype.resizeCallback = function(evt){
     var start = parseInt(eventBox.getAttribute("startTime"));
     var calType = eventBox.getAttribute("calType");
     var isOccur = eventBox.getAttribute("isoccur");
+    var eventId = eventBox.getAttribute("eventid");
     var recurId = eventBox.getAttribute("recurid");
     if (recurId == "null") recurId = "";
     var end = start + UICalendarPortlet.pixelsToMins(eventBox.offsetHeight);
     if (eventBox.offsetHeight != UIResizeEvent.beforeHeight) {
 		var actionLink = eventBox.getAttribute("actionLink");
-		var params = [
-			{name:"calendarId",value:eventBox.getAttribute("calid")},
-			{name:"startTime",value:start},
-			{name:"finishTime",value:end},
-			{name:"isOccur",value:isOccur},
-			{name:"recurId",value:recurId}
-		];
+		var form = eXo.core.DOMUtil.findAncestorByTagName(eventBox,"form");
+	  form.elements[eventId + "startTime"].value = start;
+	  form.elements[eventId + "finishTime"].value = end;
 		UICalendarPortlet.setTimeValue(eventBox,start,end);
 		UICalendarPortlet.showEvent();
-		ajaxAsyncGetRequest(eXo.cs.Utils.createUrl(actionLink,params), false) ;
+		eval(actionLink);
     }
 	UIResizeEvent.innerElement = null;
     UIResizeEvent.outerElement = null;
@@ -1295,6 +1292,7 @@ UICalendarPortlet.prototype.dayviewDropCallback = function(){
     var start = parseInt(dragObject.getAttribute("startTime"));
     var end = parseInt(dragObject.getAttribute("endTime"));
     var isOccur = dragObject.getAttribute("isoccur");
+    var eventId = dragObject.getAttribute("eventid");
     var recurId = dragObject.getAttribute("recurid");
     if (recurId == "null") recurId = "";
     var title = eXo.core.DOMUtil.findDescendantsByTagName(dragObject, "p")[0];
@@ -1314,35 +1312,15 @@ UICalendarPortlet.prototype.dayviewDropCallback = function(){
     UICalendarPortlet.dragContainer = null;
     UICalendarPortlet.title = null;
     //if (dragObject.offsetTop != eventTop) {
-		var actionLink = dragObject.getAttribute("actionLink");
-		var params = [
-			{name:"calendarId",value:dragObject.getAttribute("calid")},
-			{name:"startTime",value:currentStart},
-			{name:"finishTime",value:currentEnd},
-			{name:"isOccur",value:isOccur},
-			{name:"recurId",value:recurId}
-		];
+    var actionLink = dragObject.getAttribute("actionLink");    
+    var form = eXo.core.DOMUtil.findAncestorByTagName(dragObject,"form");
+    form.elements[eventId + "startTime"].value = currentStart;
+    form.elements[eventId + "finishTime"].value = currentEnd;
 		eXo.calendar.UICalendarPortlet.setTimeValue(dragObject,currentStart,currentEnd);
 		eXo.calendar.UICalendarPortlet.showEvent();
-		ajaxAsyncGetRequest(eXo.cs.Utils.createUrl(actionLink,params), false) ;
+		eval(actionLink);
     //}
     //title.innerHTML = titleName;
-};
-
-/* for adjusting time */
-/**
- * Change action link excuted when drop event
- * @param {Object} currentStart Current start time of calendar event 
- * @param {Object} currentEnd Current end time of calendar event 
- * @param {Object} obj Calendar event
- * @return Corrected action link
- */
-UICalendarPortlet.prototype.adjustTime = function(currentStart, currentEnd, obj){
-    var actionLink = obj.getAttribute("actionLink");
-    var pattern = /startTime.*endTime/g;
-    var params = "startTime=" + currentStart + "&finishTime=" + currentEnd;
-    actionLink = actionLink.replace(pattern, params).replace("javascript:", "");
-    return actionLink;
 };
 
 /* for showing context menu */

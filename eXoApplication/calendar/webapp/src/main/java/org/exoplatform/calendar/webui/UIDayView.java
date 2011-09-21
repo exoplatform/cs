@@ -64,7 +64,7 @@ import org.exoplatform.webui.event.EventListener;
       @EventConfig(listeners = UICalendarView.MoveNextActionListener.class), 
       @EventConfig(listeners = UICalendarView.MovePreviousActionListener.class), 
       @EventConfig(listeners = UICalendarView.ExportEventActionListener.class),
-      @EventConfig(listeners = UIDayView.SaveEventActionListener.class),
+      @EventConfig(listeners = UIDayView.UpdateEventActionListener.class),
       @EventConfig(listeners = UICalendarView.ConfirmDeleteOnlyInstance.class),
       @EventConfig(listeners = UICalendarView.ConfirmDeleteAllSeries.class),
       @EventConfig(listeners = UICalendarView.ConfirmDeleteCancel.class)
@@ -140,21 +140,22 @@ public class UIDayView extends UICalendarView {
   
   
   
-  static  public class SaveEventActionListener extends EventListener<UIDayView> {
+  static  public class UpdateEventActionListener extends EventListener<UIDayView> {
     public void execute(Event<UIDayView> event) throws Exception {
-      UIDayView calendarview = event.getSource() ;
-      UICalendarPortlet uiCalendarPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
-      calendarview.refresh() ;
-      String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      String calendarId = event.getRequestContext().getRequestParameter("calendarId") ;
-      String startTime = event.getRequestContext().getRequestParameter("startTime") ;
-      String endTime = event.getRequestContext().getRequestParameter("finishTime") ;
+      UIDayView calendarview = event.getSource();
+      UICalendarPortlet uiCalendarPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class);
+      calendarview.refresh();
+      String eventId = event.getRequestContext().getRequestParameter(OBJECTID);
+      String calendarId = event.getRequestContext().getRequestParameter(eventId + CALENDARID);
+      String startTime = event.getRequestContext().getRequestParameter(eventId + START_TIME);
+      String endTime = event.getRequestContext().getRequestParameter(eventId + FINISH_TIME);
       Boolean isOccur = false;
-      if (!Utils.isEmpty(event.getRequestContext().getRequestParameter(ISOCCUR))) {
-        isOccur = Boolean.parseBoolean(event.getRequestContext().getRequestParameter(ISOCCUR));
+      if (!Utils.isEmpty(event.getRequestContext().getRequestParameter(eventId + ISOCCUR))) {
+        isOccur = Boolean.parseBoolean(event.getRequestContext().getRequestParameter(eventId + ISOCCUR));
       }
       String recurId = null;
-      if (isOccur) recurId = event.getRequestContext().getRequestParameter(RECURID);
+      if (isOccur)
+        recurId = event.getRequestContext().getRequestParameter(eventId + RECURID);
       
       String username = CalendarUtils.getCurrentUser() ;
       CalendarEvent ce = null;

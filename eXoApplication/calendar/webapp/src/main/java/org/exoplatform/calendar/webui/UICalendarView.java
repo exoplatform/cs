@@ -96,6 +96,10 @@ public abstract class UICalendarView extends UIForm implements CalendarView {
   final public static String    CALTYPE          = "calType".intern();
 
   final public static String    EVENTID          = "eventId".intern();
+  
+  public static final String    START_TIME       = "startTime";
+
+  public static final String    FINISH_TIME      = "finishTime";
 
   final public static String    DAY              = "day".intern();
 

@@ -218,20 +218,14 @@ UIWeekView.prototype.dropCallback = function() {
     var recurId = dragElement.getAttribute("recurid");
     if (recurId == "null") recurId = "";
 	var actionLink = dragElement.getAttribute("actionLink");
-	var params = [
-		{name:"calendarId",value:dragElement.getAttribute("calid")},
-		{name:"startTime",value:currentStart},
-		{name:"finishTime",value:currentEnd},
-		{name:"calType",value:calType},
-		{name:"currentDate",value:currentDate},
-		{name:"eventCategories",value:dragElement.getAttribute("eventcat")},
-		{name:"isOccur",value:isOccur},
-		{name:"recurId",value:recurId}
-	];
+	var form = eXo.core.DOMUtil.findAncestorByTagName(dragElement,"form");
+  form.elements[eventId + "startTime"].value = currentStart;
+  form.elements[eventId + "finishTime"].value = currentEnd;
+  form.elements[eventId + "currentDate"].value = currentDate;
 	me.currentCol.appendChild(dragElement) ;
 	eXo.calendar.UICalendarPortlet.setTimeValue(dragElement,currentStart,currentEnd,me.currentCol);
 	me.setSize();
-	ajaxAsyncGetRequest(eXo.cs.Utils.createUrl(actionLink,params), false) ;
+	eval(actionLink);
 	//eXo.webui.UIForm.submitEvent(eXo.calendar.UICalendarPortlet.portletId + '#' + 'UIWeekView', 'UpdateEvent', '&subComponentId=' + 'UIWeekView' + '&objectId=' + eventId + '&calendarId=' + calId + '&calType=' + calType + '&startTime=' + currentStart + '&finishTime=' + currentEnd + '&currentDate=' + currentDate + '&isOccur=' + isOccur + '&recurId=' + recurId);
 	me.cleanUp();
 } ;
@@ -355,25 +349,20 @@ UIWeekView.prototype.resizeCallback = function(evt) {
 	var end =  start + UICalendarPortlet.pixelsToMins(eventBox.offsetHeight);
 	var calType = parseInt(eventBox.getAttribute("calType")) ;
 	var isOccur = eventBox.getAttribute("isoccur");
-    var recurId = eventBox.getAttribute("recurid");
-    if (recurId == "null") recurId = "";
+	var eventId = eventBox.getAttribute("eventid");
+  var recurId = eventBox.getAttribute("recurid");
+  if (recurId == "null") recurId = "";
     
 	if (eventBox.offsetHeight != UIResizeEvent.beforeHeight) {
 		var actionLink = eventBox.getAttribute("actionLink");
 		var currentDate = eventBox.parentNode.getAttribute("startTime").toString() ;
-		var params = [
-			{name:"calendarId",value:eventBox.getAttribute("calid")},
-			{name:"startTime",value:start},
-			{name:"finishTime",value:end},
-			{name:"calType",value:calType},
-			{name:"currentDate",value:currentDate},
-			{name:"eventCategories",value:eventBox.getAttribute("eventcat")},
-			{name:"isOccur",value:isOccur},
-			{name:"recurId",value:recurId}
-		];
+		var form = eXo.core.DOMUtil.findAncestorByTagName(eventBox,"form");
+    form.elements[eventId + "startTime"].value = start;
+    form.elements[eventId + "finishTime"].value = end;
+    form.elements[eventId + "currentDate"].value = currentDate;
 		eXo.calendar.UICalendarPortlet.setTimeValue(eventBox,start,end);	
 		eXo.calendar.UIWeekView.setSize();	
-		ajaxAsyncGetRequest(eXo.cs.Utils.createUrl(actionLink,params), false) ;
+		 eval(actionLink);
 	}
 	eXo.calendar.EventTooltip.enable();
 } ;
@@ -459,13 +448,14 @@ UIWeekView.prototype.rightResizeCallback = function() {
   	var end = parseInt(outer.getAttribute("endTime")) + delta;
   	var calType = parseInt(outer.getAttribute("calType"));
   	var isOccur = outer.getAttribute("isoccur");
+  	 var eventId = outer.getAttribute("eventid");
   	var recurId = outer.getAttribute("recurid");
   	if (recurId == "null") recurId = "";
-  	var actionLink = UICalendarPortlet.adjustTime(start, end, outer);
-  	actionLink = actionLink.toString().replace(/'\s*\)/, "&calType=" + calType + "')");
-  	actionLink = actionLink.toString().replace(/'\s*\)/,"&isOccur=" + isOccur + "')");
-  	actionLink = actionLink.toString().replace(/'\s*\)/,"&recurId=" + recurId + "')");
-  	eval(actionLink);
+  	var actionLink = outer.getAttribute("actionLink");
+  	var form = eXo.core.DOMUtil.findAncestorByTagName(outer,"form");
+    form.elements[eventId + "startTime"].value = start;
+    form.elements[eventId + "finishTime"].value = end;
+    eval(actionLink);
   }
 	eXo.calendar.UIWeekView.removeTooltip();
 	eXo.calendar.EventTooltip.enable();
@@ -485,13 +475,14 @@ UIWeekView.prototype.leftResizeCallback = function() {
   	var end = parseInt(outer.getAttribute("endTime"));
   	var calType = parseInt(outer.getAttribute("calType"));
   	var isOccur = outer.getAttribute("isoccur");
+  	var eventId = outer.getAttribute("eventid");
   	var recurId = outer.getAttribute("recurid");
   	if (recurId == "null") recurId = "";
-  	var actionLink = UICalendarPortlet.adjustTime(start, end, outer);
-  	actionLink = actionLink.toString().replace(/'\s*\)/, "&calType=" + calType + "')");
-  	actionLink = actionLink.toString().replace(/'\s*\)/,"&isOccur=" + isOccur + "')");
-  	actionLink = actionLink.toString().replace(/'\s*\)/,"&recurId=" + recurId + "')");
-  	eval(actionLink);
+  	var actionLink = outer.getAttribute("actionLink");
+    var form = eXo.core.DOMUtil.findAncestorByTagName(outer,"form");
+    form.elements[eventId + "startTime"].value = start;
+    form.elements[eventId + "finishTime"].value = end;
+    eval(actionLink);
   }
 	if(eXo.calendar.UIWeekView.extraWidth) delete eXo.calendar.UIWeekView.extraWidth;
 	eXo.calendar.UIWeekView.removeTooltip();
@@ -565,13 +556,14 @@ UIWeekView.prototype.allDayDropCallback = function(evt) {
 		var end = parseInt(dragObject.getAttribute("endTime")) + delta ;
 		var calType = parseInt(dragObject.getAttribute("calType")) ;
 		var isOccur = dragObject.getAttribute("isoccur");
+		var eventId = dragObject.getAttribute("eventid");
 		var recurId = dragObject.getAttribute("recurid");
 		if (recurId == "null") recurId = "";
-		var actionLink = UICalendarPortlet.adjustTime(start, end, dragObject) ;		
-		actionLink = actionLink.toString().replace(/'\s*\)/,"&calType=" + calType + "')") ;
-		actionLink = actionLink.toString().replace(/'\s*\)/,"&isOccur=" + isOccur + "')") ;
-		actionLink = actionLink.toString().replace(/'\s*\)/,"&recurId=" + recurId + "')") ;
-		eval(actionLink) ;
+		var actionLink = dragObject.getAttribute("actionLink");
+		var form = eXo.core.DOMUtil.findAncestorByTagName(dragObject,"form");
+    form.elements[eventId + "startTime"].value = start;
+    form.elements[eventId + "finishTime"].value = end;
+    eval(actionLink);
 	}	
 	eXo.calendar.EventTooltip.enable();
 } ;
