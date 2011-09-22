@@ -77,7 +77,7 @@ public class UpgradeCalendarPlugin extends UpgradeProductPlugin {
         username = username.substring(0, username.indexOf("/"));
         Node rssHome = getRssHome(username);
         url = url.substring(url.indexOf(":") + 3);
-        url = url.substring(url.indexOf("/"));
+        url = url.substring(url.indexOf("/") + 1);
         url = url.substring(url.indexOf("/"));
         feedNode.setProperty(Utils.EXO_BASE_URL, url);
         feedNode.save();
