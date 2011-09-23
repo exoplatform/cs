@@ -66,6 +66,7 @@ import net.fortuna.ical4j.model.property.Due;
 import net.fortuna.ical4j.model.property.Duration;
 import net.fortuna.ical4j.model.property.ExDate;
 import net.fortuna.ical4j.model.property.Location;
+import net.fortuna.ical4j.model.property.Method;
 import net.fortuna.ical4j.model.property.Priority;
 import net.fortuna.ical4j.model.property.ProdId;
 import net.fortuna.ical4j.model.property.RRule;
@@ -295,6 +296,7 @@ public class ICalendarImportExport implements CalendarImportExport {
     calendar.getProperties().add(new ProdId("-//Ben Fortuna//iCal4j 1.0//EN"));
     calendar.getProperties().add(Version.VERSION_2_0);
     calendar.getProperties().add(CalScale.GREGORIAN);
+    calendar.getProperties().add(Method.REQUEST);
     for (CalendarEvent exoEvent : events) {
       if (exoEvent.getEventType().equals(CalendarEvent.TYPE_EVENT)) {
         calendar = getCalendarComponent(calendar, exoEvent, CalendarComponent.VEVENT);
@@ -330,6 +332,7 @@ public class ICalendarImportExport implements CalendarImportExport {
     calendar.getProperties().add(new ProdId("-//Ben Fortuna//iCal4j 1.0//EN"));
     calendar.getProperties().add(Version.VERSION_2_0);
     calendar.getProperties().add(CalScale.GREGORIAN);
+    calendar.getProperties().add(Method.REQUEST);
     for (CalendarEvent exoEvent : events) {
       if (exoEvent.getId().equals(eventId)) {
         if (exoEvent.getEventType().equals(CalendarEvent.TYPE_EVENT)) {
@@ -685,6 +688,7 @@ public class ICalendarImportExport implements CalendarImportExport {
     calendar.getProperties().add(new ProdId("-//Ben Fortuna//iCal4j 1.0//EN"));
     calendar.getProperties().add(Version.VERSION_2_0);
     calendar.getProperties().add(CalScale.GREGORIAN);
+    calendar.getProperties().add(Method.REQUEST);
     if (exoEvent.getEventType().equals(CalendarEvent.TYPE_EVENT)) {
       calendar = getCalendarComponent(calendar, exoEvent, CalendarComponent.VEVENT);
     } else {
