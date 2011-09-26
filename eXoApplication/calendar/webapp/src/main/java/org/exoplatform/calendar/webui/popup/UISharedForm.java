@@ -278,7 +278,10 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       uiForm.setCanEdit(false) ;
       uiForm.setSharedUser(null) ;
       uiForm.setSharedGroup(null) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddEdit) ;
+      UICalendars uiCalendars = uiApp.findFirstComponentOfType(UICalendars.class);
+      if (uiCalendars != null)
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars);
     }
   }
    
