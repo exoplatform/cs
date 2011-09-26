@@ -395,7 +395,7 @@ UITabControl.prototype.denieFileExchange = function(denieNode) {
  */
 UITabControl.prototype.removeActionFileButtons = function(fileTransportNode, thys) {
   var DOMUtil = eXo.core.DOMUtil;
-  var actionFileList = DOMUtil.findDescendantsByClass(fileTransportNode, 'div', this.CSS_CLASS.actionFile);
+  var actionFileList = DOMUtil.findDescendantsByClass(fileTransportNode, 'a', this.CSS_CLASS.actionFile);
   for (var i=0; i < actionFileList.length; i++) {
     DOMUtil.removeElement(actionFileList[i]);
   };
