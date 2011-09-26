@@ -43,7 +43,7 @@
             </goals>
             <configuration>
               <outputDirectory>${project.build.outputDirectory}</outputDirectory>
-              <excludes>**/GATEIN-README.txt,**/EXO-README.txt,**/conf/server.xml,**/Catalina/localhost/rest.xml,**/conf/jaas.conf,**/gatein/conf/configuration.properties</excludes>
+              <excludes>**/GATEIN-README.txt,**/EXO-README.txt,**/conf/server.xml,**/Catalina/localhost/rest.xml,**/conf/jaas.conf,**/gatein/conf/configuration.properties, **/webapps/ROOT/index.html, **/webapps/ROOT/index.jsp</excludes>
               <includes>**</includes>
               <excludeArtifactIds>hsqldb</excludeArtifactIds>
             </configuration>
