@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.exoplatform.cs</groupId>
     <artifactId>exo.cs.eXoApplication.mail</artifactId>
-    <version>2.1.6</version>
+    <version>2.1.7-SNAPSHOT</version>
   </parent>
   <artifactId>exo.cs.eXoApplication.mail.webapp</artifactId>
   <packaging>war</packaging>
