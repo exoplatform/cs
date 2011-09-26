@@ -159,6 +159,11 @@
     </dependency>
     <dependency>
     <groupId>org.exoplatform.commons</groupId>
+    <artifactId>exo.platform.commons.webui</artifactId>
+    <version>${org.exoplatform.commons.version}</version>
+    </dependency>
+    <dependency>
+    <groupId>org.exoplatform.commons</groupId>
     <artifactId>exo.platform.commons.comet.service</artifactId>
     <version>${org.exoplatform.commons.version}</version>
     </dependency>
@@ -174,7 +179,13 @@
 		<version>${org.exoplatform.commons.version}</version>
 		<type>war</type>
 	  </dependency>
-	 
+    <dependency>
+      <groupId>org.exoplatform.commons</groupId>
+      <artifactId>exo.platform.commons.resources</artifactId>
+      <version>${org.exoplatform.commons.version}</version>
+       <type>war</type>
+    </dependency>	 
+
 	  <dependency>
 		<groupId>org.exoplatform.portal</groupId>
 		<artifactId>exo.portal.component.portal</artifactId>
