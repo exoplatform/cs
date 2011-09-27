@@ -156,22 +156,38 @@ public class UIMessageList extends UIForm {
     sortedBy_ = Utils.EXO_RECEIVEDDATE;
 
     MessageFilter filter = getMessageFilter();
-    if (filter == null)
+    if (filter == null) {
       filter = new MessageFilter("Folder");
+    }
+    
     if (viewMode == MODE_THREAD || viewMode == MODE_CONVERSATION) {
       filter.setOrderBy(Utils.EXO_LAST_UPDATE_TIME);
     }
     
-    UIMailPortlet mailPortlet = getAncestorOfType(UIMailPortlet.class);
-    if (mailPortlet == null) {
+    if (Utils.isEmptyField(accountId)) {
       messageList_.clear();
       setMessageFilter(filter);
       return;
     }
-    DataCache dataCache = mailPortlet.getDataCache();
-
-    String username = MailUtils.getDelegateFrom(accountId, dataCache);
-    if (!Utils.isEmptyField(accountId) && dataCache.getAccountById(username, accountId) != null) {
+    
+    Account account = null;
+    String username = null;
+    MailService mailSrv = MailUtils.getMailService();
+    UIMailPortlet mailPortlet = getAncestorOfType(UIMailPortlet.class);
+    if (mailPortlet == null) {
+      username = MailUtils.getCurrentUser();
+      Account delegatedAccount = mailSrv.getDelegatedAccount(username, accountId);
+      if(delegatedAccount != null) {
+        username = delegatedAccount.getDelegateFrom();
+      }
+      account = mailSrv.getAccountById(username, accountId);
+    } else {
+      DataCache dataCache = mailPortlet.getDataCache();
+      username = MailUtils.getDelegateFrom(accountId, dataCache);
+      account = dataCache.getAccountById(username, accountId);
+    }
+    
+    if (account != null) {
       filter.setAccountId(accountId);
       if (filter.getFolder() == null) {
         if (!filter.getName().equals("Search")) {
@@ -187,7 +203,6 @@ public class UIMessageList extends UIForm {
         currentPage = pageList_.getCurrentPage();
       }
       MessagePageList currentPageList = null;
-      MailService mailSrv = MailUtils.getMailService();
       currentPageList = mailSrv.getMessagePageList(username, filter);
       setMessagePageList(currentPageList, currentPage);
     } else {
@@ -196,24 +211,26 @@ public class UIMessageList extends UIForm {
     setMessageFilter(filter);
   }
 
-  public void setFormId(){
-    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-    String formId = ((PortletRequestContext)context).getWindowId();
+  public void setFormId() {
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+    String formId = ((PortletRequestContext) context).getWindowId();
     UIMailPortlet mailportlet = getAncestorOfType(UIMailPortlet.class);
     UIMessageArea uiMsgArea = getAncestorOfType(UIMessageArea.class);
-    if(mailportlet == null){
-      if(uiMsgArea != null) {
+    if (mailportlet == null) {
+      if (uiMsgArea != null) {
         mailportlet = uiMsgArea.getAncestorOfType(UIMailPortlet.class);
       }
     }
-    if(mailportlet != null) mailportlet.setFormId(formId);
+    if (mailportlet != null) {
+      mailportlet.setFormId(formId);
+    }
   }
 
   public boolean isMessagePreviewRendered() {
     try {
       return getAncestorOfType(UIMessageArea.class).getChild(UIMessagePreview.class).isRendered() ;
     } catch (Exception e) {
-      return false ;
+      return false;
     }
   }
 
@@ -236,6 +253,8 @@ public class UIMessageList extends UIForm {
           init(null);
           uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);
         }
+      } else {
+        updateMessagePageList(accId, selectedFolderId_);
       }
     } catch (Exception ex) {
       if (log.isDebugEnabled()) {

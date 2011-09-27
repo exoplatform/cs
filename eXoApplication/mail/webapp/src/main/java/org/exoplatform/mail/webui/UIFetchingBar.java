@@ -55,7 +55,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 public class UIFetchingBar extends UIForm {
   private static final Log log = ExoLogger.getExoLogger(UIFetchingBar.class);
   
-  private boolean isShown_ = false;
+  protected boolean isShown_ = false;
   private MailService mailService ;
   private StatusInfo statusInfo;
   
@@ -235,7 +235,6 @@ public class UIFetchingBar extends UIForm {
         }
       }
       if (updateList) {
-        // uiMsgList.updateMessagePageList(accountId,uiMsgList.getSelectedFolderId());
         uiMsgList.messageList_.put(msg.getId(), msg);
       }
 

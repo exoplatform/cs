@@ -913,8 +913,7 @@ public class MailServiceImpl implements MailService, Startable {
     if (Utils.isEmptyField(folderId))
       checkMail(userName, accountId);
     else {
-      JobDetail job = loadCheckmailJob(userName, accountId, folderId);
-
+      loadCheckmailJob(userName, accountId, folderId);
     }
   }
 
@@ -974,8 +973,10 @@ public class MailServiceImpl implements MailService, Startable {
     jobData.put(CheckMailJob.REPO_NAME, repositoryService.getCurrentRepository().getConfiguration().getName());
     jobData.put(CheckMailJob.USERNAME, userName);
     jobData.put(CheckMailJob.ACCOUNTID, accountId);
-    if (folderId != null && folderId.length() > 0)
-      jobData.put(CheckMailJob.FOLDERID, folderId);    
+    if (folderId != null && folderId.length() > 0) {
+      jobData.put(CheckMailJob.FOLDERID, folderId); 
+    }
+    
     if (job == null) {
       PeriodInfo periodInfo = new PeriodInfo(null, null, 0, 24 * 60 * 60 * 1000);
       schedulerService_.addPeriodJob(info, periodInfo, jobData);
@@ -1795,7 +1796,6 @@ public class MailServiceImpl implements MailService, Startable {
         c.setTime(checkFromDate);
       }
       HashSet<String> savedMsgList = new HashSet<String>(getListOfMessageIdsInFolder(userName, accountId, folderId, c , null));
-      
       
       totalNew = msgMap.size();
 

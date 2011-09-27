@@ -100,8 +100,9 @@ public class UIActionBar extends UIContainer {
           context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.checkMail(true, '" + folderId + "') ;");
           String uId = MailUtils.getDelegateFrom(accId, dataCache);
           currentF = dataCache.getFolder(uId, accId, folderId);
-          if (currentF.getNumberOfUnreadMessage() < 0)
+          if (currentF.getNumberOfUnreadMessage() < 0) {
             currentF.setNumberOfUnreadMessage(0);
+          }
         }
         context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.showStatusBox('checkmail-notice') ;");
         uiPortlet.findFirstComponentOfType(UIFetchingBar.class).setIsShown(true);
@@ -115,7 +116,9 @@ public class UIActionBar extends UIContainer {
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
       List<Message> msgList = new  ArrayList<Message>(uiMessageList.messageList_.values());
       long numberOfUnread = Utils.getNumberOfUnreadMessageReally(msgList);
-      if(numberOfUnread >= 0 && !MailUtils.isFieldEmpty(folderId) && msgList.size()>0) currentF.setNumberOfUnreadMessage(numberOfUnread) ;
+      if ((numberOfUnread >= 0) && !MailUtils.isFieldEmpty(folderId) && (msgList.size() > 0)) {
+        currentF.setNumberOfUnreadMessage(numberOfUnread);
+      }
       UIMessageArea uiMessageArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
