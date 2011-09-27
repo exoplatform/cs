@@ -2481,17 +2481,21 @@ public class MailServiceImpl implements MailService, Startable {
     javax.mail.Folder fd = null;
     try {
       if (account.getProtocol().equals(Utils.IMAP)) {
-        store = openIMAPConnection(userName, account);
-        if (store != null) {
-          javax.mail.Message message = null;
-          URLName url = new URLName(getFolder(userName, accountId, msg.getFolders()[0]).getURLName());
-          fd = store.getFolder(url);
-          if (fd != null) {
-            if (!fd.isOpen()) {
-              fd.open(javax.mail.Folder.READ_WRITE);
+        if (msg.isDownloadedContentFromMailServer()) {
+          msg = storage_.loadTotalMessage(userName, accountId, msg);
+        } else {
+          store = openIMAPConnection(userName, account);
+          if (store != null) {
+            javax.mail.Message message = null;
+            URLName url = new URLName(getFolder(userName, accountId, msg.getFolders()[0]).getURLName());
+            fd = store.getFolder(url);
+            if (fd != null) {
+              if (!fd.isOpen()) {
+                fd.open(javax.mail.Folder.READ_WRITE);
+              }
+              message = ((IMAPFolder) fd).getMessageByUID(Long.valueOf(msg.getUID()));
+              msg = storage_.loadTotalMessage(userName, accountId, msg, message);
             }
-            message = ((IMAPFolder) fd).getMessageByUID(Long.valueOf(msg.getUID()));
-            msg = storage_.loadTotalMessage(userName, accountId, msg, message);
           }
         }
       } else if (account.getProtocol().equals(Utils.POP3)) {

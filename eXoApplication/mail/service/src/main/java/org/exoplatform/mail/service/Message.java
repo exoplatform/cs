@@ -82,6 +82,8 @@ public class Message extends MessageHeader {
   private boolean             isRootConversation  = true;
 
   private boolean             attIsLoadedProperly = true;
+  
+  private boolean             isDownloadedContentFromMailServer = false;
 
   private ServerConfiguration serverConfiguration;
 
@@ -317,5 +319,13 @@ public class Message extends MessageHeader {
 
   public void setIsReturnReceipt(boolean b) {
     isReturnReceipt = b;
+  }
+
+  public boolean isDownloadedContentFromMailServer() {
+    return isDownloadedContentFromMailServer;
+  }
+
+  public void setDownloadedContentFromMailServer(boolean b) {
+    this.isDownloadedContentFromMailServer = b;
   }
 }

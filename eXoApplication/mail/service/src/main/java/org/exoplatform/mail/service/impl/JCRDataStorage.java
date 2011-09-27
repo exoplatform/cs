@@ -1326,6 +1326,7 @@ public class JCRDataStorage implements DataStorage {
 
     node.setProperty(Utils.EXO_CONTENT_TYPE, msg.getContentType());
     node.setProperty(Utils.EXO_BODY, strBuffer.toString());
+    node.setProperty(Utils.IS_DOWNLOADED_CONTENT, true);
     node.save();
     return strBuffer.toString();
   }

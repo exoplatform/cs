@@ -269,6 +269,8 @@ public class Utils {
   public static final String        EXO_HASATTACH                         = "exo:hasAttach".intern();
 
   public static final String        IS_LOADED                             = "exo:isLoaded".intern();
+  
+  public static final String        IS_DOWNLOADED_CONTENT                 = "exo:isDownloadedContent".intern();
 
   public static final String        ATT_IS_LOADED_PROPERLY                = "exo:isLoadedProperly".intern();
 
@@ -970,6 +972,10 @@ public class Utils {
       msg.setAttIsLoadedProperly(messageNode.getProperty(Utils.ATT_IS_LOADED_PROPERLY).getBoolean());
     if (messageNode.hasProperty(Utils.IS_RETURN_RECEIPT))
       msg.setIsReturnReceipt(messageNode.getProperty(Utils.IS_RETURN_RECEIPT).getBoolean());
+    
+    if (messageNode.hasProperty(Utils.IS_DOWNLOADED_CONTENT)) {
+      msg.setDownloadedContentFromMailServer(messageNode.getProperty(Utils.IS_DOWNLOADED_CONTENT).getBoolean());
+    }
 
     return msg;
   }
