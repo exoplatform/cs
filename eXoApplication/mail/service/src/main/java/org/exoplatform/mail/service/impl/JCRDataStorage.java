@@ -2586,7 +2586,12 @@ public class JCRDataStorage implements DataStorage {
    */
   private Message reCheckAttachment(Node messageNode, Message msg) throws Exception {
     String body = msg.getMessageBody();
-    Node attNode = messageNode.getNode(Utils.KEY_ATTACHMENT); // reload attachments node
+    Node attNode = null;
+    try {
+      attNode = messageNode.getNode(Utils.KEY_ATTACHMENT);
+    } catch (PathNotFoundException pne) {
+      attNode = messageNode.addNode(Utils.KEY_ATTACHMENT, Utils.NT_UNSTRUCTURED);
+    }
     Map<String, JCRMessageAttachment> mapOfAtts = getAttachments(messageNode); // get all of attachments. they have not been distinguished between attached file and html resource.
     if (!mapOfAtts.isEmpty()) {
       boolean attachedFile = false;
@@ -2775,22 +2780,25 @@ public class JCRDataStorage implements DataStorage {
 
         node.setProperty(Utils.EXO_REPLYTO, Utils.decodeText(InternetAddress.toString(msg.getReplyTo())));
         String subject = msg.getSubject();
-        if (subject != null)
+        if (subject != null){
           subject = Utils.decodeText(msg.getSubject());
-        else
+        } else{
           subject = "";
+        }
         node.setProperty(Utils.EXO_SUBJECT, subject);
         node.setProperty(Utils.EXO_RECEIVEDDATE, gc);
         node.setProperty(Utils.EXO_LAST_UPDATE_TIME, gc);
 
         Calendar sc = GregorianCalendar.getInstance();
-        if (msg.getSentDate() != null)
+        if (msg.getSentDate() != null){
           sc.setTime(msg.getSentDate());
-        else
+        } else{
           sc = gc;
+        }
         node.setProperty(Utils.EXO_SENDDATE, sc);
-        if (gc == null)
+        if (gc == null){
           node.setProperty(Utils.EXO_LAST_UPDATE_TIME, sc);
+        }
 
         node.setProperty(Utils.EXO_SIZE, Math.abs(msg.getSize()));
         boolean isReadMessage = MimeMessageParser.isSeenMessage(msg);
@@ -2800,18 +2808,20 @@ public class JCRDataStorage implements DataStorage {
         long priority = MimeMessageParser.getPriority(msg);
         node.setProperty(Utils.EXO_PRIORITY, priority);
 
-        if (MimeMessageParser.requestReturnReceipt(msg))
+        if (MimeMessageParser.requestReturnReceipt(msg)){
           node.setProperty(Utils.IS_RETURN_RECEIPT, true);
-        else
+        } else{
           node.setProperty(Utils.IS_RETURN_RECEIPT, false);
+        }
 
         if (spamFilter != null && spamFilter.checkSpam(msg)) {
           folderIds = new String[] { Utils.generateFID(accId, Utils.FD_SPAM, false) };
         }
         node.setProperty(Utils.MSG_FOLDERS, folderIds);
 
-        if (tagList != null && tagList.size() > 0)
+        if (tagList != null && tagList.size() > 0){
           node.setProperty(Utils.EXO_TAGS, tagList.toArray(new String[] {}));
+        }
 
         ArrayList<String> values = new ArrayList<String>();
         Enumeration enu = msg.getAllHeaders();
@@ -2832,8 +2842,9 @@ public class JCRDataStorage implements DataStorage {
         t3 = System.currentTimeMillis();
         logger.debug("Saved body (and attachments) of message finished : " + (t3 - t2) + " ms");
         node.save();
-        if (infoObj != null && continuation != null)
+        if (infoObj != null && continuation != null){
           setCometdMessage(continuation, infoObj, from, msgId, isReadMessage, subject, Utils.convertSize(Math.abs(msg.getSize())), accId, gc, sc, currentUserName, username);
+        }
         t4 = System.currentTimeMillis();
         logger.warn("Saved total message to JCR finished : " + (t4 - t1) + " ms");
         logger.debug("Adding message to thread ...");
@@ -2844,10 +2855,6 @@ public class JCRDataStorage implements DataStorage {
 
         logger.debug("Updating number message to folder ...");
         t1 = System.currentTimeMillis();
-
-        for (int i = 0; i < folderIds.length; i++) {
-          increaseFolderItem(sProvider, username, accId, folderIds[i], isReadMessage);
-        }
 
         t2 = System.currentTimeMillis();
         logger.debug("Updated number message to folder finished : " + (t2 - t1) + " ms");
@@ -2977,39 +2984,53 @@ public class JCRDataStorage implements DataStorage {
 
   private MessageFilter getFilter(Node filterNode, String username, String accountId) throws Exception {
     MessageFilter filter = new MessageFilter("");
-    if (filterNode.hasProperty(Utils.EXO_ID))
+    if (filterNode.hasProperty(Utils.EXO_ID)){
       filter.setId((filterNode.getProperty(Utils.EXO_ID).getString()));
-    if (filterNode.hasProperty(Utils.EXO_NAME))
+    }
+    if (filterNode.hasProperty(Utils.EXO_NAME)){
       filter.setName(filterNode.getProperty(Utils.EXO_NAME).getString());
-    if (filterNode.hasProperty(Utils.EXO_FROM))
+    }
+    if (filterNode.hasProperty(Utils.EXO_FROM)){
       filter.setFrom(filterNode.getProperty(Utils.EXO_FROM).getString());
-    if (filterNode.hasProperty(Utils.EXO_FROM_CONDITION))
+    }
+    if (filterNode.hasProperty(Utils.EXO_FROM_CONDITION)){
       filter.setFromCondition((int) (filterNode.getProperty(Utils.EXO_FROM_CONDITION).getLong()));
-    if (filterNode.hasProperty(Utils.EXO_TO))
+    }
+    if (filterNode.hasProperty(Utils.EXO_TO)){
       filter.setTo(filterNode.getProperty(Utils.EXO_TO).getString());
-    if (filterNode.hasProperty(Utils.EXO_TO_CONDITION))
+    }
+    if (filterNode.hasProperty(Utils.EXO_TO_CONDITION)){
       filter.setToCondition((int) (filterNode.getProperty(Utils.EXO_TO_CONDITION).getLong()));
-    if (filterNode.hasProperty(Utils.EXO_SUBJECT))
+    }
+    if (filterNode.hasProperty(Utils.EXO_SUBJECT)){
       filter.setSubject(filterNode.getProperty(Utils.EXO_SUBJECT).getString());
-    if (filterNode.hasProperty(Utils.EXO_SUBJECT_CONDITION))
+    }
+    if (filterNode.hasProperty(Utils.EXO_SUBJECT_CONDITION)){
       filter.setSubjectCondition((int) (filterNode.getProperty(Utils.EXO_SUBJECT_CONDITION).getLong()));
-    if (filterNode.hasProperty(Utils.EXO_BODY))
+    }
+    if (filterNode.hasProperty(Utils.EXO_BODY)){
       filter.setBody(filterNode.getProperty(Utils.EXO_BODY).getString());
-    if (filterNode.hasProperty(Utils.EXO_BODY_CONDITION))
+    }
+    if (filterNode.hasProperty(Utils.EXO_BODY_CONDITION)){
       filter.setBodyCondition((int) (filterNode.getProperty(Utils.EXO_BODY_CONDITION).getLong()));
+    }
     if (filterNode.hasProperty(Utils.EXO_APPLY_FOLDER)) {
       String folder = filterNode.getProperty(Utils.EXO_APPLY_FOLDER).getString();
-      if (!Utils.isEmptyField(folder) && getFolder(username, accountId, folder) != null)
+      if (!Utils.isEmptyField(folder) && getFolder(username, accountId, folder) != null){
         filter.setApplyFolder(folder);
-      else
+      } else{
         filter.setApplyFolder(Utils.generateFID(accountId, Utils.FD_INBOX, false));
+      }
     }
-    if (filterNode.hasProperty(Utils.EXO_APPLY_TAG))
+    if (filterNode.hasProperty(Utils.EXO_APPLY_TAG)){
       filter.setApplyTag(filterNode.getProperty(Utils.EXO_APPLY_TAG).getString());
-    if (filterNode.hasProperty(Utils.EXO_KEEP_IN_INBOX))
+    }
+    if (filterNode.hasProperty(Utils.EXO_KEEP_IN_INBOX)){
       filter.setKeepInInbox(filterNode.getProperty(Utils.EXO_KEEP_IN_INBOX).getBoolean());
-    if (filterNode.hasProperty(Utils.EXO_APPLY_FOR_ALL))
+    }
+    if (filterNode.hasProperty(Utils.EXO_APPLY_FOR_ALL)){
       filter.setApplyForAll(filterNode.getProperty(Utils.EXO_APPLY_FOR_ALL).getBoolean());
+    }
 
     return filter;
   }
@@ -3022,19 +3043,22 @@ public class JCRDataStorage implements DataStorage {
     folderNode.setProperty(Utils.EXO_LABEL, folder.getURLName());
     folderNode.setProperty(Utils.EXO_TOTALMESSAGE, folder.getTotalMessage());
     folderNode.setProperty(Utils.EXO_PERSONAL, folder.isPersonalFolder());
-    if (folder.getLastCheckedDate() != null)
+    if (folder.getLastCheckedDate() != null){
       folderNode.setProperty(Utils.EXO_LAST_CHECKED_TIME, folder.getLastCheckedDate().getTime());
-    else
+    } else{
       folderNode.setProperty(Utils.EXO_LAST_CHECKED_TIME, (Value) null);
+    }
 
-    if (folder.getLastStartCheckingTime() != null)
+    if (folder.getLastStartCheckingTime() != null){
       folderNode.setProperty(Utils.EXO_LAST_START_CHECKING_TIME, folder.getLastStartCheckingTime().getTime());
-    else
+    } else{
       folderNode.setProperty(Utils.EXO_LAST_START_CHECKING_TIME, (Value) null);
-    if (folder.getCheckFromDate() != null)
+    }
+    if (folder.getCheckFromDate() != null){
       folderNode.setProperty(Utils.EXO_CHECK_FROM_DATE, folder.getCheckFromDate().getTime());
-    else
+    } else{
       folderNode.setProperty(Utils.EXO_CHECK_FROM_DATE, (Value) null);
+    }
     folderNode.save();
   }
 
@@ -3045,38 +3069,45 @@ public class JCRDataStorage implements DataStorage {
     infoObj.setSubject(subject);
     infoObj.setSize(size);
     infoObj.setAccountId(accId);
-    if (gc != null)
+    if (gc != null){
       infoObj.setDate(gc.getTime().toString());
-    else if (sc != null)
+    } else if (sc != null){
       infoObj.setDate(sc.getTime().toString());
-    else
+    } else{
       infoObj.setDate(new Date().toString());
+    }
 
     JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
     JsonValue json = null;
     try {
       json = generatorImpl.createJsonObject(infoObj);
     } catch (JsonException e) {
-      if (logger.isDebugEnabled())
+      if (logger.isDebugEnabled()){
         logger.debug("Cannot create json object for cometd", e);
+      }
       return;
     }
-    if (!Utils.isEmptyField(currentUserName))
+    if (!Utils.isEmptyField(currentUserName)){
       continuation.sendMessage(currentUserName, "/eXo/Application/mail/messages", json);
-    else
+    } else{
       continuation.sendMessage(username, "/eXo/Application/mail/messages", json);
+    }
   }
 
   public Tag getTag(Node tagNode) throws Exception {
     Tag tag = new Tag();
-    if (tagNode.hasProperty(Utils.EXO_ID))
+    if (tagNode.hasProperty(Utils.EXO_ID)){
       tag.setId((tagNode.getProperty(Utils.EXO_ID).getString()));
-    if (tagNode.hasProperty(Utils.EXO_NAME))
+    }
+    if (tagNode.hasProperty(Utils.EXO_NAME)){
       tag.setName(tagNode.getProperty(Utils.EXO_NAME).getString());
-    if (tagNode.hasProperty(Utils.EXO_DESCRIPTION))
+    }
+    if (tagNode.hasProperty(Utils.EXO_DESCRIPTION)){
       tag.setDescription(tagNode.getProperty(Utils.EXO_DESCRIPTION).getString());
-    if (tagNode.hasProperty(Utils.EXO_COLOR))
+    }
+    if (tagNode.hasProperty(Utils.EXO_COLOR)){
       tag.setColor(tagNode.getProperty(Utils.EXO_COLOR).getString());
+    }
     return tag;
   }
   

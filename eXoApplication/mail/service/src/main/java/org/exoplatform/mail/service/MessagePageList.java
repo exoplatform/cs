@@ -59,8 +59,9 @@ public class MessagePageList extends JCRPageList {
     Node currentNode;
     Session session = getJCRSession(username);
     QueryImpl queryImpl = createXPathQuery(session, username, value_);
-    if (page > 1)
+    if (page > 1){
       queryImpl.setOffset((page - 1) * pageSize);
+    }
     queryImpl.setLimit(pageSize);
     QueryResult result = queryImpl.execute();
     iter_ = result.getNodes();
