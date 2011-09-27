@@ -17,8 +17,8 @@
   background: url('../skinIcons/icons/CalendarIcons.gif') no-repeat right -1686px; /* orientation=rt */
   width: 20px; 
   height: 15px;
-  margin: 3px 4px 0px 0px; /* orientation=lt */
-  margin: 3px 0px 0px 4px; /* orientation=rt */
+  margin: 9px 4px 0px 0px; /* orientation=lt */
+  margin: 9px 0px 0px 4px; /* orientation=rt */
   cursor: pointer;
   display: block;
 }
@@ -35,24 +35,23 @@
 }
 
 .UICalendarPortlet .UICalendars .Label {
-  line-height: 18px;
+  line-height: 26px;
   margin-left: 3px; /* orientation=lt */
   margin-right: 3px; /* orientation=rt */
   font-weight: normal;
 }
 
 .UICalendarPortlet .UICalendars .CalendarTitle {
-  background: url('../background/HorizontalLine.gif') no-repeat bottom left; /* orientation=lt */
-  background: url('../background/HorizontalLine.gif') no-repeat bottom right; /* orientation=rt */ 
-  height: 18px;
-  padding-top: 5px;
+  background: #f3f3f3;
+  height: 28px;
+  border: solid 1px #fff;
 }
 
 .UICalendarPortlet .UICalendars .CollapserFlatStyle {
-  background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/BlackNextArrow.gif') no-repeat left; /* orientation=lt */
-  background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/BlackNextArrow-rt.gif') no-repeat right; /* orientation=rt */
+  background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/BlackNextArrow.gif') no-repeat left center; /* orientation=lt */
+  background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/BlackNextArrow-rt.gif') no-repeat right center; /* orientation=rt */
   width: 13px;
-  height: 16px;
+  height: 28px;
   float: left; /* orientation=lt */
   float: right; /* orientation=rt */
   margin: 1px 0px 0px 3px; /* orientation=lt */
@@ -76,6 +75,8 @@
 
 .UICalendarPortlet .UICalendars .MyCalendarContainer {
   padding: 8px;
+  border-top: solid 1px #e1e1e1;
+  border-bottom: solid 1px #e1e1e1;
 }
 
 .UICalendarPortlet .UICalendars .MyCalendarContainer .GroupItem {
@@ -93,7 +94,7 @@
   margin: 2px 2px 0px 3px; /* orientation=rt */
   float: left; /* orientation=lt */
   float: right; /* orientation=rt */
-  line-height: 16px;
+  line-height: 26px;
   font-weight: bold;
   white-space: nowrap;
   width: 65%;
@@ -142,8 +143,8 @@
 }
 
 .UICalendarPortlet .UICalendars .CheckBox {
-  margin: 2px 3px 0px 0px; /* orientation=lt */
-  margin: 2px 0px 0px 3px; /* orientation=rt */
+  margin: 8px 3px 0px 0px; /* orientation=lt */
+  margin: 8px 0px 0px 3px; /* orientation=rt */
   float: left; /* orientation=lt */
   float: right; /* orientation=rt */
   width: 16px;
@@ -237,8 +238,12 @@
 }
 
 .UICalendarPortlet .UICalendars .TitleBar {
-  border: none;
-  border-bottom: 1px solid #c7c7c7;
+	background: url('../background/CalendarBackground.gif') repeat-x left -401px; /* orientation=lt */
+	background: url('../background/CalendarBackground.gif') repeat-x left -401px; /* orientation=rt */
+	border: none;
+	border-bottom: 1px solid #c7c7c7;
+	height: 26px;
+	line-height: 26px;
 }
 
 .UICalendarPortlet .UICalendarTasks .Title {

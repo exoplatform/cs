@@ -115,7 +115,7 @@
                 actionLink =  uicomponent.event("GotoDate",dayActionLink) ;
                 styleCss = "" ;
                 if(cl.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
-                   styleCss = "color:red;" ;
+                   styleCss = "" ;
                 }
                  wf.setCalendar(cl) ;
             %>
@@ -257,18 +257,24 @@
           
           String tempTimeFormat = CalendarUtils.TIMEFORMATPATTERNS[0] ;
           if (timeFormat.startsWith("HH")) tempTimeFormat = CalendarUtils.TIMEFORMATPATTERNS[1] ;
-
+          def counter = 0 ;
+		  def timeName = "Gray";
           for(full in uicomponent.getDisplayTimes(tempTimeFormat, timeInterval, Locale.ENGLISH)){
-          String time = full.substring(0,full.lastIndexOf("_")) ;
-          String display = full.substring(full.lastIndexOf("_")+1) ;
-        if(isShowWorkingTime) {
-              if(time.equals(startWorkingTime)) {style = "" ;}
-              if(time.equals(endWorkingTime)) {style = "WorkOffTime" ;}
-            }
-            if(flag) {styleClass = "TdDotLine" ;}
-            else {styleClass = "TdLine";}
+			if((counter % 4) == 0 || (counter % 4) == 1) {
+			 timeName = "GrayLight";
+			} else if((counter % 4) == 2 || (counter % 4) == 3) {
+			 timeName = "Gray";
+			}
+			String time = full.substring(0,full.lastIndexOf("_")) ;
+			String display = full.substring(full.lastIndexOf("_")+1) ;
+				if(isShowWorkingTime) {
+				if(time.equals(startWorkingTime)) {style = "" ;}
+				if(time.equals(endWorkingTime)) {style = "WorkOffTime" ;}
+				}
+				if(flag) {styleClass = "TdDotLine" ;}
+				else {styleClass = "TdLine";}
           %>
-          <tr class="$style">
+          <tr class="$style $timeName">
             <td class="TdTime">
               <div class="TdTime">
                 <%if(!flag) {println display;} else {println "&nbsp;";} %>
@@ -313,6 +319,7 @@
              %>
           </tr>
              <%
+			 counter ++;
            }
             %>
         </tbody>

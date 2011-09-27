@@ -52,10 +52,10 @@
                     monthViewAction = uicomponent.TYPE_MONTH +"&currentTime="+ uicomponent.getCurrentCalendar().getTimeInMillis();
                     yearViewAction = uicomponent.TYPE_YEAR +"&currentTime="+ uicomponent.getCurrentCalendar().getTimeInMillis();
                 %>
-                <a href="<%=uicomponent.event("GotoDate", monthViewAction)%>" style="color:orange;">
+                <a href="<%=uicomponent.event("GotoDate", monthViewAction)%>">
                   $monthName 
                 </a>,  
-                <a style="color:blue">
+                <a>
                   $currentYear
                 </a>
                 </div>

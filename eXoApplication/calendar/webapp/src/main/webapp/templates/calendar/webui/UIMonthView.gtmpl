@@ -85,7 +85,7 @@
           aCalendar.set(Calendar.DAY_OF_WEEK, aCalendar.getFirstDayOfWeek());
           for(int i = 0; i < 7; i ++) {
             String cssStyle = "" ;
-            if(aCalendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) cssStyle = "color: red;" ;
+            if(aCalendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) cssStyle = "" ;
           %>
         <div class="WeekTitle" style="$cssStyle"><%=dayNames[aCalendar.get(Calendar.DAY_OF_WEEK)]%></div>
           <%

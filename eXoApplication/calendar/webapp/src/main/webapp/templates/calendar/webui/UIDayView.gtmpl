@@ -203,8 +203,15 @@
                       if(isShowWorkingTime) {style = "WorkOffTime" ;}
                       Calendar cl = uicomponent.getInstanceTempCalendar() ;
                       cl.setTime(uicomponent.calendar_.getTime());
-                      cl = uicomponent.getBeginDay(cl) ;  
+                      cl = uicomponent.getBeginDay(cl) ;
+					  def counter = 0;
+					  def timeName = "Gray";
                     for(full in uicomponent.getDisplayTimes(timeFormat, timeInterval, locale)){
+					if((counter % 4) == 0 || (counter % 4) == 1) {
+					 timeName = "GrayLight";
+					} else if((counter % 4) == 2 || (counter % 4) == 3) {
+					 timeName = "Gray";
+					}
           String h = full.substring(0,full.lastIndexOf("_")) ;
           String display = full.substring(full.lastIndexOf("_")+1) ;
                         if(isShowWorkingTime) {
@@ -215,7 +222,7 @@
                         if(flag) {cssClass = "TdLine" ;} ;
                           
                       %>
-                      <tr startFull="<%=tempFormat.format(cl.getTime())%>" startTime="<%=cl.getTimeInMillis()%>"  class="$style">
+                      <tr startFull="<%=tempFormat.format(cl.getTime())%>" startTime="<%=cl.getTimeInMillis()%>"  class="$timeName $style">
                         <td class="$cssClass"  startFull="<%=tempFormat.format(cl.getTime())%>" startTime="<%=cl.getTimeInMillis()%>"  unselectable="on" >
                           &nbsp;
                         </td>
@@ -223,6 +230,7 @@
                       <%
                        flag = !flag ;
                        cl.add(java.util.Calendar.MINUTE, timeInterval) ;
+					   counter++;
                       }%>
                     </tbody>
                   </table>
