@@ -115,6 +115,7 @@
 .UIPopupCategory{
   right:0px; /* orientation=rt */
   position:absolute;
+  border: none;
 }
 
 .UIPopupCategory .UIContextMenuContainer {
@@ -435,7 +436,8 @@
 .UIContactPortlet .SharedContact {
   background:url("/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/SharedContact.gif") no-repeat; 
 } 
-/*AutoComplete Style*/
+
+/*AutoComplete Style*/
 .AutoCompleteMenu {
   position:absolute;
   border: solid 1px black;

@@ -41,6 +41,11 @@
   background: url('icons/CalendarIcons.gif') no-repeat right -73px; /* orientation=rt */
 }
 
+.UICalendarPortlet .UIRightPopupMenuContainer .QuickAddEvent {
+  background: url('icons/CalendarIcons.gif') no-repeat left -75px; /* orientation=lt */
+  background: url('icons/CalendarIcons.gif') no-repeat right -75px; /* orientation=rt */
+}
+
 .UICalendarPortlet .QuickAddEvent {
   background: url('icons/CalendarIcons.gif') no-repeat left -75px; /* orientation=lt */
   background: url('icons/CalendarIcons.gif') no-repeat right -75px; /* orientation=rt */
@@ -97,6 +102,11 @@
   background: url('icons/CalendarIcons.gif') no-repeat right -412px; /* orientation=rt */
 }
 
+.UICalendarPortlet .UIRightPopupMenuContainer .DeleteEventIcon {
+  background: url('icons/CalendarIcons.gif') no-repeat left -438px; /* orientation=lt */
+  background: url('icons/CalendarIcons.gif') no-repeat right -438px; /* orientation=rt */
+}
+
 .UICalendarPortlet .DeleteEventIcon {
   background: url('icons/CalendarIcons.gif') no-repeat left -438px; /* orientation=lt */
   background: url('icons/CalendarIcons.gif') no-repeat right -438px; /* orientation=rt */
@@ -130,7 +140,7 @@
   background: url('icons/CalendarIcons.gif') no-repeat right -542px; /* orientation=rt */
 }
 
-.UICalendarPortlet .EditEventIcon {
+.UICalendarPortlet .UIRightPopupMenuContainer .EditEventIcon {
   background: url('icons/CalendarIcons.gif') no-repeat left -568px; /* orientation=lt */
   background: url('icons/CalendarIcons.gif') no-repeat right -568px; /* orientation=rt */
 }
@@ -150,6 +160,11 @@
   background: url('icons/CalendarIcons.gif') no-repeat right -620px; /* orientation=rt */
   width: 16px;
   height: 16px;
+}
+
+.UICalendarPortlet .UIRightPopupMenuContainer .ExportCalendarIcon {
+  background: url('icons/CalendarIcons.gif') no-repeat left -646px; /* orientation=lt */
+  background: url('icons/CalendarIcons.gif') no-repeat right -646px; /* orientation=rt */
 }
 
 .UICalendarPortlet .ExportCalendarIcon {
@@ -193,7 +208,7 @@
   width: auto;
 }
 
-.UICalendarPortlet .HidenAllCalendar {
+.UICalendarPortlet .UIRightPopupMenuContainer .HidenAllCalendar {
   background: url('icons/CalendarIcons.gif') no-repeat left -828px; /* orientation=lt */
   background: url('icons/CalendarIcons.gif') no-repeat right -828px; /* orientation=rt */
 }
@@ -203,7 +218,7 @@
   background: url('icons/CalendarIcons.gif') no-repeat right -853px; /* orientation=rt */
 }
 
-.UICalendarPortlet .HidenMinicalendar {
+.UICalendarPortlet .UIRightPopupMenuContainer .HidenMinicalendar {
   background: url('icons/CalendarIcons.gif') no-repeat left -880px; /* orientation=lt */
   background: url('icons/CalendarIcons.gif') no-repeat right -880px; /* orientation=rt */
 }
@@ -303,7 +318,7 @@
   background: url('icons/CalendarIcons.gif') no-repeat right -1217px; /* orientation=rt */
 }
 
-.UICalendarPortlet .ShowMinicalendar {
+.UICalendarPortlet .UIRightPopupMenuContainer .ShowMinicalendar {
   background: url('icons/CalendarIcons.gif') no-repeat left -1244px; /* orientation=lt */
   background: url('icons/CalendarIcons.gif') no-repeat right -1244px; /* orientation=rt */
 }
@@ -338,7 +353,7 @@
   background: url('icons/CalendarIcons.gif') no-repeat right -1451px; /* orientation=rt */
 }
 
-.UICalendarPortlet .ViewEventIcon {
+.UICalendarPortlet .UIRightPopupMenuContainer .ViewEventIcon {
   background: url('icons/CalendarIcons.gif') no-repeat left -1374px; /* orientation=lt */
   background: url('icons/CalendarIcons.gif') no-repeat right -1374px; /* orientation=rt */
 }
@@ -411,7 +426,7 @@
 /***************************UIRightClickPopupMenu*********************/
 /*********************************************************************/
 
-.UICalendarPortlet .QuickAddTask {
+.UICalendarPortlet .UIRightPopupMenuContainer .QuickAddTask {
   background: url('icons/CalendarIcons.gif') no-repeat left -125px; /* orientation=lt */
   background: url('icons/CalendarIcons.gif') no-repeat right -125px; /* orientation=rt */
 }
