@@ -2481,7 +2481,7 @@ public class MailServiceImpl implements MailService, Startable {
     javax.mail.Folder fd = null;
     try {
       if (account.getProtocol().equals(Utils.IMAP)) {
-        if (msg.isDownloadedContentFromMailServer()) {
+        if (msg.isLoaded()) {
           msg = storage_.loadTotalMessage(userName, accountId, msg);
         } else {
           store = openIMAPConnection(userName, account);
@@ -2506,7 +2506,7 @@ public class MailServiceImpl implements MailService, Startable {
         msg = storage_.loadTotalMessage(userName, accountId, msg, null);
       } catch (Exception ex) {
       }
-      logger.info("Download content failure");
+      logger.info("Download content failure", e);
     } finally {
       if (store != null && store.isConnected()) {
         store.close();

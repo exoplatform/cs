@@ -63,7 +63,6 @@ import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UIMessagePreview;
-import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.popup.UIAddressForm.ContactData;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.util.IdGenerator;
