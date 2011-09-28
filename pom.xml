@@ -570,6 +570,5 @@
     <module>server/jboss/patch-ear</module>
     <module>packaging</module>
     <module>testsuite</module>
-    <module>migration2.2</module>
   </modules>
 </project>
