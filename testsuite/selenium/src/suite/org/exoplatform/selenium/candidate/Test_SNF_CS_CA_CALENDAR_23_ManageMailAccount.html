@@ -78,12 +78,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder AccountSettingIcon']</td>
+	<td>css=div.IconHolder.AccountSettingIcon</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder AccountSettingIcon']</td>
+	<td>css=div.IconHolder.AccountSettingIcon</td>
 	<td></td>
 </tr>
 <tr>
@@ -168,7 +168,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- Step 4</td>
+	<td>-- Step 4 User Name &amp; Password</td>
 	<td></td>
 </tr>
 <tr>
@@ -193,7 +193,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- Step 5</td>
+	<td>-- Step 5 Verify Information</td>
 	<td></td>
 </tr>
 <tr>
@@ -218,22 +218,22 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@class='UISelectAccount']//div[@title='Manage accounts']</td>
+	<td>css=div.AddAccountIcon</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@class='UISelectAccount']//div[@title='Manage accounts']</td>
+	<td>css=div.AddAccountIcon</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=Edit account</td>
+	<td>link=Edit Account</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>link=Edit account</td>
+	<td>link=Edit Account</td>
 	<td></td>
 </tr>
 <tr>
@@ -257,38 +257,73 @@
 	<td>Test_23_Signature_Edit</td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIAccountSetting', 'incoming')&quot;]</td>
+	<td>echo</td>
+	<td>-- Incoming</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[text()='Incoming']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIAccountSetting', 'incoming')&quot;]</td>
+	<td>//div[text()='Incoming']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Outgoing</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[text()='Outgoing']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIAccountSetting', 'incoming')&quot;]</td>
+	<td>//div[text()='Outgoing']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Outgoing</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[text()='Fetch Options']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIAccountSetting', 'incoming')&quot;]</td>
+	<td>//div[text()='Fetch Options']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Save</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIAccountSetting', 'outgoing')&quot;]</td>
+	<td>link=Save</td>
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIAccountSetting', 'fetchOptions')&quot;]</td>
+	<td>waitForTextPresent</td>
+	<td>The account has been updated successfully.</td>
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>//div[@id='UIAccountPopupSetting']/div/div[2]/div/div[2]/table/tbody/tr/td/a[1]/div/div/div</td>
+	<td>verifyTextPresent</td>
+	<td>The account has been updated successfully.</td>
 	<td></td>
 </tr>
 <tr>
@@ -312,28 +347,23 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>css=div.AddAccountIcon</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
-	<td>//div[@class='UISelectAccount']//div[@title='Manage accounts']</td>
+	<td>css=div.AddAccountIcon</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=Delete account</td>
+	<td>link=Delete Account</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>link=Delete account</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForTextPresent</td>
-	<td>Test_23_account</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>Test_23_account</td>
+	<td>link=Delete Account</td>
 	<td></td>
 </tr>
 <tr>
@@ -363,12 +393,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder AccountSettingIcon']</td>
+	<td>css=div.IconHolder.AccountSettingIcon</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder AccountSettingIcon']</td>
+	<td>css=div.IconHolder.AccountSettingIcon</td>
 	<td></td>
 </tr>
 <tr>
@@ -513,17 +543,17 @@
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@class='UISelectAccount']//div[@title='Manage accounts']</td>
+	<td>css=div.AddAccountIcon</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=Delete account</td>
+	<td>link=Delete Account</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>link=Delete account</td>
+	<td>link=Delete Account</td>
 	<td></td>
 </tr>
 <tr>

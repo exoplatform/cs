@@ -52,7 +52,7 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAndWait</td>
 	<td>//a[contains(@onclick,'login')]</td>
 	<td></td>
 </tr>
@@ -72,18 +72,23 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- Account Settings</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder AccountSettingIcon']</td>
+	<td>css=div.IconHolder.AccountSettingIcon</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder AccountSettingIcon']</td>
+	<td>css=div.IconHolder.AccountSettingIcon</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- Step 1</td>
+	<td>-- Step 1 : Account Name &amp; Description </td>
 	<td></td>
 </tr>
 <tr>
@@ -108,7 +113,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- Step 2</td>
+	<td>-- Step 2 : Mail Identity Settings </td>
 	<td></td>
 </tr>
 <tr>
@@ -143,7 +148,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- Step 3</td>
+	<td>-- Step 3 : Server Information </td>
 	<td></td>
 </tr>
 <tr>
@@ -163,7 +168,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- Step 4</td>
+	<td>-- Step 4: User Name &amp; Password&nbsp;&nbsp;</td>
 	<td></td>
 </tr>
 <tr>
@@ -188,7 +193,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- Step 5</td>
+	<td>-- Step 5 : Verify Information</td>
 	<td></td>
 </tr>
 <tr>
@@ -217,43 +222,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>echo</td>
-	<td>- Check Mailconfig successfully</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//div[@class='MailFolderList']//div[1]/a</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyElementPresent</td>
-	<td>xpath=//div[@class='MailFolderList']//div[1]/a</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//div[@class='MailFolderList']//div[2]/a</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//div[@class='MailFolderList']//div[2]/a</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyElementPresent</td>
-	<td>xpath=//div[@class='MailFolderList']//div[3]/a</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyElementPresent</td>
-	<td>xpath=//div[@class='MailFolderList']//div[3]/a</td>
+	<td>pause</td>
+	<td>60000</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
-	<td>- Send mail to exo3 mail account</td>
+	<td>- Write mail</td>
 	<td></td>
 </tr>
 <tr>
@@ -287,8 +262,13 @@
 	<td></td>
 </tr>
 <tr>
+	<td>pause</td>
+	<td>60000</td>
+	<td></td>
+</tr>
+<tr>
 	<td>echo</td>
-	<td>-- Check Compose Mail</td>
+	<td>-- Check email in Sent Iteams</td>
 	<td></td>
 </tr>
 <tr>
@@ -314,16 +294,6 @@
 <tr>
 	<td>clickAndWait</td>
 	<td>link=Sign out</td>
-	<td></td>
-</tr>
-<tr>
-	<td>open</td>
-	<td>/csdemo</td>
-	<td></td>
-</tr>
-<tr>
-	<td>windowMaximize</td>
-	<td></td>
 	<td></td>
 </tr>
 <tr>
@@ -357,7 +327,7 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAndWait</td>
 	<td>//a[contains(@onclick,'login')]</td>
 	<td></td>
 </tr>
@@ -383,12 +353,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder AccountSettingIcon']</td>
+	<td>css=div.IconHolder.AccountSettingIcon</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder AccountSettingIcon']</td>
+	<td>css=div.IconHolder.AccountSettingIcon</td>
 	<td></td>
 </tr>
 <tr>
@@ -527,6 +497,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>pause</td>
+	<td>300000</td>
+	<td></td>
+</tr>
+<tr>
 	<td>echo</td>
 	<td>-- Create IMAP mail account--</td>
 	<td></td>
@@ -539,6 +514,11 @@
 <tr>
 	<td>click</td>
 	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder CheckMailIcon']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>300000</td>
 	<td></td>
 </tr>
 <tr>
@@ -653,22 +633,27 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder AccountSettingIcon']</td>
+	<td>css=div.IconHolder.AccountSettingIcon</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder AccountSettingIcon']</td>
+	<td>css=div.IconHolder.AccountSettingIcon</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//a[@title='Delete Account']/div</td>
+	<td>css=a[title=&quot;Delete Account&quot;] &gt; div.DeleteIcon</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//a[@title='Delete Account']/div</td>
+	<td>css=a[title=&quot;Delete Account&quot;] &gt; div.DeleteIcon</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForConfirmation</td>
+	<td> Are you sure to delete this account with all associated emails?</td>
 	<td></td>
 </tr>
 <tr>
