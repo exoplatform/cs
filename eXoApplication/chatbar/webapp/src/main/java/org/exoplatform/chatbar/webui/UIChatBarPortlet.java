@@ -16,6 +16,8 @@
  **/
 package org.exoplatform.chatbar.webui;
 
+import java.util.Properties;
+
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
@@ -155,27 +157,22 @@ public class UIChatBarPortlet extends UIPortletApplication {
   
   protected String getEmailLink () {
     String path = getPortletPreferences().getValue(UIConfigForm.MAIL_URL, null);
-    if (Utils.isUri(path)) {
-      return path;
-    } else {
-      return Utils.getServerBaseUrl() + path;
-    }
+    return getChatBarcf() + path;
   }
+  
+  
+  private String getChatBarcf() {
+    Properties props = new Properties(System.getProperties());
+    return props.getProperty("chatbar.config.url");
+  }
+
   protected String getCalendarLink () {
     String path = getPortletPreferences().getValue(UIConfigForm.CAL_URL, null);
-    if (Utils.isUri(path)) {
-      return path;
-    } else {
-      return Utils.getServerBaseUrl() + path;
-    }
+    return getChatBarcf() + path;
   }
   protected String getContactLink () {
     String path = getPortletPreferences().getValue(UIConfigForm.CON_URL, null);
-    if (Utils.isUri(path)) {
-      return path;
-    } else {
-      return Utils.getServerBaseUrl() + path;
-    }
+    return getChatBarcf() + path;
   }
   
 
