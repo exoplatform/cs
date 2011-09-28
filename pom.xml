@@ -24,7 +24,7 @@
   </issueManagement>
   <ciManagement>
     <system>hudson</system>
-    <url>https://ci.exoplatform.org/job/cs-2.1.x-ci/</url>
+    <url>https://ci.exoplatform.org/job/cs-2.2.x-ci/</url>
   </ciManagement>
   <properties>
     <org.exoplatform.kernel.version>2.3.0-GA</org.exoplatform.kernel.version>
