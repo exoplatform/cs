@@ -23,6 +23,11 @@
   width: auto;
 }
 
+.UICalendarPortlet .UICalendarCategoryManager .UIGrid th{
+	border-right: solid 1px #fff;
+	border-top: solid 1px #fff;
+}
+
 /********************* UIEventCategoryManager ***************************/
 
 .UICalendarPortlet .UIEventCategoryManager .UIEventCategoryForm {
