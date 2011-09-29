@@ -26,13 +26,15 @@
   import org.exoplatform.social.core.service.LinkProvider;
   import org.exoplatform.social.core.space.model.Space;
   import org.exoplatform.social.webui.Utils;
-	import org.exoplatform.cs.ext.impl.ContactSpaceActivityPublisher;
+  import org.exoplatform.social.core.service.LinkProvider;
+  import org.exoplatform.cs.ext.impl.ContactSpaceActivityPublisher;
 
   def pcontext = Util.getPortalRequestContext();
   def labelActivityHasBeenDeleted = _ctx.appRes("UIActivity.label.Activity_Has_Been_Deleted");
   def activity = uicomponent.getActivity();
   def activityDeletable = uicomponent.isActivityDeletable();
   def activityCommentAndLikable = uicomponent.isActivityCommentAndLikable();
+  def streamOwner = activity.getStreamOwner();
 %>
 
 <% if (activity) { //process if not null
@@ -124,7 +126,7 @@
 
   def ownerIdentity = uicomponent.ownerIdentity;
   if (uicomponent.isUserActivity()) {
-    ownerUri = ownerIdentity.profile.url;
+    ownerUri = LinkProvider.getUserProfileUri(ownerIdentity.getRemoteId());
     ownerAvatar = ownerIdentity.profile.avatarUrl;
     ownerName = ownerIdentity.profile.fullName;
     if (!ownerAvatar) ownerAvatar= LinkProvider.PROFILE_DEFAULT_AVATAR_URL;
@@ -137,7 +139,7 @@
   }
 %>
 
-<div class="UIActivity ContactActivity">
+<div class="UIActivity">
   <script type="text/javascript">
     function initUIActivity${activity.id}() {
       new eXo.social.webui.UIActivity($params);
@@ -153,38 +155,46 @@
     </a>
     <div class="ContentBox" id="ContextBox${activity.id}">
       <h5 class="TitleContent ClearFix">
-          <a class="Text" title="$ownerName" href="$ownerUri">$ownerName</a>
+        <a class="Text" title="$ownerName" href="$ownerUri">$ownerName</a>
+        <% if (uicomponent.isUserActivity() && uicomponent.isSpaceStreamOwner() && !uicomponent.isUISpaceActivitiesDisplay()) {%>
+        	<%
+          	Space spaceSource = Utils.getSpaceService().getSpaceByPrettyName(streamOwner);
+    				def spaceSourceURI = LinkProvider.getSpaceUri(spaceSource.url);
+          %>
+	        <div class="Delimiter">&gt;</div>
+	        <a class="Text" title="$streamOwner" href="$spaceSourceURI">$streamOwner</a>
+        <%}%>
       <% if (activityDeletable) {%>
         <span onclick="<%= uicomponent.event("DeleteActivity", uicomponent.getId(), ""); %>" class="CloseContentBoxNormal" id="DeleteActivityButton${activity.id}"></span>
       <%}%>
       </h5>
-	  <div class=" BoxGray">
+      <div class=" BoxGray">
       <p class="Content">
         <%
-				  def labelContactActivity = "";
-				  if (uicomponent.isContactAdded()) {
-				    labelContactActivity = _ctx.appRes("ContactUIActivity.msg.contact-add");
-				  } else {
-				    labelContactActivity = _ctx.appRes("ContactUIActivity.msg.contact-update");
-				  }
+          def labelContactActivity = "";
+          if (uicomponent.isContactAdded()) {
+            labelContactActivity = _ctx.appRes("ContactUIActivity.msg.contact-add");
+          } else {
+            labelContactActivity = _ctx.appRes("ContactUIActivity.msg.contact-update");
+          }
 
-				  labelContactActivity = labelContactActivity.replace("{0}", uicomponent.getActivityParamValue(ContactSpaceActivityPublisher.FULL_NAME_KEY));
-				  %>
-				  $labelContactActivity<br>
-				  <div><a style="cursor: pointer;" onclick="<%=uicomponent.event("MoreContactInfo");%>" id="MoreContactInfo${activity.id}"><%=_ctx.appRes("CalendarUIActivity.label.more-info")%></a></div>
-				  <br />
+          labelContactActivity = labelContactActivity.replace("{0}", uicomponent.getActivityParamValue(ContactSpaceActivityPublisher.FULL_NAME_KEY));
+          %>
+          $labelContactActivity<br>
+          <div><a style="cursor: pointer;" onclick="<%=uicomponent.event("MoreContactInfo");%>" id="MoreContactInfo${activity.id}"><%=_ctx.appRes("CalendarUIActivity.label.more-info")%></a></div>
+          <br />
 
       </p>
-				  <%
-				  if (uicomponent.isDisplayMoreInfo()) {
-				  %>
-				  <div class="CommentBox">
-				  <%=_ctx.appRes("ContactUIActivity.label.job-title") + uicomponent.getJobTitle();%> <br>
-				  <%=_ctx.appRes("ContactUIActivity.label.email") + uicomponent.getEmail();%> <br>
-				  <%=_ctx.appRes("ContactUIActivity.label.Phone") + uicomponent.getPhone();%> <br>
-				  </div>
-				  <% } %>
-	  </div>
+          <%
+          if (uicomponent.isDisplayMoreInfo()) {
+          %>
+          <div class="CommentBox">
+          <%=_ctx.appRes("ContactUIActivity.label.job-title") + uicomponent.getJobTitle();%> <br>
+          <%=_ctx.appRes("ContactUIActivity.label.email") + uicomponent.getEmail();%> <br>
+          <%=_ctx.appRes("ContactUIActivity.label.Phone") + uicomponent.getPhone();%> <br>
+          </div>
+          <% } %>
+    </div>
       <div class="DefaultActivityIcon">
         <span class="DateTime">$activityPostedTime *</span>
       <% def toggleDisplayCommentAction = uicomponent.event('ToggleDisplayCommentForm', null, false);
@@ -217,7 +227,7 @@
             displayedIdentityLikes.each({
               def id = Utils.getIdentityManager().getIdentity(it);
               personLikeFullName = id.profile.fullName;
-              personLikeProfileUri = id.profile.url;
+              personLikeProfileUri = LinkProvider.getUserProfileUri(id.getRemoteId());
               personLikeAvatarImageSource = id.profile.avatarUrl;
               if (!personLikeAvatarImageSource) personLikeAvatarImageSource = LinkProvider.PROFILE_DEFAULT_AVATAR_URL;
               %>
@@ -230,14 +240,14 @@
           </div>
       </div>
     <%}%>
-
+    
    <div id="CommentBlockBound${activity.id}">
-
+    
       <% if (uicomponent.commentListToggleable()) {
       def showAllCommentsAction = uicomponent.event("SetCommentListStatus", "all");
       def hideAllCommentsAction = uicomponent.event("SetCommentListStatus", "none");
       %>
-
+      
       <div class="CommentListInfo">
             <% if (commentListStatus.getStatus().equals("latest") || commentListStatus.getStatus().equals("none")) { %>
               <a onclick="$showAllCommentsAction" href="#show-all-comments">
@@ -264,7 +274,7 @@
 
       def id = Utils.getIdentityManager().getIdentity(it.userId);
       commenterFullName = id.profile.fullName;
-      commenterProfileUri = id.profile.url;
+      commenterProfileUri = LinkProvider.getUserProfileUri(id.getRemoteId());
       commentMessage = it.title;
       commentPostedTime = uicomponent.getPostedTimeString(_ctx, it.postedTime);
     %>
@@ -288,7 +298,7 @@
 
     <%
       def currentCommenterIdentity = Utils.getOwnerIdentity();
-      def currentCommenterUri = currentCommenterIdentity.profile.url;
+      def currentCommenterUri = LinkProvider.getUserProfileUri(currentCommenterIdentity.getRemoteId());
       def currentCommenterAvatar = currentCommenterIdentity.profile.avatarUrl;
       def currentCommenterName = currentCommenterIdentity.profile.fullName;
       if (!currentCommenterAvatar) currentCommenterAvatar= LinkProvider.PROFILE_DEFAULT_AVATAR_URL;
@@ -310,4 +320,3 @@
 <% } else { %> <!-- activity deleted -->
 <div class="UIActivity Deleted">$labelActivityHasBeenDeleted</div>
 <% }%>
-
