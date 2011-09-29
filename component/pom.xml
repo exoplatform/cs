@@ -12,5 +12,6 @@
   <modules>
     <module>upgrade</module>
     <module>statistics</module>
+    <module>injector</module>
   </modules>
 </project>

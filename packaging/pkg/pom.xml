@@ -777,6 +777,12 @@
 		<version>${project.version}</version>
 		<type>war</type>
 	</dependency>
+  <dependency>
+    <groupId>org.exoplatform.cs</groupId>
+    <artifactId>exo.cs.component.injector</artifactId>
+    <version>${project.version}</version>
+    <type>jar</type>
+  </dependency>
 	<dependency>
 		<groupId>commons-collections</groupId>
 		<artifactId>commons-collections</artifactId>

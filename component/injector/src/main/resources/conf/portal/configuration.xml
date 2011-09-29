@@ -27,7 +27,7 @@
   </component>
   
   <!--  component>
-    <type>org.exoplatform.mail.service.bench.SimpleMailServerInitializer</type>
+    <type>org.exoplatform.cs.bench.SimpleMailServerInitializer</type>
   </component -->
 
   <external-component-plugins>
@@ -35,7 +35,7 @@
     <component-plugin>
       <name>ContactDataInjector</name>
       <set-method>addInjector</set-method>
-      <type>org.exoplatform.contact.service.bench.ContactDataInjector</type>
+      <type>org.exoplatform.cs.bench.ContactDataInjector</type>
       <description>inject data for Contact</description>
       <init-params>
         <value-param>
@@ -55,7 +55,7 @@
     <component-plugin>
       <name>CalendarDataInjector</name>
       <set-method>addInjector</set-method>
-      <type>org.exoplatform.calendar.bench.CalendarDataInjector</type>
+      <type>org.exoplatform.cs.bench.CalendarDataInjector</type>
       <description>inject data for Calendar</description>
       <init-params>
         <value-param>
@@ -91,7 +91,7 @@
     <!-- component-plugin>
       <name>MailDataInjector</name>
       <set-method>addInjector</set-method>
-      <type>org.exoplatform.mail.service.bench.MailDataInjector</type>
+      <type>org.exoplatform.cs.bench.MailDataInjector</type>
       <description>inject data for Contact</description>
       <init-params>
         <value-param>
