@@ -24,7 +24,6 @@ import java.util.Map;
 
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccessImpl;
-import org.exoplatform.contact.CalendarUtils;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.Contact;
@@ -258,9 +257,8 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         ((UIFormSelectBoxWithGroups)uiForm.getChildById(UIAddressForm.CONTACT_GROUP)).setValue(category) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
       } catch (Exception e) {
-        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIAddressForm.msg.search-error-keyword", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAddressForm.msg.search-error-keyword",
+                                                                                       null));
         return ;
       }
     }
@@ -271,9 +269,9 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       UIAddressForm uiAddressForm = event.getSource() ;
       List<Contact> checkedContact = uiAddressForm.getCheckedContact();
       if(checkedContact.isEmpty()) {
-        UIApplication uiApp = uiAddressForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIAddressForm.msg.contact-email-required",null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIAddressForm.msg.contact-email-required", null));
         return ;
       }
       UIPopupContainer uiPopupContainer = uiAddressForm.getAncestorOfType(UIPopupContainer.class) ;
@@ -341,9 +339,9 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       UIAddressForm uiAddressForm = event.getSource() ;
       List<Contact> checkedContact = uiAddressForm.getCheckedContact();      
       if(checkedContact.size() <= 0) {
-        UIApplication uiApp = uiAddressForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIAddressForm.msg.contact-email-required",null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIAddressForm.msg.contact-email-required", null));
         return ;
       }
       UIContactPortlet uiPortlet = uiAddressForm.getAncestorOfType(UIContactPortlet.class) ;

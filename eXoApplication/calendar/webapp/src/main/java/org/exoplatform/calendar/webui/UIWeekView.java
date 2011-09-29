@@ -38,7 +38,6 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -235,10 +234,8 @@ public class UIWeekView extends UICalendarView {
             calendar = calService.getGroupCalendar(calendarId) ;
           }
           if(calendar == null) {
-            UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
-            uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          } else {
+            event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
+            } else {
             Calendar cal = calendarview.getInstanceTempCalendar() ;
             int hoursBg = (Integer.parseInt(startTime)/60) ;
             int minutesBg = (Integer.parseInt(startTime)%60) ;
@@ -293,9 +290,7 @@ public class UIWeekView extends UICalendarView {
           if (log.isDebugEnabled()) {
             log.debug("The calendar is not found", e);
           }
-          UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
         }
       }
     }
@@ -316,7 +311,6 @@ public class UIWeekView extends UICalendarView {
       String recurId = null;
       if (isOccur)
         recurId = event.getRequestContext().getRequestParameter(eventId + RECURID);
-      
       try {
         String username = CalendarUtils.getCurrentUser() ;
         CalendarEvent eventCalendar = null;
@@ -348,17 +342,13 @@ public class UIWeekView extends UICalendarView {
             calendar = calendarService.getGroupCalendar(calendarId) ;
           }
           if(calendar == null) {
-            UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
-            uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          } else {
+            event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
+            } else {
             // cs-4429: fix for group calendar permission !?
             if((CalendarUtils.SHARED_TYPE.equals(calType) && !CalendarUtils.canEdit(calendarview.getApplicationComponent(OrganizationService.class), Utils.getEditPerUsers(calendar), username)) ||
                (CalendarUtils.PUBLIC_TYPE.equals(calType) && !CalendarUtils.canEdit(calendarview.getApplicationComponent(OrganizationService.class), calendar.getEditPermission(), username))) 
             {
-              UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
-              uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit-event", null, 1)) ;
-              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit-event", null, 1)) ;
               calendarview.refresh() ;
               event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
               return ;

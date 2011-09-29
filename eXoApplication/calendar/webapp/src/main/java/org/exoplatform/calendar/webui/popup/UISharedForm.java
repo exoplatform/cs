@@ -33,7 +33,6 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIBreadcumbs;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.UITree;
@@ -46,8 +45,8 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
-import org.exoplatform.webui.organization.account.UIUserSelector;
 import org.exoplatform.webui.organization.account.UIGroupSelector;
+import org.exoplatform.webui.organization.account.UIUserSelector;
 
 /**
  * Created by The eXo Platform SARL
@@ -178,10 +177,9 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       UISharedForm uiForm = event.getSource() ;
       String names = uiForm.getUIStringInput(UISharedTab.FIELD_USER).getValue() ;
       String groups = uiForm.getUIStringInput(UISharedTab.FIELD_GROUP).getValue() ;
-      UICalendarPortlet uiApp = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
+      
       if(CalendarUtils.isEmpty(names) && CalendarUtils.isEmpty(groups)) {
-        uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.required", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UISharedForm.msg.required", null)) ;
         return ;
       }
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
@@ -204,13 +202,11 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
           }
         }
         if(sb.length() > 0) {
-          uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.not-founduser", new Object[]{sb.toString()}, 1)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UISharedForm.msg.not-founduser", new Object[]{sb.toString()}, 1)) ;
           return ;
         }
         if(receiverUsers.contains(username)) {
-          uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.found-user", new Object[]{username}, 1)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UISharedForm.msg.found-user", new Object[]{username}, 1)) ;
           return ;
         }
         Map<String, String> perms = new HashMap<String, String>() ;
@@ -249,8 +245,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
           }
         }
         if(sb.length() > 0) {
-          uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.not-foundgroup", new Object[]{sb.toString()}, 1)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UISharedForm.msg.not-foundgroup", new Object[]{sb.toString()}, 1)) ;
           return ;
         }
         sharedUsers.remove(username);
@@ -279,7 +274,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       uiForm.setSharedUser(null) ;
       uiForm.setSharedGroup(null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddEdit) ;
-      UICalendars uiCalendars = uiApp.findFirstComponentOfType(UICalendars.class);
+      UICalendars uiCalendars = uiForm.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UICalendars.class);
       if (uiCalendars != null)
         event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars);
     }

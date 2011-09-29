@@ -256,11 +256,9 @@ public class UITagForm extends UIForm implements UIPopupComponent {
         tagList.add(tag.getId());
 
       if (tagList.size() <= 0) {
-        UIApplication uiApp = uiTagForm.getAncestorOfType(UIApplication.class);
-        uiApp.addMessage(new ApplicationMessage("UITagForm.msg.have-to-choose-at-least-a-tag",
-                                                null,
-                                                ApplicationMessage.INFO));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UITagForm.msg.have-to-choose-at-least-a-tag", null, ApplicationMessage.INFO));        
         return;
       }
 

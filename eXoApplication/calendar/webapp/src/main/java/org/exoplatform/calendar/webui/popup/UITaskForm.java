@@ -35,7 +35,6 @@ import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.service.Utils;
-import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
@@ -54,7 +53,6 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItem;
@@ -807,9 +805,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       UITaskForm uiForm = event.getSource() ;
       uiForm.setSelectedTab(TAB_TASKREMINDER) ;
       if(!uiForm.getEmailReminder()) {
-        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UITaskForm.msg.email-reminder-required", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UITaskForm.msg.email-reminder-required", null));
       } else {
         UIPopupAction uiPopupAction  = uiForm.getAncestorOfType(UIPopupContainer.class).getChild(UIPopupAction.class) ;
         UIAddressForm uiAddressForm = uiPopupAction.activate(UIAddressForm.class, 640) ;
@@ -901,7 +897,6 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   static  public class SaveActionListener extends EventListener<UITaskForm> {
     public void execute(Event<UITaskForm> event) throws Exception {
       UITaskForm uiForm = event.getSource() ;
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
       UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
@@ -930,8 +925,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
             s = s.trim() ;
             if(!CalendarUtils.isEmpty(s))
               if(orgService.getUserHandler().findUserByName(s) == null) {
-                uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.name-not-correct", new Object[]{s}, ApplicationMessage.WARNING)) ;
-                event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIEventForm.msg.name-not-correct", new Object[]{s}, ApplicationMessage.WARNING)) ;
                 return ;
               }  
           }
@@ -940,8 +934,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
         Date from = uiForm.getTaskFromDate(calendarPortlet.getCalendarSetting().getDateFormat(), calendarPortlet.getCalendarSetting().getTimeFormat()) ;
         Date to = uiForm.getTaskToDate(calendarPortlet.getCalendarSetting().getDateFormat(), calendarPortlet.getCalendarSetting().getTimeFormat()) ;
         if(from.after(to)) {
-          uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.event-date-time-logic", null, ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage(uiForm.getId() + ".msg.event-date-time-logic", null, ApplicationMessage.WARNING)) ;
           return ;
         } else if(from.equals(to)) {
           to = CalendarUtils.getEndDay(from).getTime() ;
@@ -957,8 +950,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
           uiPopupAction.deActivate() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(calendarPortlet) ;
-          uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1));
           return ;
         } else {
           boolean canEdit = false ;          
@@ -971,16 +963,15 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
           if(!canEdit && !uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE) ) {
             uiPopupAction.deActivate() ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-            uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null, 1));
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null, 1));
             return ;
           }
         }
         if(!uiForm.isReminderValid()) {
-          uiApp.addMessage(new ApplicationMessage(uiForm.errorMsg_, new String[] {uiForm.errorValues }, ApplicationMessage.WARNING));
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage(uiForm.errorMsg_, new String[] {uiForm.errorValues }, ApplicationMessage.WARNING));
           uiForm.setSelectedTab(TAB_TASKREMINDER) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          
           return ;
         }
         calendarEvent.setCalType(uiForm.calType_) ;
@@ -1033,15 +1024,13 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
           uiPopupAction.deActivate() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
         }catch (Exception e) {
-          uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.add-event-error", null));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage(uiForm.getId() + ".msg.add-event-error", null));
           if (log.isDebugEnabled()) {
             log.debug("Can not save the task", e);
           }
         }
       } else {
-        uiApp.addMessage(new ApplicationMessage(uiForm.errorMsg_, null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage(uiForm.errorMsg_, null));
         uiForm.setSelectedTab(TAB_TASKDETAIL) ;
       }
       

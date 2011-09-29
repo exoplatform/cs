@@ -46,15 +46,14 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIPageIterator;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItem;
 import org.exoplatform.webui.core.model.SelectOption;
 import org.exoplatform.webui.core.model.SelectOptionGroup;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBoxWithGroups;
@@ -393,10 +392,10 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
           uiForm.setContactList(filter);
           ((UIFormSelectBoxWithGroups) uiForm.getChildById(UIAddressForm.CONTACT_GROUP)).setValue(category);
           event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
-        } catch (Exception e) {
-          UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class);
-          uiApp.addMessage(new ApplicationMessage("UIAddressForm.msg.search-error-keyword", null));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        } catch (Exception e) {          
+          event.getRequestContext()
+               .getUIApplication()
+               .addMessage(new ApplicationMessage("UIAddressForm.msg.search-error-keyword", null));
           return;
         }
       }
@@ -410,10 +409,10 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       boolean isSendToGroup = uiAddressForm.getUIFormCheckBoxInput(UIAddressForm.SELECTED_GROUP)
                                            .isChecked();
       List<ContactData> checkedContact = uiAddressForm.getCheckedContact();
-      if (checkedContact.isEmpty() && !isSendToGroup) {
-        UIApplication uiApp = uiAddressForm.getAncestorOfType(UIApplication.class);
-        uiApp.addMessage(new ApplicationMessage("UIAddressForm.msg.contact-email-required", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+      if (checkedContact.isEmpty() && !isSendToGroup) {        
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIAddressForm.msg.contact-email-required", null));
         return;
       }
       UIPopupActionContainer uiPopupContainer = uiAddressForm.getAncestorOfType(UIPopupActionContainer.class);
@@ -423,11 +422,10 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       String toAddress = "";
 
       for (ContactData contact : checkedContact) {
-        if (MailUtils.isFieldEmpty(contact.getEmail())) {
-          UIApplication uiApp = uiAddressForm.getAncestorOfType(UIApplication.class);
-          uiApp.addMessage(new ApplicationMessage("UIAddressForm.msg.you-should-only-choose-contact-with-email-address",
-                                                  null));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        if (MailUtils.isFieldEmpty(contact.getEmail())) {          
+          event.getRequestContext()
+               .getUIApplication()
+               .addMessage(new ApplicationMessage("UIAddressForm.msg.you-should-only-choose-contact-with-email-address", null));    
           return;
         }
       }
@@ -530,9 +528,9 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       boolean isSendToGroup = uiAddressForm.getUIFormCheckBoxInput(UIAddressForm.SELECTED_GROUP)
                                            .isChecked();
       if (checkedContact.size() <= 0 && !isSendToGroup) {
-        UIApplication uiApp = uiAddressForm.getAncestorOfType(UIApplication.class);
-        uiApp.addMessage(new ApplicationMessage("UIAddressForm.msg.contact-email-required", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIAddressForm.msg.contact-email-required", null));
         return;
       }
       UIMailPortlet uiPortlet = uiAddressForm.getAncestorOfType(UIMailPortlet.class);
@@ -540,11 +538,10 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       UIComposeForm uiComposeForm = uiPortlet.findFirstComponentOfType(UIComposeForm.class);
       UIEventForm uiEventForm = uiPortlet.findFirstComponentOfType(UIEventForm.class);
       for (ContactData contact : checkedContact) {
-        if (MailUtils.isFieldEmpty(contact.getEmail())) {
-          UIApplication uiApp = uiAddressForm.getAncestorOfType(UIApplication.class);
-          uiApp.addMessage(new ApplicationMessage("UIAddressForm.msg.you-should-only-choose-contact-with-email-address",
-                                                  null));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        if (MailUtils.isFieldEmpty(contact.getEmail())) {          
+          event.getRequestContext()
+               .getUIApplication()
+               .addMessage(new ApplicationMessage("UIAddressForm.msg.you-should-only-choose-contact-with-email-address", null));      
           return;
         }
       }

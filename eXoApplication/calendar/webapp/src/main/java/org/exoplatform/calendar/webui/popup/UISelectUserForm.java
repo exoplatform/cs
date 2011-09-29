@@ -34,7 +34,6 @@ import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIPageIterator;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
@@ -177,9 +176,8 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
           }
         }
         if(count == 0) {
-          UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UISelectUserForm.msg.user-required",null)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UISelectUserForm.msg.user-required",
+                                                                                         null));
           return ;
         } 
         for(String s : uiForm.pars_) {
@@ -216,9 +214,8 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
           }
         }
         if(CalendarUtils.isEmpty(sb.toString())) {
-          UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UISelectUserForm.msg.user-required",null)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UISelectUserForm.msg.user-required",
+                                                                                         null));
           return ;
         }
         uiEventForm.setSelectedTab(uiForm.tabId_) ;

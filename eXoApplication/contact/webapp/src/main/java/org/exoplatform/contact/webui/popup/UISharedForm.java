@@ -39,7 +39,6 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
@@ -140,15 +139,14 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     @SuppressWarnings("unchecked")
   public void execute(Event<UISharedForm> event) throws Exception {
       UISharedForm uiForm = event.getSource() ;
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       String names = uiForm.getUIStringInput(ContactUtils.FIELD_USER).getValue() ;
       String groups = uiForm.getUIStringInput(ContactUtils.FIELD_GROUP).getValue() ;
       Map<String, String> receiveUsers = new LinkedHashMap<String, String>() ;
       Map<String, String> receiveGroups = new LinkedHashMap<String, String>() ;      
       if(ContactUtils.isEmpty(names) && ContactUtils.isEmpty(groups)) {        
-        uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.empty-username", null,
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UISharedForm.msg.empty-username",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));
         return ;
       }
       String username = ContactUtils.getCurrentUser() ;
@@ -168,9 +166,11 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
           }
         }
         if (invalidUsers.length() > 0) {
-          uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.not-exist-username"
-              , new Object[]{invalidUsers.toString()}, 1 )) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext()
+               .getUIApplication()
+               .addMessage(new ApplicationMessage("UISharedForm.msg.not-exist-username",
+                                                  new Object[] { invalidUsers.toString() },
+                                                  1));
           return ;          
         }      
       }
@@ -187,9 +187,11 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
           }
         }
         if (invalidGroups.length() > 0) {
-          uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.not-exist-group"
-              , new Object[]{invalidGroups.toString()}, 1 )) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext()
+               .getUIApplication()
+               .addMessage(new ApplicationMessage("UISharedForm.msg.not-exist-group",
+                                                  new Object[] { invalidGroups.toString() },
+                                                  1));
           return ;          
         }      
       }
@@ -213,9 +215,9 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       receiveUsersByGroups.remove(ContactUtils.getCurrentUser()) ;
 
       if (receiveGroups.size() == 0 && receiveUsers.size() == 0) {
-        uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.shared-yourself", null,
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UISharedForm.msg.shared-yourself",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));
         return ;
       }
 
@@ -295,9 +297,9 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
           try {
             contactService.saveContact(username, contact, false) ;
           }  catch (PathNotFoundException e) {
-            uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.contact-not-existed", null, 
-                ApplicationMessage.WARNING)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            event.getRequestContext()
+                 .getUIApplication()
+                 .addMessage(new ApplicationMessage("UISharedForm.msg.contact-not-existed", null, ApplicationMessage.WARNING));
             return ;              
           } 
           UIAddEditPermission uiAddEdit = uiForm.getParent() ;
@@ -418,10 +420,9 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     public void execute(Event<UISharedForm> event) throws Exception {
       UISharedForm uiSharedForm = event.getSource() ;
       if (!uiSharedForm.isNew_) {
-        UIApplication uiApp = uiSharedForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.cannot-change-username", null,
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UISharedForm.msg.cannot-change-username",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));
         return ;
       } 
       UIForm uiForm = (UIForm)uiSharedForm ;

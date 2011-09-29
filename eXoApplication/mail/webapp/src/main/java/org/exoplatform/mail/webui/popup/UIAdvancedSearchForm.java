@@ -33,13 +33,11 @@ import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UIMessagePreview;
-import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.UISelectFolder;
 import org.exoplatform.mail.webui.UITagContainer;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -233,8 +231,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       UIMailPortlet uiPortlet = uiSearchForm.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
 
-      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
-      UIApplication uiApp = uiSearchForm.getAncestorOfType(UIApplication.class);
+      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);      
       String username = uiPortlet.getCurrentUser();
       String accountId = dataCache.getSelectedAccountId();
       MailService mailService = uiPortlet.getApplicationComponent(MailService.class);
@@ -249,27 +246,28 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       
       if (!MailUtils.isFieldEmpty(fromDateText)) {
         if (!MailUtils.isDate(fromDateText, "MM/dd/yyyy")) {
-          uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.invalid-date", null));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.invalid-date",
+                                                                                         null));
           return;
         }
       } else if (!MailUtils.isFieldEmpty(toDateText)) {
         if (!MailUtils.isDate(toDateText, "MM/dd/yyyy")) {
-          uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.invalid-date", null));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.invalid-date",
+                                                                                         null));
           return;
         }
       }
 
       if (!MailUtils.isFieldEmpty(fromDateText) && !MailUtils.isFieldEmpty(toDateText)) {
         if (!MailUtils.isDate(fromDateText, "MM/dd/yyyy") || !MailUtils.isDate(toDateText, "MM/dd/yyyy")) {
-          uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.invalid-date", null));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.invalid-date",
+                                                                             null));
           return;
         }
         if (fromDate.after(toDate)) {
-          uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.date-time-invalid", null));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          event.getRequestContext()
+               .getUIApplication()
+               .addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.date-time-invalid", null));
           return;
         }
       }
@@ -280,16 +278,16 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       String folder = uiSearchForm.getSelectedFolder();
       if (Utils.isEmptyField(folder) && Utils.isEmptyField(from) && Utils.isEmptyField(to) && Utils.isEmptyField(subject)
           && (fromDate == null) && (toDate == null) && Utils.isEmptyField(body) && !hasStar && !hasAttach && (priority == 0)) {
-        uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.search-query-invalid", null, ApplicationMessage.INFO));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.search-query-invalid", null, ApplicationMessage.INFO));
+        
         return;
       } else if (!MailUtils.isSearchValid(from, MailUtils.SPECIALCHARACTER)
           || !MailUtils.isSearchValid(to, MailUtils.SPECIALCHARACTER)
           || !MailUtils.isSearchValid(subject, MailUtils.SPECIALCHARACTER)
           || !MailUtils.isSearchValid(body, MailUtils.SPECIALCHARACTER)) {
-        uiApp
-            .addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.search-query-invalid", null, ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.search-query-invalid", null, ApplicationMessage.WARNING));
         return;
       }
       
@@ -329,8 +327,9 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
         event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
       } catch (Exception e) {
-        uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.search-query-invalid", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.search-query-invalid", null));        
         return;
       }
     }

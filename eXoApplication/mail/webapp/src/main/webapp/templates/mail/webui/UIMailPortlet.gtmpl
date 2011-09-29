@@ -58,7 +58,6 @@
   <!-- End Mail AccountManagement -->
   <!-- Start Mail Working Details -->
             <%uicomponent.renderChild(UIMessageArea.class);%>
-            <%uicomponent.renderPopupMessages();%>
             <%uicomponent.renderChild(UIPopupAction.class);%>
             <div style="clear:left;"><span></span></div>
           </div>

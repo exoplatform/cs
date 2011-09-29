@@ -15,7 +15,6 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIBreadcumbs;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIBreadcumbs.LocalPath;
@@ -225,10 +224,7 @@ public class UIContentNavigation extends UIContainer {
       UIContentForm uiForm = uiWorkingArea.getChild(UIContentForm.class) ;
       ContentNode selectedNode = uiNav.getSelectedNode() ;
       if(selectedNode == null)  {
-        UIApplication uiApp = Util.getPortalRequestContext().getUIApplication() ;
-        uiApp.addMessage(new ApplicationMessage("UIContentNavigation.msg.EditNode", null)) ;
-        
-        Util.getPortalRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages() );
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIContentNavigation.msg.EditNode", null));
         return;
       }
       uiForm.setContentNode(selectedNode);
@@ -241,9 +237,7 @@ public class UIContentNavigation extends UIContainer {
       UIContentNavigation uiNav = event.getSource();
       ContentNode selectedNode = uiNav.getSelectedNode() ;
       if(selectedNode == null)  {
-        UIApplication uiApp = Util.getPortalRequestContext().getUIApplication() ;
-        uiApp.addMessage(new ApplicationMessage("UIContentNavigation.msg.EditNode", null)) ;
-        Util.getPortalRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages() );
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIContentNavigation.msg.EditNode", null));        
         return;
       }
       ContentNode parentNode = uiNav.getParentNode() ;      

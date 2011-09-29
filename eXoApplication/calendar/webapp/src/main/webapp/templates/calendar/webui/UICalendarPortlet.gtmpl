@@ -95,7 +95,6 @@
 </div>
 <div class="UICalendarPortlet UIEmpty">
 <%
-  uicomponent.renderPopupMessages() ;
   uicomponent.renderChild(UIPopupAction.class) ;
 %>
 </div>

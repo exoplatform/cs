@@ -188,13 +188,6 @@ public class UIChatBarPortlet extends UIPortletApplication {
     return pcontext.getRequest().getPreferences() ;
   }
   
-  protected void renderPopupMessages() throws Exception {
-    UIPopupMessages popupMess = getUIPopupMessages();
-    if(popupMess == null)  return ;
-    WebuiRequestContext  context =  WebuiRequestContext.getCurrentInstance() ;
-    popupMess.processRender(context);
-  }
-  
   /**
    * Get StatusText, use for show title of status***/
   public String getStatus(){

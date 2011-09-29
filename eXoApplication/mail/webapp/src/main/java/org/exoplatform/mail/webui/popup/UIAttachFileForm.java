@@ -34,11 +34,10 @@ import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormUploadInput;
 
@@ -102,8 +101,7 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
 
   static  public class SaveActionListener extends EventListener<UIAttachFileForm> {
     public void execute(Event<UIAttachFileForm> event) throws Exception {
-      UIAttachFileForm uiForm = event.getSource();
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      UIAttachFileForm uiForm = event.getSource();      
       UIPopupActionContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupActionContainer.class) ;
       List<BufferAttachment> attachList = new ArrayList<BufferAttachment>();
       long attSize = 0;
@@ -114,8 +112,11 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
           if (uploadResource != null) {
             attSize = attSize + ((long)uploadResource.getUploadedSize()) ;
             if(attSize > 10*1024*1024) {
-              uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.size-attachs-must-be-smaller-than-10M", null, ApplicationMessage.WARNING)) ;
-              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              event.getRequestContext()
+                   .getUIApplication()
+                   .addMessage(new ApplicationMessage("UIAttachFileForm.msg.size-attachs-must-be-smaller-than-10M",
+                                                      null,
+                                                      ApplicationMessage.WARNING));              
               return ;
             }
             BufferAttachment attachFile = new BufferAttachment() ;
@@ -130,16 +131,18 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
           }
         }
       } catch(Exception e) {
-        uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.upload-error", null, ApplicationMessage.INFO));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAttachFileForm.msg.upload-error",
+                                                                                       null,
+                                                                                       ApplicationMessage.INFO));        
         if (log.isDebugEnabled()) {
           log.debug("Exception in method execute of class SaveActionListener", e);
         }
         return ;
       }     
       if (attachList.isEmpty()) {
-        uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.file-empty-error", null, ApplicationMessage.INFO)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAttachFileForm.msg.file-empty-error",
+                                                                                       null,
+                                                                                       ApplicationMessage.INFO));        
         return ;
       } else {
         UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;

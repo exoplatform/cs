@@ -33,7 +33,6 @@ import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -81,16 +80,17 @@ public class UISearchForm extends UIForm {
     @SuppressWarnings("unchecked")
     public void execute(Event<UISearchForm> event) throws Exception {
       UISearchForm uiForm = event.getSource() ;
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      
       String text = uiForm.getSearchValue() ;
      if(CalendarUtils.isEmpty(text))   {
-        uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.no-text-to-search", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UISearchForm.msg.no-text-to-search", null));
         return ;
       }/*else {
        if(!CalendarUtils.isNameValid(text, CalendarUtils.EXTENDEDKEYWORD)) {
          uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.error-text-to-search", null)) ;
-         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+         
          return ;
        }
       }*/

@@ -39,7 +39,6 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
@@ -119,7 +118,6 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
   static  public class SaveActionListener extends EventListener<UIExportForm> {
     public void execute(Event<UIExportForm> event) throws Exception {
       UIExportForm uiForm = event.getSource() ;
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
       List<UIComponent> children = uiForm.getChildren() ;
       List<String> calendarIds = new ArrayList<String> () ;
@@ -130,8 +128,10 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
         }
       }
       if(calendarIds.isEmpty()) {
-        uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.calendar-does-not-existing", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIExportForm.msg.calendar-does-not-existing", null));
+        
         return ;
       }
       String type = uiForm.getUIFormSelectBox(TYPE).getValue() ;
@@ -156,8 +156,9 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
         event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');") ;
         calendarPortlet.cancelAction() ;      
       }catch(Exception e) {
-        uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.event-does-not-existing", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIExportForm.msg.event-does-not-existing", null));
         return ;
       }
     }

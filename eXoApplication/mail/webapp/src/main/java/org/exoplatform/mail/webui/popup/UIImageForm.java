@@ -37,7 +37,6 @@ import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -85,14 +84,13 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
   
   static  public class SaveActionListener extends EventListener<UIImageForm> {
     public void execute(Event<UIImageForm> event) throws Exception {
-      UIImageForm uiForm = event.getSource();
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      UIImageForm uiForm = event.getSource();      
       UIFormUploadInput input = (UIFormUploadInput)uiForm.getUIInput(FIELD_UPLOAD);
       UploadResource uploadResource = input.getUploadResource() ;
       if(uploadResource == null) {
-        uiApp.addMessage(new ApplicationMessage("UIImageForm.msg.selectFile-required", null, 
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIImageForm.msg.selectFile-required",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));      
         return ;
       }
       String mimeType = uploadResource.getMimeType() ;
@@ -101,14 +99,14 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
       for(String imageType : imageTypes)
         if (fileName.toLowerCase().endsWith(imageType)) isImage = true ;
       if(Utils.isEmptyField(fileName)) {
-        uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.fileName-error", null, 
-            ApplicationMessage.INFO)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAttachFileForm.msg.fileName-error",
+                                                                                       null,
+                                                                                       ApplicationMessage.INFO));
+        return;
       }else if((!isImage)){
-        uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.unformat-imagefile", null, 
-                                                ApplicationMessage.INFO)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAttachFileForm.msg.unformat-imagefile",
+                                                                                       null,
+                                                                                       ApplicationMessage.INFO));
         return ;
       }
       ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getUploadData()) ;

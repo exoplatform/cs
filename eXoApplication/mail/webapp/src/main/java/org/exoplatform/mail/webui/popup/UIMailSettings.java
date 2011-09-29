@@ -45,12 +45,11 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormRadioBoxInput;
@@ -292,10 +291,10 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
         } catch (PathNotFoundException e) {
           uiMessageList.setMessagePageList(null) ;
           uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-          UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);          
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account",
+                                                                                         null,
+                                                                                         ApplicationMessage.WARNING));
           return ;
         }
       }
@@ -353,12 +352,12 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
         UIFormCheckBoxInput<Boolean> checkbox = inputSet.getChildById(FIELD_PRIVILEGE_FULL);
         String permission = Utils.READ_ONLY ;
         if(checkbox.isChecked()) permission = Utils.SEND_RECIEVE ;
-        OrganizationService orService = MailUtils.getOrganizationService() ;
-        UIApplication uiApp = inputSet.getAncestorOfType(UIApplication.class) ;
+        OrganizationService orService = MailUtils.getOrganizationService() ;        
         List<String> delegatedUserFail = new ArrayList<String>();
         if(MailUtils.isFieldEmpty(receiver)) {
-          uiApp.addMessage(new ApplicationMessage("UIMailSettings.msg.select-one-user", null, ApplicationMessage.INFO)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMailSettings.msg.select-one-user",
+                                                                                         null,
+                                                                                         ApplicationMessage.INFO));          
           return ;
         } else if (receiver.contains(MailUtils.COMMA)) {
           for (String uid : receiver.split(MailUtils.COMMA)) {
@@ -381,8 +380,11 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
         }
         if(delegatedUserFail.size()> 0){
           Object [] obj = delegatedUserFail.toArray();
-          uiApp.addMessage(new ApplicationMessage("UIMailSettings.msg.delegate_fail",Arrays.copyOf(obj, obj.length, String[].class), ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMailSettings.msg.delegate_fail",
+                                                                                         Arrays.copyOf(obj,
+                                                                                                       obj.length,
+                                                                                                       String[].class),
+                                                                                         ApplicationMessage.WARNING));          
         }
         UIDelegationAccountGrid grid = inputSet.getChild(UIDelegationAccountGrid.class);
         grid.updateGrid();

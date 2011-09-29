@@ -40,7 +40,6 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -201,7 +200,6 @@ public class UIContactForm extends UIFormTabPane {
   static  public class SaveActionListener extends EventListener<UIContactForm> {
     public void execute(Event<UIContactForm> event) throws Exception {
       UIContactForm uiContactForm = event.getSource() ;
-      UIApplication uiApp = uiContactForm.getAncestorOfType(UIApplication.class) ;
       UIProfileInputSet profileTab = uiContactForm.getChildById(INPUT_PROFILETAB) ;
       Contact contact ;
       if (uiContactForm.isNew_) contact = new Contact() ;
@@ -222,24 +220,26 @@ public class UIContactForm extends UIFormTabPane {
       try {
         contact.setBirthday(profileTab.getFieldBirthday()) ;
       } catch(IllegalArgumentException e) {
-        uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.invalid-birthday", null, 
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIContactForm.msg.invalid-birthday",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));
         return ;
       }      
       if (!ContactUtils.isEmpty(profileTab.getFieldJobName())) contact.setJobTitle(profileTab.getFieldJobName().trim());
       /*if (ContactUtils.isNameLong(profileTab.getFieldJobName())) {
-        uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.jobTooLong", null, 
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIContactForm.msg.jobTooLong", null, 
             ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        
         return ;
       }*/
       String emails = profileTab.getFieldEmail();
       if (!ContactUtils.isEmpty(emails))
         emails = emails.replaceAll(CalendarUtils.SEMICOLON, CalendarUtils.COLON);
       if (!CalendarUtils.isValidEmailAddresses(emails)) {
-        uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.invalid-email", null, ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIContactForm.msg.invalid-email",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(event.getRequestContext().getUIApplication().getUIPopupMessages());
         return;
       }
       contact.setEmailAddress(emails);
@@ -304,9 +304,9 @@ public class UIContactForm extends UIFormTabPane {
             contact = contactService.getSharedContactAddressBook(username, contact.getId()) ;
             contact.setContactType(DataStorage.SHARED) ;            
           } else {
-            uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.removedPer", null, 
-                ApplicationMessage.WARNING)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIContactForm.msg.removedPer",
+                                                                                           null,
+                                                                                           ApplicationMessage.WARNING));
             return ;
           }          
         } else if (uiAddressBooks.getPrivateGroupMap().containsKey(category)){
@@ -314,9 +314,9 @@ public class UIContactForm extends UIFormTabPane {
           contact = contactService.getContact(username, contact.getId()) ;
           contact.setContactType(DataStorage.PERSONAL) ;
         } else {
-          uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.address-deleted", null,
-              ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIContactForm.msg.address-deleted",
+                                                                                         null,
+                                                                                         ApplicationMessage.WARNING));
           return ;
         }
       } else {
@@ -335,9 +335,9 @@ public class UIContactForm extends UIFormTabPane {
                 contactService.getSharedContactAddressBook(username, contact.getId()) ;
                 contact.setContactType(DataStorage.SHARED) ;
               } else {
-                uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.removedPer", null, 
-                    ApplicationMessage.WARNING)) ;
-                event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIContactForm.msg.removedPer",
+                                                                                               null,
+                                                                                               ApplicationMessage.WARNING));
                 return ;
               }              
             } else {
@@ -347,17 +347,17 @@ public class UIContactForm extends UIFormTabPane {
                 contactService.saveSharedContact(username, contact) ;   
                 contact = contactService.getSharedContact(username, contact.getId()) ;
               } else {
-                uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.removedPer", null, 
-                    ApplicationMessage.WARNING)) ;
-                event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIContactForm.msg.removedPer",
+                                                                                               null,
+                                                                                               ApplicationMessage.WARNING));
                 return ;                
               }
             }
           }
         } catch(PathNotFoundException e) {
-          uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.contact-deleted", null,
-              ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIContactForm.msg.contact-deleted",
+                                                                                         null,
+                                                                                         ApplicationMessage.WARNING));
           return ;
         }         
       }

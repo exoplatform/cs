@@ -28,6 +28,9 @@ import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.webui.action.FullDelegationEventListener;
+import org.exoplatform.mail.webui.action.HasAccountEventListener;
+import org.exoplatform.mail.webui.action.OwnerEventListener;
 import org.exoplatform.mail.webui.popup.UIAccountCreation;
 import org.exoplatform.mail.webui.popup.UIAccountSetting;
 import org.exoplatform.mail.webui.popup.UIAddressBookForm;
@@ -42,7 +45,6 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -71,25 +73,19 @@ public class UIActionBar extends UIContainer {
 
   public UIActionBar()throws Exception {}
 
-  static  public class CheckMailActionListener extends EventListener<UIActionBar> {    
-    public void execute(Event<UIActionBar> event) throws Exception {
+  static  public class CheckMailActionListener extends HasAccountEventListener<UIActionBar> {
+    
+    @Override   
+    public void processEvent(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource();
       UIMailPortlet uiPortlet = uiActionBar.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
-      
-      UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
       String formId = ((PortletRequestContext)context).getWindowId();
       uiPortlet.setFormId(formId);
       
       String username = uiPortlet.getCurrentUser();
       String accId = dataCache.getSelectedAccountId();
-      if(Utils.isEmptyField(accId) || (dataCache.getAccounts(username).isEmpty() && dataCache.getDelegatedAccounts(username).isEmpty())) {
-        uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
-      
       Folder currentF = null;
       UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
       String folderId = uiFolderContainer.getSelectedFolder();
@@ -124,25 +120,18 @@ public class UIActionBar extends UIContainer {
     }
   }
 
-  static public class ComposeActionListener extends EventListener<UIActionBar> {
-    public void execute(Event<UIActionBar> event) throws Exception {
+  static public class ComposeActionListener extends FullDelegationEventListener<UIActionBar> {
+    
+    @Override  
+    public void processEvent(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource(); 
       UIMailPortlet uiPortlet = uiActionBar.getParent();
       DataCache dataCache = uiPortlet.getDataCache();
-      
-      UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
       String accId = dataCache.getSelectedAccountId();
       String username = uiPortlet.getCurrentUser();
       
       Account acc = dataCache.getDelegatedAccount(username, accId);
-      if(Utils.isEmptyField(accId) || (dataCache.getAccounts(username).isEmpty() && !MailUtils.isFull(accId, dataCache))) {
-        uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      } else if(MailUtils.isDelegatedAccount(acc, username)) {
-        if(!MailUtils.isFull(username, acc.getPermissions().get(username))) {
-          uiActionBar.showMessage(event);
-        } else {
+       if(MailUtils.isDelegatedAccount(acc, username)) {
           UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
           UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null, "UIPopupActionComposeContainer") ;
           uiPopupAction.activate(uiPopupContainer, MailUtils.MAX_POPUP_WIDTH, 0, true);
@@ -150,7 +139,7 @@ public class UIActionBar extends UIContainer {
           uiComposeForm.init(accId, null, 0);
           uiPopupContainer.addChild(uiComposeForm) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-        }
+        
       } else {
         UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
         UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null, "UIPopupActionComposeContainer") ;
@@ -194,28 +183,13 @@ public class UIActionBar extends UIContainer {
     }
   }
 
-  static public class FilterActionListener extends EventListener<UIActionBar> {
-    public void execute(Event<UIActionBar> event) throws Exception {
+  static public class FilterActionListener extends OwnerEventListener<UIActionBar> {
+    @Override
+    public void processEvent(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource(); 
       UIMailPortlet uiPortlet = uiActionBar.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
-      
-      UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class);
       String accId = dataCache.getSelectedAccountId();
-      
-      if(Utils.isEmptyField(accId)) {
-        uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-        return ;
-      }
-      
-      String username = MailUtils.getCurrentUser();
-      Account delegatorAcc = dataCache.getDelegatedAccount(username, accId);
-      if(MailUtils.isDelegatedAccount(delegatorAcc, username)){
-        uiActionBar.showMessage(event);
-        return;
-      }
-
       UIPopupAction uiPopupAction = uiPortlet.findFirstComponentOfType(UIPopupAction.class);
       UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null, "UIPopupActionFilterContainer");
       uiPopupAction.activate(uiPopupContainer, 600, 0, false);
@@ -226,22 +200,11 @@ public class UIActionBar extends UIContainer {
     }
   }
 
-  static public class MailSettingsActionListener extends EventListener<UIActionBar> {
-    public void execute(Event<UIActionBar> event) throws Exception {
+  static public class MailSettingsActionListener extends HasAccountEventListener<UIActionBar> {
+    @Override
+    public void processEvent(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource();
       UIMailPortlet mailPortlet = uiActionBar.getParent();
-      DataCache dataCache = mailPortlet.getDataCache();
-
-      UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class);
-      String accId = dataCache.getSelectedAccountId();
-      String uid = MailUtils.getCurrentUser();
-      
-      if (Utils.isEmptyField(accId) || dataCache.getAccounts(uid).isEmpty()) {
-        uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-        return;
-      }
-      
       UIPopupAction uiPopupAction = mailPortlet.getChild(UIPopupAction.class);
       UIMailSettings uiMailSetting = uiPopupAction.activate(UIMailSettings.class, 750);
       uiMailSetting.init();
@@ -270,9 +233,9 @@ public class UIActionBar extends UIContainer {
           uiPortlet.findFirstComponentOfType(UIMessageList.class).setMessagePageList(null);
           uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-          UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class);
-          uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account",
+                                                                                         null,
+                                                                                         ApplicationMessage.WARNING));          
           return;
         }
       } else {
@@ -283,12 +246,5 @@ public class UIActionBar extends UIContainer {
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
     }
-  }
-
-  private void showMessage(Event<UIActionBar> event) {
-    UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
-    uiApp.addMessage(new ApplicationMessage("UISelectAccount.msg.account-list-no-permission", null)) ;
-    event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-    return ;
   }
 }

@@ -25,7 +25,6 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -123,10 +122,7 @@ public class UIConfigForm extends UIForm {
         preferences.setValue(CON_URL, contactLink);
 
         preferences.store();
-
-        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIConfigForm.msg.save-successful", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ; 
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIConfigForm.msg.save-successful", null)); 
       } catch (Exception e) {
         if (log.isDebugEnabled()) {
           log.debug("Fail to save the config", e);

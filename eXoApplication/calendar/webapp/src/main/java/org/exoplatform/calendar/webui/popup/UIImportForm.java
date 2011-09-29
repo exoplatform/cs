@@ -21,7 +21,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
@@ -45,12 +44,11 @@ import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormSelectBoxWithGroups;
@@ -292,11 +290,10 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
       String importFormat = uiForm.getUIFormSelectBox(UIImportForm.TYPE).getValue() ;
       String calendarName = uiForm.getUIStringInput(UIImportForm.DISPLAY_NAME).getValue() ;
       UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      
       UploadResource resource = uploadService.getUploadResource(input.getUploadId()) ;
       if(resource == null) {
-        uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.file-name-error", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIImportForm.msg.file-name-error", null));
         return ;
       }
       try {
@@ -312,8 +309,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
                 cal.setName(newName);
               }
               if(cal.getName().trim().equalsIgnoreCase(calendarName)) {
-                uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.name-exist", new Object[]{calendarName}, ApplicationMessage.WARNING)) ;
-                event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendarForm.msg.name-exist", new Object[]{calendarName}, ApplicationMessage.WARNING)) ;
                 return ;
               }
             }
@@ -340,8 +336,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
               for (GroupCalendarData groupCalendarData : groupCalendars) {
                 for (Calendar calendar2 : groupCalendarData.getCalendars()) {
                   if(calendar2.getName().equalsIgnoreCase(calendarName.trim())) {
-                    uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.name-exist", new Object[]{calendarName}, ApplicationMessage.WARNING)) ;
-                    event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                    event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendarForm.msg.name-exist", new Object[]{calendarName}, ApplicationMessage.WARNING)) ;
                     return ;
                   }
                 }
@@ -350,7 +345,12 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
               OrganizationService orgService = CalendarUtils.getOrganizationService() ;
               String groupKey = uiForm.getSelectedIdGroup() + CalendarUtils.SLASH_COLON ;
               String typedPerms = uiForm.getUIStringInput(PERMISSION).getValue();
-              List<String> listPermission = UICalendarForm.getPermissions(new ArrayList<String>(), typedPerms, orgService, uiForm.getSelectedIdGroup(), groupKey, uiApp, event);
+              List<String> listPermission = UICalendarForm.getPermissions(new ArrayList<String>(),
+                                                                          typedPerms,
+                                                                          orgService,
+                                                                          uiForm.getSelectedIdGroup(),
+                                                                          groupKey,
+                                                                          event);
               
               if (listPermission == null) return;
               Collection<Membership> mbsh = CalendarUtils.getOrganizationService().getMembershipHandler().findMembershipsByUser(username) ;
@@ -370,8 +370,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
             
             // if this is remote calendar
             if(calendarService.isRemoteCalendar(CalendarUtils.getCurrentUser(), calendarId)) {
-              uiApp.addMessage(new ApplicationMessage("UICalendars.msg.cant-add-event-on-remote-calendar", null, ApplicationMessage.WARNING));
-              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendars.msg.cant-add-event-on-remote-calendar", null, ApplicationMessage.WARNING));
               return;
             }
             
@@ -393,25 +392,21 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
           calendarPortlet.cancelAction() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(calendarPortlet) ;
         } else {
-          uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.file-type-error", null));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        } 
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIImportForm.msg.file-type-error", null));
+          } 
       } catch(Exception e) {
         if (log.isDebugEnabled()) {
           log.debug("File format to import calendar is not valid", e);
         }
-        uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.file-type-error", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;  
-      }
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIImportForm.msg.file-type-error", null));
+        }
     }
   }
   static  public class ImportActionListener extends EventListener<UIImportForm> {
     public void execute(Event<UIImportForm> event) throws Exception {
       UIImportForm uiForm = event.getSource() ;
       if(uiForm.getPrivateCalendars().isEmpty()) {
-        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar",null, ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;  
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar",null, ApplicationMessage.WARNING));
       } else {
         uiForm.switchMode(UPDATE_EXIST) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;

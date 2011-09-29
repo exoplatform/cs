@@ -28,7 +28,6 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -127,18 +126,22 @@ public class UISubscribeForm extends UIForm implements UIPopupComponent {
       
       String url = uiform.getUIStringInput(URL).getValue();
       String type = uiform.getChild(UIFormRadioBoxInput.class).getValue();
-      UIApplication uiApp = uiform.getAncestorOfType(UIApplication.class);
+      
       
       if (CalendarUtils.isEmpty(type)) {
-        uiApp.addMessage(new ApplicationMessage("UISubscribeForm.msg.remote-type-is-not-null", null, ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UISubscribeForm.msg.remote-type-is-not-null", null, ApplicationMessage.WARNING));
         return;
       }
       
       // check duplicate remote calendar
       if (calService.getRemoteCalendar(username, url, type) != null) {
-        uiApp.addMessage(new ApplicationMessage("UISubscribeForm.msg.this-remote-calendar-already-exists", null, ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UISubscribeForm.msg.this-remote-calendar-already-exists",
+                                                null,
+                                                ApplicationMessage.WARNING));
         return;
       }
       

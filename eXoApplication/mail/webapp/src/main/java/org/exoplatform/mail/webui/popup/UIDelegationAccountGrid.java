@@ -116,8 +116,7 @@ public class UIDelegationAccountGrid extends UIGrid {
 
   static  public class RemoveActionListener extends EventListener<UIDelegationAccountGrid> {
     public void execute(Event<UIDelegationAccountGrid> event) throws Exception {
-      UIDelegationAccountGrid uiDelegate = event.getSource();
-      UIApplication uiApp = uiDelegate.getAncestorOfType(UIApplication.class) ;
+      UIDelegationAccountGrid uiDelegate = event.getSource();      
       String currentuser = MailUtils.getCurrentUser();
       String delegateId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       try {
@@ -132,8 +131,9 @@ public class UIDelegationAccountGrid extends UIGrid {
         uiDelegate.updateGrid();
         event.getRequestContext().addUIComponentToUpdateByAjax(uiDelegate);
       }catch (Exception e) {
-        uiApp.addMessage(new ApplicationMessage("UIDelegationAccountGrid.msg.remove-delegateion-fail", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIDelegationAccountGrid.msg.remove-delegateion-fail", null));        
       }
     }
   }   

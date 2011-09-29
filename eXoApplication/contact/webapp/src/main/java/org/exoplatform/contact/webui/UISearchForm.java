@@ -24,7 +24,6 @@ import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -57,18 +56,18 @@ public class UISearchForm extends UIForm {
     public void execute(Event<UISearchForm> event) throws Exception {
       UISearchForm uiForm = event.getSource() ;
       String text = uiForm.getUIStringInput(UISearchForm.FIELD_SEARCHVALUE).getValue() ;
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      
       if(ContactUtils.isEmpty(text)) {
-        uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.no-text-to-search", null,
-          ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UISearchForm.msg.no-text-to-search",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));
         return ;
       }
       //String textFiltered = ContactUtils.filterString(text, true) ;
       if(!ContactUtils.isNameValid(text, ContactUtils.specialString2)) {
-        uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.text-search-error", null,
-          ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UISearchForm.msg.text-search-error",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));
         return ;
       }
       DataPageList resultPageList =  null ;

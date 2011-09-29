@@ -30,12 +30,10 @@ import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageList;
-import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -118,43 +116,37 @@ public class UIEnterPasswordDialog extends UIForm implements UIPopupComponent{
       Account acc = dataCache.getAccountById(username, accountId);
       acc.setIsSavePassword(isSavePw);
       acc.setIncomingPassword(newPw);
-
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class);
-
       try {
         mailSrv.sendMessage(username, acc, uiForm.getSendMessage());
       } catch (AddressException e) {
-        uiApp.addMessage(new ApplicationMessage(
-            "UIEnterPasswordDialog.msg.there-was-an-error-parsing-the-addresses-sending-failed", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIEnterPasswordDialog.msg.there-was-an-error-parsing-the-addresses-sending-failed",
+                                                null));       
         return;
       } catch (AuthenticationFailedException e) {
         uiForm.setShowWarning(true);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
         return;
       } catch (SMTPSendFailedException e) {
-        uiApp.addMessage(new ApplicationMessage(
-            "UIEnterPasswordDialog.msg.sorry-there-was-an-error-sending-the-message-sending-failed", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage(
+            "UIEnterPasswordDialog.msg.sorry-there-was-an-error-sending-the-message-sending-failed", null));        
         return;
       } catch (MessagingException e) {
-        uiApp.addMessage(new ApplicationMessage("UIEnterPasswordDialog.msg.there-was-an-unexpected-error-sending-falied", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIEnterPasswordDialog.msg.there-was-an-unexpected-error-sending-falied", null));        
         return;
       }
 
       try {
         if (!composeForm.saveToSentFolder(username, acc, uiForm.getSendMessage())) {
-          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.cannot-send", null, ApplicationMessage.INFO));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIComposeForm.msg.cannot-send", null, ApplicationMessage.INFO));          
         }
         UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
         uiMessageList.updateList();
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class));
       } catch (Exception e) {
-        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-sent-error", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIComposeForm.msg.save-sent-error", null));        
         uiForm.getAncestorOfType(UIPopupAction.class).deActivate();
       }
 

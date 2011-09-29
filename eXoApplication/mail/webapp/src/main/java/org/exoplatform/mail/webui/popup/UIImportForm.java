@@ -27,14 +27,12 @@ import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageList;
-import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.UISelectFolder;
 import org.exoplatform.upload.UploadResource;
 import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -84,12 +82,11 @@ public class UIImportForm extends UIForm implements UIPopupComponent {
       DataCache dataCache = uiPortlet.getDataCache();
       
       UIFormUploadInput uiUploadInput = (UIFormUploadInput) uiImport.getUIInput(CHOOSE_MIME_MESSAGE);
-      UploadResource uploadResource = uiUploadInput.getUploadResource();
-      UIApplication  uiApp = uiImport.getAncestorOfType(UIApplication.class);
+      UploadResource uploadResource = uiUploadInput.getUploadResource();      
       if(uploadResource == null) {
-        uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.upload-error", null, 
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIImportForm.msg.upload-error",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));
         return ;
       }
       String name = uploadResource.getFileName() ;
@@ -102,9 +99,9 @@ public class UIImportForm extends UIForm implements UIPopupComponent {
         }
       }
       if(!validType)  {
-        uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.file-upload-error", null, 
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIImportForm.msg.file-upload-error",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));
         return ;
       }
       InputStream inputStream = uiUploadInput.getUploadDataAsStream();
@@ -113,9 +110,9 @@ public class UIImportForm extends UIForm implements UIPopupComponent {
       String username = uiPortlet.getCurrentUser() ;
       String folderId = uiImport.getChild(UISelectFolder.class).getSelectedValue();
       if (!mailSrv.importMessage(username, accountId, folderId, inputStream, type)) {
-        uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.import-messages-error", null, 
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIImportForm.msg.import-messages-error",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));     
         return ;
       } 
       UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;

@@ -29,11 +29,10 @@ import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
@@ -110,7 +109,6 @@ public class UICalendarCategoryForm extends UIForm {
   static  public class SaveActionListener extends EventListener<UICalendarCategoryForm> {
     public void execute(Event<UICalendarCategoryForm> event) throws Exception {
       UICalendarCategoryForm uiForm = event.getSource() ;
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       UICalendarCategoryManager uiManager = uiForm.getAncestorOfType(UICalendarCategoryManager.class) ;
       String categoryName = uiForm.getCategoryName() ;
       // CS-3009
@@ -144,8 +142,9 @@ public class UICalendarCategoryForm extends UIForm {
           }
         }
         if(existed) {
-          uiApp.addMessage(new ApplicationMessage("UICalendarCategoryForm.msg.group-existed", null));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext()
+               .getUIApplication()
+               .addMessage(new ApplicationMessage("UICalendarCategoryForm.msg.group-existed", null));
           return ;
         }
         CalendarCategory category = new CalendarCategory() ;

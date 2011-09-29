@@ -22,9 +22,9 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.Map.Entry;
 
 import javax.jcr.PathNotFoundException;
 
@@ -44,7 +44,6 @@ import org.exoplatform.mail.DataCache;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIMailPortlet;
-import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -52,7 +51,6 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItem;
 import org.exoplatform.webui.core.model.SelectOption;
@@ -373,14 +371,13 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
   static public class EditContactActionListener extends EventListener<UIAddressBookForm> {
     public void execute(Event<UIAddressBookForm> event) throws Exception {
       UIAddressBookForm uiAddBook = event.getSource();
-      Contact selectedContact = uiAddBook.getSelectedContact();
-      UIApplication uiApp = uiAddBook.getAncestorOfType(UIApplication.class);
+      Contact selectedContact = uiAddBook.getSelectedContact();      
       String groupId = ((UIFormSelectBoxWithGroups) uiAddBook.getChildById(SELECT_GROUP)).getValue();
       if (selectedContact != null) {
         if (selectedContact.getContactType().equals("1")
             && !uiAddBook.havePermission(selectedContact)) {
-          uiApp.addMessage(new ApplicationMessage("UIAddressBookForm.msg.cannot-edit", null));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAddressBookForm.msg.cannot-edit",
+                                                                                         null));
           return;
         }
         UIPopupActionContainer uiActionContainer = uiAddBook.getParent();
@@ -411,9 +408,9 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup);
         uiAddBook.refrestContactList(groupId, selectedContact);
       } else {
-        uiApp.addMessage(new ApplicationMessage("UIAddressBookForm.msg.no-selected-contact-to-edit",
-                                                null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIAddressBookForm.msg.no-selected-contact-to-edit", null));        
         return;
       }
     }
@@ -473,11 +470,11 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
           }
         }
       }
-      UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class);
 
       if (contactList.size() == 0) {
-        uiApp.addMessage(new ApplicationMessage("UIAddressBookForm.msg.no-selected-contact-to-delete", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIAddressBookForm.msg.no-selected-contact-to-delete", null));       
         return;
       }
 
@@ -488,9 +485,9 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
           try {
             boolean isOk = false;
             if (contact.isOwner()) {
-              uiApp.addMessage(new ApplicationMessage("UIAddressBookForm.msg.cannot-delete-ownerContact",
-                                                      null));
-              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+              event.getRequestContext()
+                   .getUIApplication()
+                   .addMessage(new ApplicationMessage("UIAddressBookForm.msg.cannot-delete-ownerContact", null));              
               // return;
             } else {
               boolean isPrivate = false;
@@ -516,10 +513,10 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
                   } catch (PathNotFoundException e) {
                   }
                 } else {
-                  uiApp.addMessage(new ApplicationMessage("UIAddressBookForm.msg.cannot-delete",
-                                                          null));
                   event.getRequestContext()
-                  .addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+                       .getUIApplication()
+                       .addMessage(new ApplicationMessage("UIAddressBookForm.msg.cannot-delete", null));
+                  
                 }
               }
               isOk = true;
@@ -573,10 +570,9 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
       if (!MailUtils.isFieldEmpty(email)) {
         DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
         String accId = dataCache.getSelectedAccountId();
-        if (Utils.isEmptyField(accId)) {
-          UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class);
-          uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        if (Utils.isEmptyField(accId)) {          
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty",
+                                                                                         null));          
           return;
         }
 
@@ -628,9 +624,8 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
         DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
         String accId = dataCache.getSelectedAccountId();
         if (Utils.isEmptyField(accId)) {
-          UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class);
-          uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty",
+                                                                                         null));          
           return;
         }
         UIPopupActionContainer uiActionContainer = uiForm.getParent();
@@ -649,12 +644,11 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
         uiComposeForm.setFieldToValue(emails.toString());
         event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup);
       } else {
-        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class);
-        uiApp.addMessage(new ApplicationMessage("UIAddressBookForm.msg.no-selected-contact-to-send-mail",
-                                                null));
+        
         event.getRequestContext()
-        .addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIAddressBookForm.msg.no-selected-contact-to-send-mail", null));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class));
       }
     }
   }

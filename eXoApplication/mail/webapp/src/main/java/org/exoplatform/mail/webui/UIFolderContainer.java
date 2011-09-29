@@ -29,16 +29,16 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.webui.action.FullDelegationEventListener;
+import org.exoplatform.mail.webui.action.HasAccountEventListener;
 import org.exoplatform.mail.webui.popup.UIFolderForm;
 import org.exoplatform.mail.webui.popup.UIRenameFolderForm;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 
 /**
  * Created by The eXo Platform SARL
@@ -150,51 +150,33 @@ public class UIFolderContainer extends UIContainer {
     }
   }
   
-  static public class AddFolderActionListener extends EventListener<UIFolderContainer> {
-    public void execute(Event<UIFolderContainer> event) throws Exception {
-      UIFolderContainer uiFolder = event.getSource() ;
-      DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
-      
-      UIApplication uiApp = uiFolder.getAncestorOfType(UIApplication.class) ;
-      String accId = dataCache.getSelectedAccountId();
-      if(Utils.isEmptyField(accId)) {
-        uiApp.addMessage(new ApplicationMessage("UIFolderContainer.msg.account-list-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return;
-      } else if (!MailUtils.isFull(accId, dataCache)) {
-        uiFolder.showMessage(event); 
-        return;
-      }
+  static public class AddFolderActionListener extends FullDelegationEventListener<UIFolderContainer> {
+    @Override
+    public void processEvent(Event<UIFolderContainer> event) throws Exception {
+      UIFolderContainer uiFolder = event.getSource() ;      
       UIPopupAction uiPopup = uiFolder.getAncestorOfType(UIMailPortlet.class).getChild(UIPopupAction.class) ;
       uiPopup.activate(UIFolderForm.class, 450) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
     }
   }
 
-  static public class AddSubFolderActionListener extends EventListener<UIFolderContainer> {
-    public void execute(Event<UIFolderContainer> event) throws Exception {
+  static public class AddSubFolderActionListener extends FullDelegationEventListener<UIFolderContainer> {
+    @Override
+    public void processEvent(Event<UIFolderContainer> event) throws Exception {
       UIFolderContainer uiFolder = event.getSource() ;
-      UIMailPortlet mailPortlet = uiFolder.getAncestorOfType(UIMailPortlet.class);
-      DataCache dataCache = mailPortlet.getDataCache();
-      
+      UIMailPortlet mailPortlet = uiFolder.getAncestorOfType(UIMailPortlet.class);      
       String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ; 
       UIPopupAction uiPopup = mailPortlet.getChild(UIPopupAction.class) ;
       UIFolderForm uiFolderForm = uiPopup.createUIComponent(UIFolderForm.class, null, null);
-      String accId = dataCache.getSelectedAccountId();
-      
-      if (!MailUtils.isFull(accId, dataCache)){
-        uiFolder.showMessage(event); 
-        return;
-      }
-      
       uiFolderForm.setParentPath(folderId);
       uiPopup.activate(uiFolderForm, 450, 0, false) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
     }
   }
 
-  static public class ChangeFolderActionListener extends EventListener<UIFolderContainer> {
-    public void execute(Event<UIFolderContainer> event) throws Exception {
+  static public class ChangeFolderActionListener extends HasAccountEventListener<UIFolderContainer> {
+    @Override
+    public void processEvent(Event<UIFolderContainer> event) throws Exception {
       UIFolderContainer uiFolder = event.getSource() ;
       UIMailPortlet mailPortlet = uiFolder.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = mailPortlet.getDataCache();
@@ -251,19 +233,12 @@ public class UIFolderContainer extends UIContainer {
     }
   }
 
-  static public class RenameFolderActionListener extends EventListener<UIFolderContainer> {
-    public void execute(Event<UIFolderContainer> event) throws Exception {
+  static public class RenameFolderActionListener extends FullDelegationEventListener<UIFolderContainer> {
+    @Override
+    public void processEvent(Event<UIFolderContainer> event) throws Exception {
       UIFolderContainer uiFolder = event.getSource() ;
-      UIMailPortlet mailPortlet = uiFolder.getAncestorOfType(UIMailPortlet.class);
-      DataCache dataCache = mailPortlet.getDataCache();
-      
-      String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      String accountId = dataCache.getSelectedAccountId();
-      if(!MailUtils.isFull(accountId, dataCache)) {
-        uiFolder.showMessage(event); 
-        return;
-      }
-      
+      UIMailPortlet mailPortlet = uiFolder.getAncestorOfType(UIMailPortlet.class);      
+      String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;      
       UIPopupAction uiPopup = mailPortlet.getChild(UIPopupAction.class) ;
       UIRenameFolderForm uiRenameFolderForm = uiPopup.activate(UIRenameFolderForm.class, 450) ;
       uiRenameFolderForm.setFolderId(folderId);
@@ -271,8 +246,9 @@ public class UIFolderContainer extends UIContainer {
     }
   }
 
-  static public class RemoveFolderActionListener extends EventListener<UIFolderContainer> {
-    public void execute(Event<UIFolderContainer> event) throws Exception {
+  static public class RemoveFolderActionListener extends FullDelegationEventListener<UIFolderContainer> {
+    @Override
+    public void processEvent(Event<UIFolderContainer> event) throws Exception {
       UIFolderContainer uiFolder = event.getSource() ;
       UIMailPortlet mailPortlet = uiFolder.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = mailPortlet.getDataCache();
@@ -280,11 +256,6 @@ public class UIFolderContainer extends UIContainer {
       String folderId = event.getRequestContext().getRequestParameter(OBJECTID);       
       String accountId = dataCache.getSelectedAccountId();
       String username = MailUtils.getDelegateFrom(accountId, dataCache);
-      
-      if(!MailUtils.isFull(accountId, dataCache)) {
-        uiFolder.showMessage(event); 
-        return;
-      }
       
       MailUtils.getMailService().removeUserFolder(username, accountId, folderId);     
       UIMessageList uiMessageList = mailPortlet.findFirstComponentOfType(UIMessageList.class) ;
@@ -302,8 +273,9 @@ public class UIFolderContainer extends UIContainer {
     }
   }
 
-  static public class EmptyFolderActionListener extends EventListener<UIFolderContainer> {
-    public void execute(Event<UIFolderContainer> event) throws Exception {
+  static public class EmptyFolderActionListener extends FullDelegationEventListener<UIFolderContainer> {
+    @Override
+    public void processEvent(Event<UIFolderContainer> event) throws Exception {
       UIFolderContainer uiFolder = event.getSource() ;
       UIMailPortlet mailPortlet = uiFolder.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = mailPortlet.getDataCache();
@@ -315,11 +287,6 @@ public class UIFolderContainer extends UIContainer {
 
       String accountId = dataCache.getSelectedAccountId();
       String username = MailUtils.getDelegateFrom(accountId, dataCache);
-      
-      if(!MailUtils.isFull(accountId, dataCache)) {
-        uiFolder.showMessage(event); 
-        return;
-      }
       
       MailService mailSrv = MailUtils.getMailService();
       List<Message> msgList = mailSrv.getMessagesByFolder(username, accountId, folderId) ;
@@ -336,8 +303,9 @@ public class UIFolderContainer extends UIContainer {
     }
   }
 
-  static public class MarkReadActionListener extends EventListener<UIFolderContainer> {
-    public void execute(Event<UIFolderContainer> event) throws Exception {
+  static public class MarkReadActionListener extends HasAccountEventListener<UIFolderContainer> {
+    @Override
+    public void processEvent(Event<UIFolderContainer> event) throws Exception {
       UIFolderContainer uiFolder = event.getSource() ;
       UIMailPortlet mailPortlet = uiFolder.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = mailPortlet.getDataCache();
@@ -370,8 +338,9 @@ public class UIFolderContainer extends UIContainer {
     }
   }
 
-  static public class MoveToTrashActionListener extends EventListener<UIFolderContainer> {
-    public void execute(Event<UIFolderContainer> event) throws Exception {
+  static public class MoveToTrashActionListener extends FullDelegationEventListener<UIFolderContainer> {
+    @Override
+    public void processEvent(Event<UIFolderContainer> event) throws Exception {
       UIFolderContainer uiFolder = event.getSource();
       UIMailPortlet mailPortlet = uiFolder.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = mailPortlet.getDataCache();
@@ -382,10 +351,6 @@ public class UIFolderContainer extends UIContainer {
       UIMessagePreview uiMsgPreview = uiMsgArea.getChild(UIMessagePreview.class);
       String username = mailPortlet.getCurrentUser();
       String accountId = dataCache.getSelectedAccountId();
-      if(!MailUtils.isFull(accountId, dataCache)) {
-        uiFolder.showMessage(event); 
-        return;
-      }
       
       MailService mailSrv = MailUtils.getMailService();
       List<Message> msgList = mailSrv.getMessagesByFolder(username, accountId, folderId);
@@ -401,9 +366,9 @@ public class UIFolderContainer extends UIContainer {
       }  
       
       if((successes == null) || ((successes.size() > 0) && successes.size() < msgList.size()) || (successes.size() == 0)){
-        UIApplication uiApp = uiFolder.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIMoveMessageForm.msg.move_delete_not_successful", null, ApplicationMessage.INFO));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIMoveMessageForm.msg.move_delete_not_successful", null, ApplicationMessage.INFO));
       }
       uiMsgList.updateList();
       
@@ -413,11 +378,5 @@ public class UIFolderContainer extends UIContainer {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgArea);
     }
-  }
-  
-  public void showMessage(Event<UIFolderContainer> event) {
-    UIApplication uiApp = getAncestorOfType(UIApplication.class);
-    uiApp.addMessage(new ApplicationMessage("UISelectAccount.msg.account-list-no-permission", null));
-    event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
   }
 }

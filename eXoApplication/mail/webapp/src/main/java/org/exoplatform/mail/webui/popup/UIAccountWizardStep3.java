@@ -23,7 +23,7 @@ import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.WizardStep;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputSet;
@@ -131,27 +131,37 @@ public class UIAccountWizardStep3 extends UIFormInputSet implements WizardStep{
   }
 
   public boolean isFieldsValid() {
-    UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
     boolean isValid = true ;
     if (Utils.isEmptyField(getIncomingServer())) {
-      uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.incoming-server-requirement", null, ApplicationMessage.WARNING)) ;
+      context.getUIApplication().addMessage(new ApplicationMessage("UIAccountCreation.msg.incoming-server-requirement",
+                                                                   null,
+                                                                   ApplicationMessage.WARNING));
       isValid = false ;
-    } 
+    }
     if (Utils.isEmptyField(getOutgoingServer())) {
-      uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.outgoing-server-requirement", null, ApplicationMessage.WARNING)) ;
-      isValid = false ;
+      context.getUIApplication().addMessage(new ApplicationMessage("UIAccountCreation.msg.outgoing-server-requirement",
+                                                                   null,
+                                                                   ApplicationMessage.WARNING));
+      isValid = false;
     }
     if (Utils.isEmptyField(getStoreFolder())) {
-      uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.store-folder-requirement", null, ApplicationMessage.WARNING)) ;
-      isValid = false ;
+      context.getUIApplication().addMessage(new ApplicationMessage("UIAccountCreation.msg.store-folder-requirement",
+                                                                   null,
+                                                                   ApplicationMessage.WARNING));
+      isValid = false;
     }
     if (!Utils.isNumber(getIncomingPort())) {
-      uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.incoming-port-is-not-number", null, ApplicationMessage.WARNING)) ;
-      isValid = false ;
+      context.getUIApplication().addMessage(new ApplicationMessage("UIAccountCreation.msg.incoming-port-is-not-number",
+                                                                   null,
+                                                                   ApplicationMessage.WARNING));
+      isValid = false;
     }
     if (!Utils.isNumber(getOutgoingPort())) {
-      uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.outgoing-port-is-not-number", null, ApplicationMessage.WARNING)) ;
-      isValid = false ;
+      context.getUIApplication().addMessage(new ApplicationMessage("UIAccountCreation.msg.outgoing-port-is-not-number",
+                                                                   null,
+                                                                   ApplicationMessage.WARNING));
+      isValid = false;
     }
     
     return isValid ;

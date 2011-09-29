@@ -44,12 +44,11 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -536,9 +535,7 @@ public class UIAccountSetting extends UIFormTabPane {
     public void execute(Event<UIAccountSetting> event) throws Exception {
       UIAccountSetting uiSetting = event.getSource();
       UIMailPortlet uiPortlet = uiSetting.getAncestorOfType(UIMailPortlet.class);
-      DataCache dataCache = uiPortlet.getDataCache();
-
-      UIApplication uiApp = uiSetting.getAncestorOfType(UIApplication.class);
+      DataCache dataCache = uiPortlet.getDataCache();      
       MailService mailSrv = uiSetting.getApplicationComponent(MailService.class);
       String username = Util.getPortalRequestContext().getRemoteUser();
       String editedAccountId = uiSetting.getSelectedAccountId();
@@ -556,32 +553,27 @@ public class UIAccountSetting extends UIFormTabPane {
       String secureAuthMechOutgoing = uiSetting.getFieldAuthMechOutgoing();
 
       if (!MailUtils.isValidEmailAddresses(email)) {
-        uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.email-address-is-invalid", null, ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAccountSetting.msg.email-address-is-invalid", null, ApplicationMessage.WARNING));
         return;
       }
       
       if (!MailUtils.isFieldEmpty(reply) && !MailUtils.isValidEmailAddresses(reply)) {
-        uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.reply-address-is-invalid", null, ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAccountSetting.msg.reply-address-is-invalid", null, ApplicationMessage.WARNING));
         return;
       }
       
       if (!Utils.isNumber(incomingPort)) {
-        uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.incoming-port-is-not-number", null, ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAccountSetting.msg.incoming-port-is-not-number", null, ApplicationMessage.WARNING));
         return;
       }
       
       if (!Utils.isNumber(outgoingPort)) {
-        uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.outgoing-port-is-not-number", null, ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAccountSetting.msg.outgoing-port-is-not-number", null, ApplicationMessage.WARNING));
         return;
       }
 
       if (MailUtils.isFieldEmpty(password)) {
-        uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.field-password-is-required", null, ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAccountSetting.msg.field-password-is-required", null, ApplicationMessage.WARNING));
         return;
       }
 
@@ -628,8 +620,7 @@ public class UIAccountSetting extends UIFormTabPane {
         if (uiSetting.getFieldCheckFrom() != null) {
           acc.setCheckFromDate(uiSetting.getFieldCheckFrom().getTime());
         } else if (!acc.isCheckAll()) {
-          uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.please-choose-specified-date", null));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAccountSetting.msg.please-choose-specified-date", null));
           return;
         }
         if (acc.isCheckAll()) {
@@ -648,12 +639,11 @@ public class UIAccountSetting extends UIFormTabPane {
         uiSelectAccount.setSelectedValue(accountId);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectAccount);
 
-        uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.edit-acc-successfully", null));
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAccountSetting.msg.edit-acc-successfully", null));
         event.getSource().getAncestorOfType(UIMailPortlet.class).cancelAction();
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        
       } catch (Exception e) {
-        uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.edit-acc-unsuccessfully", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAccountSetting.msg.edit-acc-unsuccessfully", null));
         if (log.isDebugEnabled()) {
           log.debug("Exception in method execute of class SaveActionListener", e);
         }

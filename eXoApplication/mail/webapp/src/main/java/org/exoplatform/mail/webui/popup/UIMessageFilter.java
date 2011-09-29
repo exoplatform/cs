@@ -38,7 +38,6 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -174,10 +173,10 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
       UIMessageFilter uiMessageFilter = event.getSource();
       
       MessageFilter filter = uiMessageFilter.getSelectedFilter();
-      UIApplication uiApp = uiMessageFilter.getAncestorOfType(UIApplication.class);
       if (filter == null) {
-        uiApp.addMessage(new ApplicationMessage("UIMessageFilter.msg.select-no-filter", null, ApplicationMessage.INFO));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageFilter.msg.select-no-filter",
+                                                                                       null,
+                                                                                       ApplicationMessage.INFO));   
         return;
       }
       

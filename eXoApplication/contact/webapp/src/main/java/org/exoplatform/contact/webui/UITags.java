@@ -17,7 +17,6 @@
 package org.exoplatform.contact.webui;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -36,7 +35,6 @@ import org.exoplatform.contact.webui.popup.UIExportForm.ContactData;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -136,10 +134,9 @@ public class UITags extends UIComponent {
             ContactUtils.getCurrentUser(), tagId).getAll();
       }
       if (contacts == null || contacts.size() == 0) {
-        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UITag.msg.noContactToExport", null,
-          ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UITag.msg.noContactToExport",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));
         return ;  
       }
       UIExportForm uiExportForm = popupAction.activate(UIExportForm.class, 600) ;

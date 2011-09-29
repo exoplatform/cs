@@ -103,12 +103,7 @@ public class UICalendarPortlet extends UIPortletApplication {
     popupAction.deActivate() ;
     context.addUIComponentToUpdateByAjax(popupAction) ;
   }
-  protected void renderPopupMessages() throws Exception {
-    UIPopupMessages popupMess = getUIPopupMessages();
-    if(popupMess == null)  return ;
-    WebuiRequestContext  context =  WebuiRequestContext.getCurrentInstance() ;
-    popupMess.processRender(context);
-  }
+  
   public String getRemoteUser() throws Exception {
     return CalendarUtils.getCurrentUser() ;
   }
@@ -206,8 +201,7 @@ public class UICalendarPortlet extends UIPortletApplication {
           uiEventForm.setEmailRepeat(false) ;
           context.addUIComponentToUpdateByAjax(uiParentPopup);
         } else {
-          this.addMessage(new ApplicationMessage("UICalendarPortlet.msg.event-was-not-found", null, ApplicationMessage.ERROR));
-          context.addUIComponentToUpdateByAjax(this.getUIPopupMessages());
+          context.getUIApplication().addMessage(new ApplicationMessage("UICalendarPortlet.msg.event-was-not-found", null, ApplicationMessage.ERROR));
         }
         return;
       }

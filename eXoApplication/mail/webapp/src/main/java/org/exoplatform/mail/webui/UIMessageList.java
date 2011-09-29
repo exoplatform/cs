@@ -38,6 +38,9 @@ import org.exoplatform.mail.service.MessagePageList;
 import org.exoplatform.mail.service.SpamFilter;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.webui.action.FullDelegationEventListener;
+import org.exoplatform.mail.webui.action.HasAccountEventListener;
+import org.exoplatform.mail.webui.action.OwnerEventListener;
 import org.exoplatform.mail.webui.popup.UIAccountCreation;
 import org.exoplatform.mail.webui.popup.UIAddMessageFilter;
 import org.exoplatform.mail.webui.popup.UIAskmeReturnReceipt;
@@ -413,8 +416,9 @@ public class UIMessageList extends UIForm {
     return folderList;
   }
 
-  static public class SelectMessageActionListener extends EventListener<UIMessageList> {
-    public void execute(Event<UIMessageList> event) throws Exception {
+  static public class SelectMessageActionListener extends HasAccountEventListener<UIMessageList> {
+    @Override
+    public void processEvent(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
@@ -486,14 +490,13 @@ public class UIMessageList extends UIForm {
             if (log.isDebugEnabled()) {
               log.debug("PathNotFoundException in method execute of class SelectMessageActionListener", e);
             }
-            uiMessageList.setMessagePageList(null) ;
+            uiMessageList.setMessagePageList(null);
             uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet); 
-
-            UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-            uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-            return ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
+            event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account",
+                                                                                           null,
+                                                                                           ApplicationMessage.WARNING));
+            return;
           }
           for (Message m : msgs) {
             m.setUnread(false);
@@ -510,9 +513,9 @@ public class UIMessageList extends UIForm {
             uiPopupAction.activate(UIAskmeReturnReceipt.class, 600).setSelectedMsg(msg);
             event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
           } else if (requestReturnReceipt == MailSetting.SEND_RECEIPT_ALWAYS) {
-            UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+            
             ResourceBundle res = event.getRequestContext().getApplicationResourceBundle() ;
-            MailUtils.sendReturnReceipt(uiApp, event, username, accountId, msgId, res);
+            MailUtils.sendReturnReceipt(username, accountId, msgId, res);
             List<Message> msgL = new ArrayList<Message>();
             msgL.add(msg);
             mailSrv.toggleMessageProperty(username, accountId, msgL, folderId, Utils.IS_RETURN_RECEIPT, false);
@@ -555,8 +558,9 @@ public class UIMessageList extends UIForm {
     }
   }
 
-  static public class EditDraftActionListener extends EventListener<UIMessageList> {
-    public void execute(Event<UIMessageList> event) throws Exception {
+  static public class EditDraftActionListener extends HasAccountEventListener<UIMessageList> {
+    @Override
+    public void processEvent(Event<UIMessageList> event) throws Exception {
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       msgId = Utils.decodeMailId(msgId);
       UIMessageList uiMessageList = event.getSource();
@@ -576,10 +580,10 @@ public class UIMessageList extends UIForm {
       } catch (PathNotFoundException e) {
         uiMessageList.setMessagePageList(null) ;
         uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);        
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));        
         return ;
       }
       uiPopupContainer.addChild(uiComposeForm) ;
@@ -588,8 +592,9 @@ public class UIMessageList extends UIForm {
     }
   }
 
-  static public class AddStarActionListener extends EventListener<UIMessageList> {
-    public void execute(Event<UIMessageList> event) throws Exception {
+  static public class AddStarActionListener extends HasAccountEventListener<UIMessageList> {
+    @Override
+    public void processEvent(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
@@ -603,18 +608,13 @@ public class UIMessageList extends UIForm {
       
       if (Utils.isEmptyField(folderId)) {
         folderId = "";
-      }
-      
-      UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-      if(Utils.isEmptyField(accountId)) {
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
-      
+      }      
       if((msgId == null) && uiMessageList.getCheckedMessage().isEmpty()) {
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages",
+                                                null,
+                                                ApplicationMessage.INFO));        
         return;
       }
       
@@ -631,9 +631,9 @@ public class UIMessageList extends UIForm {
           uiMessageList.setMessagePageList(null) ;
           uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-
-          uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account",
+                                                                                         null,
+                                                                                         ApplicationMessage.WARNING));          
           return ;
         }
         uiMessageList.setSelectedMessageId(msgId);
@@ -652,9 +652,9 @@ public class UIMessageList extends UIForm {
           uiMessageList.setMessagePageList(null) ;
           uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-
-          uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account",
+                                                                                         null,
+                                                                                         ApplicationMessage.WARNING));          
           return ;
         }
       }
@@ -662,8 +662,9 @@ public class UIMessageList extends UIForm {
     }
   }
 
-  static public class RemoveStarActionListener extends EventListener<UIMessageList> {
-    public void execute(Event<UIMessageList> event) throws Exception {
+  static public class RemoveStarActionListener extends HasAccountEventListener<UIMessageList> {
+    @Override
+    public void processEvent(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
@@ -673,18 +674,19 @@ public class UIMessageList extends UIForm {
       String folderId = uiPortlet.findFirstComponentOfType(UIFolderContainer.class).getSelectedFolder();
       
       if (Utils.isEmptyField(folderId)) folderId = "";
-      UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+      
       if(Utils.isEmptyField(accountId)) {
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty",
+                                                                                       null));
+        
         return ;
       }
       
       List<Message> checkedMsgList = uiMessageList.getCheckedMessage();  
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
       if(checkedMsgList.isEmpty()) {
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
+        
         return;
       }
       
@@ -703,37 +705,30 @@ public class UIMessageList extends UIForm {
         uiMessageList.setMessagePageList(null) ;
         uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));        
         return ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
     }
   }
 
-  static public class ViewAllActionListener extends EventListener<UIMessageList> {
-    public void execute(Event<UIMessageList> event) throws Exception {
+  static public class ViewAllActionListener extends HasAccountEventListener<UIMessageList> {
+    @Override
+    public void processEvent(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
-      DataCache dataCache = uiPortlet.getDataCache();
-      
-      String accId = dataCache.getSelectedAccountId();
-      if(Utils.isEmptyField(accId)) {
-        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
       try {
         uiMessageList.filterMessage("");
       } catch (PathNotFoundException e) {
         uiMessageList.setMessagePageList(null) ;
         uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));
         return ;
       }
       uiMessageList.viewing_ = VIEW_ALL ;
@@ -741,18 +736,10 @@ public class UIMessageList extends UIForm {
     }
   }
 
-  static public class ViewAsListActionListener extends EventListener<UIMessageList> {
-    public void execute(Event<UIMessageList> event) throws Exception {
+  static public class ViewAsListActionListener extends HasAccountEventListener<UIMessageList> {
+    @Override
+    public void processEvent(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
-      DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
-      
-      String accId = dataCache.getSelectedAccountId();
-      if(Utils.isEmptyField(accId)) {
-        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
       if (uiMessageList.viewMode == MODE_LIST) return ;
       UIMessageList.setConversationMode(event);
       uiMessageList.viewMode = MODE_LIST ;
@@ -760,19 +747,11 @@ public class UIMessageList extends UIForm {
     }
   }
 
-  static public class ViewAsThreadActionListener extends EventListener<UIMessageList> {
-    public void execute(Event<UIMessageList> event) throws Exception {
+  static public class ViewAsThreadActionListener extends HasAccountEventListener<UIMessageList> {
+    @Override
+    public void processEvent(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
-      DataCache dataCache = uiPortlet.getDataCache();
-      
-      String accId = dataCache.getSelectedAccountId();
-      if(Utils.isEmptyField(accId)) {
-        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
       if (uiMessageList.viewMode == MODE_THREAD) return ;
       if (uiMessageList.viewMode == MODE_CONVERSATION) {
         UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class) ;
@@ -787,19 +766,11 @@ public class UIMessageList extends UIForm {
     }
   }
 
-  static public class ViewAsConversationActionListener extends EventListener<UIMessageList> {
-    public void execute(Event<UIMessageList> event) throws Exception {
+  static public class ViewAsConversationActionListener extends HasAccountEventListener<UIMessageList> {
+    @Override
+    public void processEvent(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
-      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
-      DataCache dataCache = uiPortlet.getDataCache();
-      
-      String accId = dataCache.getSelectedAccountId();
-      if(Utils.isEmptyField(accId)) {
-        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
+      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);      
       if (uiMessageList.viewMode == MODE_CONVERSATION) return ;
       if (uiMessageList.viewMode == MODE_THREAD) {
         UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class) ;
@@ -820,53 +791,34 @@ public class UIMessageList extends UIForm {
     }
   }
 
-  static public class GroupByDateActionListener extends EventListener<UIMessageList> {
-    public void execute(Event<UIMessageList> event) throws Exception {
-      UIMessageList uiMessageList = event.getSource();
-      DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
-      
-      String accId = dataCache.getSelectedAccountId();
-      if(Utils.isEmptyField(accId)) {
-        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
-      
+  static public class GroupByDateActionListener extends HasAccountEventListener<UIMessageList> {
+    @Override
+    public void processEvent(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiMessageList = event.getSource();      
       if (uiMessageList.viewMode == MODE_GROUP_BY_DATE) {
         return ;
-      }
-      
+      }      
       UIMessageList.setConversationMode(event);
       uiMessageList.viewMode = MODE_GROUP_BY_DATE ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
 
-  static public class ViewStarredActionListener extends EventListener<UIMessageList> {
-    public void execute(Event<UIMessageList> event) throws Exception {
+  static public class ViewStarredActionListener extends HasAccountEventListener<UIMessageList> {
+    @Override
+    public void processEvent(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();     
-      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
-      DataCache dataCache = uiPortlet.getDataCache();
-      
-      String accId = dataCache.getSelectedAccountId();
-      if(Utils.isEmptyField(accId)) {
-        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
-      
+      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);      
       try {
         uiMessageList.filterMessage("@" + Utils.EXO_STAR + "='true'");
       } catch (PathNotFoundException e) {
         uiMessageList.setMessagePageList(null) ;
         uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));
+        return;
       }
       
       uiMessageList.viewing_ = VIEW_STARRED ;
@@ -875,29 +827,20 @@ public class UIMessageList extends UIForm {
     }
   }
 
-  static public class ViewUnreadActionListener extends EventListener<UIMessageList> {
-    public void execute(Event<UIMessageList> event) throws Exception {
+  static public class ViewUnreadActionListener extends HasAccountEventListener<UIMessageList> {
+    @Override
+    public void processEvent(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
-      DataCache dataCache = uiPortlet.getDataCache();
-      
-      String accId = dataCache.getSelectedAccountId();
-      if(Utils.isEmptyField(accId)) {
-        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
-      
       try {
         uiMessageList.filterMessage("@" + Utils.EXO_ISUNREAD + "='true'");
       } catch (PathNotFoundException e) {
         uiMessageList.setMessagePageList(null) ;
         uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);        
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account",
+                                                                    null,
+                                                                    ApplicationMessage.WARNING));        
         return ;
       }
       
@@ -907,29 +850,19 @@ public class UIMessageList extends UIForm {
     }
   }
 
-  static public class ViewAttachmentActionListener extends EventListener<UIMessageList> {
-    public void execute(Event<UIMessageList> event) throws Exception {
+  static public class ViewAttachmentActionListener extends HasAccountEventListener<UIMessageList> {
+    @Override
+    public void processEvent(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
-      DataCache dataCache = uiPortlet.getDataCache();
-      
-      String accId = dataCache.getSelectedAccountId();
-      if(Utils.isEmptyField(accId)) {
-        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
-      
       try {
         uiMessageList.filterMessage("@" + Utils.EXO_HASATTACH + "='true'");
       } catch (PathNotFoundException e) {
         uiMessageList.setMessagePageList(null) ;
         uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);        
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
+        
         return ;
       }
       
@@ -962,44 +895,43 @@ public class UIMessageList extends UIForm {
     setMessagePageList(mailSrv.getMessagePageList(username, msgFilter));
   }
 
-  static public class ReplyActionListener extends EventListener<UIMessageList> {
-    public void execute(Event<UIMessageList> event) throws Exception {
-      UIMessageList.reply(event, false); 
+  static public class ReplyActionListener extends FullDelegationEventListener<UIMessageList> {
+    @Override
+    public void processEvent(Event<UIMessageList> event) throws Exception {
+      UIMessageList.reply(event, false);
     }
   }
 
-  static  public class ReplyAllActionListener extends EventListener<UIMessageList> {    
-    public void execute(Event<UIMessageList> event) throws Exception {
-      UIMessageList.reply(event, true); 
+  static public class ReplyAllActionListener extends FullDelegationEventListener<UIMessageList> {
+    @Override
+    public void processEvent(Event<UIMessageList> event) throws Exception {
+      UIMessageList.reply(event, true);
     }
   }
 
-  static public class ForwardActionListener extends EventListener<UIMessageList> {
-    public void execute(Event<UIMessageList> event) throws Exception {
+  static public class ForwardActionListener extends FullDelegationEventListener<UIMessageList> {
+    @Override
+    public void processEvent(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource(); 
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
       msgId = Utils.decodeMailId(msgId);
       String accId = uiPortlet.getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue();
-      
-      // Verify
-      UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-      if(Utils.isEmptyField(accId)) {
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
-      if(!MailUtils.isFull(accId, uiPortlet.getDataCache())) {
-        uiMessageList.showMessage(event); 
-        return;
-      }
       List<Message> checkedMsgs = uiMessageList.getCheckedMessage(false);
       if(checkedMsgs.isEmpty()) {
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages",
+                                                null,
+                                                ApplicationMessage.INFO));
         return;
       } else if (checkedMsgs.size() > 1){
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-many-messages", null, ApplicationMessage.INFO)) ;
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-many-messages",
+                                                null,
+                                                ApplicationMessage.INFO));
         return;
       }      
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
@@ -1024,8 +956,9 @@ public class UIMessageList extends UIForm {
         uiMessageList.setMessagePageList(null) ;
         uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));        
         return; 
       }
       uiPopupContainer.addChild(uiComposeForm) ;
@@ -1034,30 +967,32 @@ public class UIMessageList extends UIForm {
     }
   }  
 
-  static  public class CreateFilterActionListener extends EventListener<UIMessageList> {
-    public void execute(Event<UIMessageList> event) throws Exception {
+  static  public class CreateFilterActionListener extends OwnerEventListener<UIMessageList> {
+    @Override
+    public void processEvent(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ;
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
       
       String accountId = dataCache.getSelectedAccountId();
-      if(MailUtils.isDelegated(accountId, dataCache)) {
-        uiMessageList.showMessage(event); 
-        return;
-      }
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       msgId = Utils.decodeMailId(msgId);
-      
-      // Verify
-      UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
       List<Message> checkedMsgs = uiMessageList.getCheckedMessage(false) ;
-      if(checkedMsgs.isEmpty()) {
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      if (checkedMsgs.isEmpty()) {
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages",
+                                                null,
+                                                ApplicationMessage.INFO));
+
         return;
-      } else if (checkedMsgs.size() > 1){
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-many-messages", null, ApplicationMessage.INFO)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      } else if (checkedMsgs.size() > 1) {
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-many-messages",
+                                                null,
+                                                ApplicationMessage.INFO));
+
         return;
       }
 
@@ -1080,8 +1015,10 @@ public class UIMessageList extends UIForm {
         uiMessageList.setMessagePageList(null) ;
         uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));
+        
         return; 
       }
       uiPopupAction.activate(uiEditMessageFilter, 650, 0, false) ;
@@ -1091,26 +1028,21 @@ public class UIMessageList extends UIForm {
     }
   }
 
-  static public class DeleteActionListener extends EventListener<UIMessageList> {
-    public void execute(Event<UIMessageList> event) throws Exception {
+  static public class DeleteActionListener extends FullDelegationEventListener<UIMessageList> {
+    @Override
+    public void processEvent(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
       
       String msgId = null;
       String accountId = dataCache.getSelectedAccountId();
-
-      // Verify
-      UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-      if(Utils.isEmptyField(accountId)) {
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      } else if(!MailUtils.isFull(accountId, dataCache)) {
-        uiMessageList.showMessage(event); 
-        return;
-      } else if(uiMessageList.getCheckedMessage().isEmpty()) {
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
+      if(uiMessageList.getCheckedMessage().isEmpty()) {
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages",
+                                                null,
+                                                ApplicationMessage.INFO));
         return;
       }
       
@@ -1156,9 +1088,9 @@ public class UIMessageList extends UIForm {
         uiMessageList.setMessagePageList(null) ;
         uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));        
         return ;
       }
       if(successList.size() > 0){
@@ -1174,8 +1106,9 @@ public class UIMessageList extends UIForm {
     }
   }
 
-  static public class ReportSpamActionListener extends EventListener<UIMessageList> {
-    public void execute(Event<UIMessageList> event) throws Exception {
+  static public class ReportSpamActionListener extends FullDelegationEventListener<UIMessageList> {
+    @Override
+    public void processEvent(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
@@ -1186,23 +1119,12 @@ public class UIMessageList extends UIForm {
       String username = MailUtils.getCurrentUser();
       String accountId = dataCache.getSelectedAccountId();
       List<Message> successList = new ArrayList<Message>();
-      if (Utils.isEmptyField(accountId)) {
-        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class);
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-        return;
-      }
-      
-      UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class);
       if (uiMessageList.getCheckedMessage().isEmpty()) {
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null,
-            ApplicationMessage.INFO));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-        return;
-      }
-      
-      if (!MailUtils.isFull(accountId, dataCache)) {
-        uiMessageList.showMessage(event);
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages",
+                                                null,
+                                                ApplicationMessage.INFO));
         return;
       }
       
@@ -1214,7 +1136,7 @@ public class UIMessageList extends UIForm {
         checkedMessageList = uiMessageList.getCheckedMessage();
       }
       
-      SpamFilter spamFilter = setSpamFilter(event, msgId, username, accountId, uiApp);
+      SpamFilter spamFilter = getSpamFilter(event, msgId, username, accountId);
       for (Message message : checkedMessageList) {
         Message m = mailSrv.moveMessage(username, accountId, message, message.getFolders()[0],
             Utils.generateFID(accountId, Utils.FD_SPAM, false));
@@ -1237,8 +1159,9 @@ public class UIMessageList extends UIForm {
     }
   }
 
-  static public class NotSpamActionListener extends EventListener<UIMessageList> {
-    public void execute(Event<UIMessageList> event) throws Exception {
+  static public class NotSpamActionListener extends FullDelegationEventListener<UIMessageList> {
+    @Override
+    public void processEvent(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
       msgId = Utils.decodeMailId(msgId);
@@ -1249,11 +1172,6 @@ public class UIMessageList extends UIForm {
       String accountId = dataCache.getSelectedAccountId();
       UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class);
       List<Message> successList = new ArrayList<Message>();
-      if (Utils.isEmptyField(accountId)) {
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-        return;
-      }
       
       if (uiMessageList.getCheckedMessage().isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null,
@@ -1270,7 +1188,7 @@ public class UIMessageList extends UIForm {
         checkedMessageList = uiMessageList.getCheckedMessage();
       }
       
-      SpamFilter spamFilter = setSpamFilter(event, msgId, username, accountId, uiApp);
+      SpamFilter spamFilter = getSpamFilter(event, msgId, username, accountId);
       for (Message message : checkedMessageList) {
         Message m = mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], Utils.generateFID(accountId, Utils.FD_INBOX, false));
         if (m == null) {
@@ -1293,8 +1211,9 @@ public class UIMessageList extends UIForm {
     }
   }
 
-  static public class PrintActionListener extends EventListener<UIMessageList> {
-    public void execute(Event<UIMessageList> event) throws Exception {
+  static public class PrintActionListener extends HasAccountEventListener<UIMessageList> {
+    @Override
+    public void processEvent(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
@@ -1305,13 +1224,6 @@ public class UIMessageList extends UIForm {
       UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class);
       List<Message> checkedMsgs = uiMessageList.getCheckedMessage(false);
       String accountId = dataCache.getSelectedAccountId();
-      
-      if (Utils.isEmptyField(accountId)) {
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-        return;
-      }
-      
       if (checkedMsgs.isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO));
         return;
@@ -1400,9 +1312,9 @@ public class UIMessageList extends UIForm {
         uiMessageList.setMessagePageList(null) ;
         uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));
         return ;
       }
       
@@ -1416,8 +1328,9 @@ public class UIMessageList extends UIForm {
     }
   }
 
-  static public class MarkAsUnReadActionListener extends EventListener<UIMessageList> {
-    public void execute(Event<UIMessageList> event) throws Exception {
+  static public class MarkAsUnReadActionListener extends HasAccountEventListener<UIMessageList> {
+    @Override
+    public void processEvent(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();  
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
@@ -1460,8 +1373,11 @@ public class UIMessageList extends UIForm {
         String uid = MailUtils.getDelegateFrom(accountId, dataCache);
         mailSrv.toggleMessageProperty(uid, accountId, msgList, folderId, Utils.EXO_ISUNREAD, true);
       } catch (PathNotFoundException e) {
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages",
+                                                null,
+                                                ApplicationMessage.INFO));        
         return;
       }
       
@@ -1472,20 +1388,13 @@ public class UIMessageList extends UIForm {
     }
   }
 
-  static public class AddTagActionListener extends EventListener<UIMessageList> {
-    public void execute(Event<UIMessageList> event) throws Exception {
+  static public class AddTagActionListener extends FullDelegationEventListener<UIMessageList> {
+    @Override
+    public void processEvent(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ; 
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
-      
       String accId = dataCache.getSelectedAccountId();
-      checkEmptyAccount(event, accId);
-      
-      if(!MailUtils.isFull(accId, dataCache)) {
-        uiMessageList.showMessage(event);
-        return;
-      }
-      
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
       UITagForm uiTagForm = uiMessageList.createUIComponent(UITagForm.class, null, null) ;
       String username = MailUtils.getDelegateFrom(accId, dataCache);
@@ -1497,11 +1406,10 @@ public class UIMessageList extends UIForm {
       } catch (PathNotFoundException e) {
         uiMessageList.setMessagePageList(null) ;
         uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-
-        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);       
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));
         return ;
       }
       
@@ -1512,8 +1420,9 @@ public class UIMessageList extends UIForm {
     }
   }
 
-  static public class AddTagDnDActionListener extends EventListener<UIMessageList> {
-    public void execute(Event<UIMessageList> event) throws Exception {
+  static public class AddTagDnDActionListener extends FullDelegationEventListener<UIMessageList> {    
+    @Override
+    public void processEvent(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource(); 
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
@@ -1522,10 +1431,6 @@ public class UIMessageList extends UIForm {
       UITagContainer uiTagContainer = uiPortlet.findFirstComponentOfType(UITagContainer.class);
       String username = uiPortlet.getCurrentUser() ;
       String accountId = dataCache.getSelectedAccountId();
-      if(!MailUtils.isFull(accountId, uiPortlet.getDataCache())) {
-        uiMessageList.showMessage(event);
-        return;
-      }
       
       MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
       List<Tag> tagList = new ArrayList<Tag>();      
@@ -1554,31 +1459,19 @@ public class UIMessageList extends UIForm {
     }
   }
 
-  static public class MoveMessagesActionListener extends EventListener<UIMessageList> {
-    public void execute(Event<UIMessageList> event) throws Exception {
+  static public class MoveMessagesActionListener extends FullDelegationEventListener<UIMessageList> {    
+    @Override
+    public void processEvent(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ;    
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
-      DataCache dataCache = uiPortlet.getDataCache();
-      
+      DataCache dataCache = uiPortlet.getDataCache();      
       String accId = dataCache.getSelectedAccountId();
       UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class);
-      if(Utils.isEmptyField(accId)) {
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
-      
-      if(!MailUtils.isFull(accId, dataCache)) {
-        uiMessageList.showMessage(event);
-        return;
-      }
-      
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);    
       if(uiMessageList.getCheckedMessage().isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
         return;
       }
-      
       UIMoveMessageForm uiMoveMessageForm = uiMessageList.createUIComponent(UIMoveMessageForm.class,null, null);
       uiMoveMessageForm.init(accId);
       uiMoveMessageForm.setMessageList(uiMessageList.getCheckedMessage());
@@ -1587,8 +1480,9 @@ public class UIMessageList extends UIForm {
     }
   }
 
-  static public class MoveDirectMessagesActionListener extends EventListener<UIMessageList> {
-    public void execute(Event<UIMessageList> event) throws Exception {
+  static public class MoveDirectMessagesActionListener extends FullDelegationEventListener<UIMessageList> {
+    @Override
+    public void processEvent(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
@@ -1599,10 +1493,6 @@ public class UIMessageList extends UIForm {
       UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class) ;
       UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class);
       String accountId = dataCache.getSelectedAccountId();
-      if(!MailUtils.isFull(accountId, dataCache)) {
-        uiMessageList.showMessage(event);
-        return;
-      }
       
       String username = MailUtils.getDelegateFrom(accountId, dataCache);
       List<Message> appliedMsgList = uiMessageList.getCheckedMessage();
@@ -1617,10 +1507,11 @@ public class UIMessageList extends UIForm {
         }
       }    
 
-      if(successes == null || (successes.size()>0 && successes.size() < appliedMsgList.size()) || successes.contains(null) || successes.size() == 0){
-        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIMoveMessageForm.msg.move_delete_not_successful", null, ApplicationMessage.INFO)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      if(successes == null || (successes.size()>0 && successes.size() < appliedMsgList.size()) || successes.contains(null) || successes.size() == 0){        
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIMoveMessageForm.msg.move_delete_not_successful", null, ApplicationMessage.INFO));
+        
       }
       
       uiMessageList.updateList();     
@@ -1643,19 +1534,14 @@ public class UIMessageList extends UIForm {
     }
   }
 
-  static public class ImportActionListener extends EventListener<UIMessageList> {
-    public void execute(Event<UIMessageList> event) throws Exception {
+  static public class ImportActionListener extends FullDelegationEventListener<UIMessageList> {
+    @Override
+    public void processEvent(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ;   
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
       
       String accId = dataCache.getSelectedAccountId();
-      checkEmptyAccount(event, accId);
-      if(!MailUtils.isFull(accId, dataCache)) {
-        uiMessageList.showMessage(event);
-        return;      
-      }
-
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
       UIImportForm uiImportForm = uiPopup.createUIComponent(UIImportForm.class, null, null);
       uiImportForm.init(accId);
@@ -1669,32 +1555,30 @@ public class UIMessageList extends UIForm {
     }
   }
 
-  static public class ExportActionListener extends EventListener<UIMessageList> {
-    public void execute(Event<UIMessageList> event) throws Exception {
+  static public class ExportActionListener extends HasAccountEventListener<UIMessageList> {
+    @Override
+    public void processEvent(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ;   
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
-      DataCache dataCache = uiPortlet.getDataCache();
-      
-      String accId = dataCache.getSelectedAccountId();
-      UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-      if(Utils.isEmptyField(accId)) {
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
-      
+      DataCache dataCache = uiPortlet.getDataCache();      
+      String accId = dataCache.getSelectedAccountId();      
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
       List<Message> checkedMsgs = uiMessageList.getCheckedMessage(false) ;
       if(checkedMsgs.isEmpty()) {
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages",
+                                                null,
+                                                ApplicationMessage.INFO));
         return;
       } else if (checkedMsgs.size() > 1){
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-many-messages", null, ApplicationMessage.INFO)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-many-messages",
+                                                null,
+                                                ApplicationMessage.INFO));
         return;
       }
-      
       try {
         Message msg = checkedMsgs.get(0) ;
         if (msg != null) {
@@ -1749,9 +1633,10 @@ public class UIMessageList extends UIForm {
     }
   }
 
-  static public class RefreshActionListener extends EventListener<UIMessageList> {
-    public void execute(Event<UIMessageList> event) throws Exception {
-      UIMessageList uiMessageList = event.getSource() ; 
+  static public class RefreshActionListener extends HasAccountEventListener<UIMessageList> {
+    @Override
+    public void processEvent(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiMessageList = event.getSource();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
       
@@ -1770,8 +1655,9 @@ public class UIMessageList extends UIForm {
     }
   }
 
-  static public class SortActionListener extends EventListener<UIMessageList> {
-    public void execute(Event<UIMessageList> event) throws Exception {
+  static public class SortActionListener extends HasAccountEventListener<UIMessageList> {
+    @Override
+    public void processEvent(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ;
       String sortedBy = event.getRequestContext().getRequestParameter(OBJECTID) ;  
       DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
@@ -1818,8 +1704,9 @@ public class UIMessageList extends UIForm {
     }
   }
 
-  static public class UpdateListActionListener extends EventListener<UIMessageList> {
-    public void execute(Event<UIMessageList> event) throws Exception {
+  static public class UpdateListActionListener extends HasAccountEventListener<UIMessageList> {
+    @Override
+    public void processEvent(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMsgList = event.getSource();
       UIMailPortlet uiPortlet = uiMsgList.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
@@ -1855,14 +1742,8 @@ public class UIMessageList extends UIForm {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
     }
   }
-
-  public void showMessage(Event event) {
-    UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
-    uiApp.addMessage(new ApplicationMessage("UISelectAccount.msg.account-list-no-permission", null)) ;
-    event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-  }
   
-  public static void reply(Event<UIMessageList> event, boolean isReplyAll) throws Exception{
+  private static void reply(Event<UIMessageList> event, boolean isReplyAll) throws Exception{
     UIMessageList uiMessageList = event.getSource(); 
     UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
     DataCache dataCache = uiPortlet.getDataCache();
@@ -1870,27 +1751,13 @@ public class UIMessageList extends UIForm {
     String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
     msgId = Utils.decodeMailId(msgId);
     
-    String accId = uiPortlet.getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue() ;
-    UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ; 
-    if(Utils.isEmptyField(accId)) {
-      uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-      return ;
-    }
-    
-    if(!MailUtils.isFull(accId, dataCache)) {
-      uiMessageList.showMessage(event); 
-      return;
-    }
-    
+    String accId = uiPortlet.getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue();
     List<Message> checkedMsgs = uiMessageList.getCheckedMessage(false);
     if(checkedMsgs.isEmpty()) {
-      uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
       return;
     } else if (checkedMsgs.size() > 1){
-      uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-many-messages", null, ApplicationMessage.INFO)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-many-messages", null, ApplicationMessage.INFO)) ;
       return;
     }
     
@@ -1922,15 +1789,16 @@ public class UIMessageList extends UIForm {
       uiMessageList.setMessagePageList(null) ;
       uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-      uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account",
+                                                                                     null,
+                                                                                     ApplicationMessage.WARNING));      
       return; 
     }
     uiPopupContainer.addChild(uiComposeForm) ;
     event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;    
   }
   
-  public static void setConversationMode(Event<UIMessageList> event) throws Exception{
+  private static void setConversationMode(Event<UIMessageList> event) throws Exception{
     UIMessageList uiMessageList = event.getSource();
     UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
     if (uiMessageList.viewMode == MODE_CONVERSATION) {
@@ -1948,15 +1816,15 @@ public class UIMessageList extends UIForm {
     } catch (PathNotFoundException e) {
       uiMessageList.setMessagePageList(null) ;
       uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-      UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-      uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);      
+      event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account",
+                                                                                     null,
+                                                                                     ApplicationMessage.WARNING));      
       return;
     }   
   }
   
-  public static SpamFilter setSpamFilter(Event<UIMessageList> event, String msgId, String username, String accountId, UIApplication uiApp) throws Exception{
+  private static SpamFilter getSpamFilter(Event<UIMessageList> event, String msgId, String username, String accountId) throws Exception{
     UIMessageList uiMessageList = event.getSource();
     UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
     MailService mailSrv = MailUtils.getMailService();
@@ -1968,14 +1836,15 @@ public class UIMessageList extends UIForm {
       uiMessageList.setMessagePageList(null) ;
       uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-      uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account",
+                                                                                     null,
+                                                                                     ApplicationMessage.WARNING));    
       return null; 
     }
     return spamFilter;
   }
   
-  public static void viewListMode(Event<UIMessageList> event) throws Exception{
+  private static void viewListMode(Event<UIMessageList> event) throws Exception{
     UIMessageList uiMessageList = event.getSource();
     UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
     MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
@@ -1988,20 +1857,10 @@ public class UIMessageList extends UIForm {
     } catch (PathNotFoundException e) {
       uiMessageList.setMessagePageList(null) ;
       uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-      UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-      uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-      return ;
-    }
-  }
-  
-  public static void checkEmptyAccount(Event<UIMessageList> event, String accId){
-    UIMessageList uiMessageList = event.getSource();
-    if(Utils.isEmptyField(accId)) {
-      UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-      uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);      
+      event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account",
+                                                                                     null,
+                                                                                     ApplicationMessage.WARNING));      
       return ;
     }
   }

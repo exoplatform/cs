@@ -44,6 +44,9 @@ import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.webui.action.HasAccountEventListener;
+import org.exoplatform.mail.webui.action.FullDelegationEventListener;
+import org.exoplatform.mail.webui.action.OwnerEventListener;
 import org.exoplatform.mail.webui.popup.UIAddMessageFilter;
 import org.exoplatform.mail.webui.popup.UIComposeForm;
 import org.exoplatform.mail.webui.popup.UIEventForm;
@@ -59,7 +62,6 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.commons.UISaveAttachment;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.event.Event;
@@ -379,33 +381,30 @@ public class UIMessagePreview extends UIContainer{
     }
   }
 
-  static public class ReplyActionListener extends EventListener<UIMessagePreview> {
-    public void execute(Event<UIMessagePreview> event) throws Exception {
+  static public class ReplyActionListener extends FullDelegationEventListener<UIMessagePreview> {
+    @Override
+    public void processEvent(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview.reply(event, false);
     }
   }
 
-  static public class ReplyAllActionListener extends EventListener<UIMessagePreview> {
-    public void execute(Event<UIMessagePreview> event) throws Exception {
+  static public class ReplyAllActionListener extends FullDelegationEventListener<UIMessagePreview> {
+    @Override
+    public void processEvent(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview.reply(event, true);
     }
   }
 
-  static public class ForwardActionListener extends EventListener<UIMessagePreview> {
-    public void execute(Event<UIMessagePreview> event) throws Exception {
+  static public class ForwardActionListener extends FullDelegationEventListener<UIMessagePreview> {
+    @Override
+    public void processEvent(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
       
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
-      msgId = Utils.decodeMailId(msgId);
-      
+      msgId = Utils.decodeMailId(msgId);      
       String accId = dataCache.getSelectedAccountId();
-      if(!MailUtils.isFull(accId, dataCache)) {
-        uiMsgPreview.showMessage(event);
-        return;
-      }
-
       if (msgId != null) {
         Message msg = uiMsgPreview.getShowedMessageById(msgId);
         if (msg != null) {
@@ -425,8 +424,9 @@ public class UIMessagePreview extends UIContainer{
     }
   }
 
-  static public class CreateFilterActionListener extends EventListener<UIMessagePreview> {
-    public void execute(Event<UIMessagePreview> event) throws Exception {
+  static public class CreateFilterActionListener extends OwnerEventListener<UIMessagePreview> {
+    @Override
+    public void processEvent(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
@@ -434,11 +434,6 @@ public class UIMessagePreview extends UIContainer{
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
       msgId = Utils.decodeMailId(msgId);
       String accId = dataCache.getSelectedAccountId();
-      if(MailUtils.isDelegated(accId, dataCache)) {
-        uiMsgPreview.showMessage(event);
-        return;
-      }
-
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
       if (msgId != null) {
         Message msg = uiMsgPreview.getShowedMessageById(msgId);
@@ -471,8 +466,9 @@ public class UIMessagePreview extends UIContainer{
     }
   }
 
-  static public class DeleteActionListener extends EventListener<UIMessagePreview> {
-    public void execute(Event<UIMessagePreview> event) throws Exception {
+  static public class DeleteActionListener extends FullDelegationEventListener<UIMessagePreview> {
+    @Override
+    public void processEvent(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
@@ -480,11 +476,6 @@ public class UIMessagePreview extends UIContainer{
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
       msgId = Utils.decodeMailId(msgId);
       String accountId = dataCache.getSelectedAccountId();
-      if(!MailUtils.isFull(accountId, dataCache)) {
-        uiMsgPreview.showMessage(event);
-        return;
-      }
-
       UIMessageArea uiMsgArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
       UIMessageList uiMsgList = uiMsgArea.getChild(UIMessageList.class);
       UIFolderContainer uiFolderCon = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
@@ -511,9 +502,9 @@ public class UIMessagePreview extends UIContainer{
       }
       
       if(mResult == null){
-        UIApplication uiInfoApp = uiMsgPreview.getAncestorOfType(UIApplication.class) ;
-        uiInfoApp.addMessage(new ApplicationMessage("UIMoveMessageForm.msg.move_delete_not_successful", null, ApplicationMessage.INFO)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiInfoApp.getUIPopupMessages()) ;
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIMoveMessageForm.msg.move_delete_not_successful", null, ApplicationMessage.INFO));
       }
       
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderCon.getParent());
@@ -605,21 +596,16 @@ public class UIMessagePreview extends UIContainer{
     }
   }
 
-  static public class MoveMessagesActionListener extends EventListener<UIMessagePreview> {
-    public void execute(Event<UIMessagePreview> event) throws Exception {
+  static public class MoveMessagesActionListener extends OwnerEventListener<UIMessagePreview> {
+    @Override
+    public void processEvent(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
       
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
-      msgId = Utils.decodeMailId(msgId);
-      
-      String accountId = dataCache.getSelectedAccountId();
-      if (MailUtils.isDelegated(accountId, uiPortlet.getDataCache())) {
-        uiMsgPreview.showMessage(event);
-        return;
-      }
-      
+      msgId = Utils.decodeMailId(msgId);      
+      String accountId = dataCache.getSelectedAccountId();      
       Message msg = uiMsgPreview.getShowedMessageById(msgId);
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
       if (msg != null) {
@@ -635,10 +621,11 @@ public class UIMessagePreview extends UIContainer{
     }
   }
 
-  static public class AnswerInvitationActionListener extends EventListener<UIMessagePreview> {
+  static public class AnswerInvitationActionListener extends HasAccountEventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
       UIMailPortlet uiMailPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
+      DataCache dataCache = uiMailPortlet.getDataCache();
       
       String answer = event.getRequestContext().getRequestParameter(OBJECTID);
       String msgId = event.getRequestContext().getRequestParameter("messageId");
@@ -646,11 +633,9 @@ public class UIMessagePreview extends UIContainer{
       CalendarService calService = uiMsgPreview.getApplicationComponent(CalendarService.class);
       Message msg = uiMsgPreview.getShowedMessageById(msgId);
       String fromUserId = MailUtils.getEventFrom(msg);
-      
-      UISelectAccount uiSelectAcc = uiMailPortlet.findFirstComponentOfType(UISelectAccount.class);
-      String accId = uiSelectAcc.getSelectedValue();
+      String accId = dataCache.getSelectedAccountId();
       String confirmingUser = uiMailPortlet.getCurrentUser();
-      Account account = uiMailPortlet.getDataCache().getAccountById(confirmingUser, accId);
+      Account account = dataCache.getAccountById(confirmingUser, accId);
       String confirmingEmail = "";
       if (account != null) {
         confirmingEmail = account.getEmailAddress();
@@ -707,9 +692,9 @@ public class UIMessagePreview extends UIContainer{
         if (log.isDebugEnabled()) {
           log.debug("Exception in method execute of class AnswerInvitationActionListener", e);
         }
-        UIApplication uiApp = uiMsgPreview.getAncestorOfType(UIApplication.class);
-        uiApp.addMessage(new ApplicationMessage("UIMessagePreview.msg.trouble-loading-event", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIMessagePreview.msg.trouble-loading-event", null));        
         return;
       }
     }
@@ -755,12 +740,6 @@ public class UIMessagePreview extends UIContainer{
     }
     return true;
   }
- 
-  private void showMessage(Event event) {
-    UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
-    uiApp.addMessage(new ApplicationMessage("UISelectAccount.msg.account-list-no-permission", null)) ;
-    event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-  }
   
   static void reply(Event<UIMessagePreview> event, boolean isReplyAll) throws Exception{
     UIMessagePreview uiMsgPreview = event.getSource();
@@ -770,12 +749,7 @@ public class UIMessagePreview extends UIContainer{
     String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
     msgId = Utils.decodeMailId(msgId);
     
-    String accId = dataCache.getSelectedAccountId();
-    if(!MailUtils.isFull(accId, dataCache)) {
-      uiMsgPreview.showMessage(event);
-      return;
-    }
-    
+    String accId = dataCache.getSelectedAccountId();    
     UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
     if (msgId != null) {
       Message msg = uiMsgPreview.getShowedMessageById(msgId);

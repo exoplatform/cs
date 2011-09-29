@@ -31,7 +31,6 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIBreadcumbs;
 import org.exoplatform.webui.core.UIGrid;
 import org.exoplatform.webui.core.UIPopupWindow;
@@ -114,15 +113,14 @@ public class UISelectPermissionsForm extends UIForm implements UIPopupComponent,
     @SuppressWarnings("unchecked")
     public void execute(Event<UISelectPermissionsForm> event) throws Exception {
       UISelectPermissionsForm uiForm = event.getSource() ;
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       String names = uiForm.getUIStringInput(ContactUtils.FIELD_USER).getValue() ;
       String groups = uiForm.getUIStringInput(ContactUtils.FIELD_GROUP).getValue() ;
       Map<String, String> receiveUsers = new LinkedHashMap<String, String>() ;
       Map<String, String> receiveGroups = new LinkedHashMap<String, String>() ;      
       if(ContactUtils.isEmpty(names) && ContactUtils.isEmpty(groups)) {        
-        uiApp.addMessage(new ApplicationMessage("UISelectPermissionsForm.msg.empty-username", null,
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UISelectPermissionsForm.msg.empty-username", null, ApplicationMessage.WARNING));
         return ;
       } 
       String username = ContactUtils.getCurrentUser() ;
@@ -142,9 +140,10 @@ public class UISelectPermissionsForm extends UIForm implements UIPopupComponent,
           }
         }
         if (invalidUsers.length() > 0) {
-          uiApp.addMessage(new ApplicationMessage("UISelectPermissionsForm.msg.not-exist-username"
-              , new Object[]{invalidUsers.toString()}, 1 )) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext()
+          .getUIApplication().addMessage(new ApplicationMessage("UISelectPermissionsForm.msg.not-exist-username"
+              , new Object[]{invalidUsers.toString()},  ApplicationMessage.WARNING )) ;
+          
           return ;          
         }      
       }
@@ -162,9 +161,12 @@ public class UISelectPermissionsForm extends UIForm implements UIPopupComponent,
           }
         }
         if (invalidGroups.length() > 0) {
-          uiApp.addMessage(new ApplicationMessage("UISelectPermissionsForm.msg.not-exist-group"
-              , new Object[]{invalidGroups.toString()}, 1 )) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext()
+               .getUIApplication()
+               .addMessage(new ApplicationMessage("UISelectPermissionsForm.msg.not-exist-group",
+                                                  new Object[] { invalidGroups.toString() },
+                                                  ApplicationMessage.WARNING));
+          
           return ;          
         }      
       }
@@ -180,9 +182,10 @@ public class UISelectPermissionsForm extends UIForm implements UIPopupComponent,
         }
       }
       if (receiveGroups.size() == 0 && receiveUsers.size() == 0) {
-        uiApp.addMessage(new ApplicationMessage("UISelectPermissionsForm.msg.shared-yourself", null,
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UISelectPermissionsForm.msg.shared-yourself", null, ApplicationMessage.WARNING));
+        
         return ;
       }
       AddressBook contactGroup = uiForm.group_ ;

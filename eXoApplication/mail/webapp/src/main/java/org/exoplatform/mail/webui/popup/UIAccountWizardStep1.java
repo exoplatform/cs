@@ -23,7 +23,7 @@ import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.WizardStep;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
@@ -68,9 +68,11 @@ public class UIAccountWizardStep1 extends UIFormInputSet implements WizardStep {
     setAccDescription(description) ;
   }
   public boolean isFieldsValid() {
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
     if (Utils.isEmptyField(getAccName())) {
-      UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
-      uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.account-name-requirement", null, ApplicationMessage.WARNING)) ;
+      context.getUIApplication().addMessage(new ApplicationMessage("UIAccountCreation.msg.account-name-requirement",
+                                                                   null,
+                                                                   ApplicationMessage.WARNING));
     }
     return !Utils.isEmptyField(getAccName()) ;
   }

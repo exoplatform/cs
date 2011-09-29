@@ -38,7 +38,6 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIGrid;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 import org.exoplatform.webui.event.Event;
@@ -112,9 +111,9 @@ public class UICalendarCategoryManager extends UIContainer implements UIPopupCom
       UICalendarForm uiCalendarForm = calendarPortlet.findFirstComponentOfType(UICalendarForm.class) ;
       if(uiCalendarForm != null && !uiCalendarForm.isAddNew() && uiCalendarForm.calendar_ != null 
           && uiCalendarForm.calendar_.getCategoryId().contains(calendarCategoryId)) {
-        UIApplication app = uiManager.getAncestorOfType(UIApplication.class) ;
-        app.addMessage(new ApplicationMessage("UICalendarCategoryManager.msg.can-not-delete-calendar-in-use", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(app.getUIPopupMessages()) ;
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UICalendarCategoryManager.msg.can-not-delete-calendar-in-use", null));
         return ;        
       }
       CalendarService calService = uiManager.getApplicationComponent(CalendarService.class) ;

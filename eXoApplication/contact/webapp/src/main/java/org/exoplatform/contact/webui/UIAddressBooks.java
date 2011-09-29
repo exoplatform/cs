@@ -45,11 +45,11 @@ import org.exoplatform.contact.webui.popup.UIComposeForm;
 import org.exoplatform.contact.webui.popup.UIContactForm;
 import org.exoplatform.contact.webui.popup.UIExportAddressBookForm;
 import org.exoplatform.contact.webui.popup.UIExportForm;
-import org.exoplatform.contact.webui.popup.UIExportForm.ContactData;
 import org.exoplatform.contact.webui.popup.UIImportForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UIPopupContainer;
 import org.exoplatform.contact.webui.popup.UIPublicAddressPermission;
+import org.exoplatform.contact.webui.popup.UIExportForm.ContactData;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -59,7 +59,6 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -286,8 +285,6 @@ public class UIAddressBooks extends UIComponent {
   static public class PasteContactsActionListener extends EventListener<UIAddressBooks> {
     public void execute(Event<UIAddressBooks> event) throws Exception {
       UIAddressBooks uiAddressBook = event.getSource();
-      UIWorkingContainer uiWorkingContainer = uiAddressBook.getAncestorOfType(UIWorkingContainer.class);
-      UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
       String destAddress = event.getRequestContext().getRequestParameter(OBJECTID);
       String username = ContactUtils.getCurrentUser() ;
       String destType ;
@@ -297,19 +294,19 @@ public class UIAddressBooks extends UIComponent {
         destType = DataStorage.SHARED ;     
       }
       if (destType.equals(DataStorage.SHARED) && (!uiAddressBook.havePermission(destAddress))) {
-        uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.removedPer", null,
-          ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAddressBooks.msg.removedPer",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));
         return ; 
       }
       
       String srcAddress = uiAddressBook.copyAddress ;
       if (!ContactUtils.isEmpty(srcAddress)) {
         if (destAddress.equals(srcAddress)){
-       //   UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.invalidAddress", null,
-            ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+       //   
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAddressBooks.msg.invalidAddress",
+                                                                                         null,
+                                                                                         ApplicationMessage.WARNING));
           return ;
         }
         String srcType ;
@@ -320,8 +317,9 @@ public class UIAddressBooks extends UIComponent {
           ContactUtils.getContactService().pasteAddressBook(username
                                                             , srcAddress, srcType, destAddress, destType) ;
         }catch (AccessDeniedException ade){
-          uiApp = ContactUtils.initWarnPopup(uiAddressBook, "UIContacts.msg.noeditpermission");
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIContacts.msg.noeditpermission",
+                                                                                         null,
+                                                                                         ApplicationMessage.WARNING));
           return ;  
         }
       } else {
@@ -330,8 +328,9 @@ public class UIAddressBooks extends UIComponent {
                                                          , destAddress
                                                          ,destType, uiAddressBook.getCopyContacts()) ;
         } catch (AccessDeniedException e) {
-          uiApp = ContactUtils.initWarnPopup(uiAddressBook,"UIContacts.msg.noeditpermission");
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIContacts.msg.noeditpermission",
+                                                                                         null,
+                                                                                         ApplicationMessage.WARNING));
           return;
         }
          
@@ -380,10 +379,9 @@ public class UIAddressBooks extends UIComponent {
               username, address) ;
         }
         if (contacts == null || contacts.getAvailable() == 0) {
-          UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.noContactToExport", null,
-            ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAddressBooks.msg.noContactToExport",
+                                                                                         null,
+                                                                                         ApplicationMessage.WARNING));
           return ;  
         }
         Map<String, String> resultMap = contacts.getEmails() ;
@@ -411,11 +409,10 @@ public class UIAddressBooks extends UIComponent {
         for (String group : ContactUtils.getUserGroups()) publicGroups.put(group, group) ;
         if ((groups == null || groups.size() == 0) && (sharedGroups == null || sharedGroups.size() == 0)
             && (publicGroups == null || publicGroups.size() == 0)) {
-          UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.no-addressbook", null,
-            ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;   
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIActionBar.msg.no-addressbook",
+                                                                                         null,
+                                                                                         ApplicationMessage.WARNING));
+          return ;
         }
         UIExportAddressBookForm uiExportForm = uiPopupAction.activate(UIExportAddressBookForm.class, 500) ;
         uiExportForm.setId("UIExportAddressBookForm");
@@ -450,10 +447,10 @@ public class UIAddressBooks extends UIComponent {
           addresses.put(address.getId(), ContactUtils
               .getDisplayAdddressShared(address.getSharedUserId(), address.getName())) ;
         } else if (!ContactUtils.isEmpty(addressBookId) && addressBookId.equals(address.getId())) {
-          UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.removedPer", null,
-            ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAddressBooks.msg.removedPer",
+                                                                                         null,
+                                                                                         ApplicationMessage.WARNING));
           return ;
         }
       uiImportForm.setGroup(addresses) ;
@@ -478,10 +475,10 @@ public class UIAddressBooks extends UIComponent {
           addresses.put(address.getId(), ContactUtils
               .getDisplayAdddressShared(address.getSharedUserId(), address.getName())) ;
         } else if (!ContactUtils.isEmpty(groupId) && groupId.equals(address.getId())) {
-          UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.removedPer", null,
-            ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAddressBooks.msg.removedPer",
+                                                                                         null,
+                                                                                         ApplicationMessage.WARNING));
           return ;
         }      
       UIPopupContainer popupContainer = uiPopupAction.activate(UIPopupContainer.class, 800) ;
@@ -510,10 +507,9 @@ public class UIAddressBooks extends UIComponent {
       } else if (uiAddressBook.havePermission(groupId)){
         uiCategoryForm.setValues(groupId, true) ;
       } else {
-        UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.removedPer", null,
-          ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAddressBooks.msg.removedPer",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));
         return ;
       }
       uiCategoryForm.setNew(false) ;
@@ -575,10 +571,9 @@ public class UIAddressBooks extends UIComponent {
         addresses = contactService.getAllEmailBySharedGroup(username, groupId) ;
       }
       if (addresses == null || addresses.size() == 0) {
-        UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.no-email-found", null,
-          ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAddressBooks.msg.no-email-found",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));
         return ;        
       }
       StringBuffer buffer = new StringBuffer(addresses.get(0)) ;
@@ -587,7 +582,7 @@ public class UIAddressBooks extends UIComponent {
       }
       List<Account> acc = ContactUtils.getAccounts() ;
     /*  if (acc == null || acc.size() < 1) {
-        UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
+        
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.invalidAcc", null,
             ApplicationMessage.WARNING)) ;
         return ;

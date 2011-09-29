@@ -13,7 +13,6 @@ import org.exoplatform.content.service.ContentDAO;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -98,8 +97,9 @@ public class UIContentForm extends UIForm {
       }
       if(!contentNode.getType().equals("desc")){
         if(contentNode.getUrl() == null || contentNode.getUrl().trim().length() == 0) {
-          UIApplication uiApp = event.getRequestContext().getUIApplication() ;
-          uiApp.addMessage(new ApplicationMessage("UIContentForm.msg.UrlNull", null, ApplicationMessage.ERROR)) ;
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIContentForm.msg.UrlNull",
+                                                                                         null,
+                                                                                         ApplicationMessage.ERROR));
           return ;  
         }
       }
@@ -107,8 +107,9 @@ public class UIContentForm extends UIForm {
       if(contentNode != uiForm.getContentNode()) {
         ContentNode existingNode = uiNav.findNode(contentNode.getId()) ;
         if(existingNode != null) {
-          UIApplication uiApp = event.getRequestContext().getUIApplication() ;
-          uiApp.addMessage(new ApplicationMessage("UIContentForm.msg.SameNode", null, ApplicationMessage.INFO)) ;
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIContentForm.msg.SameNode",
+                                                                                         null,
+                                                                                         ApplicationMessage.INFO));
           return ;
         }
         uiNav.save(contentNode);

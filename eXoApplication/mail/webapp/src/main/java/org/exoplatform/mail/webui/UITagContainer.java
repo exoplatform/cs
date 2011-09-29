@@ -28,15 +28,12 @@ import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.webui.action.FullDelegationEventListener;
 import org.exoplatform.mail.webui.popup.UIEditTagForm;
-import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 
 /**
@@ -158,8 +155,9 @@ public class UITagContainer extends UIForm {
     return new String[] { "AddTag" };
   }
 
-  static public class ChangeTagActionListener extends EventListener<UITagContainer> {
-    public void execute(Event<UITagContainer> event) throws Exception {
+  static public class ChangeTagActionListener extends FullDelegationEventListener<UITagContainer> {
+    @Override
+    public void processEvent(Event<UITagContainer> event) throws Exception {
       UITagContainer uiTags = event.getSource();
       UIMailPortlet uiPortlet = uiTags.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
@@ -169,10 +167,6 @@ public class UITagContainer extends UIForm {
       UIMessagePreview uiMessagePreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class);
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
       String accountId = dataCache.getSelectedAccountId();
-      if(!MailUtils.isFull(accountId, dataCache)) {
-        uiTags.showMessage(event); 
-        return;
-      }
       String username = MailUtils.getDelegateFrom(accountId, dataCache);
       
       uiMessageList.setMessagePageList(mailSrv.getMessagePagelistByTag(username, accountId, tagId));
@@ -203,24 +197,11 @@ public class UITagContainer extends UIForm {
     }
   }
 
-  static public class AddTagActionListener extends EventListener<UITagContainer> {
-    public void execute(Event<UITagContainer> event) throws Exception {
+  static public class AddTagActionListener extends FullDelegationEventListener<UITagContainer> {
+    @Override
+    public void processEvent(Event<UITagContainer> event) throws Exception {
       UITagContainer uiTag = event.getSource();
       UIMailPortlet uiPortlet = uiTag.getAncestorOfType(UIMailPortlet.class);
-      DataCache dataCache = uiPortlet.getDataCache();
-      
-      String accId = dataCache.getSelectedAccountId();
-      if (Utils.isEmptyField(accId)) {
-        UIApplication uiApp = uiTag.getAncestorOfType(UIApplication.class);
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-        return;
-      }
-      
-      if(!MailUtils.isFull(accId, dataCache)) {
-        uiTag.showMessage(event); 
-        return;
-      }
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
       UIEditTagForm uiTagForm = uiTag.createUIComponent(UIEditTagForm.class, null, null);
       uiPopupAction.activate(uiTagForm, 600, 0, true);
@@ -228,28 +209,21 @@ public class UITagContainer extends UIForm {
     }
   }
 
-  static public class EditTagActionListener extends EventListener<UITagContainer> {
-    public void execute(Event<UITagContainer> event) throws Exception {
-      UITagContainer uiTag = event.getSource();
-      DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
-      
+  static public class EditTagActionListener extends FullDelegationEventListener<UITagContainer> {
+    @Override
+    public void processEvent(Event<UITagContainer> event) throws Exception {
+      UITagContainer uiTag = event.getSource();     
       String tagId = event.getRequestContext().getRequestParameter(OBJECTID);
-      UIPopupAction uiPopup = uiTag.getAncestorOfType(UIMailPortlet.class).getChild(UIPopupAction.class);
-      
-      String accountId = dataCache.getSelectedAccountId();
-      if(!MailUtils.isFull(accountId, dataCache)) {
-        uiTag.showMessage(event); 
-        return;
-      }
-      
+      UIPopupAction uiPopup = uiTag.getAncestorOfType(UIMailPortlet.class).getChild(UIPopupAction.class);      
       UIEditTagForm uiRenameTagForm = uiPopup.activate(UIEditTagForm.class, 450);
       uiRenameTagForm.setTag(tagId);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
     }
   }
 
-  static public class RemoveTagActionListener extends EventListener<UITagContainer> {
-    public void execute(Event<UITagContainer> event) throws Exception {
+  static public class RemoveTagActionListener extends FullDelegationEventListener<UITagContainer> {
+    @Override
+    public void processEvent(Event<UITagContainer> event) throws Exception {
       UITagContainer uiTag = event.getSource();
       UIMailPortlet uiPortlet = uiTag.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
@@ -260,10 +234,6 @@ public class UITagContainer extends UIForm {
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
       String accountId = dataCache.getSelectedAccountId();
       String username = MailUtils.getDelegateFrom(accountId, dataCache);
-      if(!MailUtils.isFull(accountId, dataCache)) {
-        uiTag.showMessage(event); 
-        return;
-      }
 
       mailSrv.removeTag(username, accountId, tagId);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
@@ -273,8 +243,9 @@ public class UITagContainer extends UIForm {
     }
   }
 
-  static public class EmptyTagActionListener extends EventListener<UITagContainer> {
-    public void execute(Event<UITagContainer> event) throws Exception {
+  static public class EmptyTagActionListener extends FullDelegationEventListener<UITagContainer> {
+    @Override
+    public void processEvent(Event<UITagContainer> event) throws Exception {
       UITagContainer uiTag = event.getSource();
       UIMailPortlet uiPortlet = uiTag.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
@@ -286,11 +257,6 @@ public class UITagContainer extends UIForm {
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = dataCache.getSelectedAccountId();
-
-      if(!MailUtils.isFull(accountId, dataCache)) {
-        uiTag.showMessage(event); 
-        return;
-      }
       List<Message> listMessage = mailSrv.getMessageByTag(username, accountId, tagId);
       List<String> listTag = new ArrayList<String>();
       listTag.add(tagId);
@@ -301,8 +267,9 @@ public class UITagContainer extends UIForm {
     }
   }
 
-  static public class ChangeColorActionListener extends EventListener<UITagContainer> {
-    public void execute(Event<UITagContainer> event) throws Exception {
+  static public class ChangeColorActionListener extends FullDelegationEventListener<UITagContainer> {
+    @Override
+    public void processEvent(Event<UITagContainer> event) throws Exception {
       UITagContainer uiTag = event.getSource();
       UIMailPortlet uiPortlet = uiTag.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
@@ -313,10 +280,6 @@ public class UITagContainer extends UIForm {
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       String accountId = dataCache.getSelectedAccountId();
       String username = MailUtils.getDelegateFrom(accountId, dataCache);
-      if(!MailUtils.isFull(accountId, dataCache)) {
-        uiTag.showMessage(event); 
-        return;
-      }
       
       Tag tag = mailSrv.getTag(username, accountId, tagId);
       tag.setColor(color);
@@ -325,11 +288,5 @@ public class UITagContainer extends UIForm {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTag);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
     }
-  }
-  
-  public void showMessage(Event event) {
-    UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
-    uiApp.addMessage(new ApplicationMessage("UISelectAccount.msg.account-list-no-permission", null)) ;
-    event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
   }
 }

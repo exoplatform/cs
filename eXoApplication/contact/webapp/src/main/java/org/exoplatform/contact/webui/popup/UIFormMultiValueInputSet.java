@@ -25,7 +25,6 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -165,10 +164,8 @@ public class UIFormMultiValueInputSet extends UIFormInputContainer<List> {
       String id = event.getRequestContext().getRequestParameter(OBJECTID);  
       if(uiSet.getId().equals(id)){
         if (uiSet.getChildren().size() >= 5) {
-          UIApplication uiApp = uiSet.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.too-manyField", null, 
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIContactForm.msg.too-manyField", null, 
               ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         }        
         uiSet.createUIFormInput(uiSet.getChildren().size());

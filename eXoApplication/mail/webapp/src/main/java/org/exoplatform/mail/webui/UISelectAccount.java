@@ -28,17 +28,16 @@ import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.webui.action.HasAccountEventListener;
 import org.exoplatform.mail.webui.popup.UIAccountCreation;
 import org.exoplatform.mail.webui.popup.UIAccountList;
 import org.exoplatform.mail.webui.popup.UIAccountSetting;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
-import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -181,20 +180,12 @@ public class UISelectAccount extends UIForm {
     }
   }
 
-  static  public class EditAccountActionListener extends EventListener<UISelectAccount> {
-    public void execute(Event<UISelectAccount> event) throws Exception {
+  static  public class EditAccountActionListener extends HasAccountEventListener<UISelectAccount> {
+    @Override
+    public void processEvent(Event<UISelectAccount> event) throws Exception {
       UISelectAccount uiForm = event.getSource();
       DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
-      
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-      String username = MailUtils.getCurrentUser();
-      
-      if(Utils.isEmptyField(uiForm.getSelectedValue()) || (dataCache.getAccounts(username).isEmpty() && dataCache.getDelegatedAccounts(username).isEmpty()) ){
-        uiApp.addMessage(new ApplicationMessage("UISelectAccount.msg.account-list-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
-      
+      String username = MailUtils.getCurrentUser();      
       String accId = uiForm.getSelectedValue();
       if((dataCache.getDelegatedAccount(username, accId) != null) && !dataCache.getAccounts(username).isEmpty()) {
         accId = dataCache.getAccounts(username).get(0).getId();
@@ -212,28 +203,17 @@ public class UISelectAccount extends UIForm {
     }
   }
 
-  static  public class DeleteAccountActionListener extends EventListener<UISelectAccount> {
-    public void execute(Event<UISelectAccount> event) throws Exception {
-      UISelectAccount uiForm = event.getSource();
-      DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
-      
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class);
-      String username = MailUtils.getCurrentUser();
-      if (Utils.isEmptyField(uiForm.getSelectedValue())) {
-        uiApp.addMessage(new ApplicationMessage("UISelectAccount.msg.account-list-empty", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-        return;
-      } else if (dataCache.getAccounts(username).isEmpty() && !dataCache.getDelegatedAccounts(username).isEmpty()) {
-        uiForm.showMessage(event);
-        return;
-      } else {
+  static  public class DeleteAccountActionListener extends HasAccountEventListener<UISelectAccount> {
+    @Override
+    public void processEvent(Event<UISelectAccount> event) throws Exception {
+      UISelectAccount uiForm = event.getSource();      
         UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class);
         UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
         UIPopupActionContainer uiAccContainer = uiPopup.activate(UIPopupActionContainer.class, 700);
         uiAccContainer.setId("UIPopupDeleteAccountContainer");
         uiAccContainer.addChild(UIAccountList.class, null, null);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-      }
+      
     }
   }
 
@@ -283,10 +263,5 @@ public class UISelectAccount extends UIForm {
         return;
       }
     }
-  } 
-  private void showMessage(Event event) {
-    UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
-    uiApp.addMessage(new ApplicationMessage("UISelectAccount.msg.account-list-no-permission", null)) ;
-    event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
   }
 }

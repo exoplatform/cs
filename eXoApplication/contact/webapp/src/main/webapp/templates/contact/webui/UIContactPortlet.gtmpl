@@ -37,7 +37,6 @@
 </div>
 
 <!-- Start UIPopupAction -->
-  <% uicomponent.renderChild(UIPopupAction.class) ;%>  
-  <%uicomponent.renderPopupMessages();%>
+  <% uicomponent.renderChild(UIPopupAction.class) ;%>
 <!-- End UIPopupAction -->
 </div>

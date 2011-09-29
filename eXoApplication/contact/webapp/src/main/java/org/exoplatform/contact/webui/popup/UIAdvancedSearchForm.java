@@ -31,7 +31,6 @@ import org.exoplatform.contact.webui.UIWorkingContainer;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -103,9 +102,9 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
       if (ContactUtils.isEmpty(text) && ContactUtils.isEmpty(fullName) && ContactUtils.isEmpty(firstName) &&
           ContactUtils.isEmpty(lastName) && ContactUtils.isEmpty(nickName) &&
           ContactUtils.isEmpty(jobTitle) && ContactUtils.isEmpty(email) && ContactUtils.isEmpty(gender)) {
-        UIApplication uiApp = uiAdvancedSearchForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.no-text-to-search", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.no-text-to-search", null));
         return ;        
       }
       
@@ -113,10 +112,9 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
           !ContactUtils.isNameValid(firstName, ContactUtils.specialString2) || !ContactUtils.isNameValid(lastName, ContactUtils.specialString2) ||
           !ContactUtils.isNameValid(nickName, ContactUtils.specialString2) || !ContactUtils.isNameValid(jobTitle, ContactUtils.specialString2) ||
           !ContactUtils.isNameValid(gender, ContactUtils.specialString2) || 
-          !ContactUtils.isNameValid(email, ContactUtils.specialString2)) {        
-        UIApplication uiApp = uiAdvancedSearchForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.text-search-error", null, ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          !ContactUtils.isNameValid(email, ContactUtils.specialString2)) {
+        event.getRequestContext()
+        .getUIApplication().addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.text-search-error", null, ApplicationMessage.WARNING)) ;
         return ;  
       }
       

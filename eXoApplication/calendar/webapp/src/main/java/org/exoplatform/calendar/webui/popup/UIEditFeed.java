@@ -42,16 +42,15 @@ import org.exoplatform.webservice.cs.calendar.CalendarWebservice;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputInfo;
-import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 import org.exoplatform.webui.form.ext.UIFormComboBox;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.SpecialCharacterValidator;
@@ -267,9 +266,7 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
       UIFormComboBox comboBox = (UIFormComboBox)uiForm.getChildById(UIEditFeed.ADDMORE);
       String value = comboBox.getValue();
       if (CalendarUtils.isEmpty(value)) {
-        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIEditFeed.msg.selectCalendar", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIEditFeed.msg.selectCalendar", null)) ;
         return ;
       }
       String type = value.split(Utils.COLON)[0];
@@ -303,9 +300,8 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
         cal = null;
       }
       if (cal == null) {
-        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIEditFeed.msg.invalidCalName", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIEditFeed.msg.invalidCalName", null)) ;
         return ;
       }
       uiForm.feedCalendars.put(value, cal.getName());
@@ -318,11 +314,10 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
   static  public class SaveActionListener extends EventListener<UIEditFeed> {
     public void execute(Event<UIEditFeed> event) throws Exception {
       UIEditFeed uiForm = event.getSource() ;
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      
       if(uiForm.feedCalendars.size() < 0) {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
-        uiApp.addMessage(new ApplicationMessage("UIEditFeed.msg.selectCalendar", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIEditFeed.msg.selectCalendar", null)) ;
         return ;
       }
       CalendarService calendarService = CalendarUtils.getCalendarService();
@@ -343,8 +338,7 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
       for (FeedData feedData : settingFeedTab.getData())
         if (feedData.getTitle().equals(tempName) && (uiForm.isNew_ || !tempName.equals(uiForm.feedData.getTitle()))) {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
-          uiApp.addMessage(new ApplicationMessage("UIEditFeed.msg.feedName_existed", null)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIEditFeed.msg.feedName_existed", null)) ;
           return ;
         }
       
@@ -367,8 +361,7 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
       }
       if(result < 0) {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
-        uiApp.addMessage(new ApplicationMessage("UIEditFeed.msg.no-data-generated", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIEditFeed.msg.no-data-generated", null)) ;
         return ;
       }
       
@@ -378,8 +371,7 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction);
       event.getRequestContext().addUIComponentToUpdateByAjax(settingFeedTab);
       Object[] object = new Object[]{title} ;
-      uiApp.addMessage(new ApplicationMessage("UIEditFeed.msg.feed-has-been-generated", object)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIEditFeed.msg.feed-has-been-generated", object)) ;
       return ;
     }
   }

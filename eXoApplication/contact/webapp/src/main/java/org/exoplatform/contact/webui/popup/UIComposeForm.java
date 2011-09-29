@@ -35,19 +35,18 @@ import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormInputWithActions;
-import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
+import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 import org.exoplatform.webui.form.wysiwyg.FCKEditorConfig;
 import org.exoplatform.webui.form.wysiwyg.UIFormWYSIWYGInput;
 
@@ -210,18 +209,19 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   static public class SendActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiForm = event.getSource() ;
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      
       String to = uiForm.getFieldToValue() ;      
       if (ContactUtils.isEmpty(to)) {
-        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.to-field-empty", null,
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIComposeForm.msg.to-field-empty",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));
         return ;
       }
       to = to.replaceAll(org.exoplatform.contact.service.Utils.SEMI_COLON, org.exoplatform.contact.service.Utils.COLON);
       if (!org.exoplatform.contact.service.Utils.isValidEmailAddresses(to)) {
-        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.invalid-email", null, ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIComposeForm.msg.invalid-email",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));
         return;
       }
       if (uiForm.isCSMail) {
@@ -255,19 +255,22 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         String username = ContactUtils.getCurrentUser() ;
         try {
           mailSvr.sendMessage(username, accId, message) ;
-          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-succsessfuly", null)) ;
+          event.getRequestContext()
+               .getUIApplication()
+               .addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-succsessfuly", null));
           uiChildPopup.deActivate() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
           
 //        TODO cs-1141
           ContactUtils.getContactService().saveAddress(username, to) ;          
         }catch (Exception e) {
-          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-error", null,
-              ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-error",
+                                                                                         null,
+                                                                                         ApplicationMessage.WARNING));
+          
           return ;
         }
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        
         try {
           MailSetting setting = mailSvr.getMailSetting(username);
           if (setting.saveMessageInSent()) {
@@ -276,14 +279,15 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           message.setReplyTo(message.getMessageTo()) ;
           boolean saveMsgsuccess = mailSvr.saveMessage(username, mailSvr.getAccountById(username, accId), message.getPath(), message, true) ;
           if(!saveMsgsuccess){
-            uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.cannot-send", null, ApplicationMessage.INFO)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIComposeForm.msg.cannot-send",
+                                                                                           null,
+                                                                                           ApplicationMessage.INFO));
           }
           uiChildPopup.deActivate() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
         } catch (Exception e) {
-          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-sent-error", null)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIComposeForm.msg.save-sent-error",
+                                                                                         null));
           uiChildPopup.deActivate() ;
         }
       } else { // portal send mail
@@ -301,14 +305,15 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           
           //ContactUtils.sendMessage(message) ;
           /*uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-succsessfuly", null, ApplicationMessage.INFO)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;*/
+          */
           UIContactPortlet portlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
           UIPopupAction popupAction = portlet.getChild(UIPopupAction.class) ;
           popupAction.deActivate() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
         } catch(Exception e) {
-          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-error", null, ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-error",
+                                                                                         null,
+                                                                                         ApplicationMessage.WARNING));
           if (log.isDebugEnabled()) {
             log.debug("Exception in method execute of class SendActionListener", e);
           }

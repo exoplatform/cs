@@ -68,24 +68,23 @@ public class UIAddGroupForm extends UIForm implements UIPopupComponent{
     public void execute(Event<UIAddGroupForm> event) throws Exception {
       UIAddGroupForm uiAddGroupForm = event.getSource() ;
       UIMailPortlet uiPortlet = uiAddGroupForm.getAncestorOfType(UIMailPortlet.class) ;
-      ContactService contactSrv = uiAddGroupForm.getApplicationComponent(ContactService.class) ;
-      UIApplication uiApp = uiAddGroupForm.getAncestorOfType(UIApplication.class) ;
+      ContactService contactSrv = uiAddGroupForm.getApplicationComponent(ContactService.class) ;      
       String groupName = uiAddGroupForm.getUIStringInput(GROUP_NAME).getValue() ;
 //    CS-3009
       groupName = MailUtils.reduceSpace(groupName) ;
       String groupDescription = uiAddGroupForm.getUIFormTextAreaInput(GROUP_DESCRIPTION).getValue() ;
       String username = MailUtils.getCurrentUser() ;
       if (groupName == null || groupName.trim().equals("")) {
-        uiApp.addMessage(new ApplicationMessage("UIAddGroupForm.msg.group-name-required", null,
-          ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAddGroupForm.msg.group-name-required",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));
         return ; 
       } else {
         for (AddressBook group : contactSrv.getGroups(username))
           if (group.getName().equalsIgnoreCase(groupName.trim())) {
-            uiApp.addMessage(new ApplicationMessage("UIAddGroupForm.msg.group-name-exist", null,
-                ApplicationMessage.WARNING)) ;
-              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAddGroupForm.msg.group-name-exist",
+                                                                                           null,
+                                                                                           ApplicationMessage.WARNING));              
             return ;
           }
         AddressBook group = new AddressBook();

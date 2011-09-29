@@ -37,11 +37,10 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
@@ -126,24 +125,23 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
       
       newTagName = MailUtils.reduceSpace(newTagName) ;
       String description = editTagForm.getUIFormTextAreaInput(DESCRIPTION).getValue() ;
-      String color = editTagForm.getSelectedColor(); 
-      UIApplication uiApp = editTagForm.getAncestorOfType(UIApplication.class) ;
+      String color = editTagForm.getSelectedColor();
       List<Tag> tagList = null ;
       try {
         tagList = mailService.getTags(username, accountId);
       } catch (PathNotFoundException e) {
         uiPortlet.findFirstComponentOfType(UIMessageList.class).setMessagePageList(null) ;
         uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet); 
-        
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);        
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));        
         return ;
       }
       for (Tag tag : tagList) {
         if(tag.getName().equals(newTagName) && !tag.getId().equals(tagId)) {
-          uiApp.addMessage(new ApplicationMessage("UIEditTagForm.msg.tag-already-exists", new Object[]{newTagName})) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIEditTagForm.msg.tag-already-exists",
+                                                                                         new Object[] { newTagName }));          
           return ;
         }
       }
@@ -159,7 +157,8 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
             mailService.updateTag(username, accountId, tag);
           }
         } catch (Exception e){
-          uiApp.addMessage(new ApplicationMessage("UIRenameTagForm.msg.error-rename-tag", null)) ;
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIRenameTagForm.msg.error-rename-tag",
+                                                                                         null));
           if (log.isDebugEnabled()) {
             log.debug("Exception in method execute of class SaveActionListener", e);
           }

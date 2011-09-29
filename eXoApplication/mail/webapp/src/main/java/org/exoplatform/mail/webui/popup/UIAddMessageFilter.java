@@ -28,17 +28,14 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
-import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UINavigationContainer;
-import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.UISelectFolder;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -268,16 +265,15 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
       String applyFolder = uiAddFilter.getApplyFolder();
       String applyTag = uiAddFilter.getApplyTag();
       boolean applyForAll = uiAddFilter.getApplyAll();
-      
-      // Verify
-      UIApplication uiApp = uiAddFilter.getAncestorOfType(UIApplication.class) ;
       if (Utils.isEmptyField(filterName)) {
-        uiApp.addMessage(new ApplicationMessage("UIAddMessageFilter.msg.filter-name-blank", null, ApplicationMessage.INFO));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIAddMessageFilter.msg.filter-name-blank", null, ApplicationMessage.INFO));
         return;
       } else if (Utils.isEmptyField(from) && Utils.isEmptyField(to) && Utils.isEmptyField(subject) && Utils.isEmptyField(body)) {
-        uiApp.addMessage(new ApplicationMessage("UIAddMessageFilter.msg.fill-at-lease-field", null, ApplicationMessage.INFO));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIAddMessageFilter.msg.fill-at-lease-field", null, ApplicationMessage.INFO));
         return;
       }
       
@@ -301,8 +297,9 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
       try {
         mailSrv.saveFilter(username, accountId, filter, uiAddFilter.getApplyAll());
       } catch (Exception e) {
-        uiApp.addMessage(new ApplicationMessage("UIAddMessageFilter.msg.contain-special-characters", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIAddMessageFilter.msg.contain-special-characters", null));
         return ;
       }
       

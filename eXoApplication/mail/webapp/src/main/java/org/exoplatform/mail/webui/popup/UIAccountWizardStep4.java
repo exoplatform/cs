@@ -26,7 +26,7 @@ import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIFormDateTimePicker;
 import org.exoplatform.mail.webui.WizardStep;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -86,14 +86,18 @@ public class UIAccountWizardStep4 extends UIFormInputSet implements WizardStep {
     setPassword(password) ;
   }
   public boolean isFieldsValid() {
-    UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
     boolean isValid = true ;
     if (Utils.isEmptyField(getUserName())) {
-      uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.username-requirement", null, ApplicationMessage.WARNING)) ;
+      context.getUIApplication().addMessage(new ApplicationMessage("UIAccountCreation.msg.username-requirement",
+                                                                   null,
+                                                                   ApplicationMessage.WARNING));
       isValid = false ;
     } 
     if (Utils.isEmptyField(getPassword())) {
-      uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.password-requirement", null, ApplicationMessage.WARNING)) ;
+      context.getUIApplication().addMessage(new ApplicationMessage("UIAccountCreation.msg.password-requirement",
+                                                                   null,
+                                                                   ApplicationMessage.WARNING));
       isValid = false ;
     } 
     

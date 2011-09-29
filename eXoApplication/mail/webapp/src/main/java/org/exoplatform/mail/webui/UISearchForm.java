@@ -22,11 +22,11 @@ import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.webui.action.HasAccountEventListener;
 import org.exoplatform.mail.webui.popup.UIAdvancedSearchForm;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -62,8 +62,9 @@ public class UISearchForm extends UIForm {
     return getUIStringInput(FIELD_SEARCHVALUE).getValue();
   }
   
-  static  public class SearchActionListener extends EventListener<UISearchForm> {
-    public void execute(Event<UISearchForm> event) throws Exception {
+  static  public class SearchActionListener extends HasAccountEventListener<UISearchForm> {
+    @Override
+    public void processEvent(Event<UISearchForm> event) throws Exception {
       UISearchForm uiSearchForm = event.getSource();
       UIMailPortlet uiPortlet = uiSearchForm.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
@@ -71,23 +72,18 @@ public class UISearchForm extends UIForm {
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       String text = uiSearchForm.getUIStringInput(FIELD_SEARCHVALUE).getValue();
       MessageFilter filter = new MessageFilter("Search");
-      filter.setHasStructure(uiMessageList.getMessageFilter().hasStructure());
-      UIApplication uiApp = uiSearchForm.getAncestorOfType(UIApplication.class);
-      
-      String accId = dataCache.getSelectedAccountId();
-      if (Utils.isEmptyField(accId)) {
-        uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.account-list-empty", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-        return;
-      }
-      
+      filter.setHasStructure(uiMessageList.getMessageFilter().hasStructure());     
+      String accId = dataCache.getSelectedAccountId();      
       if (MailUtils.isFieldEmpty(text)) {
-        uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.no-text-to-search", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UISearchForm.msg.no-text-to-search", null));        
         return;
       } else if (!MailUtils.isSearchValid(text, MailUtils.SPECIALCHARACTER)) {
-        uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.contain-special-characters", null, ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UISearchForm.msg.contain-special-characters", null, ApplicationMessage.WARNING));
+        
         return;
       } else {
         filter.setText(text);
@@ -125,26 +121,20 @@ public class UISearchForm extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
       } catch (Exception e) {
-        uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.contain-special-characters", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UISearchForm.msg.contain-special-characters", null));        
         return;
       }
     }
   }
  
-  static  public class AdvancedActionListener extends EventListener<UISearchForm> {
+  static  public class AdvancedActionListener extends HasAccountEventListener<UISearchForm> {
     public void execute(Event<UISearchForm> event) throws Exception {
       UISearchForm uiSearchForm = event.getSource();
       UIMailPortlet uiPortlet = uiSearchForm.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
-      UIApplication uiApp = uiSearchForm.getAncestorOfType(UIApplication.class);
-
       String accId = dataCache.getSelectedAccountId();
-      if (Utils.isEmptyField(accId)) {
-        uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.account-list-empty", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-        return;
-      }
 
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
       UIAdvancedSearchForm uiAdvanceSearch = uiPopupAction.createUIComponent(UIAdvancedSearchForm.class, null, null);
@@ -152,5 +142,5 @@ public class UISearchForm extends UIForm {
       uiAdvanceSearch.init(accId);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
     }
-  } 
+  }
 }

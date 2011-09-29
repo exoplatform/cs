@@ -44,7 +44,6 @@ import org.exoplatform.contact.webui.UIContacts.JobTitleComparator;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -126,10 +125,9 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
             for (String editPer : editPerGroups)
               if (ContactUtils.getUserGroups().contains(editPer)) canEdit = true ;          
           if (!canEdit) {
-            UIApplication uiApp = uiMoveContactForm.getAncestorOfType(UIApplication.class) ;
-            uiApp.addMessage(new ApplicationMessage("UIMoveContactsForm.msg.non-permission", null,
-              ApplicationMessage.WARNING)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            event.getRequestContext()
+                 .getUIApplication()
+                 .addMessage(new ApplicationMessage("UIMoveContactsForm.msg.non-permission", null, ApplicationMessage.WARNING));
             return ; 
           }           
         }
@@ -156,18 +154,18 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
               tempContact = contactService.getSharedContact(username, id) ;              
             } catch (PathNotFoundException e) { }
           }  
-          if (!uiContacts.havePermission(contact) && uiContacts.isSharedAddress(contact)) {
-            UIApplication uiApp = uiMoveContactForm.getAncestorOfType(UIApplication.class) ;
-            uiApp.addMessage(new ApplicationMessage("UIMoveContactsForm.msg.non-permission", null,
-              ApplicationMessage.WARNING)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          if (!uiContacts.havePermission(contact) && uiContacts.isSharedAddress(contact)) {;
+            event.getRequestContext()
+                 .getUIApplication()
+                 .addMessage(new ApplicationMessage("UIMoveContactsForm.msg.non-permission", null, ApplicationMessage.WARNING));
             return ; 
           }          
           if (tempContact == null) {
-            UIApplication uiApp = uiMoveContactForm.getAncestorOfType(UIApplication.class) ;
-            uiApp.addMessage(new ApplicationMessage("UIMoveContactsForm.msg.contact-not-existed", null, 
-                ApplicationMessage.WARNING)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            event.getRequestContext()
+                 .getUIApplication()
+                 .addMessage(new ApplicationMessage("UIMoveContactsForm.msg.contact-not-existed",
+                                                    null,
+                                                    ApplicationMessage.WARNING));
             return ; 
           } 
           sharedContacts.add(contact) ;
@@ -184,8 +182,9 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
         try {
           pastedContact = contactService.pasteContacts(username, addressBookId, type, copySharedContacts);   
         } catch (AccessDeniedException e) {
-          UIApplication uiApp = ContactUtils.initWarnPopup(uiContacts,"UIContacts.msg.noeditpermission");
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIContacts.msg.noeditpermission",
+                                                                                         null,
+                                                                                         ApplicationMessage.WARNING));
           return;
         }
         for (Contact contact : sharedContacts) {
@@ -201,10 +200,11 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
               try {
                 contactService.removeUserShareContact(contact.getAuthor(), contact.getId(), username) ;              
               } catch (PathNotFoundException e) {
-                UIApplication uiApp = uiMoveContactForm.getAncestorOfType(UIApplication.class) ;
-                uiApp.addMessage(new ApplicationMessage("UIMoveContactsForm.msg.contact-not-existed", null, 
-                    ApplicationMessage.WARNING)) ;
-                event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                event.getRequestContext()
+                     .getUIApplication()
+                     .addMessage(new ApplicationMessage("UIMoveContactsForm.msg.contact-not-existed",
+                                                        null,
+                                                        ApplicationMessage.WARNING));
                 return ; 
               }
              }
@@ -218,18 +218,20 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
             if(sb.length()<unMove.size())
             sb.append(", ");
           }
-          UIApplication uiApp = ContactUtils.initPopup(uiContacts, "UIContacts.msg.noeditpermission.detail", new Object[]{sb.toString()}, ApplicationMessage.WARNING);
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          event.getRequestContext()
+               .getUIApplication()
+               .addMessage(new ApplicationMessage("UIContacts.msg.noeditpermission.detail",
+                                                  new String[] { sb.toString() },
+                                                  ApplicationMessage.WARNING));
         } 
       } 
       if (contacts.size() > 0) {
         try {
           contactService.moveContacts(username, contacts, type) ;                  
         } catch (PathNotFoundException e) {
-          UIApplication uiApp = uiMoveContactForm.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UIMoveContactsForm.msg.contact-deleted", null, 
-              ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext()
+               .getUIApplication()
+               .addMessage(new ApplicationMessage("UIMoveContactsForm.msg.contact-deleted", null, ApplicationMessage.WARNING));
           return ;
         }
       }

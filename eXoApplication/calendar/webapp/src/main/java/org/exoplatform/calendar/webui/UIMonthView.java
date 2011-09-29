@@ -36,7 +36,6 @@ import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
@@ -276,9 +275,7 @@ public class UIMonthView extends UICalendarView {
         if(!dataList.isEmpty()) calendarview.moveEvents(dataList, null, null) ;
         if(dataList.size() < list.size()) {
           int number = list.size() - dataList.size() ;
-          UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.some-events-cannot-move", new Object[]{String.valueOf(number)}, 1)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendarView.msg.some-events-cannot-move", new Object[]{String.valueOf(number)}, 1)) ;
           calendarview.refresh() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
         }
@@ -288,9 +285,7 @@ public class UIMonthView extends UICalendarView {
         if (log.isDebugEnabled()) {
           log.debug("The calendar is not found", e);
         }
-        UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
       }
       UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;

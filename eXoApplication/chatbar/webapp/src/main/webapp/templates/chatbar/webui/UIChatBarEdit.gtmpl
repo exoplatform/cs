@@ -12,7 +12,6 @@
 <div id="<%=uicomponent.id%>" oncontextmenu="return false;">
      <%
      uicomponent.renderChild(UIConfigForm.class);
-     uicomponent.renderPopupMessages() ;
      %>
 </div>
 <%}%>

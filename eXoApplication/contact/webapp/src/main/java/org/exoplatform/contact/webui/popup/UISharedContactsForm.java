@@ -36,7 +36,6 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
@@ -166,15 +165,14 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
     @SuppressWarnings("unchecked")
   public void execute(Event<UISharedContactsForm> event) throws Exception {
       UISharedContactsForm uiForm = event.getSource() ;
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       String names = uiForm.getUIStringInput(FIELD_USER).getValue() ;
       String groups = uiForm.getUIStringInput(FIELD_GROUP).getValue() ;
       Map<String, String> receiverUserByGroup = new LinkedHashMap<String, String>() ;
       Map<String, String> receiverUser = new LinkedHashMap<String, String>() ;
       if(ContactUtils.isEmpty(names) && ContactUtils.isEmpty(groups)) {        
-        uiApp.addMessage(new ApplicationMessage("UISharedContactsForm.msg.empty-username", null,
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UISharedContactsForm.msg.empty-username",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));
         return ;
       } 
       String username = ContactUtils.getCurrentUser() ;
@@ -194,9 +192,11 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
           }
         }
         if (invalidUsers.length() > 0) {
-          uiApp.addMessage(new ApplicationMessage("UISharedContactsForm.msg.not-exist-username"
-              , new Object[]{invalidUsers.toString()}, 1 )) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext()
+               .getUIApplication()
+               .addMessage(new ApplicationMessage("UISharedContactsForm.msg.not-exist-username",
+                                                  new Object[] { invalidUsers.toString() },
+                                                  1));
           return ;          
         }      
       }
@@ -248,9 +248,11 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
           }
         }
         if (invalidGroups.length() > 0) {
-          uiApp.addMessage(new ApplicationMessage("UISharedContactsForm.msg.not-exist-group"
-              , new Object[]{invalidGroups.toString()}, 1 )) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext()
+               .getUIApplication()
+               .addMessage(new ApplicationMessage("UISharedContactsForm.msg.not-exist-group",
+                                                  new Object[] { invalidGroups.toString() },
+                                                  1));
           return ;          
         }      
       }
@@ -321,9 +323,9 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
           try {
             contactService.saveContact(username, contact, false) ;
           } catch (PathNotFoundException e) {
-            uiApp.addMessage(new ApplicationMessage("UISharedContactsForm.msg.deleted-contact", null,
-                ApplicationMessage.WARNING)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            event.getRequestContext()
+                 .getUIApplication()
+                 .addMessage(new ApplicationMessage("UISharedContactsForm.msg.deleted-contact", null, ApplicationMessage.WARNING));
             return ;
           }
         }
@@ -331,13 +333,17 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
         for (String user : receiverUserByGroup.keySet()) receiverUser.put(user, user) ;
         contactService.shareContact(username, contactIds, Arrays.asList(receiverUser.keySet().toArray(new String[] {}))) ; 
         //contactService.shareContact(SessionProviderFactory.createSessionProvider(), username, contactIds, receiverUserByGroup) ;
-        uiApp.addMessage(new ApplicationMessage("UISharedContactsForm.msg.contacts-shared", null)) ;
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UISharedContactsForm.msg.contacts-shared", null));
         UIContactPortlet contactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
         contactPortlet.cancelAction() ;
       } else if (ContactUtils.isEmpty(groups)){
-        uiApp.addMessage(new ApplicationMessage("UISharedContactsForm.msg.invalid-username", null)) ;
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UISharedContactsForm.msg.invalid-username", null));
       }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      
       return ;      
     }
   }

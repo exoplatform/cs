@@ -167,9 +167,9 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       if (!ContactUtils.isEmpty(inputTag)) {
         for (Tag tag : uiTags.getTagMap().values())
           if (tag.getName().equals(inputTag)) {
-            uiApp.addMessage(new ApplicationMessage("UITagForm.msg.tagName-existed", null, 
-                ApplicationMessage.WARNING)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UITagForm.msg.tagName-existed",
+                                                                                           null,
+                                                                                           ApplicationMessage.WARNING));
             return ;
           }
        /* if (ContactUtils.isNameLong(inputTag)) {
@@ -226,10 +226,9 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       UITagForm uiForm = event.getSource() ;      
       List<String> checkedTags = uiForm.getCheckedTags() ;
       if (checkedTags == null || checkedTags.size() == 0) {
-        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UITagForm.msg.checkTag-required", null,
-            ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UITagForm.msg.checkTag-required",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));
           return ;   
       }
       ContactService contactService = ContactUtils.getContactService() ; 

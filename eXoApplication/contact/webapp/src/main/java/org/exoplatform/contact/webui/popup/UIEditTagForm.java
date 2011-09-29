@@ -30,7 +30,6 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -94,17 +93,17 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
       tagName = ContactUtils.reduceSpace(tagName) ;
       
       String des = uiEditTagForm.getUIFormTextAreaInput(FIELD_DESCRIPTION_INPUT).getValue() ;
-      UIApplication uiApp = uiEditTagForm.getAncestorOfType(UIApplication.class) ;
+      
       if (ContactUtils.isEmpty(tagName)) {
-        uiApp.addMessage(new ApplicationMessage("UIEditTagForm.msg.tagName-required", null, 
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIEditTagForm.msg.tagName-required",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));
         return ; 
       }
       /*if (ContactUtils.isNameLong(tagName)) {
         uiApp.addMessage(new ApplicationMessage("UIEditTagForm.msg.nameTooLong", null, 
             ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        
         return ; 
       }
       */
@@ -113,9 +112,9 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
       if (uiEditTagForm.isNew) {
         for (Tag oldTag : uiTags.getTagMap().values()) 
           if (oldTag.getName().equals(tagName)) {
-            uiApp.addMessage(new ApplicationMessage("UIEditTagForm.msg.tagName-existed", null, 
-                ApplicationMessage.WARNING)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIEditTagForm.msg.tagName-existed",
+                                                                                           null,
+                                                                                           ApplicationMessage.WARNING));
             return ;
           }
         Tag tag = new Tag() ;
@@ -131,9 +130,9 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
         if (!tag.getName().equals(tagName))
           for (Tag oldTag : uiTags.getTagMap().values()) 
             if (oldTag.getName().equals(tagName)) {
-              uiApp.addMessage(new ApplicationMessage("UIEditTagForm.msg.tagName-existed", null, 
-                  ApplicationMessage.WARNING)) ;
-              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIEditTagForm.msg.tagName-existed",
+                                                                                             null,
+                                                                                             ApplicationMessage.WARNING));
               return ;
             }
         tag.setName(tagName) ;
@@ -143,9 +142,9 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
           ContactUtils.getContactService().updateTag(
               ContactUtils.getCurrentUser(), tag) ;
         } catch (PathNotFoundException e) {
-          uiApp.addMessage(new ApplicationMessage("UIEditTagForm.msg.tag-deleted", null, 
-              ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIEditTagForm.msg.tag-deleted",
+                                                                                         null,
+                                                                                         ApplicationMessage.WARNING));
           return ;
         }
       }

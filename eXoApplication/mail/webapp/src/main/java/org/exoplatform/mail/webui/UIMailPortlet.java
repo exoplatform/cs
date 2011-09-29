@@ -40,7 +40,6 @@ import org.exoplatform.services.log.Log;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.core.UIPopupMessages;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
@@ -209,12 +208,6 @@ public class UIMailPortlet extends UIPortletApplication {
     return mailSrv.getMailSetting(getCurrentUser()) ;    
   }
   
-  public void renderPopupMessages() throws Exception {
-    UIPopupMessages popupMess = getUIPopupMessages();
-    if(popupMess == null)  return ;
-    WebuiRequestContext  context =  WebuiRequestContext.getCurrentInstance() ;
-    popupMess.processRender(context);
-  }
   public void cancelAction() throws Exception {
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
     UIPopupAction popupAction = getChild(UIPopupAction.class) ;

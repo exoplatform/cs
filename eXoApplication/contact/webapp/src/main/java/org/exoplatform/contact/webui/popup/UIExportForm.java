@@ -161,12 +161,10 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
         }
       }      
       for (String contactId : uiForm.getCheckedCurrentPage()) contactIds.put(contactId, contactId) ;
-      
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       if (!isExportAll && contactIds.size() == 0) {
-        uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.check-contact-required", null, 
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIExportForm.msg.check-contact-required",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));
         return ;
       }
       String username = ContactUtils.getCurrentUser() ;
@@ -190,24 +188,28 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
             pageList = contactService.getPublicContactsByAddressBook(address[1]) ;
           }
           if (pageList == null) {
-            uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.deletedPer", null, ApplicationMessage.WARNING)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIExportForm.msg.deletedPer", null, ApplicationMessage.WARNING)) ;
+            
             event.getRequestContext().addUIComponentToUpdateByAjax(
               uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class)) ;
             return ;
           }          
           if (pageList.getAvailable() > Utils.limitExport) {
-            uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.manyContacts", new Object[]{Utils.limitExport + ""}, 
-                ApplicationMessage.WARNING)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            event.getRequestContext()
+                 .getUIApplication()
+                 .addMessage(new ApplicationMessage("UIExportForm.msg.manyContacts",
+                                                    new Object[] { Utils.limitExport + "" },
+                                                    ApplicationMessage.WARNING));
             return ;
           }
           contacts.addAll(pageList.getAll()) ;          
         } else {
           if (contactIds.size() > Utils.limitExport) {
-            uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.manyContacts", new Object[]{Utils.limitExport + ""}, 
-                ApplicationMessage.WARNING)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            event.getRequestContext()
+                 .getUIApplication()
+                 .addMessage(new ApplicationMessage("UIExportForm.msg.manyContacts",
+                                                    new Object[] { Utils.limitExport + "" },
+                                                    ApplicationMessage.WARNING));
             return ;
           }          
           if (address[0].equals(DataStorage.PERSONAL)) {
@@ -236,8 +238,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
         }
       }      
       if (contacts.size() == 0) {
-        uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.deletedPer", null, ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIExportForm.msg.deletedPer", null, ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(
           uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(

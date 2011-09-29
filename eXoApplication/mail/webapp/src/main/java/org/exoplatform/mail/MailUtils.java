@@ -68,7 +68,6 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.event.Event;
 
 import com.sun.mail.smtp.SMTPSendFailedException;
@@ -524,28 +523,24 @@ public class MailUtils {
     return false;
   }
 
-  public static void sendReturnReceipt(UIApplication uiApp, Event event, String username, String accid, String msgId,
-      ResourceBundle res) throws Exception {
+  public static void sendReturnReceipt(String username, String accid, String msgId, ResourceBundle res) throws Exception {
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
     try {
       getMailService().sendReturnReceipt(username, accid, msgId, res);
     } catch (AddressException e) {
-      uiApp.addMessage(new ApplicationMessage(
-          "UIEnterPasswordDialog.msg.there-was-an-error-parsing-the-addresses-sending-failed", null));
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-      return;
+      context.getUIApplication()
+             .addMessage(new ApplicationMessage("UIEnterPasswordDialog.msg.there-was-an-error-parsing-the-addresses-sending-failed",
+                                                null));
     } catch (AuthenticationFailedException e) {
-      uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.please-check-configuration-for-smtp-server", null));
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-      return;
+      context.getUIApplication()
+             .addMessage(new ApplicationMessage("UIComposeForm.msg.please-check-configuration-for-smtp-server", null));
     } catch (SMTPSendFailedException e) {
-      uiApp.addMessage(new ApplicationMessage(
-          "UIEnterPasswordDialog.msg.sorry-there-was-an-error-sending-the-message-sending-failed", null));
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-      return;
+      context.getUIApplication()
+             .addMessage(new ApplicationMessage("UIEnterPasswordDialog.msg.sorry-there-was-an-error-sending-the-message-sending-failed",
+                                                null));
     } catch (MessagingException e) {
-      uiApp.addMessage(new ApplicationMessage("UIEnterPasswordDialog.msg.there-was-an-unexpected-error-sending-falied", null));
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-      return;
+      context.getUIApplication()
+             .addMessage(new ApplicationMessage("UIEnterPasswordDialog.msg.there-was-an-unexpected-error-sending-falied", null));
     }
   }
 

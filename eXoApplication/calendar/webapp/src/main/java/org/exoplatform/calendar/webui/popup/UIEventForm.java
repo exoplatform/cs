@@ -40,7 +40,6 @@ import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.Reminder;
-import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
@@ -67,7 +66,6 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItem;
@@ -1295,7 +1293,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   
   public void SaveAndNoAsk(Event<UIEventForm> event, boolean isSend, boolean updateSeries)throws Exception {
     UIEventForm uiForm = event.getSource() ;
-    UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+    
     UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
     UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
     UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
@@ -1308,25 +1306,24 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     String description = uiForm.getEventDescription() ;
     if(!CalendarUtils.isEmpty(description)) description = description.replaceAll(CalendarUtils.GREATER_THAN, "").replaceAll(CalendarUtils.SMALLER_THAN,"") ;
     if(!uiForm.isEventDetailValid(calSetting)) {
-      uiApp.addMessage(new ApplicationMessage(uiForm.errorMsg_, null));
+      event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage(uiForm.errorMsg_, null));
       uiForm.setSelectedTab(TAB_EVENTDETAIL) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      
       return ;
     } else {
       if(!uiForm.isReminderValid()) {
-        uiApp.addMessage(new ApplicationMessage(uiForm.errorMsg_, new String[] {uiForm.errorValues} ));
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage(uiForm.errorMsg_, new String[] {uiForm.errorValues} ));
         uiForm.setSelectedTab(TAB_EVENTREMINDER) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       } else {
 //      TODO cs-839
         if(!uiForm.isParticipantValid()) {
-          uiApp.addMessage(new ApplicationMessage(uiForm.errorMsg_, new String[] { uiForm.errorValues }));
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage(uiForm.errorMsg_, new String[] { uiForm.errorValues }));
           uiForm.setSelectedTab(TAB_EVENTSHARE) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          
           return ;
         }else {
           String username = CalendarUtils.getCurrentUser() ;
@@ -1334,8 +1331,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
           Date from = uiForm.getEventFromDate(calSetting.getDateFormat(), calSetting.getTimeFormat()) ;
           Date to = uiForm.getEventToDate(calSetting.getDateFormat(),calSetting.getTimeFormat()) ;
           if(from.after(to)) {
-            uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.event-date-time-logic", null, ApplicationMessage.WARNING)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage(uiForm.getId() + ".msg.event-date-time-logic", null, ApplicationMessage.WARNING)) ;
             return ;
           } else if(from.equals(to)) {
             to = CalendarUtils.getEndDay(from).getTime() ;
@@ -1351,8 +1347,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
             uiPopupAction.deActivate() ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
             //event.getRequestContext().addUIComponentToUpdateByAjax(calendarPortlet) ;
-            uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1));
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1));
+            
             return ;
           } else {
             boolean canEdit = false ;
@@ -1366,8 +1362,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
             if(!canEdit && !uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE) ) {
               uiPopupAction.deActivate() ;
               event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-              uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null,1));
-              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null,1));
               return ;
             }
           }
@@ -1411,11 +1406,11 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
               }
               if(!emails.isEmpty()) calendarEvent.setInvitation(emails.keySet().toArray(new String[emails.size()])) ;
             } else {
-              uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.event-email-invalid"
+              event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIEventForm.msg.event-email-invalid"
                 , new String[] { CalendarUtils.invalidEmailAddresses(uiForm.getInvitationEmail())}));
               uiForm.setSelectedTab(TAB_EVENTSHARE) ;
               event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
-              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              
               return ;
             }
           calendarEvent.setCalendarId(uiForm.getCalendarId()) ;
@@ -1517,8 +1512,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
             uiPopupAction.deActivate() ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
           }catch (Exception e) {
-            uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.add-event-error", null));
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIEventForm.msg.add-event-error", null));
             if (log.isDebugEnabled()) {
               log.debug("Fail to add the event", e);
             }
@@ -1529,8 +1523,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
             try {
               uiForm.sendMail(CalendarUtils.getMailService(), CalendarUtils.getOrganizationService(), calSetting, acc, username, uiForm.getParticipantValues(), calendarEvent) ;
             } catch (Exception e) {
-              uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.error-send-email", null));
-              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIEventForm.msg.error-send-email", null));
               if (log.isDebugEnabled()) {
                 log.debug("Fail to send mail ivitation to the participant", e);
               }
@@ -1556,8 +1549,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
                   try {
                     uiForm.sendMail(CalendarUtils.getMailService(), CalendarUtils.getOrganizationService(), calSetting, acc, username, uiForm.getParticipantValues(), calendarEvent) ;
                   }catch (Exception e) {
-                    uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.error-send-email", null));
-                    event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                    event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIEventForm.msg.error-send-email", null));
+                    
                     if (log.isDebugEnabled()) {
                       log.debug("Fail to send mail ivitation to the participant", e);
                     }
@@ -1596,8 +1589,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
                     try {
                     uiForm.sendMail(CalendarUtils.getMailService(), CalendarUtils.getOrganizationService(), calSetting, acc, username, buider.toString(), calendarEvent) ;
                     }catch (Exception e) {
-                      uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.error-send-email", null));
-                      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                      event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIEventForm.msg.error-send-email", null));
+                      
                       if (log.isDebugEnabled()) {
                         log.debug("Fail to send mail ivitation to the participant", e);
                       }
@@ -1850,10 +1843,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     public void execute(Event<UIEventForm> event) throws Exception {
       UIEventForm uiForm = event.getSource() ;
       if(!uiForm.getEmailReminder()) {
-        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.email-reminder-required", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ; 
-      } else {
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIEventForm.msg.email-reminder-required", null));
+        } else {
         UIPopupAction uiPopupAction  = uiForm.getAncestorOfType(UIPopupContainer.class).getChild(UIPopupAction.class) ;
         UIAddressForm uiAddressForm = uiPopupAction.activate(UIAddressForm.class, 640) ;
         UITaskForm.showAddressForm(uiAddressForm, uiForm.getEmailAddress());
@@ -2050,23 +2041,21 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   static  public class SaveActionListener extends EventListener<UIEventForm> {
     public void execute(Event<UIEventForm> event) throws Exception {
       UIEventForm uiForm = event.getSource() ;
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      
       UICalendarPortlet uiPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiPopupAction = uiPopupContainer.getChild(UIPopupAction.class);
       //TODO cs-764
       if(!uiForm.isReminderValid()) {
-        uiApp.addMessage(new ApplicationMessage(uiForm.errorMsg_, new String[] {uiForm.errorValues}, ApplicationMessage.WARNING));
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage(uiForm.errorMsg_, new String[] {uiForm.errorValues}, ApplicationMessage.WARNING));
         uiForm.setSelectedTab(TAB_EVENTREMINDER) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
       else {
         CalendarService calService = CalendarUtils.getCalendarService();
         if(calService.isRemoteCalendar(CalendarUtils.getCurrentUser(), uiForm.getCalendarId())) {
-          uiApp.addMessage(new ApplicationMessage("UICalendars.msg.cant-add-event-on-remote-calendar", null, ApplicationMessage.WARNING));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendars.msg.cant-add-event-on-remote-calendar", null, ApplicationMessage.WARNING));
           return;
         }
         
@@ -2121,7 +2110,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       UIEventAttenderTab attendTab = uiForm.getChildById(TAB_EVENTATTENDER) ;
       UIFormInputWithActions eventShareTab = uiForm.getChildById(TAB_EVENTSHARE) ;
       String values = uiForm.getParticipantValues() ;
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      
       boolean isCheckFreeTime = attendTab.getUIFormCheckBoxInput(UIEventAttenderTab.FIELD_CHECK_TIME).isChecked() ;
       if(CalendarUtils.isEmpty(values)) {
         if(isCheckFreeTime) attendTab.getUIFormCheckBoxInput(UIEventAttenderTab.FIELD_CHECK_TIME).setChecked(false) ;
@@ -2129,8 +2118,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         attendTab.updateParticipants(values) ;
         
         uiForm.setParticipant(values) ;
-        uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.participant-required", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIEventForm.msg.participant-required", null));
         event.getRequestContext().addUIComponentToUpdateByAjax(eventShareTab) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(attendTab) ;
       } else {
@@ -2150,9 +2138,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         uiForm.setParticipant(values) ;
         if(sb2.length() > 0) {
           if(isCheckFreeTime) attendTab.getUIFormCheckBoxInput(UIEventAttenderTab.FIELD_CHECK_TIME).setChecked(false) ;
-          uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.name-not-correct", new Object[]{sb2.toString()}));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        }
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIEventForm.msg.name-not-correct", new Object[]{sb2.toString()}));
+          }
         event.getRequestContext().addUIComponentToUpdateByAjax(eventShareTab) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(attendTab) ;
       }

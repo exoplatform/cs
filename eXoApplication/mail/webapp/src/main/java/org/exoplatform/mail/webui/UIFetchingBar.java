@@ -24,12 +24,12 @@ import org.exoplatform.mail.service.CheckingInfo;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.StatusInfo;
+import org.exoplatform.mail.webui.action.HasAccountEventListener;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -165,18 +165,15 @@ public class UIFetchingBar extends UIForm {
     return true;
   }
   
-  static public class RefreshActionListener extends EventListener<UIFetchingBar> {
-    public void execute(Event<UIFetchingBar> event) throws Exception {
+  static public class RefreshActionListener extends HasAccountEventListener<UIFetchingBar> {
+    @Override
+    public void processEvent(Event<UIFetchingBar> event) throws Exception {
       UIFetchingBar uiFetchingBar = event.getSource();
       UIMailPortlet uiPortlet = uiFetchingBar.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
 
       UIMessageList uiMsgList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       String accountId = dataCache.getSelectedAccountId();
-      if (accountId == null) {
-        return;
-      }
-      
       try {
         uiMsgList.init(accountId);
       } catch (PathNotFoundException e) {
@@ -184,10 +181,9 @@ public class UIFetchingBar extends UIForm {
         uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
         uiPortlet.findFirstComponentOfType(UISelectAccount.class).setSelectedValue(null);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-
-        UIApplication uiApp = uiMsgList.getAncestorOfType(UIApplication.class);
-        uiApp.addMessage(new ApplicationMessage("UIFetchingBar.msg.deleted_account", null, ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIFetchingBar.msg.deleted_account",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));
         return;
       }
       
@@ -199,8 +195,9 @@ public class UIFetchingBar extends UIForm {
     }
   }  
   
-  static public class UpdateListActionListener extends EventListener<UIFetchingBar> {
-    public void execute(Event<UIFetchingBar> event) throws Exception {
+  static public class UpdateListActionListener extends HasAccountEventListener<UIFetchingBar> {
+    @Override
+    public void processEvent(Event<UIFetchingBar> event) throws Exception {
       UIFetchingBar uiFetchingBar = event.getSource();
       UIMailPortlet uiPortlet = uiFetchingBar.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
@@ -214,14 +211,12 @@ public class UIFetchingBar extends UIForm {
       try {
         msg = mailSrv.getMessageById(username, accountId, msgId);
       } catch (PathNotFoundException e) {
-
         uiMsgList.setMessagePageList(null);
         uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-
-        UIApplication uiApp = uiMsgList.getAncestorOfType(UIApplication.class);
-        uiApp.addMessage(new ApplicationMessage("UIFetchingBar.msg.deleted_account", null, ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIFetchingBar.msg.deleted_account",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));        
         return;
       }
       UIFormCheckBoxInput<Boolean> uiCheckBox = new UIFormCheckBoxInput<Boolean>(msg.getId(), msg.getId(), false);

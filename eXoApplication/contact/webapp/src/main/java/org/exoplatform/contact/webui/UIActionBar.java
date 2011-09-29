@@ -35,7 +35,6 @@ import org.exoplatform.contact.webui.popup.UIPopupContainer;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -146,10 +145,9 @@ public class UIActionBar extends UIContainer  {
       UIContactPortlet uiContactPortlet = uiActionBar.getParent() ; 
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
       if (uiContacts.isDisplaySearchResult()) {
-        UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.cannot-changeView", null,
-          ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIActionBar.msg.cannot-changeView",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));
         return ;        
       }      
       if (isList.equals("true")) uiContacts.setViewContactsList(true) ;

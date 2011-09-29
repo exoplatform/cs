@@ -249,10 +249,10 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       if(nextStep > uiAccCreation.getCurrentStep()) {
         if(wss.isFieldsValid()) { 
            UIAccountCreation.viewSteps(uiAccCreation, step, event);
-        } else {
-          UIApplication uiApp = uiAccCreation.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.fields-requirement", null)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        } else {          
+          event.getRequestContext()
+               .getUIApplication()
+               .addMessage(new ApplicationMessage("UIAccountCreation.msg.fields-requirement", null));          
         }
       } else {
         UIAccountCreation.viewSteps(uiAccCreation, step, event);
@@ -285,10 +285,10 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
         if(!((WizardStep)ws).isFieldsValid()) {
           int index = uiAccCreation.getChildren().indexOf(ws) + 1;
           uiAccCreation.viewStep(index) ;
-          UIApplication uiApp = uiAccCreation.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.fields-requirement", null)) ;
+          event.getRequestContext()
+               .getUIApplication()
+               .addMessage(new ApplicationMessage("UIAccountCreation.msg.fields-requirement", null));
           event.getRequestContext().addUIComponentToUpdateByAjax(uiAccCreation.getAncestorOfType(UIPopupAction.class)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         }
       }

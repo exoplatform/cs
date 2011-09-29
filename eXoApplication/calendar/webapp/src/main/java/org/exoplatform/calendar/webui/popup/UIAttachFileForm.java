@@ -28,11 +28,10 @@ import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormUploadInput;
 
@@ -90,7 +89,6 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
   static  public class SaveActionListener extends EventListener<UIAttachFileForm> {
     public void execute(Event<UIAttachFileForm> event) throws Exception {
       UIAttachFileForm uiForm = event.getSource();
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       List<Attachment> files = new ArrayList<Attachment>() ;
       int i = 0 ;
       long size = uiForm.attSize ;
@@ -101,8 +99,11 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
           long fileSize = ((long)uploadResource.getUploadedSize()) ;
           size = size + fileSize ;
           if(size >= 10*1024*1024) {
-            uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.total-attachts-size-over10M", null, ApplicationMessage.WARNING)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            event.getRequestContext()
+                 .getUIApplication()
+                 .addMessage(new ApplicationMessage("UIAttachFileForm.msg.total-attachts-size-over10M",
+                                                    null,
+                                                    ApplicationMessage.WARNING));
             return ;
           }
           Attachment attachfile = new Attachment() ;
@@ -115,9 +116,9 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
         }
       }
       if(files.isEmpty()){
-        uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.fileName-error", null, 
-                                                ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAttachFileForm.msg.fileName-error",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));
         return ;
       } else {
         UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;

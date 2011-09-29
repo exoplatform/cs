@@ -29,15 +29,14 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIBreadcumbs;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.UITree;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.organization.account.UIGroupSelector;
@@ -218,18 +217,17 @@ public class UIInvitationForm extends UIForm implements UIPopupComponent {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm) ;
       }
       else{
-        UIApplication uiApp = uiEventForm.getAncestorOfType(UIApplication.class) ;
         StringBuilder builder = new StringBuilder("");
         
         if(invalidUsers.length()>0)
           builder.append(invalidUsers + "; ");
         if(!CalendarUtils.isValidEmailAddresses(emailList.trim()))
           builder.append(CalendarUtils.invalidEmailAddresses(emailList.trim()));
-        
-        uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.event-participant-invalid"
-                                                , new String[] { uiInvitationForm.escapeGroupReferences(builder.toString()) }, ApplicationMessage.WARNING));
-        
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIEventForm.msg.event-participant-invalid",
+                                                new String[] { uiInvitationForm.escapeGroupReferences(builder.toString()) },
+                                                ApplicationMessage.WARNING));
       }      
     }
   }

@@ -72,11 +72,8 @@ public class UIAskmeReturnReceipt extends UIForm implements UIPopupComponent {
       String username = uiPortlet.getCurrentUser();
       String accId = uiMsgList.getAccountId();
       MailService mailService = uiForm.getApplicationComponent(MailService.class);
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-      ResourceBundle res = event.getRequestContext().getApplicationResourceBundle() ;
-      
-      MailUtils.sendReturnReceipt(uiApp, event, username, accId, selectedMsgId, res);
-      
+      ResourceBundle res = event.getRequestContext().getApplicationResourceBundle();
+      MailUtils.sendReturnReceipt(username, accId, selectedMsgId, res);
       List<Message> msgs = new ArrayList<Message>();
       msgs.add(uiForm.getSelectedMsg());
       mailService.toggleMessageProperty(username, accId, msgs, "", Utils.IS_RETURN_RECEIPT, true);

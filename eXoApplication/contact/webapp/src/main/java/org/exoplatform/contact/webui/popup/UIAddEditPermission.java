@@ -39,7 +39,6 @@ import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIGrid;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 import org.exoplatform.webui.event.Event;
@@ -276,11 +275,12 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
                 try {
                   contactService.removeUserShareContact(
                     username, uiForm.contactId_, user.getUserName()) ;
-                  } catch (PathNotFoundException e) {
-                  UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-                  uiApp.addMessage(new ApplicationMessage("UIAddEditPermission.msg.cannot-deleteShared", null,
-                    ApplicationMessage.WARNING)) ;
-                  event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                  } catch (PathNotFoundException e) {                  
+                  event.getRequestContext()
+                       .getUIApplication()
+                       .addMessage(new ApplicationMessage("UIAddEditPermission.msg.cannot-deleteShared",
+                                                          null,
+                                                          ApplicationMessage.WARNING));
                   return ;
                   }
               }

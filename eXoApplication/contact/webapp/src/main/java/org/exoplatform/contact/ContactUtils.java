@@ -286,20 +286,6 @@ public class ContactUtils {
     return false;
   }
   
-  //message warning within null parameter
-  public static UIApplication initWarnPopup(UIComponent uicomponent,String messagekey){
-    UIApplication windowWarn = uicomponent.getAncestorOfType(UIApplication.class) ;
-    windowWarn.addMessage(new ApplicationMessage(messagekey, null, ApplicationMessage.WARNING)) ;
-    return windowWarn;
-  }
-  
-  //message warning within parameter
-  public static UIApplication initPopup(UIComponent uicomponent,String messagekey,Object[] para,int type){
-    UIApplication windowPopup = uicomponent.getAncestorOfType(UIApplication.class) ;
-    windowPopup.addMessage(new ApplicationMessage(messagekey, para, type)) ;
-    return windowPopup;
-  }
-  
   public static UIFormInputWithActions initSelectPermissions(UIFormInputWithActions inputset) throws Exception {
     inputset.addUIFormInput(new UIFormStringInput(FIELD_USER, FIELD_USER, null)) ;
     List<ActionData> actionUser = new ArrayList<ActionData>() ;

@@ -42,7 +42,6 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItem;
@@ -278,48 +277,42 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     public void execute(Event<UIQuickAddEvent> event) throws Exception {
       UIQuickAddEvent uiForm = event.getSource() ;
       UICalendarPortlet uiPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      
       String summary = uiForm.getEventSummary().trim() ;
       summary = CalendarUtils.enCodeTitle(summary);
       /*if(!CalendarUtils.isNameValid(summary, CalendarUtils.SIMPLECHARACTER)){
         uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.summary-invalid", CalendarUtils.SIMPLECHARACTER, ApplicationMessage.WARNING) ) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        
         return ;
-      }*/
+      }*/      
       String description = uiForm.getEventDescription() ;
       if(!CalendarUtils.isEmpty(description)) description = description.replaceAll(CalendarUtils.GREATER_THAN, "").replaceAll(CalendarUtils.SMALLER_THAN,"") ;
       if(CalendarUtils.isEmpty(uiForm.getEventCalendar())) {
-        uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.calendar-field-required", null, ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage(uiForm.getId() + ".msg.calendar-field-required", null, ApplicationMessage.WARNING)) ;
         return ;
       }
       if(CalendarUtils.isEmpty(uiForm.getEventCategory())) {
-        uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.category-field-required", null, ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage(uiForm.getId() + ".msg.category-field-required", null, ApplicationMessage.WARNING)) ;
         return ;
       }
       Date from = uiForm.getEventFromDate(uiPortlet.getCalendarSetting().getDateFormat() ,uiPortlet.getCalendarSetting().getTimeFormat()) ;
       Date to = uiForm.getEventToDate(uiPortlet.getCalendarSetting().getDateFormat(), uiPortlet.getCalendarSetting().getTimeFormat()) ;
       if(from == null) {
-        uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.fromDate-format", null, ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage(uiForm.getId() + ".msg.fromDate-format", null, ApplicationMessage.WARNING)) ;
         return ;
       }
       if(to == null) {
-        uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.toDate-format", null, ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage(uiForm.getId() + ".msg.toDate-format", null, ApplicationMessage.WARNING)) ;
         return ;
       }
       if(from.after(to) || from.equals(to)) {
-        uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.logic-required", null, ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage(uiForm.getId() + ".msg.logic-required", null, ApplicationMessage.WARNING)) ;
         return ;
       }
       
       CalendarService calService =  CalendarUtils.getCalendarService() ;
       if(calService.isRemoteCalendar(CalendarUtils.getCurrentUser(), uiForm.getEventCalendar())) {
-        uiApp.addMessage(new ApplicationMessage("UICalendars.msg.cant-add-event-on-remote-calendar", null, ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendars.msg.cant-add-event-on-remote-calendar", null, ApplicationMessage.WARNING));
         return;
       }
       
@@ -383,23 +376,20 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
           calendar = calService.getSharedCalendars(username, true).getCalendarById(uiForm.getEventCalendar()) ;
         }
         if (calendar == null) {
-          uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
           uiForm.reset() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UICalendarPortlet.class)) ;
           return ;
         } else {
           if(CalendarUtils.SHARED_TYPE.equals(uiForm.calType_) && !CalendarUtils.canEdit(null, Utils.getEditPerUsers(calendar), username)) {
-            uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null,1));
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null,1));
             uiForm.reset() ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UICalendarPortlet.class)) ;
             return ;
           }
           // cs-4429: fix for group calendar permission
           if(CalendarUtils.PUBLIC_TYPE.equals(uiForm.calType_) && !uiForm.canEdit(calendar.getEditPermission())) {
-            uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null, 1)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null, 1)) ;
             uiForm.reset() ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UICalendarPortlet.class)) ;
             return ;
@@ -442,8 +432,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         if (log.isDebugEnabled()) {
           log.debug("Fail to quick add event to the calendar", e);
         }
-        uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.add-unsuccessfully", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage(uiForm.getId() + ".msg.add-unsuccessfully", null)) ;
       }
     }
   }

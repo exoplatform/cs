@@ -56,7 +56,6 @@ import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -791,17 +790,14 @@ public abstract class UICalendarView extends UIForm implements CalendarView {
   static public class AddEventActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {
       UICalendarView uiForm = event.getSource();
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class);
       String username = CalendarUtils.getCurrentUser();
       if (CalendarUtils.getCalendarOption().isEmpty()) {
-        uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.calendar-list-empty", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendarView.msg.calendar-list-empty", null));
         return;
       }
       List<EventCategory> eventCategories = CalendarUtils.getCalendarService().getEventCategories(username);
       if (eventCategories.isEmpty()) {
-        uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.event-category-list-empty", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendarView.msg.event-category-list-empty", null));
         return;
       }
       String type = event.getRequestContext().getRequestParameter(OBJECTID);
@@ -847,31 +843,31 @@ public abstract class UICalendarView extends UIForm implements CalendarView {
   static public class DeleteEventActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {
       UICalendarView uiCalendarView = event.getSource();
-      UIApplication uiApp = uiCalendarView.getAncestorOfType(UIApplication.class);
+      
       uiCalendarView.allDelete_ = true;
       UICalendarPortlet calPortlet = uiCalendarView.getAncestorOfType(UICalendarPortlet.class);
       calPortlet.cancelAction();
       if (uiCalendarView instanceof UIMonthView) {
         List<CalendarEvent> list = ((UIMonthView) uiCalendarView).getSelectedEvents();
         if (list.isEmpty()) {
-          uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.check-box-required", null));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendarView.msg.check-box-required", null));
+          
         } else {
           try {
             uiCalendarView.removeEvents(list);
             ((UIMonthView) uiCalendarView).refresh();
             if (uiCalendarView.allDelete_) {
-              uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.delete-event-successfully", null));
+              event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendarView.msg.delete-event-successfully", null));
             } else {
-              uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.can-not-delete-all-event", null));
+              event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendarView.msg.can-not-delete-all-event", null));
             }
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+            
           } catch (Exception e) {
             if (log.isDebugEnabled()) {
               log.debug("Fail to delete the events", e);
             }
-            uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.delete-event-error", null, ApplicationMessage.WARNING));
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+            event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendarView.msg.delete-event-error", null, ApplicationMessage.WARNING));
+            
             return;
           }
         }
@@ -879,8 +875,8 @@ public abstract class UICalendarView extends UIForm implements CalendarView {
         UIListView uiListView = (UIListView) uiCalendarView;
         List<CalendarEvent> list = ((UIListView) uiCalendarView).getSelectedEvents();
         if (uiListView.getSelectedEvents().isEmpty()) {
-          uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.check-box-required", null));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendarView.msg.check-box-required", null));
+          
           return;
         }
         try {
@@ -893,23 +889,21 @@ public abstract class UICalendarView extends UIForm implements CalendarView {
           if (currentPage <= uiListView.getAvailablePage())
             uiListView.updateCurrentPage(currentPage);
           if (uiCalendarView.allDelete_) {
-            uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.delete-event-successfully", null));
+            event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendarView.msg.delete-event-successfully", null));
           } else {
-            uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.can-not-delete-all-event", null));
+            event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendarView.msg.can-not-delete-all-event", null));
           }
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          
 
         } catch (Exception e) {
           if (log.isDebugEnabled()) {
             log.debug("Fail to delete the events", e);
           }
-          uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.delete-event-error", null, ApplicationMessage.WARNING));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendarView.msg.delete-event-error", null, ApplicationMessage.WARNING));
           return;
         }
       } else {
-        uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.function-not-supported", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendarView.msg.function-not-supported", null));
         return;
       }
       UIMiniCalendar uiMiniCalendar = uiCalendarView.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class);
@@ -994,10 +988,8 @@ public abstract class UICalendarView extends UIForm implements CalendarView {
       } else {
         UICalendarWorkingContainer uiWorkingContainer = uiCalendarView.getAncestorOfType(UICalendarWorkingContainer.class);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer);
-        UIApplication uiApp = uiCalendarView.getAncestorOfType(UIApplication.class);
-        uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.event-not-found", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-      }
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendarView.msg.event-not-found", null));
+        }
     }
   }
 
@@ -1098,17 +1090,15 @@ public abstract class UICalendarView extends UIForm implements CalendarView {
             event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
           }
         } else {
-          UIApplication uiApp = uiCalendarView.getAncestorOfType(UIApplication.class);
-          uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.have-no-edit-permission", null));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendarView.msg.have-no-edit-permission", null));
           return;
         }
       } else {
         UICalendarWorkingContainer uiWorkingContainer = uiCalendarView.getAncestorOfType(UICalendarWorkingContainer.class);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer);
-        UIApplication uiApp = uiCalendarView.getAncestorOfType(UIApplication.class);
-        uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.event-not-found", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendarView.msg.event-not-found", null));
+        
       }
     }
   }
@@ -1149,23 +1139,19 @@ public abstract class UICalendarView extends UIForm implements CalendarView {
         }
         calendar = CalendarUtils.getCalendar(calType, calendarId);
         if (calendar == null) {
-          UIApplication uiApp = uiCalendarView.getAncestorOfType(UIApplication.class);
-          uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-        } else {
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1));
+          } else {
           // if calendar is remote calendar
           if (calendarService.isRemoteCalendar(CalendarUtils.getCurrentUser(), calendarId)) {
-            UIApplication uiApp = uiCalendarView.getAncestorOfType(UIApplication.class);
-            uiApp.addMessage(new ApplicationMessage("UICalendars.msg.cant-add-event-on-remote-calendar", null, ApplicationMessage.WARNING));
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+            
+            event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendars.msg.cant-add-event-on-remote-calendar", null, ApplicationMessage.WARNING));
             return;
           }
 
           if ((CalendarUtils.SHARED_TYPE.equals(calType) && !CalendarUtils.canEdit(uiCalendarView.getApplicationComponent(OrganizationService.class), Utils.getEditPerUsers(calendar), CalendarUtils.getCurrentUser()))
               || (CalendarUtils.PUBLIC_TYPE.equals(calType) && !CalendarUtils.canEdit(uiCalendarView.getApplicationComponent(OrganizationService.class), calendar.getEditPermission(), CalendarUtils.getCurrentUser()))) {
-            UIApplication uiApp = uiCalendarView.getAncestorOfType(UIApplication.class);
-            uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit-event", null, 1));
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+            
+            event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit-event", null, 1));
             uiCalendarView.refresh();
             event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent());
             return;
@@ -1224,10 +1210,8 @@ public abstract class UICalendarView extends UIForm implements CalendarView {
         if (log.isDebugEnabled()) {
           log.debug("Exception in method execute of class DeleteEventActionListener", e);
         }
-        UIApplication uiApp = uiCalendarView.getAncestorOfType(UIApplication.class);
-        uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-      }
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1));
+        }
       UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class);
       CalendarSetting setting = calendarService.getCalendarSetting(username);
       uiViewContainer.refresh();
@@ -1377,16 +1361,13 @@ public abstract class UICalendarView extends UIForm implements CalendarView {
   static public class QuickAddActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {
       UICalendarView uiForm = event.getSource();
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class);
       if (CalendarUtils.getCalendarOption().isEmpty()) {
-        uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.calendar-list-empty", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendarView.msg.calendar-list-empty", null));
         return;
       }
       List<EventCategory> eventCategories = CalendarUtils.getCalendarService().getEventCategories(CalendarUtils.getCurrentUser());
       if (eventCategories.isEmpty()) {
-        uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.event-category-list-empty", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendarView.msg.event-category-list-empty", null));
         return;
       }
       String type = event.getRequestContext().getRequestParameter(OBJECTID);
@@ -1476,13 +1457,11 @@ public abstract class UICalendarView extends UIForm implements CalendarView {
       String eventId = event.getRequestContext().getRequestParameter(OBJECTID);
       String selectedCalendarId = event.getRequestContext().getRequestParameter(CALENDARID);
       String calType = event.getRequestContext().getRequestParameter(CALTYPE);
-      UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class);
       org.exoplatform.calendar.service.Calendar calendar = null;
       CalendarEvent instanceEvent = new CalendarEvent();
       instanceEvent.setId(eventId);
       if (instanceEvent.getEventType().equalsIgnoreCase("Task")) {
-        uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet);
       }
       if (calType.equals(CalendarUtils.PRIVATE_TYPE)) {
@@ -1510,8 +1489,8 @@ public abstract class UICalendarView extends UIForm implements CalendarView {
         }
       }
       if (calendar == null) {
-        uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1));
+        
         event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet);
       } else {
         boolean canEdit = false;
@@ -1521,8 +1500,8 @@ public abstract class UICalendarView extends UIForm implements CalendarView {
           canEdit = CalendarUtils.canEdit(CalendarUtils.getOrganizationService(), calendar.getEditPermission(), currentUser);
         }
         if (!calType.equals(CalendarUtils.PRIVATE_TYPE) && !canEdit) {
-          uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null));
+          
           return;
         }
         List<org.exoplatform.calendar.service.Calendar> list = new ArrayList<org.exoplatform.calendar.service.Calendar>();
@@ -1572,9 +1551,7 @@ public abstract class UICalendarView extends UIForm implements CalendarView {
 
         org.exoplatform.calendar.service.Calendar calendar = CalendarUtils.getCalendar(calType, calendarId);
         if (uiCalendarView.isHaveNotPermission(calendar, calType)) {
-          UIApplication uiApp = uiCalendarView.getAncestorOfType(UIApplication.class);
-          uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit-event", null, 1));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit-event", null, 1));
           uiCalendarView.refresh();
           event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent());
           return;
@@ -1616,9 +1593,7 @@ public abstract class UICalendarView extends UIForm implements CalendarView {
 
         org.exoplatform.calendar.service.Calendar calendar = CalendarUtils.getCalendar(calType, calendarId);
         if (uiCalendarView.isHaveNotPermission(calendar, calType)) {
-          UIApplication uiApp = uiCalendarView.getAncestorOfType(UIApplication.class);
-          uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit-event", null, 1));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit-event", null, 1));
           uiCalendarView.refresh();
           event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent());
           return;

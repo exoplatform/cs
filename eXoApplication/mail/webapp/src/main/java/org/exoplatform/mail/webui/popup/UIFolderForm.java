@@ -34,7 +34,6 @@ import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -77,8 +76,7 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
       UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
       
-      MailService mailSvr = uiForm.getApplicationComponent(MailService.class);
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class);
+      MailService mailSvr = uiForm.getApplicationComponent(MailService.class);      
       String folderName = uiForm.getUIStringInput(FIELD_NAME).getValue();
       folderName = MailUtils.reduceSpace(folderName);
       String username = uiPortlet.getCurrentUser();
@@ -92,8 +90,8 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
       try {
         username = MailUtils.getDelegateFrom(accountId, dataCache);
         if (mailSvr.isExistFolder(username, accountId, uiForm.getParentPath(), folderName)) {
-          uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.folder-exist", new Object[] { folderName }));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIFolderForm.msg.folder-exist",
+                                                                                         new Object[] { folderName }));          
           return;
         }
       } catch (Exception e) {
@@ -111,16 +109,17 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
           uiPortlet.findFirstComponentOfType(UIMessageList.class).setMessagePageList(null);
           uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-
-          uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account",
+                                                                                         null,
+                                                                                         ApplicationMessage.WARNING));          
           return;
         }
       }
       
       if (!issaved) {
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.cannot-save-folder", null, ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.cannot-save-folder",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));        
         return;
       }
 

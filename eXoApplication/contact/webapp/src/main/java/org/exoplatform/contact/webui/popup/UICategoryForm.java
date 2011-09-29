@@ -29,12 +29,11 @@ import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -103,12 +102,11 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
       UICategoryForm uiCategoryForm = event.getSource() ;
       String  groupName = uiCategoryForm.getUIStringInput(FIELD_CATEGORYNAME_INPUT).getValue().trim();
       // CS-3009
-      groupName = ContactUtils.reduceSpace(groupName) ;
-      UIApplication uiApp = uiCategoryForm.getAncestorOfType(UIApplication.class) ;
+      groupName = ContactUtils.reduceSpace(groupName) ;      
       /*if (ContactUtils.isNameLong(groupName)) {
-        uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.nameTooLong", null, 
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICategoryForm.msg.nameTooLong", null, 
             ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(event.getRequestContext().getUIApplication().getUIPopupMessages()) ;
         return ;
       }*/
       UIContactPortlet uiContactPortlet = uiCategoryForm.getAncestorOfType(UIContactPortlet.class) ;
@@ -116,9 +114,9 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
       if (uiAddressBook.getPrivateGroupMap().values().contains(groupName)) {
         if (uiCategoryForm.isNew_ || (!uiCategoryForm.isNew_  && uiCategoryForm.editedAddName != null 
             && !groupName.equals(uiCategoryForm.editedAddName))) {
-          uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.existed-categoryName", null,
-              ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext()
+               .getUIApplication()
+               .addMessage(new ApplicationMessage("UICategoryForm.msg.existed-categoryName", null, ApplicationMessage.WARNING));
           return ; 
         }
       }    
@@ -132,9 +130,9 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
           oldGroup = contactService.getSharedAddressBook(username, uiCategoryForm.groupId_) ;
           if (oldGroup != null) { 
             if (!uiAddressBook.havePermission(oldGroup.getId())) {
-              uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.non-permission", null,
-                  ApplicationMessage.WARNING)) ;
-              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICategoryForm.msg.non-permission",
+                                                                                             null,
+                                                                                             ApplicationMessage.WARNING));
               return ; 
             } else { //cs-2017
               try {
@@ -143,8 +141,8 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
                 for (AddressBook contactGroup : groups) 
                   if (contactGroup.getName().equals(groupName) && uiCategoryForm.editedAddName != null 
                       && !groupName.equals(uiCategoryForm.editedAddName)) {
-                    uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.userExisted-categoryName", new String[] {shredUser}, ApplicationMessage.WARNING)) ;
-                    event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                    event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICategoryForm.msg.userExisted-categoryName", new String[] {shredUser}, ApplicationMessage.WARNING)) ;
+                    
                     return ;
                   }                
               } catch (Exception e) {
@@ -157,9 +155,9 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
           }
         }
         if (oldGroup == null) {
-          uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.category-deleted", null,
-              ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICategoryForm.msg.category-deleted",
+                                                                                         null,
+                                                                                         ApplicationMessage.WARNING));
           return ; 
         }
         group.setEditPermissionGroups(oldGroup.getEditPermissionGroups()) ;

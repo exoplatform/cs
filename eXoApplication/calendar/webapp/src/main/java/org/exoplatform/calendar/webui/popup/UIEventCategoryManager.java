@@ -147,11 +147,10 @@ public class UIEventCategoryManager extends UIContainer implements UIPopupCompon
       UIEventCategoryManager uiManager = event.getSource() ;
       UICalendarPortlet calendarPortlet = uiManager.getAncestorOfType(UICalendarPortlet.class) ;
       String eventCategoryId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-
-      UIApplication uiApp = uiManager.getAncestorOfType(UIApplication.class) ;
       if (eventCategoryId.equalsIgnoreCase(NewUserListener.DEFAULT_EVENTCATEGORY_ID_ALL)) {
-        uiApp.addMessage(new ApplicationMessage("UIEventCategoryManager.msg.cannot-delete", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ; 
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIEventCategoryManager.msg.cannot-delete", null));
         return ;        
       }
       CalendarService calService = uiManager.getApplicationComponent(CalendarService.class) ;

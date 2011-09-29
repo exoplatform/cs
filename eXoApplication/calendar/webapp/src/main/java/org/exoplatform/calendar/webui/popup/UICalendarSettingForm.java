@@ -40,7 +40,6 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -269,11 +268,13 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       calendarSetting.setBaseURL(CalendarUtils.getServerBaseUrl() + "calendar/iCalRss") ;
       //TODO cs-764
       calendarSetting.setSendOption(settingTab.getSendOption()) ;
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       if(settingTab.getShowWorkingTimes()) {
         if(settingTab.getWorkingBegin().equals(settingTab.getWorkingEnd()) || settingTab.getWorkingBeginTime().after(settingTab.getWorkingEndTime())) {
-          uiApp.addMessage(new ApplicationMessage("UICalendarSettingForm.msg.working-time-logic", null, ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext()
+               .getUIApplication()
+               .addMessage(new ApplicationMessage("UICalendarSettingForm.msg.working-time-logic",
+                                                  null,
+                                                  ApplicationMessage.WARNING));
           return ;
         }
         calendarSetting.setShowWorkingTime(settingTab.getShowWorkingTimes()) ;
