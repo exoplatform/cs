@@ -27,15 +27,17 @@
   import org.exoplatform.social.core.space.model.Space;
   import org.exoplatform.social.webui.Utils;
   import org.exoplatform.social.core.service.LinkProvider;
-	import org.exoplatform.cs.ext.impl.CalendarSpaceActivityPublisher;
+  /* this block is required for rendering calendar content */
+  import org.exoplatform.cs.ext.impl.CalendarSpaceActivityPublisher;
   import org.exoplatform.calendar.service.CalendarEvent;
-
+  /* end block */
 
   def pcontext = Util.getPortalRequestContext();
   def labelActivityHasBeenDeleted = _ctx.appRes("UIActivity.label.Activity_Has_Been_Deleted");
   def activity = uicomponent.getActivity();
   def activityDeletable = uicomponent.isActivityDeletable();
   def activityCommentAndLikable = uicomponent.isActivityCommentAndLikable();
+  def streamOwner = activity.getStreamOwner();
 %>
 
 <% if (activity) { //process if not null
@@ -127,7 +129,7 @@
 
   def ownerIdentity = uicomponent.ownerIdentity;
   if (uicomponent.isUserActivity()) {
-    ownerUri = ownerIdentity.profile.url;
+    ownerUri = LinkProvider.getUserProfileUri(ownerIdentity.getRemoteId());
     ownerAvatar = ownerIdentity.profile.avatarUrl;
     ownerName = ownerIdentity.profile.fullName;
     if (!ownerAvatar) ownerAvatar= LinkProvider.PROFILE_DEFAULT_AVATAR_URL;
@@ -140,7 +142,7 @@
   }
 %>
 
-<div class="UIActivity CalendarActivity">
+<div class="UIActivity">
   <script type="text/javascript">
     function initUIActivity${activity.id}() {
       new eXo.social.webui.UIActivity($params);
@@ -148,23 +150,33 @@
   </script>
 
   <% uiform.begin() %>
-  <div class="NormalBox">
+  <div class="NormalBox ClearFix">
     <a class="Avatar" title="$ownerName" href="$ownerUri">
-      <img title="$ownerName" src="$ownerAvatar" alt="$ownerName" >
+      <img title="$ownerName" src="$ownerAvatar" alt="$ownerName">
       <span class="BorderTop"></span>
       <span class="BorderBottom"></span>
     </a>
-    <div class="ContentBox ClearFix" id="ContextBox${activity.id}">
+    <div class="ContentBox" id="ContextBox${activity.id}">
       <h5 class="TitleContent ClearFix">
-          <a class="Text" title="$ownerName" href="$ownerUri">$ownerName</a>
+        <a class="Text" title="$ownerName" href="$ownerUri">$ownerName</a>
+        <% if (uicomponent.isUserActivity() && uicomponent.isSpaceStreamOwner() && !uicomponent.isUISpaceActivitiesDisplay()) {%>
+        	<%
+          	Space spaceSource = Utils.getSpaceService().getSpaceByPrettyName(streamOwner);
+    				def spaceSourceURI = LinkProvider.getSpaceUri(spaceSource.url);
+          %>
+	        <div class="Delimiter">&gt;</div>
+	        <a class="Text" title="$streamOwner" href="$spaceSourceURI">$streamOwner</a>
+        <%}%>
       <% if (activityDeletable) {%>
         <span onclick="<%= uicomponent.event("DeleteActivity", uicomponent.getId(), ""); %>" class="CloseContentBoxNormal" id="DeleteActivityButton${activity.id}"></span>
       <%}%>
       </h5>
-	  <div class="BoxGray" >
+      <% /* begin the block for rendering the calendar activity content */ %>
+      <div class="BoxGray" >
       <div class="Content ">
-		<div class="TextBold">
-	   <%
+      <% uicomponent.init(); %>
+    <div class="TextBold">
+     <%
           def labelEventAdded = "";
           if (CalendarSpaceActivityPublisher.EVENT_ADDED.equals(uicomponent.getTypeOfEvent())) {
             labelEventAdded = _ctx.appRes("CalendarUIActivity.msg.event-add");
@@ -177,11 +189,10 @@
           }
         %>
         <%= labelEventAdded.replace("{0}", uicomponent.getActivityParamValue(CalendarSpaceActivityPublisher.EVENT_SUMMARY_KEY)) %><br>
-		</div>
-	   <div><a  style="cursor: pointer;" onclick="<%=uicomponent.event("MoreEventInfo");%>" id="MoreEventInfo${activity.id}"><span><%=_ctx.appRes("CalendarUIActivity.label.more-info")%></span></a></div>
+    </div>
+     <div><a  style="cursor: pointer;" onclick="<%=uicomponent.event("MoreEventInfo");%>" id="MoreEventInfo${activity.id}"><span><%=_ctx.appRes("CalendarUIActivity.label.more-info")%></span></a></div>
 
         <% if (uicomponent.isDisplayMoreInfo()) { %>
-        <% uicomponent.init(); %>
         <div class=" ClearFix">
         <%=_ctx.appRes("CalendarUIActivity.msg.event.label.description") + uicomponent.getDescription();%> <br>
         <%=_ctx.appRes("CalendarUIActivity.msg.event.label.location") + uicomponent.getLocation();%> <br>
@@ -190,14 +201,9 @@
         </div>
       <% } %>
       </div>
-	  </div>
-       <!-- update condition following by question or answer-->
-	  <%
-	  def isQuestion = false ;
-	  def icon = "EventActivityIcon";
-	  if(isQuestion) {icon="TaskActivityIcon"};
-	  %>	  
-      <div class="ActivityIcon  $icon">
+    </div>
+    <% /* end the block for rendering the calendar activity content */ %>
+      <div class="DefaultActivityIcon">
         <span class="DateTime">$activityPostedTime *</span>
       <% def toggleDisplayCommentAction = uicomponent.event('ToggleDisplayCommentForm', null, false);
          def commentLink = "";
@@ -205,42 +211,50 @@
      <% if (activityCommentAndLikable) { %>
         <a class="$commentLink" onclick="$toggleDisplayCommentAction" id="CommentLink${activity.id}" href="#comment">
           $labelComment
-        </a><a>|</a>
+        </a>
       <% if (uicomponent.isLiked()) { %>
-        <a onclick="$unlikeActivityAction" id="UnLikeLink${activity.id}" href="#unlike">
+      &nbsp;|&nbsp;
+      <a onclick="$unlikeActivityAction" id="UnLikeLink${activity.id}" href="#unlike">
           $labelUnlike
-        </a><a>|</a>
+        </a>
       <% } else { %>
-        <a onclick="$likeActivityAction" id="LikeLink${activity.id}" href="#like">
-          $labelLike
-        </a><a>|</a>
+      &nbsp;|&nbsp;
+      <a onclick="$likeActivityAction" id="LikeLink${activity.id}" href="#like">$labelLike</a>
       <% }%>
      <% }%>
-	 
-	  <%
-        if (!uicomponent.isAnswered() && uicomponent.getTypeOfEvent().contains("Event")) {
-        %>
-          <a  onclick="<%=uicomponent.event("AcceptEvent", "true");%>"  id="AcceptButton${activity.id}" /><%=_ctx.appRes("CalendarUIActivity.label.accept-invite")%></a><a>|</a>
-          <a  onclick="<%=uicomponent.event("AcceptEvent", "false");%>"   id="RefuseButton${activity.id}" /><%=_ctx.appRes("CalendarUIActivity.label.refuse-invite")%></a>
-        <% } else if (uicomponent.getTypeOfEvent().contains("Task")) { %>
-          <% if (!uicomponent.isTaskAssigned()) { %>
-            <a  onclick="<%=uicomponent.event("AssignTask", "me");%>"   id="AssignButton${activity.id}" /><%=_ctx.appRes("CalendarUIActivity.label.assign-to-me")%></a>
-          <% } else { %>
-          <% if (!CalendarEvent.NEEDS_ACTION.equalsIgnoreCase(uicomponent.getTaskStatus())) { %>
-              <a  onclick="<%=uicomponent.event("SetTaskStatus", CalendarEvent.NEEDS_ACTION);%>"  id="NeedActionButton${activity.id}" /><%=_ctx.appRes("CalendarUIActivity.label.need-action")%></a><a>|</a>
-            <% }
-             if (!CalendarEvent.IN_PROCESS.equalsIgnoreCase(uicomponent.getTaskStatus())) { %>
-              <a  onclick="<%=uicomponent.event("SetTaskStatus", CalendarEvent.IN_PROCESS);%>"   id="InProgressButton${activity.id}" /><%=_ctx.appRes("CalendarUIActivity.label.in-progress")%></a><a>|</a>
-            <% }
-             if (!CalendarEvent.CANCELLED.equalsIgnoreCase(uicomponent.getTaskStatus())) { %>
-              <a  onclick="<%=uicomponent.event("SetTaskStatus", CalendarEvent.CANCELLED);%>"  id="CancelButton${activity.id}" /><%=_ctx.appRes("CalendarUIActivity.label.cancel")%></a><a>|</a>
-            <% }
-             if (!CalendarEvent.COMPLETED.equalsIgnoreCase(uicomponent.getTaskStatus())) { %>
-              <a  onclick="<%=uicomponent.event("SetTaskStatus", CalendarEvent.COMPLETED);%>"  id="CompleteButton${activity.id}" /><%=_ctx.appRes("CalendarUIActivity.label.complete")%></a><a>|</a>
-        <%     }
-            }
-          }
-        %>
+     <% /* begin the block for rendering the calendar actions */ %>
+     <%
+     if (uicomponent.isInvited && !uicomponent.isAnswered && uicomponent.getTypeOfEvent().contains("Event")) {
+     %>
+       &nbsp;|&nbsp;
+       <a  onclick="<%=uicomponent.event("AcceptEvent", "true");%>"  id="AcceptButton${activity.id}" /><%=_ctx.appRes("CalendarUIActivity.label.accept-invite")%></a>
+       &nbsp;|&nbsp;
+       <a  onclick="<%=uicomponent.event("AcceptEvent", "false");%>"   id="RefuseButton${activity.id}" /><%=_ctx.appRes("CalendarUIActivity.label.refuse-invite")%></a>
+     <% } else if (uicomponent.getTypeOfEvent().contains("Task")) { %>
+       <% if (!uicomponent.isTaskAssigned()) { %>
+         &nbsp;|&nbsp;
+         <a  onclick="<%=uicomponent.event("AssignTask", "me");%>"   id="AssignButton${activity.id}" /><%=_ctx.appRes("CalendarUIActivity.label.assign-to-me")%></a>
+       <% } else { %>
+       <% if (!CalendarEvent.NEEDS_ACTION.equalsIgnoreCase(uicomponent.getTaskStatus())) { %>
+           &nbsp;|&nbsp;
+           <a  onclick="<%=uicomponent.event("SetTaskStatus", CalendarEvent.NEEDS_ACTION);%>"  id="NeedActionButton${activity.id}" /><%=_ctx.appRes("CalendarUIActivity.label.need-action")%></a>
+         <% }
+          if (!CalendarEvent.IN_PROCESS.equalsIgnoreCase(uicomponent.getTaskStatus())) { %>
+            &nbsp;|&nbsp;
+            <a  onclick="<%=uicomponent.event("SetTaskStatus", CalendarEvent.IN_PROCESS);%>"   id="InProgressButton${activity.id}" /><%=_ctx.appRes("CalendarUIActivity.label.in-progress")%></a>
+         <% }
+          if (!CalendarEvent.CANCELLED.equalsIgnoreCase(uicomponent.getTaskStatus())) { %>
+            &nbsp;|&nbsp;
+            <a  onclick="<%=uicomponent.event("SetTaskStatus", CalendarEvent.CANCELLED);%>"  id="CancelButton${activity.id}" /><%=_ctx.appRes("CalendarUIActivity.label.cancel")%></a>
+         <% }
+          if (!CalendarEvent.COMPLETED.equalsIgnoreCase(uicomponent.getTaskStatus())) { %>
+          &nbsp;|&nbsp;
+           <a  onclick="<%=uicomponent.event("SetTaskStatus", CalendarEvent.COMPLETED);%>"  id="CompleteButton${activity.id}" /><%=_ctx.appRes("CalendarUIActivity.label.complete")%></a>
+     <%     }
+         }
+       }
+      /* end the block for rendering the calendar actions */ 
+     %>
       </div>
     <% if (identityLikesNum > 0 || uicomponent.isLiked()) {%>
       <div class="ListPeopleLikeBG $listPeopleBGClass">
@@ -254,7 +268,7 @@
             displayedIdentityLikes.each({
               def id = Utils.getIdentityManager().getIdentity(it);
               personLikeFullName = id.profile.fullName;
-              personLikeProfileUri = id.profile.url;
+              personLikeProfileUri = LinkProvider.getUserProfileUri(id.getRemoteId());
               personLikeAvatarImageSource = id.profile.avatarUrl;
               if (!personLikeAvatarImageSource) personLikeAvatarImageSource = LinkProvider.PROFILE_DEFAULT_AVATAR_URL;
               %>
@@ -267,14 +281,14 @@
           </div>
       </div>
     <%}%>
-
+    
    <div id="CommentBlockBound${activity.id}">
-
+    
       <% if (uicomponent.commentListToggleable()) {
       def showAllCommentsAction = uicomponent.event("SetCommentListStatus", "all");
       def hideAllCommentsAction = uicomponent.event("SetCommentListStatus", "none");
       %>
-
+      
       <div class="CommentListInfo">
             <% if (commentListStatus.getStatus().equals("latest") || commentListStatus.getStatus().equals("none")) { %>
               <a onclick="$showAllCommentsAction" href="#show-all-comments">
@@ -301,7 +315,7 @@
 
       def id = Utils.getIdentityManager().getIdentity(it.userId);
       commenterFullName = id.profile.fullName;
-      commenterProfileUri = id.profile.url;
+      commenterProfileUri = LinkProvider.getUserProfileUri(id.getRemoteId());
       commentMessage = it.title;
       commentPostedTime = uicomponent.getPostedTimeString(_ctx, it.postedTime);
     %>
@@ -325,7 +339,7 @@
 
     <%
       def currentCommenterIdentity = Utils.getOwnerIdentity();
-      def currentCommenterUri = currentCommenterIdentity.profile.url;
+      def currentCommenterUri = LinkProvider.getUserProfileUri(currentCommenterIdentity.getRemoteId());
       def currentCommenterAvatar = currentCommenterIdentity.profile.avatarUrl;
       def currentCommenterName = currentCommenterIdentity.profile.fullName;
       if (!currentCommenterAvatar) currentCommenterAvatar= LinkProvider.PROFILE_DEFAULT_AVATAR_URL;
@@ -347,4 +361,3 @@
 <% } else { %> <!-- activity deleted -->
 <div class="UIActivity Deleted">$labelActivityHasBeenDeleted</div>
 <% }%>
-

@@ -10,14 +10,13 @@ import java.util.Map;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.Utils;
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
-import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.social.webui.activity.BaseUIActivity;
+import org.exoplatform.web.CacheUserProfileFilter;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -47,8 +46,6 @@ public class CalendarUIActivity extends BaseUIActivity {
 
   private String           taskStatus;
 
-  private String           currentUser;
-
   private String           eventId, calendarId;
 
   public CalendarUIActivity() {
@@ -59,10 +56,8 @@ public class CalendarUIActivity extends BaseUIActivity {
     try {
       eventId = getActivity().getTemplateParams().get(CalendarSpaceActivityPublisher.EVENT_ID_KEY);
       calendarId = getActivity().getTemplateParams().get(CalendarSpaceActivityPublisher.CALENDAR_ID_KEY);
-      User user = getCurrentUser();
-      if (user == null)
-        return;
-      currentUser = user.getUserName();
+      User user = (User) ConversationState.getCurrent().getAttribute(CacheUserProfileFilter.USER_PROFILE);
+      String username = user.getUserName();      
       CalendarService calService = (CalendarService) PortalContainer.getInstance().getComponentInstanceOfType(CalendarService.class);
       CalendarEvent event = null;
       event = calService.getGroupEvent(calendarId, eventId);
@@ -76,9 +71,9 @@ public class CalendarUIActivity extends BaseUIActivity {
           else
             pars.put(entry[0], Utils.EMPTY_STR);
         }
-        if (pars.containsKey(user.getUserName())) {
+        if (pars.containsKey(username)) {
           isInvited = true;
-          if (pars.get(user.getUserName()).equalsIgnoreCase(Utils.STATUS_YES) || pars.get(user.getUserName()).equalsIgnoreCase(Utils.STATUS_NO)) {
+          if (pars.get(username).equalsIgnoreCase(Utils.STATUS_YES) || pars.get(username).equalsIgnoreCase(Utils.STATUS_NO)) {
             isAnswered = true;
           }
         }
@@ -93,10 +88,8 @@ public class CalendarUIActivity extends BaseUIActivity {
       }
 
     } catch (Exception e) {
-      if (log.isDebugEnabled())
-        log.debug("Could not calculate values of Calendar activity with event(task): " + eventId, e);
-      else
-        log.error("Could not calculate values of Calendar activity with event(task): " + eventId);
+      if (log.isErrorEnabled())
+        log.error("Could not calculate values of Calendar activity with event(task): " + eventId, e);
     }
 
   }
@@ -176,24 +169,6 @@ public class CalendarUIActivity extends BaseUIActivity {
    */
   public void setDisplayMoreInfo(boolean displayMoreInfo) {
     this.displayMoreInfo = displayMoreInfo;
-  }
-
-  public User getCurrentUser() {
-    String userName = Util.getPortalRequestContext().getRemoteUser();
-    /* --- start organization service --- */
-    OrganizationService oService = (OrganizationService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
-    // ((ComponentRequestLifecycle) oService).startRequest(manager);
-
-    try {
-      return oService.getUserHandler().findUserByName(userName);
-    } catch (Exception e) {
-      return null;
-    } finally {
-      /* --- stop organization service --- */
-      // ((ComponentRequestLifecycle) oService).endRequest(manager);
-      /* --- end --- */
-    }
-
   }
 
   public String getActivityParamValue(String key) {
@@ -281,7 +256,7 @@ public class CalendarUIActivity extends BaseUIActivity {
 
     @Override
     public void execute(Event<CalendarUIActivity> event) throws Exception {
-
+      
       CalendarUIActivity uiComponent = event.getSource();
       WebuiRequestContext requestContext = event.getRequestContext();
       String paramStr = requestContext.getRequestParameter(OBJECTID);
@@ -291,16 +266,14 @@ public class CalendarUIActivity extends BaseUIActivity {
           isAccepted = Boolean.parseBoolean(paramStr);
         try {
           CalendarService calService = (CalendarService) PortalContainer.getInstance().getComponentInstanceOfType(CalendarService.class);
-          User user = uiComponent.getCurrentUser();
+          User user = (User) ConversationState.getCurrent().getAttribute(CacheUserProfileFilter.USER_PROFILE);
           int answer = Utils.DENY;
           if (isAccepted)
             answer = Utils.ACCEPT;
           calService.confirmInvitation(user.getUserName(), user.getEmail(), user.getUserName(), org.exoplatform.calendar.service.Calendar.TYPE_PUBLIC, uiComponent.getCalendarId(), uiComponent.getEventId(), answer);
         } catch (Exception e) {
-          if (!log.isDebugEnabled())
-            log.error("Could not answer the invitation of event: " + uiComponent.getEventId());
-          else
-            log.debug("Could not answer the invitation of event: " + uiComponent.getEventId(), e);
+          if (log.isWarnEnabled())
+            log.warn("Could not answer the invitation of event: " + uiComponent.getEventId(), e);
         }
       }
 
@@ -321,10 +294,8 @@ public class CalendarUIActivity extends BaseUIActivity {
           String remoteUser = requestContext.getRemoteUser();
           calService.assignGroupTask(uiComponent.getEventId(), uiComponent.getCalendarId(), remoteUser);
         } catch (Exception e) {
-          if (!log.isDebugEnabled())
-            log.error("Could not assign user for task: " + uiComponent.getEventId());
-          else
-            log.debug("Could not assign user for task: " + uiComponent.getEventId(), e);
+          if (log.isWarnEnabled())
+            log.warn("Could not assign user for task: " + uiComponent.getEventId(), e);
         }
       }
       requestContext.addUIComponentToUpdateByAjax(uiComponent);
@@ -347,10 +318,8 @@ public class CalendarUIActivity extends BaseUIActivity {
           calService.setGroupTaskStatus(uiComponent.getEventId(), uiComponent.getCalendarId(), param);
         }
       } catch (Exception e) {
-        if (!log.isDebugEnabled())
-          log.error("Could not set task status for task: " + uiComponent.getEventId());
-        else
-          log.debug("Could not set task status for task: " + uiComponent.getEventId(), e);
+        if (log.isWarnEnabled())
+          log.warn("Could not set task status for task: " + uiComponent.getEventId(), e);
       }
       requestContext.addUIComponentToUpdateByAjax(uiComponent);
     }
