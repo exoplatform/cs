@@ -66,7 +66,7 @@ public class UIFolderContainer extends UIContainer {
   
   private boolean isChecking_ = false;
   
-  Hashtable<String, Folder> folderMap = new Hashtable<String, Folder>();
+  private Hashtable<String, Folder> folderMap = new Hashtable<String, Folder>();
   
   public UIFolderContainer() throws Exception { }
 
@@ -98,7 +98,7 @@ public class UIFolderContainer extends UIContainer {
     String accountId = dataCache.getSelectedAccountId();
     String username = MailUtils.getDelegateFrom(accountId, dataCache);
     
-    List<Folder> folders = MailUtils.getMailService().getSubFolders(username, accountId, parentPath);
+    List<Folder> folders = dataCache.getSubFolders(username, accountId, parentPath);
     for (Folder folder : folders) {
       folderMap.put(folder.getId(), folder);
     }

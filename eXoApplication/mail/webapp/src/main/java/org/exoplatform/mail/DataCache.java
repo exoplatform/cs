@@ -19,7 +19,6 @@ package org.exoplatform.mail;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Vector;
 
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.mail.service.Account;
@@ -41,8 +40,10 @@ public class DataCache {
   private Hashtable<String, Boolean> isAlreadyGotAllAccount = new Hashtable<String, Boolean>();
   
   private Hashtable<String, Hashtable<String, Folder>> folderCache = new Hashtable<String, Hashtable<String,Folder>>();
-  private Hashtable<String, Vector<Folder>> allFolderCache = new Hashtable<String, Vector<Folder>>();
+  private Hashtable<String, List<Folder>> allFolderCache = new Hashtable<String, List<Folder>>();
   private Hashtable<String, Boolean> isAlreadyGotAllFolder = new Hashtable<String, Boolean>();
+  
+  private Hashtable<String, List<Folder>> subFolderCache = new Hashtable<String, List<Folder>>();
   
   private String selectedAccountId; 
   
@@ -231,20 +232,20 @@ public class DataCache {
       }
       
       // Get all folders cache
-      Vector<Folder> allFolders = allFolderCache.get(cacheKey);
+      List<Folder> allFolders = allFolderCache.get(cacheKey);
       if (allFolders == null) {
-        allFolders = new Vector<Folder>();
+        allFolders = new ArrayList<Folder>();
         allFolderCache.put(cacheKey, allFolders);
       }
       
       // Store to all folder cache
-      allFolders.removeAllElements();
+      allFolders.clear();
       allFolders.addAll(folders);
       
       // Mark that we were already got all folders
       isAlreadyGotAllFolder.put(cacheKey, Boolean.TRUE);
     } else {
-      Vector<Folder> allFolders = allFolderCache.get(cacheKey);
+      List<Folder> allFolders = allFolderCache.get(cacheKey);
       folders = new ArrayList<Folder>();
       folders.addAll(allFolders);
     }
@@ -261,5 +262,21 @@ public class DataCache {
       }
     }
     return resultList;
+  }
+  
+  public List<Folder> getSubFolders(String userName, String accountId, String parentPath) throws Exception {
+    if (parentPath == null) {
+      return new ArrayList<Folder>();
+    }
+    String key = userName + "_" + accountId + "_" + parentPath;
+    
+    List<Folder> subFolders = subFolderCache.get(key);
+    if (subFolders == null) {
+      subFolders = MailUtils.getMailService().getSubFolders(userName, accountId, parentPath);
+      if (subFolders != null) {
+        subFolderCache.put(key, subFolders);
+      }
+    }
+    return subFolders;
   }
 }

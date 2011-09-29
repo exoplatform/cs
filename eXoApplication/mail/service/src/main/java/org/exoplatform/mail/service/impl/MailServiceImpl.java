@@ -18,7 +18,6 @@ package org.exoplatform.mail.service.impl;
 
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.security.GeneralSecurityException;
 import java.security.cert.CertificateException;
@@ -913,8 +912,7 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public void checkMail(String userName, String accountId) throws Exception {
-    JobDetail job = loadCheckmailJob(userName, accountId);
-
+    loadCheckmailJob(userName, accountId);
   }
 
   public void checkMail(String userName, String accountId, String folderId) throws Exception {
@@ -1413,7 +1411,6 @@ public class MailServiceImpl implements MailService, Startable {
         if (logger.isDebugEnabled())
           logger.debug("Exception while connecting to server : ", e);
         StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
         StringBuffer sb = sw.getBuffer();
         logger.error(sb.toString());
         if (info != null) {
@@ -1944,7 +1941,6 @@ public class MailServiceImpl implements MailService, Startable {
       info.setStatusCode(CheckingInfo.START_CHECKMAIL_STATUS);
       updateCheckingMailStatusByCometd(userName, accountId, info);
       int totalNew = 0;
-      boolean isImap = account.getProtocol().equals(Utils.IMAP);
 
       String incomingFolder = account.getIncomingFolder().trim();
       URLName storeURL = new URLName(account.getProtocol(), account.getIncomingHost(), Integer.valueOf(account.getIncomingPort()), incomingFolder, account.getIncomingUser(), account.getIncomingPassword());
@@ -2670,6 +2666,7 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   class CheckMailInteruptedException extends Exception {
+    private static final long serialVersionUID = 1L;
     private String message;
 
     public CheckMailInteruptedException(String msg) {
