@@ -16,13 +16,11 @@
  **/
 package org.exoplatform.chatbar.webui;
 
-import java.util.Properties;
-
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 
-import org.exoplatform.chatbar.Utils;
+import org.apache.commons.lang.StringUtils;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.log.ExoLogger;
@@ -52,6 +50,8 @@ public class UIChatBarPortlet extends UIPortletApplication {
 
   protected static final String VIEWMODE_TEMP = "app:/templates/chatbar/webui/UIChatBarPortlet.gtmpl" ;
   protected static final String EDITMODE_TEMP = "app:/templates/chatbar/webui/UIChatBarEdit.gtmpl" ;
+  private static final String BASE_URL_VALUE = "/portal/intranet/";
+  private static final String BASE_URL_KEY = "cs.chatbar.shortcut.baseUrl";
 
   private String templatePath_ = VIEWMODE_TEMP ;
 
@@ -157,22 +157,29 @@ public class UIChatBarPortlet extends UIPortletApplication {
   
   protected String getEmailLink () {
     String path = getPortletPreferences().getValue(UIConfigForm.MAIL_URL, null);
-    return getChatBarcf() + path;
+    return getShortcutBaseUrl() + path;
   }
   
   
-  private String getChatBarcf() {
-    Properties props = new Properties(System.getProperties());
-    return props.getProperty("chatbar.config.url");
+  private String getShortcutBaseUrl() {
+    String sUrl = null;
+    try {
+      sUrl = System.getProperties().getProperty(BASE_URL_KEY);
+    } catch (Exception e) {
+    }
+    if(!StringUtils.isNotBlank(sUrl)){
+      sUrl = BASE_URL_VALUE;
+    } 
+    return sUrl;
   }
 
   protected String getCalendarLink () {
     String path = getPortletPreferences().getValue(UIConfigForm.CAL_URL, null);
-    return getChatBarcf() + path;
+    return getShortcutBaseUrl() + path;
   }
   protected String getContactLink () {
     String path = getPortletPreferences().getValue(UIConfigForm.CON_URL, null);
-    return getChatBarcf() + path;
+    return getShortcutBaseUrl() + path;
   }
   
 
