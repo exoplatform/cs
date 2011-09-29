@@ -183,7 +183,7 @@ public class DataCache {
     return accounts;
   }
   
-  public Folder getFolder(String username, String accountId, String folderId) throws Exception {
+  public Folder getFolderById(String username, String accountId, String folderId) throws Exception {
     if (StringUtils.isEmpty(username) || StringUtils.isEmpty(accountId) || StringUtils.isEmpty(folderId)) {
       return null;
     }
@@ -198,14 +198,14 @@ public class DataCache {
     
     Folder folder = folderMaps.get(folderId);
     if (folder == null) {
-      folder = MailUtils.getMailService().getFolder(username, accountId, folderId);
+      folder = MailUtils.getMailService().getFolderById(username, accountId, folderId);
       if (folder != null) {
         folderMaps.put(folderId, folder);
       }
     }
     return folder;
   }
-  
+   
   public List<Folder> getFolders(String username, String accountId) throws Exception {
     if (StringUtils.isEmpty(username) || StringUtils.isEmpty(accountId)) {
       return new ArrayList<Folder>();

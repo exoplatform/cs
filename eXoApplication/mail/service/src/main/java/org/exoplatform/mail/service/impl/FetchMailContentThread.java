@@ -81,7 +81,7 @@ public class FetchMailContentThread implements Runnable {
         break;
       }
       log.info("save msg to database: " + msg.getSubject());
-      storage_.saveTotalMessage(username_, accountId_, MimeMessageParser.getMessageId(msg), msg, null);
+      storage_.saveTotalMessage(username_, accountId_, MimeMessageParser.getMessageId(msg), msg);
       j++;
     }
   }

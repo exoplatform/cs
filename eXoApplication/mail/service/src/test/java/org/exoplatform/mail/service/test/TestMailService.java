@@ -274,7 +274,7 @@ public class TestMailService extends BaseMailTestCase {
     assertEquals(subFolderUrl, expectedSubFolder.getURLName());
     
     // Test getFolder
-    Folder expectedFolder1 = mailService_.getFolder(username, accountPop.getId(), subFolder.getId());
+    Folder expectedFolder1 = mailService_.getFolderById(username, accountPop.getId(), subFolder.getId());
     assertEquals(subFolderId, expectedFolder1.getId());
     assertEquals(subFolderName, expectedFolder1.getName());
     assertEquals(subFolderUrl, expectedFolder1.getURLName());
@@ -286,14 +286,14 @@ public class TestMailService extends BaseMailTestCase {
     // Test renameFolder
     String newFoldername = "newFoldername";
     mailService_.renameFolder(username, accountPop.getId(), newFoldername, folder.getId());
-    Folder expectedFolder2 = mailService_.getFolder(username, accountPop.getId(), folder.getId());
+    Folder expectedFolder2 = mailService_.getFolderById(username, accountPop.getId(), folder.getId());
     assertEquals(folderId, expectedFolder2.getId());
     assertEquals(newFoldername, expectedFolder2.getName());
     assertEquals(folderUrl, expectedFolder2.getURLName());
     
     // Test removeUserFolder
     mailService_.removeUserFolder(username, accountPop.getId(), folder.getId());
-    Folder expectedFolder3 = mailService_.getFolder(username, accountPop.getId(), folder.getId());
+    Folder expectedFolder3 = mailService_.getFolderById(username, accountPop.getId(), folder.getId());
     assertNull(expectedFolder3);
     
     mailService_.removeAccount(username, accountPop.getId());

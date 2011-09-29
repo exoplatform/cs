@@ -17,6 +17,7 @@
 package org.exoplatform.mail.webui ;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 import org.exoplatform.cs.common.webui.UIPopupAction;
@@ -59,9 +60,13 @@ import org.exoplatform.webui.event.EventListener;
                  }
 )
 public class UIFolderContainer extends UIContainer {
-  private String currentFolder_ = null ;
+  private String currentFolder_ = null;
+  
   public int i = 1;
+  
   private boolean isChecking_ = false;
+  
+  Hashtable<String, Folder> folderMap = new Hashtable<String, Folder>();
   
   public UIFolderContainer() throws Exception { }
 
@@ -93,29 +98,41 @@ public class UIFolderContainer extends UIContainer {
     String accountId = dataCache.getSelectedAccountId();
     String username = MailUtils.getDelegateFrom(accountId, dataCache);
     
-    List<Folder> subFolders = new ArrayList<Folder>();
-    subFolders.addAll(MailUtils.getMailService().getSubFolders(username, accountId, parentPath));
-    return subFolders ;
+    List<Folder> folders = MailUtils.getMailService().getSubFolders(username, accountId, parentPath);
+    for (Folder folder : folders) {
+      folderMap.put(folder.getId(), folder);
+    }
+    return folders;
   }
 
-  public Folder getCurrentFolder() throws Exception{
+  public Folder getFolderById(String folderId) throws Exception {
     DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
     String accountId = dataCache.getSelectedAccountId();
     String username = MailUtils.getDelegateFrom(accountId, dataCache);
     
-    return dataCache.getFolder(username, accountId, getSelectedFolder()) ;
+    Folder folder = folderMap.get(folderId);
+    if (folder != null) {
+      return MailUtils.getMailService().getFolder(username, accountId, folder.getPath());
+    }
+    return dataCache.getFolderById(username, accountId, folderId);
+  }
+  
+  public Folder getCurrentFolder() throws Exception {
+    return getFolderById(currentFolder_);
   }
 
-  public List<Folder> getFolders(boolean isPersonal) throws Exception{
+  public List<Folder> getFolders(boolean isPersonal) throws Exception {
     DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
     String accountId = dataCache.getSelectedAccountId();
     String username = MailUtils.getDelegateFrom(accountId, dataCache);
     
-    List<Folder> folders = new ArrayList<Folder>() ;
-    folders.addAll(dataCache.getFolders(username, accountId, isPersonal)) ;
-    return folders ;
+    List<Folder> folders = dataCache.getFolders(username, accountId, isPersonal);
+    for (Folder folder : folders) {
+      folderMap.put(folder.getId(), folder);
+    }
+    return folders;
   }
-
+  
   public String[] getActions() {
     return new String[] {"AddFolder"} ;
   }
@@ -184,7 +201,6 @@ public class UIFolderContainer extends UIContainer {
       
       String folderId = event.getRequestContext().getRequestParameter(OBJECTID);
       String accountId = dataCache.getSelectedAccountId();
-      String username = MailUtils.getDelegateFrom(accountId, dataCache);
       
       UIMessageArea uiMsgArea = mailPortlet.findFirstComponentOfType(UIMessageArea.class);
       UIMessageList uiMessageList = uiMsgArea.getChild(UIMessageList.class);
@@ -222,7 +238,7 @@ public class UIFolderContainer extends UIContainer {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
       }
 
-      Folder currentFolder = dataCache.getFolder(username, accountId, folderId);
+      Folder currentFolder = uiFolder.getFolderById(folderId);
       List<Message> msgList = new  ArrayList<Message>(uiMessageList.messageList_.values());
       long numberOfUnread = Utils.getNumberOfUnreadMessageReally(msgList);
       if((numberOfUnread >= 0) && (currentFolder != null) && (msgList.size() > 0)) {
@@ -340,7 +356,7 @@ public class UIFolderContainer extends UIContainer {
       mailSrv.toggleMessageProperty(username, accountId, messages, folderId, Utils.EXO_ISUNREAD, false);
       
       UIMessageList uiMessageList = mailPortlet.findFirstComponentOfType(UIMessageList.class) ;
-      Folder currentFolder = dataCache.getFolder(username, accountId, folderId);
+      Folder currentFolder = uiFolder.getFolderById(folderId);
       if (folderId.equals(uiMessageList.getSelectedFolderId())) {
         List<Message> msgList = new  ArrayList<Message>(uiMessageList.messageList_.values());
         for (Message msg : msgList) {
@@ -356,7 +372,7 @@ public class UIFolderContainer extends UIContainer {
 
   static public class MoveToTrashActionListener extends EventListener<UIFolderContainer> {
     public void execute(Event<UIFolderContainer> event) throws Exception {
-      UIFolderContainer uiFolder = event.getSource() ;
+      UIFolderContainer uiFolder = event.getSource();
       UIMailPortlet mailPortlet = uiFolder.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = mailPortlet.getDataCache();
       
@@ -398,8 +414,8 @@ public class UIFolderContainer extends UIContainer {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgArea);
     }
   }
-
-  public void showMessage(Event event) {
+  
+  public void showMessage(Event<UIFolderContainer> event) {
     UIApplication uiApp = getAncestorOfType(UIApplication.class);
     uiApp.addMessage(new ApplicationMessage("UISelectAccount.msg.account-list-no-permission", null));
     event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());

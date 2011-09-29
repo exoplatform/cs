@@ -118,7 +118,7 @@ public class NewUserListener extends UserEventListener {
       mservice_.createAccount(username, acc);
       for (String folderName : defaultFolders_) {
         folderId = Utils.generateFID(accId, folderName, false);
-        folder = mservice_.getFolder(username, accId, folderId);
+        folder = mservice_.getFolderById(username, accId, folderId);
         if (folder == null) {
           folder = new Folder();
           folder.setId(folderId);

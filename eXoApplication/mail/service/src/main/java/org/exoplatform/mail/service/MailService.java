@@ -123,7 +123,18 @@ public interface MailService {
    * @return exo Folder object
    * @throws Exception
    */
-  public Folder getFolder(String username, String accountId, String folderId) throws Exception;
+  public Folder getFolderById(String username, String accountId, String folderId) throws Exception;
+  
+  /**
+   * This method uses to get a folder object by folderPath
+   * 
+   * @param username
+   * @param accountId
+   * @param folderId
+   * @return exo Folder object
+   * @throws Exception
+   */
+  public Folder getFolder(String username, String accountId, String folderPath) throws Exception;
 
   /**
    * This method get id of parent folder by id of child folder

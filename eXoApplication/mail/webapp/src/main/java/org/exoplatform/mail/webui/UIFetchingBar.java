@@ -42,7 +42,6 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
  *          phunghainam@gmail.com
  * 15-01-2009  
  */
-
 @ComponentConfig(
   lifecycle = UIFormLifecycle.class, 
   template =  "app:/templates/mail/webui/UIFetchingBar.gtmpl",

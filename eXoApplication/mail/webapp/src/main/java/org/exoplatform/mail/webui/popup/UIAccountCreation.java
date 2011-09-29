@@ -24,7 +24,6 @@ import javax.mail.AuthenticationFailedException;
 
 import org.exoplatform.cs.common.webui.UIPopupAction;
 import org.exoplatform.cs.common.webui.UIPopupComponent;
-import org.exoplatform.mail.DataCache;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
@@ -175,14 +174,16 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
   }
   
   protected void saveForm(String currentUser, Account account) throws Exception {
-    DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
+    UIMailPortlet mailPortlet = getAncestorOfType(UIMailPortlet.class);
+    UIFolderContainer folderContainer = mailPortlet.findFirstComponentOfType(UIFolderContainer.class);
+    
     MailService mailSvr = getApplicationComponent(MailService.class);
     mailSvr.createAccount(currentUser, account);
 
     String username = MailUtils.getCurrentUser();
     for (String folderName : defaultFolders_) {
       String folderId = Utils.generateFID(account.getId(), folderName, false);
-      Folder folder = dataCache.getFolder(username, account.getId(), folderId);
+      Folder folder = folderContainer.getFolderById(folderId);
       if (folder == null) {
         folder = new Folder();
         folder.setId(folderId);

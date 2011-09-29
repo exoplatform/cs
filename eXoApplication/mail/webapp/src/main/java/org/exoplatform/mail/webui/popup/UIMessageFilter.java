@@ -28,6 +28,7 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
@@ -105,11 +106,9 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
   }
   
   public Folder getFolder() throws Exception {
-    DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
-    
-    String username = MailUtils.getCurrentUser();
-    String accountId = getAncestorOfType(UIMailPortlet.class).getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue() ;
-    return dataCache.getFolder(username, accountId, getSelectedFilter().getApplyFolder());
+    UIMailPortlet mailPortlet = getAncestorOfType(UIMailPortlet.class);
+    UIFolderContainer folderContainer = mailPortlet.findFirstComponentOfType(UIFolderContainer.class);
+    return folderContainer.getFolderById(getSelectedFilter().getApplyFolder());
   }
   
   public Tag getTag() throws Exception {

@@ -77,29 +77,28 @@ public class UIActionBar extends UIContainer {
       UIMailPortlet uiPortlet = uiActionBar.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
       
-      UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
-      String folderId = uiFolderContainer.getSelectedFolder();
       UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
-      String accId = dataCache.getSelectedAccountId();
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
       String formId = ((PortletRequestContext)context).getWindowId();
-      String username = uiPortlet.getCurrentUser();
-      Folder currentF = null;
       uiPortlet.setFormId(formId);
       
+      String username = uiPortlet.getCurrentUser();
+      String accId = dataCache.getSelectedAccountId();
       if(Utils.isEmptyField(accId) || (dataCache.getAccounts(username).isEmpty() && dataCache.getDelegatedAccounts(username).isEmpty())) {
         uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
       
+      Folder currentF = null;
+      UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
+      String folderId = uiFolderContainer.getSelectedFolder();
       try {
         if (MailUtils.isFieldEmpty(folderId)) {
           context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.checkMail(true) ;");
         } else {
           context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.checkMail(true, '" + folderId + "') ;");
-          String uId = MailUtils.getDelegateFrom(accId, dataCache);
-          currentF = dataCache.getFolder(uId, accId, folderId);
+          currentF = uiFolderContainer.getCurrentFolder();
           if (currentF.getNumberOfUnreadMessage() < 0) {
             currentF.setNumberOfUnreadMessage(0);
           }
@@ -132,7 +131,6 @@ public class UIActionBar extends UIContainer {
       DataCache dataCache = uiPortlet.getDataCache();
       
       UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
-      UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
       String accId = dataCache.getSelectedAccountId();
       String username = uiPortlet.getCurrentUser();
       
@@ -287,7 +285,7 @@ public class UIActionBar extends UIContainer {
     }
   }
 
-  private void showMessage(Event event) {
+  private void showMessage(Event<UIActionBar> event) {
     UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
     uiApp.addMessage(new ApplicationMessage("UISelectAccount.msg.account-list-no-permission", null)) ;
     event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

@@ -234,9 +234,13 @@ public class MailServiceImpl implements MailService, Startable {
     }
     storage_.removeAccount(userName, accountId);
   }
+  
+  public Folder getFolderById(String username, String accountId, String folderId) throws Exception {
+    return storage_.getFolderById(username, accountId, folderId);
+  }
 
-  public Folder getFolder(String userName, String accountId, String folderId) throws Exception {
-    return storage_.getFolder(userName, accountId, folderId);
+  public Folder getFolder(String userName, String accountId, String folderPath) throws Exception {
+    return storage_.getFolder(userName, accountId, folderPath);
   }
 
   public String getFolderParentId(String userName, String accountId, String folderId) throws Exception {
@@ -306,7 +310,7 @@ public class MailServiceImpl implements MailService, Startable {
     Account account = getAccountById(userName, accountId);
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP) && folder.isPersonalFolder() && true) {
       try {
-        Folder parentFolder = getFolder(userName, accountId, parentId);
+        Folder parentFolder = getFolderById(userName, accountId, parentId);
         Connector connector = new ImapConnector(account, this.getSSLSocketFactory(account.getIncomingHost()));
         IMAPFolder imapFolder = (IMAPFolder) connector.createFolder(parentFolder, folder);
         if (imapFolder != null) {
@@ -317,7 +321,6 @@ public class MailServiceImpl implements MailService, Startable {
       }
     } else {// pop3
       storage_.saveFolder(userName, accountId, parentId, folder);
-
     }
     return true;
   }
@@ -326,7 +329,7 @@ public class MailServiceImpl implements MailService, Startable {
     Account account = getAccountById(userName, accountId);
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP) && folder.isPersonalFolder() && b) {
       try {
-        Folder parentFolder = getFolder(userName, accountId, parentId);
+        Folder parentFolder = getFolderById(userName, accountId, parentId);
         Connector connector = new ImapConnector(account, this.getSSLSocketFactory(account.getIncomingHost()));
         IMAPFolder imapFolder = (IMAPFolder) connector.createFolder(parentFolder, folder);
         if (imapFolder != null) {
@@ -348,7 +351,7 @@ public class MailServiceImpl implements MailService, Startable {
     } else {
       folderId = Utils.escapeIllegalJcrChars(serverFolder.getName());
     }
-    folder = storage_.getFolder(userName, accountId, folderId);
+    folder = storage_.getFolderById(userName, accountId, folderId);
     if (folder == null) {
       folder = new Folder();
       folder.setId(folderId);
@@ -371,7 +374,7 @@ public class MailServiceImpl implements MailService, Startable {
 
   public void renameFolder(String userName, String accountId, String newName, String folderId) throws Exception {
     Account account = getAccountById(userName, accountId);
-    Folder folder = this.getFolder(userName, accountId, folderId);
+    Folder folder = getFolderById(userName, accountId, folderId);
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP) && folder.isPersonalFolder()) {
       try {
         Connector connector = new ImapConnector(account, this.getSSLSocketFactory(account.getIncomingHost()));
@@ -380,8 +383,9 @@ public class MailServiceImpl implements MailService, Startable {
         return;
       }
     }
-    if (folder != null)
+    if (folder != null) {
       storage_.renameFolder(userName, accountId, newName, folder);
+    }
   }
 
   private void deleteLocalFolder(String userName, String accountId, String folderId) throws Exception {
@@ -390,7 +394,7 @@ public class MailServiceImpl implements MailService, Startable {
 
   public void removeUserFolder(String userName, String accountId, String folderId) throws Exception {
     Account account = getAccountById(userName, accountId);
-    Folder folder = this.getFolder(userName, accountId, folderId);
+    Folder folder = getFolderById(userName, accountId, folderId);
     boolean success = true;
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP) && folder.isPersonalFolder()) {
       try {
@@ -400,8 +404,9 @@ public class MailServiceImpl implements MailService, Startable {
         return;
       }
     }
-    if (success)
+    if (success) {
       storage_.removeUserFolder(userName, accountId, folderId);
+    }
   }
 
   public List<MessageFilter> getFilters(String userName, String accountId) throws Exception {
@@ -450,9 +455,9 @@ public class MailServiceImpl implements MailService, Startable {
 
   public List<Message> moveMessages(String userName, String accountId, List<Message> msgList, String currentFolderId, String destFolderId) throws Exception {
     Account account = getAccountById(userName, accountId);
-    Folder currentFolder = this.getFolder(userName, accountId, currentFolderId);
+    Folder currentFolder = getFolderById(userName, accountId, currentFolderId);
     List<Message> successList = new ArrayList<Message>();
-    Folder destFolder = this.getFolder(userName, accountId, destFolderId);
+    Folder destFolder = getFolderById(userName, accountId, destFolderId);
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
       try {
         Connector connector = new ImapConnector(account, this.getSSLSocketFactory(account.getIncomingHost()));
@@ -464,15 +469,16 @@ public class MailServiceImpl implements MailService, Startable {
     } else if (account.getProtocol().equals(Utils.POP3))
       successList.addAll(msgList);
 
-    if (successList != null && successList.size() > 0)
+    if (successList != null && successList.size() > 0) {
       storage_.moveMessages(userName, accountId, successList, currentFolderId, destFolderId);
+    }
     return successList;
   }
 
   public List<Message> moveMessages(String userName, String accountId, List<Message> msgList, String currentFolderId, String destFolderId, boolean updateReference) throws Exception {
     Account account = getAccountById(userName, accountId);
-    Folder currentFolder = this.getFolder(userName, accountId, currentFolderId);
-    Folder destFolder = this.getFolder(userName, accountId, destFolderId);
+    Folder currentFolder = getFolderById(userName, accountId, currentFolderId);
+    Folder destFolder = getFolderById(userName, accountId, destFolderId);
     List<Message> successList = new ArrayList<Message>();
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
       try {
@@ -481,18 +487,20 @@ public class MailServiceImpl implements MailService, Startable {
       } catch (Exception e) {
         logger.error("Mailservice: Move message to trash folder error", e);
       }
-    } else if (account.getProtocol().equals(Utils.POP3))
+    } else if (account.getProtocol().equals(Utils.POP3)) {
       successList.addAll(msgList);
+    }
 
-    if (successList != null && successList.size() > 0)
+    if (successList != null && successList.size() > 0) {
       storage_.moveMessages(userName, accountId, successList, currentFolderId, destFolderId, updateReference);
+    }
     return successList;
   }
 
   public Message moveMessage(String userName, String accountId, Message msg, String currentFolderId, String destFolderId) throws Exception {
     Account account = getAccountById(userName, accountId);
-    Folder currentFolder = this.getFolder(userName, accountId, currentFolderId);
-    Folder destFolder = this.getFolder(userName, accountId, destFolderId);
+    Folder currentFolder = getFolderById(userName, accountId, currentFolderId);
+    Folder destFolder = getFolderById(userName, accountId, destFolderId);
     List<Message> successList = new ArrayList<Message>();
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
       try {
@@ -516,8 +524,8 @@ public class MailServiceImpl implements MailService, Startable {
 
   public void moveMessage(String userName, String accountId, Message msg, String currentFolderId, String destFolderId, boolean updateReference) throws Exception {
     Account account = getAccountById(userName, accountId);
-    Folder currentFolder = this.getFolder(userName, accountId, currentFolderId);
-    Folder destFolder = this.getFolder(userName, accountId, destFolderId);
+    Folder currentFolder = getFolderById(userName, accountId, currentFolderId);
+    Folder destFolder = getFolderById(userName, accountId, destFolderId);
     boolean success = true;
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
       try {
@@ -525,17 +533,19 @@ public class MailServiceImpl implements MailService, Startable {
         List<Message> msgList = new ArrayList<Message>();
         msgList.add(msg);
         msgList = connector.moveMessage(msgList, currentFolder, destFolder);
-        if (msgList == null || msgList.size() <= 0)
+        if (msgList == null || msgList.size() <= 0) {
           success = false;
-        // else msg = msgList.get(0);
+        }
       } catch (Exception e) {
         return;
       }
-    } else if (account.getProtocol().equals(Utils.POP3))
+    } else if (account.getProtocol().equals(Utils.POP3)) {
       success = true;
+    }
 
-    if (success)
+    if (success) {
       storage_.moveMessage(userName, accountId, msg, currentFolderId, destFolderId, updateReference);
+    }
   }
 
   public MessagePageList getMessagePageList(String userName, MessageFilter filter) throws Exception {
@@ -554,7 +564,7 @@ public class MailServiceImpl implements MailService, Startable {
     Folder destFolder = null;
     boolean success = false;
     if (folderId != null) {
-      destFolder = getFolder(userName, account.getId(), folderId);
+      destFolder = getFolderById(userName, account.getId(), folderId);
     }
     if (destFolder != null && account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
       Connector connector = new ImapConnector(account, this.getSSLSocketFactory(account.getIncomingHost()));
@@ -786,7 +796,6 @@ public class MailServiceImpl implements MailService, Startable {
       } catch (Exception e) {
         logger.error(" #### Info : send fail at message " + i + " \n", e);
         StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
         StringBuffer sb = sw.getBuffer();
         logger.error(sb.toString());
       }
@@ -795,7 +804,6 @@ public class MailServiceImpl implements MailService, Startable {
     transport.close();
   }
 
-  @SuppressWarnings("unchecked")
   private Message send(Session session, Transport transport, Message message) throws Exception {
     MimeMessage mimeMessage = new MimeMessage(session);
     SMTPMessage smtpMessage = null;
@@ -1229,7 +1237,7 @@ public class MailServiceImpl implements MailService, Startable {
         }
 
         serverFolderId.add(folderId);
-        Folder folder = storage_.getFolder(userName, accountId, folderId);
+        Folder folder = storage_.getFolderById(userName, accountId, folderId);
 
         if (folder == null) {
           folder = new Folder();
@@ -1261,10 +1269,10 @@ public class MailServiceImpl implements MailService, Startable {
 
         folderList.add(fd);
         if ((folderType == 2) || (fd.list().length > 0)) {
-          folderList.addAll(synchImapFolders(userName, accountId, getFolder(userName, accountId, folderId), fd.list()));
+          folderList.addAll(synchImapFolders(userName, accountId, getFolderById(userName, accountId, folderId), fd.list()));
         }
       } else {
-        Folder inbox = getFolder(userName, accountId, Utils.generateFID(accountId, Utils.FD_INBOX, false));
+        Folder inbox = getFolderById(userName, accountId, Utils.generateFID(accountId, Utils.FD_INBOX, false));
         inbox.setNumberOfUnreadMessage(fd.getNewMessageCount());
         inbox.setURLName(fd.getURLName().toString());
         saveFolder(userName, accountId, inbox, false);
@@ -1512,20 +1520,6 @@ public class MailServiceImpl implements MailService, Startable {
     }
   }
 
-  public List<Message> removeMessageFromJCR(String userName, String accountId, List<Message> msgListFromJcrFolder, List<String> msgIDListFromMailServer) throws Exception {
-    List<Message> msgList = new ArrayList<Message>();
-    for (Message message : msgListFromJcrFolder) {
-      String id = message.getId();
-      if (!msgIDListFromMailServer.contains(id)) {
-        removeMessage(userName, accountId, message);
-      } else {
-        msgList.add(message);
-      }
-    }
-
-    return msgList;
-  }
-
   public void addMessageNotInJCR(String userName, String accountId, String folderId, javax.mail.Folder mailServerFolder) throws Exception {
     Map<String, javax.mail.Message> msgServerMap = getServerMessageMap(mailServerFolder);
     List<String> msgIDListFromJcrFolder = getMessageIDFromJcrFolder(userName, accountId, folderId);
@@ -1534,7 +1528,7 @@ public class MailServiceImpl implements MailService, Startable {
     Set<String> msgKeySet = msgServerMap.keySet();
     for (String msgID : msgKeySet) {
       if (!msgIDListFromJcrFolder.contains(msgID)) {
-        storage_.saveTotalMessage(userName, accountId, msgID, msgServerMap.get(msgID), null);
+        storage_.saveTotalMessage(userName, accountId, msgID, msgServerMap.get(msgID));
       }
     }
   }
@@ -1549,7 +1543,7 @@ public class MailServiceImpl implements MailService, Startable {
 
     for (String msgID : msgIDListFromJcrFolder) {
       if (!msgServerMap.containsKey(msgID)) {
-        storage_.saveTotalMessage(userName, accountId, msgID, msgServerMap.get(msgID), null);
+        storage_.saveTotalMessage(userName, accountId, msgID, msgServerMap.get(msgID));
       }
     }
   }
@@ -1606,9 +1600,9 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public void mergeMessageBetweenJcrAndServerMail(IMAPStore store, String userName, String accountId, String folderId, CheckingInfo info) throws Exception {
-    Folder jcrFolder = getFolder(userName, accountId, folderId);
+    Folder jcrFolder = getFolderById(userName, accountId, folderId);
     if (jcrFolder == null || Utils.isEmptyField(jcrFolder.getURLName())) {
-      jcrFolder = getFolder(userName, accountId, Utils.generateFID(accountId, Utils.FD_INBOX, false));
+      jcrFolder = getFolderById(userName, accountId, Utils.generateFID(accountId, Utils.FD_INBOX, false));
     }
     String urlName = jcrFolder.getURLName();
     if (jcrFolder != null && !Utils.isEmptyField(urlName)) {
@@ -1618,31 +1612,11 @@ public class MailServiceImpl implements MailService, Startable {
         mailServerFolder.open(javax.mail.Folder.READ_WRITE);
       if (mailServerFolder != null) {
         synchImapMessage(userName, accountId, mailServerFolder, info);
-//        Map<String, javax.mail.Message> map = getServerMessageMap(mailServerFolder);
-//        List<String> msgIDListFromMailServer = new LinkedList<String>(map.keySet());
-//        List<Message> msgListFromJcrFolder = getMessagesByFolder(userName, accountId, folderId);
-//        jcrFolder.setNumberOfUnreadMessage(Utils.getNumberOfUnreadMessageReally(msgListFromJcrFolder));
-//        msgListFromJcrFolder = removeMessageFromJCR(userName, accountId, msgListFromJcrFolder, msgIDListFromMailServer);
-//        addMessageNotInJCR(userName, accountId, folderId, mailServerFolder);
-//        for (Message message : msgListFromJcrFolder) {
-//          if (info.isRequestStop()) {
-//            // check stopping request value from user.
-//            throw new CheckMailInteruptedException("stop checking mail while synchronizing between email server and database!");
-//          }
-//          String id = message.getId();
-//          javax.mail.Message serverMessage = map.get(id);
-//          message.setHasStar(serverMessage.isSet(Flags.Flag.FLAGGED));
-//          message.setUnread(!serverMessage.isSet(Flags.Flag.SEEN));
-//          IMAPFolder serverFolder = (IMAPFolder) mailServerFolder;
-//          message.setUID(String.valueOf(serverFolder.getUID(serverMessage)));
-//          storage_.saveMessage(userName, accountId, message, false);
-//        }
       }
     }
   }
 
   private CheckingInfo createCheckingInfo(String userName, String accountId) {
-    // if(!Utils.isEmptyField(getCurrentUserName())) userName = this.getCurrentUserName();
     String key = userName + ":" + accountId;
     CheckingInfo info = new CheckingInfo();
     checkingLog_.put(key, info);
@@ -1765,7 +1739,7 @@ public class MailServiceImpl implements MailService, Startable {
         folderId = Utils.generateFID(accountId, localFolder, false);
       }
     }
-    Folder eXoFolder = getFolder(userName, accountId, folderId);
+    Folder eXoFolder = getFolderById(userName, accountId, folderId);
     if (eXoFolder != null) {
       long unreadMsgCount = eXoFolder.getNumberOfUnreadMessage();
       Date checkFromDate = eXoFolder.getCheckFromDate();
@@ -2102,10 +2076,10 @@ public class MailServiceImpl implements MailService, Startable {
 
   private String makeStoreFolder(String userName, String accountId, String incomingFolder, int unReadMsg) throws Exception {
     String folderId = Utils.generateFID(accountId, incomingFolder, false);
-    Folder storeFolder = storage_.getFolder(userName, accountId, folderId);
+    Folder storeFolder = storage_.getFolderById(userName, accountId, folderId);
     if (storeFolder == null) {
       folderId = Utils.generateFID(accountId, incomingFolder, true);
-      Folder storeUserFolder = storage_.getFolder(userName, accountId, folderId);
+      Folder storeUserFolder = storage_.getFolderById(userName, accountId, folderId);
       if (storeUserFolder != null) {
         storeFolder = storeUserFolder;
       } else {
@@ -2367,7 +2341,7 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   private IMAPFolder getIMAPFolder(String userName, String accountId, String folderId) throws Exception {
-    Folder folder = getFolder(userName, accountId, folderId);
+    Folder folder = getFolderById(userName, accountId, folderId);
     Account account = getAccountById(userName, accountId);
     IMAPStore store = openIMAPConnection(userName, account);
     URLName remoteURL = new URLName(folder.getURLName());
@@ -2376,7 +2350,6 @@ public class MailServiceImpl implements MailService, Startable {
       remoteFolder = (IMAPFolder) store.getFolder(remoteURL);
     }
     return remoteFolder;
-
   }
 
   public OutputStream exportMessage(String userName, String accountId, Message message) throws Exception {
@@ -2393,7 +2366,7 @@ public class MailServiceImpl implements MailService, Startable {
 
   public void toggleMessageProperty(String userName, String accountId, List<Message> msgList, String folderId, String property, boolean value) throws Exception {
     Account account = getAccountById(userName, accountId);
-    Folder folder = getFolder(userName, accountId, folderId);
+    Folder folder = getFolderById(userName, accountId, folderId);
     boolean success = true;
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
       try {
@@ -2404,7 +2377,7 @@ public class MailServiceImpl implements MailService, Startable {
           } else {
             List<Message> l = new ArrayList<Message>();
             for (Message m : msgList) {
-              folder = getFolder(userName, accountId, m.getFolders()[0]);
+              folder = getFolderById(userName, accountId, m.getFolders()[0]);
               if (folder != null) {
                 l.add(m);
                 success = connector.markIsReadStared(l, folder, null, value);
@@ -2421,7 +2394,7 @@ public class MailServiceImpl implements MailService, Startable {
           } else {
             List<Message> l;
             for (Message m : msgList) {
-              folder = getFolder(userName, accountId, m.getFolders()[0]);
+              folder = getFolderById(userName, accountId, m.getFolders()[0]);
               if (folder != null) {
                 l = new ArrayList<Message>();
                 l.add(m);
@@ -2487,7 +2460,7 @@ public class MailServiceImpl implements MailService, Startable {
           store = openIMAPConnection(userName, account);
           if (store != null) {
             javax.mail.Message message = null;
-            URLName url = new URLName(getFolder(userName, accountId, msg.getFolders()[0]).getURLName());
+            URLName url = new URLName(getFolderById(userName, accountId, msg.getFolders()[0]).getURLName());
             fd = store.getFolder(url);
             if (fd != null) {
               if (!fd.isOpen()) {

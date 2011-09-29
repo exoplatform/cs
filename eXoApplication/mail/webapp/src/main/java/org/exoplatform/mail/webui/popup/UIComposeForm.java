@@ -1066,8 +1066,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
           event.getRequestContext()
           .addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class));
         }
-        event.getRequestContext()
-        .addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class));
         UIPopupAction uiChildPopup = uiComposeForm.getAncestorOfType(UIPopupAction.class);
         uiChildPopup.deActivate();
         event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup);
@@ -1086,6 +1085,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
 
   public boolean saveToSentFolder(String usename, Account account, Message message) throws Exception {
     UIMailPortlet mailPortlet = getAncestorOfType(UIMailPortlet.class);
+    UIFolderContainer folderContainer = mailPortlet.findFirstComponentOfType(UIFolderContainer.class);
     MailService mailSvr = getApplicationComponent(MailService.class);
     MailSetting setting = mailSvr.getMailSetting(usename);
     boolean isSaved = setting.saveMessageInSent();
@@ -1098,7 +1098,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
       message.setFolders(new String[] { Utils.generateFID(account.getId(), Utils.FD_SENT, false) });
       saveMsgSuccess = mailSvr.saveMessage(usename, account, parentPath_, message, true);
     } else if (fromDrafts) {
-      Folder drafts = mailPortlet.getDataCache().getFolder(usename, account.getId(), Utils.generateFID(account.getId(), Utils.FD_DRAFTS, false));
+      Folder drafts = folderContainer.getFolderById(Utils.generateFID(account.getId(), Utils.FD_DRAFTS, false));
       if (isSaved) {
         message.setFolders(new String[] { Utils.generateFID(account.getId(), Utils.FD_SENT, false) });
         saveMsgSuccess = mailSvr.saveMessage(usename, account, parentPath_, message, false);
@@ -1135,9 +1135,8 @@ import com.sun.mail.smtp.SMTPSendFailedException;
         message.setIsLoaded(true);
         boolean saveMsgSuccess = false;
         if (!composeForm.fromDrafts()) {
-          saveMsgSuccess = mailSvr.saveMessage(username, dataCache.getAccountById(username, accountId), composeForm.parentPath_,
-              message, true);
-          Folder drafts = dataCache.getFolder(username, accountId, draftFolderId);
+          saveMsgSuccess = mailSvr.saveMessage(username, dataCache.getAccountById(username, accountId), composeForm.parentPath_, message, true);
+          Folder drafts = uiFolderContainer.getFolderById(draftFolderId);
           drafts.setTotalMessage(drafts.getTotalMessage() + 1);
           mailSvr.saveFolder(username, accountId, drafts);
         } else {

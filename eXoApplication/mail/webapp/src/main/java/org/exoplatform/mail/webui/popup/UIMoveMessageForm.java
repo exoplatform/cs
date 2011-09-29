@@ -33,7 +33,6 @@ import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UIMessagePreview;
-import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.UISelectFolder;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -91,19 +90,19 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UIMoveMessageForm> event) throws Exception {
       UIMoveMessageForm uiMoveMessageForm = event.getSource();
       UIMailPortlet uiPortlet = uiMoveMessageForm.getAncestorOfType(UIMailPortlet.class);
+      UIFolderContainer folderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
       DataCache dataCache = uiPortlet.getDataCache();
 
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType((UIMessageList.class));
       UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class);
-      String username = uiPortlet.getCurrentUser();
       String accountId = dataCache.getSelectedAccountId();
       String destFolderId = uiMoveMessageForm.getChild(UISelectFolder.class).getSelectedValue();
       Folder destFolder = null;
-      username = MailUtils.getDelegateFrom(accountId, dataCache);
+      String username = MailUtils.getDelegateFrom(accountId, dataCache);
 
       List<Message> successes = new ArrayList<Message>();
       try {
-        destFolder = uiPortlet.getDataCache().getFolder(username, accountId, destFolderId);
+        destFolder = folderContainer.getFolderById(destFolderId);
       } catch (PathNotFoundException e) {
         if (log.isDebugEnabled()) {
           log.debug("PathNotFoundException in getting des folder", e);
@@ -119,9 +118,8 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
       }
       
       List<Message> appliedMsgList = uiMoveMessageForm.getMessageList();
-      UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
       MailService mailSrv = uiMoveMessageForm.getApplicationComponent(MailService.class);
-      String fromFolderId = uiFolderContainer.getSelectedFolder();
+      String fromFolderId = folderContainer.getSelectedFolder();
       if (fromFolderId != null) {
         successes = mailSrv.moveMessages(username, accountId, uiMoveMessageForm.getMessageList(), fromFolderId, destFolderId);
       } else {

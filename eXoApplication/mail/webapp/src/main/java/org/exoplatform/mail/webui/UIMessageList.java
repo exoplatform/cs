@@ -399,13 +399,14 @@ public class UIMessageList extends UIForm {
   } 
 
   public List<Folder> getFolders(Message msg) throws Exception {
-    DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
-    String username = MailUtils.getCurrentUser();
+    UIMailPortlet mailPortlet = getAncestorOfType(UIMailPortlet.class);
+    UIFolderContainer folderContainer = mailPortlet.findFirstComponentOfType(UIFolderContainer.class);
+    
     List<Folder> folderList = new ArrayList<Folder>();
     String[] folders = msg.getFolders();
-    if (folders != null && folders.length > 0) {
+    if ((folders != null) && (folders.length > 0)) {
       for (int i = 0; i < folders.length; i++) {
-        Folder folder = dataCache.getFolder(username, accountId_, folders[i]);
+        Folder folder = folderContainer.getFolderById(folders[i]);
         folderList.add(folder);
       }
     }
@@ -425,7 +426,7 @@ public class UIMessageList extends UIForm {
       UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
       
       String accountId = dataCache.getSelectedAccountId();
-      String folderId = uiPortlet.findFirstComponentOfType(UIFolderContainer.class).getSelectedFolder();
+      String folderId = uiFolderContainer.getSelectedFolder();
       if (Utils.isEmptyField(folderId)) {
         folderId = "";
       }
@@ -438,7 +439,6 @@ public class UIMessageList extends UIForm {
       if (msg != null) {
         msg = mailSrv.loadTotalMessage(username, accountId, msg) ;
         Account account = dataCache.getAccountById(username, accountId);
-        Folder currentFolder = dataCache.getFolder(username, accountId, folderId);
         
         // Update message list
         uiMessageList.setSelectedMessageId(msgId);
@@ -519,6 +519,7 @@ public class UIMessageList extends UIForm {
           }
         }
         
+        Folder currentFolder = uiFolderContainer.getCurrentFolder();
         List<Message> msgList = new  ArrayList<Message>(uiMessageList.messageList_.values());
         long numberOfUnread = Utils.getNumberOfUnreadMessageReally(msgList); 
         if(msg.isUnread() && currentFolder != null && numberOfUnread > 0) {
@@ -1271,8 +1272,7 @@ public class UIMessageList extends UIForm {
       
       SpamFilter spamFilter = setSpamFilter(event, msgId, username, accountId, uiApp);
       for (Message message : checkedMessageList) {
-        Message m = mailSrv.moveMessage(username, accountId, message, message.getFolders()[0],
-            Utils.generateFID(accountId, Utils.FD_INBOX, false));
+        Message m = mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], Utils.generateFID(accountId, Utils.FD_INBOX, false));
         if (m == null) {
           successList.add(null);
         }
@@ -1359,15 +1359,12 @@ public class UIMessageList extends UIForm {
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
       
-      String accountId = dataCache.getSelectedAccountId();
-      String folderId = uiPortlet.findFirstComponentOfType(UIFolderContainer.class).getSelectedFolder();
       UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
       List<Message> msgList = new ArrayList<Message>();
-      String uid = MailUtils.getDelegateFrom(accountId, dataCache);
-      Folder currentFolder = dataCache.getFolder(uid, accountId, folderId);
       List<Message> currentMsgList = new ArrayList<Message>(uiMessageList.messageList_.values());
       long numberUnreadMsg = Utils.getNumberOfUnreadMessageReally(currentMsgList);
 
+      String accountId = dataCache.getSelectedAccountId();
       if(Utils.isEmptyField(accountId)) {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -1390,11 +1387,14 @@ public class UIMessageList extends UIForm {
         }
       }
       
+      UIFolderContainer folderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
+      String folderId = folderContainer.getSelectedFolder();
+      if (Utils.isEmptyField(folderId)) {
+        folderId = "";
+      }
       try {
-        if (Utils.isEmptyField(folderId)) {
-          folderId = "";
-        }
         MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
+        String uid = MailUtils.getDelegateFrom(accountId, dataCache);
         mailSrv.toggleMessageProperty(uid, accountId, msgList, folderId, Utils.EXO_ISUNREAD, false);
       } catch (PathNotFoundException e) {
         uiMessageList.setMessagePageList(null) ;
@@ -1407,6 +1407,7 @@ public class UIMessageList extends UIForm {
       }
       
       if(numberUnreadMsg >= 0) {
+        Folder currentFolder = folderContainer.getCurrentFolder();
         currentFolder.setNumberOfUnreadMessage(numberUnreadMsg);
       }
       
@@ -1421,29 +1422,22 @@ public class UIMessageList extends UIForm {
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
       
-      String accountId = dataCache.getSelectedAccountId();
-      String folderId = uiPortlet.findFirstComponentOfType(UIFolderContainer.class).getSelectedFolder();
       List<Message> msgList = new ArrayList<Message>();
-      String uid = MailUtils.getDelegateFrom(accountId, dataCache);
-      Folder currentFolder = dataCache.getFolder(uid, accountId, folderId);
       List<Message> currentMsgList = new ArrayList<Message>(uiMessageList.messageList_.values());
       long numberUnreadMsg = Utils.getNumberOfUnreadMessageReally(currentMsgList);
 
-      if (Utils.isEmptyField(folderId)) {
-        folderId = "";
-      }
-      
-      UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+      UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class);
+      String accountId = dataCache.getSelectedAccountId();
       if(Utils.isEmptyField(accountId)) {
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return ;
       }
       
       List<Message> appliedList = uiMessageList.getCheckedMessage();
       if(appliedList.isEmpty()) {
-        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }
       
@@ -1456,8 +1450,14 @@ public class UIMessageList extends UIForm {
         }
       }
       
+      UIFolderContainer folderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
+      String folderId = folderContainer.getSelectedFolder();
+      if (Utils.isEmptyField(folderId)) {
+        folderId = "";
+      }
       try {
         MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
+        String uid = MailUtils.getDelegateFrom(accountId, dataCache);
         mailSrv.toggleMessageProperty(uid, accountId, msgList, folderId, Utils.EXO_ISUNREAD, true);
       } catch (PathNotFoundException e) {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
@@ -1465,6 +1465,7 @@ public class UIMessageList extends UIForm {
         return;
       }
       
+      Folder currentFolder = folderContainer.getCurrentFolder();
       currentFolder.setNumberOfUnreadMessage(numberUnreadMsg);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class));
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class));
@@ -1608,7 +1609,7 @@ public class UIMessageList extends UIForm {
       String fromFolderId = uiFolderContainer.getSelectedFolder() ;
       List<Message> successes = new ArrayList<Message>();
       if (fromFolderId != null) {
-        successes = mailSrv.moveMessages(username, accountId, appliedMsgList, fromFolderId, folderId) ;
+        successes = mailSrv.moveMessages(username, accountId, appliedMsgList, fromFolderId, folderId);
       } else {
         for (Message message : appliedMsgList) {
           Message m = mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], folderId);
@@ -1757,10 +1758,9 @@ public class UIMessageList extends UIForm {
       String accountId = dataCache.getSelectedAccountId();
       uiMessageList.init(accountId);
       uiPortlet.findFirstComponentOfType(UIFetchingBar.class).setIsShown(false);
-      String username = uiPortlet.getCurrentUser();
-      String folderId = uiPortlet.findFirstComponentOfType(UIFolderContainer.class).getSelectedFolder();
       
-      Folder currentFolder = dataCache.getFolder(username, accountId, folderId);
+      UIFolderContainer folderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
+      Folder currentFolder = folderContainer.getCurrentFolder();
       List<Message> currentMsgList = new ArrayList<Message>(uiMessageList.messageList_.values());
       long numberUnreadMsg = Utils.getNumberOfUnreadMessageReally(currentMsgList);
       if(numberUnreadMsg >=0) currentFolder.setNumberOfUnreadMessage(numberUnreadMsg);

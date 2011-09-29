@@ -494,17 +494,13 @@ public class UIMessagePreview extends UIContainer{
       Message mResult = null;
       if (msg != null) {
         String selectedFolderId = uiFolderCon.getSelectedFolder();
-        if (selectedFolderId != null
-            && selectedFolderId.equals(Utils.generateFID(accountId, Utils.FD_TRASH, false))) {
+        if ((selectedFolderId != null) && selectedFolderId.equals(Utils.generateFID(accountId, Utils.FD_TRASH, false))) {
           mailSrv.removeMessage(username, accountId, msg);
         } else {
-          mResult = mailSrv.moveMessage(username,
-                                        accountId,
-                                        msg,
-                                        msg.getFolders()[0],
-                                        Utils.generateFID(accountId, Utils.FD_TRASH, false));
+          mResult = mailSrv.moveMessage(username, accountId, msg, msg.getFolders()[0], Utils.generateFID(accountId, Utils.FD_TRASH, false));
         }
         uiMsgList.updateList();
+        
         List<Message> showedMsgList = uiMsgPreview.getShowedMessages();
         if (showedMsgList != null && showedMsgList.size() > 1) {
           showedMsgList.remove(msg);
@@ -513,11 +509,13 @@ public class UIMessagePreview extends UIContainer{
           uiMsgPreview.setShowedMessages(null);
         }
       }
+      
       if(mResult == null){
         UIApplication uiInfoApp = uiMsgPreview.getAncestorOfType(UIApplication.class) ;
         uiInfoApp.addMessage(new ApplicationMessage("UIMoveMessageForm.msg.move_delete_not_successful", null, ApplicationMessage.INFO)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiInfoApp.getUIPopupMessages()) ;
       }
+      
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderCon.getParent());
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgArea);
     }

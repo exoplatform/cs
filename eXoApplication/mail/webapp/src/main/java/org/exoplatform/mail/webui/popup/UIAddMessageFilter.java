@@ -28,6 +28,7 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
@@ -266,18 +267,20 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
       String bodyCondition = uiAddFilter.getBodyCondition();
       String applyFolder = uiAddFilter.getApplyFolder();
       String applyTag = uiAddFilter.getApplyTag();
-      boolean applyForAll = uiAddFilter.getApplyAll() ;
+      boolean applyForAll = uiAddFilter.getApplyAll();
+      
       // Verify
       UIApplication uiApp = uiAddFilter.getAncestorOfType(UIApplication.class) ;
       if (Utils.isEmptyField(filterName)) {
-        uiApp.addMessage(new ApplicationMessage("UIAddMessageFilter.msg.filter-name-blank", null, ApplicationMessage.INFO)) ;
+        uiApp.addMessage(new ApplicationMessage("UIAddMessageFilter.msg.filter-name-blank", null, ApplicationMessage.INFO));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
       } else if (Utils.isEmptyField(from) && Utils.isEmptyField(to) && Utils.isEmptyField(subject) && Utils.isEmptyField(body)) {
-        uiApp.addMessage(new ApplicationMessage("UIAddMessageFilter.msg.fill-at-lease-field", null, ApplicationMessage.INFO)) ;
+        uiApp.addMessage(new ApplicationMessage("UIAddMessageFilter.msg.fill-at-lease-field", null, ApplicationMessage.INFO));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
       }
+      
       MessageFilter filter = new MessageFilter(filterName);       
       if (uiAddFilter.getCurrentFilter() != null) filter = uiAddFilter.getCurrentFilter();
       filter.setName(filterName) ;
@@ -293,7 +296,8 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
       filter.setBodyCondition(Integer.valueOf(bodyCondition));
       filter.setApplyFolder(applyFolder);
       filter.setApplyTag(applyTag);
-      filter.setApplyForAll(applyForAll) ;
+      filter.setApplyForAll(applyForAll);
+      
       try {
         mailSrv.saveFilter(username, accountId, filter, uiAddFilter.getApplyAll());
       } catch (Exception e) {
@@ -301,6 +305,7 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
+      
       UIMessageFilter uiMsgFilter = uiPortlet.findFirstComponentOfType(UIMessageFilter.class);
       if (uiMsgFilter != null) {
         uiMsgFilter.setSelectedFilterId(filter.getId());

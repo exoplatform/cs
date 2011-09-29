@@ -19,13 +19,7 @@ package org.exoplatform.mail.webui;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.exoplatform.mail.DataCache;
-import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Folder;
-import org.exoplatform.mail.service.MailService;
-import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.log.Log;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.model.SelectItem;
 import org.exoplatform.webui.core.model.SelectOption;
 import org.exoplatform.webui.core.model.SelectOptionGroup;
@@ -40,8 +34,6 @@ import org.exoplatform.webui.form.UIFormSelectBoxWithGroups;
  * Jan 5, 2008  
  */
 public class UISelectFolder extends UIFormInputSet {
-  private static final Log log = ExoLogger.getExoLogger(UISelectFolder.class);
-  
   final public static String SELECT_FOLDER = "folder" ;
   public String level = "" ;
   public String accountId_ = "";
@@ -71,27 +63,15 @@ public class UISelectFolder extends UIFormInputSet {
   }
   
   public List<Folder> getSubFolders(String parentPath) throws Exception {
-    MailService mailSvr = MailUtils.getMailService();
-    String username = MailUtils.getCurrentUser() ;
-    List<Folder> subFolders = new ArrayList<Folder>();
-    for (Folder f : mailSvr.getSubFolders(username, accountId_, parentPath)) {
-      subFolders.add(f);
-    }
-    return subFolders ;
+    UIMailPortlet mailPortlet = getAncestorOfType(UIMailPortlet.class);
+    UIFolderContainer folderContainer = mailPortlet.findFirstComponentOfType(UIFolderContainer.class);
+    return folderContainer.getSubFolders(parentPath);
   }
 
   public List<Folder> getFolders(boolean isPersonal) throws Exception {
-    DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
-    List<Folder> folders = new ArrayList<Folder>();
-    String username = MailUtils.getCurrentUser();
-    try {
-      folders.addAll(dataCache.getFolders(username, accountId_, isPersonal));
-    } catch (Exception e) {
-      if (log.isDebugEnabled()) {
-        log.debug("Exception in method getFolders", e);
-      }
-    }
-    return folders;
+    UIMailPortlet mailPortlet = getAncestorOfType(UIMailPortlet.class);
+    UIFolderContainer folderContainer = mailPortlet.findFirstComponentOfType(UIFolderContainer.class);
+    return folderContainer.getFolders(isPersonal);
   }
   
   public SelectOptionGroup addChildOption(String folderPath,  SelectOptionGroup optionList) throws Exception {

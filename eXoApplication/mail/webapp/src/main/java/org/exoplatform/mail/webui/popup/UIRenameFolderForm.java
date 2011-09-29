@@ -20,7 +20,6 @@ import org.exoplatform.cs.common.webui.UIPopupAction;
 import org.exoplatform.cs.common.webui.UIPopupComponent;
 import org.exoplatform.mail.DataCache;
 import org.exoplatform.mail.MailUtils;
-import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
@@ -28,11 +27,9 @@ import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
-import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -79,13 +76,11 @@ public class UIRenameFolderForm extends UIForm implements UIPopupComponent {
   }
   
   public void setFolderId(String folderId) throws Exception {
-    DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
-    
     this.folderId = folderId;
-    String accountId = dataCache.getSelectedAccountId();
-    String username = MailUtils.getDelegateFrom(accountId, dataCache);
     
-    Folder folder = dataCache.getFolder(username, accountId, folderId);
+    UIMailPortlet mailPortlet = getAncestorOfType(UIMailPortlet.class);
+    UIFolderContainer folderContainer = mailPortlet.findFirstComponentOfType(UIFolderContainer.class);
+    Folder folder = folderContainer.getFolderById(folderId);
     getUIFormInputInfo(CUR_FOLDER_NAME).setValue(folder.getName());    
   }
 
