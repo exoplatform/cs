@@ -37,7 +37,6 @@ import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
-import org.exoplatform.mail.webui.action.FullDelegationEventListener;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -48,8 +47,8 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -481,8 +480,8 @@ public class UIAccountSetting extends UIFormTabPane {
     }
   }
   
-  static  public class DeleteAccountActionListener extends FullDelegationEventListener<UIAccountSetting> {
-    public void processEvent(Event<UIAccountSetting> event) throws Exception {
+  static  public class DeleteAccountActionListener extends EventListener<UIAccountSetting> {
+    public void execute(Event<UIAccountSetting> event) throws Exception {
       UIAccountSetting uiAccSetting = event.getSource();
       UIMailPortlet uiPortlet = uiAccSetting.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
@@ -495,6 +494,8 @@ public class UIAccountSetting extends UIFormTabPane {
       try {
         String removedAccId = uiAccSetting.getSelectedAccountId();
         mailSvr.removeAccount(username, removedAccId);
+        dataCache.clearAccountCache();
+        
         MailSetting mailSetting = mailSvr.getMailSetting(username);
         if (uiAccSetting.getAccounts().size() > 0) {
           String newSelectedAcc = uiAccSetting.getAccounts().get(0).getId();
@@ -532,8 +533,8 @@ public class UIAccountSetting extends UIFormTabPane {
     }
   }
   
-  static public class SaveActionListener extends FullDelegationEventListener<UIAccountSetting> {
-    public void processEvent(Event<UIAccountSetting> event) throws Exception {
+  static public class SaveActionListener extends EventListener<UIAccountSetting> {
+    public void execute(Event<UIAccountSetting> event) throws Exception {
       UIAccountSetting uiSetting = event.getSource();
       UIMailPortlet uiPortlet = uiSetting.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();      

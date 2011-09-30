@@ -257,7 +257,8 @@ public class UIFolderContainer extends UIContainer {
       String accountId = dataCache.getSelectedAccountId();
       String username = MailUtils.getDelegateFrom(accountId, dataCache);
       
-      MailUtils.getMailService().removeUserFolder(username, accountId, folderId);     
+      MailUtils.getMailService().removeUserFolder(username, accountId, folderId);
+      dataCache.clearFolderCache();
       UIMessageList uiMessageList = mailPortlet.findFirstComponentOfType(UIMessageList.class) ;
       if (folderId.equals(uiFolder.getSelectedFolder())) {
         uiMessageList.setMessageFilter(null);

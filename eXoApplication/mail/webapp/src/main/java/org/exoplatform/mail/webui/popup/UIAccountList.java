@@ -110,51 +110,51 @@ public class UIAccountList extends UIGrid  implements UIPopupComponent{
     public String getProtocol() {return protocol ;}
   }
 
-  static  public class DeleteActionListener extends EventListener<UIAccountList> {
+  static public class DeleteActionListener extends EventListener<UIAccountList> {
     public void execute(Event<UIAccountList> event) throws Exception {
       UIAccountList uiAccountList = event.getSource();
       UIMailPortlet uiPortlet = uiAccountList.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
-      
+
       UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       UIMessagePreview uiMessagePreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class);
       String currAccountId = dataCache.getSelectedAccountId();
-      String accId = event.getRequestContext().getRequestParameter(OBJECTID);      
+      String accId = event.getRequestContext().getRequestParameter(OBJECTID);
       MailService mailSvr = uiAccountList.getApplicationComponent(MailService.class);
       String username = event.getRequestContext().getRemoteUser();
 
       try {
-        mailSvr.removeAccount(username, accId) ;
-        uiSelectAccount.refreshItems() ;
-        uiAccountList.updateGrid() ;
-        MailSetting mailSetting = mailSvr.getMailSetting(username) ;
+        mailSvr.removeAccount(username, accId);
+        dataCache.clearAccountCache();
+        
+        uiSelectAccount.refreshItems();
+        uiAccountList.updateGrid();
+        MailSetting mailSetting = mailSvr.getMailSetting(username);
         if (currAccountId.equals(accId)) {
           List<Account> accounts = dataCache.getAccounts(username);
           if (accounts.size() == 0) {
             uiSelectAccount.setSelectedValue(null);
-            mailSetting.setDefaultAccount(null) ;
+            mailSetting.setDefaultAccount(null);
             uiMessageList.init("");
           } else {
             String selectedAcc = accounts.get(0).getId();
             uiSelectAccount.setSelectedValue(selectedAcc);
-            uiPortlet.findFirstComponentOfType(UIFolderContainer.class)
-              .setSelectedFolder(Utils.generateFID(selectedAcc, Utils.FD_INBOX, false));
-            mailSetting.setDefaultAccount(selectedAcc) ;
+            uiPortlet.findFirstComponentOfType(UIFolderContainer.class).setSelectedFolder(Utils.generateFID(selectedAcc, Utils.FD_INBOX, false));
+            mailSetting.setDefaultAccount(selectedAcc);
             uiMessageList.setMessageFilter(null);
             uiMessageList.init(selectedAcc);
           }
-          mailSvr.saveMailSetting(username, mailSetting) ;
+          mailSvr.saveMailSetting(username, mailSetting);
           uiMessagePreview.setMessage(null);
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ; 
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
         } else {
           uiSelectAccount.setSelectedValue(currAccountId);
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiAccountList.getAncestorOfType(UIPopupAction.class)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiAccountList.getAncestorOfType(UIPopupAction.class));
           event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectAccount);
         }
       } catch (Exception e) {
-        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAccountList.msg.remove-accout-error",
-                                                                                       null));        
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAccountList.msg.remove-accout-error", null));
         if (log.isDebugEnabled()) {
           log.debug("Exception in method execute of class DeleteActionListener", e);
         }

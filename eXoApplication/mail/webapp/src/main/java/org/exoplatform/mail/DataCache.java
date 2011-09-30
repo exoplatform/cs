@@ -55,17 +55,31 @@ public class DataCache {
   public void setMailPortlet(UIMailPortlet mailPortlet) {
     this.mailPortlet = mailPortlet;
   }
+  
+  public void clearAccountCache() {
+    delegatedAccountCache.clear();
+    isAlreadyGotAllDelegatedAccount.clear();
+    accountCache.clear();
+    isAlreadyGotAllAccount.clear();
+    selectedAccountId = null;
+  }
+  
+  public void clearFolderCache() {
+    folderCache.clear();
+    allFolderCache.clear();
+    isAlreadyGotAllFolder.clear();
+    subFolderCache.clear();
+  }
 
   public void clearCache() {
     delegatedAccountCache.clear();
     isAlreadyGotAllDelegatedAccount.clear();
-    
     accountCache.clear();
     isAlreadyGotAllAccount.clear();
-    
     folderCache.clear();
+    allFolderCache.clear();
     isAlreadyGotAllFolder.clear();
-    
+    subFolderCache.clear();
     selectedAccountId = null;
   }
   

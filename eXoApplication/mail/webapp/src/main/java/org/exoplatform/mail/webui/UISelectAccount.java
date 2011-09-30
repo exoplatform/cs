@@ -203,9 +203,9 @@ public class UISelectAccount extends UIForm {
     }
   }
 
-  static  public class DeleteAccountActionListener extends FullDelegationEventListener<UISelectAccount> {
+  static  public class DeleteAccountActionListener extends EventListener<UISelectAccount> {
     @Override
-    public void processEvent(Event<UISelectAccount> event) throws Exception {
+    public void execute(Event<UISelectAccount> event) throws Exception {
       UISelectAccount uiForm = event.getSource();      
         UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class);
         UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
@@ -213,7 +213,6 @@ public class UISelectAccount extends UIForm {
         uiAccContainer.setId("UIPopupDeleteAccountContainer");
         uiAccContainer.addChild(UIAccountList.class, null, null);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-      
     }
   }
 
