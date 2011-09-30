@@ -67,9 +67,6 @@ addDependency(new Project("org.exoplatform.ecms", "exo-ecms-core-parser", "jar",
     new Project("org.exoplatform.cs", "exo.cs.eXoApplication.chat.webapp", "war", module.version).
     addDependency(new Project("org.exoplatform.cs", "exo.cs.eXoApplication.chat.service", "jar", module.version).
     addDependency(new Project("org.exoplatform.cs", "exo.cs.eXoApplication.organization.service", "jar", module.version)).
-  	//addDependency(new Project("org.exoplatform.cs", "exo.cs.eXoApplication.organization.webapp", "war", module.version)).
-    addDependency(new Project("org.exoplatform.cs", "exo.cs.eXoApplication.organization.client.openfire", "jar", module.version)).
-  	//addDependency(new Project("org.exoplatform.cs", "exo.cs.eXoApplication.organization.webapp", "war", module.version)).
     addDependency(new Project("jivesoftware", "smack", "jar", "${jivesoftware.smack.version}")).
     addDependency(new Project("jivesoftware", "smackx", "jar", "${jivesoftware.smackx.version}")).
     addDependency(new Project("org.jcrom", "jcrom", "jar", "${jcrom.version}")));
