@@ -37,6 +37,7 @@ import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
+import org.exoplatform.mail.webui.action.FullDelegationEventListener;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -480,8 +481,8 @@ public class UIAccountSetting extends UIFormTabPane {
     }
   }
   
-  static  public class DeleteAccountActionListener extends EventListener<UIAccountSetting> {
-    public void execute(Event<UIAccountSetting> event) throws Exception {
+  static  public class DeleteAccountActionListener extends FullDelegationEventListener<UIAccountSetting> {
+    public void processEvent(Event<UIAccountSetting> event) throws Exception {
       UIAccountSetting uiAccSetting = event.getSource();
       UIMailPortlet uiPortlet = uiAccSetting.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
@@ -531,8 +532,8 @@ public class UIAccountSetting extends UIFormTabPane {
     }
   }
   
-  static public class SaveActionListener extends EventListener<UIAccountSetting> {
-    public void execute(Event<UIAccountSetting> event) throws Exception {
+  static public class SaveActionListener extends FullDelegationEventListener<UIAccountSetting> {
+    public void processEvent(Event<UIAccountSetting> event) throws Exception {
       UIAccountSetting uiSetting = event.getSource();
       UIMailPortlet uiPortlet = uiSetting.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();      

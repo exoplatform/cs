@@ -28,7 +28,7 @@ import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Utils;
-import org.exoplatform.mail.webui.action.HasAccountEventListener;
+import org.exoplatform.mail.webui.action.FullDelegationEventListener;
 import org.exoplatform.mail.webui.popup.UIAccountCreation;
 import org.exoplatform.mail.webui.popup.UIAccountList;
 import org.exoplatform.mail.webui.popup.UIAccountSetting;
@@ -180,7 +180,7 @@ public class UISelectAccount extends UIForm {
     }
   }
 
-  static  public class EditAccountActionListener extends HasAccountEventListener<UISelectAccount> {
+  static  public class EditAccountActionListener extends FullDelegationEventListener<UISelectAccount> {
     @Override
     public void processEvent(Event<UISelectAccount> event) throws Exception {
       UISelectAccount uiForm = event.getSource();
@@ -203,7 +203,7 @@ public class UISelectAccount extends UIForm {
     }
   }
 
-  static  public class DeleteAccountActionListener extends HasAccountEventListener<UISelectAccount> {
+  static  public class DeleteAccountActionListener extends FullDelegationEventListener<UISelectAccount> {
     @Override
     public void processEvent(Event<UISelectAccount> event) throws Exception {
       UISelectAccount uiForm = event.getSource();      

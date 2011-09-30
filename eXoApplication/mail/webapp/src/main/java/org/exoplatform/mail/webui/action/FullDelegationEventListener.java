@@ -32,6 +32,11 @@ import org.exoplatform.webui.event.Event;
 public class FullDelegationEventListener<T extends UIComponent> extends HasAccountEventListener<T> {
 
   @Override
+  public final void execute(Event<T> event) throws Exception {
+    super.execute(event);
+  }
+  
+  @Override
   public boolean validate(Event<T> event) throws Exception {
     if (super.validate(event)) {
       UIMailPortlet uiPortlet = event.getSource().getAncestorOfType(UIMailPortlet.class);
