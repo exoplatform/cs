@@ -3370,6 +3370,8 @@ public class JCRDataStorage implements DataStorage {
   public Map<String,String> checkFreeBusy(EventQuery eventQuery, Date date) throws Exception {
     Node eventFolder = getEventFolder(date);
     Map<String, String> participantMap = new HashMap<String, String>();
+    String calendarPath = eventQuery.getCalendarPath();
+    String[] orderBy = eventQuery.getOrderBy();
     eventQuery.setCalendarPath(eventFolder.getPath());
     eventQuery.setOrderBy(new String[] { Utils.EXO_FROM_DATE_TIME });
     QueryManager qm = getSession(createSystemProvider()).getWorkspace().getQueryManager();
@@ -3379,6 +3381,7 @@ public class JCRDataStorage implements DataStorage {
     String from;
     String to;
     for (String par : pars) {
+      String[] participants = eventQuery.getParticipants();
       eventQuery.setParticipants(new String[] { par });
       query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH);
       QueryResult result = query.execute();
@@ -3406,7 +3409,10 @@ public class JCRDataStorage implements DataStorage {
           participantMap.put(par, timeValues.toString());
         }
       }
+      eventQuery.setParticipants(participants);
     }
+    eventQuery.setCalendarPath(calendarPath);
+    eventQuery.setOrderBy(orderBy);
     return participantMap;
   }
   
