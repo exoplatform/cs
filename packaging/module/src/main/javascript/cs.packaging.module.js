@@ -104,6 +104,10 @@ addDependency(new Project("org.exoplatform.ecms", "exo-ecms-core-parser", "jar",
 		
   module.server.jboss.patchear = 
 	    new Project("org.exoplatform.cs", "exo.cs.server.jboss.patch-ear", "jar", module.version);
+  
+  module.server.openfire = {};
+  module.server.openfire.patch = 
+    new Project("org.exoplatform.cs", "exo.cs.eXoApplication.organization.client.openfire", "jar", module.version);
       
   // CS demo 
   module.demo = {};
@@ -147,17 +151,8 @@ function deployOpenfireServer(mainServer, module) {
 
   // We use only the local repository which must be defined in the repos list
   server.openfireJarPath = new java.net.URL(eXo.env.m2Repos[0]).getPath();
+  server.openfireJarPath += "/" + module.server.openfire.patch.relativePath;
   
-  for (var i=0; i < module.eXoApplication.chat.dependencies.size(); i++) {
-	  var tmpObj = module.eXoApplication.chat.dependencies.get(i).dependencies; 
-	  for (var j=0; j<tmpObj.size(); j++) {
-		  if (tmpObj.get(j).artifactId == "exo.cs.eXoApplication.organization.client.openfire") {
-			  server.openfireJarPath += "/" + tmpObj.get(j).relativePath;
-			  break;
-		  }
-	  }
-  }
-   
   server.cleanServer = "openfire-" + "${openfire.version}";
   server.name = "exo-chatserver";
   server.serverHome = eXo.env.workingDir + "/" + server.name;
