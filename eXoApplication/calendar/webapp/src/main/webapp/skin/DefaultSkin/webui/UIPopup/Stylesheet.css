@@ -13,6 +13,10 @@
 .UICalendarPortlet .UICalendarCategoryManager {
   padding: 10px;
   min-width: 400px;
+  background: #fff;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
 }
 
 .UICalendarPortlet .UICalendarCategoryManager .UICalendarCategoryForm {
