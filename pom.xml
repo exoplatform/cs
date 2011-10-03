@@ -36,7 +36,7 @@
     <gatein.wci.version>2.0.2-GA</gatein.wci.version>
     <exo.tool.framework.junit.version>1.2.0</exo.tool.framework.junit.version>
     <org.exoplatform.exopackage.version>1.1.4</org.exoplatform.exopackage.version>
-    <version.chromattic>1.1.0-beta7</version.chromattic>    
+    <version.chromattic>1.1.0</version.chromattic>    
      <!--commons dependencies-->
      <org.exoplatform.commons.version>1.1.2-GA-SNAPSHOT</org.exoplatform.commons.version>	      
     <org.hsqldb.version>2.0.0</org.hsqldb.version>
@@ -65,7 +65,7 @@
     <org.jvnet.mock-javamail.version>1.9</org.jvnet.mock-javamail.version>
     <xml-apis.version>1.0.b2</xml-apis.version>
     <pull-parser.version>2</pull-parser.version>
-    <org.quartz-scheduler.version>1.8.4</org.quartz-scheduler.version>
+    <quartz.version>1.5.2</quartz.version>
     <rome.version>1.0</rome.version>
     <picocontainer.version>1.1</picocontainer.version>
     <commons-io.version>1.4</commons-io.version>
@@ -306,9 +306,9 @@
         <version>${xml-apis.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.quartz-scheduler</groupId>
+        <groupId>quartz</groupId>
         <artifactId>quartz</artifactId>
-        <version>${org.quartz-scheduler.version}</version>
+        <version>${quartz.version}</version>
       </dependency>
       <dependency>
         <groupId>rome</groupId>

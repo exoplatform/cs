@@ -342,7 +342,7 @@
 		<version>${xml-apis.version}</version>
 	  </dependency>
 	  <dependency>
-      <groupId>org.quartz-scheduler</groupId>
+      <groupId>quartz</groupId>
       <artifactId>quartz</artifactId>
 	  </dependency>
 	  <dependency>
