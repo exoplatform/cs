@@ -30,3 +30,8 @@
 .UIContactPortlet .UIExportContactForm .UIContactList .text{
   white-space: nowrap;
 }
+
+.UIContactPortlet .PopupContent{
+  overflow-x: hidden;
+  width: 100%;
+}
