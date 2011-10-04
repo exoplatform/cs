@@ -84,45 +84,35 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
       UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
       folderName = folderName.trim();
 
-      boolean issaved = false;
       String folderId = Utils.KEY_FOLDERS + IdGenerator.generate();
       Folder folder = null;
-      try {
-        username = MailUtils.getDelegateFrom(accountId, dataCache);
-        if (mailSvr.isExistFolder(username, accountId, uiForm.getParentPath(), folderName)) {
-          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIFolderForm.msg.folder-exist",
-                                                                                         new Object[] { folderName }));          
-          return;
-        }
-      } catch (Exception e) {
+      username = MailUtils.getDelegateFrom(accountId, dataCache);
+      if (mailSvr.isExistFolder(username, accountId, uiForm.getParentPath(), folderName)) {
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIFolderForm.msg.folder-exist", new Object[] { folderName }));          
+        return;
       }
       
       folder = new Folder();
       folder.setId(folderId);
       folder.setName(folderName);
-      if (uiForm.getParentPath() != null && !"".equals(uiForm.getParentPath().trim())) {
-        issaved = mailSvr.saveFolderImapOnline(username, accountId, uiForm.getParentPath(), folder);
-      } else {
-        try {
-          issaved = mailSvr.saveFolderImapOnline(username, accountId, folder);
-        } catch (PathNotFoundException e) {
-          uiPortlet.findFirstComponentOfType(UIMessageList.class).setMessagePageList(null);
-          uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account",
-                                                                                         null,
-                                                                                         ApplicationMessage.WARNING));          
-          return;
-        }
-      }
       
-      if (!issaved) {
-        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.cannot-save-folder",
-                                                                                       null,
-                                                                                       ApplicationMessage.WARNING));        
+      try {
+        if (uiForm.getParentPath() != null && !"".equals(uiForm.getParentPath().trim())) {
+          mailSvr.saveFolderImapOnline(username, accountId, uiForm.getParentPath(), folder);
+        } else {
+          mailSvr.saveFolderImapOnline(username, accountId, folder);
+        }
+      } catch (PathNotFoundException e) { 
+        uiPortlet.findFirstComponentOfType(UIMessageList.class).setMessagePageList(null);
+        uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING));          
+        return;
+      } catch (Exception ex) {
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.cannot-save-folder", null, ApplicationMessage.WARNING));
         return;
       }
-
+      
       uiForm.getAncestorOfType(UIPopupAction.class).deActivate();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class));
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
@@ -140,5 +130,4 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
 
   public void activate() throws Exception { }
   public void deActivate() throws Exception { }
-
 }

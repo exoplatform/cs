@@ -44,10 +44,8 @@ public class CheckMailJob implements Job, InterruptableJob {
 
   public static final String FOLDERID        = "folderId";
 
-  public static final String MAILSVR         = "mailservice";
-  
   public static final String REPO_NAME       = "repository";
-
+  
   private static Log         log             = ExoLogger.getLogger("cs.service.job");
 
   private String             username;
@@ -57,12 +55,10 @@ public class CheckMailJob implements Job, InterruptableJob {
   private String             folderId;
 
   public CheckMailJob() throws Exception {
-
   }
 
   public void execute(JobExecutionContext context) throws JobExecutionException {
     PortalContainer container = getPortalContainer(context);
-    // MailService mailService = getMailService();
     MailService mailService = (MailService) container.getComponentInstanceOfType(MailService.class);
     RepositoryService repoService = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
     String currentRepo = null;
@@ -81,6 +77,7 @@ public class CheckMailJob implements Job, InterruptableJob {
     username = dataMap.getString(USERNAME);
     accountId = dataMap.getString(ACCOUNTID);
     folderId = dataMap.getString(FOLDERID);
+    
     String repoName = dataMap.getString(REPO_NAME);
     if (repoName != null) {
       try {
@@ -108,7 +105,6 @@ public class CheckMailJob implements Job, InterruptableJob {
         info.setStatusCode(CheckingInfo.CONNECTION_FAILURE);
         mailService.updateCheckingMailStatusByCometd(username, accountId, info);
       }
-
     } finally {
       if (currentRepo != null) {
         try {
@@ -161,5 +157,4 @@ public class CheckMailJob implements Job, InterruptableJob {
       portalName = portalName.substring(0, portalName.indexOf(":"));
     return RootContainer.getInstance().getPortalContainer(portalName);
   }
-
 }

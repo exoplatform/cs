@@ -575,7 +575,9 @@ public class UIMessageList extends UIForm {
 
       UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
       try {
-        if (msg != null) msg = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(uiPortlet.getCurrentUser(), accountId, msg);
+        if (msg != null) {
+          msg = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(uiPortlet.getCurrentUser(), accountId, msg);
+        }
         uiComposeForm.init(accountId, msg, uiComposeForm.MESSAGE_IN_DRAFT);
       } catch (PathNotFoundException e) {
         uiMessageList.setMessagePageList(null) ;
@@ -941,10 +943,12 @@ public class UIMessageList extends UIForm {
       UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
 
       Message message = null;
-      if (!Utils.isEmptyField(msgId) && !"null".equals(msgId))
+      if (!Utils.isEmptyField(msgId) && !"null".equals(msgId)) {
         message = uiMessageList.messageList_.get(msgId);
-      else
+      } else {
         message = checkedMsgs.get(0);
+      }
+      
       try {
         String username = MailUtils.getDelegateFrom(accId, uiPortlet.getDataCache());
         MailService mService = MailUtils.getMailService();
@@ -956,13 +960,10 @@ public class UIMessageList extends UIForm {
         uiMessageList.setMessagePageList(null) ;
         uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account",
-                                                                                       null,
-                                                                                       ApplicationMessage.WARNING));        
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING));        
         return; 
       }
       uiPopupContainer.addChild(uiComposeForm) ;
-
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;      
     }
   }  
@@ -1580,7 +1581,7 @@ public class UIMessageList extends UIForm {
         return;
       }
       try {
-        Message msg = checkedMsgs.get(0) ;
+        Message msg = checkedMsgs.get(0);
         if (msg != null) {
           UIExportForm uiExportForm = uiPopup.activate(UIExportForm.class, 600);
           String username = uiPortlet.getCurrentUser() ;
@@ -1789,9 +1790,7 @@ public class UIMessageList extends UIForm {
       uiMessageList.setMessagePageList(null) ;
       uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-      event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account",
-                                                                                     null,
-                                                                                     ApplicationMessage.WARNING));      
+      event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING));      
       return; 
     }
     uiPopupContainer.addChild(uiComposeForm) ;
@@ -1807,6 +1806,7 @@ public class UIMessageList extends UIForm {
       showedMsgs.add(uiMsgPreview.getMessage()) ;
       uiMsgPreview.setShowedMessages(showedMsgs);
     }
+    
     MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
     String username = uiPortlet.getCurrentUser();
     MessageFilter filter = uiMessageList.getMessageFilter() ;
@@ -1817,9 +1817,7 @@ public class UIMessageList extends UIForm {
       uiMessageList.setMessagePageList(null) ;
       uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);      
-      event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account",
-                                                                                     null,
-                                                                                     ApplicationMessage.WARNING));      
+      event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING));      
       return;
     }   
   }
@@ -1836,9 +1834,7 @@ public class UIMessageList extends UIForm {
       uiMessageList.setMessagePageList(null) ;
       uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-      event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account",
-                                                                                     null,
-                                                                                     ApplicationMessage.WARNING));    
+      event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING));    
       return null; 
     }
     return spamFilter;
@@ -1858,9 +1854,7 @@ public class UIMessageList extends UIForm {
       uiMessageList.setMessagePageList(null) ;
       uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);      
-      event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account",
-                                                                                     null,
-                                                                                     ApplicationMessage.WARNING));      
+      event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING));      
       return ;
     }
   }

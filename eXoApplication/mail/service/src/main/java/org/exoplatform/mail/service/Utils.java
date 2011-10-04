@@ -94,6 +94,8 @@ public class Utils {
 
   public static final String        POP3_SSL_STARTTLS_ENABLE              = "mail.pop3.starttls.enable".intern();
 
+  public static final String        SVR_POP3                              = "pop3";
+  
   public static final String        SVR_POP3S                             = "pop3s";
 
   public static final String        POP3_SSL_FACTORY                      = "mail.pop3.ssl.socketFactory".intern();

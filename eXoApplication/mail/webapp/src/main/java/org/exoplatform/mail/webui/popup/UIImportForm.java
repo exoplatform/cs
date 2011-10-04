@@ -99,22 +99,23 @@ public class UIImportForm extends UIForm implements UIPopupComponent {
         }
       }
       if(!validType)  {
-        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIImportForm.msg.file-upload-error",
-                                                                                       null,
-                                                                                       ApplicationMessage.WARNING));
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIImportForm.msg.file-upload-error", null, ApplicationMessage.WARNING));
         return ;
       }
+      
       InputStream inputStream = uiUploadInput.getUploadDataAsStream();
       String type = uploadResource.getMimeType();
       String accountId = dataCache.getSelectedAccountId();
       String username = uiPortlet.getCurrentUser() ;
       String folderId = uiImport.getChild(UISelectFolder.class).getSelectedValue();
-      if (!mailSrv.importMessage(username, accountId, folderId, inputStream, type)) {
-        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIImportForm.msg.import-messages-error",
-                                                                                       null,
-                                                                                       ApplicationMessage.WARNING));     
-        return ;
-      } 
+      
+      try {
+        mailSrv.importMessage(username, accountId, folderId, inputStream, type);
+      } catch (Exception ex) {
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIImportForm.msg.import-messages-error", null, ApplicationMessage.WARNING));
+        return;
+      }
+      
       UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
       uploadService.removeUploadResource(uiUploadInput.getUploadId()) ;
       uiPortlet.cancelAction() ;

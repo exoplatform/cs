@@ -16,14 +16,13 @@
  */
 package org.exoplatform.mail.connection.impl;
 
-import java.util.Properties;
-
+import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Store;
+import javax.mail.URLName;
 
 import org.exoplatform.mail.connection.Connector;
 import org.exoplatform.mail.service.Account;
-import org.exoplatform.mail.service.Utils;
 
 import com.sun.mail.util.MailSSLSocketFactory;
 
@@ -36,22 +35,45 @@ import com.sun.mail.util.MailSSLSocketFactory;
  */
 public abstract class BaseConnector implements Connector {
   protected Store store_;
+  
+  protected Account account_;
 
-  public Session getSession(Account account, MailSSLSocketFactory sslSocket) throws Exception {
-    Properties props = System.getProperties();
-    String socketFactoryClass = "javax.net.SocketFactory";
-    if (account.isIncomingSsl() && sslSocket != null) {
-
-      props.put(Utils.IMAP_SSL_FACTORY, sslSocket);
-      if (account.getSecureAuthsIncoming().equalsIgnoreCase(Utils.STARTTLS))
-        props.put(Utils.IMAP_SSL_STARTTLS_ENABLE, true);
-      else
-        props.put(Utils.MAIL_IMAP_SSL_ENABLE, "true");
-      props.put(Utils.IMAP_SASL_MECHS, account.getAuthMechsIncoming());
+  public abstract Session getSession(Account account, MailSSLSocketFactory sslSocket) throws Exception;
+  
+  public boolean isConnected() {
+    return (store_ != null) && store_.isConnected();
+  }
+  
+  public void openStore(Account account) throws Exception {
+    if (store_ == null) {
+      return;
     }
-    props.put("mail.imap.socketFactory.class", socketFactoryClass);
-    props.put("mail.mime.base64.ignoreerrors", "true");
-    props.put("mail.imap.socketFactory.fallback", "false");
-    return Session.getInstance(props, null);
+    this.account_ = account;
+    store_.connect(account.getIncomingHost(), Integer.valueOf(account.getIncomingPort()), account.getIncomingUser(), account.getIncomingPassword());
+  }
+  
+  public Store getStore() {
+    return store_;
+  }
+
+  public Account getAccount() {
+    return account_;
+  }
+  
+  public javax.mail.Folder getDefaultFolder() throws MessagingException {
+    return store_.getDefaultFolder();
+  }
+  
+  public javax.mail.Folder getFolder(String folderUrl) throws MessagingException {
+    return store_.getFolder(new URLName(folderUrl));
+  }
+  
+  public void close() {
+    if (store_ != null) {
+      try {
+        store_.close();
+      } catch (MessagingException e) {
+      }
+    }
   }
 }

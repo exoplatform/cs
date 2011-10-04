@@ -18,6 +18,8 @@ package org.exoplatform.mail.connection;
 
 import java.util.List;
 
+import javax.mail.MessagingException;
+
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.Message;
@@ -32,29 +34,9 @@ public interface Connector {
 
   public void openStore(Account account) throws Exception;
 
-  public javax.mail.Folder createFolder(Folder folder) throws Exception;
-
-  public javax.mail.Folder createFolder(Folder parentFolder, Folder folder) throws Exception;
-
-  public Folder renameFolder(String newName, Folder folder) throws Exception;
-
-  public boolean deleteFolder(Folder folder) throws Exception;
-
-  public int emptyFolder(Folder folder) throws Exception;
-
-  public List<Message> createMessage(List<Message> msgs, Folder folder) throws Exception;
-
-  public boolean deleteMessage(List<Message> msgs, Folder folder) throws Exception;
-
-  /**
-   * Move message(s) between folders.
-   * Return a list of deleted/moved messages
-   * */
-  public List<Message> moveMessage(List<Message> msgs, Folder currentFolder, Folder desFolder) throws Exception;
-
-  /**
-   * mark the message is read/unread or stared/not started
-   * @param isRead is read if true, is unread if false. Else if is null, method is going to set stared/not stared
-   * @param isStared is star if true, and is not star if false. Else if is null, method is going to set read/unread**/
-  public boolean markIsReadStared(List<Message> msgList, Folder folder, Object isRead, Object isStared) throws Exception;
+  public javax.mail.Folder getDefaultFolder() throws MessagingException;
+  
+  public javax.mail.Folder getFolder(String folderUrl) throws MessagingException;
+  
+  public boolean isConnected();
 }

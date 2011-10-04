@@ -590,7 +590,7 @@ public interface MailService {
    * @param newSetting
    * @throws Exception
    */
-  public boolean importMessage(String username, String accountId, String folderId, InputStream inputStream, String type) throws Exception;
+  public void importMessage(String username, String accountId, String folderId, InputStream inputStream, String type) throws Exception;
 
   /**
    * Export message from eXo Mail. The exported file can reimport to eXo Mail or
@@ -742,7 +742,7 @@ public interface MailService {
    * @param userName
    * @param accountId
    * @param folder*/
-  public boolean saveFolderImapOnline(String userName, String accountId, Folder folder) throws Exception;
+  public void saveFolderImapOnline(String userName, String accountId, Folder folder) throws Exception;
 
   /**
    * Saving new folder as child folder  
@@ -751,7 +751,7 @@ public interface MailService {
    * @param parentId
    * @param folder
    * */
-  public boolean saveFolderImapOnline(String userName, String accountId, String parentId, Folder folder) throws Exception;
+  public void saveFolderImapOnline(String userName, String accountId, String parentId, Folder folder) throws Exception;
 
   /**
    * Retrieve attachment from personal document location of user with that given path
@@ -828,4 +828,6 @@ public interface MailService {
    * @return
    */
   public List<String> getListOfMessageIds(String username, MessageFilter filter) throws Exception;
+  
+  public void closeAllMailConnectionByUser(String username) throws Exception;
 }

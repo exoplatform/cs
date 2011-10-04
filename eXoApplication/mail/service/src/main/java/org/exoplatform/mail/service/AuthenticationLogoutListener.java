@@ -47,6 +47,7 @@ public class AuthenticationLogoutListener extends Listener<ConversationRegistry,
       for (Account acc : accList) {
         mService.stopAllJobs(username, acc.getId());
       }
+      mService.closeAllMailConnectionByUser(username);
     } catch (Exception e) {
       if (log.isDebugEnabled()) {
         log.debug("Exception when stop stop all job when user logout", e);

@@ -21,12 +21,11 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.mail.Flags;
+import javax.mail.Flags.Flag;
 import javax.mail.MessagingException;
 import javax.mail.Session;
-import javax.mail.Store;
 import javax.mail.UIDFolder;
 import javax.mail.URLName;
-import javax.mail.Flags.Flag;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.lang.StringUtils;
@@ -48,41 +47,55 @@ import com.sun.mail.util.MailSSLSocketFactory;
  */
 public class ImapConnector extends BaseConnector {
   private static final Log logger = ExoLogger.getLogger("cs.mail.service");
-
-  private Account          account_;
-
+  
+  protected IMAPStore imapStore;
+  
   public ImapConnector(Account account, MailSSLSocketFactory sslSocket) throws Exception {
     Session session = getSession(account, sslSocket);
     String protocolName = Utils.SVR_IMAP;
     String emailaddr = account.getIncomingUser();
-    if (Utils.isGmailAccount(emailaddr))
+    if (Utils.isGmailAccount(emailaddr)) {
       protocolName = Utils.SVR_IMAPS;
-    IMAPStore imapStore = (IMAPStore) session.getStore(protocolName);
-    store_ = imapStore;
-    account_ = account;
-    store_.connect(account_.getIncomingHost(), Integer.valueOf(account_.getIncomingPort()), account_.getIncomingUser(), account_.getIncomingPassword());
+    }
+    
+    store_ = session.getStore(protocolName);
+    openStore(account);
+    imapStore = (IMAPStore) store_;
   }
-
-  public Store getStore() {
-    return store_;
+  
+  public Session getSession(Account account, MailSSLSocketFactory sslSocket) throws Exception {
+    Properties props = System.getProperties();
+    props.put("mail.imap.socketFactory.class", "javax.net.SocketFactory");
+    props.put("mail.mime.base64.ignoreerrors", "true");
+    props.put("mail.imap.socketFactory.fallback", "false");
+    
+    if (account.isIncomingSsl() && sslSocket != null) {
+      props.put(Utils.IMAP_SSL_FACTORY, sslSocket);
+      if (account.getSecureAuthsIncoming().equalsIgnoreCase(Utils.STARTTLS)) {
+        props.put(Utils.IMAP_SSL_STARTTLS_ENABLE, true);
+      } else {
+        props.put(Utils.MAIL_IMAP_SSL_ENABLE, "true");
+      }
+      props.put(Utils.IMAP_SASL_MECHS, account.getAuthMechsIncoming());
+    }
+    
+    return Session.getInstance(props, null);
   }
-
-  public void openStore(Account account) throws Exception {
-  }
-
-  public javax.mail.Folder createFolder(Folder folder) throws Exception {
+  
+  public IMAPFolder createFolder(Folder folder) throws Exception {
     return createFolder(null, folder);
   }
 
-  public javax.mail.Folder createFolder(Folder parentFolder, Folder folder) throws Exception {
+  public IMAPFolder createFolder(Folder parentFolder, Folder folder) throws Exception {
     IMAPFolder imapFolder = null;
     if (parentFolder == null) {
-      imapFolder = (IMAPFolder) ((IMAPStore) store_).getFolder(folder.getName());
-      if (!imapFolder.exists())
+      imapFolder = (IMAPFolder) imapStore.getFolder(folder.getName());
+      if (!imapFolder.exists()) {
         imapFolder.create((int) folder.getType());
+      }
     } else {
       URLName url = new URLName(parentFolder.getURLName());
-      IMAPFolder parentImapFolder = (IMAPFolder) ((IMAPStore) store_).getFolder(url);
+      IMAPFolder parentImapFolder = (IMAPFolder) imapStore.getFolder(url);
       if (parentImapFolder != null && parentImapFolder.exists()) {
         boolean isOpen = parentImapFolder.isOpen();
         if (!isOpen)
@@ -91,10 +104,8 @@ public class ImapConnector extends BaseConnector {
         if (!imapFolder.exists()) {
           imapFolder.create((int) folder.getType());
         }
-        parentImapFolder.close(true);
       }
     }
-
     return imapFolder;
   }
 
@@ -102,16 +113,17 @@ public class ImapConnector extends BaseConnector {
     try {
       boolean result = false;
       URLName url = new URLName(folder.getURLName());
-      IMAPFolder folderToBeRenamed = (IMAPFolder) ((IMAPStore) store_).getFolder(url);
+      IMAPFolder folderToBeRenamed = (IMAPFolder) imapStore.getFolder(url);
       if (folderToBeRenamed.exists()) {
-        if (folderToBeRenamed.isOpen())
-          folderToBeRenamed.close(false);
-        IMAPFolder f1 = (IMAPFolder) ((IMAPStore) store_).getFolder(newName);
+        if (folderToBeRenamed.isOpen()) {
+        }
+        IMAPFolder f1 = (IMAPFolder) imapStore.getFolder(newName);
         result = folderToBeRenamed.renameTo(f1);
         folder.setURLName(f1.getURLName().toString());
         folder.setName(newName);
-        if (!result)
+        if (!result) {
           logger.info("Error while renaming folder!");
+        }
       } else {
         logger.info("Folder does not exists!");
       }
@@ -125,13 +137,12 @@ public class ImapConnector extends BaseConnector {
   }
 
   public int emptyFolder(Folder folder) throws Exception {
-    IMAPFolder folderToEmpty = (IMAPFolder) ((IMAPStore) store_).getFolder(folder.getName());
+    IMAPFolder folderToEmpty = (IMAPFolder) imapStore.getFolder(folder.getName());
     javax.mail.Message[] messages = folderToEmpty.getMessagesByUID(0, UIDFolder.LASTUID);
     int messageCount = messages.length;
     for (int i = 0; i < messageCount; i++) {
       messages[i].setFlag(Flags.Flag.DELETED, true);
     }
-    folderToEmpty.close(true);
     return messageCount;
   }
 
@@ -139,13 +150,15 @@ public class ImapConnector extends BaseConnector {
     try {
       boolean result = false;
       URLName url = new URLName(folder.getURLName());
-      IMAPFolder folderToBeRemoved = (IMAPFolder) ((IMAPStore) store_).getFolder(url);
+      IMAPFolder folderToBeRemoved = (IMAPFolder) imapStore.getFolder(url);
       if (folderToBeRemoved.exists()) {
-        if (folderToBeRemoved.isOpen())
+        if (folderToBeRemoved.isOpen()) {
           folderToBeRemoved.close(true);
+        }
         result = folderToBeRemoved.delete(true);
-        if (!result)
+        if (!result) {
           logger.info("Error while deleting folder!");
+        }
       } else {
         logger.info("Folder does not exists!");
       }
@@ -167,6 +180,7 @@ public class ImapConnector extends BaseConnector {
         messagesToDelete.add(message);
       }
     }
+    
     if (messagesToDelete.size() > 0) {
       deleteMessage(messagesToDelete, folder);
     }
@@ -211,7 +225,6 @@ public class ImapConnector extends BaseConnector {
             logger.warn("Mail server could not append a new UID for message: " + msgs.get(l).getSubject());
           successList.add(msgs.get(l));
         }
-        remoteFolder.close(true);
       } else {
         logger.warn("Not all messages are synchronized with server.");
       }
@@ -223,7 +236,7 @@ public class ImapConnector extends BaseConnector {
     IMAPFolder remoteFolder = null;
     URLName remoteURL = new URLName(folder.getURLName());
     try {
-      remoteFolder = (IMAPFolder) ((IMAPStore) store_).getFolder(remoteURL);
+      remoteFolder = (IMAPFolder) imapStore.getFolder(remoteURL);
     } catch (Exception e) {
       logger.warn("Cannot get \"" + folder.getName() + "\" folder. It will be created on server immediate.");
       remoteFolder = (IMAPFolder) createFolder(folder);
@@ -265,7 +278,6 @@ public class ImapConnector extends BaseConnector {
           message.setFlag(Flags.Flag.DELETED, true);
         }
       }
-      remoteFolder.close(true);
       return true;
     } catch (Exception e) {
       return false;
@@ -275,11 +287,17 @@ public class ImapConnector extends BaseConnector {
   public List<Message> moveMessage(List<Message> msgs, Folder sourceFolder, Folder desFolder) throws Exception {
     if (!sourceFolder.isPersonalFolder() && !sourceFolder.getName().equalsIgnoreCase(Utils.FD_INBOX) && desFolder.isPersonalFolder()) {// local->server
       return moveMessages(msgs, sourceFolder, desFolder, true, true);
-    } else if (!sourceFolder.isPersonalFolder() && !sourceFolder.getName().equalsIgnoreCase(Utils.FD_INBOX) && !desFolder.isPersonalFolder()) {// local to local
+    } 
+    
+    if (!sourceFolder.isPersonalFolder() && !sourceFolder.getName().equalsIgnoreCase(Utils.FD_INBOX) && !desFolder.isPersonalFolder()) {// local to local
       return moveMessages(msgs, sourceFolder, desFolder, true, false);
-    } else if ((sourceFolder.isPersonalFolder() && !desFolder.getName().equalsIgnoreCase(Utils.FD_INBOX) && !desFolder.isPersonalFolder()) || (sourceFolder.getName().equalsIgnoreCase(Utils.FD_INBOX) && !desFolder.getName().equalsIgnoreCase(Utils.FD_INBOX) && !desFolder.isPersonalFolder())) {// server to local
+    }
+    
+    if ((sourceFolder.isPersonalFolder() && !desFolder.getName().equalsIgnoreCase(Utils.FD_INBOX) && !desFolder.isPersonalFolder()) || (sourceFolder.getName().equalsIgnoreCase(Utils.FD_INBOX) && !desFolder.getName().equalsIgnoreCase(Utils.FD_INBOX) && !desFolder.isPersonalFolder())) {// server to local
       return moveMessages(msgs, sourceFolder, desFolder, false, false);
-    } else if ((sourceFolder.isPersonalFolder() && desFolder.isPersonalFolder()) || (sourceFolder.getName().equalsIgnoreCase(Utils.FD_INBOX) && desFolder.isPersonalFolder()) || (desFolder.getName().equalsIgnoreCase(Utils.FD_INBOX) && sourceFolder.isPersonalFolder())) {// server to server
+    }
+    
+    if ((sourceFolder.isPersonalFolder() && desFolder.isPersonalFolder()) || (sourceFolder.getName().equalsIgnoreCase(Utils.FD_INBOX) && desFolder.isPersonalFolder()) || (desFolder.getName().equalsIgnoreCase(Utils.FD_INBOX) && sourceFolder.isPersonalFolder())) {// server to server
       return moveMessages(msgs, sourceFolder, desFolder, false, true);
     }
     return null;
@@ -296,34 +314,42 @@ public class ImapConnector extends BaseConnector {
    </pre>
    * return {@link List} of mails that were not moved/deleted*/
   private List<Message> moveMessages(List<Message> msgs, Folder sourceFolder, Folder desFolder, boolean isLocalFolder, boolean isRemoteFolder) throws Exception {
-    if (msgs == null || msgs.size() == 0 || (sourceFolder.getId() == desFolder.getId()) || sourceFolder == null || desFolder == null)
+    if (msgs == null || msgs.size() == 0 || (sourceFolder.getId() == desFolder.getId()) || sourceFolder == null || desFolder == null) {
       return null;
+    }
+    
     IMAPFolder sourceImapFolder = null, desImapFolder = null;
     try {
       if (isLocalFolder && isRemoteFolder) {// local -> remote
         sourceImapFolder = (IMAPFolder) createFolder(sourceFolder);
         URLName desURL = new URLName(desFolder.getURLName());
-        desImapFolder = (IMAPFolder) ((IMAPStore) store_).getFolder(desURL);
+        desImapFolder = (IMAPFolder) imapStore.getFolder(desURL);
       } else if (isLocalFolder && !isRemoteFolder) {// local -> local
         sourceImapFolder = (IMAPFolder) createFolder(sourceFolder);
         desImapFolder = (IMAPFolder) createFolder(desFolder);
       } else if (!isLocalFolder && isRemoteFolder) {// remote -> remote
         URLName srcURL = new URLName(sourceFolder.getURLName());
-        sourceImapFolder = (IMAPFolder) ((IMAPStore) store_).getFolder(srcURL);
+        sourceImapFolder = (IMAPFolder) imapStore.getFolder(srcURL);
         URLName desURL = new URLName(desFolder.getURLName());
-        desImapFolder = (IMAPFolder) ((IMAPStore) store_).getFolder(desURL);
+        desImapFolder = (IMAPFolder) imapStore.getFolder(desURL);
       } else if (!isLocalFolder && !isRemoteFolder) {// remote -> local
         URLName srcURL = new URLName(sourceFolder.getURLName());
-        sourceImapFolder = (IMAPFolder) ((IMAPStore) store_).getFolder(srcURL);
+        sourceImapFolder = (IMAPFolder) imapStore.getFolder(srcURL);
         desImapFolder = (IMAPFolder) createFolder(desFolder);
       }
-      if (sourceImapFolder == null || desImapFolder == null)
+      
+      if (sourceImapFolder == null || desImapFolder == null) {
         return null;
+      }
+      
       try {
-        if (!sourceImapFolder.isOpen())
+        if (!sourceImapFolder.isOpen()) {
           sourceImapFolder.open(javax.mail.Folder.READ_WRITE);
-        if (!desImapFolder.isOpen())
+        }
+        
+        if (!desImapFolder.isOpen()) {
           desImapFolder.open(javax.mail.Folder.READ_WRITE);
+        }
       } catch (Exception e) {
         logger.debug("ImapConnector: \"" + sourceFolder + "\" or \"" + desFolder + "\" folder was not synchronized with server\n", e);
       }
@@ -333,16 +359,20 @@ public class ImapConnector extends BaseConnector {
         javax.mail.Message msg = null;
         for (Message m : msgs) {
           try {
-            if (m != null && m.getUID() != null)
+            if (m != null && m.getUID() != null) {
               msg = sourceImapFolder.getMessageByUID(Long.valueOf(m.getUID()));
-            else
+            } else {
               logger.warn("Message is null or UID is null.");
+            }
           } catch (Exception e) {
             logger.warn("The UID: \"" + m.getUID() + "\" for message: \"" + m.getSubject() + "\" is not exist on server mail\n");
           }
-          if (msg != null)
+          
+          if (msg != null) {
             copiedMsgs.add(msg);
+          }
         }
+        
         if (copiedMsgs != null && copiedMsgs.size() > 0) {
           javax.mail.Message[] messages = copiedMsgs.toArray(new javax.mail.Message[copiedMsgs.size()]);
           sourceImapFolder.copyMessages(messages, desImapFolder);
@@ -352,8 +382,6 @@ public class ImapConnector extends BaseConnector {
           sourceImapFolder.expunge();
           desImapFolder.expunge();
         }
-        sourceImapFolder.close(true);
-        desImapFolder.close(true);
       }
     } catch (Exception e) {
       logger.error("ImapConnector: Error in move message.\n", e);
@@ -364,15 +392,18 @@ public class ImapConnector extends BaseConnector {
   public boolean markIsReadStared(List<Message> msgList, Folder f, Object isRead, Object isStared) throws Exception {
     try {
       Flag flag = null;
-      if (isRead != null)
+      if (isRead != null) {
         isStared = null;
-      else if (isStared != null)
+      } else if (isStared != null) {
         isRead = null;
+      }
 
       URLName url = new URLName(f.getURLName());
-      IMAPFolder folder = (IMAPFolder) ((IMAPStore) store_).getFolder(url);
-      if (!folder.isOpen())
+      IMAPFolder folder = (IMAPFolder) imapStore.getFolder(url);
+      if (!folder.isOpen()) {
         folder.open(javax.mail.Folder.READ_WRITE);
+      }
+      
       javax.mail.Message message;
       for (Message msg : msgList) {
         message = folder.getMessageByUID(Long.valueOf(msg.getUID()));
@@ -392,10 +423,30 @@ public class ImapConnector extends BaseConnector {
           }
         }
       }
-      folder.close(true);
       return true;
     } catch (Exception e) {
       return false;
     }
+  }
+  
+  public IMAPFolder openFolderForReadWrite(String folderUrl) throws MessagingException {
+    IMAPFolder remoteFolder = (IMAPFolder) getFolder(folderUrl);
+    if (remoteFolder != null) {
+      if (!remoteFolder.isOpen()) {
+        remoteFolder.open(javax.mail.Folder.READ_WRITE);
+      }
+    }
+    return remoteFolder;
+  }
+  
+  public javax.mail.Message getMessageByUID(String uid, String folderUrl) throws MessagingException {
+    IMAPFolder folder = openFolderForReadWrite(folderUrl);
+    javax.mail.Message message = folder.getMessageByUID(Long.valueOf(uid));
+    return message;
+  }
+  
+  public void importMessageIntoServerMail(String folderUrl, MimeMessage mimeMessage, long[] msgUID) throws Exception {
+    IMAPFolder remoteFolder = openFolderForReadWrite(folderUrl);
+    remoteFolder.addMessages(new javax.mail.Message[] { mimeMessage });
   }
 }

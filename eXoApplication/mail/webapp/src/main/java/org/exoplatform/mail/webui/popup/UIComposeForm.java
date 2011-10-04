@@ -1180,8 +1180,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
               if (message.getId().equals(msg.getId())) {
                 int index = showedMsg.indexOf(msg);
                 showedMsg.remove(index);
-                message = mailSvr.loadTotalMessage(username, accountId,
-                    mailSvr.getMessageById(username, accountId, message.getId()));
+                message = mailSvr.loadTotalMessage(username, accountId, message);
                 showedMsg.add(index, message);
               }
             }

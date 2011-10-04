@@ -66,7 +66,7 @@ public class UIMailPortlet extends UIPortletApplication {
   public DataCache getDataCache() {
     return dataCache;
   }
-
+  
   public String getFormId() {
     return formId;
   }
@@ -99,7 +99,7 @@ public class UIMailPortlet extends UIPortletApplication {
       return;
     }
     
-    String url = ((HttpServletRequest)portalContext.getRequest()).getRequestURL().toString();
+    String url = ((HttpServletRequest) portalContext.getRequest()).getRequestURL().toString();
     try {
       String username = MailUtils.getCurrentUser();
       String[] content = url.split("/");

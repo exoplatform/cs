@@ -23,7 +23,6 @@ import java.util.Random;
 
 import javax.mail.AuthenticationFailedException;
 
-import org.exoplatform.mail.connection.Connector;
 import org.exoplatform.mail.connection.impl.ImapConnector;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
@@ -105,7 +104,7 @@ public class TestConnectorService extends BaseMailTestCase {
     Folder folder = new Folder();
     folder.setId("testID");
     folder.setName("testFolder");
-    Connector connector = getConnector(account);
+    ImapConnector connector = getConnector(account);
     if (connector != null) {
       javax.mail.Folder imapFolder = connector.createFolder(folder);
       folder.setURLName(imapFolder.getURLName().toString());
@@ -124,13 +123,11 @@ public class TestConnectorService extends BaseMailTestCase {
 
     Folder parentFolder = new Folder();
     parentFolder.setName("parentFolder2");
-    Connector connector = getConnector(account);
+    ImapConnector connector = getConnector(account);
     if (connector != null) {
-
       javax.mail.Folder imapParentFolder = connector.createFolder(parentFolder);
       parentFolder.setURLName(imapParentFolder.getURLName().toString());
 
-      // assertEquals(parentFolder.getName(), imapParentFolder.getName());
       assertNotNull(imapParentFolder);
 
       Folder childFolder = new Folder();
@@ -139,14 +136,6 @@ public class TestConnectorService extends BaseMailTestCase {
       childFolder.setURLName(imapChildFolder.getURLName().toString());
 
       assertNotNull("Child folder is NUL", imapChildFolder);
-      // assertEquals("Parent and child folder is NOT SAME",
-      // childFolder.getName(),
-      // imapChildFolder.getName());
-
-      // assertEquals(true, connector.deleteFolder(childFolder));
-      // imapChildFolder.delete(true);
-      // assertEquals(true, connector.deleteFolder(parentFolder));
-      // imapParentFolder.delete(true);
     } else {
       log.warn("\n\n connector is null, check configuration !");
     }
@@ -158,7 +147,7 @@ public class TestConnectorService extends BaseMailTestCase {
     Account account = createAccountObj(Utils.IMAP, prv_);
     Folder folder = new Folder();
     folder.setName("rootFolder");
-    Connector connector = getConnector(account);
+    ImapConnector connector = getConnector(account);
     if (connector != null) {
       IMAPFolder imapFolder = (IMAPFolder) connector.createFolder(folder);
       folder.setURLName(imapFolder.getURLName().toString());
@@ -168,15 +157,12 @@ public class TestConnectorService extends BaseMailTestCase {
       Folder renamedFolder = connector.renameFolder("newName", folder);
       assertNotNull("Can not rename folder", renamedFolder);
       assertEquals("newName", renamedFolder.getName());
-
-      // assertEquals(true, connector.deleteFolder(renamedFolder));
-      // imapFolder.delete(true);
     } else {
       log.warn("\n\n connector is null, check configuration !");
     }
   }
 
-  private Connector getConnector(Account acc) {
+  private ImapConnector getConnector(Account acc) {
     try {
       return new ImapConnector(acc, new MailSSLSocketFactory());
     } catch (UnknownHostException e) {
@@ -197,7 +183,7 @@ public class TestConnectorService extends BaseMailTestCase {
     Folder folder = new Folder();
     folder.setId("folderReadID");
     folder.setName("foldeReadrName");
-    Connector connector = getConnector(account);
+    ImapConnector connector = getConnector(account);
     if (connector != null) {
       javax.mail.Folder imapFolder = connector.createFolder(folder);
       folder.setURLName(imapFolder.getURLName().toString());
@@ -207,8 +193,6 @@ public class TestConnectorService extends BaseMailTestCase {
       assertEquals(1, list.size());
       boolean asRead = connector.markIsReadStared(list, folder, true, null);
       assertTrue("Can not mark message as READ", asRead);
-      // assertEquals(true, connector.deleteFolder(folder));
-      // imapFolder.delete(true);
     } else {
       log.warn("\n\n connector is null, check configuration !");
     }
@@ -222,7 +206,7 @@ public class TestConnectorService extends BaseMailTestCase {
     Folder folder = new Folder();
     folder.setId("folderUnReadID");
     folder.setName("foldeUnReadrName");
-    Connector connector = getConnector(account);
+    ImapConnector connector = getConnector(account);
     if (connector != null) {
       javax.mail.Folder imapFolder = connector.createFolder(folder);
       folder.setURLName(imapFolder.getURLName().toString());
@@ -232,8 +216,6 @@ public class TestConnectorService extends BaseMailTestCase {
       assertEquals(1, list.size());
       boolean asUnRead = connector.markIsReadStared(list, folder, false, null);
       assertTrue("Can not mark message as UnREAD", asUnRead);
-      // assertEquals(true, connector.deleteFolder(folder));
-      // imapFolder.delete(true);
     } else {
       log.warn("\n\n connector is null, check configuration !");
     }
@@ -247,7 +229,7 @@ public class TestConnectorService extends BaseMailTestCase {
     Folder folder = new Folder();
     folder.setId("setIsStaredID");
     folder.setName("setIsStaredName");
-    Connector connector = getConnector(account);
+    ImapConnector connector = getConnector(account);
     if (connector != null) {
       javax.mail.Folder imapFolder = connector.createFolder(folder);
       folder.setURLName(imapFolder.getURLName().toString());
@@ -257,8 +239,6 @@ public class TestConnectorService extends BaseMailTestCase {
       assertEquals(1, list.size());
       boolean isStared = connector.markIsReadStared(list, folder, null, true);
       assertTrue("Can not set star", isStared);
-      // assertEquals(true, connector.deleteFolder(folder));
-      // imapFolder.delete(true);
     } else {
       log.warn("\n\n connector is null, check configuration !");
     }
@@ -272,7 +252,7 @@ public class TestConnectorService extends BaseMailTestCase {
     Folder folder = new Folder();
     folder.setId("setIsNotStaredID");
     folder.setName("setIsNotStaredName");
-    Connector connector = getConnector(account);
+    ImapConnector connector = getConnector(account);
     if (connector != null) {
       javax.mail.Folder imapFolder = connector.createFolder(folder);
       folder.setURLName(imapFolder.getURLName().toString());
@@ -282,8 +262,6 @@ public class TestConnectorService extends BaseMailTestCase {
       assertEquals(1, list.size());
       boolean isNotStared = connector.markIsReadStared(list, folder, null, false);
       assertTrue("Message is Stared(unexpected)", isNotStared);
-      // assertEquals(true, connector.deleteFolder(folder));
-      // imapFolder.delete(true);
     } else {
       log.warn("\n\n connector is null, check configuration !");
     }
