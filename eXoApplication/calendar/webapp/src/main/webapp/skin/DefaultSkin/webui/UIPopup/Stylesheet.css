@@ -126,3 +126,12 @@
 .UICalendarPortlet .UIPopupCalendarSettingContainer{
 	background: #EBEBEB;
 }
+/********************************** UIAddEditPermission *****************************************/
+.UICalendarPortlet .UIAddEditPermission .UIGrid th{
+	border-right: solid 1px #fff;
+	border-top: solid 1px #fff;
+}
+
+.UICalendarPortlet .UIAddEditPermission .UIGrid{
+	margin-bottom: 2px;
+}
