@@ -325,7 +325,6 @@ public class HistoryImpl implements Startable {
         conversationNode.getSession().save();
         participantsNode.getSession().save();
       } catch (Exception e) {
-        // TODO: find why exception happens
         if (log.isDebugEnabled()) {
           log.debug("Fail to add historical message", e);
         }

@@ -166,7 +166,7 @@ public class JCRDataStorage implements DataStorage {
    * {@inheritDoc}
    */
   public Node getSharedCalendarHome() throws Exception {
-    // TODO have to use system session
+    // have to use system session
     Node calendarServiceHome = getPublicCalendarServiceHome();
     try {
       return calendarServiceHome.getNode(SHARED_CALENDAR);
@@ -1384,7 +1384,7 @@ public class JCRDataStorage implements DataStorage {
         addAttachment(eventNode, att, isNew);
       }
     }
-    // TODO CS-764
+    
     eventNode.setProperty(Utils.EXO_MESSAGE, event.getMessage());
     eventNode.setProperty(Utils.EXO_SEND_OPTION, event.getSendOption());
     if (event.getParticipantStatus() == null)

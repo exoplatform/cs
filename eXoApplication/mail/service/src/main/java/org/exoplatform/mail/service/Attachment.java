@@ -73,7 +73,6 @@ abstract public class Attachment {
     this.name = name_;
   }
 
-  // TODO: should not have Session in the api
   public abstract InputStream getInputStream() throws Exception;
 
   public void setPath(String path) {

@@ -99,16 +99,6 @@ public class UIEventCategoryForm extends UIForm {
       UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
       UIEventForm uiEventForm = uiPortlet.findFirstComponentOfType(UIEventForm.class) ;
       String name = uiForm.getUIStringInput(UIEventCategoryForm.EVENT_CATEGORY_NAME).getValue() ;
-      /*if(Utils.isEmptyField(name)) {
-        uiApp.addMessage(new ApplicationMessage("UIEventCategoryForm.msg.name-required", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }*/
-     /* if(!MailUtils.isNameValid(name, CalendarUtils.EXTENDEDCHARACTER)) {
-        uiApp.addMessage(new ApplicationMessage("UIEventCategoryForm.msg.name-invalid", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ; 
-        return ;
-      }*/
       CalendarService calendarService = CalendarUtils.getCalendarService();
       String description = uiForm.getUIFormTextAreaInput(UIEventCategoryForm.DESCRIPTION).getValue() ;
       String username = Util.getPortalRequestContext().getRemoteUser() ;
@@ -116,20 +106,17 @@ public class UIEventCategoryForm extends UIForm {
       eventCat.setName(name) ;
       eventCat.setDescription(description) ;
       try {
-        if(uiForm.isAddNew_) calendarService.saveEventCategory(username, eventCat, true) ;
-        else { 
+        if (uiForm.isAddNew_) {
+          calendarService.saveEventCategory(username, eventCat, true) ;
+        } else { 
           eventCat = uiForm.getEventCategory() ;
           eventCat.setName(name) ;
           eventCat.setDescription(description) ;
           calendarService.saveEventCategory(username, eventCat, false) ; 
         }
-        /*ActionResponse actResponse = event.getRequestContext().getResponse() ;
-        actResponse.setEvent(new QName("RefreshCalendar"), null) ;*/
         UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class);
         uiEventForm.setSelectedTab(UIEventForm.TAB_EVENTDETAIL) ;
         uiEventForm.refreshCategory() ;
-        // TODO CS-2170
-        //uiEventForm.setSelectedCategory(uiForm.categoryName);
         uiEventForm.setSelectedCategory(eventCat.getId());
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
         uiPopupAction.deActivate() ;

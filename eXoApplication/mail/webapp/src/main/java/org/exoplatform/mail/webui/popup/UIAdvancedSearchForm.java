@@ -101,7 +101,6 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     addUIFormInput(uiFormDateTimeInputAfterDate) ;  
     
     List<SelectItemOption<String>>  options1 = new ArrayList<SelectItemOption<String>>() ;
-    //TODO should replace string values here by resource bundle
     options1.add(new SelectItemOption<String>("contains", String.valueOf(Utils.CONDITION_CONTAIN)));
     options1.add(new SelectItemOption<String>("doesn't contain", String.valueOf(Utils.CONDITION_NOT_CONTAIN)));
     addUIFormInput(new UIFormSelectBox(SEARCH_BODY_CONDITION, SEARCH_BODY_CONDITION, options1));

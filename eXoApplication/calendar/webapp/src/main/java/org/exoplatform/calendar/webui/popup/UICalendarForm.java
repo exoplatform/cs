@@ -434,9 +434,11 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     } 
     return groups  ;
   }
-  private List<SelectItemOption<String>> getTimeZones() {
+  
+  protected List<SelectItemOption<String>> getTimeZones() {
     return CalendarUtils.getTimeZoneSelectBoxOptions(TimeZone.getAvailableIDs()) ;
   } 
+  
   public String getLabel(String id) {
     try {
       return super.getLabel(id) ;
@@ -445,7 +447,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     }
   }
 
-  private List<SelectItemOption<String>> getLocales() {
+  protected List<SelectItemOption<String>> getLocales() {
     return CalendarUtils.getLocaleSelectBoxOptions(java.util.Calendar.getAvailableLocales()) ;
   }
 
@@ -583,7 +585,6 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
             return ;
           }
 
-          // TODO CS-3607
           List<GroupCalendarData> groupCalendars = calendarService.getGroupCalendars(selected.toArray(new String[] {}), false, username) ;
           for (GroupCalendarData groupCalendarData : groupCalendars) {
             for (Calendar calendar2 : groupCalendarData.getCalendars()) {

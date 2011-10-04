@@ -229,7 +229,6 @@ public class TestMailService extends BaseMailTestCase {
     mailService_.removeAccount(username, accImap.getId());
   }
 
-  // TODO have to move it to test connector, Add custom folder
   public void testFolder() throws Exception {
     Account accountPop = createAccountObj(Utils.POP3);
     mailService_.createAccount(username, accountPop);

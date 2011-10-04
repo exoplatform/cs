@@ -34,16 +34,11 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.PropertyIterator;
-import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.Value;
-import javax.jcr.ValueFormatException;
-import javax.jcr.lock.LockException;
-import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
-import javax.jcr.version.VersionException;
 
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.contact.service.AddressBook;
@@ -577,19 +572,20 @@ public class JCRDataStorage implements DataStorage {
         }
       }
     }
-    // TODO : should throw a business exception instead of PathNotFoundException
-    if (groupNode == null && !isNew)
+    if (groupNode == null && !isNew) {
       throw new PathNotFoundException("No personal or shared address book for user " + username + " was found with ID " + addressbook);
+    }
     groupNode.setProperty("exo:name", addressbook.getName());
     groupNode.setProperty("exo:description", addressbook.getDescription());
     groupNode.setProperty("exo:editPermissionUsers", addressbook.getEditPermissionUsers());
     groupNode.setProperty("exo:viewPermissionUsers", addressbook.getViewPermissionUsers());
     groupNode.setProperty("exo:editPermissionGroups", addressbook.getEditPermissionGroups());
     groupNode.setProperty("exo:viewPermissionGroups", addressbook.getViewPermissionGroups());
-    if (isNew)
+    if (isNew) {
       groupNode.getSession().save();
-    else
+    } else {
       groupNode.save();
+    }
   }
 
   public void savePublicAddressBook(AddressBook addressbook, boolean isNew) throws Exception {
@@ -1721,7 +1717,6 @@ public class JCRDataStorage implements DataStorage {
         PropertyIterator iter = sharedAddressBookMock.getReferences();
         Node addressBook;
 
-        // TODO add if to fix bug 1407
         boolean hasGroup = (filter.getCategories() != null && filter.getCategories().length > 0);
         while (iter.hasNext()) {
           addressBook = iter.nextProperty().getParent();
@@ -1730,7 +1725,6 @@ public class JCRDataStorage implements DataStorage {
           if (!hasGroup)
             filter.setCategories(new String[] { addressBook.getName() });
           filter.setUsername(addressBook.getProperty("exo:sharedUserId").getString());
-          // qm = getSession(sysProvider).getWorkspace().getQueryManager();
           qm = contactHomeNode.getSession().getWorkspace().getQueryManager();
           query = qm.createQuery(filter.getStatement(), Query.XPATH);
           NodeIterator it = query.execute().getNodes();
@@ -2098,7 +2092,6 @@ public class JCRDataStorage implements DataStorage {
       groupNode.setProperty("exo:editPermissionGroups", addressbook.getEditPermissionGroups());
       groupNode.setProperty("exo:viewPermissionGroups", addressbook.getViewPermissionGroups());
 
-      // TODO cs-1141
       Node addressesGroup = addressHome.addNode(NewUserListener.ADDRESSESGROUP + user.getUserName(), "exo:contactGroup");
       addressesGroup.setProperty("exo:id", NewUserListener.ADDRESSESGROUP + user.getUserName());
       addressesGroup.setProperty("exo:name", NewUserListener.ADDRESSESGROUPNAME);

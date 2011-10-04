@@ -98,14 +98,10 @@ public class UIEventCategoryForm extends UIForm {
       UIEventCategoryForm uiForm = event.getSource() ;
       String name = uiForm.getUIStringInput(EVENT_CATEGORY_NAME).getValue() ;
       String description = uiForm.getUIFormTextAreaInput(DESCRIPTION).getValue() ;
-      /*if(!CalendarUtils.isNameValid(name, CalendarUtils.EXTENDEDCHARACTER)) {
-        uiApp.addMessage(new ApplicationMessage("UIEventCategoryForm.msg.name-invalid", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ; 
-        return ;
-      }*/
-      if(!CalendarUtils.isEmpty(name)) name = name.trim() ;
+      if(!CalendarUtils.isEmpty(name)) {
+        name = name.trim() ;
+      }
       
-      // TODO CS-3009
       name = CalendarUtils.reduceSpace(name) ;
       if(!CalendarUtils.isEmpty(description)) description = description.trim() ;
       UIEventCategoryManager uiManager = uiForm.getAncestorOfType(UIEventCategoryManager.class) ;
@@ -116,16 +112,19 @@ public class UIEventCategoryForm extends UIForm {
       eventCat.setDescription(description) ;
       try {
         if(uiForm.isAddNew_) {
-          for (String defaultName : uiManager.defaultEventCategoriesMap.values())
-            if (defaultName.equalsIgnoreCase(eventCat.getName()))
+          for (String defaultName : uiManager.defaultEventCategoriesMap.values()) {
+            if (defaultName.equalsIgnoreCase(eventCat.getName())) {
               throw new ItemExistsException();
+            }
+          }
           calendarService.saveEventCategory(username, eventCat, true) ;
-        }
-        else { 
+        } else { 
           eventCat = uiForm.getEventCategory() ;
-          for (String defaultName : uiManager.defaultEventCategoriesMap.values())
-            if (defaultName.equalsIgnoreCase(name) && !eventCat.getName().equalsIgnoreCase(name))
+          for (String defaultName : uiManager.defaultEventCategoriesMap.values()) {
+            if (defaultName.equalsIgnoreCase(name) && !eventCat.getName().equalsIgnoreCase(name)) {
               throw new ItemExistsException();
+            }
+          }
           eventCat.setName(name) ;
           eventCat.setDescription(description) ;
           calendarService.saveEventCategory(username, eventCat, false) ; 
@@ -158,15 +157,14 @@ public class UIEventCategoryForm extends UIForm {
           if(uiEventForm != null){ 
             uiEventForm.setSelectedTab(UIEventForm.TAB_EVENTDETAIL) ;
             uiEventForm.refreshCategory() ;
-            // TODO CS-1905          
             uiEventForm.setSelectedCategory(uiManager.categoryId_) ;
             uiEventForm.setSelectedCategory(eventCat.getId()) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getChildById(UIEventForm.TAB_EVENTDETAIL)) ;
           }
+          
           if(uiTaskForm != null) { 
             uiTaskForm.setSelectedTab(UITaskForm.TAB_TASKDETAIL) ;
             uiTaskForm.refreshCategory() ;
-            // TODO CS-1905
             uiTaskForm.setSelectedCategory(eventCat.getName()) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiTaskForm.getChildById(UITaskForm.TAB_TASKDETAIL)) ;
           }

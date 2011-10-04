@@ -197,20 +197,6 @@ public class TestContactService extends BaseContactServiceTestCase {
     // updated by shared user
     ab.setName("shared-by-root-to-john");
     ab.setDescription("modified by john");
-
-    // contactService.saveAddressBook(john, ab, false);
-    // AddressBook updated = contactService.getPersonalAddressBook(root,
-    // ab.getId()); // I receive a pathNotFoundException!
-    // assertEquals("Saved address book name should match", ab.getName(),
-    // updated.getName());
-    // assertEquals("Saved address book description should match",
-    // ab.getDescription(), updated.getDescription());
-
-    // updated by non shared user
-    // TODO : service should check permissions and not allow modification by non
-    // allowed users/groups
-    // See : http://jira.exoplatform.org/browse/CS-2389
-
   }
 
   public void testSaveGetContact() throws Exception {
@@ -335,11 +321,6 @@ public class TestContactService extends BaseContactServiceTestCase {
     startSessionAs(demo);
     contactService.unshareAddressBook(root, shared.getId(), demo);
     endSession();
-
-    // TODO : demo should not be able to write
-
-    // TODO : john should be able to write
-
   }
 
   public void testGetPersonalContacts() throws Exception {
@@ -540,8 +521,6 @@ public class TestContactService extends BaseContactServiceTestCase {
   }
 
   public void testGetPublicContactsByFilter() throws Exception {
-    // TODO : need to create self contact for several users then query them with
-    // getPublicContactsByFilter()
   }
 
   public void testRemoveContacts() throws Exception {

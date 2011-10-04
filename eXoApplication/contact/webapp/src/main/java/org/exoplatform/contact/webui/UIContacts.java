@@ -1002,9 +1002,6 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           return;
         }
         for (Contact contact : sharedContacts) {
-          //check permission
-          //if(contactService.haveEditPermissionOnContact(username,contact)){
-          // TODO CS-4542
           if (uiContacts.havePermission(contact)) {
             if (uiContacts.isSharedAddress(contact)) {
               String addressId = null;
@@ -1022,7 +1019,6 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         }
         
         //check edit permission  
-        
         if(unMoveContacts.size()>0){
           StringBuffer sb = new StringBuffer();
           for(Contact ct : unMoveContacts){

@@ -506,10 +506,12 @@ public class MessageFilter {
 
     if (body_ != null && body_.trim().length() > 0) {
       body_ = Utils.encodeJCRTextSearch(body_);
-      if (hasConjuntion)
+      if (hasConjuntion) {
         stringBuffer.append(" and (");
-      else
+      } else {
         stringBuffer.append("(");
+      }
+      
       switch (getBodyCondition()) {
       case Utils.CONDITION_CONTAIN:
         stringBuffer.append(" jcr:contains(@exo:body, '" + body_ + "')");
@@ -523,10 +525,11 @@ public class MessageFilter {
     }
 
     if (fromDate_ != null) {
-      if (hasConjuntion)
+      if (hasConjuntion) {
         stringBuffer.append(" and (");
-      else
+      } else {
         stringBuffer.append("(");
+      }
       stringBuffer.append(" @exo:receivedDate >= xs:dateTime('" + ISO8601.format(fromDate_) + "')");
       stringBuffer.append(")");
       hasConjuntion = true;
@@ -536,60 +539,66 @@ public class MessageFilter {
       toDate_.set(Calendar.HOUR_OF_DAY, 23);
       toDate_.set(Calendar.MINUTE, 59);
       toDate_.set(Calendar.MILLISECOND, 999);
-      if (hasConjuntion)
+      if (hasConjuntion) {
         stringBuffer.append(" and (");
-      else
+      } else {
         stringBuffer.append("(");
+      }
       stringBuffer.append(" @exo:receivedDate <= xs:dateTime('" + ISO8601.format(toDate_) + "')");
       stringBuffer.append(")");
       hasConjuntion = true;
     }
 
     if (priority_ > 0) {
-      if (hasConjuntion)
+      if (hasConjuntion) {
         stringBuffer.append(" and (");
-      else
+      } else {
         stringBuffer.append("(");
+      }
       stringBuffer.append(" @exo:priority = " + priority_ + "");
       stringBuffer.append(")");
       hasConjuntion = true;
     }
 
     if (hasAttach_) {
-      if (hasConjuntion)
+      if (hasConjuntion) {
         stringBuffer.append(" and (");
-      else
+      } else {
         stringBuffer.append("(");
+      }
       stringBuffer.append(" @exo:hasAttach = 'true'");
       stringBuffer.append(")");
       hasConjuntion = true;
     }
 
     if (hasStar_) {
-      if (hasConjuntion)
+      if (hasConjuntion) {
         stringBuffer.append(" and (");
-      else
+      } else {
         stringBuffer.append("(");
+      }
       stringBuffer.append(" @exo:star = 'true'");
       stringBuffer.append(")");
       hasConjuntion = true;
     }
 
     if (viewQuery_ != null && viewQuery_.trim().length() > 0) {
-      if (hasConjuntion)
+      if (hasConjuntion) {
         stringBuffer.append(" and (");
-      else
+      } else {
         stringBuffer.append("(");
+      }
       stringBuffer.append(viewQuery_);
       stringBuffer.append(")");
       hasConjuntion = true;
     }
 
     if (hasStructure_) {
-      if (hasConjuntion)
+      if (hasConjuntion) {
         stringBuffer.append(" and (");
-      else
+      } else {
         stringBuffer.append("(");
+      }
       stringBuffer.append(" @exo:isRoot = 'true'");
       stringBuffer.append(")");
       hasConjuntion = true;
@@ -599,25 +608,25 @@ public class MessageFilter {
 
     if (orderBy_ != null && orderBy_.trim().length() > 0) {
       stringBuffer.append(" order by @" + orderBy_ + " ");
-      // TODO CS-3734
-      // if (isAscending_ && !hasStructure_) stringBuffer.append("ascending") ;
-      if (isAscending_)
+      if (isAscending_) {
         stringBuffer.append("ascending");
-      else
+      } else {
         stringBuffer.append("descending");
+      }
 
       if (orderBy_.equalsIgnoreCase(Utils.EXO_LAST_UPDATE_TIME)) {
         stringBuffer.append(" , @" + Utils.EXO_RECEIVEDDATE + " ");
-        // if (isAscending_ && !hasStructure_) stringBuffer.append("ascending") ;
-        if (isAscending_)
+        if (isAscending_) {
           stringBuffer.append("ascending");
-        else
+        } else {
           stringBuffer.append("descending");
+        }
       }
     }
 
-    if (hasConjuntion)
+    if (hasConjuntion) {
       queryString.append(stringBuffer.toString());
+    }
     return queryString.toString();
   }
 }

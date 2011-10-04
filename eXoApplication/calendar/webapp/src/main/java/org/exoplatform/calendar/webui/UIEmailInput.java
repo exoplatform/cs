@@ -33,8 +33,6 @@ public class UIEmailInput extends UIFormStringInput {
       }
       return ;
     }
-    // TODO validate email when save.
-    //if((!CalendarUtils.isEmpty(value) && (value.indexOf("@") != -1))){
     if (!CalendarUtils.isEmpty(value)){
       w.write("  <div class='UIEmailAddressItem'>");
       w.write("    <div class='UIEmailAddressLabel'>" + value + "</div><div class='UIRemoveEmailIcon' onclick='eXo.calendar.UICalendarPortlet.removeEmailReminder(this) ;'><span></span></div>");

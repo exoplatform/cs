@@ -50,7 +50,6 @@ public class UIStateService implements ResourceContainer {
   private static final CacheControl cc;
 
   static {
-    // TODO: to find the reason why UIStateService loaded before ResourceBinder
     RuntimeDelegate.setInstance(new RuntimeDelegateImpl());
     cc = new CacheControl();
     cc.setNoCache(true);

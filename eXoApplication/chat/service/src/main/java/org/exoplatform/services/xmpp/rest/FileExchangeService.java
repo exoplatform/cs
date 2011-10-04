@@ -93,7 +93,6 @@ public class FileExchangeService implements ResourceContainer {
           String fileType = fileItem.getContentType();
           if (session != null) {
             if (fileName != null) {
-              // TODO Check this for compatible or not
               // It's necessary because IE posts full path of uploaded files
               fileName = FilenameUtils.getName(fileName);
               fileType = FilenameUtils.getExtension(fileName);

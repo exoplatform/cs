@@ -103,7 +103,6 @@ public class UIInvitationForm extends UIForm implements UIPopupComponent {
     addUIFormInput(new UIFormTextAreaInput(FIELD_INVITATION_MSG, FIELD_INVITATION_MSG, defaul_msg)) ;
 
 
-    //TODO add group selector
     UIPopupWindow uiPopup = addChild(UIPopupWindow.class, null, "PUIPopupGroupSelector");
     uiPopup.setWindowSize(540, 0);
     UIGroupSelector uiGroup = createUIComponent(UIGroupSelector.class, null, null);

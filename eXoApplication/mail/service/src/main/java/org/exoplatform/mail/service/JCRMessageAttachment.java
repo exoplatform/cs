@@ -30,8 +30,6 @@ import org.exoplatform.services.jcr.RepositoryService;
  * Author : Hung Ngyen Quang
  *          hung.nguyen@exoplatform.com
  * Jul 9, 2007  
- * 
- * TODO: wrong location, rename to JCRMessageAttachment
  */
 public class JCRMessageAttachment extends Attachment {
   private String workspace;

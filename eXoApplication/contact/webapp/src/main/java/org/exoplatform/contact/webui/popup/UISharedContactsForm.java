@@ -287,26 +287,37 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
           String[] viewPer = contact.getViewPermissionUsers() ;
           Map<String, String> newViewMapUsers = new LinkedHashMap<String, String>() ;
           newViewMapUsers.putAll(viewMapUsers) ;
-          if (viewPer != null)
-            for (String view : viewPer) newViewMapUsers.put(view, view) ;
+          if (viewPer != null) {
+            for (String view : viewPer) {
+              newViewMapUsers.put(view, view) ;
+            }
+          }
+          
           String[] editPer = contact.getEditPermissionUsers() ;
           Map<String, String> newEditMapUsers = new LinkedHashMap<String, String>() ;
           newEditMapUsers.putAll(editMapUsers) ;
-          if (editPer != null)
-            for (String edit : editPer) newEditMapUsers.put(edit, edit) ; 
+          if (editPer != null) {
+            for (String edit : editPer) {
+              newEditMapUsers.put(edit, edit) ;
+            }
+          }
           
           Map<String, String> newViewMapGroups = new LinkedHashMap<String, String>() ;
           newViewMapGroups.putAll(viewMapGroups) ;
           String[] viewPerGroup = contact.getViewPermissionGroups() ;
-          if (viewPerGroup != null) 
-            for (String view : viewPerGroup) newViewMapGroups.put(view, view) ;
+          if (viewPerGroup != null) {
+            for (String view : viewPerGroup) {
+              newViewMapGroups.put(view, view) ;
+            }
+          }
+          
           String[] editPerGroup = contact.getEditPermissionGroups() ;
           Map<String, String> newEditMapGroups = new LinkedHashMap<String, String>() ;
           newEditMapGroups.putAll(editMapGroups) ;
-          if (editPerGroup != null)
-            for (String edit : editPerGroup) newEditMapGroups.put(edit, edit) ; 
+          if (editPerGroup != null) {
+            for (String edit : editPerGroup) newEditMapGroups.put(edit, edit) ;
+          }
           
-          // cs-1777
           if (!uiForm.getUIFormCheckBoxInput(ContactUtils.FIELD_EDIT_PERMISSION).isChecked()) {
             for (String user : receiverUser.keySet()) newEditMapUsers.remove(user) ;
             if (!ContactUtils.isEmpty(groups)) {
@@ -319,7 +330,6 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
           contact.setEditPermissionUsers(newEditMapUsers.keySet().toArray(new String[] {})) ;
           contact.setViewPermissionGroups(newViewMapGroups.keySet().toArray(new String[] {})) ;
           contact.setEditPermissionGroups(newEditMapGroups.keySet().toArray(new String[] {})) ;
-          //TODO cs-2481
           try {
             contactService.saveContact(username, contact, false) ;
           } catch (PathNotFoundException e) {
@@ -332,7 +342,6 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
         String[] contactIds = uiForm.sharedContacts.keySet().toArray(new String[]{}) ;
         for (String user : receiverUserByGroup.keySet()) receiverUser.put(user, user) ;
         contactService.shareContact(username, contactIds, Arrays.asList(receiverUser.keySet().toArray(new String[] {}))) ; 
-        //contactService.shareContact(SessionProviderFactory.createSessionProvider(), username, contactIds, receiverUserByGroup) ;
         event.getRequestContext()
              .getUIApplication()
              .addMessage(new ApplicationMessage("UISharedContactsForm.msg.contacts-shared", null));

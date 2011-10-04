@@ -188,8 +188,6 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
           return;
         }
         for (Contact contact : sharedContacts) {
-          //if(contactService.haveEditPermissionOnContact(username,contact)){
-          // TODO CS-4542
           if(uiContacts.havePermission(contact)){
             if (uiContacts.isSharedAddress(contact)) {
               String addressId = null ;

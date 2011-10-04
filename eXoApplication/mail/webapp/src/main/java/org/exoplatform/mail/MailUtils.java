@@ -339,15 +339,12 @@ public class MailUtils {
     return str.replaceAll("<[^>]*>", "").replaceAll("&nbsp;", "").replaceAll("&quot;", "\"").replaceAll("\n", "");
   }
 
-  // TODO : need to improve later
   public static String html2text(String str) throws Exception {
     if (isFieldEmpty(str))
       return "";
     return str.replaceAll("<br*/?>", "\n").replaceAll("<[^>]*>", "").replaceAll("&nbsp;", "").replaceAll("&quot;", "\"");
-
   }
 
-  // TODO : need to improve later
   public static String text2html(String str) throws Exception {
     if (isFieldEmpty(str))
       return "";

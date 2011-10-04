@@ -133,7 +133,6 @@ public class UIListView extends UICalendarView {
     }
     query.setExcludeRepeatEvent(true);
    
-    // TODO CS-3152
     List<String> calendarIds = findCalendarIds();
     if (calendarIds.size() > 0)
       query.setCalendarId(calendarIds.toArray(new String[] {}));

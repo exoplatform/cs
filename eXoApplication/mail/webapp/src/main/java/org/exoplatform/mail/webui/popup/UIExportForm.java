@@ -52,7 +52,6 @@ import org.exoplatform.webui.form.UIFormStringInput;
 
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    //TODO should not use individual template
     template = "app:/templates/mail/webui/popup/UIExportForm.gtmpl",
     events = {
       @EventConfig(listeners = UIExportForm.ExportActionListener.class), 

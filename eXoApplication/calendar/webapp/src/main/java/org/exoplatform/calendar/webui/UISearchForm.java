@@ -80,44 +80,30 @@ public class UISearchForm extends UIForm {
     @SuppressWarnings("unchecked")
     public void execute(Event<UISearchForm> event) throws Exception {
       UISearchForm uiForm = event.getSource() ;
-      
       String text = uiForm.getSearchValue() ;
      if(CalendarUtils.isEmpty(text))   {
         event.getRequestContext()
              .getUIApplication()
              .addMessage(new ApplicationMessage("UISearchForm.msg.no-text-to-search", null));
         return ;
-      }/*else {
-       if(!CalendarUtils.isNameValid(text, CalendarUtils.EXTENDEDKEYWORD)) {
-         uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.error-text-to-search", null)) ;
-         
-         return ;
-       }
-      }*/
+      }
+     
       try {
         EventQuery eventQuery = new EventQuery() ;
         eventQuery.setText(CalendarUtils.encodeJCRText(text)) ;
-        //eventQuery.setQueryType(Query.SQL) ;
-        String username = CalendarUtils.getCurrentUser() ;
         UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
-        // TODO cs-1953
-        /*List<CalendarEvent> resultList = 
-          CalendarUtils.getCalendarService().searchEvent(username, eventQuery, uiForm.getPublicCalendars()).getAll() ;*/
-        UICalendarViewContainer calendarViewContainer = 
-          calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+        UICalendarViewContainer calendarViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
         String currentView = calendarViewContainer.getRenderedChild().getId() ;
         if(calendarViewContainer.getRenderedChild() instanceof UIWeekView) {
-          if(((UIWeekView)calendarViewContainer.getRenderedChild()).isShowCustomView()) currentView = UICalendarViewContainer.WORKING_VIEW;
+          if(((UIWeekView)calendarViewContainer.getRenderedChild()).isShowCustomView()) {
+            currentView = UICalendarViewContainer.WORKING_VIEW;
+          }
         }
         calendarViewContainer.initView(UICalendarViewContainer.LIST_VIEW) ;
         UIListView uiListView = calendarViewContainer.findFirstComponentOfType(UIListView.class) ;
-        if(!uiListView.isDisplaySearchResult()) uiListView.setLastViewId(currentView) ;
-        /*
-        uiListView.setSortedField(CalendarEventComparator.EVENT_SUMMARY);
-        boolean order = false ;
-        ceCompare.setRevertOrder(order);
-        uiListView.setIsAscending(order);*/
-        //Collections.sort(resultList, ceCompare);
+        if(!uiListView.isDisplaySearchResult()) {
+          uiListView.setLastViewId(currentView) ;
+        }
 
         UICalendars uiCalendars = uiForm.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UICalendars.class);
         eventQuery = uiCalendars.getEventQuery(eventQuery);

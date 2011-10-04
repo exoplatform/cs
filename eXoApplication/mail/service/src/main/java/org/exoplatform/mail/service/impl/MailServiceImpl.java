@@ -996,7 +996,6 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   private JobDetail findActiveCheckmailJob(String userName, String accountId) throws Exception {
-    // TODO current implementation is inefficient
     // / Need to upgrade to 2.0.3 and use this instead :
     // schedulerService_.getJob(info)
     List list = schedulerService_.getAllExcutingJobs();
@@ -1011,7 +1010,6 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   private JobDetail findCheckmailJob(String userName, String accountId) throws Exception {
-    // TODO current implementation is inefficient
     // / Need to upgrade to 2.0.3 and use this instead :
     // schedulerService_.getJob(info)
     List<Object> list = schedulerService_.getAllJobs();
@@ -1787,7 +1785,6 @@ public class MailServiceImpl implements MailService, Startable {
     }
   }
 
-  // TODO: refactor code for checking mail from POP3 server.
   private void checkPop3Server(String userName, Account account) throws Exception {
     String accountId = account.getId();
     if (account != null) {
@@ -2333,7 +2330,6 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public boolean sendReturnReceipt(String userName, String accId, String msgId, ResourceBundle res) throws Exception {
-    // TODO need to implement
     Account acc = getAccountById(userName, accId);
     Message msg = getMessageById(userName, accId, msgId);
 

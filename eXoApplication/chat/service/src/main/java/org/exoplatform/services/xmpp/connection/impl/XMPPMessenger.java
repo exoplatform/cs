@@ -109,9 +109,6 @@ public class XMPPMessenger {
    */
   private Map<String, XMPPSession>       sessions_                  = new HashMap<String, XMPPSession>();
 
-  // TODO add XMPPSession cleaner. This class must search closed session in
-  // sessions map and remove it.
-
   /**
    * @param params the initParms
    */

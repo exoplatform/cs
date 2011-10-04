@@ -57,7 +57,8 @@ public class UIFormDateTimePicker extends UIFormInputBase<String>  {
     if(date != null) value_ = getFormater().format(date) ;
     if(date != null) value_ = getFormater().format(date) ;
   }
-  private String getDaysName() { 
+  
+  protected String getDaysName() { 
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
     Locale locale = context.getParentAppRequestContext().getLocale() ;
     if(locale_ == null) locale_ = locale ;
@@ -155,24 +156,33 @@ public class UIFormDateTimePicker extends UIFormInputBase<String>  {
     timeStyle_ = timeStyle ;
     value_ = getFormater().format(date_) ;
   }
-  @SuppressWarnings("unused")
+  
   public void decode(Object input, WebuiRequestContext context) throws Exception {
     if(input != null) value_ = ((String)input).trim();
   }
+  
   public String getFormatStyle() {
-    if(isDisplayTime_) return dateStyle_ + " " + timeStyle_ ;
-    return dateStyle_ ;
+    if (isDisplayTime_) {
+      return dateStyle_ + " " + timeStyle_;
+    }
+    return dateStyle_;
   }
+
   private String getLang() {
-	    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-	    Locale locale = context.getParentAppRequestContext().getLocale() ;
-	    return locale.getLanguage();
-}
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+    Locale locale = context.getParentAppRequestContext().getLocale();
+    return locale.getLanguage();
+  }
+  
   private DateFormat getFormater() {
-    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-    Locale locale = context.getParentAppRequestContext().getLocale() ;
-    if(locale_ == null) locale_ = locale ;
-    return new SimpleDateFormat(getFormatStyle(), locale_) ;}
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+    Locale locale = context.getParentAppRequestContext().getLocale();
+    if (locale_ == null) {
+      locale_ = locale;
+    }
+    return new SimpleDateFormat(getFormatStyle(), locale_);
+  }
+  
   public void processRender(WebuiRequestContext context) throws Exception {
     Locale locale = context.getParentAppRequestContext().getLocale() ;
     locale_ = locale ;

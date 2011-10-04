@@ -60,7 +60,6 @@ public class SpamFilter {
   }
 
   public boolean checkSpam(javax.mail.Message msg) throws Exception {
-    // TODO : Need to improve this method to check spam more intelligent
     List<String> senderList = new ArrayList<String>(Arrays.asList(getSenders()));
     String sender = Utils.getAddresses(InternetAddress.toString(msg.getFrom()))[0];
     return senderList.contains(sender);

@@ -580,7 +580,6 @@ public class JCRDataStorage implements DataStorage {
             if (moveReference)
               node = moveReference(accountId, node);
             NodeType[] nts = node.getMixinNodeTypes();
-            // TODO should use for each
             for (int i = 0; i < nts.length; i++) {
               node.removeMixin(nts[i].getName());
             }
@@ -2547,8 +2546,6 @@ public class JCRDataStorage implements DataStorage {
           try {
             if (node.hasProperty("exo:conversationId")) {
               Value[] currentValues = node.getProperty("exo:conversationId").getValues();
-              // TODO: get parent have the same folder with child
-              // message
               if (currentValues.length > 0) {
                 parentNode = node.getSession().getNodeByUUID(currentValues[0].getString());
               }
@@ -2929,8 +2926,6 @@ public class JCRDataStorage implements DataStorage {
    */
   private void closeSessionProvider(SessionProvider sessionProvider) {
     if (sessionProvider != null) {
-      // TODO check this when update to gatein
-      // sessionProvider.close();
     }
   }
 

@@ -177,7 +177,6 @@ public class RESTXMPPService implements ResourceContainer, Startable {
 
   private static final CacheControl         cc;
   static {
-    // TODO: to find the reason why RESTXMPPService loaded before ResourceBinder
     RuntimeDelegate.setInstance(new RuntimeDelegateImpl());
     cc = new CacheControl();
     cc.setNoCache(true);
@@ -900,7 +899,6 @@ public class RESTXMPPService implements ResourceContainer, Startable {
     }
   }
 
-  // TODO may be change
   /**
    * @param username
    * @param remoteUser
@@ -1545,15 +1543,12 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       myProfile.setFullName(myInfo.getFirstName() + " " + myInfo.getLastName());
       initInfoBean.setMyProfile(myProfile);
 
-      // Add 17/06
       session.addFullUserNames(username, myProfile.getFullName());
 
       initInfoBean.setSearchServicesNames(services);
       initInfoBean.setHostedRooms(rooms);
       initInfoBean.setTotalRooms(rooms.size());
-      // TODO: temper temporarily comment until we not have confirmation about
       // receive messages
-      // initInfoBean.setMessages(session.getNotRecieveMessages());
       return Response.ok(initInfoBean, JSON_CONTENT_TYPE).cacheControl(cc).header("Set-Cookie", "userTicket=" + UUID.randomUUID().toString()).build();
     } catch (XMPPException e) {
       if (log.isDebugEnabled()) {

@@ -34,7 +34,6 @@ import org.exoplatform.webui.core.UIContainer;
   template = "app:/templates/mail/webui/UINavigationContainer.gtmpl"
 )
 public class UINavigationContainer extends UIContainer  {
-  //TODO set id for diffrence id (compare with contact portlet)
   public UINavigationContainer() throws Exception {
     addChild(UISearchForm.class, null, null) ;
     UISelectAccount uiSelectAccount = createUIComponent(UISelectAccount.class, null, null);
@@ -42,7 +41,6 @@ public class UINavigationContainer extends UIContainer  {
     MailService mailSvr = getApplicationComponent(MailService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     String defaultAcc = mailSvr.getMailSetting(username).getDefaultAccount();
-    //TODO check session to get account (no need the systemSession for this)
     List<Account> accounts = mailSvr.getAccounts(username);
     if (defaultAcc == null && accounts.size() > 0) defaultAcc = accounts.get(0).getId();
     uiSelectAccount.setSelectedValue(defaultAcc);
@@ -52,6 +50,4 @@ public class UINavigationContainer extends UIContainer  {
     addChild(uiFolderContainer) ;
     addChild(UITagContainer.class, null, null) ;
   }
-
-  
 }

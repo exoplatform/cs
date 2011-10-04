@@ -466,7 +466,6 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         uiEventForm.setSelectedCategory(uiForm.getEventCategory()) ;
         String username = CalendarUtils.getCurrentUser() ;
         uiEventForm.setSelectedEventState(UIEventForm.ITEM_BUSY) ;
-//      TODO cs-839
         uiEventForm.setParticipant(username) ;
         uiEventForm.setParticipantStatus(username) ;
         uiEventForm.getChild(UIEventShareTab.class).setParticipantStatusList(uiEventForm.getParticipantStatusList());
@@ -475,7 +474,6 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         uiEventForm.setEmailReminder(true) ;
         uiEventForm.setEmailRepeat(false) ;
         if (uiForm.getEventCalendar() != null) uiEventForm.setSelectedCalendarId(uiForm.getEventCalendar());
-        //event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       } else {
         uiPopupAction.deActivate() ;
         UIPopupContainer uiPopupContainer  = uiPopupAction.activate(UIPopupContainer.class, 700) ;

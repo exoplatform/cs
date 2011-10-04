@@ -223,7 +223,6 @@ public class CalendarWebservice implements ResourceContainer{
       CalendarService calService = (CalendarService)ExoContainerContext
       .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
 
-      // TODO getFeed(String feedname)
       FeedData feed = null;
       for (FeedData feedData : calService.getFeeds(username)) {
         if (feedData.getTitle().equals(feedname)) {

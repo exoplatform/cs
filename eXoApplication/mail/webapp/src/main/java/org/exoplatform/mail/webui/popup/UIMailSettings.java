@@ -224,7 +224,6 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
   static  public class SaveActionListener extends EventListener<UIMailSettings> {
     public void execute(Event<UIMailSettings> event) throws Exception {
       UIMailSettings uiSetting = event.getSource();
-      //TODO save to data base
       UIMailPortlet uiPortlet = uiSetting.getAncestorOfType(UIMailPortlet.class);
       String username = uiPortlet.getCurrentUser();
       UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;

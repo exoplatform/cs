@@ -87,7 +87,6 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     setSelectedTab(setting.getId()) ;
     UICalendarSettingDisplayTab defaultCalendarsTab  = new UICalendarSettingDisplayTab(DEFAULT_CALENDAR_TAB) ;    
     addUIFormInput(defaultCalendarsTab) ;
-    // TODO Add Feed Tab
     UICalendarSettingFeedTab uiFeedTab = new UICalendarSettingFeedTab(FEED_TAB);
     addUIFormInput(uiFeedTab);
   }
@@ -118,10 +117,8 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
         settingTab.setWorkingBegin(calendarSetting.getWorkingTimeBegin(), CalendarUtils.DATEFORMAT + " " + calendarSetting.getTimeFormat()) ;
         settingTab.setWorkingEnd(calendarSetting.getWorkingTimeEnd(), CalendarUtils.DATEFORMAT + " " + calendarSetting.getTimeFormat()) ;
       }
-      //TODO cs-764
       settingTab.setSendOption(calendarSetting.getSendOption()) ;
       if(calendarSetting.getBaseURL() == null) calendarSetting.setBaseURL(CalendarUtils.getServerBaseUrl() + "calendar/iCalRss") ;
-      //settingTab.setBaseUrl(calendarSetting.getBaseURL()) ;
     }
     UICalendarSettingDisplayTab defaultCalendarsTab = getChildById(DEFAULT_CALENDAR_TAB) ;    
     List<String> filteredCalendars = new ArrayList<String>() ;
@@ -266,7 +263,6 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       calendarSetting.setLocation(settingTab.getLocale()) ;
       calendarSetting.setTimeZone(settingTab.getTimeZone()) ;
       calendarSetting.setBaseURL(CalendarUtils.getServerBaseUrl() + "calendar/iCalRss") ;
-      //TODO cs-764
       calendarSetting.setSendOption(settingTab.getSendOption()) ;
       if(settingTab.getShowWorkingTimes()) {
         if(settingTab.getWorkingBegin().equals(settingTab.getWorkingEnd()) || settingTab.getWorkingBeginTime().after(settingTab.getWorkingEndTime())) {
@@ -318,7 +314,6 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       
       UICalendarContainer uiCalendarContainer = calendarPortlet.findFirstComponentOfType(UICalendarContainer.class);
       uiCalendarContainer.applySeting();
-      // TODO CS-4165
       calendarPortlet.findFirstComponentOfType(UICalendarView.class).setCalendarSetting(calendarSetting);
       
       calendarPortlet.findFirstComponentOfType(UIActionBar.class).setCurrentView(viewType) ;

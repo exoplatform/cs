@@ -244,7 +244,6 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     return !CalendarUtils.isEmpty(formData);
   }
   static  public class SearchActionListener extends EventListener<UIAdvancedSearchForm> {
-    @SuppressWarnings("unchecked")
     public void execute(Event<UIAdvancedSearchForm> event) throws Exception {
       UIAdvancedSearchForm uiForm = event.getSource() ;
       
@@ -309,12 +308,8 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
         }
         String priority = uiForm.getUIFormSelectBox(UIAdvancedSearchForm.PRIORITY).getValue() ;
         if(priority != null && priority.trim().length() > 0) query.setPriority(priority) ;
-        String username = CalendarUtils.getCurrentUser() ;
         UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
         
-        // TODO cs-1953
-        /*List<CalendarEvent> resultList =  
-          CalendarUtils.getCalendarService().searchEvent(username, query, uiForm.getPublicCalendars()).getAll() ;*/
         UICalendarViewContainer calendarViewContainer = 
           calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
         String currentView = calendarViewContainer.getRenderedChild().getId() ;

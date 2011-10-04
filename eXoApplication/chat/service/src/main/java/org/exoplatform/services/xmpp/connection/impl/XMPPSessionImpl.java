@@ -795,7 +795,6 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
    * {@inheritDoc}
    */
   public ReportedData searchUser(String search, boolean byUsername, boolean byName, boolean byEmail, String searchService) throws XMPPException {
-    // TODO: search form
     // Probably: change to ask about search form for each search.
     // In this case it will not necessary to check form - it will be impossible
     // to put wrong fields in the form.

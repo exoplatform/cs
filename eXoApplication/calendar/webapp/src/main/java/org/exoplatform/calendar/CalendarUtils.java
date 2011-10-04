@@ -801,8 +801,6 @@ public class CalendarUtils {
     addressList = addressList.replaceAll(SEMICOLON,COMMA) ;
     List<String> emails = new ArrayList<String>() ;
     emails.addAll(Arrays.asList(addressList.split(COMMA))) ;
-    // TODO use regex same EmailAddressValidator in portal.
-    //String emailRegex = "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+\\.[A-Za-z]{2,5}" ;
     try{
       for (String email : emails) {
         email = email.trim() ;

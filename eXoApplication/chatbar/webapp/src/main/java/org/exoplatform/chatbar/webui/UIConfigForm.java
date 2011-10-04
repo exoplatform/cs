@@ -105,7 +105,6 @@ public class UIConfigForm extends UIForm {
         UIConfigForm uiForm = event.getSource() ;
         PortletRequestContext pcontext = (PortletRequestContext)WebuiRequestContext.getCurrentInstance() ;
         PortletPreferences preferences = pcontext.getRequest().getPreferences();
-        //TODO update value here
 
         boolean isShowMail = uiForm.getUIFormCheckBoxInput(MAIL_APP).isChecked();
         boolean isShowCalendar = uiForm.getUIFormCheckBoxInput(CAL_APP).isChecked();

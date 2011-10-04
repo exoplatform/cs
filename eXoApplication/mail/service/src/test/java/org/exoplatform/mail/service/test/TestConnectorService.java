@@ -141,8 +141,6 @@ public class TestConnectorService extends BaseMailTestCase {
     }
   }
 
-  // TODO problem with this function from gmail and gmx, this one only pass when use local mail server in vietnam
-  // have to check more
   public void testRenameFolder() throws Exception {
     Account account = createAccountObj(Utils.IMAP, prv_);
     Folder folder = new Folder();

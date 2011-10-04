@@ -261,7 +261,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           uiChildPopup.deActivate() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
           
-//        TODO cs-1141
           ContactUtils.getContactService().saveAddress(username, to) ;          
         }catch (Exception e) {
           event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-error",
@@ -300,12 +299,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           message.setBody(uiForm.getFieldContentValue()) ;
           org.exoplatform.services.mail.MailService mService = uiForm.getApplicationComponent(org.exoplatform.services.mail.impl.MailServiceImpl.class) ;
           mService.sendMessage(message) ;
-          // TODO cs-1141
           ContactUtils.getContactService().saveAddress(ContactUtils.getCurrentUser(), to) ;          
           
-          //ContactUtils.sendMessage(message) ;
-          /*uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-succsessfuly", null, ApplicationMessage.INFO)) ;
-          */
           UIContactPortlet portlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
           UIPopupAction popupAction = portlet.getChild(UIPopupAction.class) ;
           popupAction.deActivate() ;

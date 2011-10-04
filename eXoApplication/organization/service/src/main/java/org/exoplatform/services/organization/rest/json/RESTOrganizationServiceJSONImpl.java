@@ -91,7 +91,6 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
   public Response findUsers(@Context UriInfo uriInfo, @QueryParam("username") String username, @QueryParam("firstname") String firstname, @QueryParam("lastname") String lastname, @QueryParam("email") String email, @QueryParam("fromLoginDate") String fromLoginDate, @QueryParam("toLogindate") String toLoginDate) {
     username = RESTAuthenticator.decodeUsername(username);
     try {
-      // TODO : now returned all founded user need be carefully then using wildcard (*)
       Query query = new Query();
       query.setUserName(username);
       query.setFirstName(firstname);

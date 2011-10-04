@@ -58,7 +58,6 @@ public class MailWebservice implements ResourceContainer {
   public static final int    MAX_TIMEOUT       = 16;
 
   private static final Log log = ExoLogger.getLogger("cs.mail.webservice");
-  // TODO need to organize code, don't keep html content here !
   
   public MailWebservice() {
     

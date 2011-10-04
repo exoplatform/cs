@@ -885,7 +885,6 @@ public class UICalendars extends UIForm  {
     }
   }
   
-  // TODO CS- 3152 only when list view
   static public class TickActionListener extends EventListener<UICalendars> {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiCalendars = event.getSource() ;
