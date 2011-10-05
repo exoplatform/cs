@@ -1478,9 +1478,7 @@ public class MailServiceImpl implements MailService, Startable {
     
     String urlName = folder.getURLName();
     if (folder != null && !Utils.isEmptyField(urlName)) {
-      javax.mail.Folder mailServerFolder = connector.getFolder(urlName);
-      if (!mailServerFolder.isOpen())
-        mailServerFolder.open(javax.mail.Folder.READ_WRITE);
+      javax.mail.Folder mailServerFolder = connector.openFolderForReadWrite(urlName);
       if (mailServerFolder != null) {
         synchImapMessage(userName, account, mailServerFolder, info);
       }
@@ -1562,10 +1560,8 @@ public class MailServiceImpl implements MailService, Startable {
     // If it hasn't been set yet, we will create a new finish message.
     if (info != null) {
       if (info.getStatusCode() != CheckingInfo.FINISHED_CHECKMAIL_STATUS) {
-        // info.setStatusMsg("Finish getting messages");
         info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
       }
-      // removeCheckingInfo(userName, accountId);
       updateCheckingMailStatusByCometd(userName, accountId, info);
     }
   }
@@ -1585,18 +1581,22 @@ public class MailServiceImpl implements MailService, Startable {
     String accountId = account.getId();
     boolean saved = false;
     int totalNew = -1;
-    if (folder == null)
+    if (folder == null) {
       return;
+    }
+    
     String folderId = null;
     String folderName = folder.getName();
     if (!folder.isOpen()) {
       folder.open(javax.mail.Folder.READ_ONLY);
     }
+    
     logger.debug(" #### Getting mails from folder " + folderName + " !");
     if (info != null) {
       info.setStatusCode(CheckingInfo.DOWNLOADING_MAIL_STATUS);
       updateCheckingMailStatusByCometd(userName, accountId, info);
     }
+    
     folderId = Utils.generateFID(accountId, String.valueOf(((IMAPFolder) folder).getUIDValidity()), true);
     String[] localFolders = Utils.DEFAULT_FOLDERS;
     for (String localFolder : localFolders) {
@@ -1604,6 +1604,7 @@ public class MailServiceImpl implements MailService, Startable {
         folderId = Utils.generateFID(accountId, localFolder, false);
       }
     }
+    
     Folder eXoFolder = getFolderById(userName, accountId, folderId);
     if (eXoFolder != null) {
       long unreadMsgCount = eXoFolder.getNumberOfUnreadMessage();
@@ -1616,7 +1617,8 @@ public class MailServiceImpl implements MailService, Startable {
       }
 
       boolean isImap = account.getProtocol().equals(Utils.IMAP);
-      boolean leaveOnserver = (isImap && Boolean.valueOf(account.getServerProperties().get(Utils.SVR_LEAVE_ON_SERVER)));
+      boolean leaveOnserver = isImap && Boolean.valueOf(account.getServerProperties().get(Utils.SVR_LEAVE_ON_SERVER));
+      
       // after check folder, we see the stopping request of user.
       if (info.isRequestStop()) {
         throw new CheckMailInteruptedException("stopped checking emails!");
@@ -1755,7 +1757,7 @@ public class MailServiceImpl implements MailService, Startable {
         } else if (account.getProtocol().equals(Utils.IMAP)) {
           if (reciever != null) {
             Folder folder = Utils.isEmptyField(folderId) ? null : getFolderById(username, accountId, folderId);
-            boolean isSyncFolder = getFolders(username, accountId).size() == 0;
+            boolean isSyncFolder = getFolders(username, accountId, true).size() == 0;
             getSynchnizeImapServer(reciever, account, folder, isSyncFolder);
           }
         }
@@ -1765,8 +1767,9 @@ public class MailServiceImpl implements MailService, Startable {
         info.assignInterruptedStatus();
         updateCheckingMailStatusByCometd(username, accountId, info);
       } catch (MessagingException e) {
-        if (logger.isDebugEnabled()) 
+        if (logger.isDebugEnabled()) {
           logger.debug(String.format("Error when getting new messages for user '%s' account '%s', folderid '%s'", reciever, accountId, folderId), e);
+        }
         CheckingInfo info = getCheckingInfo(username, accountId);
         if (info != null) {
           info.setStatusCode(CheckingInfo.CONNECTION_FAILURE);

@@ -197,8 +197,8 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
   protected void getMail(String accountId) throws Exception {
     MailService mailSvr = getApplicationComponent(MailService.class) ;
     UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class) ;
-    String username = uiPortlet.getCurrentUser() ;
-    mailSvr.checkMail(username, accountId) ;
+    String username = uiPortlet.getCurrentUser();
+    mailSvr.checkMail(username, accountId);
   }
 
   protected void resetForm() {
@@ -370,6 +370,7 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
         uiMessageList.setMessageFilter(null);
         uiMessageList.init(acc.getId());
         uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);
+        uiPortlet.getDataCache().clearCache();
       } catch (Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.create-acc-unsuccessfully", null, ApplicationMessage.ERROR)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -388,8 +389,6 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
           event.getRequestContext().addUIComponentToUpdateByAjax(uiAccCreation.getAncestorOfType(UIPopupAction.class)) ;
           WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
           context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.initService('checkMailInfobar', '" + MailUtils.getCurrentUser() + "', '" + acc.getId() + "') ;") ;
-          /*context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.setCheckmailTimeout(" + 
-              uiAccCreation.getApplicationComponent(MailService.class).getMailSetting(MailUtils.getCurrentUser()).getPeriodCheckAuto() + ") ;") ;*/
           context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.checkMail(true) ;");
           context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.showStatusBox('checkmail-notice') ;");        
         } catch (AuthenticationFailedException afe) {
