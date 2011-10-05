@@ -68,6 +68,10 @@ public abstract class BaseConnector implements Connector {
     return store_.getFolder(new URLName(folderUrl));
   }
   
+  public javax.mail.Folder getFolder(URLName folderUrl) throws MessagingException {
+    return store_.getFolder(folderUrl);
+  }
+  
   public void close() {
     if (store_ != null) {
       try {

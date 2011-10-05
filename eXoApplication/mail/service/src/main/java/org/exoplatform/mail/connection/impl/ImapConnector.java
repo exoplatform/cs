@@ -393,6 +393,10 @@ public class ImapConnector extends BaseConnector {
   }
   
   public IMAPFolder openFolderForReadWrite(String folderUrl) throws MessagingException {
+    return openFolderForReadWrite(new URLName(folderUrl));
+  }
+  
+  public IMAPFolder openFolderForReadWrite(URLName folderUrl) throws MessagingException {
     IMAPFolder remoteFolder = (IMAPFolder) getFolder(folderUrl);
     if (remoteFolder != null) {
       if (!remoteFolder.isOpen()) {

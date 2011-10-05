@@ -1476,12 +1476,9 @@ public class MailServiceImpl implements MailService, Startable {
       folder = getFolderById(userName, account.getId(), Utils.generateFID(account.getId(), Utils.FD_INBOX, false));
     }
     
-    String urlName = folder.getURLName();
-    if (folder != null && !Utils.isEmptyField(urlName)) {
-      javax.mail.Folder mailServerFolder = connector.openFolderForReadWrite(urlName);
-      if (mailServerFolder != null) {
-        synchImapMessage(userName, account, mailServerFolder, info);
-      }
+    javax.mail.Folder mailServerFolder = connector.openFolderForReadWrite(folder.getURLName());
+    if (mailServerFolder != null) {
+      synchImapMessage(userName, account, mailServerFolder, info);
     }
   }
 
@@ -1587,8 +1584,14 @@ public class MailServiceImpl implements MailService, Startable {
     
     String folderId = null;
     String folderName = folder.getName();
-    if (!folder.isOpen()) {
-      folder.open(javax.mail.Folder.READ_ONLY);
+    
+    try {
+      if (!folder.isOpen()) {
+        folder.open(javax.mail.Folder.READ_ONLY);
+      }
+    } catch (MessagingException ex) {
+      org.mortbay.log.Log.warn("Can not download messages of folder: " + folderName, ex);
+      return;
     }
     
     logger.debug(" #### Getting mails from folder " + folderName + " !");
@@ -1612,7 +1615,7 @@ public class MailServiceImpl implements MailService, Startable {
 
       if (account.getCheckFromDate() == null) {
         checkFromDate = null;
-      } else if (checkFromDate == null || checkFromDate.before(account.getCheckFromDate())) {
+      } else if ((checkFromDate == null) || checkFromDate.before(account.getCheckFromDate())) {
         checkFromDate = account.getCheckFromDate();
       }
 
@@ -1637,7 +1640,6 @@ public class MailServiceImpl implements MailService, Startable {
         c.setTime(checkFromDate);
       }
       HashSet<String> savedMsgList = new HashSet<String>(getListOfMessageIdsInFolder(userName, accountId, folderId, c , null));
-      
       totalNew = msgMap.size();
 
       logger.debug(" #### Folder " + folderName + " contains " + totalNew + " messages !");
@@ -1650,8 +1652,7 @@ public class MailServiceImpl implements MailService, Startable {
         info.setStatusCode(CheckingInfo.DOWNLOADING_MAIL_STATUS);
         updateCheckingMailStatusByCometd(userName, accountId, info);
         while (i < totalNew) {
-
-          if (info != null && info.isRequestStop()) {
+          if ((info != null) && info.isRequestStop()) {
             if (logger.isDebugEnabled()) {
               logger.debug("Stop requested on checkmail for " + account.getId());
             }
