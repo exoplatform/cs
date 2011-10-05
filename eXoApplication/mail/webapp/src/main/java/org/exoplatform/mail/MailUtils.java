@@ -444,9 +444,9 @@ public class MailUtils {
    * 
    * @return
    */
-  public static boolean hasDMSSelector() {
+  public static boolean hasDMSConnector() {
     try {
-      Class.forName("org.exoplatform.webui.commons.UIDocumentSelector");
+      Class.forName("org.exoplatform.ecm.connector.platform.ManageDocumentService");
       return true;
     } catch (ClassNotFoundException e) {
       return false;
