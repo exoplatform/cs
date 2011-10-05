@@ -94,12 +94,8 @@ public class ImapConnector extends BaseConnector {
         imapFolder.create((int) folder.getType());
       }
     } else {
-      URLName url = new URLName(parentFolder.getURLName());
-      IMAPFolder parentImapFolder = (IMAPFolder) imapStore.getFolder(url);
+      IMAPFolder parentImapFolder = openFolderForReadWrite(parentFolder.getURLName());
       if (parentImapFolder != null && parentImapFolder.exists()) {
-        boolean isOpen = parentImapFolder.isOpen();
-        if (!isOpen)
-          parentImapFolder.open(javax.mail.Folder.READ_WRITE);
         imapFolder = (IMAPFolder) parentImapFolder.getFolder(folder.getName());
         if (!imapFolder.exists()) {
           imapFolder.create((int) folder.getType());
@@ -112,11 +108,8 @@ public class ImapConnector extends BaseConnector {
   public Folder renameFolder(String newName, Folder folder) throws Exception {
     try {
       boolean result = false;
-      URLName url = new URLName(folder.getURLName());
-      IMAPFolder folderToBeRenamed = (IMAPFolder) imapStore.getFolder(url);
+      IMAPFolder folderToBeRenamed = openFolderForReadWrite(folder.getURLName());
       if (folderToBeRenamed.exists()) {
-        if (folderToBeRenamed.isOpen()) {
-        }
         IMAPFolder f1 = (IMAPFolder) imapStore.getFolder(newName);
         result = folderToBeRenamed.renameTo(f1);
         folder.setURLName(f1.getURLName().toString());
@@ -187,9 +180,10 @@ public class ImapConnector extends BaseConnector {
     
     // Create new messages
     List<Message> successList = new ArrayList<Message>();
-    IMAPFolder remoteFolder = openImapFolder(folder);
+    IMAPFolder remoteFolder = openFolderForReadWrite(folder.getURLName());
     if (remoteFolder == null) {
-      return null;
+      createFolder(folder);
+      remoteFolder = openFolderForReadWrite(folder.getURLName());
     }
     
     Properties props = System.getProperties();
@@ -202,67 +196,37 @@ public class ImapConnector extends BaseConnector {
       messages[i] = (javax.mail.Message) mimeMessage;
     }
     
-    if (remoteFolder.isOpen()) {
-      try {
-        createdMsgs = remoteFolder.addMessages(messages);
-      } catch (MessagingException me) {
-        logger.error("Synchronize message from local to server fail.\n", me);
+    try {
+      createdMsgs = remoteFolder.addMessages(messages);
+    } catch (MessagingException me) {
+      logger.error("Synchronize message from local to server fail.\n", me);
+    }
+    if (createdMsgs != null && createdMsgs.length > 0 && createdMsgs.length == msgs.size()) {
+      String uid = "";
+      for (int l = 0; l < createdMsgs.length; l++) {
+        if (createdMsgs[l] != null) {
+          try {
+            uid = String.valueOf(remoteFolder.getUID(createdMsgs[l]));
+          } catch (MessagingException me) {
+            logger.warn("Not found UID for \"" + createdMsgs[l].getSubject() + "\".");
+          }
+          if (Utils.isEmptyField(uid))
+            uid = MimeMessageParser.getMsgUID();
+          msgs.get(l).setId(MimeMessageParser.getMessageId(createdMsgs[l]));
+          msgs.get(l).setUID(uid);
+        } else
+          logger.warn("Mail server could not append a new UID for message: " + msgs.get(l).getSubject());
+        successList.add(msgs.get(l));
       }
-      if (createdMsgs != null && createdMsgs.length > 0 && createdMsgs.length == msgs.size()) {
-        String uid = "";
-        for (int l = 0; l < createdMsgs.length; l++) {
-          if (createdMsgs[l] != null) {
-            try {
-              uid = String.valueOf(remoteFolder.getUID(createdMsgs[l]));
-            } catch (MessagingException me) {
-              logger.warn("Not found UID for \"" + createdMsgs[l].getSubject() + "\".");
-            }
-            if (Utils.isEmptyField(uid))
-              uid = MimeMessageParser.getMsgUID();
-            msgs.get(l).setId(MimeMessageParser.getMessageId(createdMsgs[l]));
-            msgs.get(l).setUID(uid);
-          } else
-            logger.warn("Mail server could not append a new UID for message: " + msgs.get(l).getSubject());
-          successList.add(msgs.get(l));
-        }
-      } else {
-        logger.warn("Not all messages are synchronized with server.");
-      }
+    } else {
+      logger.warn("Not all messages are synchronized with server.");
     }
     return successList;
   }
   
-  public IMAPFolder openImapFolder(Folder folder) throws Exception {
-    IMAPFolder remoteFolder = null;
-    URLName remoteURL = new URLName(folder.getURLName());
-    try {
-      remoteFolder = (IMAPFolder) imapStore.getFolder(remoteURL);
-    } catch (Exception e) {
-      logger.warn("Cannot get \"" + folder.getName() + "\" folder. It will be created on server immediate.");
-      remoteFolder = (IMAPFolder) createFolder(folder);
-      folder.setURLName(remoteFolder.getURLName().toString());
-    }
-    
-    if (remoteFolder == null) {
-      return null;
-    }
-    
-    try {
-      if (remoteFolder != null && !remoteFolder.isOpen()) {
-        remoteFolder.open(javax.mail.Folder.READ_WRITE);
-      } 
-    } catch (Exception e) {
-      logger.warn("Cannot open \"" + folder.getName() + "\" folder. It will be created on server.");
-      remoteFolder = (IMAPFolder) createFolder(folder);
-      folder.setURLName(remoteFolder.getURLName().toString());
-      remoteFolder.open(javax.mail.Folder.READ_WRITE);
-    }
-    return remoteFolder;
-  }
-
   public boolean deleteMessage(List<Message> msgs, Folder folder) throws Exception {
     try {
-      IMAPFolder remoteFolder = openImapFolder(folder);
+      IMAPFolder remoteFolder = openFolderForReadWrite(folder.getURLName());
       if (remoteFolder == null) {
         return false;
       }
@@ -398,8 +362,7 @@ public class ImapConnector extends BaseConnector {
         isRead = null;
       }
 
-      URLName url = new URLName(f.getURLName());
-      IMAPFolder folder = (IMAPFolder) imapStore.getFolder(url);
+      IMAPFolder folder = openFolderForReadWrite(f.getURLName());
       if (!folder.isOpen()) {
         folder.open(javax.mail.Folder.READ_WRITE);
       }

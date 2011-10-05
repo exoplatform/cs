@@ -1680,11 +1680,13 @@ public class MailServiceImpl implements MailService, Startable {
 
               receivedDate = MimeMessageParser.getReceivedDate(msg).getTime();
 
-              if (i == 0)
+              if (i == 0) {
                 lastFromDate = receivedDate;
+              }
               eXoFolder.setLastCheckedDate(receivedDate);
-              if ((i == (totalNew - 1)))
+              if ((i == (totalNew - 1))) {
                 eXoFolder.setCheckFromDate(lastFromDate);
+              }
 
               if (lastFromDate != null && (eXoFolder.getLastStartCheckingTime() == null || eXoFolder.getLastStartCheckingTime().before(lastFromDate))) {
                 eXoFolder.setLastStartCheckingTime(lastFromDate);
