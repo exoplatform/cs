@@ -62,8 +62,18 @@
 	<td></td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>5000</td>
+	<td>echo</td>
+	<td>-- Agenda</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Agenda</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Agenda</td>
 	<td></td>
 </tr>
 <tr>
@@ -73,22 +83,17 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=Agenda</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>link=Agenda</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
 	<td>link=Event</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
 	<td>link=Event</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Type event name</td>
 	<td></td>
 </tr>
 <tr>
@@ -107,23 +112,18 @@
 	<td>Test_CS06_Event_description</td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>link=Save</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
-	<td>//div[@id='QuickAddEventContainer']//div[@class='ButtonRight']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForTextPresent</td>
-	<td>Test_CS06_Event</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>Test_CS06_Event</td>
+	<td>link=Save</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- Search for&nbsp;&nbsp;and Edit Event</td>
+	<td>-- Search Event</td>
 	<td></td>
 </tr>
 <tr>
@@ -142,23 +142,38 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>//div[@class='UIListView SpliterResizableListArea']//tr[@class='UIListViewRow']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>//div[@class='UIListView SpliterResizableListArea']//tr[@class='UIListViewRow']</td>
+	<td>echo</td>
+	<td>-- View Event</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//table[@id='RowContainerDay']//div[@class='IconHolder EditEventIcon']</td>
+	<td>//span[@title='Test_CS06_Event']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//table[@id='RowContainerDay']//div[@class='IconHolder EditEventIcon']</td>
+	<td>//span[@title='Test_CS06_Event']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--&nbsp;&nbsp;Edit Event</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[text()='Test_CS06_Event']/following-sibling::a[contains(@href,'Edit')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[text()='Test_CS06_Event']/following-sibling::a[contains(@href,'Edit')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--&nbsp;&nbsp;Change content of event</td>
 	<td></td>
 </tr>
 <tr>
@@ -177,18 +192,33 @@
 	<td>Test_CS06_Event_description_Edited</td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>//div[@id='UIPopupAddEventContainer']//div[@class='ButtonRight']</td>
+	<td>echo</td>
+	<td>--&nbsp;&nbsp;Save</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=Save</td>
+	<td>css=div.HorizontalLayout &gt; div.UIAction &gt; a.ActionButton.LightBlueStyle</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>link=Save</td>
+	<td>css=div.HorizontalLayout &gt; div.UIAction &gt; a.ActionButton.LightBlueStyle</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--&nbsp;&nbsp;Confirm Save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//form[@id='UIConfirmForm']/div[2]/div/div/a[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//form[@id='UIConfirmForm']/div[2]/div/div/a[2]</td>
 	<td></td>
 </tr>
 <tr>
@@ -208,17 +238,27 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//table[@id='RowContainerDay']//div[@class='IconHolder DeleteEventIcon']</td>
+	<td>//div[text()='Test_CS06_Event_Edited']/following-sibling::a[contains(@href,'Delete')]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//table[@id='RowContainerDay']//div[@class='IconHolder DeleteEventIcon']</td>
+	<td>//div[text()='Test_CS06_Event_Edited']/following-sibling::a[contains(@href,'Delete')]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>assertConfirmation</td>
-	<td>Are you sure you want to delete?</td>
+	<td>Are you sure to delete this event/task?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Sign out</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Sign out</td>
 	<td></td>
 </tr>
 <tr>
@@ -226,12 +266,6 @@
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
-<tr>
-	<td>close</td>
-	<td></td>
-	<td></td>
-</tr>
-
 </tbody></table>
 </body>
 </html>
