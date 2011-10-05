@@ -1526,25 +1526,24 @@ public class MailServiceImpl implements MailService, Startable {
       if (info.isRequestStop()) {
         throw new CheckMailInteruptedException("stopped checking emails!");
       }
-
-      if (folder != null) {
-        mergeMessageBetweenJcrAndServerMail(connector, userName, account, folder, info);
-      } else {
-        if (folderList != null && folderList.size() > 0) {
-          for (javax.mail.Folder folder1 : folderList) {
-            if (!Utils.isEmptyField(info.getRequestingForFolder_()) && !info.getRequestingForFolder_().equals("checkall")) {
-              break;
-            }
-            if (info != null && info.isRequestStop()) {
-              if (logger.isDebugEnabled()) {
-                logger.debug("Stop requested on checkmail for " + account.getId());
-              }
-              throw new CheckMailInteruptedException("Stop getting mails from folder " + folder1.getName() + " !");
-            }
-            synchImapMessage(userName, account, folder1, info);
-          }
-        }
-      }
+      
+//      if (folder == null) {
+//        if (folderList != null && folderList.size() > 0) {
+//          for (javax.mail.Folder folder1 : folderList) {
+//            if (!Utils.isEmptyField(info.getRequestingForFolder_()) && !info.getRequestingForFolder_().equals("checkall")) {
+//              break;
+//            }
+//            if (info != null && info.isRequestStop()) {
+//              if (logger.isDebugEnabled()) {
+//                logger.debug("Stop requested on checkmail for " + account.getId());
+//              }
+//              throw new CheckMailInteruptedException("Stop getting mails from folder " + folder1.getName() + " !");
+//            }
+//            synchImapMessage(userName, account, folder1, info);
+//          }
+//        }
+//      }
+      mergeMessageBetweenJcrAndServerMail(connector, userName, account, folder, info);
 
       logger.debug("/////////////////////////////////////////////////////////////");
       logger.debug("/////////////////////////////////////////////////////////////");
@@ -1585,16 +1584,15 @@ public class MailServiceImpl implements MailService, Startable {
     String folderId = null;
     String folderName = folder.getName();
     
+    logger.warn(" #### Getting mails from folder " + folderName + " !");
     try {
       if (!folder.isOpen()) {
         folder.open(javax.mail.Folder.READ_ONLY);
       }
     } catch (MessagingException ex) {
-      logger.warn("Can not download messages of folder: " + folderName, ex);
       return;
     }
     
-    logger.debug(" #### Getting mails from folder " + folderName + " !");
     if (info != null) {
       info.setStatusCode(CheckingInfo.DOWNLOADING_MAIL_STATUS);
       updateCheckingMailStatusByCometd(userName, accountId, info);
