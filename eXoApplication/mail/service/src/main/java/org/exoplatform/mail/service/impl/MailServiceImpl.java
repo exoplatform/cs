@@ -1590,7 +1590,7 @@ public class MailServiceImpl implements MailService, Startable {
         folder.open(javax.mail.Folder.READ_ONLY);
       }
     } catch (MessagingException ex) {
-      org.mortbay.log.Log.warn("Can not download messages of folder: " + folderName, ex);
+      logger.warn("Can not download messages of folder: " + folderName, ex);
       return;
     }
     
