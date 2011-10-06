@@ -88,7 +88,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- Step 1 : Account Name &amp; Description </td>
+	<td>-- Step 1 : Account Name &amp; Description</td>
 	<td></td>
 </tr>
 <tr>
@@ -113,7 +113,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- Step 2 : Mail Identity Settings </td>
+	<td>-- Step 2 : Mail Identity Settings</td>
 	<td></td>
 </tr>
 <tr>
@@ -148,7 +148,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- Step 3 : Server Information </td>
+	<td>-- Step 3 : Server Information</td>
 	<td></td>
 </tr>
 <tr>
@@ -168,7 +168,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- Step 4: User Name &amp; Password&nbsp;&nbsp;</td>
+	<td>-- Step 4: User Name &amp; Password</td>
 	<td></td>
 </tr>
 <tr>
@@ -342,7 +342,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAndWait</td>
 	<td>link=Mail</td>
 	<td></td>
 </tr>
@@ -568,97 +568,7 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//a[@title='Delete Account']/div</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>//a[@title='Delete Account']/div</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyConfirmation</td>
-	<td> Are you sure to delete this account with all associated emails?</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
 	<td>link=Sign out</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=Sign out</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=Sign in</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>link=Sign in</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>username</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>username</td>
-	<td>demo</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>password</td>
-	<td>gtn</td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>//a[contains(@onclick,'login')]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=Mail</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAtAndWait</td>
-	<td>link=Mail</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>css=div.IconHolder.AccountSettingIcon</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>css=div.IconHolder.AccountSettingIcon</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>css=a[title=&quot;Delete Account&quot;] &gt; div.DeleteIcon</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>css=a[title=&quot;Delete Account&quot;] &gt; div.DeleteIcon</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForConfirmation</td>
-	<td> Are you sure to delete this account with all associated emails?</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyConfirmation</td>
-	<td> Are you sure to delete this account with all associated emails?</td>
 	<td></td>
 </tr>
 <tr>

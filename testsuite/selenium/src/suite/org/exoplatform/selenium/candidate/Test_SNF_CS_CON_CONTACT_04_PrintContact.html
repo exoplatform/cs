@@ -58,7 +58,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- Add an Contact</td>
+	<td>-- Contacts menu</td>
 	<td></td>
 </tr>
 <tr>
@@ -67,8 +67,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAndWait</td>
 	<td>link=Contacts</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Contact function</td>
 	<td></td>
 </tr>
 <tr>
@@ -79,6 +84,11 @@
 <tr>
 	<td>click</td>
 	<td>link=Contact</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Type contact detail</td>
 	<td></td>
 </tr>
 <tr>
@@ -112,13 +122,18 @@
 	<td>Test_44@gmail.com</td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- Save</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>link=Save</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- Verify contacts created</td>
+	<td>-- Access My Contacts</td>
 	<td></td>
 </tr>
 <tr>
@@ -132,6 +147,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- Verify contact have create</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>link=Test_44 eXo_Contact</td>
 	<td></td>
@@ -149,6 +169,21 @@
 <tr>
 	<td>verifyElementPresent</td>
 	<td>link=Test_44@gmail.com</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Check user in contact list</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//td//a[contains(text(),'Test_44 eXo_Contact')]/preceding::td[2]/input</td>
+	<td></td>
+</tr>
+<tr>
+	<td>check</td>
+	<td>//td//a[contains(text(),'Test_44 eXo_Contact')]/preceding::td[2]/input</td>
 	<td></td>
 </tr>
 <tr>
@@ -157,23 +192,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>10000</td>
-	<td></td>
-</tr>
-<tr>
 	<td>waitForElementPresent</td>
-	<td>//tr[2]/td[1]/input</td>
+	<td>css=div.Icon.PrintIcon</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//tr[2]/td[1]/input</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>//form[@id='UIContacts']/div[2]/a[5]/div</td>
+	<td>css=div.Icon.PrintIcon</td>
 	<td></td>
 </tr>
 <tr>
@@ -203,22 +228,27 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//tr[2]/td[1]/input</td>
+	<td>//div[@title='Delete']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//tr[2]/td[1]/input</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>//div[2]/a[4]/div</td>
+	<td>//div[@title='Delete']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>assertConfirmation</td>
-	<td>Are you sure you want to delete this contact ?</td>
+	<td>Are you sure to delete this contact?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Sign out</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Sign out</td>
 	<td></td>
 </tr>
 <tr>
@@ -226,12 +256,6 @@
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
-<tr>
-	<td>close</td>
-	<td></td>
-	<td></td>
-</tr>
-
 </tbody></table>
 </body>
 </html>
