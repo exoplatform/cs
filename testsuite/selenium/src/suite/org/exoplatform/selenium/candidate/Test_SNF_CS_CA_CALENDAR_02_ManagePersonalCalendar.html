@@ -63,27 +63,37 @@
 </tr>
 <tr>
 	<td>echo</td>
+	<td>-- Agenda</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Agenda</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Agenda</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Calendar Action</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@onclick='eXo.calendar.UICalendarPortlet.showMainMenu(this, event);']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@onclick='eXo.calendar.UICalendarPortlet.showMainMenu(this, event);']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
 	<td>-- Add Calendar</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=Agenda</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>link=Agenda</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>//div[@onclick='eXo.calendar.UICalendarPortlet.showMainMenu(this, event);']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>//div[@onclick='eXo.calendar.UICalendarPortlet.showMainMenu(this, event);']</td>
 	<td></td>
 </tr>
 <tr>
@@ -112,13 +122,28 @@
 	<td>Test_02_calendar_description</td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- Save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>css=div.HorizontalLayout &gt; div.UIAction &gt; a.ActionButton.LightBlueStyle</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
-	<td>link=Save</td>
+	<td>css=div.HorizontalLayout &gt; div.UIAction &gt; a.ActionButton.LightBlueStyle</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
 	<td>-- Edit Calendar</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//a[@title='Test_02_calendar']</td>
 	<td></td>
 </tr>
 <tr>
@@ -139,7 +164,7 @@
 <tr>
 	<td>clickAt</td>
 	<td>//div[@class='UIContextMenuContainer ContextMenuContainer']//a[@class='ItemIcon&nbsp;&nbsp;EditCalendarIcon']</td>
-	<td></td>
+	<td>2,2</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -162,8 +187,18 @@
 	<td>Test_02_calendar_description_edited</td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- Save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>css=div.HorizontalLayout &gt; div.UIAction &gt; a.ActionButton.LightBlueStyle</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
-	<td>link=Save</td>
+	<td>css=div.HorizontalLayout &gt; div.UIAction &gt; a.ActionButton.LightBlueStyle</td>
 	<td></td>
 </tr>
 <tr>
@@ -204,6 +239,16 @@
 <tr>
 	<td>assertConfirmation</td>
 	<td>Are you sure to delete this calendar and all its events?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Sign out</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Sign out</td>
 	<td></td>
 </tr>
 <tr>
