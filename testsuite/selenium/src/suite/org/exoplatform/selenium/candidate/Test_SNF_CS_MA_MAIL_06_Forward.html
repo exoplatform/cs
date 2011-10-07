@@ -37,6 +37,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- User name</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>username</td>
 	<td></td>
@@ -47,13 +52,28 @@
 	<td>mary</td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- Password</td>
+	<td></td>
+</tr>
+<tr>
 	<td>type</td>
 	<td>password</td>
 	<td>gtn</td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- Login</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAndWait</td>
 	<td>id=UIPortalLoginFormAction</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Goto Site/classic/Mail</td>
 	<td></td>
 </tr>
 <tr>
@@ -73,12 +93,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>document.forms[4].elements[2]</td>
+	<td>//a[contains(text(),'Test_Mail ')]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>document.forms[4].elements[2]</td>
+	<td>//a[contains(text(),'Test_Mail ')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -88,12 +108,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=Forward</td>
+	<td>css=div.MessageActionIcon. &gt; a.ForwardMailIcon</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>link=Forward</td>
+	<td>css=div.MessageActionIcon. &gt; a.ForwardMailIcon</td>
 	<td></td>
 </tr>
 <tr>
@@ -109,12 +129,12 @@
 <tr>
 	<td>type</td>
 	<td>to</td>
-	<td>exotest4@gmail.com</td>
+	<td>exomailtest@gmail.com</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
 	<td>subject</td>
-	<td>Fwd: eXo_Test</td>
+	<td></td>
 </tr>
 <tr>
 	<td>verifyElementPresent</td>
@@ -142,6 +162,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- Verify Mail was sent successfully</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>link=Fwd: eXo_Test</td>
 	<td></td>
@@ -149,11 +174,6 @@
 <tr>
 	<td>verifyElementPresent</td>
 	<td>link=Fwd: eXo_Test</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>-- Verify Mail was sent successfully</td>
 	<td></td>
 </tr>
 <tr>
@@ -207,7 +227,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAndWait</td>
 	<td>link=Mail</td>
 	<td></td>
 </tr>
@@ -232,6 +252,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>click</td>
+	<td>link=Refresh</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>link=Fwd: eXo_Test</td>
 	<td></td>
@@ -242,13 +267,18 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>echo</td>
+	<td>-- Sign out</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
 <tr>
-	<td>close</td>
-	<td></td>
+	<td>clickAndWait</td>
+	<td>link=Sign out</td>
 	<td></td>
 </tr>
 </tbody></table>

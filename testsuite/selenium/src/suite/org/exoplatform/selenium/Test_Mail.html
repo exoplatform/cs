@@ -73,7 +73,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- Account Settings</td>
+	<td>-- Account Settings: Create Account</td>
 	<td></td>
 </tr>
 <tr>
@@ -502,6 +502,16 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>link=Refresh</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Refresh</td>
+	<td></td>
+</tr>
+<tr>
 	<td>echo</td>
 	<td>-- Create IMAP mail account--</td>
 	<td></td>
@@ -522,18 +532,13 @@
 	<td></td>
 </tr>
 <tr>
+	<td>click</td>
+	<td>link=Refresh</td>
+	<td></td>
+</tr>
+<tr>
 	<td>echo</td>
 	<td>-- Check Get Mail</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementNotPresent</td>
-	<td>//div[@class='MessageNotice']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyElementNotPresent</td>
-	<td>//div[@class='MessageNotice']</td>
 	<td></td>
 </tr>
 <tr>
@@ -548,22 +553,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- Delete 2 newly created account --</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>css=div.IconHolder.AccountSettingIcon</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>css=div.IconHolder.AccountSettingIcon</td>
-	<td>2,2</td>
-</tr>
-<tr>
-	<td>pause</td>
-	<td>20000</td>
+	<td>-- Sign out</td>
 	<td></td>
 </tr>
 <tr>
