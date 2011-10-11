@@ -161,8 +161,8 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
       UIAddMessageFilter uiAddMessageFilter = uiChildPopup.createUIComponent(UIAddMessageFilter.class, null, null);
       String accountId = dataCache.getSelectedAccountId();
-      uiAddMessageFilter.init(accountId);
       uiChildPopup.activate(uiAddMessageFilter, 650, 0, false) ;
+      uiAddMessageFilter.init(accountId);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
     }
   }
@@ -182,10 +182,10 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
       UIPopupActionContainer uiActionContainer = uiMessageFilter.getAncestorOfType(UIPopupActionContainer.class);
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class);
       UIAddMessageFilter uiEditMessageFilter = uiChildPopup.createUIComponent(UIAddMessageFilter.class, null, null);
+      uiChildPopup.activate(uiEditMessageFilter, 650, 0, false);
       DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
       String accountId = dataCache.getSelectedAccountId();
       uiEditMessageFilter.init(accountId);
-      uiChildPopup.activate(uiEditMessageFilter, 650, 0, false);
       uiEditMessageFilter.setCurrentFilter(filter);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer);
     }

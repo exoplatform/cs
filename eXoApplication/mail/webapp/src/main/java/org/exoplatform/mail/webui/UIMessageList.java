@@ -1010,6 +1010,7 @@ public class UIMessageList extends UIForm {
       filter.setFromCondition(Utils.CONDITION_CONTAIN);
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
       UIAddMessageFilter uiEditMessageFilter = uiPopupAction.createUIComponent(UIAddMessageFilter.class, null, null);
+      uiPopupAction.activate(uiEditMessageFilter, 650, 0, false);
       try {
         uiEditMessageFilter.init(accountId);
       } catch (Exception e) {
@@ -1022,7 +1023,6 @@ public class UIMessageList extends UIForm {
         
         return; 
       }
-      uiPopupAction.activate(uiEditMessageFilter, 650, 0, false) ;
       uiEditMessageFilter.setCurrentFilter(filter);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class)) ;

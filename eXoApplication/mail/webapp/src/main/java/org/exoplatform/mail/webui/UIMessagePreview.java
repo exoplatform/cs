@@ -453,13 +453,10 @@ public class UIMessagePreview extends UIContainer{
         MessageFilter filter = new MessageFilter(from);
         filter.setFrom(from);
         filter.setFromCondition(Utils.CONDITION_CONTAIN);
-        UIAddMessageFilter uiEditMessageFilter = uiPopupAction.createUIComponent(UIAddMessageFilter.class,
-                                                                                 null,
-                                                                                 null);
-        String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class)
-        .getSelectedValue();
-        uiEditMessageFilter.init(accountId);
+        UIAddMessageFilter uiEditMessageFilter = uiPopupAction.createUIComponent(UIAddMessageFilter.class, null, null);
         uiPopupAction.activate(uiEditMessageFilter, 650, 0, false);
+        String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+        uiEditMessageFilter.init(accountId);
         uiEditMessageFilter.setCurrentFilter(filter);
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
