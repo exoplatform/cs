@@ -1185,13 +1185,17 @@ public class MailServiceImpl implements MailService, Startable {
       if (connector != null) {
         String key = userName + ":" + accountId;
         if (info == null) {
-          checkingLog_.put(key, new CheckingInfo());
+          info = new CheckingInfo();
+          checkingLog_.put(key, info);
         }
-        info.setSyncFolderStatus(CheckingInfo.FINISH_SYNC_FOLDER);
         synchImapFolders(uId, account, null, connector.getDefaultFolder().list());
         info.setSyncFolderStatus(CheckingInfo.FINISH_SYNC_FOLDER);
       }
     } catch (Exception e) {
+      if (info != null) {
+        info.setSyncFolderStatus(CheckingInfo.FINISH_SYNC_FOLDER);
+      }
+      
       if (logger.isDebugEnabled()) {
         logger.debug("Exception in method synchImapFolders", e);
       }
