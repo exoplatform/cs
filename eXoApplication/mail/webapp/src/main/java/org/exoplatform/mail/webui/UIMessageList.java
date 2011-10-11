@@ -1474,9 +1474,9 @@ public class UIMessageList extends UIForm {
         return;
       }
       UIMoveMessageForm uiMoveMessageForm = uiMessageList.createUIComponent(UIMoveMessageForm.class,null, null);
+      uiPopupAction.activate(uiMoveMessageForm, 600, 0, true);
       uiMoveMessageForm.init(accId);
       uiMoveMessageForm.setMessageList(uiMessageList.getCheckedMessage());
-      uiPopupAction.activate(uiMoveMessageForm, 600, 0, true);             
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);        
     }
   }

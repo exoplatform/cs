@@ -607,11 +607,11 @@ public class UIMessagePreview extends UIContainer{
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
       if (msg != null) {
         UIMoveMessageForm uiMoveMessageForm = uiMsgPreview.createUIComponent(UIMoveMessageForm.class, null, null);
+        uiPopupAction.activate(uiMoveMessageForm, 600, 0, true);
         uiMoveMessageForm.init(accountId);
         List<Message> msgList = new ArrayList<Message>();
         msgList.add(msg);
         uiMoveMessageForm.setMessageList(msgList);
-        uiPopupAction.activate(uiMoveMessageForm, 600, 0, true);
       }
       uiMsgPreview.setMessage(null);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
