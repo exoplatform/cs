@@ -786,8 +786,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
             currentCalendar = calService.getGroupCalendar(calendarId) ;
           }
           if(currentCalendar == null) {
-            uiPopupAction.deActivate() ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+            uiPopupAction.cancelPopupAction();
             event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIEventForm.msg.have-no-calendar",
                                                                                            null,
                                                                                            1));            
@@ -803,8 +802,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
               canEdit = CalendarUtils.canEdit(CalendarUtils.getOrganizationService(), currentCalendar.getEditPermission(), username) ;
             }
             if(!canEdit && !uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE) ) {
-              uiPopupAction.deActivate() ;
-              event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+              uiPopupAction.cancelPopupAction();
               event.getRequestContext()
                    .getUIApplication()
                    .addMessage(new ApplicationMessage("UIEventForm.msg.have-no-permission-to-edit", null, 1));              
@@ -822,8 +820,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
           }
           /* ActionResponse actResponse = event.getRequestContext().getResponse() ;
           actResponse.setEvent(new QName("RefreshCalendar"), null) ;*/
-          uiPopupAction.deActivate() ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+          uiPopupAction.cancelPopupAction();
         }catch (Exception e) {
           event.getRequestContext()
                .getUIApplication()
@@ -846,8 +843,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
       for(Attachment a : uiForm.getAttachments()) {
         UIAttachFileForm.removeUploadTemp(uiForm.getApplicationComponent(UploadService.class), a.getResourceId()) ;
       }
-      uiPopupAction.deActivate() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      uiPopupAction.cancelPopupAction();
     }
   }
 

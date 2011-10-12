@@ -175,16 +175,14 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class)) ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UITagContainer.class)) ;
-      editTagForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(editTagForm.getAncestorOfType(UIPopupAction.class)) ;
+      editTagForm.getAncestorOfType(UIPopupAction.class).cancelPopupAction();
     }
   }
   
   static  public class CancelActionListener extends EventListener<UIEditTagForm> {
     public void execute(Event<UIEditTagForm> event) throws Exception {
       UIEditTagForm uiForm = event.getSource() ;
-      uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
+      uiForm.getAncestorOfType(UIPopupAction.class).cancelPopupAction();
     }
   }
 }

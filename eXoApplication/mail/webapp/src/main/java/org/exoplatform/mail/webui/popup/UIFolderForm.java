@@ -113,8 +113,7 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
         return;
       }
       
-      uiForm.getAncestorOfType(UIPopupAction.class).deActivate();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class));
+      uiForm.getAncestorOfType(UIPopupAction.class).cancelPopupAction();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class));
     }
@@ -123,8 +122,7 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
   static  public class CancelActionListener extends EventListener<UIFolderForm> {
     public void execute(Event<UIFolderForm> event) throws Exception {
       UIFolderForm uiForm = event.getSource() ;
-      uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
+      uiForm.getAncestorOfType(UIPopupAction.class).cancelPopupAction();      
     }
   }
 

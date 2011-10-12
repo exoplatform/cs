@@ -310,8 +310,7 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
       }
       
       UIPopupAction uiPopupAction = uiAddFilter.getAncestorOfType(UIPopupAction.class) ;
-      uiPopupAction.deActivate() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      uiPopupAction.cancelPopupAction();
       
       if (filter.applyForAll()) {
         UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
@@ -326,8 +325,7 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
     public void execute(Event<UIAddMessageFilter> event) throws Exception {
       UIAddMessageFilter uiAddMessageFilter = event.getSource();
       UIPopupAction uiPopupAction = uiAddMessageFilter.getAncestorOfType(UIPopupAction.class) ;
-      uiPopupAction.deActivate() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      uiPopupAction.cancelPopupAction();
     }
   }
 }

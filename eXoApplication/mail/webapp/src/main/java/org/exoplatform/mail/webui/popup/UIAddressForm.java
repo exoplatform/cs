@@ -515,8 +515,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         event.getRequestContext()
              .addUIComponentToUpdateByAjax(uiComposeForm.getChildById(UIComposeForm.FIELD_TO_SET));
       }
-      childPopup.deActivate();
-      event.getRequestContext().addUIComponentToUpdateByAjax(childPopup);
+      childPopup.cancelPopupAction();
     }
   }
 
@@ -668,8 +667,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UIAddressForm> event) throws Exception {
       UIAddressForm uiAddressForm = event.getSource();
       UIPopupAction uiPopupAction = uiAddressForm.getAncestorOfType(UIPopupAction.class);
-      uiPopupAction.deActivate();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
+      uiPopupAction.cancelPopupAction();
     }
   }
 

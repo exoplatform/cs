@@ -154,8 +154,7 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
           }
           uiComposeForm.refreshUploadFileList() ;
           UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
-          uiPopupAction.deActivate();
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+          uiPopupAction.cancelPopupAction();
           event.getRequestContext().addUIComponentToUpdateByAjax(uiComposeForm.getChildById(UIComposeForm.FIELD_TO_SET)) ;
         } else if (uiEventForm != null) {
           uiEventForm.setSelectedTab(UIEventForm.TAB_EVENTDETAIL) ;
@@ -172,8 +171,7 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
           uiEventDetailTab.refreshUploadFileList() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiEventDetailTab) ;
           UIPopupAction uiPopupAction = uiPopupContainer.getChild(UIPopupAction.class) ;
-          uiPopupAction.deActivate() ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+          uiPopupAction.cancelPopupAction();
         }
       } 
     }
@@ -202,8 +200,7 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
         if(uploadResource != null) 
           UIAttachFileForm.removeUploadTemp(uiForm.getApplicationComponent(UploadService.class), uploadResource.getUploadId()) ;
       }
-      uiPopupAction.deActivate() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      uiPopupAction.cancelPopupAction();
     }
   }
 }

@@ -515,12 +515,9 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
           uiAddress.refrestContactList(selectedGroupId, contact);
           uiAddress.setCheckAll();
           ((UIFormSelectBoxWithGroups) uiAddress.getChildById(SELECT_GROUP)).setValue(selectedGroupId);
-          uiContact.getAncestorOfType(UIPopupAction.class).deActivate();
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiAddress.getParent());
+          uiContact.getAncestorOfType(UIPopupAction.class).cancelPopupAction();
         } else {
-          uiContact.getAncestorOfType(UIPopupAction.class).deActivate();
-          event.getRequestContext()
-               .addUIComponentToUpdateByAjax(uiContact.getAncestorOfType(UIPopupAction.class));
+          uiContact.getAncestorOfType(UIPopupAction.class).cancelPopupAction();
         }
       } catch (Exception e) {
         if (log.isDebugEnabled()) {
@@ -553,8 +550,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiAddress.getParent());
       }
       UIPopupAction uiPopupAction = uiContact.getAncestorOfType(UIPopupAction.class);
-      uiPopupAction.deActivate();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
+      uiPopupAction.cancelPopupAction();
     }
   }
 

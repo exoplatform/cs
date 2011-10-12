@@ -160,10 +160,9 @@ public class UIFormMultiValueInputSet extends UIFormInputContainer<List> {
       String id = event.getRequestContext().getRequestParameter(OBJECTID);  
       if(uiSet.getId().equals(id)){
         if (uiSet.getChildren().size() >= 5) {
-          UIApplication uiApp = uiSet.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UIAddContactForm.msg.too-manyField", null, 
-              ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAddContactForm.msg.too-manyField",
+                                                                                         null,
+                                                                                         ApplicationMessage.WARNING));
           return ;
         }        
         uiSet.createUIFormInput(uiSet.getChildren().size());

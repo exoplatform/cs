@@ -90,8 +90,7 @@ public class UIComfirmPassword extends UIForm implements UIPopupComponent{
   static  public class CancelActionListener extends EventListener<UIComfirmPassword> {
     public void execute(Event<UIComfirmPassword> event) throws Exception {
       UIComfirmPassword uiForm = event.getSource() ;
-      uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
+      uiForm.getAncestorOfType(UIPopupAction.class).cancelPopupAction();
     }
   }
 }

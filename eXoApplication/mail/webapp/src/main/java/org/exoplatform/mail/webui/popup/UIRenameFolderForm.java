@@ -98,12 +98,10 @@ public class UIRenameFolderForm extends UIForm implements UIPopupComponent {
       
       // CS-3009
       newFolderName = MailUtils.reduceSpace(newFolderName);
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class);
       UIFolderContainer uiFolderContainer = uiMailPortlet.findFirstComponentOfType(UIFolderContainer.class);
 
       if (Utils.isEmptyField(newFolderName)) {
-        uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.name-required", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIFolderForm.msg.name-required", null));
         return;
       }
 
@@ -113,13 +111,11 @@ public class UIRenameFolderForm extends UIForm implements UIPopupComponent {
         if (!mailService.isExistFolder(username, accountId, folderParentId, newFolderName)) {
           mailService.renameFolder(username, accountId, newFolderName, folderId);
         } else {
-          uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.folder-exist", new Object[] { newFolderName }));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIFolderForm.msg.folder-exist", new Object[] { newFolderName }));
           return;
         }
       } catch (Exception e) {
-        uiApp.addMessage(new ApplicationMessage("UIRenameFolderForm.msg.error-rename-folder", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIRenameFolderForm.msg.error-rename-folder", null));
         if (log.isDebugEnabled()) {
           log.debug("Exception in method execute of class SaveActionListener", e);
         }
@@ -139,8 +135,7 @@ public class UIRenameFolderForm extends UIForm implements UIPopupComponent {
   static  public class CancelActionListener extends EventListener<UIRenameFolderForm> {
     public void execute(Event<UIRenameFolderForm> event) throws Exception {
       UIRenameFolderForm uiForm = event.getSource() ;
-      uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
+      uiForm.getAncestorOfType(UIPopupAction.class).cancelPopupAction();
     }
   }
   

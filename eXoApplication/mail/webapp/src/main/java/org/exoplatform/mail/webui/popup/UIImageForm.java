@@ -137,9 +137,7 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
       uiContactForm.setTempContact(contactSrv
         .getContact(username, contact.getId())) ;      
       UIPopupAction popupAction = uiPopupActionContainer.getChild(UIPopupAction.class) ;
-      popupAction.deActivate() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction.getParent()) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContactForm) ;
+      popupAction.cancelPopupAction();
     }
   }
 
@@ -149,8 +147,7 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
       UIPopupActionContainer uiPopupActionContainer = uiForm.getAncestorOfType(UIPopupActionContainer.class) ;
       UIAddContactForm uiContactForm =  uiPopupActionContainer.findFirstComponentOfType(UIAddContactForm.class) ;
       UIPopupAction popupAction = uiPopupActionContainer.getChild(UIPopupAction.class) ;
-      popupAction.deActivate() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction.getParent()) ;
+      popupAction.cancelPopupAction();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactForm) ;
      }
   }  

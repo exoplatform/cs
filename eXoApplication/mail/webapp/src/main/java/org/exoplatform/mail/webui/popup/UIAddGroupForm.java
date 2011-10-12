@@ -106,8 +106,7 @@ public class UIAddGroupForm extends UIForm implements UIPopupComponent{
         }
       }
       UIPopupAction uiPopupAction = uiAddGroupForm.getAncestorOfType(UIPopupAction.class) ; 
-      uiPopupAction.deActivate() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      uiPopupAction.cancelPopupAction();
     }
   }
   
@@ -115,8 +114,7 @@ public class UIAddGroupForm extends UIForm implements UIPopupComponent{
     public void execute(Event<UIAddGroupForm> event) throws Exception {
       UIAddGroupForm uiAddGroup = event.getSource();
       UIPopupAction uiPopupAction = uiAddGroup.getAncestorOfType(UIPopupAction.class) ; 
-      uiPopupAction.deActivate() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      uiPopupAction.cancelPopupAction();
     }
   }
 

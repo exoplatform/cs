@@ -64,6 +64,7 @@ import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.popup.UIAddressForm.ContactData;
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.log.ExoLogger;
@@ -80,15 +81,15 @@ import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputInfo;
-import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
+import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 import org.exoplatform.webui.form.wysiwyg.FCKEditorConfig;
 import org.exoplatform.webui.form.wysiwyg.UIFormWYSIWYGInput;
 
@@ -971,11 +972,11 @@ import com.sun.mail.smtp.SMTPSendFailedException;
       Message message = uiComposeForm.getNewMessage();
       
       Account acctemp = dataCache.getDelegatedAccount(usename, accountId);
-      UIApplication uiApp = uiComposeForm.getAncestorOfType(UIApplication.class);
       if(MailUtils.isDelegatedAccount(acctemp, usename))
         if (!MailUtils.isFull(usename, acctemp.getPermissions().get(usename))) {
-          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.please-check-permission", null));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          event.getRequestContext()
+               .getUIApplication()
+               .addMessage(new ApplicationMessage("UIComposeForm.msg.please-check-permission", null));
           return;
         } else {
           usename = acctemp.getDelegateFrom();
@@ -988,8 +989,9 @@ import com.sun.mail.smtp.SMTPSendFailedException;
       if (MailUtils.isFieldEmpty(message.getMessageTo())
           && MailUtils.isFieldEmpty(message.getMessageCc())
           && MailUtils.isFieldEmpty(message.getMessageBcc())) {
-        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.select-at-least-recipient", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIComposeForm.msg.select-at-least-recipient", null));
         return;
       }
 
@@ -1000,16 +1002,16 @@ import com.sun.mail.smtp.SMTPSendFailedException;
         contactService.saveAddress(usename, message.getMessageCc());
         contactService.saveAddress(usename, message.getMessageBcc());
       } catch (AddressException e) {
-        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.there-was-an-error-parsing-the-addresses-sending-failed",
-                                                null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIComposeForm.msg.there-was-an-error-parsing-the-addresses-sending-failed", null));
         return;
       } catch (AuthenticationFailedException e) {
         Account dAcc = dataCache.getDelegatedAccount(usename, accountId);
         if(MailUtils.isDelegatedAccount(dAcc, usename)){
-          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.please-check-permission",
-                                                  null));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          event.getRequestContext()
+               .getUIApplication()
+               .addMessage(new ApplicationMessage("UIComposeForm.msg.please-check-permission", null));
           return;
         }
         Account acc = dataCache.getAccountById(usename, accountId);
@@ -1024,27 +1026,33 @@ import com.sun.mail.smtp.SMTPSendFailedException;
           uiChildPopup.activate(enterPasswordDialog, 600, 0);
           event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup);
         } else {
-          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.please-check-configuration-for-smtp-server",
-                                                  null));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          event.getRequestContext()
+               .getUIApplication()
+               .addMessage(new ApplicationMessage("UIComposeForm.msg.please-check-configuration-for-smtp-server", null));
         }
         return;
       } catch (SMTPSendFailedException e) {
         if (e.getMessage().contains("Authentication Required")) {
-          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.check-authentication-smtp-outgoingServer",
-                                                  null));
+          event.getRequestContext()
+               .getUIApplication()
+               .addMessage(new ApplicationMessage("UIComposeForm.msg.check-authentication-smtp-outgoingServer", null));
         } else {
-          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.sorry-there-was-an-error-sending-the-message-sending-failed",
+          event.getRequestContext()
+               .getUIApplication()
+               .addMessage(new ApplicationMessage("UIComposeForm.msg.sorry-there-was-an-error-sending-the-message-sending-failed",
                                                   null));
         }
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       } catch (MessagingException e) {
         if(Utils.isGmailAccount(emailAddr))
-          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.cannot-connect-to-mailserver", null));
+          event.getRequestContext()
+               .getUIApplication()
+               .addMessage(new ApplicationMessage("UIComposeForm.msg.cannot-connect-to-mailserver", null));
         else 
-          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.there-was-an-unexpected-error-sending-falied", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          event.getRequestContext()
+               .getUIApplication()
+               .addMessage(new ApplicationMessage("UIComposeForm.msg.there-was-an-unexpected-error-sending-falied", null));
+
         return;
       }
 
@@ -1052,8 +1060,10 @@ import com.sun.mail.smtp.SMTPSendFailedException;
       try {
         Account account = dataCache.getAccountById(usename, accountId);
         if(!uiComposeForm.saveToSentFolder(usename, account, message)){
-          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.cannot-send", null, ApplicationMessage.INFO)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIComposeForm.msg.cannot-send",
+                                                                                         null,
+                                                                                         ApplicationMessage.INFO));
+         
         }
         UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
         UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class);
@@ -1068,17 +1078,17 @@ import com.sun.mail.smtp.SMTPSendFailedException;
         }
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class));
         UIPopupAction uiChildPopup = uiComposeForm.getAncestorOfType(UIPopupAction.class);
-        uiChildPopup.deActivate();
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup);
+        uiChildPopup.cancelPopupAction();
         for (Attachment a : uiComposeForm.getAttachFileList()) {
           UIAttachFileForm.removeUploadTemp(uiComposeForm.getApplicationComponent(UploadService.class),
                                             a.getResoureId());
         }
       } catch (Exception e) {
         logger.warn("Message is sent, but it was not saved in Sent folder", e);
-        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-sent-error", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-        uiComposeForm.getAncestorOfType(UIPopupAction.class).deActivate();
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIComposeForm.msg.save-sent-error", null));
+        uiComposeForm.getAncestorOfType(UIPopupAction.class).cancelPopupAction();
       }
     }
   }
@@ -1144,9 +1154,11 @@ import com.sun.mail.smtp.SMTPSendFailedException;
               message, false);
         }
         if (!saveMsgSuccess) {
-          composeForm.getAncestorOfType(UIApplication.class).addMessage(
-              new ApplicationMessage("UIMoveMessageForm.msg.create-massage-not-successful", null, ApplicationMessage.INFO));
-          event.getRequestContext().addUIComponentToUpdateByAjax(composeForm.getAncestorOfType(UIApplication.class));
+          event.getRequestContext()
+               .getUIApplication()
+               .addMessage(new ApplicationMessage("UIMoveMessageForm.msg.create-massage-not-successful",
+                                                  null,
+                                                  ApplicationMessage.INFO));
         }
       }
       // CS-4462
@@ -1154,18 +1166,17 @@ import com.sun.mail.smtp.SMTPSendFailedException;
         if (logger.isDebugEnabled()) {
           logger.debug("AuthenticationFailedException in method execute of class SaveDraftActionListener", e);
         }
-        UIApplication uiApp = composeForm.getAncestorOfType(UIApplication.class);
-        uiApp
-            .addMessage(new ApplicationMessage("UIComposeForm.msg.the-username-or-password-may-be-wrong-save-draft-error", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIComposeForm.msg.the-username-or-password-may-be-wrong-save-draft-error", null));
         return;
       } catch (Exception e) {
         if (logger.isDebugEnabled()) {
           logger.debug("Exception in method execute of class SaveDraftActionListener", e);
         }
-        UIApplication uiApp = composeForm.getAncestorOfType(UIApplication.class);
-        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-draft-error", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIComposeForm.msg.save-draft-error", null));
       }
       // update ui
       String selectedFolder = uiFolderContainer.getSelectedFolder();
@@ -1194,8 +1205,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
         UIAttachFileForm.removeUploadTemp(composeForm.getApplicationComponent(UploadService.class), a.getResoureId());
       }
 
-      uiChildPopup.deActivate();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup);
+      uiChildPopup.cancelPopupAction();
     }
   }
 
@@ -1208,8 +1218,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
                                           a.getResoureId());
       }
       UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class);
-      uiPopupAction.deActivate();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
+      uiPopupAction.cancelPopupAction();
     }
   }
 
@@ -1471,9 +1480,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
     }
 
     if (msgWarning != null) {
-      UIApplication uiApp = getAncestorOfType(UIApplication.class);
-      uiApp.addMessage(new ApplicationMessage(msgWarning, null));
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+      event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage(msgWarning, null));
       return false;
     }
 
@@ -1587,7 +1594,6 @@ import com.sun.mail.smtp.SMTPSendFailedException;
       WebuiRequestContext context = event.getRequestContext();
       String selectedFile = (String) context.getAttribute(UIAddAttachment.SELECTEDFILE);
       boolean isAttachFile = Boolean.valueOf(String.valueOf(context.getAttribute(UIAddAttachment.ISATTACHFILE)));
-      UIApplication uiApp = component.getAncestorOfType(UIApplication.class);
       ApplicationMessage message = null;
       BufferAttachment attachFile = null;
       if (isAttachFile) {
@@ -1619,8 +1625,8 @@ import com.sun.mail.smtp.SMTPSendFailedException;
 
       context.addUIComponentToUpdateByAjax(component);
       if (message != null) {
-        uiApp.addMessage(message);
-        context.addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext().getUIApplication().addMessage(message);
+        ((PortalRequestContext) event.getRequestContext().getParentAppRequestContext()).setFullRender(true);
       }
     }
   }

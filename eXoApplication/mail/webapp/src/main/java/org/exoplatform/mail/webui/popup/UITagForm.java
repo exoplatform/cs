@@ -198,22 +198,18 @@ public class UITagForm extends UIForm implements UIPopupComponent {
           newTag.setDescription("Tag's description");
           tagList.add(newTag);
         } else {
-          UIApplication uiApp = uiTagForm.getAncestorOfType(UIApplication.class);
-          uiApp.addMessage(new ApplicationMessage("UITagForm.msg.tag-already-exists",
-                                                  null,
-                                                  ApplicationMessage.INFO));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UITagForm.msg.tag-already-exists",
+                                                                                         null,
+                                                                                         ApplicationMessage.INFO));
           return;
         }
       }
 
       tagList.addAll(uiTagForm.getCheckedTags());
       if (tagList.size() <= 0) {
-        UIApplication uiApp = uiTagForm.getAncestorOfType(UIApplication.class);
-        uiApp.addMessage(new ApplicationMessage("UITagForm.msg.have-to-choose-at-least-a-tag",
-                                                null,
-                                                ApplicationMessage.INFO));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UITagForm.msg.have-to-choose-at-least-a-tag", null, ApplicationMessage.INFO));
         return;
       }
       mailSrv.addTag(username, accountId, uiTagForm.getMessageList(), tagList);

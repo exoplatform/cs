@@ -297,7 +297,7 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
           return ;
         }
       }
-      uiSetting.getAncestorOfType(UIPopupAction.class).deActivate();
+      uiSetting.getAncestorOfType(UIPopupAction.class).cancelPopupAction();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
     }
   }

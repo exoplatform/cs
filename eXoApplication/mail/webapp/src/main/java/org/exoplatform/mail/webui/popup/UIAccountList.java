@@ -165,8 +165,7 @@ public class UIAccountList extends UIGrid  implements UIPopupComponent{
   static  public class CloseActionListener extends EventListener<UIAccountList> {
     public void execute(Event<UIAccountList> event) throws Exception {
       UIPopupAction uiPopup = event.getSource().getAncestorOfType(UIPopupAction.class);
-      uiPopup.deActivate() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
+      uiPopup.cancelPopupAction();
     }
   }
 }

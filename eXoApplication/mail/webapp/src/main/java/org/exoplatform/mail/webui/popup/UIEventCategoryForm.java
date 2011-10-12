@@ -119,9 +119,8 @@ public class UIEventCategoryForm extends UIForm {
         uiEventForm.refreshCategory() ;
         uiEventForm.setSelectedCategory(eventCat.getId());
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
-        uiPopupAction.deActivate() ;
+        uiPopupAction.cancelPopupAction();
         event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       } catch (RepositoryException e) {
         event.getRequestContext()
              .getUIApplication()
@@ -146,8 +145,7 @@ public class UIEventCategoryForm extends UIForm {
     public void execute(Event<UIEventCategoryForm> event) throws Exception {
       UIEventCategoryForm uiForm = event.getSource() ;
       UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
-      uiPopupAction.deActivate() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      uiPopupAction.cancelPopupAction();
     }
   }
 }

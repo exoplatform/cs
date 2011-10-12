@@ -211,8 +211,7 @@ public class UIMailPortlet extends UIPortletApplication {
   public void cancelAction() throws Exception {
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
     UIPopupAction popupAction = getChild(UIPopupAction.class) ;
-    popupAction.deActivate() ;
-    context.addUIComponentToUpdateByAjax(popupAction) ;
+    popupAction.cancelPopupAction();
   }
   public String getRemoteUser() throws Exception {
     return CalendarUtils.getCurrentUser() ;

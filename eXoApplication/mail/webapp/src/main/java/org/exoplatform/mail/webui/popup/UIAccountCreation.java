@@ -38,6 +38,7 @@ import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.WizardStep;
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -288,7 +289,6 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
           event.getRequestContext()
                .getUIApplication()
                .addMessage(new ApplicationMessage("UIAccountCreation.msg.fields-requirement", null));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiAccCreation.getAncestorOfType(UIPopupAction.class)) ;
           return ;
         }
       }
@@ -357,8 +357,6 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
           acc.setCheckFromDate(new Date());
         }
       }
-      
-      UIApplication uiApp = uiAccCreation.getAncestorOfType(UIApplication.class) ;
       UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
       try {
         uiAccCreation.saveForm(uiPortlet.getCurrentUser(), acc) ;
@@ -372,8 +370,9 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
         uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);
         uiPortlet.getDataCache().clearCache();
       } catch (Exception e) {
-        uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.create-acc-unsuccessfully", null, ApplicationMessage.ERROR)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIAccountCreation.msg.create-acc-unsuccessfully", null, ApplicationMessage.ERROR));
         if (log.isDebugEnabled()) {
           log.debug("Exception in method execute of class FinishActionListener", e);
         }
@@ -385,21 +384,24 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
           UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class);
           uiSelectAccount.setSelectedValue(acc.getId());
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-          uiAccCreation.getAncestorOfType(UIPopupAction.class).deActivate() ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiAccCreation.getAncestorOfType(UIPopupAction.class)) ;
+          uiAccCreation.getAncestorOfType(UIPopupAction.class).cancelPopupAction();
           WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
           context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.initService('checkMailInfobar', '" + MailUtils.getCurrentUser() + "', '" + acc.getId() + "') ;") ;
           context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.checkMail(true) ;");
           context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.showStatusBox('checkmail-notice') ;");        
         } catch (AuthenticationFailedException afe) {
-          uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.userName-password-incorrect", null, ApplicationMessage.ERROR)) ;
+          event.getRequestContext()
+               .getUIApplication()
+               .addMessage(new ApplicationMessage("UIAccountCreation.msg.userName-password-incorrect",
+                                                  null,
+                                                  ApplicationMessage.ERROR));
           uiAccCreation.viewStep(4) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiAccCreation) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         } catch (Exception e) {
-          uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.getMail-unsuccessfully", null, ApplicationMessage.ERROR)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext()
+               .getUIApplication()
+               .addMessage(new ApplicationMessage("UIAccountCreation.msg.getMail-unsuccessfully", null, ApplicationMessage.ERROR));
           if (log.isDebugEnabled()) {
             log.debug("Exception in method execute of class FinishActionListener", e);
           }
@@ -407,8 +409,8 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
         }
       } else {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
-        uiAccCreation.getAncestorOfType(UIPopupAction.class).deActivate() ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiAccCreation.getAncestorOfType(UIPopupAction.class)) ;
+        uiAccCreation.getAncestorOfType(UIPopupAction.class).cancelPopupAction();
+       
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiNavigation) ;
     }
@@ -425,8 +427,7 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       UIComponent selectedTab = uiAccCreation.getChildById(uiAccCreation.getCurrentChild()) ;
       WizardStep wss = (WizardStep) selectedTab ;
       if(!wss.isFieldsValid()) {
-        UIApplication uiApp = uiAccCreation.getAncestorOfType(UIApplication.class) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        ((PortalRequestContext) event.getRequestContext().getParentAppRequestContext()).setFullRender(true);
         return ;
       } else {
         if(uiAccWs4.isRendered()) {

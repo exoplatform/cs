@@ -91,8 +91,7 @@ public class UIViewAllHeaders extends UIGrid  implements UIPopupComponent{
   static  public class CloseActionListener extends EventListener<UIViewAllHeaders> {
     public void execute(Event<UIViewAllHeaders> event) throws Exception {
       UIPopupAction uiPopup = event.getSource().getAncestorOfType(UIPopupAction.class);
-      uiPopup.deActivate() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
+      uiPopup.cancelPopupAction();
     }
   }
 }

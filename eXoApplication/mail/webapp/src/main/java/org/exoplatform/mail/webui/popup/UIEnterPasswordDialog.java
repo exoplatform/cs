@@ -147,15 +147,14 @@ public class UIEnterPasswordDialog extends UIForm implements UIPopupComponent{
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class));
       } catch (Exception e) {
         event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIComposeForm.msg.save-sent-error", null));        
-        uiForm.getAncestorOfType(UIPopupAction.class).deActivate();
+        uiForm.getAncestorOfType(UIPopupAction.class).cancelPopupAction();
       }
 
       if (isSavePw) {
         mailSrv.updateAccount(username, acc);
       }
 
-      uiPopup.deActivate();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
+      uiPopup.cancelPopupAction();
     }
   }
   
@@ -163,8 +162,7 @@ public class UIEnterPasswordDialog extends UIForm implements UIPopupComponent{
     public void execute(Event<UIEnterPasswordDialog> event) throws Exception {
       UIEnterPasswordDialog uiForm = event.getSource() ;
       UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ; 
-      uiPopupAction.deActivate() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      uiPopupAction.cancelPopupAction();
     }
   }
 

@@ -110,9 +110,9 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
       }
       
       if (destFolder == null) {
-        UIApplication uiApp = uiMoveMessageForm.getAncestorOfType(UIApplication.class);
-        uiApp.addMessage(new ApplicationMessage("UIMoveMessageForm.msg.selected-folder-is-not-exits-any-more", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIMoveMessageForm.msg.selected-folder-is-not-exits-any-more", null));
         uiPortlet.cancelAction();
         return;
       }
@@ -133,10 +133,9 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
       
       if (successes == null || (successes.size() > 0 && successes.size() < uiMoveMessageForm.getMessageList().size())
           || successes.contains(null) || successes.size() == 0) {
-        UIApplication uiApp = uiMoveMessageForm.getAncestorOfType(UIApplication.class);
-        uiApp
-            .addMessage(new ApplicationMessage("UIMoveMessageForm.msg.move_delete_not_successful", null, ApplicationMessage.INFO));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIMoveMessageForm.msg.move_delete_not_successful", null, ApplicationMessage.INFO));
       }
       uiMessageList.updateList();
       
@@ -154,8 +153,7 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
   static  public class CancelActionListener extends EventListener<UIMoveMessageForm> {
     public void execute(Event<UIMoveMessageForm> event) throws Exception {
       UIMoveMessageForm uiForm = event.getSource() ;
-      uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
+      uiForm.getAncestorOfType(UIPopupAction.class).cancelPopupAction();
     }
   }
 

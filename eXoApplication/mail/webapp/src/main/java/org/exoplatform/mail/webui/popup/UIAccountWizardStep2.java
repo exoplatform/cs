@@ -24,6 +24,7 @@ import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.WizardStep;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -76,22 +77,22 @@ public class UIAccountWizardStep2 extends UIFormInputSet implements WizardStep{
   }
   
   public boolean isFieldsValid() {
-    UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
     boolean isValid = true ;
+    WebuiRequestContext context  = WebuiRequestContext.getCurrentInstance();
     try {
       if (Utils.isEmptyField(getOutgoingName())) {
-        uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.display-name-requirement", null, ApplicationMessage.WARNING)) ;
+        context.getUIApplication().addMessage(new ApplicationMessage("UIAccountCreation.msg.display-name-requirement", null, ApplicationMessage.WARNING)) ;
         isValid = false ;
       } 
       if (Utils.isEmptyField(getEmailAddress())) {
-        uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.email-address-requirement", null, ApplicationMessage.WARNING)) ;
+        context.getUIApplication().addMessage(new ApplicationMessage("UIAccountCreation.msg.email-address-requirement", null, ApplicationMessage.WARNING)) ;
         isValid = false ;
       } else if(!MailUtils.isValidEmailAddresses(getEmailAddress())) {
-        uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.email-address-is-invalid", null, ApplicationMessage.WARNING)) ;
+        context.getUIApplication().addMessage(new ApplicationMessage("UIAccountCreation.msg.email-address-is-invalid", null, ApplicationMessage.WARNING)) ;
         isValid = false ;
       }
       if (!MailUtils.isValidEmailAddresses(getEmailReply())) {
-        uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.reply-address-is-invalid", null, ApplicationMessage.WARNING)) ;
+        context.getUIApplication().addMessage(new ApplicationMessage("UIAccountCreation.msg.reply-address-is-invalid", null, ApplicationMessage.WARNING)) ;
         isValid = false ;
       }
     } catch(Exception e) {
