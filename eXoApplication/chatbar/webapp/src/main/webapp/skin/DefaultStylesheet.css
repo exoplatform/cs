@@ -8,6 +8,11 @@
 	overflow: hidden;
 }
 
+.UICharBarPortletCoveringSpace {
+	height: 30px;
+	margin-top: 1px;
+}
+
 .UIChatBarPortlet {
 	z-index:1;
 }

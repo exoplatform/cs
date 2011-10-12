@@ -66,9 +66,6 @@ eXo.communication.chatbar.eXoChatBar = {
         [{className:'OverflowContainer', tagName: 'div'}, {className: 'PopupTitle', tagName: 'span'}]);
       eXo.communication.chatbar.webui.UIMainChatWindow.xLogin(userName);
 	  eXo.communication.chatbar.eXoChatBar.setWidth();
-	  var div = document.createElement("div");
-	  div.style.height = document.getElementById(eXo.communication.chatbar.eXoChatBar.applicationId).offsetHeight + "px";
-	  document.body.appendChild(div);
     } catch (e) {
       throw (new Error('Error while loading chat application.'));
     }
