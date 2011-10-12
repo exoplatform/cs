@@ -159,28 +159,27 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
         }        
         groupIds = uiForm.getCheckedGroups() ;        
       }
-
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       if (groupIds.size() < 1) {
-        uiApp.addMessage(new ApplicationMessage("UIExportAddressBookForm.checkGroup-required", null,
-                                                ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;          
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIExportAddressBookForm.checkGroup-required", null, ApplicationMessage.WARNING));        return ;          
       } 
       String exportFormat = uiForm.getUIFormSelectBox(ContactUtils.TYPE).getValue() ;
       OutputStream out = null ;
       try {
         out = ContactUtils.getContactService().getContactImportExports(exportFormat).exportContact(ContactUtils.getCurrentUser(), groupIds.toArray(new String[]{})) ;        
       } catch (ArrayIndexOutOfBoundsException e) {
-        uiApp.addMessage(new ApplicationMessage("UIExportAddressBookForm.many-Contacts", new Object[]{Utils.limitExport + ""},
-                                                ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIExportAddressBookForm.many-Contacts",
+                                                                                       new Object[] { Utils.limitExport + "" },
+                                                                                       ApplicationMessage.WARNING));
         return ; 
       }
       if(out == null) {
-        uiApp.addMessage(new ApplicationMessage("UIExportAddressBookForm.msg.there-is-not-contacts-exists", null,
-                                                ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIExportAddressBookForm.msg.there-is-not-contacts-exists",
+                                                null,
+                                                ApplicationMessage.WARNING));
         return ;   
       }
       ContactUtils.exportData(uiForm, event, out);

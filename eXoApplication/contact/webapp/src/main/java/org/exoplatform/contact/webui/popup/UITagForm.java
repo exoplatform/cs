@@ -155,7 +155,6 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       UITagForm uiTagForm = event.getSource() ;
       ContactService contactService = ContactUtils.getContactService();
       String username = ContactUtils.getCurrentUser() ;
-      UIApplication uiApp = uiTagForm.getAncestorOfType(UIApplication.class) ;
       List<Tag> tags = new ArrayList<Tag>();
 
       Map<String, String> tagIds = new LinkedHashMap<String, String>() ;
@@ -190,9 +189,8 @@ public class UITagForm extends UIForm implements UIPopupComponent {
         tagIds.put(tagId, tagId) ;
       } 
       if (tags.size() == 0) {
-        uiApp.addMessage(new ApplicationMessage("UITagForm.msg.tagName-required", null, 
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UITagForm.msg.tagName-required", null, 
             ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       } 
       List<String> contactIds = new ArrayList<String>() ;
@@ -209,9 +207,8 @@ public class UITagForm extends UIForm implements UIPopupComponent {
         }      
         contactService.addTag(username, contactIds, tags);
       } catch (PathNotFoundException e) {
-        uiApp.addMessage(new ApplicationMessage("UITagForm.msg.contact-not-existed", null, 
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UITagForm.msg.contact-not-existed", null, 
             ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
       uiContacts.updateList();
@@ -250,10 +247,9 @@ public class UITagForm extends UIForm implements UIPopupComponent {
         contactService.removeContactTag(
             username, newContactIds, checkedTags) ;
       } catch (PathNotFoundException e) {
-        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UITagForm.msg.contact-not-exist-remove", null, 
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UITagForm.msg.contact-not-exist-remove",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));
         return ;
       }
       
@@ -302,10 +298,9 @@ public class UITagForm extends UIForm implements UIPopupComponent {
           if (builder.length() > 0) builder.append(" ,") ;
           builder.append(tagMap.get(tag).getName()) ;
         }
-        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UITagForm.msg.noTagRemoved", new Object[]{builder.toString()}, 
-            ApplicationMessage.INFO)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;       
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UITagForm.msg.noTagRemoved",
+                                                                                       new Object[] { builder.toString() },
+                                                                                       ApplicationMessage.INFO));
       }
     }
   }
