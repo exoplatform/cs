@@ -14,6 +14,13 @@
     <type>org.exoplatform.mail.service.impl.MailServiceImpl</type>
   </component>  
   <component>
+    <key>org.mortbay.cometd.continuation.AbstractBayeux</key>
+    <type>org.mortbay.cometd.continuation.EXoContinuationBayeux</type>
+  </component>
+  <component>
+    <type>org.exoplatform.ws.frameworks.cometd.ContinuationService</type>
+  </component>
+  <component>
     <key>org.exoplatform.services.log.LogConfigurationInitializer</key>
     <type>org.exoplatform.services.log.LogConfigurationInitializer</type>
     <init-params>

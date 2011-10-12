@@ -184,7 +184,13 @@
       <artifactId>exo.platform.commons.resources</artifactId>
       <version>${org.exoplatform.commons.version}</version>
        <type>war</type>
-    </dependency>	 
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.commons</groupId>
+      <artifactId>exo.platform.commons.extension.webapp</artifactId>
+      <version>${org.exoplatform.commons.version}</version>
+       <type>war</type>
+    </dependency>
 
 	  <dependency>
 		<groupId>org.exoplatform.portal</groupId>
@@ -296,6 +302,21 @@
 		<artifactId>exo.tool.framework.junit</artifactId>
 		<version>${exo.tool.framework.junit.version}</version>
 	  </dependency>
+    <dependency>
+      <groupId>net.sf.ehcache</groupId>
+      <artifactId>ehcache</artifactId>
+      <version>${ehcache.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>de.odysseus.juel</groupId>
+      <artifactId>juel-api</artifactId>
+      <version>${juel.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>de.odysseus.juel</groupId>
+      <artifactId>juel-impl</artifactId>
+      <version>${juel.version}</version>
+    </dependency>
 	  <dependency>
 		<groupId>commons-lang</groupId>
 		<artifactId>commons-lang</artifactId>
@@ -496,7 +517,7 @@
     </dependency>
 	<dependency>
       <groupId>org.gatein.wci</groupId>
-      <artifactId>wci-tomcat</artifactId>
+      <artifactId>wci-tomcat6</artifactId>
       <version>${org.gatein.wci.version}</version>
 	  <scope>provided</scope>
     </dependency>

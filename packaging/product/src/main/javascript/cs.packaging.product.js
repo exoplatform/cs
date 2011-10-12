@@ -50,6 +50,7 @@ function getProduct(version) {
   product.addDependencies(cs.eXoApplication.content);
   product.addDependencies(cs.web.csResources); 
   product.addDependencies(cs.web.webservice);
+  product.addDependencies(cs.commons.extension);
 
   // CS demo
   product.addDependencies(cs.demo.portal);

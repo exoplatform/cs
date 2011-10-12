@@ -59,9 +59,6 @@
                 <!-- No wsrp in beta02 <value> <string>wsrp-producer</string> 
                   </value> -->
                 <value>
-                  <string>cometd-csdemo</string>
-                </value>
-                <value>
                   <string>csResources</string>
                 </value>
                 <value>
@@ -85,6 +82,9 @@
                 <!--<value> <string>cs</string> </value> -->
                 <value>
                   <string>csdemo</string>
+                </value>
+                <value>
+                  <string>cometd-csdemo</string>
                 </value>
                 <value>
                   <string>fck</string>
