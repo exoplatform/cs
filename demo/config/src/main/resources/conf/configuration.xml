@@ -84,6 +84,9 @@
                   <string>csdemo</string>
                 </value>
                 <value>
+                  <string>commons-extension</string>
+                </value>
+                <value>
                   <string>cometd-csdemo</string>
                 </value>
                 <value>
