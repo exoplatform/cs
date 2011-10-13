@@ -17,7 +17,6 @@
 package org.exoplatform.mail.webui.popup;
 
 import org.exoplatform.cs.common.webui.UIPopupAction;
-import org.exoplatform.cs.common.webui.UIPopupComponent;
 import org.exoplatform.mail.DataCache;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
@@ -26,6 +25,7 @@ import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIPopupComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
