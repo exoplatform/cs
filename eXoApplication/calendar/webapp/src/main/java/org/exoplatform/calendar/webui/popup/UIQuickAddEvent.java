@@ -36,6 +36,7 @@ import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UIFormDateTimePicker;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -92,10 +93,10 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   private boolean isEvent_ = true ;
   public UIQuickAddEvent() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    addUIFormInput(new UIFormStringInput(FIELD_EVENT, FIELD_EVENT, null).addValidator(MandatoryValidator.class)) ;
+    addUIFormInput(new UIFormStringInput(FIELD_EVENT, FIELD_EVENT, null));
     addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION, FIELD_DESCRIPTION, null)) ;
-    addUIFormInput(new UIFormDateTimePicker(FIELD_FROM, FIELD_FROM, new Date(), false).addValidator(MandatoryValidator.class));
-    addUIFormInput(new UIFormDateTimePicker(FIELD_TO, FIELD_TO, new Date(), false).addValidator(MandatoryValidator.class));
+    addUIFormInput(new UIFormDateTimePicker(FIELD_FROM, FIELD_FROM, new Date(), false));
+    addUIFormInput(new UIFormDateTimePicker(FIELD_TO, FIELD_TO, new Date(), false));
     addUIFormInput(new UIFormComboBox(FIELD_FROM_TIME, FIELD_FROM_TIME, options));
     addUIFormInput(new UIFormComboBox(FIELD_TO_TIME, FIELD_TO_TIME, options));
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_ALLDAY, FIELD_ALLDAY, false));
@@ -278,7 +279,14 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
       UIQuickAddEvent uiForm = event.getSource() ;
       UICalendarPortlet uiPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       
-      String summary = uiForm.getEventSummary().trim() ;
+      String summary = uiForm.getEventSummary();
+      if (summary == null) {
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage(uiForm.getId()
+            + ".msg.summary-field-required", null, ApplicationMessage.WARNING));
+        ((PortalRequestContext) event.getRequestContext().getParentAppRequestContext()).setFullRender(true);
+        return;
+      }
+      summary = summary.trim();
       summary = CalendarUtils.enCodeTitle(summary);
       /*if(!CalendarUtils.isNameValid(summary, CalendarUtils.SIMPLECHARACTER)){
         uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.summary-invalid", CalendarUtils.SIMPLECHARACTER, ApplicationMessage.WARNING) ) ;
@@ -289,30 +297,37 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
       if(!CalendarUtils.isEmpty(description)) description = description.replaceAll(CalendarUtils.GREATER_THAN, "").replaceAll(CalendarUtils.SMALLER_THAN,"") ;
       if(CalendarUtils.isEmpty(uiForm.getEventCalendar())) {
         event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage(uiForm.getId() + ".msg.calendar-field-required", null, ApplicationMessage.WARNING)) ;
+        ((PortalRequestContext) event.getRequestContext().getParentAppRequestContext()).setFullRender(true);
         return ;
       }
       if(CalendarUtils.isEmpty(uiForm.getEventCategory())) {
         event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage(uiForm.getId() + ".msg.category-field-required", null, ApplicationMessage.WARNING)) ;
+        ((PortalRequestContext) event.getRequestContext().getParentAppRequestContext()).setFullRender(true);
         return ;
       }
+      UIFormDateTimePicker fromField = uiForm.getChildById(FIELD_FROM);
       Date from = uiForm.getEventFromDate(uiPortlet.getCalendarSetting().getDateFormat() ,uiPortlet.getCalendarSetting().getTimeFormat()) ;
       Date to = uiForm.getEventToDate(uiPortlet.getCalendarSetting().getDateFormat(), uiPortlet.getCalendarSetting().getTimeFormat()) ;
       if(from == null) {
         event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage(uiForm.getId() + ".msg.fromDate-format", null, ApplicationMessage.WARNING)) ;
+        ((PortalRequestContext) event.getRequestContext().getParentAppRequestContext()).setFullRender(true);
         return ;
       }
       if(to == null) {
         event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage(uiForm.getId() + ".msg.toDate-format", null, ApplicationMessage.WARNING)) ;
+        ((PortalRequestContext) event.getRequestContext().getParentAppRequestContext()).setFullRender(true);
         return ;
       }
       if(from.after(to) || from.equals(to)) {
         event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage(uiForm.getId() + ".msg.logic-required", null, ApplicationMessage.WARNING)) ;
+        ((PortalRequestContext) event.getRequestContext().getParentAppRequestContext()).setFullRender(true);
         return ;
       }
       
       CalendarService calService =  CalendarUtils.getCalendarService() ;
       if(calService.isRemoteCalendar(CalendarUtils.getCurrentUser(), uiForm.getEventCalendar())) {
         event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendars.msg.cant-add-event-on-remote-calendar", null, ApplicationMessage.WARNING));
+        ((PortalRequestContext) event.getRequestContext().getParentAppRequestContext()).setFullRender(true);
         return;
       }
       
