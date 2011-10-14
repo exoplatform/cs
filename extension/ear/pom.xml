@@ -116,9 +116,9 @@
     TODO : they should be included only for Platform
      -->
     <dependency>
-      <groupId>org.exoplatform.cs</groupId>
-      <artifactId>exo.cs.ext.social-integration</artifactId>
-      <version>${project.version}</version>
+      <groupId>org.exoplatform.integration</groupId>
+      <artifactId>integ-cs-social</artifactId>
+      <version>${org.exoplatform.integ.version}</version>
     </dependency>
     
        <!-- missing lib for collaboration ear -->
