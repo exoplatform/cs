@@ -949,7 +949,7 @@ Details:
 
 h3. PortletPreferenceRequiredPlugin {anchor:id=CSref.Configuration.PortletPreferenceRequiredPlugin}
 
-{code:Xml}
+{code:xml}
 <external-component-plugins>
   <target-component>org.exoplatform.social.core.space.spi.SpaceService</target-component>
   <component-plugin>
@@ -978,3 +978,6 @@ Details:
 See the details about the init-params of the component in the following table:
 || value-param || Possible value || Default value || Description ||
 | *portletsPrefsRequired* | {{String}} | {{ContactPortlet / ContactPortlet}}| The name of plugin added to SpaceService. |
+
+h1. Data Injectors {anchor:id=CSref.Configuration.DataInjectorService}
+{include:document="DataInjectorService.wiki"}
