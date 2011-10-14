@@ -1069,7 +1069,7 @@ UIMainChatWindow.prototype.getPreviousStatus_ = function(userName) {
 	var request = new eXo.portal.AjaxRequest('GET', url, null);
 	request.onSuccess = function(request){
 		var presenceStatus = request.responseText;
-		var uiMainChatWindow = eXo.communication.chatbar.webui.UIMainChatWindow;
+		var uiMainChatWindow = eXo.communication.chat.webui.UIMainChatWindow;
 		uiMainChatWindow.userNames[uiMainChatWindow.XMPPCommunicator.TRANSPORT_XMPP] = uiMainChatWindow.userName;
 		if(presenceStatus == null || presenceStatus == uiMainChatWindow.SEVER_IS_NOT_AVAILABLE){//chat server is not available/notify to user
 		   presenceStatus = uiMainChatWindow.OFFLINE_STATUS;
@@ -1081,7 +1081,7 @@ UIMainChatWindow.prototype.getPreviousStatus_ = function(userName) {
 	}
 	
 	request.onError = function(request){
-		var uiMainChatWindow = eXo.communication.chatbar.webui.UIMainChatWindow;
+		var uiMainChatWindow = eXo.communication.chat.webui.UIMainChatWindow;
 		uiMainChatWindow.matchPresenceStatusIcon_(uiMainChatWindow.OFFLINE_STATUS);
 		uiMainChatWindow.preChangeStatus(uiMainChatWindow.OFFLINE_STATUS);
 	}

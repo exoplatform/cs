@@ -1,0 +1,22 @@
+Index: eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIMainChatWindow.js
+===================================================================
+--- eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIMainChatWindow.js	(revision 73677)
++++ eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIMainChatWindow.js	(working copy)
+@@ -1069,7 +1069,7 @@
+ 	var request = new eXo.portal.AjaxRequest('GET', url, null);
+ 	request.onSuccess = function(request){
+ 		var presenceStatus = request.responseText;
+-		var uiMainChatWindow = eXo.communication.chatbar.webui.UIMainChatWindow;
++		var uiMainChatWindow = eXo.communication.chat.webui.UIMainChatWindow;
+ 		uiMainChatWindow.userNames[uiMainChatWindow.XMPPCommunicator.TRANSPORT_XMPP] = uiMainChatWindow.userName;
+ 		if(presenceStatus == null || presenceStatus == uiMainChatWindow.SEVER_IS_NOT_AVAILABLE){//chat server is not available/notify to user
+ 		   presenceStatus = uiMainChatWindow.OFFLINE_STATUS;
+@@ -1081,7 +1081,7 @@
+ 	}
+ 	
+ 	request.onError = function(request){
+-		var uiMainChatWindow = eXo.communication.chatbar.webui.UIMainChatWindow;
++		var uiMainChatWindow = eXo.communication.chat.webui.UIMainChatWindow;
+ 		uiMainChatWindow.matchPresenceStatusIcon_(uiMainChatWindow.OFFLINE_STATUS);
+ 		uiMainChatWindow.preChangeStatus(uiMainChatWindow.OFFLINE_STATUS);
+ 	}
