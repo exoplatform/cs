@@ -1378,6 +1378,11 @@
       <Clients>Khách</Clients>
       <Holiday>Ngày nghỉ</Holiday>
       <Anniversary>Lễ kỷ niệm</Anniversary>
+      <defaultEventCategoryIdMeeting>Họp</defaultEventCategoryIdMeeting>
+      <defaultEventCategoryIdCalls>Cuộc gọi</defaultEventCategoryIdCalls>
+      <defaultEventCategoryIdClients>Khách</defaultEventCategoryIdClients>
+      <defaultEventCategoryIdHoliday>Ngày nghỉ</defaultEventCategoryIdHoliday>
+      <defaultEventCategoryIdAnniversary>Lễ kỷ niệm</defaultEventCategoryIdAnniversary>
       <defaultCalendarCategoryId>Nhóm của tôi</defaultCalendarCategoryId>
       <defaultCalendarId>Mặc định</defaultCalendarId>
     </label>

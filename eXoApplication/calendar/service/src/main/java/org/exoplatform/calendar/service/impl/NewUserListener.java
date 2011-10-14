@@ -62,28 +62,36 @@ public class NewUserListener extends UserEventListener {
   final public static String DEFAULT_CALENDAR_NAME = "defaultCalendarName";
   
   final public static String DEFAULT_EVENTCATEGORY_ID_ALL = "defaultEventCategoryIdAll";
-  final public static String DEFAULT_EVENTCATEGORY_ID_MEETING = "Meeting";
-  final public static String DEFAULT_EVENTCATEGORY_ID_CALLS = "Calls";
-  final public static String DEFAULT_EVENTCATEGORY_ID_CLIENTS = "Clients";
-  final public static String DEFAULT_EVENTCATEGORY_ID_HOLIDAY = "Holiday";
-  final public static String DEFAULT_EVENTCATEGORY_ID_ANNIVERSARY = "Anniversary";
+  final public static String DEFAULT_EVENTCATEGORY_ID_MEETING = "defaultEventCategoryIdMeeting";
+  final public static String DEFAULT_EVENTCATEGORY_ID_CALLS = "defaultEventCategoryIdCalls";
+  final public static String DEFAULT_EVENTCATEGORY_ID_CLIENTS = "defaultEventCategoryIdClients";
+  final public static String DEFAULT_EVENTCATEGORY_ID_HOLIDAY = "defaultEventCategoryIdHoliday";
+  final public static String DEFAULT_EVENTCATEGORY_ID_ANNIVERSARY = "defaultEventCategoryIdAnniversary";
+  
+  private static final String[] DEFAULT_EVENT_CATEGORY_IDS = new String[] {DEFAULT_EVENTCATEGORY_ID_ALL, DEFAULT_EVENTCATEGORY_ID_MEETING, DEFAULT_EVENTCATEGORY_ID_CALLS,
+    DEFAULT_EVENTCATEGORY_ID_CLIENTS, DEFAULT_EVENTCATEGORY_ID_HOLIDAY, DEFAULT_EVENTCATEGORY_ID_ANNIVERSARY};
+  
+  public static String[] defaultEventCategoryIds = DEFAULT_EVENT_CATEGORY_IDS;
   
   final public static String DEFAULT_EVENTCATEGORY_NAME_ALL = "defaultEventCategoryNameAll";
-  final public static String DEFAULT_EVENTCATEGORY_NAME_MEETING = "Meeting";
-  final public static String DEFAULT_EVENTCATEGORY_NAME_CALLS = "Calls";
-  final public static String DEFAULT_EVENTCATEGORY_NAME_CLIENTS = "Clients";
-  final public static String DEFAULT_EVENTCATEGORY_NAME_HOLIDAY = "Holiday";
-  final public static String DEFAULT_EVENTCATEGORY_NAME_ANNIVERSARY = "Anniversary";
+  final public static String DEFAULT_EVENTCATEGORY_NAME_MEETING = "defaultEventCategoryNameMeeting";
+  final public static String DEFAULT_EVENTCATEGORY_NAME_CALLS = "defaultEventCategoryNameCalls";
+  final public static String DEFAULT_EVENTCATEGORY_NAME_CLIENTS = "defaultEventCategoryNameClients";
+  final public static String DEFAULT_EVENTCATEGORY_NAME_HOLIDAY = "defaultEventCategoryNameHoliday";
+  final public static String DEFAULT_EVENTCATEGORY_NAME_ANNIVERSARY = "defaultEventCategoryNameAnniversary";
+  
+  private static final String[] DEFAULT_EVENT_CATEGORY_NAMES = new String[] {DEFAULT_EVENTCATEGORY_NAME_ALL, DEFAULT_EVENTCATEGORY_NAME_MEETING, DEFAULT_EVENTCATEGORY_NAME_CALLS,
+    DEFAULT_EVENTCATEGORY_NAME_CLIENTS, DEFAULT_EVENTCATEGORY_NAME_HOLIDAY, DEFAULT_EVENTCATEGORY_NAME_ANNIVERSARY};
+  
+  public static String[] defaultEventCategoryNames = DEFAULT_EVENT_CATEGORY_NAMES;
   
   private CalendarService cservice_;
-  public static String defaultCalendarCategoryId;
-  public static String defaultCalendarCategoryName;
+  public static String defaultCalendarCategoryId = DEFAULT_CALENDAR_CATEGORYID;
+  public static String defaultCalendarCategoryName = DEFAULT_CALENDAR_CATEGORYNAME;
   
-  public static String defaultCalendarId;
-  public static String defaultCalendarName;
+  public static String defaultCalendarId = DEFAULT_CALENDAR_ID;
+  public static String defaultCalendarName = DEFAULT_CALENDAR_NAME;
   
-  public static String[] defaultEventCategoryIds;
-  public static String[] defaultEventCategoryNames;
   private List<String> ignore_users_ ;
   private CalendarSetting defaultCalendarSetting_ ;
 
@@ -102,23 +110,25 @@ public class NewUserListener extends UserEventListener {
     // Get default calendar category
     if(params.getValueParam(CALENDAR_CATEGORY) != null) {
       defaultCalendarCategoryId = params.getValueParam(CALENDAR_CATEGORY).getValue().trim();
-      defaultCalendarCategoryName = defaultCalendarCategoryId;
+      if (defaultCalendarCategoryId.equals(DEFAULT_CALENDAR_CATEGORYID)) {
+        defaultCalendarCategoryName = DEFAULT_CALENDAR_CATEGORYNAME;
+      } else {
+        defaultCalendarCategoryName = defaultCalendarCategoryId;
+      }
     } else {
       LOG.warn("Config for Default calendar category does not exist!");
-      
-      defaultCalendarCategoryId = DEFAULT_CALENDAR_CATEGORYID;
-      defaultCalendarCategoryName = DEFAULT_CALENDAR_CATEGORYNAME;
     }
     
     // Get default calendars
     if(params.getValueParam(CALENDAR_NAME) != null) {
       defaultCalendarId = params.getValueParam(CALENDAR_NAME).getValue().trim();
-      defaultCalendarName = defaultCalendarId;
+      if (defaultCalendarId.equals(DEFAULT_CALENDAR_ID)) {
+        defaultCalendarName = DEFAULT_CALENDAR_NAME;
+      } else {
+        defaultCalendarName = defaultCalendarId;
+      }
     } else {
       LOG.warn("Config for Default calendar does not exist!");
-      
-      defaultCalendarId = DEFAULT_CALENDAR_ID;
-      defaultCalendarName = DEFAULT_CALENDAR_NAME;
     }
     
     // Get default event categories
@@ -137,16 +147,25 @@ public class NewUserListener extends UserEventListener {
       
       for (int i = 0; i < configValue.length; i++) {
         defaultEventCategoryIds[i + 1] = configValue[i].trim();
-        defaultEventCategoryNames[i + 1] = configValue[i].trim();
+        
+        // Check if this is default event category
+        int defaultEventCategoryIndex = -1;
+        for (int j = 0; j < DEFAULT_EVENT_CATEGORY_IDS.length; j++) {
+          if (DEFAULT_EVENT_CATEGORY_IDS[j].equals(defaultEventCategoryIds[i + 1])) {
+            defaultEventCategoryIndex = j;
+            break;
+          }
+        }
+        
+        // If this is default event category
+        if (defaultEventCategoryIndex > -1) {
+          defaultEventCategoryNames[i + 1] = DEFAULT_EVENT_CATEGORY_NAMES[defaultEventCategoryIndex];
+        } else {
+          defaultEventCategoryNames[i + 1] = configValue[i].trim();
+        }
       }
     } else {
       LOG.warn("Config for Default event categories does not exist!");
-      
-      // If there is no config then use default event category list
-      defaultEventCategoryIds = new String[] {DEFAULT_EVENTCATEGORY_ID_ALL, DEFAULT_EVENTCATEGORY_ID_MEETING, DEFAULT_EVENTCATEGORY_ID_CALLS
-          , DEFAULT_EVENTCATEGORY_ID_CLIENTS, DEFAULT_EVENTCATEGORY_ID_HOLIDAY, DEFAULT_EVENTCATEGORY_ID_ANNIVERSARY};
-      defaultEventCategoryNames = new String[] {DEFAULT_EVENTCATEGORY_NAME_ALL, DEFAULT_EVENTCATEGORY_NAME_MEETING, DEFAULT_EVENTCATEGORY_NAME_CALLS
-          , DEFAULT_EVENTCATEGORY_NAME_CLIENTS, DEFAULT_EVENTCATEGORY_NAME_HOLIDAY, DEFAULT_EVENTCATEGORY_NAME_ANNIVERSARY};
     }
     
     // Get calendar setting

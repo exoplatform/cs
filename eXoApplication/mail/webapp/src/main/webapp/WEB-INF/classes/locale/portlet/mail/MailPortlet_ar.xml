@@ -1391,6 +1391,11 @@
       <Clients>Clients</Clients>
       <Holiday>Holiday</Holiday>
       <Anniversary>Anniversary</Anniversary>
+      <defaultEventCategoryIdMeeting>Meeting</defaultEventCategoryIdMeeting>
+      <defaultEventCategoryIdCalls>Calls</defaultEventCategoryIdCalls>
+      <defaultEventCategoryIdClients>Clients</defaultEventCategoryIdClients>
+      <defaultEventCategoryIdHoliday>Holiday</defaultEventCategoryIdHoliday>
+      <defaultEventCategoryIdAnniversary>Anniversary</defaultEventCategoryIdAnniversary>
       <defaultCalendarCategoryId>My group</defaultCalendarCategoryId>
       <defaultCalendarId>Default</defaultCalendarId>
     </label>

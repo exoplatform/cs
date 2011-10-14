@@ -604,6 +604,11 @@
       <defaultEventCategoryIdClients>Khách hàng</defaultEventCategoryIdClients>
       <defaultEventCategoryIdHoliday>Kỳ Nghỉ</defaultEventCategoryIdHoliday>
       <defaultEventCategoryIdAnniversary>Kỉ niệm</defaultEventCategoryIdAnniversary>
+      <Meeting>Hội họp</Meeting>
+      <Calls>Liên lạc</Calls>
+      <Clients>Khách hàng</Clients>
+      <Holiday>Kỳ Nghỉ</Holiday>
+      <Anniversary>Kỉ niệm</Anniversary>
     </label>
   </UICalendarView>
   <!--

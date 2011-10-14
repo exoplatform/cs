@@ -1,0 +1,456 @@
+Index: eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_de.properties
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_de.properties	(revision 73481)
++++ eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_de.properties	(working copy)
+@@ -991,6 +991,11 @@
+ UIEventForm.label.Clients=Clients
+ UIEventForm.label.Holiday=Holiday
+ UIEventForm.label.Anniversary=Anniversary
++UIEventForm.label.defaultEventCategoryIdMeeting=Meeting
++UIEventForm.label.defaultEventCategoryIdCalls=Calls
++UIEventForm.label.defaultEventCategoryIdClients=Clients
++UIEventForm.label.defaultEventCategoryIdHoliday=Holiday
++UIEventForm.label.defaultEventCategoryIdAnniversary=Anniversary
+ 
+ 
+ UIEventForm.label.defaultCalendarCategoryId=My group
+Index: eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_nl.properties
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_nl.properties	(revision 73481)
++++ eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_nl.properties	(working copy)
+@@ -990,8 +990,12 @@
+ UIEventForm.label.Clients=Clients
+ UIEventForm.label.Holiday=Holiday
+ UIEventForm.label.Anniversary=Anniversary
++UIEventForm.label.defaultEventCategoryIdMeeting=Meeting
++UIEventForm.label.defaultEventCategoryIdCalls=Calls
++UIEventForm.label.defaultEventCategoryIdClients=Clients
++UIEventForm.label.defaultEventCategoryIdHoliday=Holiday
++UIEventForm.label.defaultEventCategoryIdAnniversary=Anniversary
+ 
+-
+ UIEventForm.label.defaultCalendarCategoryId=My group
+ UIEventForm.label.defaultCalendarId=Default
+ ##################################################################
+Index: eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_it.properties
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_it.properties	(revision 73481)
++++ eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_it.properties	(working copy)
+@@ -824,12 +824,19 @@
+ UIEventForm.optionGroup.label.privateCalendar=Calendari personali
+ UIEventForm.optionGroup.label.sharedCalendar=Calendari condivisi
+ UIEventForm.optionGroup.label.publicCalendar=Calendari di gruppo
++
+ UIEventForm.label.defaultEventCategoryIdAll=Tutti
+ UIEventForm.label.Meeting=Incontri
+ UIEventForm.label.Calls=Chiamate
+ UIEventForm.label.Clients=Clienti
+ UIEventForm.label.Holiday=Ferie
+ UIEventForm.label.Anniversary=Anniversari
++UIEventForm.label.defaultEventCategoryIdMeeting=Incontri
++UIEventForm.label.defaultEventCategoryIdCalls=Chiamate
++UIEventForm.label.defaultEventCategoryIdClients=Clienti
++UIEventForm.label.defaultEventCategoryIdHoliday=Ferie
++UIEventForm.label.defaultEventCategoryIdAnniversary=Anniversari
++
+ UIEventForm.label.defaultCalendarCategoryId=Il mio gruppo
+ UIEventForm.label.defaultCalendarId=Default
+ UIEventCategoryForm.label.eventCategoryName=Categoria
+Index: eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet.properties
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet.properties	(revision 73481)
++++ eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet.properties	(working copy)
+@@ -1003,8 +1003,12 @@
+ UIEventForm.label.Clients=Clients
+ UIEventForm.label.Holiday=Holiday
+ UIEventForm.label.Anniversary=Anniversary
++UIEventForm.label.defaultEventCategoryIdMeeting=Meeting
++UIEventForm.label.defaultEventCategoryIdCalls=Calls
++UIEventForm.label.defaultEventCategoryIdClients=Clients
++UIEventForm.label.defaultEventCategoryIdHoliday=Holiday
++UIEventForm.label.defaultEventCategoryIdAnniversary=Anniversary
+ 
+-
+ UIEventForm.label.defaultCalendarCategoryId=My group
+ UIEventForm.label.defaultCalendarId=Default
+ ##################################################################
+Index: eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_en.properties
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_en.properties	(revision 73481)
++++ eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_en.properties	(working copy)
+@@ -1001,8 +1001,12 @@
+ UIEventForm.label.Clients=Clients
+ UIEventForm.label.Holiday=Holiday
+ UIEventForm.label.Anniversary=Anniversary
++UIEventForm.label.defaultEventCategoryIdMeeting=Meeting
++UIEventForm.label.defaultEventCategoryIdCalls=Calls
++UIEventForm.label.defaultEventCategoryIdClients=Clients
++UIEventForm.label.defaultEventCategoryIdHoliday=Holiday
++UIEventForm.label.defaultEventCategoryIdAnniversary=Anniversary
+ 
+-
+ UIEventForm.label.defaultCalendarCategoryId=My group
+ UIEventForm.label.defaultCalendarId=Default
+ ##################################################################
+Index: eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_vi.xml
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_vi.xml	(revision 73481)
++++ eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_vi.xml	(working copy)
+@@ -1378,6 +1378,11 @@
+       <Clients>Khách</Clients>
+       <Holiday>Ngày nghỉ</Holiday>
+       <Anniversary>Lễ kỷ niệm</Anniversary>
++      <defaultEventCategoryIdMeeting>Họp</defaultEventCategoryIdMeeting>
++      <defaultEventCategoryIdCalls>Cuộc gọi</defaultEventCategoryIdCalls>
++      <defaultEventCategoryIdClients>Khách</defaultEventCategoryIdClients>
++      <defaultEventCategoryIdHoliday>Ngày nghỉ</defaultEventCategoryIdHoliday>
++      <defaultEventCategoryIdAnniversary>Lễ kỷ niệm</defaultEventCategoryIdAnniversary>
+       <defaultCalendarCategoryId>Nhóm của tôi</defaultCalendarCategoryId>
+       <defaultCalendarId>Mặc định</defaultCalendarId>
+     </label>
+Index: eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_ar.xml
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_ar.xml	(revision 73481)
++++ eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_ar.xml	(working copy)
+@@ -1391,6 +1391,11 @@
+       <Clients>Clients</Clients>
+       <Holiday>Holiday</Holiday>
+       <Anniversary>Anniversary</Anniversary>
++      <defaultEventCategoryIdMeeting>Meeting</defaultEventCategoryIdMeeting>
++      <defaultEventCategoryIdCalls>Calls</defaultEventCategoryIdCalls>
++      <defaultEventCategoryIdClients>Clients</defaultEventCategoryIdClients>
++      <defaultEventCategoryIdHoliday>Holiday</defaultEventCategoryIdHoliday>
++      <defaultEventCategoryIdAnniversary>Anniversary</defaultEventCategoryIdAnniversary>
+       <defaultCalendarCategoryId>My group</defaultCalendarCategoryId>
+       <defaultCalendarId>Default</defaultCalendarId>
+     </label>
+Index: eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_pt_BR.properties
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_pt_BR.properties	(revision 73481)
++++ eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_pt_BR.properties	(working copy)
+@@ -824,12 +824,19 @@
+ UIEventForm.optionGroup.label.privateCalendar=Calend\u00e1rios pessoais
+ UIEventForm.optionGroup.label.sharedCalendar=Calend\u00e1rios compartilhados
+ UIEventForm.optionGroup.label.publicCalendar=Calend\u00e1rios do grupo
++
+ UIEventForm.label.defaultEventCategoryIdAll=Todos
++UIEventForm.label.Meeting=Reuni\u00e3o
++UIEventForm.label.Calls=Chamadas
++UIEventForm.label.Clients=Clientes
++UIEventForm.label.Holiday=Feriados
++UIEventForm.label.Anniversary=Anivers\u00e1rio
+ UIEventForm.label.defaultEventCategoryIdMeeting=Reuni\u00e3o
+ UIEventForm.label.defaultEventCategoryIdCalls=Chamadas
+ UIEventForm.label.defaultEventCategoryIdClients=Clientes
+ UIEventForm.label.defaultEventCategoryIdHoliday=Feriados
+ UIEventForm.label.defaultEventCategoryIdAnniversary=Anivers\u00e1rio
++
+ UIEventForm.label.defaultCalendarCategoryId=Meu grupo
+ UIEventForm.label.defaultCalendarId=Padr\u00e3o
+ UIEventCategoryForm.label.eventCategoryName=Categoria
+Index: eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_fr.properties
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_fr.properties	(revision 73481)
++++ eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_fr.properties	(working copy)
+@@ -993,8 +993,12 @@
+ UIEventForm.label.Clients=Clients
+ UIEventForm.label.Holiday=Vacance
+ UIEventForm.label.Anniversary=Anniversaire
++UIEventForm.label.defaultEventCategoryIdMeeting=Réunion
++UIEventForm.label.defaultEventCategoryIdCalls=Appels
++UIEventForm.label.defaultEventCategoryIdClients=Clients
++UIEventForm.label.defaultEventCategoryIdHoliday=Vacance
++UIEventForm.label.defaultEventCategoryIdAnniversary=Anniversaire
+ 
+-
+ UIEventForm.label.defaultCalendarCategoryId=mon groupe
+ UIEventForm.label.defaultCalendarId=non-remboursement
+ ##################################################################
+Index: eXoApplication/calendar/service/src/main/java/org/exoplatform/calendar/service/impl/NewUserListener.java
+===================================================================
+--- eXoApplication/calendar/service/src/main/java/org/exoplatform/calendar/service/impl/NewUserListener.java	(revision 73481)
++++ eXoApplication/calendar/service/src/main/java/org/exoplatform/calendar/service/impl/NewUserListener.java	(working copy)
+@@ -62,28 +62,36 @@
+   final public static String DEFAULT_CALENDAR_NAME = "defaultCalendarName";
+   
+   final public static String DEFAULT_EVENTCATEGORY_ID_ALL = "defaultEventCategoryIdAll";
+-  final public static String DEFAULT_EVENTCATEGORY_ID_MEETING = "Meeting";
+-  final public static String DEFAULT_EVENTCATEGORY_ID_CALLS = "Calls";
+-  final public static String DEFAULT_EVENTCATEGORY_ID_CLIENTS = "Clients";
+-  final public static String DEFAULT_EVENTCATEGORY_ID_HOLIDAY = "Holiday";
+-  final public static String DEFAULT_EVENTCATEGORY_ID_ANNIVERSARY = "Anniversary";
++  final public static String DEFAULT_EVENTCATEGORY_ID_MEETING = "defaultEventCategoryIdMeeting";
++  final public static String DEFAULT_EVENTCATEGORY_ID_CALLS = "defaultEventCategoryIdCalls";
++  final public static String DEFAULT_EVENTCATEGORY_ID_CLIENTS = "defaultEventCategoryIdClients";
++  final public static String DEFAULT_EVENTCATEGORY_ID_HOLIDAY = "defaultEventCategoryIdHoliday";
++  final public static String DEFAULT_EVENTCATEGORY_ID_ANNIVERSARY = "defaultEventCategoryIdAnniversary";
+   
++  private static final String[] DEFAULT_EVENT_CATEGORY_IDS = new String[] {DEFAULT_EVENTCATEGORY_ID_ALL, DEFAULT_EVENTCATEGORY_ID_MEETING, DEFAULT_EVENTCATEGORY_ID_CALLS,
++    DEFAULT_EVENTCATEGORY_ID_CLIENTS, DEFAULT_EVENTCATEGORY_ID_HOLIDAY, DEFAULT_EVENTCATEGORY_ID_ANNIVERSARY};
++  
++  public static String[] defaultEventCategoryIds = DEFAULT_EVENT_CATEGORY_IDS;
++  
+   final public static String DEFAULT_EVENTCATEGORY_NAME_ALL = "defaultEventCategoryNameAll";
+-  final public static String DEFAULT_EVENTCATEGORY_NAME_MEETING = "Meeting";
+-  final public static String DEFAULT_EVENTCATEGORY_NAME_CALLS = "Calls";
+-  final public static String DEFAULT_EVENTCATEGORY_NAME_CLIENTS = "Clients";
+-  final public static String DEFAULT_EVENTCATEGORY_NAME_HOLIDAY = "Holiday";
+-  final public static String DEFAULT_EVENTCATEGORY_NAME_ANNIVERSARY = "Anniversary";
++  final public static String DEFAULT_EVENTCATEGORY_NAME_MEETING = "defaultEventCategoryNameMeeting";
++  final public static String DEFAULT_EVENTCATEGORY_NAME_CALLS = "defaultEventCategoryNameCalls";
++  final public static String DEFAULT_EVENTCATEGORY_NAME_CLIENTS = "defaultEventCategoryNameClients";
++  final public static String DEFAULT_EVENTCATEGORY_NAME_HOLIDAY = "defaultEventCategoryNameHoliday";
++  final public static String DEFAULT_EVENTCATEGORY_NAME_ANNIVERSARY = "defaultEventCategoryNameAnniversary";
+   
++  private static final String[] DEFAULT_EVENT_CATEGORY_NAMES = new String[] {DEFAULT_EVENTCATEGORY_NAME_ALL, DEFAULT_EVENTCATEGORY_NAME_MEETING, DEFAULT_EVENTCATEGORY_NAME_CALLS,
++    DEFAULT_EVENTCATEGORY_NAME_CLIENTS, DEFAULT_EVENTCATEGORY_NAME_HOLIDAY, DEFAULT_EVENTCATEGORY_NAME_ANNIVERSARY};
++  
++  public static String[] defaultEventCategoryNames = DEFAULT_EVENT_CATEGORY_NAMES;
++  
+   private CalendarService cservice_;
+-  public static String defaultCalendarCategoryId;
+-  public static String defaultCalendarCategoryName;
++  public static String defaultCalendarCategoryId = DEFAULT_CALENDAR_CATEGORYID;
++  public static String defaultCalendarCategoryName = DEFAULT_CALENDAR_CATEGORYNAME;
+   
+-  public static String defaultCalendarId;
+-  public static String defaultCalendarName;
++  public static String defaultCalendarId = DEFAULT_CALENDAR_ID;
++  public static String defaultCalendarName = DEFAULT_CALENDAR_NAME;
+   
+-  public static String[] defaultEventCategoryIds;
+-  public static String[] defaultEventCategoryNames;
+   private List<String> ignore_users_ ;
+   private CalendarSetting defaultCalendarSetting_ ;
+ 
+@@ -102,23 +110,25 @@
+     // Get default calendar category
+     if(params.getValueParam(CALENDAR_CATEGORY) != null) {
+       defaultCalendarCategoryId = params.getValueParam(CALENDAR_CATEGORY).getValue().trim();
+-      defaultCalendarCategoryName = defaultCalendarCategoryId;
++      if (defaultCalendarCategoryId.equals(DEFAULT_CALENDAR_CATEGORYID)) {
++        defaultCalendarCategoryName = DEFAULT_CALENDAR_CATEGORYNAME;
++      } else {
++        defaultCalendarCategoryName = defaultCalendarCategoryId;
++      }
+     } else {
+       LOG.warn("Config for Default calendar category does not exist!");
+-      
+-      defaultCalendarCategoryId = DEFAULT_CALENDAR_CATEGORYID;
+-      defaultCalendarCategoryName = DEFAULT_CALENDAR_CATEGORYNAME;
+     }
+     
+     // Get default calendars
+     if(params.getValueParam(CALENDAR_NAME) != null) {
+       defaultCalendarId = params.getValueParam(CALENDAR_NAME).getValue().trim();
+-      defaultCalendarName = defaultCalendarId;
++      if (defaultCalendarId.equals(DEFAULT_CALENDAR_ID)) {
++        defaultCalendarName = DEFAULT_CALENDAR_NAME;
++      } else {
++        defaultCalendarName = defaultCalendarId;
++      }
+     } else {
+       LOG.warn("Config for Default calendar does not exist!");
+-      
+-      defaultCalendarId = DEFAULT_CALENDAR_ID;
+-      defaultCalendarName = DEFAULT_CALENDAR_NAME;
+     }
+     
+     // Get default event categories
+@@ -137,16 +147,25 @@
+       
+       for (int i = 0; i < configValue.length; i++) {
+         defaultEventCategoryIds[i + 1] = configValue[i].trim();
+-        defaultEventCategoryNames[i + 1] = configValue[i].trim();
++        
++        // Check if this is default event category
++        int defaultEventCategoryIndex = -1;
++        for (int j = 0; j < DEFAULT_EVENT_CATEGORY_IDS.length; j++) {
++          if (DEFAULT_EVENT_CATEGORY_IDS[j].equals(defaultEventCategoryIds[i + 1])) {
++            defaultEventCategoryIndex = j;
++            break;
++          }
++        }
++        
++        // If this is default event category
++        if (defaultEventCategoryIndex > -1) {
++          defaultEventCategoryNames[i + 1] = DEFAULT_EVENT_CATEGORY_NAMES[defaultEventCategoryIndex];
++        } else {
++          defaultEventCategoryNames[i + 1] = configValue[i].trim();
++        }
+       }
+     } else {
+       LOG.warn("Config for Default event categories does not exist!");
+-      
+-      // If there is no config then use default event category list
+-      defaultEventCategoryIds = new String[] {DEFAULT_EVENTCATEGORY_ID_ALL, DEFAULT_EVENTCATEGORY_ID_MEETING, DEFAULT_EVENTCATEGORY_ID_CALLS
+-          , DEFAULT_EVENTCATEGORY_ID_CLIENTS, DEFAULT_EVENTCATEGORY_ID_HOLIDAY, DEFAULT_EVENTCATEGORY_ID_ANNIVERSARY};
+-      defaultEventCategoryNames = new String[] {DEFAULT_EVENTCATEGORY_NAME_ALL, DEFAULT_EVENTCATEGORY_NAME_MEETING, DEFAULT_EVENTCATEGORY_NAME_CALLS
+-          , DEFAULT_EVENTCATEGORY_NAME_CLIENTS, DEFAULT_EVENTCATEGORY_NAME_HOLIDAY, DEFAULT_EVENTCATEGORY_NAME_ANNIVERSARY};
+     }
+     
+     // Get calendar setting
+Index: eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_en.properties
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_en.properties	(revision 73481)
++++ eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_en.properties	(working copy)
+@@ -362,6 +362,11 @@
+ UICalendarView.label.Clients=Clients
+ UICalendarView.label.Holiday=Holiday
+ UICalendarView.label.Anniversary=Anniversary
++UICalendarView.label.defaultEventCategoryIdMeeting=Meeting
++UICalendarView.label.defaultEventCategoryIdCalls=Calls
++UICalendarView.label.defaultEventCategoryIdClients=Clients
++UICalendarView.label.defaultEventCategoryIdHoliday=Holiday
++UICalendarView.label.defaultEventCategoryIdAnniversary=Anniversary
+ 
+ #org.exoplatform.calendar.webui.UISearchForm
+ UISearchForm.label.value=Search:
+Index: eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_vi.xml
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_vi.xml	(revision 73481)
++++ eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_vi.xml	(working copy)
+@@ -604,6 +604,11 @@
+       <defaultEventCategoryIdClients>Khách hàng</defaultEventCategoryIdClients>
+       <defaultEventCategoryIdHoliday>Kỳ Nghỉ</defaultEventCategoryIdHoliday>
+       <defaultEventCategoryIdAnniversary>Kỉ niệm</defaultEventCategoryIdAnniversary>
++      <Meeting>Hội họp</Meeting>
++      <Calls>Liên lạc</Calls>
++      <Clients>Khách hàng</Clients>
++      <Holiday>Kỳ Nghỉ</Holiday>
++      <Anniversary>Kỉ niệm</Anniversary>
+     </label>
+   </UICalendarView>
+   <!--
+Index: eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_pt_BR.properties
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_pt_BR.properties	(revision 73481)
++++ eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_pt_BR.properties	(working copy)
+@@ -325,6 +325,11 @@
+ UICalendarView.msg.can-not-delete-all-event=Imposs\u00edvel deletar eventos (tarefas) porque voc\u00ea n\u00e3o tem permiss\u00e3o de edi\u00e7\u00e3o.
+ UICalendarView.msg.feed-list-empty=Voc\u00ea precisa gerar um feed primeiro.
+ UICalendarView.label.defaultEventCategoryIdAll=Todo
++UICalendarView.label.Meeting=Reuni\u00e3o
++UICalendarView.label.Calls=Chamadas
++UICalendarView.label.Clients=Clientes
++UICalendarView.label.Holiday=F\u00e9rias
++UICalendarView.label.Anniversary=Anivers\u00e1rio
+ UICalendarView.label.defaultEventCategoryIdMeeting=Reuni\u00e3o
+ UICalendarView.label.defaultEventCategoryIdCalls=Chamadas
+ UICalendarView.label.defaultEventCategoryIdClients=Clientes
+Index: eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_fr.properties
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_fr.properties	(revision 73481)
++++ eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_fr.properties	(working copy)
+@@ -364,6 +364,11 @@
+ UICalendarView.label.Clients=Clients
+ UICalendarView.label.Holiday=Vacance
+ UICalendarView.label.Anniversary=Anniversaire
++UICalendarView.label.defaultEventCategoryIdMeeting=Réunion
++UICalendarView.label.defaultEventCategoryIdCalls=Appels
++UICalendarView.label.defaultEventCategoryIdClients=Clients
++UICalendarView.label.defaultEventCategoryIdHoliday=Vacance
++UICalendarView.label.defaultEventCategoryIdAnniversary=Anniversaire
+ 
+ #org.exoplatform.calendar.webui.UISearchForm
+ UISearchForm.label.value=Recherche
+Index: eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_de.properties
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_de.properties	(revision 73481)
++++ eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_de.properties	(working copy)
+@@ -362,6 +362,11 @@
+ UICalendarView.label.Clients=Clients
+ UICalendarView.label.Holiday=Holiday
+ UICalendarView.label.Anniversary=Anniversary
++UICalendarView.label.defaultEventCategoryIdMeeting=Meeting
++UICalendarView.label.defaultEventCategoryIdCalls=Calls
++UICalendarView.label.defaultEventCategoryIdClients=Clients
++UICalendarView.label.defaultEventCategoryIdHoliday=Holiday
++UICalendarView.label.defaultEventCategoryIdAnniversary=Anniversary
+ 
+ #org.exoplatform.calendar.webui.UISearchForm
+ UISearchForm.label.value=Suchen:
+Index: eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_nl.properties
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_nl.properties	(revision 73481)
++++ eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_nl.properties	(working copy)
+@@ -362,6 +362,11 @@
+ UICalendarView.label.Clients=Clients
+ UICalendarView.label.Holiday=Holiday
+ UICalendarView.label.Anniversary=Anniversary
++UICalendarView.label.defaultEventCategoryIdMeeting=Meeting
++UICalendarView.label.defaultEventCategoryIdCalls=Calls
++UICalendarView.label.defaultEventCategoryIdClients=Clients
++UICalendarView.label.defaultEventCategoryIdHoliday=Holiday
++UICalendarView.label.defaultEventCategoryIdAnniversary=Anniversary
+ 
+ #org.exoplatform.calendar.webui.UISearchForm
+ UISearchForm.label.value=Zoeken:
+Index: eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_it.properties
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_it.properties	(revision 73481)
++++ eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_it.properties	(working copy)
+@@ -330,6 +330,11 @@
+ UICalendarView.label.Clients=Clienti
+ UICalendarView.label.Holiday=Vacanze
+ UICalendarView.label.Anniversary=Anniversario
++UICalendarView.label.defaultEventCategoryIdMeeting=Incontro
++UICalendarView.label.defaultEventCategoryIdCalls=Chiamate
++UICalendarView.label.defaultEventCategoryIdClients=Clienti
++UICalendarView.label.defaultEventCategoryIdHoliday=Vacanze
++UICalendarView.label.defaultEventCategoryIdAnniversary=Anniversario
+ UISearchForm.label.value=Ricerca:
+ UISearchForm.label.AdvancedSearch=Ricerca avanzata
+ UISearchForm.label.Search=Ricerca
+Index: eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet.properties
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet.properties	(revision 73481)
++++ eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet.properties	(working copy)
+@@ -364,6 +364,11 @@
+ UICalendarView.label.Clients=Clients
+ UICalendarView.label.Holiday=Holiday
+ UICalendarView.label.Anniversary=Anniversary
++UICalendarView.label.defaultEventCategoryIdMeeting=Meeting
++UICalendarView.label.defaultEventCategoryIdCalls=Calls
++UICalendarView.label.defaultEventCategoryIdClients=Clients
++UICalendarView.label.defaultEventCategoryIdHoliday=Holiday
++UICalendarView.label.defaultEventCategoryIdAnniversary=Anniversary
+ 
+ #org.exoplatform.calendar.webui.UISearchForm
+ UISearchForm.label.value=Search:
+Index: demo/war/src/main/webapp/WEB-INF/conf/csdemo/cs/calendar/calendar-service-configuration.xml
+===================================================================
+--- demo/war/src/main/webapp/WEB-INF/conf/csdemo/cs/calendar/calendar-service-configuration.xml	(revision 73481)
++++ demo/war/src/main/webapp/WEB-INF/conf/csdemo/cs/calendar/calendar-service-configuration.xml	(working copy)
+@@ -25,11 +25,11 @@
+       
+           <value-param>
+             <name>defaultEventCategories</name>
+-            <value>Meeting,Calls,Clients,Holiday,Anniversary</value><!-- Multi value, use coma (,) to split values-->
++            <value>defaultEventCategoryIdMeeting,defaultEventCategoryIdCalls,defaultEventCategoryIdClients,defaultEventCategoryIdHoliday,defaultEventCategoryIdAnniversary</value><!-- Multi value, use coma (,) to split values-->
+             <!-- The event category's name will be get from resource bundle by key "UICalendars.label." + defaultEventCategory's value. 
+                If the key does not exist, the defaultEventCategory's value will be used to display. 
+                Sample: 
+-                  If the value is "Meeting" then the resource bundle key is "UICalendars.label.Meeting". 
++                  If the value is "defaultEventCategoryIdMeeting" then the resource bundle key is "UICalendars.label.defaultEventCategoryIdMeeting". 
+                     The value of this key is "Meeting", so "Meeting" will be display as default event category.
+                   If the value is "Not exist key", because this key doesn't exist in resource bundle then 
+                     "Not exist key" will be display as default event category.
+Index: extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/calendar/calendar-service-configuration.xml
+===================================================================
+--- extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/calendar/calendar-service-configuration.xml	(revision 73481)
++++ extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/calendar/calendar-service-configuration.xml	(working copy)
+@@ -25,11 +25,11 @@
+       
+           <value-param>
+             <name>defaultEventCategories</name>
+-            <value>Meeting,Calls,Clients,Holiday,Anniversary</value><!-- Multi value, use coma (,) to split values-->
++            <value>defaultEventCategoryIdMeeting,defaultEventCategoryIdCalls,defaultEventCategoryIdClients,defaultEventCategoryIdHoliday,defaultEventCategoryIdAnniversary</value><!-- Multi value, use coma (,) to split values-->
+             <!-- The event category's name will be get from resource bundle by key "UICalendars.label." + defaultEventCategory's value. 
+                If the key does not exist, the defaultEventCategory's value will be used to display. 
+                Sample: 
+-                  If the value is "Meeting" then the resource bundle key is "UICalendars.label.Meeting". 
++                  If the value is "defaultEventCategoryIdMeeting" then the resource bundle key is "UICalendars.label.defaultEventCategoryIdMeeting". 
+                     The value of this key is "Meeting", so "Meeting" will be display as default event category.
+                   If the value is "Not exist key", because this key doesn't exist in resource bundle then 
+                     "Not exist key" will be display as default event category.
