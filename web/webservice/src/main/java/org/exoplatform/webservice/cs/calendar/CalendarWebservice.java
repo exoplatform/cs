@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.GregorianCalendar;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -32,6 +33,7 @@ import javax.jcr.PathNotFoundException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -88,7 +90,17 @@ public class CalendarWebservice implements ResourceContainer{
   final public static String BASE_URL_PRIVATE = BASE_URL + "/".intern();
   private Log log = ExoLogger.getExoLogger("calendar.webservice");
 
+  static CacheControl cc = new CacheControl();
+  static {
+    cc.setNoCache(true);
+    cc.setNoStore(true);
+  }
+  
   public CalendarWebservice() {}
+  
+  private boolean validateEventType(String type) {
+    return type != null && (CalendarEvent.TYPE_EVENT.equals(type) || CalendarEvent.TYPE_TASK.equals(type));
+  }
 
   /**
    * 
@@ -162,9 +174,6 @@ public class CalendarWebservice implements ResourceContainer{
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
     try {
-      if(!isAuthorized(username)) return Response.status(HTTPStatus.LOCKED)
-      .entity("Unauthorized: Access is denied").cacheControl(cacheControl).build();
-
       CalendarService calService = (CalendarService)ExoContainerContext
       .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
       CalendarImportExport icalEx = calService.getCalendarImportExports(CalendarService.ICALENDAR);
@@ -217,9 +226,6 @@ public class CalendarWebservice implements ResourceContainer{
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
     try {
-      if(!isAuthorized(username))
-        return Response.status(HTTPStatus.LOCKED)
-        .entity("Unauthorized: Access is denied").cacheControl(cacheControl).build();
       CalendarService calService = (CalendarService)ExoContainerContext
       .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
 
@@ -386,8 +392,6 @@ public class CalendarWebservice implements ResourceContainer{
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
     try {
-      if(!isAuthorized(username)) return Response.status(HTTPStatus.LOCKED)
-      .entity("Unauthorized: Access is denied").cacheControl(cacheControl).build();
       CalendarService calService = (CalendarService)ExoContainerContext
       .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
       CalendarImportExport icalEx = calService.getCalendarImportExports(CalendarService.ICALENDAR);
@@ -405,13 +409,54 @@ public class CalendarWebservice implements ResourceContainer{
       return Response.status(HTTPStatus.INTERNAL_ERROR).entity(e).cacheControl(cacheControl).build();
     }
   }
-
-  private boolean isAuthorized(String usename) {
-    return (ConversationState.getCurrent() != null && ConversationState.getCurrent().getIdentity() != null && 
-        ConversationState.getCurrent().getIdentity().getUserId() != null && ConversationState.getCurrent().getIdentity().getUserId().equals(usename)  
-    );
+  
+  /**
+   * get list of personal events by their type, list of calendar ids, from time, to time and the size limitation.
+   * @param type  type of the events. The possible values are "Event" and "Task". 
+   * @param calids a string contains calendar ids separated by commas (,). 
+   * @param from long value of the time which the events are started after. 
+   * @param to long value of the time which the events are started before. 
+   * @param limit limit number of returned events.
+   * @return Response of a Json object. The json object includes the list of events saved in "info" property.  
+   */
+  @GET
+  @RolesAllowed("users")
+  @Path("/events/personal/{type}/{calids}/{from}/{to}/{limit}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response getEvents(@PathParam("type") String type, @PathParam("calids") String calids, @PathParam("from") long from, @PathParam("to") long to, @PathParam("limit") long limit) {
+    if (!validateEventType(type)) {
+      return Response.status(HTTPStatus.BAD_REQUEST).cacheControl(cc).build();
+    }
+    List<String> calList = new LinkedList<String>();
+    for (String s : calids.split(",")) {
+      if (s.trim().length() > 0) 
+        calList.add(s);
+    }
+    CalendarService calendarService = (CalendarService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+    String username = ConversationState.getCurrent().getIdentity().getUserId();
+    EventQuery eventQuery = new EventQuery();
+    java.util.Calendar calendar = java.util.Calendar.getInstance();
+    calendar.setTimeInMillis(from);
+    eventQuery.setFromDate(calendar);
+    calendar = java.util.Calendar.getInstance();
+    calendar.setTimeInMillis(to);
+    eventQuery.setToDate(calendar);
+    eventQuery.setEventType(type);
+    eventQuery.setLimitedItems(limit);
+    eventQuery.setOrderBy(new String[]{Utils.EXO_FROM_DATE_TIME});
+    if (calList.size() > 0)
+      eventQuery.setCalendarId(calList.toArray(new String[calList.size()]));
+    try {
+      List<CalendarEvent> events = calendarService.getUserEvents(username, eventQuery);
+      EventData data = new EventData();
+      data.setInfo(events);
+      return Response.ok(data, MediaType.APPLICATION_JSON_TYPE).cacheControl(cc).build();
+    } catch (Exception e) {
+      if (log.isWarnEnabled()) log.warn(String.format("Getting events for user $1s from $2s to $3s failed", username, from, to), e);
+      return Response.status(HTTPStatus.INTERNAL_ERROR).cacheControl(cc).build();
+    }
   }
-
+  
   /**
    * listing up coming event or task given by current date time
    * @param username : current loged-in user
@@ -427,19 +472,9 @@ public class CalendarWebservice implements ResourceContainer{
                                 String currentdatetime, @PathParam("type")
                                 String type, @PathParam("limit")
                                 int limit) throws Exception {
-
-    CacheControl cacheControl = new CacheControl();
-    cacheControl.setNoCache(true);
-    cacheControl.setNoStore(true);
-
     try {
-
-      //if(!isAuthorized(username)) {
-        //return Response.status(HTTPStatus.UNAUTHORIZED).cacheControl(cacheControl).build();
-      //}
-      
-      if(!(CalendarEvent.TYPE_EVENT.equalsIgnoreCase(type) || CalendarEvent.TYPE_TASK.equalsIgnoreCase(type))) {
-        return Response.status(HTTPStatus.BAD_REQUEST).cacheControl(cacheControl).build();
+      if (!validateEventType(type)) {
+        return Response.status(HTTPStatus.BAD_REQUEST).cacheControl(cc).build();
       }
       SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd") ;
       java.util.Calendar fromCal = GregorianCalendar.getInstance();
@@ -461,14 +496,14 @@ public class CalendarWebservice implements ResourceContainer{
       TimeZone userTimezone = TimeZone.getTimeZone(timezoneId);
       int timezoneOffset = userTimezone.getRawOffset() + userTimezone.getDSTSavings();
       if(data == null || data.getAll().isEmpty()) 
-        return Response.status(HTTPStatus.NO_CONTENT).cacheControl(cacheControl).build();
+        return Response.status(HTTPStatus.NO_CONTENT).cacheControl(cc).build();
       EventData eventData = new EventData();
       eventData.setInfo(data.getAll());
       eventData.setUserTimezoneOffset(Integer.toString(timezoneOffset));
-      return Response.ok(eventData, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
+      return Response.ok(eventData, MediaType.APPLICATION_JSON).cacheControl(cc).build();
     } catch (Exception e) {
       if(log.isDebugEnabled()) log.debug(e.getMessage());
-      return Response.status(HTTPStatus.INTERNAL_ERROR).cacheControl(cacheControl).build();
+      return Response.status(HTTPStatus.INTERNAL_ERROR).cacheControl(cc).build();
     }
 
   }
@@ -483,9 +518,6 @@ public class CalendarWebservice implements ResourceContainer{
   @Path("/updatestatus/{taskid}")
   public Response updateStatus(@PathParam("taskid")
                                 String taskid) throws Exception {    
-    CacheControl cacheControl = new CacheControl();
-    cacheControl.setNoCache(true);
-    cacheControl.setNoStore(true);
     try{
     CalendarService calService = (CalendarService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
     String username = ConversationState.getCurrent().getIdentity().getUserId();
@@ -493,27 +525,24 @@ public class CalendarWebservice implements ResourceContainer{
     String calendarId = task.getCalendarId();
     task.setEventState(CalendarEvent.COMPLETED);
     calService.saveUserEvent(username, calendarId, task, false);
-    return Response.ok("true", MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
+    return Response.ok("true", MediaType.APPLICATION_JSON).cacheControl(cc).build();
     } catch(Exception e){
-      return Response.status(HTTPStatus.INTERNAL_ERROR).cacheControl(cacheControl).build();
+      return Response.status(HTTPStatus.INTERNAL_ERROR).cacheControl(cc).build();
     }
   }
   @GET
   @RolesAllowed("users")
   @Path("/getcalendars")
   public Response getCalendars() throws Exception{
-    CacheControl cacheControl = new CacheControl();
-    cacheControl.setNoCache(true);
-    cacheControl.setNoStore(true);
     try{      
       CalendarService calService = (CalendarService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
       String username = ConversationState.getCurrent().getIdentity().getUserId();
       List<Calendar> calList = calService.getUserCalendars(username, true);
       EventData data = new EventData();
       data.setCalendars(calList);
-      return Response.ok(data, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
+      return Response.ok(data, MediaType.APPLICATION_JSON).cacheControl(cc).build();
     }catch(Exception e){
-      return Response.status(HTTPStatus.INTERNAL_ERROR).cacheControl(cacheControl).build();
+      return Response.status(HTTPStatus.INTERNAL_ERROR).cacheControl(cc).build();
     }
   }
   
@@ -540,9 +569,6 @@ public class CalendarWebservice implements ResourceContainer{
   @RolesAllowed("users")
   @Path("/getevent/{eventid}")
   public Response getEvent(@PathParam("eventid") String eventid) throws Exception{
-    CacheControl cacheControl = new CacheControl();
-    cacheControl.setNoCache(true);
-    cacheControl.setNoStore(true);
     try{      
       CalendarService calService = (CalendarService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
       String username = ConversationState.getCurrent().getIdentity().getUserId();
@@ -551,9 +577,9 @@ public class CalendarWebservice implements ResourceContainer{
       if(!calEvent.getAttachment().isEmpty()) calEvent.setAttachment(null);
       SingleEvent data = makeSingleEvent(calSetting, calEvent);
       //data.setCalendars(calList);
-      return Response.ok(data, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
+      return Response.ok(data, MediaType.APPLICATION_JSON).cacheControl(cc).build();
     }catch(Exception e){
-      return Response.status(HTTPStatus.INTERNAL_ERROR).cacheControl(cacheControl).build();
+      return Response.status(HTTPStatus.INTERNAL_ERROR).cacheControl(cc).build();
     }
   }
   
@@ -567,9 +593,6 @@ public class CalendarWebservice implements ResourceContainer{
                                          String invitee, @PathParam("eXoId")
                                          String eXoId, @PathParam("answer") 
                                          String answer) throws Exception {
-    CacheControl cacheControl = new CacheControl();
-    cacheControl.setNoCache(true);
-    cacheControl.setNoStore(true);
     try {
       CalendarService calService = (CalendarService)ExoContainerContext
                                     .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
@@ -595,10 +618,10 @@ public class CalendarWebservice implements ResourceContainer{
       }
       
       response.append("</body></html>");
-      return Response.ok(response.toString(), MediaType.TEXT_HTML).cacheControl(cacheControl).build();
+      return Response.ok(response.toString(), MediaType.TEXT_HTML).cacheControl(cc).build();
     } catch (Exception e) {
       if(log.isDebugEnabled()) log.debug(e.getMessage());
-      return Response.status(HTTPStatus.INTERNAL_ERROR).cacheControl(cacheControl).build();
+      return Response.status(HTTPStatus.INTERNAL_ERROR).cacheControl(cc).build();
     }
   }                                    
 }
