@@ -2464,13 +2464,15 @@ public class JCRDataStorage implements DataStorage {
       CalendarSetting calSetting = getCalendarSetting(getUserCalendarServiceHome(username));
       Node calendarShareNode = getSharedCalendarHome();
       Node publicCalHome = getPublicCalendarHome();
+      java.util.Calendar fromDateCal = calSetting.createCalendar(eventQuery.getFromDate().getTimeInMillis());
+      java.util.Calendar toDateCal = calSetting.createCalendar(eventQuery.getToDate().getTimeInMillis());
       QueryManager qm = publicCalHome.getSession().getWorkspace().getQueryManager();
       // public events
       if (username != null && username.length() > 0) {
         eventQuery.setCalendarPath(calendarHome.getPath());
         query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH);
         NodeIterator it = query.execute().getNodes();
-        mapData = updateMap(mapData, it, eventQuery.getFromDate(), eventQuery.getToDate(), calSetting.getFilterPrivateCalendars());
+        mapData = updateMap(mapData, it, fromDateCal, toDateCal, calSetting, Calendar.TYPE_PRIVATE);
       }
       // shared events
       if (calendarShareNode.hasNode(username)) {
@@ -2481,7 +2483,7 @@ public class JCRDataStorage implements DataStorage {
             eventQuery.setCalendarPath(calendar.getPath());
             query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH);
             NodeIterator it = query.execute().getNodes();
-            mapData = updateMap(mapData, it, eventQuery.getFromDate(), eventQuery.getToDate(), calSetting.getFilterSharedCalendars());
+            mapData = updateMap(mapData, it, fromDateCal, toDateCal, calSetting, Calendar.TYPE_SHARED);
           } catch (Exception e) {
             if (log.isDebugEnabled()) {
               log.debug("Fail to update map of shared event", e);
@@ -2494,7 +2496,7 @@ public class JCRDataStorage implements DataStorage {
       eventQuery.setCalendarId(publicCalendarIds);
       query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH);
       NodeIterator it = query.execute().getNodes();
-      mapData = updateMap(mapData, it, eventQuery.getFromDate(), eventQuery.getToDate(), calSetting.getFilterPublicCalendars());
+      mapData = updateMap(mapData, it, fromDateCal, toDateCal, calSetting, Calendar.TYPE_PUBLIC);
     } catch (Exception e) {
       if (log.isDebugEnabled()) {
         log.debug("Fail to search hight light event", e);
@@ -2567,10 +2569,31 @@ public class JCRDataStorage implements DataStorage {
   }
 
   /**
-   * {@inheritDoc}
+   * put busy days of the year, which contain events, to "data" map.
+   * @param data The map contains busy days of the year. Its values are optional.
+   * @param it
+   * @param fromDate
+   * @param toDate
+   * @param calendarSetting
+   * @param calType
+   * @return
+   * @throws Exception
    */
-  @SuppressWarnings("deprecation")
-  public Map<Integer, String> updateMap(Map<Integer, String> data, NodeIterator it, java.util.Calendar fromDate, java.util.Calendar toDate, String[] filterCalIds) throws Exception {
+  private Map<Integer, String> updateMap(Map<Integer, String> data, NodeIterator it, java.util.Calendar fromDate, java.util.Calendar toDate, CalendarSetting calendarSetting, int calType) throws Exception {
+    String[] filterCalIds = null;
+    switch (calType) {
+    case Calendar.TYPE_PRIVATE:
+      filterCalIds = calendarSetting.getFilterPrivateCalendars();
+      break;
+    case Calendar.TYPE_PUBLIC:
+      filterCalIds = calendarSetting.getFilterPublicCalendars();
+      break;
+    case Calendar.TYPE_SHARED:
+      filterCalIds = calendarSetting.getFilterSharedCalendars();
+      break;
+    default:
+      break;
+    }
     int fromDayOfYear = fromDate.get(java.util.Calendar.DAY_OF_YEAR);
     int daysOfyer = fromDate.getMaximum(java.util.Calendar.DAY_OF_YEAR);
     int toDayOfYear = toDate.get(java.util.Calendar.DAY_OF_YEAR);
@@ -2581,16 +2604,16 @@ public class JCRDataStorage implements DataStorage {
     while (it.hasNext() && !isVictory) {
       Node eventNode = it.nextNode();
       if (filterCalIds == null || !Arrays.asList(filterCalIds).contains(eventNode.getProperty(Utils.EXO_CALENDAR_ID).getString())) {
-        java.util.Calendar eventFormDate = eventNode.getProperty(Utils.EXO_FROM_DATE_TIME).getDate();
-        java.util.Calendar eventToDate = eventNode.getProperty(Utils.EXO_TO_DATE_TIME).getDate();
+        java.util.Calendar eventFormDate = calendarSetting.createCalendar(eventNode.getProperty(Utils.EXO_FROM_DATE_TIME).getDate().getTime());
+        java.util.Calendar eventToDate = calendarSetting.createCalendar(eventNode.getProperty(Utils.EXO_TO_DATE_TIME).getDate().getTime());
         int eventFromDayOfYear = eventFormDate.get(java.util.Calendar.DAY_OF_YEAR);
         int eventToDayOfYear = eventToDate.get(java.util.Calendar.DAY_OF_YEAR);
 
         // CS-911
-        if (eventFormDate.getTime().getYear() < fromDate.getTime().getYear()) {
+        if (eventFormDate.get(java.util.Calendar.YEAR) < fromDate.get(java.util.Calendar.YEAR)) {
           eventFromDayOfYear = 1;
         }
-        if (eventToDate.getTime().getYear() > toDate.getTime().getYear()) {
+        if (eventToDate.get(java.util.Calendar.YEAR) > toDate.get(java.util.Calendar.YEAR)) {
           eventToDayOfYear = 366;
         }
         Integer begin = -1;

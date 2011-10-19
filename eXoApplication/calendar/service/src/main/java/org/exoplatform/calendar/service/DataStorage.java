@@ -640,17 +640,6 @@ public interface DataStorage {
   public Map<Integer, String> searchHightLightEvent(String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception;
 
   /**
-   * @param data
-   * @param it
-   * @param fromDate
-   * @param toDate
-   * @param filterCalIds
-   * @return
-   * @throws Exception
-   */
-  public Map<Integer, String> updateMap(Map<Integer, String> data, NodeIterator it, java.util.Calendar fromDate, java.util.Calendar toDate, String[] filterCalIds) throws Exception;
-
-  /**
    * Shared a calendar to list of users
    * @param username
    * @param calendarId

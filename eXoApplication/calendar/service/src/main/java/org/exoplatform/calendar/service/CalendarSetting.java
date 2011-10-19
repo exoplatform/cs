@@ -17,6 +17,8 @@
 package org.exoplatform.calendar.service;
 
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -244,5 +246,26 @@ public class CalendarSetting {
 
   public String getSendOption() {
     return sendOption;
+  }
+  
+  /**
+   * Create Calendar object which has the user preference (timezone, firstdayofweek, ...)
+   * @param time time in long  
+   * @return calendar object
+   */
+  public Calendar createCalendar(long time) {
+    Calendar c = GregorianCalendar.getInstance(TimeZone.getTimeZone(timeZone));
+    c.setFirstDayOfWeek(Integer.parseInt(weekStartOn));
+    c.setTimeInMillis(time);
+    return c;
+  }
+  
+  /**
+   * Create Calendar object which has the user preference (timezone, firstdayofweek, ...)
+   * @param time  
+   * @return calendar object
+   */
+  public Calendar createCalendar(Date time) {
+    return time != null ? createCalendar(time.getTime()) : null;
   }
 }
