@@ -33,6 +33,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang.StringUtils;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.Calendar;
@@ -946,13 +947,14 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
    // StringBuilder buider = new StringBuilder("") ;
     for (String par : values) {
       String[] entry = par.split(":");
-      if(entry.length>1){
-        participantStatus_.put(entry[0], entry[1]);
-        participantStatusList_.add(new ParticipantStatus(entry[0],entry[1]));
-      }
-      else if(entry.length == 1){
-        participantStatus_.put(entry[0], STATUS_EMPTY);
-        participantStatusList_.add(new ParticipantStatus(entry[0],STATUS_EMPTY));
+      if(entry.length> 0 && StringUtils.isNotBlank(entry[0])){
+        if(entry.length>1){
+          participantStatus_.put(entry[0], entry[1]);
+          participantStatusList_.add(new ParticipantStatus(entry[0],entry[1]));
+        } else if(entry.length == 1){
+          participantStatus_.put(entry[0], STATUS_EMPTY);
+          participantStatusList_.add(new ParticipantStatus(entry[0],STATUS_EMPTY));
+        }
       }
     }
   }
@@ -2030,7 +2032,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         }
         
       String sendOption = uiForm.getSendOption();
-      if(CalendarSetting.ACTION_ASK.equalsIgnoreCase(sendOption)){
+      List<ParticipantStatus>  lstPart = ((UIEventShareTab)uiForm.getChildById(TAB_EVENTSHARE)).getData();
+      if(CalendarSetting.ACTION_ASK.equalsIgnoreCase(sendOption) && lstPart.size() > 0){
           // Show Confirm
         UIPopupAction pAction = uiPopupContainer.getChild(UIPopupAction.class) ;
         UIConfirmForm confirmForm =  pAction.activate(UIConfirmForm.class, 500);
