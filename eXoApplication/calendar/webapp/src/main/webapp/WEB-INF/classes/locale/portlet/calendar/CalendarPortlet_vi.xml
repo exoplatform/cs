@@ -1297,9 +1297,6 @@
     </title>
   </UICalendarChildPopupWindow>
   <UIConfirmForm>
-    <label>
-      <confirm>Lời nhắn</confirm>
-    </label>
     <action>
       <ConfirmOK>Lưu và gửi thư</ConfirmOK>
       <ConfirmCancel>Chỉ lưu</ConfirmCancel>

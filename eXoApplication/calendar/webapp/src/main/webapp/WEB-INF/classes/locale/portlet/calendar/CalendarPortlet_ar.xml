@@ -1268,9 +1268,6 @@
     </title>
   </UICalendarChildPopupWindow>
   <UIConfirmForm>
-    <label>
-      <confirm>Message</confirm>
-    </label>
     <action>
       <ConfirmOK>Save and Send</ConfirmOK>
       <ConfirmCancel>Save</ConfirmCancel>
