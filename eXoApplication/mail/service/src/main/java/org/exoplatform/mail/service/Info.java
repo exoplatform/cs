@@ -42,6 +42,8 @@ public class Info {
   private String isRead_;
 
   private String priority_;
+  
+  private String hasAttachment;
 
   public String getMsgId() {
     return id_;
@@ -121,5 +123,13 @@ public class Info {
 
   public void setFolders(String folders) {
     folders_ = folders;
+  }
+
+  public String getHasAttachment() {
+    return hasAttachment;
+  }
+
+  public void setHasAttachment(String hasAttachment) {
+    this.hasAttachment = hasAttachment;
   }
 }

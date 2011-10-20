@@ -8,9 +8,6 @@ UpdateList.prototype.init = function(accountId, eXoUser, eXoToken, cometdContext
   eXo.cs.CSCometd.subscribe('/eXo/Application/mail/messages', function(eventObj) {		
 		eXo.mail.UpdateList.update(eventObj) ;
   });
-  //eXo.cs.CSCometd.subscribe('/eXo/Application/mail/ckmailsts', function(eventObj) {		
-//		eXo.mail.MailServiceHandler.updateCheckMailStatus(eventObj);
-//  });
   
 	if (!eXo.cs.CSCometd.isConnected()) {
      eXo.cs.CSCometd.init();
@@ -65,7 +62,7 @@ UpdateList.prototype.update = function(obj){
 	  	} else if (viewing == "5") {
 	  		if (data.isUnread == "true") return ;
 	  	} else if (viewing == "6") {
-	  		if (data.hasAttach != "true") {
+	  		if (data.hasAttachment != "true") {
 	  			return ;	  			
 	  		}
 	  	}
@@ -112,7 +109,11 @@ UpdateList.prototype.update = function(obj){
 		  
 		  td = document.createElement("td");
 		  td.className = clazz;
-		  td.innerHTML = "<a " + href + "> </a>";
+		  if (data.hasAttachment == "true") {
+		    td.innerHTML = "<a " + href + "><div class='AttachmentIcon'><span></span></div></a>"
+		  } else {
+		    td.innerHTML = "<a " + href + "> </a>";
+		  }
 		  tr.appendChild(td);
 		  
 		  td = document.createElement("td");
@@ -137,8 +138,6 @@ UpdateList.prototype.update = function(obj){
 		  		tr.className = "OddItem";
 		  	}
 		  }
-		
-		  
 		}
   }
 } ;

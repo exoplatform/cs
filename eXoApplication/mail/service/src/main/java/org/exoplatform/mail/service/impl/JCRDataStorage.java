@@ -1203,17 +1203,16 @@ public class JCRDataStorage implements DataStorage {
         node.setProperty(Utils.MSG_HEADERS, values.toArray(new String[] {}));
         long priority = MimeMessageParser.getPriority(msg);
         node.setProperty(Utils.EXO_PRIORITY, priority);
-        if (msg.isMimeType(MAIL_HAS_ATTACHMENT_MIME_TYPE)) {
-          node.setProperty(Utils.EXO_HASATTACH, true);
-        } else {
-          node.setProperty(Utils.EXO_HASATTACH, false);
-        }
+        
+        boolean isHasAttachment = msg.isMimeType(MAIL_HAS_ATTACHMENT_MIME_TYPE);
+        node.setProperty(Utils.EXO_HASATTACH, isHasAttachment);
         node.save();
 
-        if (infoObj != null && continuation != null)
-          setCometdMessage(continuation, infoObj, from, msgId, isReadMessage, subject, Utils.convertSize(msgSize), accId, gc, sc, currentUserName, username);
-        if (saveTotal)
+        if (infoObj != null && continuation != null) {
+          setCometdMessage(continuation, infoObj, from, msgId, isReadMessage, subject, Utils.convertSize(msgSize), accId, gc, sc, currentUserName, username, isHasAttachment);
+        } if (saveTotal) {
           saveTotalMessage(username, accId, msgId, msg, sProvider);
+        }
 
         t4 = System.currentTimeMillis();
         logger.debug("Saved total message to JCR finished : " + (t4 - t1) + " ms");
@@ -2861,7 +2860,7 @@ public class JCRDataStorage implements DataStorage {
         logger.debug("Saved body (and attachments) of message finished : " + (t3 - t2) + " ms");
         node.save();
         if (infoObj != null && continuation != null){
-          setCometdMessage(continuation, infoObj, from, msgId, isReadMessage, subject, Utils.convertSize(Math.abs(msg.getSize())), accId, gc, sc, currentUserName, username);
+          setCometdMessage(continuation, infoObj, from, msgId, isReadMessage, subject, Utils.convertSize(Math.abs(msg.getSize())), accId, gc, sc, currentUserName, username, fakeMsg.hasAttachment());
         }
         t4 = System.currentTimeMillis();
         logger.warn("Saved total message to JCR finished : " + (t4 - t1) + " ms");
@@ -3070,13 +3069,14 @@ public class JCRDataStorage implements DataStorage {
     folderNode.save();
   }
 
-  private void setCometdMessage(ContinuationService continuation, Info infoObj, String from, String msgId, boolean isReadMessage, String subject, String size, String accId, Calendar gc, Calendar sc, String currentUserName, String username) {
+  private void setCometdMessage(ContinuationService continuation, Info infoObj, String from, String msgId, boolean isReadMessage, String subject, String size, String accId, Calendar gc, Calendar sc, String currentUserName, String username, boolean isHasAttachment) {
     infoObj.setFrom(from);
     infoObj.setMsgId(Utils.encodeMailId(msgId));
     infoObj.setIsRead(isReadMessage);
     infoObj.setSubject(subject);
     infoObj.setSize(size);
     infoObj.setAccountId(accId);
+    infoObj.setHasAttachment(String.valueOf(isHasAttachment));
     if (gc != null){
       infoObj.setDate(gc.getTime().toString());
     } else if (sc != null){
