@@ -702,7 +702,7 @@
       <%/* End of function show*/%>
       
       <% if (uicomponent.getMessageList().size() > 0) { %>
-        <tbody id="TbodyMessageList" class="MessageContainer" viewing="<%=uicomponent.viewing_%>" formFullId="<%=uicomponent.getFormId();%>">
+        <tbody id="TbodyMessageList" class="MessageContainer" viewing="<%=uicomponent.viewing_%>" formfullid="<%=uicomponent.getFormId();%>">
         <%
           int i = 0 ;
           int l = 0 ;

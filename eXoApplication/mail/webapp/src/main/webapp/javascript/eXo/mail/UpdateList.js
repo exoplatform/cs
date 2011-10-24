@@ -23,7 +23,7 @@ UpdateList.prototype.update = function(obj){
 	var tbodyMsgList = document.getElementById("TbodyMessageList");
 	var updateListLabel = document.getElementById("UpdateList");
 	var viewing = tbodyMsgList.getAttribute("viewing");
-	var formFullId = tbodyMsgList.getAttribute("formFullId");
+	var formFullId = tbodyMsgList.getAttribute("formfullid");
 	
 	var isUpdate = false ;
 	if (this.accountId_ == data.accountId) {
