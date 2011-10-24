@@ -23,6 +23,7 @@ import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
@@ -476,22 +477,23 @@ public class CalendarWebservice implements ResourceContainer{
       if (!validateEventType(type)) {
         return Response.status(HTTPStatus.BAD_REQUEST).cacheControl(cc).build();
       }
-      SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd") ;
-      java.util.Calendar fromCal = GregorianCalendar.getInstance();
-      java.util.Calendar toCal = GregorianCalendar.getInstance();
-      fromCal.setTime(sf.parse(currentdatetime)) ;
-      toCal.setTime(sf.parse(currentdatetime)) ;
+      String username = ConversationState.getCurrent().getIdentity().getUserId();
       CalendarService calService = (CalendarService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+      CalendarSetting calSetting = calService.getCalendarSetting(username);
+      SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd") ;
+      sf.setTimeZone(TimeZone.getTimeZone(calSetting.getTimeZone()));
+      Date currentDate = sf.parse(currentdatetime);
+      java.util.Calendar fromCal = calSetting.createCalendar(currentDate);
+      java.util.Calendar toCal = calSetting.createCalendar(currentDate);
+      toCal.add(java.util.Calendar.DAY_OF_YEAR, 1);
+      toCal.add(java.util.Calendar.SECOND, -1); // To fix CS-5412 
       EventQuery eventQuery = new EventQuery();
       eventQuery.setFromDate(fromCal);
-      toCal.add(java.util.Calendar.HOUR_OF_DAY, 24) ;
       eventQuery.setToDate(toCal);
-      eventQuery.setLimitedItems((int)limit);
+      eventQuery.setLimitedItems(limit);
       eventQuery.setOrderBy(new String[]{Utils.EXO_FROM_DATE_TIME});
-      String username = ConversationState.getCurrent().getIdentity().getUserId();
       eventQuery.setEventType(type);
       EventPageList data =  calService.searchEvent(username, eventQuery, null);
-      CalendarSetting calSetting = calService.getCalendarSetting(username);
       String timezoneId = calSetting.getTimeZone();
       TimeZone userTimezone = TimeZone.getTimeZone(timezoneId);
       int timezoneOffset = userTimezone.getRawOffset() + userTimezone.getDSTSavings();
