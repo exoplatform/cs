@@ -23,6 +23,8 @@ UpdateList.prototype.update = function(obj){
 	var tbodyMsgList = document.getElementById("TbodyMessageList");
 	var updateListLabel = document.getElementById("UpdateList");
 	var viewing = tbodyMsgList.getAttribute("viewing");
+	var formFullId = tbodyMsgList.getAttribute("formFullId");
+	
 	var isUpdate = false ;
 	if (this.accountId_ == data.accountId) {
 	  var folderIds = data.folders;
@@ -70,13 +72,12 @@ UpdateList.prototype.update = function(obj){
 		  tbodyMsgList.appendChild(tr);
 		  var preTr = eXo.core.DOMUtil.findPreviousElementByTagName(tr, "tr");
 		  if (preTr && !preTr.className) tbodyMsgList.removeChild(preTr);
-		  var href = "href=\"javascript:eXo.webui.UIForm.submitEvent('" + this.formId + "#UIMessageList','SelectMessage','&objectId=" + data.msgId + "')\"";
+		  var href = "href=\"javascript:eXo.webui.UIForm.submitEvent('" + formFullId + "#UIMessageList','SelectMessage','&objectId=" + data.msgId + "')\"";
 		  var clazz = "UnreadItem";
 		  if (data.isRead == 'true') clazz = "ReadItem";
 		  eXo.core.EventManager.addEvent(tr, "mousedown", eXo.mail.UIMailDragDrop.mailMDTrigger);
 		  tr.className = "MessageItem";
 		  tr.msgid = data.msgId;
-		  
 		  
 		  var td = document.createElement("td");
 		  td.innerHTML =  "  <input class='checkbox' type='checkbox' name='" + data.msgId + "'/>";

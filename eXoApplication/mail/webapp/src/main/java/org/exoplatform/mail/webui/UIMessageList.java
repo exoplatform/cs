@@ -213,7 +213,15 @@ public class UIMessageList extends UIForm {
     }
     setMessageFilter(filter);
   }
-
+  
+  public String getFormId() {
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+    if (context instanceof PortletRequestContext) {
+      return ((PortletRequestContext) context).getWindowId() + "#" + getId();
+    }
+    return getId();
+  }
+  
   public void setFormId() {
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
     String formId = ((PortletRequestContext) context).getWindowId();
