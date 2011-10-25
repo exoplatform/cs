@@ -72,7 +72,7 @@ UpdateList.prototype.update = function(obj){
 		  tbodyMsgList.appendChild(tr);
 		  var preTr = eXo.core.DOMUtil.findPreviousElementByTagName(tr, "tr");
 		  if (preTr && !preTr.className) tbodyMsgList.removeChild(preTr);
-		  var href = "href=\"javascript:eXo.webui.UIForm.submitEvent('" + formFullId + "#UIMessageList','SelectMessage','&objectId=" + data.msgId + "')\"";
+		  var href = "href=\"javascript:eXo.webui.UIForm.submitEvent('" + formFullId + "','SelectMessage','&objectId=" + data.msgId + "')\"";
 		  var clazz = "UnreadItem";
 		  if (data.isRead == 'true') clazz = "ReadItem";
 		  eXo.core.EventManager.addEvent(tr, "mousedown", eXo.mail.UIMailDragDrop.mailMDTrigger);
