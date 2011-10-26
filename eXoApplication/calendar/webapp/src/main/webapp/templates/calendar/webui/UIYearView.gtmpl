@@ -12,7 +12,7 @@
   def rcontext = _ctx.getRequestContext() ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.setSelected("'+uiform.id+'") ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.currentDate = ' + uicomponent.getDefaultStartTimeOfEvent() +';') ;
-   _ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
+   
   int currentYear = uicomponent.getCurrentYear() ;
   Calendar cal =  new GregorianCalendar() ;
   cal.setTimeInMillis(uicomponent.getCurrentCalendar().getTimeInMillis()) ;
@@ -25,27 +25,7 @@
   DateFormat wf = new  SimpleDateFormat("E", locale) ;
 %>
 <div class="UIYearView" style="display: block;">
-  <div class="TitleBar">    
-    <table>
-      <body>
-        <tr>
-          <td>
-            <a href="$linkDayPrevious">
-              <div class="BackIcon" title="<%=uiform.getLabel('previousYear')%>"><span></span></div>
-            </a>
-          </td>
-          <td>
-            <div class="Title"><%=uiform.getLabel('year')%> $currentYear</div>
-          </td>
-          <td>
-            <a href="$linkDayNext">
-              <div class="NextIcon" title="<%=uiform.getLabel('nextYear')%>"><span></span></div>
-            </a>
-          </td>
-        </tr>
-      </body>
-    </table>
-  </div>
+  <%_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");%>
   <div class="DayWorkingArea">
     <table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
       <col width="33%"><col width="33%"><col width="33%">
@@ -65,10 +45,11 @@
               cal.set(Calendar.YEAR, currentYear) ;
               cal.set(Calendar.MONTH, month) ;
               cal.set(Calendar.DATE, 1) ;
-              monthViewAction = uicomponent.TYPE_MONTH +"&currentTime="+cal.getTimeInMillis() ;  
-              //monthViewAction = uicomponent.TYPE_MONTH +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ month +"&"+ uicomponent.DAY + "=1" ;
+              monthViewAction = uicomponent.TYPE_MONTH +"&currentTime="+cal.getTimeInMillis();  
+			 def addedClass = "";
+			 if(i % 2 == 0) {addedClass = "MidleBox";} 
            %>
-           <td class="$cssClass">
+           <td class="$cssClass $addedClass">
               <div class="WeekSuburdbar">
                 <a href="<%=uicomponent.event("GotoDate", monthViewAction)%>">
                   $monthName 
@@ -82,8 +63,8 @@
                     String[] dayNames = dfs_.getShortWeekdays();
                     calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
                     for(int i = 0; i < 7; i++) {
-                      cssClass = "DayTitle" ;
-                      if(calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) cssClass = "SundayTitle" ;
+                      cssClass = "DayTitle";
+					  if(calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) cssClass = "SundayTitle";
                     %>
                   <div class="$cssClass"><%=dayNames[calendar.get(Calendar.DAY_OF_WEEK)].substring(0,1)%></div>
                     <%

@@ -8,10 +8,8 @@
   <div onclick="<%=uicomponent.event("AdvancedSearch")%>">
     <div class="AdvancedSearch" title="<%=uiform.getLabel('AdvancedSearch')%>"><span></span></div>
   </div>
-  <div onclick="<%=uicomponent.event("Search")%>" class="Search">
-    <div class="SearchIcon" title="<%=uiform.getLabel('Search')%>"><span></span></div>
+  <div class="Input">
+    <div class="SearchIcon" title="<%=uiform.getLabel('Search')%>"><%uiform.renderChild("value")%></div>
   </div>
-  <%uiform.renderChild("value")%>
-  <div class="Clear"><span></span></div>
 </div>
 <%uiform.end();%>

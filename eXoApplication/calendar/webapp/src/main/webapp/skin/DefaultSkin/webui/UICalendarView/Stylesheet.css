@@ -2,11 +2,17 @@
 .UICalendarViewContainer {
   margin-left: 243px; /* orientation=lt */
   margin-right: 243px; /* orientation=rt */
-  padding: 8px;
 }
 
-.UICalendarViewContainer .UIHeaderBar{
-	border-top: none;
+.UICalendarViewContainer .UIHeaderBar, .UIListContainer .Result{
+	border: solid 1px #c7c7c7;
+	height: 33px;
+}
+
+.UIListContainer .Result{
+	font-weight: bold;
+	text-align: center;
+	line-height: 33px;
 }
 
 .UICalendarViewContainer .ViewTypeSelect .UIPopupCategory {
@@ -27,6 +33,8 @@
 
 .UIDayView .EventAllDay {
   background-color: #f4f4f4;
+  border: 1px solid #c7c7c7;
+  border-top: none;
   height: 28px;
 }
 
@@ -44,7 +52,8 @@
 
 .UIDayView .EventDayContent .TdLine{
   text-align: right;
-  border-left: none ;
+  border-left: none;
+  border: solid 1px #E6E6E6;
 }
 
 .UIDayView .EventDayContainer .EventDayContent .TdTime{
@@ -55,7 +64,7 @@
   -moz-user-select: none;
   border-bottom: none;
   height: 20px;
-  line-height: 21px;
+  line-height: 20px;
 }
 
 .UIDayView .EventDayContent .TdDotLine{
@@ -70,11 +79,11 @@
 }
 
 .UIDayView .EventDayContent .UIGrid td{
-  border-left: none ;
   padding:0px;
   line-height: 20px;
   height: 20px;
-  border-bottom: solid 1px #fff;
+  border-bottom: solid 1px ##E6E6E6;
+  border-left: solid 1px ##E6E6E6;;
 }
 
 .UIDayView .EventDayContent .HourPoint {
@@ -170,14 +179,11 @@
 
 .UIWeekView .UIGrid td.UICellBlock,
 .UIWeekView .UIGrid td.UIEmtyBlock {
-  background: url('../background/CalendarBackground.gif') repeat-x center -363px;  
+  background: #f3f3f3;  
   height: 33px;
-  border-right: 1px solid #fff; /* orientation=lt */
-  border-left: 1px solid #fff; /* orientation=rt */
+  border: 1px solid #c7c7c7;
+  border-top: none;
   width: 13.2%;
-  border-top:1px solid #fff;
-  border-left: none; /* orientation=lt */
-  border-right: none; /* orientation=rt */
   *width: 14%;
   -moz-user-select: none ;
   padding: 0px ;
@@ -215,12 +221,6 @@
    font-weight: bold ;
 }
 
-.UIWeekView .EventWeekBar .Weekday {
-}
-
-.UIWeekView .EventWeekBar .Weekend {
-}
-
 .UIWeekView .EventWeekBar .Weekend a {
   color: #464646;
 }
@@ -231,13 +231,7 @@
 }
 
 .UICalendarPortlet .UIWeekView .TdLine {
-  border:  1px solid #fff;
-  width: 13.2%;
-  *width: 14%;
-}
-
-.UICalendarPortlet .UIWeekView .TdDotLine  {
-  border:  1px solid #fff;
+  border: 1px solid #e6e6e6;
   width: 13.2%;
   *width: 14%;
 }
@@ -245,9 +239,15 @@
 .UICalendarPortlet .UIWeekView .TdTime {
   text-align: right;
   border-left: none;
-  border-right: 1px solid #fff;
+  border-right: 1px solid #ededed;
   width: 55px;
   -moz-user-select : none ;
+}
+
+.UICalendarPortlet .UIWeekView .TdDotLine, .UICalendarPortlet .UIDayView .TdDotLine  {
+  border-left: none;
+  border: 1px solid #e6e6e6;
+
 }
 
 .UIWeekView td {
@@ -295,15 +295,7 @@
 }
 
 .UIWeekView .Today {
-  background: #DFE6F8;
-}
-
-.UIWeekView .Weekday {
-  background: #FFFFFF;
-}
-
-.UIWeekView .Weekend {
-  background:#FCFCFC;
+  background: #f7f7f7;
 }
 
 .UIWeekView .EventContainerBorder {
@@ -403,7 +395,7 @@
 }
 
 .UIWeekView .TitleBar .Title {
-   width:350px;
+   width:290px;
    text-align:center;
 }
 
@@ -547,20 +539,20 @@
 
 .UIYearView .CalendarContentNomal {
   background: #ffffff;
-  padding: 0px;
+  padding: 20px 20px 0px 0px;
 }
 
 .UIYearView .CalendarMatchedEventContent {
-  background: #DFE6F8;
-  padding: 0px;
+  background: #fff;
+  padding: 20px 20px 0px 0px;
 }
 
 .UIYearView .WeekSuburdbar {
-  background: url('../background/CalendarBackground.gif') repeat-x center -363px;  
+  background: #f3f3f3;  
   height: 33px;
   text-align: center;
   line-height: 33px;
-  border-bottom: 1px solid #fff;
+  border: 1px solid #c7c7c7;
 }
 
 .UIYearView .WeekSuburdbar a{
@@ -594,10 +586,11 @@
 
 .UIYearView .MonthList {
   padding: 8px;
+  border: solid 1px #ededed;
+  border-top: none;
 }
 
 .UIYearView .DayList {
-  border: 1px solid #c7c7c7;
   padding: 4px;
   background:#ffffff;
 }
@@ -629,7 +622,6 @@
 
 .UIYearView .MonthList .UIGrid td a{
 	color: #464646;
-	font-weight: bold;
 }
 
 .UIYearView .MonthList .UIGrid .Today {
@@ -638,8 +630,8 @@
 
 .UIYearView .MonthList .UIGrid .Today a {
 	color: #464646;
-	border: 1px solid #C7C7C7;
-	background: #ECECEC;
+	border: 1px solid #b6b6b6;
+	background: #f7f7f7;
 }
 
 .UIYearView .MonthList .Highlight {
@@ -703,9 +695,13 @@
   width: 18px; height: 18px;
 }
 .ListBar select {
-  width: 150px;
+  width: 85px;
   height: 18px;
   font-size: 11px;
+  border:solid 1px #c3c3c3;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
 }
 
 .ListBar a {
@@ -746,25 +742,23 @@
 }
 
 .UICalendarPortlet .UICalendarViewContainer .UIListView td {
-	border-right: solid 1px #fff;
-	border-top: solid 1px #fff;
+	border: solid 1px #ededed;
 }
 
 .UIListView .UIGrid th {
-	background: url('../background/CalendarBackground.gif') repeat-x center -363px;    
+	background: #f3f3f3;    
 	height: 33px;
-	border-right: 1px solid #fff; /* orientation=lt */
-	border-left: 1px solid #fff; /* orientation=rt */
-	border-left: none; /* orientation=lt */
-	border-right: none; /* orientation=rt */
-	border-top: 1px solid #fff; /* orientation=lt */
+	border: 1px solid #c7c7c7;
+	border-top: none;
 	padding: 0px 0px 0px 7px; /* orientation=lt */
 	padding: 0px 7px 0px 0px; /* orientation=rt */
 	line-height: 31px;
+	font-weight: normal;
 }
 
 .UIListView .UIGrid th a{
 	color: #464646;
+	font-weight: normal;
 }
 
 .UIListView .EventIcon {
@@ -808,17 +802,7 @@
   height: 12px;
 }
 
-.UIListContainer .Result {
-  height: 22px;
-  line-height: 22px;
-  text-align: center;
-  font-weight: bold;
-  background: url('../background/CalendarBackground.gif') repeat-x center -106px;
-  border-top: none;
-}
-
 .UIPreview {
-  padding: 1px;
   background-color: #ffffff ;
   border: 1px solid #c7c7c7;
   width: 99%;
@@ -1006,7 +990,6 @@
 .UIMonthView .EventMonthContent .DisableDay {
   text-align: right; /* orientation=lt */
   text-align: left; /* orientation=rt */
-  border-top: 1px solid #fff;
   color: #909090;
 }
 
@@ -1036,12 +1019,8 @@
   
 }
 
-.UIMonthView .EventMonthContent  .UIGrid td {
-  border-right: 1px solid #fff; /* orientation=lt */
-  border-left: 1px solid #fff; /* orientation=rt */
-  border-top: none;
-  border-left: none; /* orientation=lt */
-  border-right: none; /* orientation=rt */
+.UIMonthView .EventMonthContent .UIGrid td {
+	border: solid 1px #cacaca
 }
 
 .UIMonthView .EventMonthContent .WeekList {
@@ -1069,11 +1048,11 @@
 }
 
 .UIMonthView .EventMonthContent  .RowContainerDay .CalendarContentNomal {
-  background: #F9F9F9;
+  background: #fff;
   padding: 0px;
 }
 .UIMonthView .EventMonthContent  .RowContainerDay .CalendarContentDisable {
-  background: #F4F4F4;
+  background: #f5f5f5;
   padding: 0px;
 }
 
@@ -1448,12 +1427,4 @@
 .UICalendarEventTooltip .BgBCEvent{
   background: url('../background/EventDetailBorder.gif') repeat-x left -20px;
   height: 6px;
-}
-
-.UICalendarPortlet .UIWeekView .UIGrid td.Today{
-	background: #e0e0e0;
-}
-
-.UICalendarPortlet .UIWeekView .EventWeekContainer .EventWeekBar .Today{
-	background: #e0e0e0;
 }

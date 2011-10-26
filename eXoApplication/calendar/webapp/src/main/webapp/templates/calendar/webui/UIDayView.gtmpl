@@ -19,9 +19,7 @@
   int currentYear = uicomponent.getCurrentYear() ;
   String currentDayName = uicomponent.getDayName(uicomponent.getDayOfWeek(currentYear, currentMonth, currentDay)) ;
 
-   _ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
-   String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT, String.valueOf(Calendar.DATE)) ;
-   String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS, String.valueOf(Calendar.DATE)) ;
+   
   monthViewAction = uicomponent.TYPE_MONTH +"&currentTime="+ uicomponent.getCurrentCalendar().getTimeInMillis();
   yearViewAction = uicomponent.TYPE_YEAR +"&currentTime="+ uicomponent.getCurrentCalendar().getTimeInMillis();
                     
@@ -57,38 +55,8 @@
   
 %>
 <div class="UIDayView">
-  <div class="TitleBar">
-    <table>
-      <body>
-        <tr>
-          <td>
-            <div onclick="$linkDayPrevious">
-              <div class="BackIcon" title="<%=uiform.getLabel('previousDay')%>"><span></span></div>
-            </div>
-          </td>
-          <td>
-            <div class="Title $cssClass">
-              <span>$currentDayName,
-            <%=uicomponent.renderDayViewInTitleBar("<a href=\"" + uicomponent.event("GotoDate",monthViewAction)+ "\">", "</a>", "<a href=\"" + uicomponent.event("GotoDate",yearViewAction) + "\">", "</a>"); %>
-            </span>
-          <!--     <a href="<%=uicomponent.event("GotoDate",monthViewAction)%>">
-              $currentMonthName
-            </a>, $currentDay, 
-            <a href="<%=uicomponent.event("GotoDate",yearViewAction)%>">
-              $currentYear
-            </a>
-            -->
-            </div>
-          </td>
-          <td>
-            <div onclick="$linkDayNext">
-              <div class="NextIcon" title="<%=uiform.getLabel('nextDay')%>"><span></span></div>
-            </div>
-          </td>
-        </tr>
-      </body>
-    </table>
-  </div>
+ <%_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");%>
+  
   <div class="EventAllDay">
     <table>
       <tbody>
@@ -205,12 +173,12 @@
                       cl.setTime(uicomponent.calendar_.getTime());
                       cl = uicomponent.getBeginDay(cl) ;
 					  def counter = 0;
-					  def timeName = "Gray";
+					  def timeName = "EvenRow";
                     for(full in uicomponent.getDisplayTimes(timeFormat, timeInterval, locale)){
 					if((counter % 4) == 0 || (counter % 4) == 1) {
-					 timeName = "GrayLight";
+					 timeName = "OddRow";
 					} else if((counter % 4) == 2 || (counter % 4) == 3) {
-					 timeName = "Gray";
+					 timeName = "EvenRow";
 					}
           String h = full.substring(0,full.lastIndexOf("_")) ;
           String display = full.substring(full.lastIndexOf("_")+1) ;

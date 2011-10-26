@@ -1,5 +1,7 @@
 <% 
   import org.exoplatform.web.application.Parameter;
+  import org.exoplatform.calendar.webui.UISearchForm;
+   
   def rcontext = _ctx.getRequestContext() ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.attachSwapClass("'+ uicomponent.id +'","ControlButton","ControlButtonHover") ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.CalendarScrollManager.load() ;') ;
@@ -10,6 +12,7 @@
       <div class="LeftBar">
         <div class="RightBar">
           <div class="CenterBar">
+		    <%uicomponent.renderChild(UISearchForm.class)%>
             <div class="Title ControlButton ActionBarButton">
               <span></span>
             </div>
@@ -126,6 +129,7 @@
               </div>
             <div style="clear: both;"><span></span></div>
           </div>
+         
         </div>
       </div>
     </div>

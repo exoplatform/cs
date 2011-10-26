@@ -8,9 +8,9 @@
 }
 
 .UICalendarPortlet .UIHeaderBar .ViewTypeSelect .UIPopupCategory {
-  left: 315px;
+  left: 100px;
   position:absolute;
-  top: 22px;
+  top: 15px;
   width: auto;
 }
 

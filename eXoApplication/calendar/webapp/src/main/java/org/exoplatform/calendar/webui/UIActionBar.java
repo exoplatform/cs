@@ -58,13 +58,18 @@ public class UIActionBar extends UIContainer  {
   final static String CATEGORYID = "categoryId".intern() ;
   private boolean isShowPane_ = true ;
   private String currentView_ = null ;
-  public UIActionBar() throws Exception {}
+  
+  public UIActionBar() throws Exception {
+    addChild(UISearchForm.class, null, null) ;
+  }
+  
   protected String[] getViewTypes() {return UICalendarViewContainer.TYPES ;} 
   protected String getCurrentView() {return currentView_ ;}
   public void setCurrentView(String viewName) {currentView_ = viewName ;}
 
   protected boolean isShowPane() {return isShowPane_ ;}
   protected void setShowPane(boolean isShow) {isShowPane_ = isShow ;}
+  
   static public class QuickAddEventActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ;

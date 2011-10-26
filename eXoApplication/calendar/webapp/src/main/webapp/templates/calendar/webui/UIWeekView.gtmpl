@@ -10,15 +10,12 @@
   import org.exoplatform.calendar.service.CalendarEvent;
   import java.text.ParseException;
   uiform.begin()
-   _ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
+ 
    Calendar currentCalendar = uicomponent.getCurrentCalendar() ;
    int currentDay = uicomponent.getCurrentDay() ;
   int currentMonth = uicomponent.getCurrentMonth() ;
    int currentYear = uicomponent.getCurrentYear() ;
   timeInterval = uicomponent.getTimeInterval() ;
-   String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT, String.valueOf(Calendar.WEEK_OF_YEAR)) ;
-   String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS, String.valueOf(Calendar.WEEK_OF_YEAR)) ;
-   int weekNumber = uicomponent.getCurrentWeek() ;
    def rcontext = _ctx.getRequestContext() ;
   numberOfDays = 7 ;
   styleWidth = "width:13.8%;*width:14%;" ;
@@ -61,43 +58,7 @@
   tempFormat.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;  
 %>
 <div class="UIWeekView">
-  <div class="TitleBar">
-    <table>
-      <tbody>
-        <tr>
-          <td>
-              <div onclick="$linkDayPrevious" class="BackIcon" title="<%=uiform.getLabel('previousWeek')%>">
-                <span></span>
-              </div>
-          </td>
-          <td>
-            <div class="Title">
-              <%=uiform.getLabel("Week")%>
-              $weekNumber, 
-              <% if (startDateOfWeek.get(Calendar.MONTH) == endDateOfWeek.get(Calendar.MONTH)) {%>
-              <a href="<%=uicomponent.event('GotoDate',startDayViewAction)%>"><%=startDateOfWeek.get(Calendar.DAY_OF_MONTH)%></a> - 
-              <a href="<%=uicomponent.event('GotoDate',endDayViewAction)%>"><%=endDateOfWeek.get(Calendar.DAY_OF_MONTH)%></a>
-              <a href="<%=uicomponent.event('GotoDate',startMonthViewAction)%>"><%=uicomponent.getMonthName(startDateOfWeek.get(Calendar.MONTH))%></a>
-              <a href="<%=uicomponent.event('GotoDate',startYearViewAction)%>"><%=startDateOfWeek.get(Calendar.YEAR)%></a>
-              <% } else { %>
-              <a href="<%=uicomponent.event('GotoDate',startDayViewAction)%>"><%=startDateOfWeek.get(Calendar.DAY_OF_MONTH)%></a>
-              <a href="<%=uicomponent.event('GotoDate',startMonthViewAction)%>"><%=uicomponent.getMonthName(startDateOfWeek.get(Calendar.MONTH))%></a>
-              <a href="<%=uicomponent.event('GotoDate',startYearViewAction)%>"><%=startDateOfWeek.get(Calendar.YEAR)%></a> - 
-              <a href="<%=uicomponent.event('GotoDate',endDayViewAction)%>"><%=endDateOfWeek.get(Calendar.DAY_OF_MONTH)%></a>
-              <a href="<%=uicomponent.event('GotoDate',endMonthViewAction)%>"><%=uicomponent.getMonthName(endDateOfWeek.get(Calendar.MONTH))%></a>
-              <a href="<%=uicomponent.event('GotoDate',endYearViewAction)%>"><%=endDateOfWeek.get(Calendar.YEAR)%></a>
-              <% } %>
-            </div>
-          </td>
-          <td>
-        <div onclick="$linkDayNext" class="NextIcon" title="<%=uiform.getLabel('nextWeek')%>">
-        <span></span>
-        </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+ <%_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");%>
   <div class="EventWeekContainer">
     <div class="EventWeekBar">
       <table class="UIGrid"  cellspacing="0" cellpadding="0" exocallback="eXo.calendar.UIWeekView.callbackSelectionX();">
@@ -261,9 +222,9 @@
 		  def timeName = "Gray";
           for(full in uicomponent.getDisplayTimes(tempTimeFormat, timeInterval, Locale.ENGLISH)){
 			if((counter % 4) == 0 || (counter % 4) == 1) {
-			 timeName = "GrayLight";
+			 timeName = "OddRow";
 			} else if((counter % 4) == 2 || (counter % 4) == 3) {
-			 timeName = "Gray";
+			 timeName = "EvenRow";
 			}
 			String time = full.substring(0,full.lastIndexOf("_")) ;
 			String display = full.substring(full.lastIndexOf("_")+1) ;

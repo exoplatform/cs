@@ -72,8 +72,7 @@
 }
 
 .UICalendarPortlet .UICalendarWorkingContainer {
-  background-color: #f8f8f8;
-  border: 1px solid #c7c7c7;
+  margin-top: 4px;
 }
 
 .UICalendarPortlet .UICalendarWorkingContainer .SeparatorLine {
@@ -89,32 +88,33 @@
   float: left; /* orientation=lt */
   float: right; /* orientation=rt */
   width: 225px;
-  padding: 8px;
 }
  
 /*==========================================*/
 
 
 .UICalendarPortlet .TitleBar {
-  background: #eee;  
   height: 33px;
   line-height: 33px ;
   font-weight: bold ;
-  border: 1px solid #fff;
   border-left: none; /* orientation=lt */
   border-right: none; /* orientation=rt */
   border-right: none; /* orientation=lt */
   border-left: none; /* orientation=rt */
 }
 
-.UICalendarPortlet .UIWeekView .TitleBar {
-  border-bottom: none;
-  border-left: none;
+.UICalendarPortlet .UIWeekView .TitleBar, .UICalendarPortlet .UIDayView .TitleBar, .UICalendarPortlet .UIMonthView .TitleBar, .UICalendarPortlet .UIYearView .TitleBar{
+  border:none;
   padding-top: 0px;
+  width: 75%;
+  float: left;
 }
 
-.UICalendarPortlet .UIListContainer .TitleBar {
-  border-bottom: none;
+.UICalendarPortlet .UIListContainer .TitleBar{
+  border:none;
+  padding-top: 0px;
+  width: 60%;
+  float: left;
 }
 
 .UICalendarPortlet .UIListContainer .TitleBar .Title a{
@@ -277,17 +277,6 @@
 	table-layout: fixed;
 }
 
-.UICalendarPortlet .UIGrid td {
-	border: none;
-	vertical-align: top;
-	border-collapse: collapse;
-	background: #F9F9F9;
-}
-
-.UICalendarPortlet .UIGrid .Gray td{
-	background: #f4f4f4;
-}
-
 .UICalendarPortlet .UIPopupWindow  .UIGrid td {
 	border-left: 1px solid #ffffff;
 	border-right: 1px solid #ffffff;
@@ -363,7 +352,6 @@
 .UICalendarPortlet .UICalendarViewContainer {
   -khtml-user-select:none;
   background: #fff;
-  border-left: solid 1px #e1e1e1;
 }
 
 .UICalendarPortlet .UIHightlightEvent {
@@ -417,4 +405,11 @@
 
 .UIToolbar .HeaderToolbar{
 	height: 40px;
+}
+
+.UIGrid .OddRow{
+	background: #fff;
+}
+.UIGrid .EvenRow{
+	background: #fff;
 }

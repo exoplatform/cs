@@ -289,9 +289,20 @@
 }
 
 .UICalendarPortlet .SearchIcon {
-  background: url('icons/CalendarIcons.gif') no-repeat left -1117px; /* orientation=lt */
-  background: url('icons/CalendarIcons.gif') no-repeat right -1117px; /* orientation=rt */
+	background: url('icons/CalendarIcons.gif') no-repeat left -1117px; /* orientation=lt */
+	background: url('icons/CalendarIcons.gif') no-repeat right -1117px; /* orientation=rt */
+	float: right;
+	height: 16px;
+	width: 16px;
 }
+
+.UICalendarPortlet .UISearchForm .SearchIcon{
+	background: url('icons/CalendarIcons.gif') no-repeat right -1117px;
+    height: 22px;
+    padding-right: 20px;
+    width: auto;
+}
+
 
 .UICalendarPortlet .SelectIcon {
   background: url('icons/CalendarIcons.gif') no-repeat left -1144px; /* orientation=lt */

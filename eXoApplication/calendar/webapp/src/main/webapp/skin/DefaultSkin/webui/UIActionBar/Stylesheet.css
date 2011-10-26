@@ -32,12 +32,17 @@
 
 .UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar .ControlButton {
   color: #000000;
-  margin: 4px 1px 0px 1px;
+  margin: 3px 0px;
   cursor: pointer;
 }
 
 .UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar .ControlButton:hover {
-  color: #fff;
+	color: #fff;
+	background: #757575;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	margin: 3px 0px;
 }
 
 .UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar .ControlButtonHover div{
@@ -49,13 +54,11 @@
 }
 
 .UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar .ControlButtonHover {
-	border: 1px solid #757575;
-	line-height: 26px;
 	background: #757575;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 	border-radius: 3px;
-	margin: 3px 0px 0px 0px;
+	margin: 3px 0px;
 	color: #fff;
 }
 
@@ -125,7 +128,8 @@
 /*========================= UIActionBar ======================================*/
 
 .UICalendarPortlet .UIToolbar .HeaderToolbar .CenterBar{
-	background: none;
+	background: #f6f6f6;
+	border: solid 1px #ebebeb;
 }
 
 .UICalendarPortlet .UIToolbar .HeaderToolbar .RightBar{

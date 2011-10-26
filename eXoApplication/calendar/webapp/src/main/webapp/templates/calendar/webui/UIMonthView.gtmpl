@@ -10,14 +10,11 @@
   import org.exoplatform.webui.application.WebuiRequestContext;
   import org.exoplatform.calendar.service.CalendarEvent;
   uiform.begin() ;
-   _ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
+  
   def rcontext = _ctx.getRequestContext() ;
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarDragDrop','/calendar/javascript/') ;
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarMan','/calendar/javascript/') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.onLoad() ;') ;
-  //rcontext.getJavascriptManager().addOnLoadJavascript('eXo.calendar.UICalendarPortlet.onLoad') ;
-  //rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;
-  //rcontext.getJavascriptManager().addOnResizeJavascript('eXo.calendar.UICalendarPortlet.onLoad') ;
   rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.UICalendarPortlet.checkFilter();') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.currentDate = ' + uicomponent.getDefaultStartTimeOfEvent() +';') ;
    int currentDay = uicomponent.getCurrentDay() ;
@@ -48,52 +45,9 @@
   tempFormat.setCalendar(uicomponent.getInstanceTempCalendar()) ;
   %>
   <div class="UIMonthView">
-    <div class="TitleBar">
-      <table>
-        <body>
-          <tr>
-            <td>
-              <div onclick="$linkDayPrevious">
-                <div class="BackIcon" title="<%=uiform.getLabel('previousMonth')%>"><span></span></div>
-              </div>
-            </td>
-            <td>
-              <div class="Title">$currentMonthName, 
-                <a href="<%=uicomponent.event("GotoDate",yearViewAction)%>">
-                  $currentYear
-                </a>
-              </div>
-            </td>
-            <td>
-              <div onclick="$linkDayNext">
-                <div class="NextIcon" title="<%=uiform.getLabel('nextMonth')%>"><span></span></div>
-              </div>
-            </td>
-          </tr>
-        </body>
-      </table>
-    </div>
+    <% _ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");%>
     <div class="EventMonthContainer">
       <div class="EventMonthContent">
-        <div class="WeekList">
-
-
-          <%
-          dfs_ = new DateFormatSymbols(locale) ;
-          def aCalendar = uicomponent.getInstanceTempCalendar();
-          String[] dayNames = dfs_.getShortWeekdays();
-          aCalendar.set(Calendar.DAY_OF_WEEK, aCalendar.getFirstDayOfWeek());
-          for(int i = 0; i < 7; i ++) {
-            String cssStyle = "" ;
-            if(aCalendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) cssStyle = "" ;
-          %>
-        <div class="WeekTitle" style="$cssStyle"><%=dayNames[aCalendar.get(Calendar.DAY_OF_WEEK)]%></div>
-          <%
-            aCalendar.add(Calendar.DAY_OF_WEEK, 1);
-          }
-          %>      
-          <div style="clear: left;"><span></span></div>
-        </div>
         <div class="RowContainerDay" style="position:relative ;"  onresize="eXo.calendar.UICalendarMan.initMonth() ;" lastUpdatedId="<%=uicomponent.getLastUpdatedEventId()%>">
           
       <table class="UIGrid"  style="table-layout: fixed;" id="UIMonthViewGrid" cellspacing="0" borderspacing="0" eXoCallback="eXo.calendar.UICalendarMan.GUIMan.callbackHighlighter() ;">
