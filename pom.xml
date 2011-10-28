@@ -41,9 +41,7 @@
     <org.hsqldb.version>2.0.0</org.hsqldb.version>
      <!-- eXo extended service -->
      <org.exoplatform.social.version>1.2.4-SNAPSHOT</org.exoplatform.social.version>
-     <org.exoplatform.integ.version>1.0.2-SNAPSHOT</org.exoplatform.integ.version>
-	
-    <!-- 3rd parties -->
+     <!-- 3rd parties -->
     <org.aspectj.version>1.6.10</org.aspectj.version>
     <ehcache.version>1.6.0</ehcache.version>
     <juel.version>2.1.2</juel.version>
