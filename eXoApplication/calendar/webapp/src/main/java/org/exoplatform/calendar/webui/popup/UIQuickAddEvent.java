@@ -146,8 +146,6 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   }
   private Date getEventFromDate(String dateFormat, String timeFormat) throws Exception {
     try {
-      UICalendarPortlet portlet = getAncestorOfType(UICalendarPortlet.class);
-      
       UIFormDateTimePicker fromField = getChildById(FIELD_FROM) ;
       UIFormComboBox timeFile = getChildById(FIELD_FROM_TIME) ;
       
@@ -156,15 +154,12 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
       
       if(getIsAllDay()) {
         DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
-        df.setCalendar(portlet.getUserCalendar()) ;
-        Date fromDate = df.parse(fromField.getValue());
-        java.util.Calendar calendar = new GregorianCalendar();
-        calendar.setTime(fromDate);
-        return CalendarUtils.getBeginDay(calendar).getTime();
+        df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
+        return CalendarUtils.getBeginDay(df.parse(fromField.getValue())).getTime();
       } 
-      DateFormat df = new SimpleDateFormat(dateFormat + " "  + timeFormat, locale) ;
-      df.setCalendar(portlet.getUserCalendar()) ;
-      return df.parse(fromField.getValue() + " " + timeFile.getValue()) ;
+      DateFormat df = new SimpleDateFormat(dateFormat + Utils.SPACE  + timeFormat, locale) ;
+      df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
+      return df.parse(fromField.getValue() + Utils.SPACE + timeFile.getValue()) ;
     }
     catch (Exception e) {
       if (log.isDebugEnabled()) {
@@ -186,8 +181,6 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   }
   private Date getEventToDate(String dateFormat, String timeFormat) throws Exception {
     try {
-      UICalendarPortlet portlet = getAncestorOfType(UICalendarPortlet.class);
-      
       UIFormDateTimePicker toField = getChildById(FIELD_TO) ;
       UIFormComboBox timeFile = getChildById(FIELD_TO_TIME) ;
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
@@ -195,16 +188,12 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
       
       if(getIsAllDay()) {
         DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
-        df.setCalendar(portlet.getUserCalendar()) ;
-        Date fromDate = df.parse(toField.getValue());
-        java.util.Calendar calendar = new GregorianCalendar();
-        calendar.setTime(fromDate);
-        return CalendarUtils.getEndDay(calendar).getTime();
+        df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
+        return CalendarUtils.getEndDay(df.parse(toField.getValue())).getTime();
       } 
-      DateFormat df = new SimpleDateFormat(dateFormat + " "  + timeFormat, locale) ;
-      df.setCalendar(portlet.getUserCalendar()) ;
-      return df.parse(toField.getValue() + " " + timeFile.getValue()) ;
-      
+      DateFormat df = new SimpleDateFormat(dateFormat + Utils.SPACE + timeFormat, locale) ;
+      df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
+      return df.parse(toField.getValue() + Utils.SPACE + timeFile.getValue()) ;
     } catch (Exception e) {
       if (log.isDebugEnabled()) {
         log.debug("Fail to get event to date", e);
