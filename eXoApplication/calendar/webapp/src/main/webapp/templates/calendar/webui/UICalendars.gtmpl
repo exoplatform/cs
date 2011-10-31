@@ -4,7 +4,7 @@
   import org.exoplatform.calendar.CalendarUtils;
   import org.exoplatform.calendar.service.Utils;
   def rcontext = _ctx.getRequestContext() ;
-  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkLayout() ;') ;
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarContainer.updateUICalendarsLayout();') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.getFilterForm("' + uiform.id + '") ;') ;
   //rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;
   

@@ -16,6 +16,7 @@
  **/
 package org.exoplatform.calendar.webui;
 
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
@@ -38,6 +39,15 @@ public class UICalendarContainer extends UIContainer  {
     addChild(UICalendars.class, null, null) ;    
   }
   
+  @Override
+  public void renderChildren(WebuiRequestContext context) throws Exception {
+    super.renderChildren(context);
+    // load javascript block for updating the component's visibility. 
+    context.getJavascriptManager().addJavascript("eXo.calendar.UICalendarContainer.updateCalendarContainerLayout();");
+  }
+
+
+
   public void applySeting() throws Exception {
     for(UIComponent comp : getChildren()) {
       if((comp instanceof CalendarView)) ((CalendarView)comp).applySeting() ;  

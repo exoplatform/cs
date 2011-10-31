@@ -653,24 +653,9 @@ UICalendarPortlet.prototype.switchLayoutCallback = function(layout,status){
 
 UICalendarPortlet.prototype.checkLayoutCallback = function(layoutcookie){
   var UICalendarContainer = eXo.calendar.UICalendarContainer;
-  UICalendarContainer.init();
-  if (layoutcookie.indexOf("1") >= 0) {
-    UICalendarContainer.collapseCalendarContainer();
-  } else {
-    UICalendarContainer.expandCalendarContainer();
-  }    
-
-  if (layoutcookie.indexOf("2") >= 0) {
-    UICalendarContainer.expandMiniCalendar();
-  } else {
-    UICalendarContainer.collapseMiniCalendar();
-  }
-  
-  if (layoutcookie.indexOf("3") >= 0) {
-    UICalendarContainer.collapseUICalendars();
-  } else {
-    UICalendarContainer.expandUICalendars();
-  }
+  UICalendarContainer.updateCalendarContainerLayout();
+  UICalendarContainer.updateMiniCalendarLayout();
+  UICalendarContainer.updateUICalendarsLayout();
 };
 
 UICalendarPortlet.prototype.resetSpaceDefaultLayout = function(){
@@ -697,7 +682,6 @@ UICalendarPortlet.prototype.checkLayout = function(){
 	if(eXo.calendar.UICalendarPortlet.isSpace != "null") eXo.core.Browser.setCookie(eXo.calendar.LayoutManager.layoutId,"1",1);
 	eXo.calendar.LayoutManager.layouts = [] ;
 	eXo.calendar.LayoutManager.switchCallback = eXo.calendar.UICalendarPortlet.switchLayoutCallback;
-	eXo.calendar.LayoutManager.callback = eXo.calendar.UICalendarPortlet.checkLayoutCallback;
 	eXo.calendar.LayoutManager.resetCallback = eXo.calendar.UICalendarPortlet.resetLayoutCallback;
 	eXo.calendar.LayoutManager.check();
 };

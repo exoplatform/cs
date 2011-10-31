@@ -1,7 +1,9 @@
 function UICalendarContainer() {
+  this.calendarsListHeight = 305;
+  this.miniCalendarContainerHeight = 148;
 }
 
-UICalendarContainer.prototype.init = function() {
+UICalendarContainer.prototype.assignDOMElements = function() {
   //TODO need to be changed to be relevant to WebOS
   this.UICalendarContainer = document.getElementById("UICalendarContainer");
   var DOMUtil = eXo.core.DOMUtil;
@@ -11,12 +13,34 @@ UICalendarContainer.prototype.init = function() {
   this.UICalendarsListContentContainer = DOMUtil.findFirstDescendantByClass(this.UICalendarsList, "div", "ContentContainer");
   this.UIMiniCalendarToggleButton = DOMUtil.findFirstDescendantByClass(this.UIMiniCalendar, "div", "UIMiniCalendarToggleButton");
   this.UICalendarsToggleButton = DOMUtil.findFirstDescendantByClass(this.UICalendarsList, "div", "UICalendarsToggleButton");
-  if (this.UICalendarsList.style.display != "none" && this.UIMiniCalendarContainer.style.display != "none") {
-    // get height of UIMiniCalendarContainer and UICalendarsListContentContenter when they are shown at the same time.
-    if (!this.calendarsListHeight) 
-      this.calendarsListHeight = this.UICalendarsListContentContainer.offsetHeight;
-    if (!this.miniCalendarContainerHeight) 
-      this.miniCalendarContainerHeight = this.UIMiniCalendarContainer.offsetHeight;
+  var layoutMan = eXo.calendar.LayoutManager;
+  this.layoutcookie = eXo.core.Browser.getCookie(layoutMan.layoutId);
+};
+
+UICalendarContainer.prototype.updateCalendarContainerLayout = function() {
+  this.assignDOMElements();
+  if (this.layoutcookie.indexOf("1") >= 0) {
+    this.collapseCalendarContainer();
+  } else {
+    this.expandCalendarContainer();
+  }
+};
+
+UICalendarContainer.prototype.updateMiniCalendarLayout = function() {
+  this.assignDOMElements();
+  if (this.layoutcookie.indexOf("2") >= 0) {
+    this.expandMiniCalendar();
+  } else {
+    this.collapseMiniCalendar();
+  }
+};
+
+UICalendarContainer.prototype.updateUICalendarsLayout = function() {
+  this.assignDOMElements();
+  if (this.layoutcookie.indexOf("3") >= 0) {
+    this.collapseUICalendars();
+  } else {
+    this.expandUICalendars();
   }
 };
 
