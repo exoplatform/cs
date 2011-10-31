@@ -29,14 +29,6 @@ uiform.begin() %>
   <div class="ViewContainer">
    <div class="DecoratorBox SpliterResizableListArea">
     <div class="ViewBoxStyle">
-     <div class="TopLeftViewBoxStyle">
-      <div class="TopRightViewBoxStyle">
-       <div class="TopCenterViewBoxStyle"><span></span></div>          
-      </div>
-     </div>
-     <div class="MiddleLeftViewBoxStyle">
-      <div class="MiddleRightViewBoxStyle">
-       <div class="MiddleCenterViewBoxStyle">
         <table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
          <tr>
           <td style="border-right: 1px solid #c7c7c7;width: 185px;">
@@ -161,7 +153,7 @@ uiform.begin() %>
                 </tr>
                </table>
                <%if(!uicomponent.isShowPopup()){%>                
-                <a href="<%=uicomponent.event("Edit",event.getId()+"&"+uicomponent.CALENDARID+"="+event.getCalendarId()+"&calType=" +event.getCalType())%>" class="ControlButton">
+                <a href="<%=uicomponent.event("Edit",event.getId()+"&"+uicomponent.CALENDARID+"="+event.getCalendarId()+"&calType=" +event.getCalType())%>" class="ControlButton BntEvenPreview">
                  <div class="IconHolder EditEventIcon">
                     <%=uiform.getLabel('EditEvent')%>
                  </div>
@@ -178,14 +170,6 @@ uiform.begin() %>
           </td>
          </tr>                    
         </table>
-       </div>          
-      </div>
-     </div>
-     <div class="BottomLeftViewBoxStyle">
-      <div class="BottomRightViewBoxStyle">
-       <div class="BottomCenterViewBoxStyle"><span></span></div>          
-      </div>
-     </div>
     </div>
    </div>
   </div>

@@ -77,16 +77,6 @@
   background: url('icons/CalendarIcons.gif') no-repeat right -256px; /* orientation=rt */
 }
 
-.UICalendarPortlet .CalendarGroupIcon {
-  background: url('icons/CalendarIcons.gif') no-repeat left -287px; /* orientation=lt */
-  background: url('icons/CalendarIcons.gif') no-repeat right -287px; /* orientation=rt */
-}
-
-.UICalendarPortlet .CalendarIcon {
-  background: url('icons/CalendarIcons.gif') no-repeat left -312px; /* orientation=lt */
-  background: url('icons/CalendarIcons.gif') no-repeat right -312px; /* orientation=rt */
-}
-
 .UICalendarPortlet .CopyCalendarIcon {
   background: url('icons/CalendarIcons.gif') no-repeat left -360px; /* orientation=lt */
   background: url('icons/CalendarIcons.gif') no-repeat right -360px; /* orientation=rt */
@@ -141,6 +131,11 @@
 }
 
 .UICalendarPortlet .UIRightPopupMenuContainer .EditEventIcon {
+  background: url('icons/CalendarIcons.gif') no-repeat left -568px; /* orientation=lt */
+  background: url('icons/CalendarIcons.gif') no-repeat right -568px; /* orientation=rt */
+}
+
+.UICalendarPortlet .EditEventIcon {
   background: url('icons/CalendarIcons.gif') no-repeat left -568px; /* orientation=lt */
   background: url('icons/CalendarIcons.gif') no-repeat right -568px; /* orientation=rt */
 }
@@ -462,11 +457,6 @@
   background: url('icons/CalendarIcons.gif') no-repeat right -256px; /* orientation=rt */
 }
 
-.UICalendarPortlet .CalendarGroupIcon {
-  background: url('icons/CalendarIcons.gif') no-repeat left -280px; /* orientation=lt */
-  background: url('icons/CalendarIcons.gif') no-repeat right -280px; /* orientation=rt */
-}
-
 .UICalendarPortlet .busyIcon {
   float:left; /* orientation=lt */
   float:right; /* orientation=rt */
@@ -572,3 +562,28 @@
 }
 
 /***************************The end Edit Feed*********************/
+
+
+.UICalendarPortlet .UICalendars .IconCheckBox{
+	background: url('icons/IconCheckbox.png') no-repeat center center;
+	display: inline-block;
+	float: left;
+	width: 14px;
+	height: 14px;
+	padding: 0px;
+	margin: 0px;
+	cursor: hand;
+}
+
+.UICalendarPortlet .UICalendars .ColorOpacity{
+	width: 14px;
+	height: 14px;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	background: rgba(255,255,255,0.4);
+	display: block;
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#40ffffff, endColorstr=#40ffffff);
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#40ffffff, endColorstr=#40ffffff)";
+}
+

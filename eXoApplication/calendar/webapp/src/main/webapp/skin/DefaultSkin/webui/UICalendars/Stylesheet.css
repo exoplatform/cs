@@ -51,7 +51,6 @@
   background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/BlackNextArrow.gif') no-repeat left center; /* orientation=lt */
   background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/BlackNextArrow-rt.gif') no-repeat right center; /* orientation=rt */
   width: 13px;
-  height: 28px;
   float: left; /* orientation=lt */
   float: right; /* orientation=rt */
   margin: 1px 0px 0px 3px; /* orientation=lt */
@@ -80,22 +79,17 @@
 }
 
 .UICalendarPortlet .UICalendars .MyCalendarContainer .GroupItem {
-  border: 1px solid #c7c7c7;
-  background-color: #edd5ff;
   -moz-box-shadow: 1px 1px 0 white inset, -1px -1px 0 white inset;
   box-shadow: 1px 1px 0 white inset, -1px -1px 0 white inset;
   -webkit-box-shadow: 1px 1px 0 white inset, -1px -1px 0 white inset;
 }
 
 .UICalendarPortlet .UICalendars .CalendarGroupIcon {
-  padding-left: 22px; /* orientation=lt */
-  padding-right: 22px; /* orientation=rt */
-  margin: 2px 3px 0px 2px; /* orientation=lt */
-  margin: 2px 2px 0px 3px; /* orientation=rt */
+  margin: 0px 3px 0px 4px; /* orientation=lt */
+  margin: 0px 4px 0px 3px; /* orientation=rt */
   float: left; /* orientation=lt */
   float: right; /* orientation=rt */
-  line-height: 26px;
-  font-weight: bold;
+  line-height: 18px;
   white-space: nowrap;
   width: 65%;
   overflow: hidden;
@@ -109,16 +103,13 @@
 }
 
 .UICalendarPortlet .UICalendars .CalendarIcon {
-  padding-left: 22px; /* orientation=lt */
-  padding-right: 22px; /* orientation=rt */
   float: left; /* orientation=lt */
   float: right; /* orientation=rt */
   width: 105px;
   overflow: hidden;
-  line-height: 17px;
+  line-height: 16px;
   white-space: nowrap;
   cursor: pointer;
-  margin-top: 1px;
 }
 
 .UICalendarPortlet .UICalendars .SharedCalendarIcon {
@@ -161,25 +152,35 @@
 }
 
 .UICalendarPortlet .UICalendars a {
-  color: #000000;
+	color: #000000;
+	display: block;
+    float: left;
+    height: 14px;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	margin-right: 7px;
+	padding: 1px;
 }
 
 .UICalendarPortlet .UICalendars a:hover {
   color: #058ee6;
 }
 
+.UICalendarPortlet .UICalendars .CalendarName{
+	width: 130px;
+	overflow: hidden;
+}
+
 .UICalendarPortlet .UICalendars .CalendarItem {
-  border: 1px solid #c7c7c7;
   margin: 3px 0px;
   height: 18px;
   _height: 20px;
 }
 
 .UICalendarPortlet .UICalendars .UIVTabContent {
-  border: 1px solid #e7e7e7;
-  border-top: none;
-  padding: 8px 8px 8px 25px; /* orientation=lt */
-  padding: 8px 25px 8px 8px; /* orientation=rt */
+  padding: 0px 8px 0px 20px; /* orientation=lt */
+  padding: 0px 20px 0px 8px; /* orientation=rt */
 }
 
 .UICalendarPortlet .UICalendars .CalendarItem .CalendarColor1 {

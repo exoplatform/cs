@@ -74,12 +74,9 @@
             if (groupData.getCalendars().size() > 0) {
         %>
          
-			<div class="GroupItem ClearFix"   id="$groupData.id">
-			 
+			<div class="GroupItem ClearFix" id="$groupData.id">
 				<a class="CollapserFlatStyle"></a>
-				<input class="CalendarGroup CheckBox" type="checkbox"/>
 				<div class="CalendarGroupIcon" title="$groupData.name">$groupData.name</div>
-			
 			</div>
           <ul class="UIVTabContent" >
         <%  
@@ -91,9 +88,10 @@
               if(calendar.getViewPermission()!= null && calendar.getViewPermission().length > 0) { icon = "SharedCalendarIcon"}
               if(uicomponent.getChildById(calId) != null) {
         %>
-            <li class="CalendarItem $calendar.calendarColor CalendarItemPrivate ClearFix" calColor="$calendar.calendarColor" canEdit="true" id="$calId" calType="0" isRemote="$isRemote">
-                <%uiform.renderField(calId)%>
-                <a class="$icon" title="$calendar.name">$calendar.name</a>
+            <li class="CalendarItem  CalendarItemPrivate ClearFix" calColor="$calendar.calendarColor" canEdit="true" id="$calId" calType="0" isRemote="$isRemote">
+                <a href="#" class="$calendar.calendarColor"><span class="ColorOpacity"><span class="IconCheckBox"></span></span></a>
+                <a class="CalendarName" href="#" title="$calendar.name">$calendar.name</a>
+				<span style="display:none"><%uiform.renderField(calId)%></span>
             </li>
         <%     }
             }
@@ -120,7 +118,7 @@
           if(sharedCalendars != null) {
         %>
            
-          <div class="UIVTabContent" >
+          <ul class="UIVTabContent" >
         <%  
             List calendarList = sharedCalendars.getCalendars() ;
             for(calendar in calendarList) {
@@ -132,15 +130,16 @@
               owner = calendar.getCalendarOwner() + "- " ;
             }
         %>
-            <div class="CalendarItem $color CalendarItemShared ClearFix"  calColor="$color" id="$calId" calType="1"  canEdit="<%=uicomponent.canEdit(Utils.getEditPerUsers(calendar), checkPerms)%>">
-                <%uiform.renderField(calendar.getId())%>
-                <a class="CalendarIcon" title="<%=owner + calendar.getName()%>"><%=owner + calendar.getName()%></a>
-            </div>
+            <li class="CalendarItem CalendarItemShared ClearFix" calColor="$color" id="$calId" calType="1"  canEdit="<%=uicomponent.canEdit(Utils.getEditPerUsers(calendar), checkPerms)%>">
+                <a href="#" class="$color"><span class="ColorOpacity"><span class="IconCheckBox"></span></span></a>
+                <a class="CalendarName" title="<%=owner + calendar.getName()%>"><%=owner + calendar.getName()%></a>
+				<span style="display:none;"><%uiform.renderField(calendar.getId())%></span>
+            </li>
         <%
         }
             }
         %>
-          </div>
+          </ul>
          
         <%
           }
@@ -165,28 +164,27 @@
         %>
            
             <div class="GroupItem ClearFix">
-
                 <a class="CollapserFlatStyle" title="<%=uiform.getLabel("groupActions")%>"></a>
-                <input class="CalendarGroup CheckBox" type="checkbox"/>
                 <div class="CalendarGroupIcon" title="$title">$label</div>
 
             </div>
-          <div class="UIVTabContent" >
+          <ul class="UIVTabContent" >
         <%  true
             List calendarList = groupData.getCalendars() ;
             for(calendar in calendarList) {
               calId = calendar.getId() ;
               if(uicomponent.getChildById(calId) != null) {
         %>
-            <div class="CalendarItem $calendar.calendarColor CalendarItemPublic ClearFix"  calColor="$calendar.calendarColor" canEdit="<%=uicomponent.canEdit(calendar.getEditPermission(), checkPerms)%>" id="$calId" calType="2" >
-                <%uiform.renderField(calendar.getId())%>
-                <a class="CalendarIcon" title="<%=calendar.getName()%>"><%=calendar.getName()%></a>
-            </div>
+            <li class="CalendarItem CalendarItemPublic ClearFix"  calColor="$calendar.calendarColor" canEdit="<%=uicomponent.canEdit(calendar.getEditPermission(), checkPerms)%>" id="$calId" calType="2" >
+                <a href="#" class="$calendar.calendarColor"><span class="ColorOpacity"><span class="IconCheckBox"></span></span></a>
+                <a class="CalendarName" title="<%=calendar.getName()%>"><%=calendar.getName()%></a>
+				<span style="display:none"><%uiform.renderField(calendar.getId())%></span>
+            </li>
         <%
         }
             }
         %>
-          </div>
+          </ul>
        
         <%
           }

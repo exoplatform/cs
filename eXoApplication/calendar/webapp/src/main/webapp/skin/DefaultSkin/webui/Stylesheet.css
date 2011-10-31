@@ -277,9 +277,8 @@
 	table-layout: fixed;
 }
 
-.UICalendarPortlet .UIPopupWindow  .UIGrid td {
-	border-left: 1px solid #ffffff;
-	border-right: 1px solid #ffffff;
+.UICalendarPortlet .UIPopupWindow .UIGrid td {
+	border: solid 1px #c7c7c7;
 }
 
 .UICalendarPortlet .UIForm .UIFormGrid td.FieldComponent {
@@ -412,4 +411,8 @@
 }
 .UIGrid .EvenRow{
 	background: #fff;
+}
+
+.UICalendarPortlet .UIWindowContent .PopupContent .UIGrid th{
+	border-left: none;
 }

@@ -58,9 +58,9 @@ UICalendarContainer.prototype.expandCalendarContainer = function() {
   this.UICalendarContainer.style.display = "block";
   var UICalendarViewContainer = eXo.core.DOMUtil.findNextElementByTagName(this.UICalendarContainer, "div");
   if (eXo.core.I18n.isRT()) {
-    UICalendarViewContainer.style.marginRight = "243px" ;
+    UICalendarViewContainer.style.marginRight = "236px" ;
   }else{
-    UICalendarViewContainer.style.marginLeft = "243px" ;
+    UICalendarViewContainer.style.marginLeft = "236px" ;
   }
 };
 

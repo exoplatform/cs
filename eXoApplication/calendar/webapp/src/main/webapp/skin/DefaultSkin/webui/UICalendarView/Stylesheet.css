@@ -723,8 +723,8 @@
   float: left; /* orientation=rt */
   width: 22px; 
   height: 22px;
-  margin: 8px 6px 0px 0px; /* orientation=lt */
-  margin: 8px 0px 0px 6px; /* orientation=rt */
+  margin: 8px 15px 0px 0px; /* orientation=lt */
+  margin: 8px 0px 0px 15px; /* orientation=rt */
 }
 
 .ListBar .EventCategory {
@@ -838,7 +838,7 @@
 }
 
 .UIPreview .ViewContainer {
-  padding: 4px;
+
 }
 
 .UIPreview .ViewContainer td{
@@ -876,11 +876,19 @@
   margin: 5px auto; 
 }
 
-.UIPreview .ViewContainer .EventDescription {
-  width:30px;
-  height: 12px;
-  float:left;
-  margin-right: 10px;
+.UICalendarViewContainer .EventDescription {
+  width: 13px;
+  height: 13px;
+  float: left;
+  margin: 0px 17px 0px 5px;
+}
+
+.UIPreview .ViewContainer .UIGrid .BntEvenPreview{
+	margin-left: 25px;
+}
+
+.UICalendarWorkingContainer .UIPreview .ViewContainer .UIGrid td{
+	padding: 5px 0px 5px 5px;
 }
 
 .UIPreview .ViewContainer .SeparatorDotLine {

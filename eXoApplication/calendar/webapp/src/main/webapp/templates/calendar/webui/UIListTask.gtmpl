@@ -1,4 +1,6 @@
 <%
+
+  import org.exoplatform.calendar.CalendarUtils;
   uiform.begin();
   
   int currentDay = uicomponent.getCurrentDay() ;
@@ -49,16 +51,18 @@
           <%
                   for(event in uicomponent.getEvents()){
                     rowStyle = "" ;
-                    if(event.getId().equals(uicomponent.getLastUpdatedEventId())) {rowStyle = "background:#B0E0E6;";}
+                    if(event.getId().equals(uicomponent.getLastUpdatedEventId())) {rowStyle = "background:#f5f5f5;";}
                     attachIcon = "" ;
                     if(!event.getAttachment().isEmpty()) {attachIcon = "AttachmentIcon" ;}
                     String actionLink = uicomponent.event("ViewDetail", event.getId()+"&calendarId="+event.getCalendarId()+"&calType="+event.getCalType()) ;  
+					def color = uicomponent.getColors().get(event.getCalType() + CalendarUtils.COLON + event.getCalendarId()) ;
                 %>
             <tr actionLink="$actionLink" onclick="eXo.calendar.UICalendarPortlet.listViewClickCallback(this);" class="UIListViewRow" style="$rowStyle" eventid="<%=event.getId()%>" calid="<%=event.getCalendarId()%>" calType=<%=event.getCalType()%>>
               <td><%uicomponent.renderField(uicomponent.getChildById(event.getId()))%></td>
                   <td style="padding: 0px;"><div class="$attachIcon" >&nbsp;</div></td>
                 <td class="text"><div class="<%=event.getPriority()%>PriorityIcon">&nbsp;</div></td>
                 <td class="text">
+				  <div class="EventDescription $color"><span></span></div>
                   <span class="ControlButton" title="<%=event.summary%>">
                   <%=event.getSummary()%>
                 </span>  
