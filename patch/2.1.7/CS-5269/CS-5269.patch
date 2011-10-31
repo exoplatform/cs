@@ -1,0 +1,254 @@
+Index: eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_fr.properties
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_fr.properties	(revision 75765)
++++ eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_fr.properties	(working copy)
+@@ -31,13 +31,13 @@
+ UICalendars.msg.have-no-permission-to-edit-event=Vous n'êtes pas autorisé à modifier cet événement.
+ UICalendars.msg.confirm-delete-calendar=Le calendrier ainsi que tous ses événements et tâches seront supprimés. Confirmez-vous ?
+ UICalendars.msg.confirm-delete-sharedCalendar=Si vous supprimez ce calendrier partagé, vous ne pourrez plus accéder à ces événements et tâches. Confirmez-vous ?
+-UICalendars.msg.confirm-delete-group=En supprimant de groupe, vous allez supprimer tous ses calendriers. Confirmez-vous?
+-UICalendars.msg.have-no-calendar=Le calendrier à été supprimé.
++UICalendars.msg.confirm-delete-group=En supprimant un groupe, vous allez supprimer tous ses calendriers. Confirmez-vous?
++UICalendars.msg.have-no-calendar=Le calendrier a été supprimé.
+ UICalendars.msg.have-no-item=Aucun élément n'est sélectionné.
+ UICalendars.msg.calendar-require=Vous devez d'abord ajouter un calendrier.
+ UICalendars.msg.not-support-edit-share-calendar=Un calendrier partagé n'est pas éditable.
+ UICalendars.label.defaultCalendarCategoryId=mon groupe
+-UICalendars.label.defaultCalendarId=non-remboursement
++UICalendars.label.defaultCalendarId=Défaut
+ 
+ #org.exoplatform.calendar.webui.popup.UIPopupAction
+ UICalendarPopupWindow.title.UIPopupAddCalendarContainer=Calendrier
+@@ -70,11 +70,11 @@
+ UIAddEditPermission.action.title.Delete=Supprimer
+ UIAddEditPermission.action.title.Edit=Editer
+ 
+-UIPopupWindowUserSelect.title.UIUserSelector=Selecteur d'utilisateur
+-UIPopupWindowUserSelectEventForm.title.UIUserSelector=Selecteur d'utilisateur
+-UIPopupWindowUserSelectTaskForm.title.UIUserSelector=Selecteur d'utilisateur
+-UIPopupWindowAddUserEventForm.title.UIUserSelector=Selecteur d'utilisateur
+-UIPopupWindowGroupSelect.title.UIGroupSelector=Select Group
++UIPopupWindowUserSelect.title.UIUserSelector=Sélecteur d'utilisateur
++UIPopupWindowUserSelectEventForm.title.UIUserSelector=Sélecteur d'utilisateur
++UIPopupWindowUserSelectTaskForm.title.UIUserSelector=Sélecteur d'utilisateur
++UIPopupWindowAddUserEventForm.title.UIUserSelector=Sélecteur d'utilisateur
++UIPopupWindowGroupSelect.title.UIGroupSelector=Sélecteur de groupe
+ #org.exoplatform.calendar.webui.popup.UICalendarCategoryForm
+ UICalendarCategoryForm.action.Reset=Réinitialiser
+ UICalendarCategoryForm.action.Cancel=#{word.close}
+@@ -85,7 +85,7 @@
+ UICalendarCategoryForm.msg.group-existed=Ce groupe existe déjà
+ 
+ #org.exoplatform.calendar.webui.popup.UICalendarForm
+-UICalendarForm.tab.label.MyTab=My tab
++UICalendarForm.tab.label.MyTab=Mon onglet
+ UICalendarForm.label.selectPermission=Sélectionnez un rôle
+ UICalendarPopupWindow.title.UICalendarForm=Calendrier
+ UICalendarForm.action.Cancel=Annuler
+@@ -108,21 +108,21 @@
+ UICalendarForm.label.action.EditPermission=Changer la permission
+ UICalendarForm.label.action.SelectPermission=Choisir la permission
+ UICalendarForm.msg.name-exist=Le nom {0} existe déjà.
+-UICalendarForm.msg.name-not-on-group=Le nom {0} n'est pas dans le gorupe {1}, supprimez le.
++UICalendarForm.msg.name-not-on-group=Le nom {0} n'est pas dans le groupe {1}, veuillez le supprimer.
+ UICalendarForm.msg.group-empty=Cochez au moins un groupe dans lequel le calendrier sera affiché.
+ UICalendarForm.msg.category-empty=Ajoutez un groupe de calendrier.
+ UICalendarForm.msg.checkbox-public-notchecked=Cochez au moins un groupe.
+ UICalendarForm.msg.checkbox-notchecked=Cochez {0} pour changer cette permission.
+-UICalendarForm.label.public-url=Public URL
+-UICalendarForm.label.private-url=Private URL
+-UICalendarForm.label.public-url-msg-active=This calendar is public access.
+-UICalendarForm.label.public-url-msg-deactive=This calendar is not public access.
+-UICalendarForm.label.action.public-url-msg-active=This calendar is public access.
+-UICalendarForm.label.action.Open=Open
+-UICalendarForm.label.Open=Open
+-UICalendarForm.label.Active=Enable Public Access
+-UICalendarForm.label.Deactive=Disable Public Access
+-UICalendarForm.msg.need-save-calendar-first=You have to save calendar first!
++UICalendarForm.label.public-url=Lien public
++UICalendarForm.label.private-url=Lien privé
++UICalendarForm.label.public-url-msg-active=Ce calendrier est en accès public.
++UICalendarForm.label.public-url-msg-deactive=Ce calendrier n'est pas en accès public.
++UICalendarForm.label.action.public-url-msg-active=Ce calendrier est en accès public.
++UICalendarForm.label.action.Open=Ouvrir
++UICalendarForm.label.Open=Ouvrir
++UICalendarForm.label.Active=Activer accès public
++UICalendarForm.label.Deactive=Désactiver accès public
++UICalendarForm.msg.need-save-calendar-first=Vous devez d'abord enregistrer le calendrier! 
+ 
+ #org.exoplatform.calendar.webui.popup.UIEventCategoryForm
+ UIEventCategoryForm.label.eventCategoryName=Catégorie d'événement
+@@ -136,7 +136,7 @@
+ UICalendarSettingForm.tab.label.setting=Préférences
+ UICalendarSettingForm.tab.label.defaultCalendarTab=Calendriers affichés
+ UICalendarSettingForm.label.viewType=Vue par défaut
+-UICalendarSettingForm.label.timeInterval=Intervale de temps
++UICalendarSettingForm.label.timeInterval=Intervalle de temps
+ UICalendarSettingForm.label.weekStartOn=La semaine commence le
+ UICalendarSettingForm.label.dateFormat=Format de date
+ UICalendarSettingForm.label.timeFormat=Format d'heure
+@@ -187,7 +187,7 @@
+ UIEventForm.tab.label.eventShare=Participants
+ UIEventForm.tab.label.eventAttender=Planifier
+ UIEventForm.action.AddAttachment=Joindre un fichier
+-UIEventForm.action.AddUser=Add participant
++UIEventForm.action.AddUser=Ajouter un participant
+ UIEventForm.action.Save=#{word.save}
+ UIEventForm.action.Cancel=#{word.cancel}
+ UIEventForm.label.eventName=Objet de l'événement
+@@ -256,7 +256,7 @@
+ UIEventForm.msg.can-not-check=Vous ne pouvez pas vérifier la disponibilité au delà d'un jour.
+ UIEventForm.msg.participant-required=Vous devez ajouter un participant.
+ UIEventForm.msg.name-not-correct=L'utilisateur '{0}' est introuvable, il sera enlevé.
+-UIEventForm.msg.check-free-busy-required=Vérifier la disponibilité est onligatoire.
++UIEventForm.msg.check-free-busy-required=Vérification de la disponibilité obligatoire.
+ UIEventForm.msg.cant-send-email=Vous devez disposer d'un compte dans eXo Mail pour envoyer des emails.
+ UIEventForm.msg.error-send-email=Impossible d'envoyer l'invitation aux participants. Essayez plus tard.
+ UIEventForm.msg.event-participant-invalid='{0}' n'est pas un participant valide.
+@@ -306,7 +306,7 @@
+ UIImportForm.label.description=Description
+ UIImportForm.label.category=Groupes
+ UIImportForm.label.locale=Pays (Langue)
+-UIImportForm.label.timeZone=Time zone
++UIImportForm.label.timeZone=Fuseau horaire
+ UIImportForm.label.selectColor=Couleur
+ UIImportForm.label.AddCalendar=Ajouter un calendrier
+ UIImportForm.label.permission=Modifiable par
+@@ -336,7 +336,7 @@
+ UIRssForm.label.message=Cochez les calendriers que vous souhaitez intégrer dans le flux.
+ UIRssForm.tab.label.rssInfo=Informations
+ UIRssForm.tab.label.rssCalendars=Calendriers
+-UIRssForm.msg.there-is-not-calendar=Sélectionnez au moins au calendrier pour le flux.
++UIRssForm.msg.there-is-not-calendar=Sélectionnez au moins un calendrier pour le flux.
+ UIRssForm.msg.feed-has-been-generated=Le flux {0} a bien été généré.
+ UIRssForm.msg.no-data-generated=Le calendrier doit contenir au moins un événement.
+ 
+@@ -345,7 +345,7 @@
+ UIFeed.action.Close=#{word.close}
+ UIFeed.msg.there-are-not-feed-generated=Il n'y a aucun flux existant.
+ #org.exoplatform.calendar.webui.UICalendarView
+-UICalendarView.msg.some-events-cannot-move=Impossible de déplacer {0}, vous n'avez probabelement pas les droits suffisants.
++UICalendarView.msg.some-events-cannot-move=Impossible de déplacer {0}, vous n'avez probablement pas les droits suffisants.
+ UICalendarView.msg.confirm-delete=Confirmez-vous la suppression?
+ UICalendarView.msg.calendar-list-empty=Ajoutez au moins un calendrier personnel.
+ UICalendarView.msg.event-category-list-empty=Il faut ajouter une catégorie avant.
+@@ -395,13 +395,13 @@
+ UIQuickAddEvent.action.MoreDetail=Plus de détails
+ UIQuickAddEvent.action.Save=#{word.save}
+ UIQuickAddEvent.action.Cancel=#{word.cancel}
+-UIQuickAddEvent.msg.calendar-field-required=Choissiez un calendrier avant.
++UIQuickAddEvent.msg.calendar-field-required=Choisissez un calendrier avant.
+ UIQuickAddEvent.msg.category-field-required=Ajoutez une catégorie avant.
+ UIQuickAddEvent.msg.logic-required=La date de fin doit être ultétieure à la date de début.
+ UIQuickAddEvent.msg.add-unsuccessfully=Impossible d'ajouter cet événement.
+ UIQuickAddEvent.msg.add-successfully=L'événement a bien été ajouté.
+ UIQuickAddEvent.msg.fromDate-format=La date de début a un format invalide.
+-UIQuickAddEvent.msg.toDate-format=La date de fin à un format invalide.
++UIQuickAddEvent.msg.toDate-format=La date de fin a un format invalide.
+ #org.exoplatform.calendar.webui.UIAdvancedSearchForm
+ UIAdvancedSearchForm.label.text=Texte
+ UIAdvancedSearchForm.label.type=Type
+@@ -420,7 +420,7 @@
+ UIAdvancedSearchForm.label.option.needs-action=Action nécessaire
+ UIAdvancedSearchForm.label.option.completed=Terminé
+ UIAdvancedSearchForm.label.option.in-process=En cours
+-UIAdvancedSearchForm.label.option.tentative=Tentative
++UIAdvancedSearchForm.label.option.tentative=Provisoire
+ UIAdvancedSearchForm.label.option.confirmed=Confirmée
+ UIAdvancedSearchForm.label.option.canceled=Annulée
+ 
+@@ -440,7 +440,7 @@
+ UIQuickAddTask.label.to=à
+ UIQuickAddTask.label.allDay=Toute la journée
+ UIQuickAddTask.label.calendar=Calendrier
+-UIQuickAddTask.label.category=Categorie
++UIQuickAddTask.label.category=Catégorie
+ UIQuickAddTask.optionGroup.label.privateCalendar=Calendriers personnels
+ UIQuickAddTask.optionGroup.label.sharedCalendar=Calendriers partagés
+ UIQuickAddTask.optionGroup.label.publicCalendar=Calendriers de groupe
+@@ -485,7 +485,7 @@
+ UIEventCategoryManager.action.title.Delete=Supprimer
+ UIEventCategoryManager.action.title.Edit=Modifier
+ UIEventCategoryManager.msg.confirm-delete=La catégorie sera supprimée. Confirmez-vous ?
+-UIEventCategoryManager.msg.cannot-delete=Can not delete default event category.
++UIEventCategoryManager.msg.cannot-delete=La catégorie d'événements par défaut ne peut être supprimée.
+ 
+ #org.exoplatform.calendar.webui.UIActionBar
+ UIActionBar.label.QuickAdd=
+@@ -562,13 +562,13 @@
+ UITaskForm.label.option.canceled=Annulée
+ UITaskForm.label.option.no-repeat=Répétition
+ UITaskForm.label.option.repeat=Pas de répétition
+-UITaskForm.label.repeat=Repeat
++UITaskForm.label.repeat=Répéter
+ UITaskForm.msg.email-reminder-required=Cochez le rappel par email avant.
+ UITaskForm.msg.event-email-invalid=Le format d'adresse email n'est pas valide.
+ UITaskForm.msg.add-event-successfully=La tâche a bien été ajoutée.
+ UITaskForm.msg.update-event-successfully=La tâche a bien été mise à jour.
+ UITaskForm.msg.add-event-error=Impossible de sauver la tâche.
+-UITaskForm.msg.event-summary-required=Le nom de la tâche est onligatoire.
++UITaskForm.msg.event-summary-required=Le nom de la tâche est obligatoire.
+ UITaskForm.msg.event-calendar-required=Ajoutez un calendrier avant.
+ UITaskForm.msg.event-category-required=Ajoutez une catégorie avant.
+ UITaskForm.msg.event-fromdate-required=La date de début est obligatoire.
+@@ -587,14 +587,14 @@
+ 
+ #org.exoplatform.calendar.webui.popup.UIShareForm
+ UISharedForm.label.username=Nom d'utilisateur
+-UISharedForm.label.group=Group
++UISharedForm.label.group=Groupe
+ UISharedForm.action.Save=#{word.save}
+ UISharedForm.action.Close=#{word.close}
+-UISharedForm.action.Cancel=Cancel
++UISharedForm.action.Cancel=Annuler
+ UISharedForm.msg.not-found-user=L'utilisateur {0} n'a pas été trouvé.
+ UISharedForm.msg.found-user=L'utilisateur {0} étant le propriétaire du calendrier, il n'est pas nécessaire de lui partager.
+-UISharedForm.msg.required=Who would you like to share to?
+-UISharedForm.msg.not-foundgroup=Group {0} was not found, please check again.
++UISharedForm.msg.required=A qui voulez-vous partager?
++UISharedForm.msg.not-foundgroup=Le groupe {0} n'a pas été trouvé, veuillez vérifier.
+ #org.exoplatform.calendar.webui.popup.UIAddressForm
+ UICalendarChildPopupWindow.title.UIAddressForm=Choisir un email
+ UIAddressForm.label.keyWord=Chercher
+@@ -818,7 +818,7 @@
+ #org.exoplatform.calendar.webui.popup.UIInvitationForm
+ UIInvitationForm.label.default-invitation-msg=Vous avez été invité à cet événement
+ UIInvitationForm.label.participant=Participants
+-UIInvitationForm.label.invitation-msg=Invitation Messages
++UIInvitationForm.label.invitation-msg=Messages d'invitation
+ UIInvitationForm.label.contact-picker=Choisissez un contact
+ UIInvitationForm.label.user-picker=Choisissez un utilisateur
+ UIInvitationForm.label.group-picker=Choisissez un groupe
+@@ -830,7 +830,7 @@
+ UIEventForm.label.never=Jamais
+ UIEventForm.label.ask=Demander
+ UIEventForm.label.send=Envoi des invitations
+-UIEventForm.label.confirm-msg="L'événement sera enreggistré et les invitations envoyez. Confirmez-vous ?"
++UIEventForm.label.confirm-msg="L'événement sera enregistré et les invitations seront envoyées. Confirmez-vous ?"
+ UIEventForm.label.messageName=Message d'invitation
+ shareEvent.label.private=Privé
+ shareEvent.label.public=Public
+@@ -842,7 +842,7 @@
+ send.label.always=Toujours
+ send.label.ask=Demander
+ UICalendarChildPopupWindow.title.UIInvitationContainer=Invitations
+-PUIPopupGroupSelector.title.PGroupSelector=Selectionnez un groupe
++PUIPopupGroupSelector.title.PGroupSelector=Sélectionnez un groupe
+ UIPopupWindow3.title.UIAddressForm=Ajouter un contact
+ UICalendarSettingForm.label.send=Envoyer les invitations
+ UIPopupWindow.title.UIAddressForm=Sélection d'adresse
+@@ -883,12 +883,12 @@
+ UIEditFeed.action.Close=Fermer
+ UIEditFeed.action.delete=Supprimer
+ UIEditFeed.action.ResetURL=Réinitialiser l'URL
+-UIEditFeed.action.GenerateURL=Generer URL
++UIEditFeed.action.GenerateURL=Générer URL
+ UIEditFeed.label.option.selectCalendar=--choisissez un calendrier--
+ UIEditFeed.msg.no-data-generated=Ce calendrier est vide. Le flux n'a pas été généré.
+ UIEditFeed.msg.feed-has-been-generated=Le flux {0} a été généré avec succès.
+ UIEditFeed.msg.invalidCalName=Ce nom de calendrier n'existe pas
+-UIEditFeed.msg.selectCalendar=Selectionez le calendrier à générer
++UIEditFeed.msg.selectCalendar=Sélectionnez le calendrier à générer
+ UIEditFeed.msg.feedName_existed=Ce nom existe déjà. Choisissez autre chose.
+ UIEditFeed.msg.invalidCalName=Ce nom de calendrier n'existe pas
+ 
