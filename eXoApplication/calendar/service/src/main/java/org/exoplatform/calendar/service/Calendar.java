@@ -254,7 +254,7 @@ public class Calendar {
   }
 
   public void setPublicUrl(String publicUrl) {
-    this.publicUrl = publicUrl;
+    this.publicUrl = removeDomainName(publicUrl);
   }
 
   public String getPublicUrl() {
@@ -262,10 +262,19 @@ public class Calendar {
   }
 
   public void setPrivateUrl(String privateUrl) {
-    this.privateUrl = privateUrl;
+    this.privateUrl = removeDomainName(privateUrl);
   }
 
   public String getPrivateUrl() {
     return privateUrl;
+  }
+  
+  // This method used to back compatible with old url data contain domain name
+  private String removeDomainName(String url) {
+    if (url != null && url.indexOf("http") == 0) {
+      url = url.substring(url.indexOf(":") + 3);
+      url = url.substring(url.indexOf("/"));
+    }
+    return url;
   }
 }

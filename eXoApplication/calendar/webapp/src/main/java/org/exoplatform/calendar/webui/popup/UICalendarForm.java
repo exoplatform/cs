@@ -304,7 +304,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     //    setTimeZone(calendar.getTimeZone()) ;
     setSelectedColor(calendar.getCalendarColor()) ;
     if(calendar.getPrivateUrl() == null || calendar.getPrivateUrl().isEmpty()) {
-      String privateUrl = CalendarUtils.getServerBaseUrl() + PortalContainer.getCurrentPortalContainerName() +"/"+ 
+      String privateUrl = "/" + PortalContainer.getCurrentPortalContainerName() +"/"+ 
       PortalContainer.getCurrentRestContextName() + CalendarWebservice.BASE_URL_PRIVATE + CalendarUtils.getCurrentUser()+"/"+
       calendar.getId() +"/"+ calType_ ;
       calendar_.setPrivateUrl(privateUrl);
@@ -540,7 +540,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
         calendar.setDescription(uiForm.getDescription()) ;
         calendar.setCalendarColor(uiForm.getSelectedColor()) ;
         calendar.setCalendarOwner(username) ;
-        String url =  CalendarUtils.getServerBaseUrl() + PortalContainer.getCurrentPortalContainerName() +"/"+ 
+        String url =  "/" + PortalContainer.getCurrentPortalContainerName() +"/"+ 
         PortalContainer.getCurrentRestContextName() + CalendarWebservice.BASE_URL_PRIVATE + CalendarUtils.getCurrentUser()+"/"+
         calendar.getId() +"/"+ uiForm.calType_ ;
         calendar.setPrivateUrl(url);
@@ -750,7 +750,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       if(uiForm.isAddNew_) {
         event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendarForm.msg.need-save-calendar-first", null, ApplicationMessage.WARNING)) ;
         } else {
-        String url =  CalendarUtils.getServerBaseUrl() + PortalContainer.getCurrentPortalContainerName() +"/"+ 
+        String url = "/" + PortalContainer.getCurrentPortalContainerName() +"/"+ 
         PortalContainer.getCurrentRestContextName() + CalendarWebservice.BASE_URL_PUBLIC + CalendarUtils.getCurrentUser()+"/"+
         uiForm.calendar_.getId() +"/"+ uiForm.calType_ ;
         uiForm.calendar_.setPublicUrl(url);
