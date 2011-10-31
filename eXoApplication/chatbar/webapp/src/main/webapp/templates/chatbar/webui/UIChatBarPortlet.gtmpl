@@ -125,7 +125,7 @@
 </div>
 <!-- End of BuddyItem action popup menu -->
 <!-- Chat window with tab -->
-<div style="position: absolute; top: 115px; left: 255px; width: 655px; height: auto;
+<div style="position: absolute; top: 115px; left: 255px; width: 655px; height: auto; z-index:2;
     display: none; visibility:visible" class="UIPopupWindow DefaultTheme UIDragObject UIResizeObject ChatPopup ChatSharedIcons"
     minwidth="545px" minheight="245px">
     <div class="OverflowContainer ClearFix">
