@@ -144,7 +144,6 @@
                 } else if(calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
                   dayStyle = "Saturday" ;
                 }
-               //sdf.setCalendar(calendar) ;
                %>
               
                 <td class="$highlight $styleClass $dayStyle $currentWeekClass">
@@ -155,8 +154,13 @@
                <% 
                dayOfMonth++ ;
               } else {
+                styleClassOutDate = "";
+                boolean isCurrDay = uicomponent.isCurrentDay(calendar.get(Calendar.DATE), calendar.get(Calendar.MONTH), currentYear );
+                if (isCurrDay) {
+                   styleClassOutDate = " Today ";
+                }
                 %>
-                <td class="$currentWeekClass OtherMonth">
+                <td class="$currentWeekClass OtherMonth $styleClassOutDate">
                   <div class="MiniCalendarActions" onclick="$actionLink">
                      <%=sdf.format(calendar.getTime())%> 
                    </div>
