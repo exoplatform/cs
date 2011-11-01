@@ -144,6 +144,19 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
     setSyncPeriod(Utils.SYNC_AUTO);
     setSelectColor(Calendar.COLORS[new  Random().nextInt(Calendar.COLORS.length)]);
     setUseAuthentication(true);
+    
+    CalendarService calendarService = this.getApplicationComponent(CalendarService.class);
+    try {
+      RemoteCalendar rCalendar = calendarService.getRemoteCalendarService().getRemoteCalendar(url, remoteType, null, null);
+      if (rCalendar != null) {
+        setCalendarName(rCalendar.getCalendarName());
+        setDescription(rCalendar.getDescription());
+        remoteCalendar = rCalendar;
+      }
+    } catch (Exception e) {
+      if (logger.isDebugEnabled()) logger.debug(String.format("Loading the remote calendar information from %s failed", url), e);
+    }
+    
   }
   
   public void init(Calendar calendar) throws Exception {

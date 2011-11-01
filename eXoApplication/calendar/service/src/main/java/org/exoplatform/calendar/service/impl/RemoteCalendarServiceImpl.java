@@ -123,8 +123,12 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
 
   private static final String    CALDAV_XML_END               = "end";
 
-  private static final String    CALDAV_XML_COMP_FILTER_NAME  = "name";
+  private static final String    CALDAV_XML_COMP_FILTER_NAME     = "name";
 
+  public static final String     ICAL_PROPS_CALENDAR_NAME        = "X-WR-CALNAME";
+  
+  public static final String    ICAL_PROPS_CALENDAR_DESCRIPTION = "X-WR-CALDESC";
+  
   private static final Log       logger                       = ExoLogger.getLogger("cs.calendar.service.remote");
 
   private JCRDataStorage         storage_;
@@ -132,7 +136,7 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
   public RemoteCalendarServiceImpl(JCRDataStorage storage) {
     this.storage_ = storage;
   }
-
+  
   @Override
   public InputStream connectToRemoteServer(RemoteCalendar remoteCalendar) throws Exception {
     HttpClient client = getRemoteClient(remoteCalendar);
@@ -142,8 +146,9 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
       InputStream icalInputStream = get.getResponseBodyAsStream();
       return icalInputStream;
     } catch (IOException e) {
-      logger.debug(e.getMessage());
-      throw new IOException(e.getMessage());
+      if (logger.isDebugEnabled()) 
+        logger.debug(String.format("Connect to %s failed!", remoteCalendar.getRemoteUrl()), e);
+      throw e;
     }
   }
 
@@ -1032,5 +1037,29 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
         logger.debug("Cannot build report method for CalDav query", e);
       return null;
     }
+  }
+
+  @Override
+  public RemoteCalendar getRemoteCalendar(String url,
+                                          String type,
+                                          String remoteUser,
+                                          String remotePassword) throws Exception {
+    RemoteCalendar remoteCalendar = null;
+    if (CalendarService.ICALENDAR.equals(type)) {
+      remoteCalendar = new RemoteCalendar();
+      remoteCalendar.setRemoteUrl(url);
+      remoteCalendar.setType(type);
+      InputStream inputStream = connectToRemoteServer(remoteCalendar);
+      try {
+      CalendarBuilder calendarBuilder = new CalendarBuilder();
+      net.fortuna.ical4j.model.Calendar iCalendar = calendarBuilder.build(inputStream);
+      remoteCalendar.setCalendarName(iCalendar.getProperty(ICAL_PROPS_CALENDAR_NAME).getValue());
+      remoteCalendar.setDescription(iCalendar.getProperty(ICAL_PROPS_CALENDAR_DESCRIPTION).getValue());
+      } finally {
+        if (inputStream != null)
+          inputStream.close();
+      }
+    }
+    return remoteCalendar;
   }
 }

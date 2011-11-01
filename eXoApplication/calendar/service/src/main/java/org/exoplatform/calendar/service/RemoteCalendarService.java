@@ -65,5 +65,16 @@ public interface RemoteCalendarService {
    * @throws Exception
    */
   Calendar refreshRemoteCalendar(String username, String remoteCalendarId) throws Exception;
+  
+  /**
+   * Read calendar information(name, description,...) from url.
+   * @param url url to the calendar data
+   * @param type type of the calendar
+   * @param remoteUser username
+   * @param remotePassword password
+   * @return null if cannot read the calendar information.
+   * @throws Exception
+   */
+  RemoteCalendar getRemoteCalendar(String url, String type, String remoteUser, String remotePassword) throws Exception;
 
 }

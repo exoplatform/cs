@@ -651,7 +651,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   public Calendar importRemoteCalendar(RemoteCalendar remoteCalendar) throws Exception {
     return remoteCalendarService.importRemoteCalendar(remoteCalendar);
   }
-
+  
   /**
    * {@inheritDoc}
    */
