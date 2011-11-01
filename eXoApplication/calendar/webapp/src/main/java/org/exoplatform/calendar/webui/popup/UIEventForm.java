@@ -2036,7 +2036,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       if(CalendarSetting.ACTION_ASK.equalsIgnoreCase(sendOption) && lstPart.size() > 0){
           // Show Confirm
         UIPopupAction pAction = uiPopupContainer.getChild(UIPopupAction.class) ;
-        UIConfirmForm confirmForm =  pAction.activate(UIConfirmForm.class, 500);
+        UIConfirmForm confirmForm =  pAction.activate(UIConfirmForm.class, 425);
         confirmForm.setConfirmMessage(uiForm.confirm_msg);
         confirmForm.setConfig_id(uiForm.getId()) ;
         

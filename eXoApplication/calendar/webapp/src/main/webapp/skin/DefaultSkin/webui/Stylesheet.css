@@ -285,6 +285,10 @@
   white-space: nowrap;
 }
 
+.UICalendarPortlet .UIForm .UIFormGrid td.FieldComponent span.confirm {
+  white-space: normal;
+}
+
 .UICalendarPortlet .UIAttachFileForm .UIForm .UIFormGrid td.FieldComponent {
   white-space: normal;
 }
