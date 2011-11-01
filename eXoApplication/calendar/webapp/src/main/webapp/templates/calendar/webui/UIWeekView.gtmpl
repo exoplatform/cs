@@ -7,6 +7,7 @@
 	import org.exoplatform.calendar.CalendarUtils;
 	import java.util.Locale;
 	import org.exoplatform.webui.application.WebuiRequestContext;
+	import java.text.ParseException;
 	uiform.begin()
  	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
  	Calendar currentCalendar = uicomponent.getCurrentCalendar() ;
@@ -248,7 +249,14 @@
 								//df.setCalendar(cl) ;
 					 			startTime = dayFormat.format(cl.getTime()) + " " + time;
 					 			//dtf.setCalendar(cl) ;
-					 			cl.setTime(fullDateFormat.parse(startTime)) ;
+					 			fullDateFormat.setLenient(false);
+					 			// add try-catch block to handle Daylight Saving Time problem 
+					 			try {
+					 			  cl.setTime(fullDateFormat.parse(startTime)) ;
+					 			} catch (ParseException e) {
+					 			  fullDateFormat.setLenient(true);
+					 			  cl.setTime(fullDateFormat.parse(startTime));   
+					 			}
 					 			dayOfWeek = cl.get(Calendar.DAY_OF_WEEK) ;
 					 		  if(uicomponent.isCurrentDay(cl.get(Calendar.DATE), cl.get(Calendar.MONTH), cl.get(Calendar.YEAR))) {
 						  		cssClass = "Today" ;

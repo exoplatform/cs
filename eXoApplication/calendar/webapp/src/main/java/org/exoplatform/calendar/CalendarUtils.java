@@ -142,7 +142,7 @@ public class CalendarUtils {
   public static final String DATETIMEFORMAT = DATEFORMAT +" " +TIMEFORMAT;   
   public static final int DEFAULT_TIMEITERVAL = 15;
   public static final long MILISECONS_OF_DAY = 24*60*59*1000;
-  public static final String EXO_INVITATION = "X-Exo-Invitation".intern();
+  public static final String EXO_INVITATION = "x-exo-invitation".intern();
   public static final String SPECIALCHARACTER[] = {SEMICOLON,COMMA,SLASH,BACKSLASH,
     SINGLE_QUOTE,OR,GREATER_THAN,SMALLER_THAN,QUOTE, QUESTION_MARK, EXCLAMATION, 
     AT, SHARP, MONEY_MARK, PERCENT,EXPONENT,AND,STAR};
@@ -259,22 +259,32 @@ public class CalendarUtils {
   }
   
   /**
+   * get calendar by user setting (timezone, first day of week)
+   * @param calendarSetting
+   * @return calendar object
+   */
+  public static Calendar getCalendarInstanceBySetting(final CalendarSetting calendarSetting) {
+    Calendar  calendar = GregorianCalendar.getInstance() ;
+    calendar.setLenient(false);
+    calendar.setTimeZone(TimeZone.getTimeZone(calendarSetting.getTimeZone()));
+    calendar.setFirstDayOfWeek(Integer.parseInt(calendarSetting.getWeekStartOn()));
+    return calendar;
+  }
+  
+  /**
    * 
    * @return return an instance of Calendar class which contains user's setting, such as, time zone, first day of week.
    */
-  public static Calendar getInstanceOfCurrentCalendar() { 
-    Calendar  calendar = GregorianCalendar.getInstance() ;
-    calendar.setLenient(false);
+  public static Calendar getInstanceOfCurrentCalendar() {
      try {
       CalendarSetting setting = getCurrentUserCalendarSetting();
-      calendar.setTimeZone(TimeZone.getTimeZone(setting.getTimeZone()));
-      calendar.setFirstDayOfWeek(Integer.parseInt(setting.getWeekStartOn())); 
+      return getCalendarInstanceBySetting(setting); 
     } catch (Exception e) {
-      log.warn(e);
+      if (log.isWarnEnabled()) log.warn("Could not get calendar setting!", e);
+      Calendar calendar = GregorianCalendar.getInstance() ;
+      calendar.setLenient(false);
+      return calendar;
     }
-//    int gmtoffset = calendar.get(Calendar.DST_OFFSET) + calendar.get(Calendar.ZONE_OFFSET);
-//    calendar.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ; 
-    return  calendar;
   }
   public static List<SelectItemOption<String>> getTimesSelectBoxOptions(String timeFormat) {
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
