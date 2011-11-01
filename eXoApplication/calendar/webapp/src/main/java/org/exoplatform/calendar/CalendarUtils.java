@@ -277,6 +277,8 @@ public class CalendarUtils {
     calendar.setLenient(false);
     calendar.setTimeZone(TimeZone.getTimeZone(calendarSetting.getTimeZone()));
     calendar.setFirstDayOfWeek(Integer.parseInt(calendarSetting.getWeekStartOn()));
+    // fix CS-4725
+    calendar.setMinimalDaysInFirstWeek(4);
     return calendar;
   }
   

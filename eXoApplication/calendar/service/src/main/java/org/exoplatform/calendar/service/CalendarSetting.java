@@ -257,6 +257,8 @@ public class CalendarSetting {
     Calendar c = GregorianCalendar.getInstance(TimeZone.getTimeZone(timeZone));
     c.setFirstDayOfWeek(Integer.parseInt(weekStartOn));
     c.setTimeInMillis(time);
+    // fix CS-4725
+    c.setMinimalDaysInFirstWeek(4);
     return c;
   }
   
