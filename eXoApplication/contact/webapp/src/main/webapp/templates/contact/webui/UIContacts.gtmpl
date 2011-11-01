@@ -256,7 +256,7 @@
                  <% 
                    if(isDisplaySearchResult) {  
                  %>
-                   <th style="width: 90px; "> <%=_ctx.appRes(uicomponent.getName() + ".label.addressBook")%> </th>
+                   <th style="width: 10%; "> <%=_ctx.appRes(uicomponent.getName() + ".label.addressBook")%> </th>
                  <% } %>
                    
                </tr>
@@ -372,7 +372,7 @@
              %>
                 
               <tr class="UIContactList $cssClass" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" havePermissionAdd="<%=uicomponent.havePermissionAdd(contact)%>" isSharedAddress = "<%=uicomponent.isSharedAddress(contact)%>" isOwner="<%=contact.isOwner()%>"> 
-                <td class="text" style="padding-left: 3px; width:18px;">
+                <td class="text" style="padding-left: 7px; width:18px;">
                   <%
                     if(checkboxField != null) uicomponent.renderField(checkboxField) ;
                   %>
@@ -461,7 +461,7 @@
             %>
               
               <tr class="UIContactList $cssClass" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" havePermissionAdd="<%=uicomponent.havePermissionAdd(contact)%>" isSharedAddress = "<%=uicomponent.isSharedAddress(contact)%>" isOwner="<%=contact.isOwner()%>">
-                <td class="text" style="padding-left: 3px; width: 18px;">
+                <td class="text" style="padding-left: 7px; width: 18px;">
                   <%
                     if(checkboxField != null) uicomponent.renderField(checkboxField) ;
                   %>
