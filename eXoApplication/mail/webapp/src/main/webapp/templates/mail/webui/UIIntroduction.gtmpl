@@ -9,7 +9,6 @@
   <div class="SubjectMail">
     <div class="WelcomeMail">
       <div class="LabelWelcomeMail"><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.welcome")%></div>
-      <div class="LabelComment"><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.commentwarning")%></div>
       <div style="clear:both;"><span></span></div>
     </div>
     <!-- div class="LogoMail">

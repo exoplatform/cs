@@ -847,8 +847,7 @@
     <UIIntroduction>
       <label>
         <title>Subject:</title>
-        <subject>Welcome to eXo Mail - eXo Collaboration Suite.</subject>
-        <commentwarning>please do not reply to this message !</commentwarning>
+        <subject>Welcome to the Mail application.</subject>
         <welcome>مرحبًــا بكم في</welcome>
         <overview>نظرة عامّة</overview>
         <label0>يُعتبَرُ بريد إكزو عميلاً للبريد ذو المصدر المفتوح. هذا العميل الذي يقوم على أساس eXo WebOS يتضمّن العديد من الوظائف الجديدة و المُصمَّمَة  من أجل أن تجعل تجربَتك مع بريدك الإلكتروني أكثر إنتاجية وأكثر مُلائَمَة، مع توفير طريقة جديدة لعرض رسائل البريد الوارد ، والمحادثة ، إلى جانب مُساعدتك على الحدّ من المخاطر أو المُضايقات التي يُمكن التعرُّض لها مثل التصيّـد الالكتروني أو رسائل البريد الالكترونية الغير مرغوب فيها...بريد إكزو هو طريقة سهلة لفهم أُسُس كتابة الرّسائل، قرائتها، العثور على معلومات تضمَّنَتها هذه الأخيرة و أكثر من ذلك من الميزات...</label0>

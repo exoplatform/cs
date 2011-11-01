@@ -19,10 +19,10 @@
                     <a class="SearchIcon" href="<%=uicomponent.event("SearchContact")%>" title="<%=_ctx.appRes(uicomponent.id+ '.label.quick-search') %>"><span>&nbsp;</span></a>
                   
                  
-                  <span class="SelectedLabel"><%=_ctx.appRes(uicomponent.id+ ".label.selected-group") %> : </span>
+                  <span class="SelectedLabel"><%=_ctx.appRes(uicomponent.id+ ".label.selected-group") %>: </span>
                     <% uiform.renderField(uiform.SELECTED_GROUP) %>                   
                    
-                  <span class="AddressLabel"><%=_ctx.appRes(uicomponent.id+ ".label.addresses-from-group") %> : </span>
+                  <span class="AddressLabel"><%=_ctx.appRes(uicomponent.id+ ".label.addresses-from-group") %>: </span>
                     <% uiform.renderField(uiform.CONTACT_GROUP) %>                   
                   
                 

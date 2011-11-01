@@ -1282,14 +1282,7 @@
   float: right; /* orientation=rt */
   color: #469ae2;
   font-size: 14px;
-}
-
-.UIMailPortlet .SubjectMail .WelcomeMail .LabelComment {
-  float: right; /* orientation=lt */
-  float: left; /* orientation=rt */
-  color: #8a8a8a;
-  font-size: 10px;
-  padding:3px 0px;
+  padding: 0 0 3px;
 }
 
 .UIMailPortlet .SubjectMail .LogoMail {

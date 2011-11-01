@@ -1306,7 +1306,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
       UIComposeForm uiComposeForm = event.getSource();
       UIPopupActionContainer uiActionContainer = uiComposeForm.getAncestorOfType(UIPopupActionContainer.class);
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class);
-      UIAddressForm uiAddress = uiChildPopup.activate(UIAddressForm.class, 650);
+      UIAddressForm uiAddress = uiChildPopup.activate(UIAddressForm.class, 710);
       uiAddress.setRecipientsType(FIELD_TO);
       String toAddressString = uiComposeForm.getFieldToValue();
       InternetAddress[] toAddresses = Utils.getInternetAddress(toAddressString);
@@ -1336,7 +1336,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
       UIComposeForm uiComposeForm = event.getSource();
       UIPopupActionContainer uiActionContainer = uiComposeForm.getAncestorOfType(UIPopupActionContainer.class);
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class);
-      UIAddressForm uiAddress = uiChildPopup.activate(UIAddressForm.class, 650);
+      UIAddressForm uiAddress = uiChildPopup.activate(UIAddressForm.class, 710);
 
       uiAddress.setRecipientsType(FIELD_CC);
       String ccAddressString = uiComposeForm.getFieldCcValue();
@@ -1367,7 +1367,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
       UIComposeForm uiComposeForm = event.getSource();
       UIPopupActionContainer uiActionContainer = uiComposeForm.getAncestorOfType(UIPopupActionContainer.class);
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class);
-      UIAddressForm uiAddress = uiChildPopup.activate(UIAddressForm.class, 650);
+      UIAddressForm uiAddress = uiChildPopup.activate(UIAddressForm.class, 710);
 
       uiAddress.setRecipientsType(FIELD_BCC);
       String bccAddressString = uiComposeForm.getFieldBccValue();
