@@ -110,6 +110,9 @@ public class ImapConnector extends BaseConnector {
       boolean result = false;
       IMAPFolder folderToBeRenamed = openFolderForReadWrite(folder.getURLName());
       if (folderToBeRenamed.exists()) {
+        if (folderToBeRenamed.isOpen()) {
+          folderToBeRenamed.close(true);
+        }
         IMAPFolder f1 = (IMAPFolder) imapStore.getFolder(newName);
         result = folderToBeRenamed.renameTo(f1);
         folder.setURLName(f1.getURLName().toString());
