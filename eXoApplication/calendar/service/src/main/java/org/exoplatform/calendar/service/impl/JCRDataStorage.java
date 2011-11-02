@@ -4268,7 +4268,9 @@ public class JCRDataStorage implements DataStorage {
   public void assignGroupTask(String taskId, String calendarId, String assignee) throws Exception {
     Node calendarNode = getPublicCalendarHome().getNode(calendarId);
     Node eventNode = calendarNode.getNode(taskId);
-    String taskDelegator = eventNode.getProperty(Utils.EXO_TASK_DELEGATOR).getString();
+    String taskDelegator = null;
+    if (eventNode.hasProperty(Utils.EXO_TASK_DELEGATOR)) 
+      taskDelegator = eventNode.getProperty(Utils.EXO_TASK_DELEGATOR).getString();
     if (assignee != null && assignee.length() > 0) {
       if (taskDelegator == null || taskDelegator.trim().length() == 0) {
         taskDelegator = assignee;

@@ -355,6 +355,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         } else {
           calEvent.setEventType(CalendarEvent.TYPE_TASK) ;
           calEvent.setEventState(CalendarEvent.NEEDS_ACTION) ;
+          calEvent.setTaskDelegator(event.getRequestContext().getRemoteUser());
         }
         calEvent.setEventCategoryId(uiForm.getEventCategory());
         //String eventCategoryName = CalendarUtils.getCalendarService().getEventCategory(SessionProviderFactory.createSessionProvider(), username, uiForm.getEventCategory()).getName() ;
