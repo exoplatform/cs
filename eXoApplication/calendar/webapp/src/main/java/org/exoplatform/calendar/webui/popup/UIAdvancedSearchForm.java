@@ -50,8 +50,8 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -319,9 +319,11 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
         calendarViewContainer.initView(UICalendarViewContainer.LIST_VIEW) ;
         UIListView uiListView = calendarViewContainer.findFirstComponentOfType(UIListView.class) ;
         
-        //CS-3610
-        uiListView.setViewType(UIListView.TYPE_BOTH) ;
-        calendarPortlet.cancelAction() ;
+        // CS-3610
+        uiListView.setViewType(UIListView.TYPE_BOTH);
+        uiListView.setSortedField(UIListView.EVENT_START);
+        uiListView.setIsAscending(false);
+        calendarPortlet.cancelAction();
         
         if (query.getCalendarId() == null) { 
           List<String> calendarIds = new ArrayList<String>() ; 
@@ -344,7 +346,8 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
           }          
         }
         
-        query.setOrderBy(new String[] {Utils.EXO_SUMMARY});
+        query.setOrderBy(new String[] { Utils.EXO_FROM_DATE_TIME });
+        query.setOrderType(Utils.DESCENDING);
         uiListView.setDisplaySearchResult(true) ;
         List<CalendarEvent> allEvents = uiListView.getAllEvents(query);
         uiListView.update(new EventPageList(allEvents,10));
