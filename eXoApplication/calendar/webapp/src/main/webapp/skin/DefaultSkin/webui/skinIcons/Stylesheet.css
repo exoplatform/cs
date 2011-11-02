@@ -575,6 +575,17 @@
 	cursor: hand;
 }
 
+.UICalendarPortlet .UICalendars .IconUnCheckBox{
+	background: none;
+	display: inline-block;
+	float: left;
+	width: 14px;
+	height: 14px;
+	padding: 0px;
+	margin: 0px;
+	cursor: hand;
+}
+
 .UICalendarPortlet .UICalendars .ColorOpacity{
 	width: 14px;
 	height: 14px;

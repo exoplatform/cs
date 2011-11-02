@@ -1701,34 +1701,52 @@ UICalendarPortlet.prototype.resortEvents = function(){
  * Filters calendar event by calendar
  */
 UICalendarPortlet.prototype.filterByCalendar = function(){
-    var calid = this.name;
-    var checked = this.checked;
+	var calid = this.id;
+    var show = "block";
+    var hide = "none";
+    var stylEvent = "none";
+    
+    var checkBox = eXo.core.DOMUtil.findFirstDescendantByClass(this, "input", "checkbox");
+    var checked = checkBox.checked;
+    window.console.info("============checked="+checked);
+    
+    var imgChk = eXo.core.DOMUtil.findFirstDescendantByClass(this, "span", "checkbox");
+    
     var uiCalendarViewContainer = eXo.calendar.UICalendarPortlet.getElementById("UICalendarViewContainer");
     var UICalendarPortlet = eXo.calendar.UICalendarPortlet;
-    if (!uiCalendarViewContainer) 
-        return;
+    if (!uiCalendarViewContainer) {
+			return;    
+    }
     var className = "EventBoxes";
-    if (eXo.calendar.UICalendarPortlet.getElementById("UIWeekViewGrid")) 
-        className = "WeekViewEventBoxes"; // TODO : review event box gettting
+    if (eXo.calendar.UICalendarPortlet.getElementById("UIWeekViewGrid")){
+			className = "WeekViewEventBoxes";  
+    }
     var events = eXo.core.DOMUtil.findDescendantsByClass(uiCalendarViewContainer, "div", className);
 
-     //CS-3152
+    if(checked){
+    	stylEvent = hide;
+    	checkBox.checked = false;
+    	imgChk.className = "IconUnCheckBox checkbox";
+    }else{
+    	checkBox.checked = true;
+    	stylEvent = show;
+    	imgChk.className = "IconCheckBox checkbox";
+    }
+    
     if ((!events || events.length == 0)&& eXo.calendar.UICalendarPortlet.getElementById("UIListView")) {
         eXo.webui.UIForm.submitForm('UICalendars','Tick', true)		
     }
     if (!events) return;
     var len = events.length;
+    
     for (var i = 0; i < len; i++) {
         if (events[i].getAttribute("calId") == calid) {
-            if (checked) {
-                events[i].style.display = "block";
-            }
-            else {
-                events[i].style.display = "none";
-            }
+            events[i].style.display = stylEvent;
         }
     }
-    UICalendarPortlet.runFilterByCategory();
+    
+    
+    //UICalendarPortlet.runFilterByCategory();
     eXo.calendar.UICalendarPortlet.resortEvents();
     
 };
@@ -1817,7 +1835,7 @@ UICalendarPortlet.prototype.getFilterForm = function(form){
         form = eXo.calendar.UICalendarPortlet.getElementById(form);
     this.filterForm = form;
     var CalendarGroup = eXo.core.DOMUtil.findDescendantsByClass(form, "input", "CalendarGroup");
-    var CalendarItem = eXo.core.DOMUtil.findDescendantsByClass(form, "input", "checkbox");
+    var CalendarItem = eXo.core.DOMUtil.findDescendantsByClass(form, "li", "CalendarItem");
     var len = CalendarGroup.length;
     var clen = CalendarItem.length;
     for (var i = 0; i < len; i++) {

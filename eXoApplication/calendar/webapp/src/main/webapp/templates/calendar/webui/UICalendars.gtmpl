@@ -89,9 +89,13 @@
               if(uicomponent.getChildById(calId) != null) {
         %>
             <li class="CalendarItem  CalendarItemPrivate ClearFix" calColor="$calendar.calendarColor" canEdit="true" id="$calId" calType="0" isRemote="$isRemote">
-                <a href="#" class="$calendar.calendarColor"><span class="ColorOpacity"><span class="IconCheckBox"></span></span></a>
-                <a class="CalendarName" href="#" title="$calendar.name">$calendar.name</a>
-				<span style="display:none"><%uiform.renderField(calId)%></span>
+                <a href="javascript:void(0);" class="$calendar.calendarColor">
+                	<span class="ColorOpacity">
+                		<span class="IconCheckBox checkbox"></span>
+                	</span>
+                </a>
+                <a class="CalendarName" href="javascript:void(0);" title="$calendar.name">$calendar.name</a>
+								<span style="display:none"><%uiform.renderField(calId)%></span>
             </li>
         <%     }
             }
@@ -131,9 +135,13 @@
             }
         %>
             <li class="CalendarItem CalendarItemShared ClearFix" calColor="$color" id="$calId" calType="1"  canEdit="<%=uicomponent.canEdit(Utils.getEditPerUsers(calendar), checkPerms)%>">
-                <a href="#" class="$color"><span class="ColorOpacity"><span class="IconCheckBox"></span></span></a>
-                <a class="CalendarName" title="<%=owner + calendar.getName()%>"><%=owner + calendar.getName()%></a>
-				<span style="display:none;"><%uiform.renderField(calendar.getId())%></span>
+                <a href="javascript:void(0);" class="$color">
+                	<span class="ColorOpacity">
+                		<span class="IconCheckBox checkbox"></span>
+                	</span>
+                </a>
+                <a class="CalendarName" href="javascript:void(0);" title="<%=owner + calendar.getName()%>"><%=owner + calendar.getName()%></a>
+								<span style="display:none;"><%uiform.renderField(calendar.getId())%></span>
             </li>
         <%
         }
@@ -176,9 +184,13 @@
               if(uicomponent.getChildById(calId) != null) {
         %>
             <li class="CalendarItem CalendarItemPublic ClearFix"  calColor="$calendar.calendarColor" canEdit="<%=uicomponent.canEdit(calendar.getEditPermission(), checkPerms)%>" id="$calId" calType="2" >
-                <a href="#" class="$calendar.calendarColor"><span class="ColorOpacity"><span class="IconCheckBox"></span></span></a>
-                <a class="CalendarName" title="<%=calendar.getName()%>"><%=calendar.getName()%></a>
-				<span style="display:none"><%uiform.renderField(calendar.getId())%></span>
+                <a href="javascript:void(0);" class="$calendar.calendarColor">
+                	<span class="ColorOpacity">
+                		<span class="IconCheckBox checkbox"></span>
+                	</span>
+                </a>
+                <a class="CalendarName" href="javascript:void(0);" title="<%=calendar.getName()%>"><%=calendar.getName()%></a>
+								<span style="display:none"><%uiform.renderField(calendar.getId())%></span>
             </li>
         <%
         }

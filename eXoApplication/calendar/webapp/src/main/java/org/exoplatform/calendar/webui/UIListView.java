@@ -17,6 +17,7 @@
 package org.exoplatform.calendar.webui;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -141,6 +142,15 @@ public class UIListView extends UICalendarView {
     }
     query.setOrderBy(new String[] {Utils.EXO_SUMMARY});
     List<CalendarEvent> allEvents = getAllEvents(query);
+    
+    List<CalendarEvent> allEventsTemp = new ArrayList<CalendarEvent>();
+    for(CalendarEvent event : allEvents){
+      if(calendarIds.contains(event.getCalendarId())){
+        allEventsTemp.add(event);
+      }
+    }
+    allEvents= allEventsTemp;
+    
     if(uiListContainer.isDisplaySearchResult())  { 
       update(pageList_) ;
     } else {
@@ -223,7 +233,7 @@ public class UIListView extends UICalendarView {
       eventQuery.setExcludeRepeatEvent(false);
       return calendarService.getEvents(username, eventQuery, getPublicCalendars())  ;
     }
-    List<CalendarEvent> allEvents =  calendarService.getEvents(username, eventQuery, getPublicCalendars())  ;  
+    List<CalendarEvent> allEvents =  calendarService.getEvents(username, eventQuery, getPublicCalendars())  ;
     List<CalendarEvent> originalRecurEvents = calendarService.getOriginalRecurrenceEvents(username, eventQuery.getFromDate(), eventQuery.getToDate(), getPublicCalendars());
     String timezone = CalendarUtils.getCurrentUserCalendarSetting().getTimeZone();
     if (originalRecurEvents != null && originalRecurEvents.size() > 0) {
