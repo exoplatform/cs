@@ -33,18 +33,12 @@
 
 .UIEmpty {
   margin: 0px;
-  border: none;
   min-width: 1px;
-  background: none;
-  color:none;
 }
 
 .UIWindow .UIEmpty {
   margin: 0px;
-  border: none;
   min-width: 1px;
-  background: none;
-  color:none;
 }
 
 
@@ -142,15 +136,8 @@
   _margin: 2px 0px 0px 0px;
 }
 /*=====================Table Color===========================*/
-
-.UIContextMenuContainer {
-  white-space: nowrap;
-}
-
 .UIContextMenuContainer .CalendarTableColor {
-  background: #e4eaf5;
-  padding: 5px;
-  margin: 1px;
+  padding: 10px;
 }
 
 .UIContextMenuContainer .CalendarTableColor .ColorCell {
@@ -330,24 +317,6 @@
    height: 16px;
 }
 
-.UICalendarPortlet .ItemIcon{
-  padding: 0px 0px 0px 23px; /* orientation=lt */
-  padding: 0px 23px 0px 0px; /* orientation=rt */
-  line-height: 22px;
-  margin: 0px 2px;
-  height: 22px;
-  display: block;
-}
-
-.UICalendarPortlet .MenuItem .ItemIcon {
-  line-height: 25px;
-  height: 25px;
-}
-
-.UICalendarPortlet .MenuItem .ItemIcon:hover {
-  background-color: #dee4f2;
-  color: orange;
-}
 .UICalendarPortlet .UICalendarViewContainer {
   -khtml-user-select:none;
   background: #fff;
@@ -367,13 +336,6 @@
   
 }
 
-/*Override style of Right click menu*/
-.UIRightClickPopupMenu .MenuItem .ItemIcon{
-  padding: 0px 5px 0px 28px; /* orientation=lt */
-  padding: 0px 28px 0px 5px; /* orientation=rt */
-  margin: 0px 2px;
-  line-height: 24px;
-}
 
 /* For SearchIcon of UIUserSelector */
 
@@ -384,21 +346,6 @@
   margin:3px 4px;
   width:24px;
 }
-
-.UICalendarPortlet .ContextMenuContainer .MenuItemBG:hover{
-	background: #dee4f2;
-	color: orange;
-}
-
-.UICalendarPortlet .ContextMenuContainer .MenuItemBG a:hover{
-	color: orange;
-}
-
-.UICalendarPortlet .ContextMenuContainer{
-	background: #efefef;
-	border: 1px solid #c7c7c7;
-}
-
 
 /* UI-1552 */
 

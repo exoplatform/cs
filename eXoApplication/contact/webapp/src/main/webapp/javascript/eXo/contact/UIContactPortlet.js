@@ -575,10 +575,10 @@ UIContactPortlet.prototype.checkView = function() {
 	var isVcard = eXo.contact.UIContactPortlet.getElementById("UIVCards");
 	if (isVcard && eXo.core.DOMUtil.findAncestorByClass(isVcard,"UIContactContainer")) {
 		if(menuItems[0].getAttribute("style")) menuItems[0].removeAttribute("style");
-  	menuItems[1].style.background = "#E6E8F5" ;
+  	menuItems[1].style.background = "#eaeaea" ;
 	} else{
 		if(menuItems[1].getAttribute("style")) menuItems[1].removeAttribute("style");
-		menuItems[0].style.background = "#E6E8F5" ;
+		menuItems[0].style.background = "#eaeaea" ;
 	}	
 };
 

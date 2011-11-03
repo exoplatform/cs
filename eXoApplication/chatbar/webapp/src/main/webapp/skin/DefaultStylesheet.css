@@ -22,23 +22,6 @@
 	margin-bottom: 0px;
 }
 
-.UIChatBarPortlet .UIContextMenuContainer {
-	background: #fff;
-	margin: 1px;
-	padding: 5px;
-	border: 1px solid #dbdbdb;
-	-moz-box-shadow: 2px 2px 1px #dbdbdb;
-	-webkit-box-shadow: 2px 2px 1px #dbdbdb;
-	box-shadow: 2px 2px 1px #dbdbdb;
-}
-
-.UIContextMenuContainer {
-	background: #F6F6F6;
-	margin: 1px;
-	padding: 5px 0;
-	border: 1px solid #7E7E7F;
-}
-
 .UIChatBarPortlet .AddContactIcon {
 	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat left -227px; /* orientation=lt */
 	background: url('DefaultSkin/skinIcons/SmallChatIcons.png') no-repeat right -227px; /* orientation=rt */
@@ -382,12 +365,6 @@ form {
 
 .UIConversation .UIActionbar .HistoryIcon .ItemIcon {
 	padding: 3px 5px;
-	font-weight: normal;
-}
-
-.UIConversation .UIActionbar .HistoryIcon .ItemIcon:hover {
-	background: #dee4f2;
-	color: orange;
 }
 
 /* New Form */
@@ -1002,14 +979,6 @@ form {
 	bottom: 35px;
 }
 
-.UIChatBarPortlet .UIActionbar .UIRightClickPopupMenu a{
-	color: #666666;
-}
-
-.UIChatBarPortlet .UIActionbar .UIRightClickPopupMenu a:hover{
-	color: #f7941d;
-}
-
 .UIChatBarPortlet .UIActionbar .RoomArea {
 	width: 27px;
 	position: relative;
@@ -1104,6 +1073,10 @@ form {
 	height: 25px;
 	margin: 2px;
 	display: block;
+}
+
+.UIChatBarPortlet .Icon:hover {
+	color: orange;
 }
 
 .UIChatBarPortlet .UIRightClickPopupMenu .Split{

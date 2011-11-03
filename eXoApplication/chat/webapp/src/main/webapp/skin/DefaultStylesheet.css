@@ -71,13 +71,6 @@
 	padding-right: 8px; /* orientation=rt */
 }
 
-.UIContextMenuContainer {
-	background: #F6F6F6;
-	margin: 1px;
-	padding: 5px 0;
-	border: 1px solid #7E7E7F;
-}
-
 .UIChat .UIActionbar .Icon {
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
@@ -340,12 +333,6 @@
 
 .UIConversation .UIActionbar .HistoryIcon .ItemIcon {
 	padding: 3px 5px;
-	font-weight: normal;
-}
-
-.UIConversation .UIActionbar .HistoryIcon .ItemIcon:hover {
-	background: #dee4f2;
-	color: orange;
 }
 
 /* UIPopupWindow ExoMesseageDecorator */
@@ -372,6 +359,10 @@
 	padding: 5px 26px 5px 0px; /* orientation=rt */
 	white-space: nowrap;
 	width: auto;
+}
+
+.BuddyItemActionMenu .ItemIcon:hover {
+	color: orange;
 }
 
 .BuddyItemActionMenu .RemoveIcon {

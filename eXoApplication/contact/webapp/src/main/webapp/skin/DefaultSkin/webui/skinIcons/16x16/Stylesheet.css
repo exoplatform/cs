@@ -84,7 +84,7 @@
 }
 
 .UIContactPortlet .TypeViewContactPortlet .ContactListIcon {
-  background: url('icons/ContactListIcon.gif') no-repeat center;
+  background: url('icons/ContactListIcon.gif') no-repeat left center;
 }
 
 .UIContactPortlet .TypeViewContactPortlet .MenuItem {

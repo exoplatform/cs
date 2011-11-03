@@ -22,32 +22,32 @@
 		<div class="UIRightClickPopupMenu" style="display: none ;"> 
 			 <div class="UIContextMenuContainer ContextMenuContainer">
 				<ul>
-					<li class="MenuItemBG">
+					<li class="MenuItem">
 					  <a class="ItemIcon AddGroupIcon" href="<%=uicomponent.event("AddCalendarCategory")%>">
 						<%=uiform.getLabel("AddGroup")%>
 					  </a>
 					</li>
-					<li class="MenuItemBG">
+					<li class="MenuItem">
 					  <a class="ItemIcon AddCalendarIcon" href="<%=uicomponent.event('AddCalendar','id')%>">
 						<%=uiform.getLabel("AddCalendar")%>
 					  </a>
 					</li>
-					<li class="MenuItemBG">
+					<li class="MenuItem">
 					  <a class="ItemIcon AddCalendarIcon" href="<%=uicomponent.event("RemoteCalendar")%>">
 						<%=uiform.getLabel("RemoteCalendar")%>
 					  </a>
 					</li>
-					<li class="MenuItemBG">
+					<li class="MenuItem">
 					  <a class="ItemIcon AddCategoryIcon" href="<%=uicomponent.event("AddEventCategory")%>">
 						<%=uiform.getLabel("AddEventCategory")%>
 					  </a>
 					</li>
-					<li class="MenuItemBG">
+					<li class="MenuItem">
 					  <a class="ItemIcon ImportCalendarIcon" href="<%=uicomponent.event("ImportCalendar")%>">
 						<%=uiform.getLabel("ImportCalendar")%>
 					  </a>
 					</li>
-					<li class="MenuItemBG">
+					<li class="MenuItem">
 					  <a class="ItemIcon SettingCalendarIcon" href="<%=uicomponent.event("CalendarSetting")%>">
 						<%=uiform.getLabel("CalendarSetting")%>
 					  </a>
@@ -218,32 +218,32 @@
 	<div class="UIRightClickPopupMenu" style="display: none;" id="CalendarGroupPopupMenu" eXoCallback="eXo.calendar.UICalendarPortlet.calendarMenuCallback">
 		 <div class="UIContextMenuContainer ContextMenuContainer">
 			<ul>
-				<li class="MenuItemBG">
+				<li class="MenuItem">
 					<a class="ItemIcon AddCalendarIcon" href="<%=uicomponent.event("AddCalendar","id")%>">
 					   <%=uiform.getLabel("AddCalendar")%>
 					</a>
 				</li>
-				<li class="MenuItemBG">
+				<li class="MenuItem">
 					<a class="ItemIcon AddCalendarIcon" href="<%=uicomponent.event("RemoteCalendar", "id")%>">
 					  <%=uiform.getLabel("RemoteCalendar")%>
 					</a>
 				</li>
-				<li class="MenuItemBG">
+				<li class="MenuItem">
 					<a class="ItemIcon EditGroupIcon" href="<%=uicomponent.event("EditGroup","id")%>">
 					   <%=uiform.getLabel("EditGroup")%>
 					</a>
 				</li>
-				<li class="MenuItemBG">
+				<li class="MenuItem">
 					<a class="ItemIcon DeleteGroupIcon" href="<%=uicomponent.event("DeleteGroup",uicomponent.id,"id")%>">
 					  <%=uiform.getLabel("DeleteGroup")%>
 					</a>
 				</li>
-				<li class="MenuItemBG">
+				<li class="MenuItem">
 					<a class="ItemIcon ImportCalendarIcon" href="<%=uicomponent.event("ImportCalendar")%>">
 					  <%=uiform.getLabel("ImportCalendar")%>
 					</a>
 				</li>
-				<li class="MenuItemBG">
+				<li class="MenuItem">
 					<a class="ItemIcon ExportCalendarIcon" href="<%=uicomponent.event("ExportCalendars","id")%>">
 					  <%=uiform.getLabel("ExportCalendars")%>
 					</a>
@@ -260,42 +260,42 @@
 	<div class="UIRightClickPopupMenu" style="display: none;" id="CalendarPopupMenu" eXoCallback="eXo.calendar.UICalendarPortlet.calendarMenuCallback">
 		 <div class="UIContextMenuContainer ContextMenuContainer">
 			<ul>
-				<li class="MenuItemBG">
+				<li class="MenuItem">
 					<a class="ItemIcon AddNewEvent" href="javascript:eXo.calendar.UICalendarPortlet.addQuickShowHiddenWithId(this, 1, 'objectId=id');">
 					  <%=uiform.getLabel("AddEvent")%>
 					</a>
 				</li>
-				<li class="MenuItemBG">
+				<li class="MenuItem">
 					<a class="ItemIcon AddNewTask" href="javascript:eXo.calendar.UICalendarPortlet.addQuickShowHiddenWithId(this, 2, 'objectId=id');">
 					  <%=uiform.getLabel("AddTask")%>
 					</a> 
 				</li>
-				<li class="MenuItemBG">
+				<li class="MenuItem">
 					<a class="ItemIcon  EditCalendarIcon" href="<%=uicomponent.event("EditCalendar","id")%>">
 					  <%=uiform.getLabel("EditCalendar")%>
 					</a>
 				</li>
-				<li class="MenuItemBG">
+				<li class="MenuItem">
 					<a class="ItemIcon RemoveCalendarIcon" href="<%=uicomponent.event("RemoveCalendar",uicomponent.id,"id")%>">
 					  <%=uiform.getLabel("RemoveCalendar")%>
 					</a>
 				</li>
-				<li class="MenuItemBG">
+				<li class="MenuItem">
 					<a class="ItemIcon ImportCalendarIcon" href="<%=uicomponent.event('ImportCalendar','id')%>">
 					  <%=uiform.getLabel("ImportCalendar")%>
 					</a>
 				</li>
-				<li class="MenuItemBG">
+				<li class="MenuItem">
 					<a class="ItemIcon ExportCalendarIcon" href="<%=uicomponent.event("ExportCalendar","id")%>">
 					  <%=uiform.getLabel("ExportCalendar")%>
 					</a>
 				</li>
-				<li class="MenuItemBG">
+				<li class="MenuItem">
 					<a class="ItemIcon  SharedCalendarIcon" href="<%=uicomponent.event("ShareCalendar","id")%>">
 					  <%=uiform.getLabel("ShareCalendar")%>
 					</a>
 				</li>
-				<li class="MenuItemBG">
+				<li class="MenuItem">
 					<a class="ItemIcon  RefreshRemoteIcon" href="<%=uicomponent.event("RefreshRemoteCalendar","id")%>">
 					  <%=uiform.getLabel("RefreshRemoteCalendar")%>
 					</a> 
@@ -334,37 +334,37 @@
 		<div class="UIRightClickPopupMenu" style="display: none;" id="CalendarPopupMenu2" eXoCallback="eXo.calendar.UICalendarPortlet.calendarMenuCallback">
 			 <div class="UIContextMenuContainer ContextMenuContainer">
 				<ul>
-					<li class="MenuItemBG">
+					<li class="MenuItem">
 						<a class="ItemIcon AddNewEvent" href="javascript:eXo.calendar.UICalendarPortlet.addQuickShowHiddenWithId(this, 1, 'objectId=id');">
 						  <%=uiform.getLabel("AddEvent")%>
 						</a>
 					</li>
-					<li class="MenuItemBG">
+					<li class="MenuItem">
 						<a class="ItemIcon AddNewTask" href="javascript:eXo.calendar.UICalendarPortlet.addQuickShowHiddenWithId(this, 2, 'objectId=id');">
 						  <%=uiform.getLabel("AddTask")%>
 						</a>
 					</li>
-					<li class="MenuItemBG">
+					<li class="MenuItem">
 						<a class="ItemIcon  EditCalendarIcon" href="<%=uicomponent.event("EditCalendar","id")%>">
 						  <%=uiform.getLabel("EditCalendar")%>
 						</a>
 					</li>
-					<li class="MenuItemBG">
+					<li class="MenuItem">
 						<a class="ItemIcon RemoveCalendarIcon" href="<%=uicomponent.event("RemoveSharedCalendar",uicomponent.id,"id")%>">
 						  <%=uiform.getLabel("RemoveCalendar")%>
 						</a>
 					</li>
-					<li class="MenuItemBG">
+					<li class="MenuItem">
 						<a class="ItemIcon ImportCalendarIcon" href="<%=uicomponent.event('ImportCalendar','id')%>">
 						  <%=uiform.getLabel("ImportCalendar")%>
 						</a>
 					</li>
-					<li class="MenuItemBG">
+					<li class="MenuItem">
 						<a class="ItemIcon ExportCalendarIcon" href="<%=uicomponent.event("ExportCalendar","id")%>">
 						  <%=uiform.getLabel("ExportCalendar")%>
 						</a>
 					</li>
-					<li class="MenuItemBG">
+					<li class="MenuItem">
 						<a class="ItemIcon  SharedCalendarIcon" href="<%=uicomponent.event("ShareCalendar","id")%>">
 						  <%=uiform.getLabel("ShareCalendar")%>
 						</a>

@@ -11,10 +11,6 @@
   background: url('icons/ContactIcon.gif') no-repeat left center;
 }
 
-.UIContactPortlet .TypeViewContactPortlet .MenuItem {
-
-}
-
 .UIContactPortlet .TypeViewContactPortlet .MenuItemSelected {
   background: #dee4f2;
 }

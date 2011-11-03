@@ -23,23 +23,15 @@
 
 .UIWindow .UIContactPortlet {
   margin: 0px;
-  border: none;
   min-width: 900px;
-}
-
-.UIContactPortlet {
-  background: white;
 }
 
 .UIWindow .UIEmpty {
   margin: 0px;
-  border: none ;
   min-width: none ;
 }
 
 .UIEmpty {
-  background: none;
-  border: none;
   margin: 0px;
 }
 /***************************** PopUp ****************************/
@@ -116,10 +108,6 @@
   right:0px; /* orientation=rt */
   position:absolute;
   border: none;
-}
-
-.UIPopupCategory .UIContextMenuContainer {
-  white-space: nowrap;
 }
 
 .UIPopupCategory .ContactTableColor {
@@ -227,23 +215,6 @@
 
 .UIContactPortlet .UIImageForm .UIFormGrid td.FieldComponent {
   white-space: normal;
-}
-
-.UIContactPortlet .UIContextMenuContainer .MenuItem .ItemIcon{
-  background-position: 4px center; /* orientation=lt */
-  background-position: 98% center; /* orientation=rt */
-}
-
-.UIRightClickPopupMenu .MenuItem .ItemIcon{
-  padding: 0px 5px 0px 28px; /* orientation=lt */
-  padding: 0px 28px 0px 5px; /* orientation=rt */
-  margin: 0px 2px;
-  line-height: 24px;
-}
-
-.UIRightClickPopupMenu .MenuItem .ItemIcon:hover {
-  background-color: #dee4f2;
-  color: orange;
 }
 
 /* Create color tag */

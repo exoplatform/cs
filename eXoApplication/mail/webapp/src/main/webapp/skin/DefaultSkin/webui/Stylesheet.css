@@ -30,13 +30,10 @@
 
 .UIWindow .UIEmpty {
   margin: 0px;
-  border: none ;
   min-width: 0px ;
 }
 
 .UIEmpty {
-  background: none;
-  border: none;
   margin: 0px;
   min-width: 0px ;
 }
@@ -253,10 +250,6 @@
   padding: 3px 22px 5px 0px; /* orientation=rt */
 }
 
-.UIMailPortlet .UINavigationContainer .UIFolderContainer a {
-
-}
-
 .UIMailPortlet .UINavigationContainer .UIFolderContainer .Icon {
   padding-left: 30px; /* orientation=lt */
   padding-right: 30px; /* orientation=rt */
@@ -369,12 +362,6 @@
 
 
 /*=====================Table Color===========================*/
-
-.UIMailPortlet .UIContextMenuContainer {
-  white-space: nowrap;
-}
-
-
 .UIMailPortlet .MailTableColor {
   background: #e4eaf5;
   padding: 5px;
@@ -620,29 +607,8 @@
   padding-left: 18px; /* orientation=rt */
 }
 
-.UIRightClickPopupMenu .MenuItem {
-  font-size:11px;
-}
-
-.UIMailPortlet .UIContextMenuContainer .MenuItem .ItemIcon{
-  background-position: 4px center; /* orientation=lt */
-  background-position: 98% center; /* orientation=rt */
-}
-
-.UIRightClickPopupMenu .MenuItem .ItemIcon{
-  padding: 0px 5px 0px 26px; /* orientation=lt */
-  padding: 0px 26px 0px 5px; /* orientation=rt */
-  margin: 0px 2px;
-  line-height: 25px;
-}
-
-.UIRightClickPopupMenu .MenuItem .ItemIcon:hover {
-  background-color: #dee4f2;
-  color: orange;
-}
-
 .UIRightClickPopupMenu .SelectItem {
-  background: #dee4f2 ;
+  background: #eaeaea ;
 }
 
 /*================================== UIGrid==============================*/
@@ -1220,22 +1186,6 @@
   left: 1px;
   top: 17px;
   width: auto;
-}
-
-.UIMailPortlet .UIRightClickPopupMenu .ItemIcon {
-  white-space: nowrap;
-  display: block;
-  width: auto;
-  height: auto;
-  background-position: left center; /* orientation=lt */
-  background-position: right center; /* orientation=rt */
-  margin-left: 4px; /* orientation=lt */
-  margin-right: 4px; /* orientation=rt */
-}
-
-.UIMailPortlet .UIRightClickPopupMenu .ItemIcon:hover {
-  background-color: #DEE4F2;
-  color: orange;
 }
 
 .UIMailPortlet .SeparatorLine {
