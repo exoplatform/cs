@@ -1,13 +1,13 @@
 <%
   import org.exoplatform.calendar.service.GroupCalendarData;
+  import org.exoplatform.calendar.webui.UICalendarPortlet;
+  import org.exoplatform.webui.form.UIFormCheckBoxInput;
   import org.exoplatform.calendar.service.CalendarEvent;
   import org.exoplatform.calendar.CalendarUtils;
   import org.exoplatform.calendar.service.Utils;
   def rcontext = _ctx.getRequestContext() ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarContainer.updateUICalendarsLayout();') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.getFilterForm("' + uiform.id + '") ;') ;
-  //rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;
-  
   String[] checkPerms = uicomponent.getCheckPermissionString().split(CalendarUtils.COMMA);
 %>
 <%uiform.begin()%>
@@ -87,11 +87,14 @@
               Boolean isRemote = uicomponent.isRemoteCalendar(calId);
               if(calendar.getViewPermission()!= null && calendar.getViewPermission().length > 0) { icon = "SharedCalendarIcon"}
               if(uicomponent.getChildById(calId) != null) {
+                def css = "IconCheckBox checkbox";
+                if(UICalendarPortlet.isInSpace() && !uicomponent.isCalendarOfSpace(calId))  {css = "IconUnCheckBox checkbox";}
+              
         %>
             <li class="CalendarItem  CalendarItemPrivate ClearFix" calColor="$calendar.calendarColor" canEdit="true" id="$calId" calType="0" isRemote="$isRemote">
                 <a href="javascript:void(0);" class="$calendar.calendarColor">
                 	<span class="ColorOpacity">
-                		<span class="IconCheckBox checkbox"></span>
+                		<span class="$css"></span>
                 	</span>
                 </a>
                 <a class="CalendarName" href="javascript:void(0);" title="$calendar.name">$calendar.name</a>
@@ -133,11 +136,13 @@
             if(calendar.getCalendarOwner() != null) {
               owner = calendar.getCalendarOwner() + "- " ;
             }
+            def css = "IconCheckBox checkbox";
+            if(UICalendarPortlet.isInSpace() && !uicomponent.isCalendarOfSpace(calId))  {css = "IconUnCheckBox checkbox";}
         %>
             <li class="CalendarItem CalendarItemShared ClearFix" calColor="$color" id="$calId" calType="1"  canEdit="<%=uicomponent.canEdit(Utils.getEditPerUsers(calendar), checkPerms)%>">
                 <a href="javascript:void(0);" class="$color">
                 	<span class="ColorOpacity">
-                		<span class="IconCheckBox checkbox"></span>
+                		<span class="$css"></span>
                 	</span>
                 </a>
                 <a class="CalendarName" href="javascript:void(0);" title="<%=owner + calendar.getName()%>"><%=owner + calendar.getName()%></a>
@@ -177,16 +182,18 @@
 
             </div>
           <ul class="UIVTabContent" >
-        <%  true
+        <%
             List calendarList = groupData.getCalendars() ;
             for(calendar in calendarList) {
               calId = calendar.getId() ;
               if(uicomponent.getChildById(calId) != null) {
+             def css = "IconCheckBox checkbox";
+             if((UICalendarPortlet.isInSpace() && !uicomponent.isCalendarOfSpace(calId)))  {css = "IconUnCheckBox checkbox";}
         %>
             <li class="CalendarItem CalendarItemPublic ClearFix"  calColor="$calendar.calendarColor" canEdit="<%=uicomponent.canEdit(calendar.getEditPermission(), checkPerms)%>" id="$calId" calType="2" >
                 <a href="javascript:void(0);" class="$calendar.calendarColor">
                 	<span class="ColorOpacity">
-                		<span class="IconCheckBox checkbox"></span>
+                		<span class="$css"></span>
                 	</span>
                 </a>
                 <a class="CalendarName" href="javascript:void(0);" title="<%=calendar.getName()%>"><%=calendar.getName()%></a>

@@ -1708,8 +1708,6 @@ UICalendarPortlet.prototype.filterByCalendar = function(){
     
     var checkBox = eXo.core.DOMUtil.findFirstDescendantByClass(this, "input", "checkbox");
     var checked = checkBox.checked;
-    window.console.info("============checked="+checked);
-    
     var imgChk = eXo.core.DOMUtil.findFirstDescendantByClass(this, "span", "checkbox");
     
     var uiCalendarViewContainer = eXo.calendar.UICalendarPortlet.getElementById("UICalendarViewContainer");
@@ -1744,7 +1742,6 @@ UICalendarPortlet.prototype.filterByCalendar = function(){
             events[i].style.display = stylEvent;
         }
     }
-    
     
     //UICalendarPortlet.runFilterByCategory();
     eXo.calendar.UICalendarPortlet.resortEvents();
