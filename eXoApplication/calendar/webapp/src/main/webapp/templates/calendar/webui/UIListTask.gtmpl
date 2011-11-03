@@ -59,7 +59,7 @@
                 %>
             <tr actionLink="$actionLink" onclick="eXo.calendar.UICalendarPortlet.listViewClickCallback(this);" class="UIListViewRow" style="$rowStyle" eventid="<%=event.getId()%>" calid="<%=event.getCalendarId()%>" calType=<%=event.getCalType()%>>
               <td><%uicomponent.renderField(uicomponent.getChildById(event.getId()))%></td>
-                  <td style="padding: 0px;"><div class="$attachIcon" >&nbsp;</div></td>
+                <td style="padding: 0px 0px 0px 7px;"><div class="$attachIcon" >&nbsp;</div></td>
                 <td class="text"><div class="<%=event.getPriority()%>PriorityIcon">&nbsp;</div></td>
                 <td class="text">
 				  <div class="EventDescription $color"><span></span></div>

@@ -57,10 +57,15 @@
             </thead>
             <tbody>
               <%
+			    def rowClass = "";
+				boolean even = true;
                 for (ContactData contact : uicomponent.getContacts()) {
                   checkboxField = uicomponent.getChildById(contact.getId());
+				   if (even) rowClass = "EvenRow";
+				   else rowClass = "OddRow";
+				   even = !even;
               %>
-                <tr>
+                <tr class="$rowClass">
                   <td class="BorderAddress">
                     <%
                       if (checkboxField != null) { uicomponent.renderField(checkboxField); }

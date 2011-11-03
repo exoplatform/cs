@@ -277,10 +277,6 @@
 	table-layout: fixed;
 }
 
-.UICalendarPortlet .UIPopupWindow .UIGrid td {
-	border: solid 1px #c7c7c7;
-}
-
 .UICalendarPortlet .UIForm .UIFormGrid td.FieldComponent {
   white-space: nowrap;
 }
@@ -410,10 +406,10 @@
 	height: 40px;
 }
 
-.UIGrid .OddRow{
+.UICalendarViewContainer .UIGrid .OddRow{
 	background: #fff;
 }
-.UIGrid .EvenRow{
+.UICalendarViewContainer .UIGrid .EvenRow{
 	background: #fff;
 }
 

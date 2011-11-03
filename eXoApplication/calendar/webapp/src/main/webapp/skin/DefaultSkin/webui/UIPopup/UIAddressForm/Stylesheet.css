@@ -21,36 +21,12 @@
   padding-top: 10px;
 }
 
-.UICalendarPortlet .UIInsertAddress .UIGrid th {
-  background: url('../background/CalendarBackground.gif') repeat-x center -162px;
-  line-height: 17px; height: 18px;
-  text-align: left;
-  padding: 0px 5px;
-}
-
-.UICalendarPortlet .UIInsertAddress .UIGrid th input {
-  text-align: center;
-  margin: 2px 0px 0px 0px;
-}
 
 .UICalendarPortlet .UIInsertAddress .UIGrid td input {
   text-align: center;
   margin: 2px 0px 0px 0px;
 }
 
-.UICalendarPortlet .UIInsertAddress .UIGrid tbody {
-  background: white;  
-  padding-bottom: 10px;
-}
-
-.UICalendarPortlet .UIInsertAddress .UIGrid td {
-  height: 23px;
-  padding: 4px 0px 0px 5px;
-}
-
-.UICalendarPortlet .UIInsertAddress .UIGrid .BorderAddress {
-  border-right: 1px solid #e8e8e8;
-}
 
 /*********************************************UISearch*****************************************/
 
@@ -102,32 +78,12 @@
   background: white;
   overflow-y: auto;
   overflow-x: hidden;
-  border: 1px solid #b7b7b7;
 }
 
-
-.UICalendarPortlet .UIInsertAddress .ListAddress .UIGrid {
-  border-top: none;
-  border-left: none;
-  border-right: none;
-}
 
 .UICalendarPortlet .UIInsertAddress .ListAddress .UIGrid .BlueDownArrowIcon{
   padding: 0px 10px 0px 4px; 
   width: 34px;
   float: left;
   cursor: pointer;
-}
-
-.UICalendarPortlet .UIInsertAddress .ListAddress .UIGrid thead {
-  border: none;
-}
-
-.UICalendarPortlet .UIInsertAddress .ListAddress .UIGrid th {
-  border-left: none;
-  border-top: none;
-}
-
-.UICalendarPortlet .UIInsertAddress .ListAddress .UIGrid td {
-  border-left: none;
 }

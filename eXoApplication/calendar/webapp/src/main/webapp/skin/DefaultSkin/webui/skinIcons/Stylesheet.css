@@ -237,14 +237,15 @@
 .UICalendarPortlet .MaximizeButton {
   background: url('icons/CalendarIcons.gif') no-repeat left -962px; /* orientation=lt */
   background: url('icons/CalendarIcons.gif') no-repeat right -962px; /* orientation=rt */
-  width: 17px; 
+  width: 23px; 
   height: 16px;
 }
 
 .UICalendarPortlet .MinimizeButton {
   background: url('icons/CalendarIcons.gif') no-repeat left -988px; /* orientation=lt */
   background: url('icons/CalendarIcons.gif') no-repeat right -988px; /* orientation=rt */
-  width: 17px; height: 16px;
+  width: 23px;
+  height: 16px;
 }
 
 .UICalendarPortlet .PrintCalendarIcon {

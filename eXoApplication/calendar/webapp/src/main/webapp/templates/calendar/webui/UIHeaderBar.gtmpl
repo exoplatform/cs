@@ -52,7 +52,7 @@ uicomponent.setSelectedCategory(uicomponent.getSelectedCategory()) ;
           <td>
             <div class="Title">
               <%=uiform.getLabel("Week")%>
-              <%=uicomponent.getCurrentWeek()%> 
+              <%=uicomponent.getCurrentWeek()%>,
               <% if (startDateOfWeek.get(Calendar.MONTH) == endDateOfWeek.get(Calendar.MONTH)) {%>
               <a href="<%=uicomponent.event('GotoDate',startDayViewAction)%>"><%=startDateOfWeek.get(Calendar.DAY_OF_MONTH)%></a> - 
               <a href="<%=uicomponent.event('GotoDate',endDayViewAction)%>"><%=endDateOfWeek.get(Calendar.DAY_OF_MONTH)%></a>
