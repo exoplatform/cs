@@ -140,13 +140,13 @@
               link = uicomponent.event(act,"id&$uicomponent.CALENDARID=calId&$uicomponent.CALTYPE=caltype") ;
               icon = act + "EventIcon" ;
             %>
-            <a href="$link">
+            <a class="MenuItem" style="display: block;" href="$link">
               <div class="ItemIcon $icon">
                  <%=_ctx.appRes("ContextMenu.label."+act)%>
                </div>
             </a>
             <%}%>
-            <a href="<%=uicomponent.event("ExportEvent","id&$uicomponent.CALENDARID=calId&$uicomponent.CALTYPE=caltype")%>">
+            <a class="MenuItem" style="display: block;" href="<%=uicomponent.event("ExportEvent","id&$uicomponent.CALENDARID=calId&$uicomponent.CALTYPE=caltype")%>">
               <div class="ItemIcon ExportCalendarIcon">
                  <%=_ctx.appRes("ContextMenu.label.ExportEvent")%>
                </div>
