@@ -63,7 +63,7 @@ UpdateList.prototype.update = function(obj){
 	  	} else if (viewing == "5") {
 	  		if (data.isUnread == "true") return ;
 	  	} else if (viewing == "6") {
-	  		if (data.hasAttach != "true") {
+	  		if (data.hasAttachment != "true") {
 	  			return ;	  			
 	  		}
 	  	}
@@ -110,7 +110,11 @@ UpdateList.prototype.update = function(obj){
 		  
 		  td = document.createElement("td");
 		  td.className = clazz;
-		  td.innerHTML = "<a " + href + "> </a>";
+		  if (data.hasAttachment == "true") {
+        td.innerHTML = "<a " + href + "><div class='AttachmentIcon'><span></span></div></a>"
+      } else {
+        td.innerHTML = "<a " + href + "> </a>";
+      }
 		  tr.appendChild(td);
 		  
 		  td = document.createElement("td");

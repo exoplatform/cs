@@ -33,6 +33,7 @@ public class Info {
   private String folders_;
   private String isRead_;
   private String priority_;
+  private String hasAttachment;
   
   public String getMsgId() { return id_; }
   public void setMsgId(String id) { id_ = id; }
@@ -63,4 +64,12 @@ public class Info {
   
   public String getFolders() { return folders_; }
   public void setFolders(String folders) { folders_ = folders; }
+  
+  public String getHasAttachment() {
+    return hasAttachment;
+  }
+  
+  public void setHasAttachment(String hasAttachment) {
+    this.hasAttachment = hasAttachment;
+  }
 }

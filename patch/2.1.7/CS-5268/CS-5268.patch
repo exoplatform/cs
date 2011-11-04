@@ -1,0 +1,83 @@
+Index: eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/impl/JCRDataStorage.java
+===================================================================
+--- eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/impl/JCRDataStorage.java	(revision 75340)
++++ eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/impl/JCRDataStorage.java	(working copy)
+@@ -96,6 +96,8 @@
+ 
+   private static final String  MAIL_SERVICE = "MailApplication";
+   
++  public static final String MAIL_HAS_ATTACHMENT_MIME_TYPE = "multipart/mixed";
++  
+   public JCRDataStorage(NodeHierarchyCreator nodeHierarchyCreator, RepositoryService repoService) {
+     nodeHierarchyCreator_ = nodeHierarchyCreator;
+     repoService_ = repoService;
+@@ -1264,7 +1266,9 @@
+         node.setProperty(Utils.MSG_HEADERS, values.toArray(new String[] {}));
+         long priority = MimeMessageParser.getPriority(msg);
+         node.setProperty(Utils.EXO_PRIORITY, priority);
+-        node.setProperty(Utils.EXO_HASATTACH, false);
++        
++        boolean isHasAttachment = msg.isMimeType(MAIL_HAS_ATTACHMENT_MIME_TYPE);
++        node.setProperty(Utils.EXO_HASATTACH, isHasAttachment);
+         node.save();
+       
+         if (infoObj != null && continuation != null) {
+@@ -1275,6 +1279,7 @@
+           infoObj.setSize(Utils.convertSize(msgSize));
+           infoObj.setPriority(String.valueOf(priority));
+           infoObj.setAccountId(accId);
++          infoObj.setHasAttachment(String.valueOf(isHasAttachment));
+           if (gc != null)
+             infoObj.setDate(gc.getTime().toString());
+           else if (sc != null)
+Index: eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/Info.java
+===================================================================
+--- eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/Info.java	(revision 75340)
++++ eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/Info.java	(working copy)
+@@ -33,6 +33,7 @@
+   private String folders_;
+   private String isRead_;
+   private String priority_;
++  private String hasAttachment;
+   
+   public String getMsgId() { return id_; }
+   public void setMsgId(String id) { id_ = id; }
+@@ -63,4 +64,12 @@
+   
+   public String getFolders() { return folders_; }
+   public void setFolders(String folders) { folders_ = folders; }
++  
++  public String getHasAttachment() {
++    return hasAttachment;
++  }
++  
++  public void setHasAttachment(String hasAttachment) {
++    this.hasAttachment = hasAttachment;
++  }
+ }
+Index: eXoApplication/mail/webapp/src/main/webapp/javascript/eXo/mail/UpdateList.js
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/javascript/eXo/mail/UpdateList.js	(revision 75340)
++++ eXoApplication/mail/webapp/src/main/webapp/javascript/eXo/mail/UpdateList.js	(working copy)
+@@ -63,7 +63,7 @@
+ 	  	} else if (viewing == "5") {
+ 	  		if (data.isUnread == "true") return ;
+ 	  	} else if (viewing == "6") {
+-	  		if (data.hasAttach != "true") {
++	  		if (data.hasAttachment != "true") {
+ 	  			return ;	  			
+ 	  		}
+ 	  	}
+@@ -110,7 +110,11 @@
+ 		  
+ 		  td = document.createElement("td");
+ 		  td.className = clazz;
+-		  td.innerHTML = "<a " + href + "> </a>";
++		  if (data.hasAttachment == "true") {
++        td.innerHTML = "<a " + href + "><div class='AttachmentIcon'><span></span></div></a>"
++      } else {
++        td.innerHTML = "<a " + href + "> </a>";
++      }
+ 		  tr.appendChild(td);
+ 		  
+ 		  td = document.createElement("td");

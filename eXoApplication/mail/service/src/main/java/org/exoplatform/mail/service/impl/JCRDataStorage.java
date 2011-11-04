@@ -96,6 +96,8 @@ public class JCRDataStorage implements DataStorage {
 
   private static final String  MAIL_SERVICE = "MailApplication";
   
+  public static final String MAIL_HAS_ATTACHMENT_MIME_TYPE = "multipart/mixed";
+  
   public JCRDataStorage(NodeHierarchyCreator nodeHierarchyCreator, RepositoryService repoService) {
     nodeHierarchyCreator_ = nodeHierarchyCreator;
     repoService_ = repoService;
@@ -1264,7 +1266,9 @@ public class JCRDataStorage implements DataStorage {
         node.setProperty(Utils.MSG_HEADERS, values.toArray(new String[] {}));
         long priority = MimeMessageParser.getPriority(msg);
         node.setProperty(Utils.EXO_PRIORITY, priority);
-        node.setProperty(Utils.EXO_HASATTACH, false);
+        
+        boolean isHasAttachment = msg.isMimeType(MAIL_HAS_ATTACHMENT_MIME_TYPE);
+        node.setProperty(Utils.EXO_HASATTACH, isHasAttachment);
         node.save();
       
         if (infoObj != null && continuation != null) {
@@ -1275,6 +1279,7 @@ public class JCRDataStorage implements DataStorage {
           infoObj.setSize(Utils.convertSize(msgSize));
           infoObj.setPriority(String.valueOf(priority));
           infoObj.setAccountId(accId);
+          infoObj.setHasAttachment(String.valueOf(isHasAttachment));
           if (gc != null)
             infoObj.setDate(gc.getTime().toString());
           else if (sc != null)
