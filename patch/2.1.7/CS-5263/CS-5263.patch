@@ -1,0 +1,166 @@
+Index: eXoApplication/contact/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/contact/ContactPortlet_fr.properties
+===================================================================
+--- eXoApplication/contact/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/contact/ContactPortlet_fr.properties	(revision 76088)
++++ eXoApplication/contact/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/contact/ContactPortlet_fr.properties	(working copy)
+@@ -1,15 +1,15 @@
+ javax.portlet.title=eXo Address Book
+ 
+-UIContactPopupWindow.title.AddNewContact=Contact
+-contactActionUIPopupWindow.title.UIAddressForm=Select Email
++UIContactPopupWindow.title.AddNewContact=Ajouter/Modifier Contact
++contactActionUIPopupWindow.title.UIAddressForm=Sélectionner email
+ UIContactPopupWindow.title.UICategoryForm=Carnet d'adresse
+ contactActionUIPopupWindow.title.UICategoryForm=Carnet d'adresse
+-UIContactPopupWindow.title.AddNewEvent=Add Event
++UIContactPopupWindow.title.AddNewEvent=Ajouter un événement
+ UIContactPopupWindow.title.ExportForm=Exporter les contacts
+ UIContactPopupWindow.title.ImportAddress=Importer des carnets d'adresse
+ UIContactPopupWindow.title.ImportContacts=Importer des contacts
+ UIContactPopupWindow.title.UIExportAddressBookForm=Exporter des carnets d'adresse
+-UIContactPopupWindow.title.UITagForm=Ajouter supprimer un tag
++UIContactPopupWindow.title.UITagForm=Ajouter/Supprimer un tag
+ contactActionUIPopupWindow.title.UIImageForm=Télécharger une image
+ contactActionUIPopupWindow.title.UIPopupContainer
+ UIContactPopupWindow.title.ContactDetails=Fiche de contact
+@@ -23,7 +23,7 @@
+ UIContactPopupWindow.title.UIPermissionContactForm=Partager le contact
+ UIContactPopupWindow.title.UIPermissionContactsForm=Partager les contacts
+ UIContactPopupWindow.title.UIMoveToPublicForm=Déplacer dans le carnet d'adresse public
+-UIContactPopupWindow.title.UIComposeForm=Envoi d'email
++UIContactPopupWindow.title.UIComposeForm=Envoyer un email
+ contactActionUIPopupWindow.title.UIComposeForm=Envoi d'email
+ 
+ #org.exoplatform.contact.webui.popup.UICategorySelect
+@@ -75,8 +75,8 @@
+ UIContactForm.label.mobilePhone=Mobile
+ UIContactForm.label.webPage=Site Internet
+ UIContactForm.label.note=Notes
+-UIContactForm.label.selectGroups=Selection de groupes
+-UIContactForm.label.editPermission=Permission de modifier
++UIContactForm.label.selectGroups=Sélectionner des groupes
++UIContactForm.label.editPermission=Editer permission
+ UIContactForm.tab.label.protileTab=Profil
+ UIContactForm.tab.label.imContactTab=Messagerie instantanée
+ UIContactForm.tab.label.homeTab=Personnel
+@@ -133,7 +133,7 @@
+ UIExportForm.msg.check-contact-required=Veuillez cocher les contacts à exporter.
+ UIExportForm.label.exportSelected=Exporter la sélection
+ UIExportForm.label.exportAll=Tout exporter
+-UIExportForm.label.export=Export
++UIExportForm.label.export=Exporter
+ UIExportForm.label.cancel=#{word.cancel}
+ UIExportForm.label.email=#{word.email}
+ UIExportForm.label.name=#{word.name}
+@@ -142,7 +142,7 @@
+ UIExportForm.label.checkAll=Tout sélectionner
+ UIExportForm.label.available=Disponible
+ UIExportForm.msg.manyContacts=Vous ne pouvez pas importer plus de {0} contacts à la fois.
+-UIExportForm.msg.deletedPer=Vous n'êtes pas autosié à effectuer cette action.
++UIExportForm.msg.deletedPer=Vous n'êtes pas autorisé(e) à effectuer cette action.
+ 
+ #org.exoplatform.contact.webui.popup.UIExportAddressBookForm
+ UIExportAddressBookForm.action.Cancel=#{word.cancel}
+@@ -249,8 +249,8 @@
+ UIContacts.label.mobile=Mobile
+ UIContacts.msg.contact-not-existed=Cette action n'a pu aboutir. Le contact n'existe plus.
+ UIContacts.msg.contact-deleted=Cette action n'a pu aboutir. Le contact n'existe plus.
+-UIContacts.msg.noeditpermission.detail=You have not edit permission for {0} contact. Please check again.
+-UIContacts.msg.noeditpermission=You have not edit permission. Please check again.
++UIContacts.msg.noeditpermission.detail=Vous n'avez pas la permission de modifier pour {0} contact. Veuillez vérifier.
++UIContacts.msg.noeditpermission=Vous n'avez pas la permission de modifier. Veuillez vérifier.
+ 
+ 
+ #org.exoplatform.contact.webui.popup.UIMoveContactsForm
+@@ -279,7 +279,7 @@
+ UIAddressBooks.label.exportAddress=Exporter
+ UIAddressBooks.label.personalAddress=Personnels
+ UIAddressBooks.label.publicAddress=Publics
+-UIAddressBooks.label.publicGroups=Public Groups
++UIAddressBooks.label.publicGroups=Groupes publics
+ UIAddressBooks.label.addContact=Ajouter
+ UIAddressBooks.label.copyContacts=Copier
+ UIAddressBooks.label.pasteContacts=Coller
+@@ -295,8 +295,8 @@
+ UIAddressBooks.label.collapse-expand=déplier/replier tout
+ UIAddressBooks.label.defaultAddName=Mes Contacts
+ UIAddressBooks.label.defaultAddDes=Mon carnet d'adresse personnel
+-UIAddressBooks.msg.removedPer=You do not have edit permission so you can not perform this action!
+-UIAddressBooks.label.collectedAddresses=Collected Addresses
++UIAddressBooks.msg.removedPer=Vous n'avez pas la permission de modifier. Veuillez vérifier.
++UIAddressBooks.label.collectedAddresses=Adresses rassemblées
+ 
+ #org.exoplatform.contact.webui.UITags
+ UITags.msg.confirm-delete=Confirmez-vous la supression de ce tag ?
+@@ -329,7 +329,7 @@
+ UIContactPreview.label.homeTitle=Maison
+ UIContactPreview.label.fax=(Fax)
+ UIContactPreview.label.email=Email :
+-UIContactPreview.label.more=more
++UIContactPreview.label.more=plus
+ UIContactPreview.label.im=IM
+ UIContactPreview.label.exoChat=eXo Chat :
+ UIContactPreview.label.google=Google Talk :
+@@ -339,7 +339,7 @@
+ UIContactPreview.label.icr=Icr :
+ UIContactPreview.label.skype=Skype :
+ UIContactPreview.label.icq=Icq :
+-UIContactPreview.label.hide=hide
++UIContactPreview.label.hide=masquer
+ UIContactPreview.label.phone=(Phone)
+ UIContactPreview.label.mobile=(Mobile)
+ UIContactPreview.label.phoneTitle=Phone
+@@ -347,11 +347,11 @@
+ UIContactPreview.label.note=Note
+ UIContactPreview.label.contactDetails=Fiche contact
+ UIContactPreview.label.viewFull=Voir entièrement
+-UIContactPreview.label.yearsOld=les ans vieux
++UIContactPreview.label.yearsOld=ans
+ UIContactPreview.label.alsoKnownAs=Aussi connu comme
+-UIContactPreview.action.print=Print
+-UIContactPreview.action.Cancel=Cancel
+-UIContactPreview.action.printPreview=Print preview
++UIContactPreview.action.print=Imprimer
++UIContactPreview.action.Cancel=Annuler
++UIContactPreview.action.printPreview=Aperçu avant impression
+ UIContactPreview.label.Male=masculin
+ UIContactPreview.label.Female=féminin
+ 
+@@ -373,7 +373,7 @@
+ UIActionBar.label.addressbooks=Carnets d'adresse
+ UIActionBar.label.tags=Tags
+ UIActionBar.label.details=Détails
+-UIActionBar.label.customLayoutView=Vue
++UIActionBar.label.customLayoutView=Vue personalisée
+ UIActionBar.label.contactsView=Vue
+ UIActionBar.label.layoutView=Affichage
+ UIActionBar.msg.cannot-changeView=Fermez la recherche pour changer de vue.
+@@ -414,7 +414,7 @@
+ #org.exoplatform.contact.webui.popup.UIUserSelector
+ UIUserSelector.label.selectUser=Selectionnez un utilisateur
+ UIUserSelector.label.selectGroup=Selectionnez un groupe
+-UIUserSelector.label.selectMemberShip=Selectionnez un rôles
++UIUserSelector.label.selectMemberShip=Selectionnez un rôle
+ 
+ #org.exoplatform.contact.webui.popup.UIComposeForm
+ UIComposeForm.msg.to-field-empty=A qui faut-il l'envoyer?
+@@ -426,9 +426,9 @@
+ UIComposeForm.label.from=De
+ UIComposeForm.label.to=A
+ UIComposeForm.label.subject=Objet
+-UIComposeForm.msg.save-sent-error=Une erreur est survenue à la sauvegarde dans le dossier Sent.
++UIComposeForm.msg.save-sent-error=Une erreur est survenue à la sauvegarde dans le dossier Envoyé.
+ UIComposeForm.msg.invalid-email=L'adresse email est invalide.
+-UIComposeForm.msg.cannot-send=The message could not be sent to the remote email server. Please try again. If the problem remains, please contact your system administrator.
++UIComposeForm.msg.cannot-send=Le message n'a pas pu être envoyé au serveur d'email distant. Veuillez réessayer. Si ce problème subsiste, veuillez contacter votre administrateur.
+ 
+ #org.exoplatform.contact.webui.popup.UIAddEditPermission
+ UIAddEditPermission.msg.confirm-delete=Confirmez vous la suppression de cette permission ?
+@@ -454,7 +454,7 @@
+ UISharedForm.label.UIPopupWindow=UISharedForm
+ UISharedForm.action.Save=#{word.save}
+ UISharedForm.action.Cancel=#{word.close}
+-UISharedForm.msg.empty-username=Choisissez avec qui partager ce contact.
++UISharedForm.msg.empty-username=Avec qui vous voulez partager ce contact?
+ UISharedForm.msg.not-exist-username={0} n'est pas un utilisateur à qui vous pouvez partager.
+ UISharedForm.msg.not-exist-group={0} n'est pas un groupe à qui vous pouvez partager.
+ UISharedForm.msg.cannot-change-username=Vous ne pouvez pas changer d'utilisateur à la modification d'un partage.
