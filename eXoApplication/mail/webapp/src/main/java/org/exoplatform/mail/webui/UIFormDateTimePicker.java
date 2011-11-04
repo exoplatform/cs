@@ -163,6 +163,11 @@ public class UIFormDateTimePicker extends UIFormInputBase<String>  {
     if(isDisplayTime_) return dateStyle_ + " " + timeStyle_ ;
     return dateStyle_ ;
   }
+  private String getLang() {
+	    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+	    Locale locale = context.getParentAppRequestContext().getLocale() ;
+	    return locale.getLanguage();
+}
   private DateFormat getFormater() {
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
     Locale locale = context.getParentAppRequestContext().getLocale() ;
@@ -175,7 +180,7 @@ public class UIFormDateTimePicker extends UIFormInputBase<String>  {
     context.getJavascriptManager().importJavascript("eXo.webui.UICalendar") ;
     context.getJavascriptManager().importJavascript("eXo.cs.UIDateTimePicker","/csResources/javascript/") ;
     Writer w = context.getWriter();
-    w.write("<input "+ disabled +" monthsName='"+ getMonthsName()+"' daysName='"+getDaysName()+"' format='" + getFormatStyle() + "' type='text' onfocus='eXo.cs.UIDateTimePicker.init(this,") ;
+    w.write("<input lang='"+getLang()+"' format='" + getFormatStyle() + "' type='text' onfocus='eXo.cs.UIDateTimePicker.init(this,") ;
     w.write(String.valueOf(isDisplayTime_));
     w.write(");' onkeyup='eXo.cs.UIDateTimePicker.show();' name='") ;
     w.write(getName()) ; w.write('\'') ;
