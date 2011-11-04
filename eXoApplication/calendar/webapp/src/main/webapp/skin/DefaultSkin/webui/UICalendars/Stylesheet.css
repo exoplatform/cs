@@ -34,6 +34,10 @@
   margin-bottom: 0px;
 }
 
+.UICalendarPortlet .UICalendars .MyCalendar{
+	width: 100%;
+}
+
 .UICalendarPortlet .UICalendars .Label {
   line-height: 26px;
   margin-left: 3px; /* orientation=lt */

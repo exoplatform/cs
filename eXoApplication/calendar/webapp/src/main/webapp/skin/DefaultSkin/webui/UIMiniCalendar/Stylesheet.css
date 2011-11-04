@@ -84,9 +84,9 @@
 }
 
 .UICalendarPortlet .UIMiniCalendar .DayList {
-  background: #ffffff;
+  background: #fff;
   padding: 3px;
-  font-weight: bold;
+
 }
 
 .UICalendarPortlet .UIMiniCalendar .DayList .UIGrid {
@@ -131,6 +131,7 @@
 
 .UICalendarPortlet .UIMiniCalendar .DayList .UIGrid .Today .MiniCalendarActions {
   border: solid 1px #c7c7c7;
+  font-weight: bold;
 }
 
 .UICalendarPortlet .UIMiniCalendar .WeekList .SundayTitle {

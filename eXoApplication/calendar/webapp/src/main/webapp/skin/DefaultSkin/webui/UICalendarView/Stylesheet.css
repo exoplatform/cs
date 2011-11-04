@@ -690,12 +690,12 @@
 }
 .ListBar select {
   width: 85px;
-  height: 18px;
+  height: 20px;
   font-size: 11px;
   border:solid 1px #c3c3c3;
-  border-radius: 3px;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
 }
 
 .ListBar a {
@@ -724,8 +724,8 @@
 .ListBar .EventCategory {
   float: right; /* orientation=lt */
   float: left; /* orientation=rt */
-  margin: 8px 6px 0px 3px; /* orientation=lt */
-  margin: 8px 3px 0px 6px; /* orientation=rt */
+  margin: 7px 6px 0px 3px; /* orientation=lt */
+  margin: 7px 3px 0px 6px; /* orientation=rt */
 }
 
 .UIListView table {
