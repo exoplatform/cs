@@ -1,5 +1,5 @@
 h1. Prerequisites {anchor:id=CSref.Prerequisites}
-{include:document="Prequisites.wiki"}
+{include:document="Prerequisites.wiki"}
 
 h1. Applications {anchor:id=CSref.Application}
 

@@ -2,7 +2,7 @@ There are some overridable components in eXo Collaboration so that you can contr
 
 h1. ContentDAO {anchor:id=CSref.ExtensionPoints.ContentDAO}
 
-{{ContentDAO}} is an overridable component used in the Content application ( or called RSS reader) of eXo Collaboration.
+_ContentDAO_ is an overridable component used in the Content application (or called RSS reader) of eXo Collaboration.
 
 You can find the configuration file at _WEB-INF/cs-extension/cs/content/content-service-configuration.xml_ with the declaration as below:
 
@@ -12,6 +12,7 @@ You can find the configuration file at _WEB-INF/cs-extension/cs/content/content-
   <type>org.exoplatform.content.service.impl.ContentDAOImpl</type>
 </component>
 {code}
+
 The example below is an example of plugin configuration:
 
 {code:xml}
@@ -35,9 +36,9 @@ The example below is an example of plugin configuration:
 
 
 h1. ContactLifeCycle {anchor:id=CSref.ExtensionPoints.ContactLifeCycle}
-{{ContactLifeCycle}} is an interface to extend the capabilities of eXo Platform. A {{ContactLifeCycle}} lets you be notified during the lifecycle of an address book's contact when a contact is added or modified.
+_ContactLifeCycle_ is an interface to extend the capabilities of eXo Platform. A _ContactLifeCycle_ lets you be notified during the lifecycle of an address book's contact when a contact is added or modified.
 
-An example of {{ContactLifeCycle}} has been implemented to integrate the Address Book application in the eXo Social's Spaces. See the following configuration at:  _ext/social-integration/src/main/resources/conf/portal/configuration.xml._
+An example of _ContactLifeCycle_ has been implemented to integrate the Address Book application in the eXo Social's Spaces. See the following configuration at:  _ext/social-integration/src/main/resources/conf/portal/configuration.xml._
 
 See the following example:
 
@@ -53,14 +54,14 @@ See the following example:
 {code}
 
 Details:
-{{ContactSpaceActivityPublisher}} implements {{ContactLifeCycle}}. This implementation publishes activities in the space activity stream to notify of new and updated contacts in the space address book.
+_ContactSpaceActivityPublisher_ implements _ContactLifeCycle_. This implementation publishes activities in the space activity stream to notify of new and updated contacts in the space address book.
 
 
 h1. Transport {anchor:id=CSref.ExtensionPoints.Transport}
 
-{{Transport}} is an overridable component used in the Chat application of eXo Collaboration.
+_Transport_ is an overridable component used in the Chat application of eXo Collaboration.
 
-This overridable component is used to help users add the protocol to the Chat application, such as: ICQ, YAHOO, MSN, XMPP, AIM, GTALk.
+This overridable component is used to help users add the protocol to the Chat application, such as: ICQ, Yahoo, MSN, XMPP, AIM, GTk.
 
 The Chat application of eXo Collaboration only uses the XMPP protocol that is implemented in this object "{{XMPPTransport}}".
 
@@ -83,4 +84,4 @@ See the following example:
 {code}
 
 Details:
-{{CalendarSpaceActivityPublisher}} implements {{EventLifeCycle}}. It writes activities in the space activity stream when events or tasks are added/modified.
+_CalendarSpaceActivityPublisher_ implements _EventLifeCycle_. It writes activities in the space activity stream when events or tasks are added/modified.

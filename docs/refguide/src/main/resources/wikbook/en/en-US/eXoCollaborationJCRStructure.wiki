@@ -15,123 +15,123 @@ The Calendar JCR Structure is divided into two main branches: one for public (ex
 The node type *{noformat}exo:calendar{noformat}* has the following properties:
 
 || Property name || Required type || Description ||
-| exo:id | String | Id of the calendar. |
-| exo:name | String | Name of the calendar. |
-| exo:description | String | Brief description of the calendar. |
-| exo:viewPermissions | String | List of users/groups having the view permissions. |
-| exo:editPermissions | String | List of users/groups having the edit permissions. |
-| exo:groups | String | List of user groups to which the calendar belongs. |
-| exo:categoryId | String | Id of the category containing the calendar. |
-| exo:calendarColor | String | Color name of the calendar that is defined in the _org.exoplatform.web__ ui.form.ext.UIFormColorPicker class (such as SkyBlue, PowderBlue). |
-| exo:calendarOwner | String | Name of the user creating the calendar. |
-| exo:locale | String | Location where the calendar is set in format of the uppercase ISO 3166 3-letter country code. |
-| exo:timeZone | String | Id of the time zone that is set by the user in compliance with the Java class: java.util.TimeZone. |
-| exo:publicUrl | String | The public ICAL link of the calendar. |
-| exo:privateUrl | String | The private ICAL link of the calendar. |
+| *exo:id | {{string}} | Id of the calendar. |
+| *exo:name | {{string}} | Name of the calendar. |
+| *exo:description | {{string}} | Brief description of the calendar. |
+| *exo:viewPermissions | {{string}} | List of users/groups having the view permissions. |
+| *exo:editPermissions | {{string}} | List of users/groups having the edit permissions. |
+| *exo:groups | {{string}} | List of user groups to which the calendar belongs. |
+| *exo:categoryId | {{string}} | Id of the category containing the calendar. |
+| *exo:calendarColor | {{string}} | Color name of the calendar that is defined in the _org.exoplatform.web__ ui.form.ext.UIFormColorPicker class (such as SkyBlue, PowderBlue). |
+| *exo:calendarOwner | {{string}} | Name of the user creating the calendar. |
+| *exo:locale | {{string}} | Location where the calendar is set in format of the uppercase ISO 3166 3-letter country code. |
+| *exo:timeZone | {{string}} | Id of the time zone that is set by the user in compliance with the Java class: java.util.TimeZone. |
+| *exo:publicUrl | {{string}} | The public ICAL link of the calendar. |
+| *exo:privateUrl | {{string}} | The private ICAL link of the calendar. |
 
 The node type *{noformat}exo:calendarEvent{noformat}* has the following properties:
 
 || Property name || Required type || Description ||
-| exo:id | String | Id of the event. |
-| exo:eventType | String | Type of the event, including Event and Task. |
-| exo:summary | String | Summary of the event. |
-| exo:location | String | Location where the event will take place. |
-| exo:taskDelegator | String | Name of the user being delegated the task. |
-| exo:description | String | Brief description of the event. |
-| exo:eventCategoryId | String | Id of the category containing the event. |
-| exo:eventCategoryName | String | Name of the category containing the event. |
-| exo:calendarId | String | Id of the calendar containing the event. |
-| exo:fromDateTime | Date | Start time of the event. |
-| exo:toDateTime | Date | End time of the event. |
-| exo:priority | String | The preference order of the event, including 4 values: none, low, normal, high. |
-| exo:isPrivate | Boolean | Define if the event is private or not. |
-| exo:eventState | String | State of the event which depends on each event type. |
-| exo:invitation | String | List of email addresses of users being invited to the event. This property is for the Event type only. |
-| exo:participant | String | List of users being invited to the event. This property is for the Event type only.|
-| exo:participantStatus | String | Status of the participant, including name and status value. |
-| exo:message | String | Message of the invitation email.  |
-| exo:repeat | String | Repetition type of the event, including: "norepeat", "daily", "weekly", "monthly", "yearly", "weekend", "workingdays". |
-| exo:sendOption | String | The option to notify users before sending the invitation via email: never (not sending all time), always (sending without asking) and ask (asking before sending). |
+| *exo:id | {{string}} | Id of the event. |
+| *exo:eventType | {{string}} | Type of the event, including Event and Task. |
+| *exo:summary | {{string}} | Summary of the event. |
+| *exo:location | {{string}} | Location where the event will take place. |
+| *exo:taskDelegator | {{string}} | Name of the user being delegated the task. |
+| *exo:description | {{string}} | Brief description of the event. |
+| *exo:eventCategoryId | {{string}} | Id of the category containing the event. |
+| *exo:eventCategoryName | {{string}} | Name of the category containing the event. |
+| *exo:calendarId | {{string}} | Id of the calendar containing the event. |
+| *exo:fromDateTime | {{date}} | Start time of the event. |
+| *exo:toDateTime | {{date}} | End time of the event. |
+| *exo:priority | {{string}} | The preference order of the event, including 4 values: none, low, normal, high. |
+| *exo:isPrivate | {{boolean}} | Define if the event is private or not. |
+| *exo:eventState | {{string}} | State of the event which depends on each event type. |
+| *exo:invitation | {{string}} | List of email addresses of users being invited to the event. This property is for the Event type only. |
+| *exo:participant | {{string}} | List of users being invited to the event. This property is for the Event type only.|
+| *exo:participantStatus | {{string}} | Status of the participant, including name and status value. |
+| *exo:message | {{string}} | Message of the invitation email.  |
+| *exo:repeat | {{string}} | Repetition type of the event, including: "norepeat", "daily", "weekly", "monthly", "yearly", "weekend", "workingdays". |
+| *exo:sendOption | {{string}} | The option to notify users before sending the invitation via email: never (not sending all time), always (sending without asking) and ask (asking before sending). |
 
 The node type *{noformat}exo:eventAttachment{noformat}* has the following properties:
 
 || Property name || Required type || Description ||
-| exo:fileName | String | Name of the attached file. |
+| *exo:fileName | {{string}} | Name of the attached file. |
 
 
 The node type *{noformat}exo:reminder{noformat}* has the following properties:
 
 || Property name || Required type || Description ||
-| exo:id | String | Id of the reminder. |
-| exo:eventId | String | The event id of the reminder. |
-| exo:creator | String | Define who creates the reminder. |
-| exo:alarmBefore | Long | Amount of time that the reminder message is sent before the event starts. |
-| exo:email | String | List of emails to which the reminder message is sent. |
-| exo:timeInterval | Long | Interval for resending the reminder message in minutes. |
-| exo:reminderType | String | The types of reminders, including email and popup. |
-| exo:fromDateTime | Date | Start time to send the reminder. |
-| exo:remindDateTime | Date | Time to send the reminder. |
-| exo:isRepeat | Boolean | Check if the reminder is repeated or not. |
-| exo:isOver | Boolean | Check if the reminder is expired or not. |
-| exo:summary | String | Summary of the reminder. |
-| exo:description | String | Brief description of the reminder. |
+| *exo:id | {{string}} | Id of the reminder. |
+| *exo:eventId | {{string}} | The event id of the reminder. |
+| *exo:creator | {{string}} | Define who creates the reminder. |
+| *exo:alarmBefore | {{long}} | Amount of time that the reminder message is sent before the event starts. |
+| *exo:email | {{string}} | List of emails to which the reminder message is sent. |
+| *exo:timeInterval | {{long}} | Interval for resending the reminder message in minutes. |
+| *exo:reminderType | {{string}} | The types of reminders, including email and popup. |
+| *exo:fromDateTime | {{date}} | Start time to send the reminder. |
+| *exo:remindDateTime | {{date}} | Time to send the reminder. |
+| *exo:isRepeat | {{boolean}} | Check if the reminder is repeated or not. |
+| *exo:isOver | {{boolean}} | Check if the reminder is expired or not. |
+| *exo:summary | {{string}} | Summary of the reminder. |
+| *exo:description | {{string}} | Brief description of the reminder. |
 
 
 The node type *{noformat}exo:calendarPublicEvent{noformat}* has the following properties:
 
 || Property name || Required type || Description ||
-| exo:id | String | Id of the public event. |
-| exo:eventType | String | Event type, including Task and Event. |
-| exo:calendarId | String | Calendar Id of the public event. |
-| exo:rootEventId | String | Id of each corresponding node: exo:calendarEvent. |
-| exo:fromDateTime | Date | Start time of the public event. |
-| exo:toDateTime | Date | End time of the public event. |
-| exo:participant | String | List of users being invited to the public event. |
-| exo:eventState | String | State of the public event, including: busy, available, outside. |
+| *exo:id | {{string}} | Id of the public event. |
+| *exo:eventType | {{string}} | Event type, including Task and Event. |
+| *exo:calendarId | {{string}} | Calendar Id of the public event. |
+| *exo:rootEventId | {{string}} | Id of each corresponding node: _{noformat}exo:calendarEvent{noformat}_. |
+| *exo:fromDateTime | {{date}} | Start time of the public event. |
+| *exo:toDateTime | {{date}} | End time of the public event. |
+| *exo:participant | {{string}} | List of users being invited to the public event. |
+| *exo:eventState | {{string}} | State of the public event, including: busy, available, outside. |
 
 
 The node type *{noformat}exo:calendarSetting{noformat}* has the following properties:
 
 || Property name || Required type || Description ||
-| exo:viewType | String | View type of the calendar. For more details, refer to the _org.exoplatform.calendar.service.__ CalendarSetting class. |
-| exo:timeInterval | Long | The interval for each UI display to be performed, for example dragging and dropping one event in the Calendar application. |
-| exo:weekStartOn | String | Define the start date of one week, complying with the _org.exoplatform.cal__ endar.service.CalendarSetting class. |
-| exo:dateFormat | String | Define the date format, including dd/MM/yyyy, dd-MM-yyyy, MM/dd/yyyy, and MM-dd-yyyy. |
-| exo:timeFormat | String | Define the time format, including "hh:mm a" and "HH:mm". |
-| exo:location | String | Location where the calendar is set in format of the uppercase ISO 3166 3-letter country code.  |
-| exo:timeZone | String | Id of the time zone, which is set by the user in compliance with the Java class: java.util.TimeZone. |
-| exo:showWorkingTime | Boolean | Check if the working period is displayed or not. |
-| exo:workingTimeBegin | String | Time to start working. This property only takes effect when exo:showWorkingTime is set to true.  |
-| exo:workingTimeEnd | String | Time to end working. This property only takes effect when exo:showWorkingTime is set to true. |
-| exo:defaultPrivateCalendars | String | List of the hidden private calendars. |
-| exo:defaultPublicCalendars | String | List of the public calendars hidden. |
-| exo:defaultSharedCalendars | String | List of the shared calendars hidden. |
-| exo:sharedCalendarsColors | String | Define the color of the shared calendar, which is in format of [calendar id]:[color name]. |
-| exo:sendOption | String | The option to notify users before sending an invitation via email: never (not sending all time), always (sending message without asking) and ask (asking before sending). |
+| *exo:viewType | {{string}} | View type of the calendar. For more details, refer to the _org.exoplatform.calendar.service.__ CalendarSetting class. |
+| *exo:timeInterval | {{long}} | The interval for each UI display to be performed, for example dragging and dropping one event in the Calendar application. |
+| *exo:weekStartOn | {{string}} | Define the start date of one week, complying with the _org.exoplatform.cal__ endar.service.CalendarSetting class. |
+| *exo:dateFormat | {{string}} | Define the date format, including dd/MM/yyyy, dd-MM-yyyy, MM/dd/yyyy, and MM-dd-yyyy. |
+| *exo:timeFormat | {{string}} | Define the time format, including "hh:mm a" and "HH:mm". |
+| *exo:location | {{string}} | Location where the calendar is set in format of the uppercase ISO 3166 3-letter country code.  |
+| *exo:timeZone | {{string}} | Id of the time zone, which is set by the user in compliance with the Java class: java.util.TimeZone. |
+| *exo:showWorkingTime | {{boolean}} | Check if the working period is displayed or not. |
+| *exo:workingTimeBegin | {{string}} | Time to start working. This property only takes effect when exo:showWorkingTime is set to true.  |
+| *exo:workingTimeEnd | {{string}} | Time to end working. This property only takes effect when exo:showWorkingTime is set to true. |
+| *exo:defaultPrivateCalendars | {{string}} | List of the hidden private calendars. |
+| *exo:defaultPublicCalendars | {{string}} | List of the public calendars hidden. |
+| *exo:defaultSharedCalendars | {{string}} | List of the shared calendars hidden. |
+| *exo:sharedCalendarsColors | {{string}} | Define the color of the shared calendar, which is in format of [calendar id]:[color name]. |
+| *exo:sendOption | {{string}} | The option to notify users before sending an invitation via email: never (not sending all time), always (sending message without asking) and ask (asking before sending). |
 
 
 The node type *{noformat}exo:eventCategory{noformat}* has the following properties:
 
 || Property name || Required type || Description ||
-| exo:id | String | Id of the category to which an event belongs. |
-| exo:name | String | Name of the category to which an event belongs. |
-| exo:description | String | Brief description of the category to which an event belongs. |
+| *exo:id | {{string}} | Id of the category to which an event belongs. |
+| *exo:name | {{string}} | Name of the category to which an event belongs. |
+| *exo:description | {{string}} | Brief description of the category to which an event belongs. |
 
 
 The node type *{noformat}exo:calendarCategory{noformat}* has the following properties:
 
 || Property name || Required type || Description ||
-| exo:id | String | Id of the category to which a calendar belongs. |
-| exo:name | String | Name of the category to which a calendar belongs. |
-| exo:description | String | Brief description of the category to which a calendar belongs. |
-| exo:calendarIds | String | List of calendar Ids belonging to the category. |
+| *exo:id | {{string}} | Id of the category to which a calendar belongs. |
+| *exo:name | {{string}} | Name of the category to which a calendar belongs. |
+| *exo:description | {{string}} | Brief description of the category to which a calendar belongs. |
+| *exo:calendarIds | {{string}} | List of calendar Ids belonging to the category. |
 
 
 The node type *{noformat}exo:rssData{noformat}* has the following properties:
 || Property name || Required type || Description ||
-| exo:baseUrl | String | Original link to the RSS file. |
-| exo:title | String | Title of the feed. |
-| exo:content | Binary | Content of the feed. |
+| *exo:baseUrl | {{string}} | Original link to the RSS file. |
+| *exo:title | {{string}} | Title of the feed. |
+| *exo:content | {{binary}} | Content of the feed. |
 
 
 h1. Chat JCR Structure {anchor:id=CSref.JCRStructure.Chat}
@@ -141,45 +141,45 @@ h1. Chat JCR Structure {anchor:id=CSref.JCRStructure.Chat}
 The node type *{noformat}lr:conversation{noformat}* has the following properties:
 
 || Property name || Required type || Description ||
-| lr:conversationstartDate | Date | Start date of the conversation. |
-| lr:conversationlastActiveDate | Date | Last date when the conversation is updated. |
+| *lr:conversationstartDate | {{date}} | Start date of the conversation. |
+| *lr:conversationlastActiveDate | {{date}} | Last date when the conversation is updated. |
 
 The node type *{noformat}lr:historicalmessage{noformat}* has the following properties:
 
 || Property name || Required type || Description ||
-| lr:messagefrom | String | Jabber Id of the user (or chat room) sending (or containing) the message respectively. |
-| lr:messageto | String | Jabber Id of the user (or chat room) to whom (to which) the message is sent. |
-| lr:messagetype | String | List of message types. For more details, refer to the _org.jivesoftware.__ smack.packet.Message.Type class.  |
-| lr:messagebody | String | Main content of the message.  |
-| lr:messagedateSend | Date | Date when the message was sent. |
-| lr:messagereceive | Boolean | Check if the message has been received or not. |
+| *lr:messagefrom | {{string}} | Jabber Id of the user (or chat room) sending (or containing) the message respectively. |
+| *lr:messageto | {{string}} | Jabber Id of the user (or chat room) to whom (to which) the message is sent. |
+| *lr:messagetype | {{string}} | List of message types. For more details, refer to the _org.jivesoftware.__ smack.packet.Message.Type class.  |
+| *lr:messagebody | {{string}} | Main content of the message.  |
+| *lr:messagedateSend | {{date}} | {{date}} when the message was sent. |
+| *lr:messagereceive | {{boolean}} | Check if the message has been received or not. |
 
 The node type *{noformat}lr:participantchat{noformat}* has the following properties:
 
 || Property name || Required type || Description ||
-| lr:participantchatjid | String | Jabber Id of the user. |
-| lr:participantchatusername | String | Username of the portal. |
+| *lr:participantchatjid | {{string}} | Jabber Id of the user. |
+| *lr:participantchatusername | {{string}} | Username of the portal. |
 
 
 The node type *{noformat}lr:interlocutor{noformat}* contains information regarding to the conversation between two users or of the chat room. It has the following properties:
 
 || Property name || Required type || Description ||
-| lr:conversationId | String | Id of the conversation which is the JCR node name of lr:conversation. |
-| lr:interlocutorjid | String | Jabber Id of the chat room or user. |
-| lr:interlocutorname | String | Username or name of the chat room. |
-| lr:interlocutorisRoom | Boolean | Define if the conversation is performed between two users or is of chat room. |
+| *lr:conversationId | {{string}} | Id of the conversation which is the JCR node name of lr:conversation. |
+| *lr:interlocutorjid | {{string}} | Jabber Id of the chat room or user. |
+| *lr:interlocutorname | {{string}} | Username or name of the chat room. |
+| *lr:interlocutorisRoom | {{boolean}} | Define if the conversation is performed between two users or is of chat room. |
 
 The node type *{noformat}lr:defaultpresencestatus{noformat}* has the following properties:
 
 || Property name || Required type || Description ||
-| lr:conversationlastActiveDate | Date | Date when the conversation is last updated. |
+| *lr:conversationlastActiveDate | {{date}} | The date when the conversation is last updated. |
 
 
 The node type *{noformat}lr:presencestatus{noformat}* contains information regarding to the current status of user. It has the following properties:
 
 || Property name || Required type || Description ||
-| lr:userid | String | Id of the user. |
-| lr:status | String | Current status of the user included in the _org.jivesoftware.smack.pack__ et.Presence.Type class. |
+| *lr:userid | {{string}} | Id of the user. |
+| *lr:status | {{string}} | Current status of the user included in the _org.jivesoftware.smack.pack__ et.Presence.Type class. |
 
 
 h1. Address Book JCR Structure {anchor:id=CSref.JCRStructure.AddressBook}
@@ -189,77 +189,77 @@ h1. Address Book JCR Structure {anchor:id=CSref.JCRStructure.AddressBook}
 The node type *{noformat}exo:contact{noformat}* contains information of each contact. It has the following properties:
 
 || Property name || Required type || Description ||
-| exo:id | String | Node name of the exo:contact property.  |
-| exo:fullName | String | Full name of the contact. |
-| exo:firstName | String | First name of the contact. |
-| exo:lastName | String | Last name of the contact. |
-| exo:nickName | String | Nickname of the contact. |
-| exo:gender | String | Gender of the contact. |
-| exo:birthday | Date | Birthday of the contact.|
-| exo:jobTitle | String | Job name of the contact. |
-| exo:emailAddress | String | Email address of the contact. |
-| exo:exoId | String | Id of the user in the Chat application of eXo Collaboration. |
-| exo:googleId | String | Google Id of the user. |
-| exo:msnId | String | MSN Id of the user. |
-| exo:aolId | String | AOL Id of the user. |
-| exo:yahooId | String | Yahoo Id of the user. |
-| exo:icrId | String | ICR Id of the user. |
-| exo:skypeId | String | Skype Id of the user. |
-| exo:icqId | String | ICQ Id of the user. |
-| exo:homeAddress | String | Home address of the contact. |
-| exo:homeCity | String | Home city of the contact.|
-| exo:homeState_province | String | Home state/province of the contact. |
-| exo:homePostalCode | String | Home postal code of the contact. |
-| exo:homeCountry | String | Home country of the contact. |
-| exo:homePhone1 | String | Primary home phone number of the contact. |
-| exo:homePhone2 | String | Secondary home phone number of the contact. |
-| exo:homeFax | String | Home fax of the contact. |
-| exo:personalSite | String | Personal site of the contact. |
-| exo:workAddress | String | Address where the contact works. |
-| exo:workCity | String | City where the contact works. |
-| exo:workState_province | String | State/province where the contact works. |
-| exo:workPostalCode | String | Postal code of the location where the contact works. |
-| exo:workCountry | String | Country where the contact works. |
-| exo:workPhone1 | String | Primary phone number at the contact's working location. |
-| exo:workPhone2 | String | Secondary phone number at the contact's working location. |
-| exo:workFax | String | Fax number at the contact's working location. |
-| exo:mobilePhone | String | Mobile phone of the contact. |
-| exo:webPage | String | Website of the contact. |
-| exo:note | String | Note of the contact. |
-| exo:categories | String | List of categories created by the user. |
-| exo:editPermissionUsers | String | List of users obtaining the edit permission. |
-| exo:viewPermissionUsers | String | List of users obtaining the view permission.  |
-| exo:editPermissionGroups | String | List of groups obtaining the edit permission. |
-| exo:viewPermissionGroups | String | List of groups obtaining the view permission. |
-| exo:tags | String | List of tag Ids which the contact has marked.|
-| exo:lastUpdated | Date | Time when the contact is last updated. |
-| exo:isOwner | Boolean | Define if the contact is created by the user or is available in the OrganizationService. If the value is set to false, the contact is created by the user. |
+| *exo:id | {{string}} | Node name of the exo:contact property.  |
+| *exo:fullName | {{string}} | Full name of the contact. |
+| *exo:firstName | {{string}} | First name of the contact. |
+| *exo:lastName | {{string}} | Last name of the contact. |
+| *exo:nickName | {{string}} | Nickname of the contact. |
+| *exo:gender | {{string}} | Gender of the contact. |
+| *exo:birthday | {{date}} | Birthday of the contact.|
+| *exo:jobTitle | {{string}} | Job name of the contact. |
+| *exo:emailAddress | {{string}} | Email address of the contact. |
+| *exo:exoId | {{string}} | Id of the user in the Chat application of eXo Collaboration. |
+| *exo:googleId | {{string}} | Google Id of the user. |
+| *exo:msnId | {{string}} | MSN Id of the user. |
+| *exo:aolId | {{string}} | AOL Id of the user. |
+| *exo:yahooId | {{string}} | Yahoo Id of the user. |
+| *exo:icrId | {{string}} | ICR Id of the user. |
+| *exo:skypeId | {{string}} | Skype Id of the user. |
+| *exo:icqId | {{string}} | ICQ Id of the user. |
+| *exo:homeAddress | {{string}} | Home address of the contact. |
+| *exo:homeCity | {{string}} | Home city of the contact.|
+| *exo:homeState_province | {{string}} | Home state/province of the contact. |
+| *exo:homePostalCode | {{string}} | Home postal code of the contact. |
+| *exo:homeCountry | {{string}} | Home country of the contact. |
+| *exo:homePhone1 | {{string}} | Primary home phone number of the contact. |
+| *exo:homePhone2 | {{string}} | Secondary home phone number of the contact. |
+| *exo:homeFax | {{string}} | Home fax of the contact. |
+| *exo:personalSite | {{string}} | Personal site of the contact. |
+| *exo:workAddress | {{string}} | Address where the contact works. |
+| *exo:workCity | {{string}} | City where the contact works. |
+| *exo:workState_province | {{string}} | State/province where the contact works. |
+| *exo:workPostalCode | {{string}} | Postal code of the location where the contact works. |
+| *exo:workCountry | {{string}} | Country where the contact works. |
+| *exo:workPhone1 | {{string}} | Primary phone number at the contact's working location. |
+| *exo:workPhone2 | {{string}} | Secondary phone number at the contact's working location. |
+| *exo:workFax | {{string}} | Fax number at the contact's working location. |
+| *exo:mobilePhone | {{string}} | Mobile phone of the contact. |
+| *exo:webPage | {{string}} | Website of the contact. |
+| *exo:note | {{string}} | Note of the contact. |
+| *exo:categories | {{string}} | List of categories created by the user. |
+| *exo:editPermissionUsers | {{string}} | List of users obtaining the edit permission. |
+| *exo:viewPermissionUsers | {{string}} | List of users obtaining the view permission.  |
+| *exo:editPermissionGroups | {{string}} | List of groups obtaining the edit permission. |
+| *exo:viewPermissionGroups | {{string}} | List of groups obtaining the view permission. |
+| *exo:tags | {{string}} | List of tag Ids which the contact has marked.|
+| *exo:lastUpdated | {{date}} | Time when the contact is last updated. |
+| *exo:isOwner | {{boolean}} | Define if the contact is created by the user or is available in the OrganizationService. If the value is set to false, the contact is created by the user. |
 
 
 The node type *{noformat}exo:contactGroup{noformat}* contains information of an address book. Each node type has the following properties:
 
 || Property name || Required type || Description ||
-| exo:id | String | Id of the address book. |
-| exo:name | String | Name of the address book. |
-| exo:description | String | Brief description of the address book. |
-| exo:editPermissionUsers | String | List of users having the permission to edit the address book. |
-| exo:viewPermissionUsers | String | List of users having the permission to view the address book. |
-| exo:editPermissionGroups | String | List of groups having the permission to edit the address book. |
-| exo:viewPermissionGroups | String | List of groups having the permission to view the address book. |
+| *exo:id | {{string}} | Id of the address book. |
+| *exo:name | {{string}} | Name of the address book. |
+| *exo:description | {{string}} | Brief description of the address book. |
+| *exo:editPermissionUsers | {{string}} | List of users having the permission to edit the address book. |
+| *exo:viewPermissionUsers | {{string}} | List of users having the permission to view the address book. |
+| *exo:editPermissionGroups | {{string}} | List of groups having the permission to edit the address book. |
+| *exo:viewPermissionGroups | {{string}} | List of groups having the permission to view the address book. |
 
 The node type *{noformat}exo:contactTag{noformat}* contains information of each tag. This node type includes the following properties:
 
 || Property name || Required type || Description ||
-| exo:id | String | Id of the tag. |
-| exo:name | String | Name of the tag. |
-| exo:description | String | Brief description of the tag. |
-| exo:color | String | Color of the tag which is defined in the _org.exoplatform.webui.form.ext__ .UIFormColorPicker class. |
+| *exo:id | {{string}} | Id of the tag. |
+| *exo:name | {{string}} | Name of the tag. |
+| *exo:description | {{string}} | Brief description of the tag. |
+| *exo:color | {{string}} | Color of the tag which is defined in the _org.exoplatform.webui.form.ext__ .UIFormColorPicker class. |
 
 The node type *{noformat}exo:contactShared{noformat}* contains references to each shared contact. It has the following properties:
 
 || Property name || Required type || Description ||
-| exo:sharedUserId | String | Name of the user sharing the contact. |
-| exo:sharedId | Reference | List of the references to shared contacts/address books. |
+| *exo:sharedUserId | {{string}} | Name of the user sharing the contact. |
+| *exo:sharedId | {{reference}} | List of the references to shared contacts/address books. |
 
 
 h1. Mail JCR Structure {anchor:id=CSref.JCRStructure.Mail}
@@ -268,105 +268,105 @@ h1. Mail JCR Structure {anchor:id=CSref.JCRStructure.Mail}
 
 The node type *{noformat}exo:account{noformat}* has the following properties:
 || Property name || Required type || Description ||
-| exo:id | String | Id of the account. |
-| exo:label | String | Name of the account. |
-| exo:userDisplayName | String | Screen name of the user. |
-| exo:emailAddress | String | Email address of the account. |
-| exo:emailReplyAddress | String | Email address of the account receiving replies.  |
-| exo:signature | String | Signature of the account. |
-| exo:description | String | Brief description of the account. |
-| exo:checkMailAuto | Boolean | Define if the mail is automatically checked after a given period or not. |
-| exo:emptyTrash | Boolean | Define if the trash needs to be cleaned up when exiting from the Mail application or not. |
-| exo:serverProperties | String | Information of the POP/IMAP server configuration. |
-| exo:smtpServerProperties | String | Information of the SMTP server configuration. |
-| exo:lastCheckedTime | Date | Time when the account was last checked. |
-| exo:checkAll | Boolean | Define if all folders of the mail are checked or not. |
-| exo:checkFromDate | Date | Get mails as from the given date only if the value of exo:serverProperties is set for configuring the IMAP server. |
-| exo:isSavePassword | Boolean | Define if the password is saved or not. |
-| exo:secureAuthsIncoming | String | Type of the incoming connection for security. Its values include starttls, ssl/tls. |
-| exo:secureAuthsOutgoing | String | Type of the outgoing connection for security. Its values include starttls, ssl/tls. |
-| exo:authMechsIncoming | String | Authentication mechanism of the incoming connections. Its values consist of ntlm, plain, login, digest-md5, kerberos/gssapi, cram-md5. |
-| exo:authMechsOutgoing | String | Authentication mechanism of the outgoing connections. Its values consist of ntlm, plain, login, digest-md5, kerberos/gssapi, cram-md5. |
-| exo:permissions | String | Permissions of delegators. |
+| *exo:id | {{string}} | Id of the account. |
+| *exo:label | {{string}} | Name of the account. |
+| *exo:userDisplayName | {{string}} | Screen name of the user. |
+| *exo:emailAddress | {{string}} | Email address of the account. |
+| *exo:emailReplyAddress | {{string}} | Email address of the account receiving replies.  |
+| *exo:signature | {{string}} | Signature of the account. |
+| *exo:description | {{string}} | Brief description of the account. |
+| *exo:checkMailAuto | {{boolean}} | Define if the mail is automatically checked after a given period or not. |
+| *exo:emptyTrash | {{boolean}} | Define if the trash needs to be cleaned up when exiting from the Mail application or not. |
+| *exo:serverProperties | {{string}} | Information of the POP/IMAP server configuration. |
+| *exo:smtpServerProperties | {{string}} | Information of the SMTP server configuration. |
+| *exo:lastCheckedTime | {{date}} | Time when the account was last checked. |
+| *exo:checkAll | {{boolean}} | Define if all folders of the mail are checked or not. |
+| *exo:checkFromDate | {{date}} | Get mails as from the given date only if the value of _exo:serverProperties_ is set for configuring the IMAP server. |
+| *exo:isSavePassword | {{boolean}} | Define if the password is saved or not. |
+| *exo:secureAuthsIncoming | {{string}} | Type of the incoming connection for security. Its values include starttls, ssl/tls. |
+| *exo:secureAuthsOutgoing | {{string}} | Type of the outgoing connection for security. Its values include starttls, ssl/tls. |
+| *exo:authMechsIncoming | {{string}} | Authentication mechanism of the incoming connections. Its values consist of ntlm, plain, login, digest-md5, kerberos/gssapi, cram-md5. |
+| *exo:authMechsOutgoing | {{string}} | Authentication mechanism of the outgoing connections. Its values consist of ntlm, plain, login, digest-md5, kerberos/gssapi, cram-md5. |
+| *exo:permissions | {{string}} | Permissions of delegators. |
 
 The node type *{noformat}exo:folder{noformat}* has the following properties:
 
 || Property name || Required type || Description ||
-| exo:id | String | Id of the folder. |
-| exo:name | String | Name of the folder. |
-| exo:label | String | Absolute path referring to the folder on the Mail server. |
-| exo:unreadMessages | Long | Number of unread messages in the folder. |
-| exo:totalMessages | Long | Total number of messages in the folder. |
-| exo:personal | Boolean | Define if the folder is created by one user or the Mail system. |
-| exo:folderType | Long | Type of folder, which is defined in the javax.mail.Folder class.  |
-| exo:lastStartCheckingTime | Date | Start time of the last check in the folder. |
-| exo:lastCheckedTime | Date | End time of the last check in the folder. |
+| *exo:id | {{string}} | Id of the folder. |
+| *exo:name | {{string}} | Name of the folder. |
+| *exo:label | {{string}} | Absolute path referring to the folder on the Mail server. |
+| *exo:unreadMessages | {{long}} | Number of unread messages in the folder. |
+| *exo:totalMessages | {{long}} | Total number of messages in the folder. |
+| *exo:personal | {{boolean}} | Define if the folder is created by one user or the Mail system. |
+| *exo:folderType | {{long}} | Type of folder, which is defined in the _javax.mail.Folder class_.  |
+| *exo:lastStartCheckingTime | {{date}} | Start time of the last check in the folder. |
+| *exo:lastCheckedTime | {{date}} | End time of the last check in the folder. |
 
 
 The node type *{noformat}exo:message{noformat}* has the following properties:
 || Property name || Required type || Description ||
-| exo:id | String | Id of the message. |
-| exo:uid | String | Id of the message on the IMAP server.  |
-| exo:inReplyToHeader | String | Id of the first message in the matching thread. |
-| exo:path | String | Absolute path of the exo:message type. |
-| exo:account | String | Id of the account. |
-| exo:from | String | Value given in the *From* field in the email message, containing information of the sender, such as full name and email. |
-| exo:to | String | Value given in the *To* field in the email message, containing information of the receiver, such as full name and email. |
-| exo:cc | String | Value given in the *CC* field in the email message, containing information of the receivers, such as full name and email. |
-| exo:replyto | String | Value given in the *Reply-To* field in the email message, such as emails. |
-| exo:isUnread | Boolean | Define if the email has been read or not. |
-| exo:subject | String | Subject of the email message that can be read from the *Subject* field. |
-| exo:body | String | Main content of the email message. |
-| exo:sendDate | Date | Date when the email message was sent. |
-| exo:receivedDate | Date | Date when the email message was received. |
-| exo:size | Long | Capacity of the email message in bytes. |
-| exo:contentType | String | Content type of the email message, for example: text/plain and text/html. |
-| exo:folders | String | List of folder Ids containing the email message. |
-| exo:tags | String | List of tag Ids marked in the email message. |
-| exo:star | Boolean | Define if the email message is starred or not. |
-| exo:hasAttach | Boolean | Define if any files are attached with the email message or not. |
-| exo:priority | Long | Preference order of the message with 3 default values: 1 = High, 3 = Normal, 5 = Low. |
-| exo:lastUpdateTime | Date | Time when the message was last updated. |
+| *exo:id | {{string}} | Id of the message. |
+| *exo:uid | {{string}} | Id of the message on the IMAP server.  |
+| *exo:inReplyToHeader | {{string}} | Id of the first message in the matching thread. |
+| *exo:path | {{string}} | Absolute path of the exo:message type. |
+| *exo:account | {{string}} | Id of the account. |
+| *exo:from | {{string}} | Value given in the *From* field in the email message, containing information of the sender, such as full name and email. |
+| *exo:to | {{string}} | Value given in the *To* field in the email message, containing information of the receiver, such as full name and email. |
+| *exo:cc | {{string}} | Value given in the *CC* field in the email message, containing information of the receivers, such as full name and email. |
+| *exo:replyto | {{string}} | Value given in the *Reply-To* field in the email message, such as emails. |
+| *exo:isUnread | {{boolean}} | Define if the email has been read or not. |
+| *exo:subject | {{string}} | Subject of the email message that can be read from the *Subject* field. |
+| *exo:body | {{string}} | Main content of the email message. |
+| *exo:sendDate | {{date}} | The date when the email message was sent. |
+| *exo:receivedDate | {{date}} | The date when the email message was received. |
+| *exo:size | {{long}} | Capacity of the email message in bytes. |
+| *exo:contentType | {{string}} | Content type of the email message, for example: text/plain and text/html. |
+| *exo:folders | {{string}} | List of folder Ids containing the email message. |
+| *exo:tags | {{string}} | List of tag Ids marked in the email message. |
+| *exo:star | {{boolean}} | Define if the email message is starred or not. |
+| *exo:hasAttach | {{boolean}} | Define if any files are attached with the email message or not. |
+| *exo:priority | {{long}} | Preference order of the message with 3 default values: 1 = High, 3 = Normal, 5 = Low. |
+| *exo:lastUpdateTime | {{date}} | Time when the message was last updated. |
 
 The node type *{noformat}exo:mailAttachment{noformat}* has the following property:
 || Property name || Required type || Description ||
-| exo:fileName | String | Name of the file attached in the mail. |
+| *exo:fileName | {{string}} | Name of the file attached in the mail. |
 
 
 The node type *{noformat}exo:mailtag{noformat}* has the following properties:
 || Property name || Required type || Description ||
-| exo:id | String | Tag id of the mail. |
-| exo:name | String | Name of the tag. |
-| exo:description | String | Brief description of the mail tag. |
-| exo:color | String | Color of the tag which is defined in the _org.exoplatform.webui.form.ext__ .UIFormColorPicker class. |
+| *exo:id | {{string}} | Tag id of the mail. |
+| *exo:name | {{string}} | Name of the tag. |
+| *exo:description | {{string}} | Brief description of the mail tag. |
+| *exo:color | {{string}} | Color of the tag which is defined in the _org.exoplatform.webui.form.ext__ .UIFormColorPicker class. |
 
 The node type *{noformat}exo:filter{noformat}* has the following properties:
 
 || Property name || Required type || Description ||
-| exo:id | String | Filter id which is a unique and randomized value.|
-| exo:name | String | Name of the filter which is defined by the user. |
-| {example}{example} {example}{example} exo:from {example}{example} exo:to {example}{example} exo:subject {example}{example} exo:body | String | Filter email messages by each field respectively:  {example}{example} * From {example}{example} * To {example}{example} * Subject {example}{example} * Body|
-| {example}{example} {example}{example} exo:fromCondition {example}{example} exo:toCondition {example}{example} exo:subjectCondition {example}{example} exo:bodyCondition | Long | Filter emails by the condition types set in each property respectively: {example}{example} * exo:from {example}{example} * exo:to {example}{example} * exo:subject {example}{example} * exo:body {example}{example} All these properties have two values: {example}{example} * 0 = returned messages contains the value set in the corresponding property. {example}{example} * 1 = do not contain the value set in the corresponding property. |
-| exo:applyTag | String | Apply the tag for the filtered email messages. |
-| exo:applyFolder | String | Apply the folder for the filtered email messages. |
-| exo:keepInbox | Boolean | Define if the email message is still kept in the Inbox folder or not. |
-| exo:applyForAll | Boolean | If the value is set to "true" into the exo:applyForAll property, the filter will be executed for all email messages. |
+| *exo:id | {{string}} | Filter id which is a unique and randomized value.|
+| *exo:name | {{string}} | Name of the filter which is defined by the user. |
+| {example}{example} {example}{example} exo:from {example}{example} exo:to {example}{example} exo:subject {example}{example} exo:body | {{string}} | Filter email messages by each field respectively:  {example}{example} * From {example}{example} * To {example}{example} * Subject {example}{example} * Body|
+| {example}{example} {example}{example} exo:fromCondition {example}{example} exo:toCondition {example}{example} exo:subjectCondition {example}{example} exo:bodyCondition | {{long}} | Filter emails by the condition types set in each property respectively: {example}{example} * exo:from {example}{example} * exo:to {example}{example} * exo:subject {example}{example} * exo:body {example}{example} All these properties have two values: {example}{example} * 0 = returned messages contains the value set in the corresponding property. {example}{example} * 1 = do not contain the value set in the corresponding property. |
+| *exo:applyTag | {{string}} | Apply the tag for the filtered email messages. |
+| *exo:applyFolder | {{string}} | Apply the folder for the filtered email messages. |
+| *exo:keepInbox | {{boolean}} | Define if the email message is still kept in the Inbox folder or not. |
+| *exo:applyForAll | {{boolean}} | If the value is set to "true" into the exo:applyForAll property, the filter will be executed for all email messages. |
 
 
 The node type *{noformat}exo:mailSetting{noformat}* has the following properties:
 
 || Property name || Required type || Description ||
-| exo:numberMsgPerPage | Long | Number of messages displayed in one page. |
-| exo:formatAsOriginal | Boolean | Define if the email message got from the mail server is kept in the original format or not. |
-| exo:replyWithAttach | Boolean | Make the original message as the attachment before replying or not. |
-| exo:forwardWithAttach | Boolean | Make the original message as the attachment before forwarding or not. |
-| exo:prefixMsgWith | String | Prefix for the message. |
-| exo:periodCheckAuto | Long | Time interval to check the email messages automatically. |
-| exo:defaultAccount | String | Id of the user account that is displayed by default when the user logged in the Mail application.  |
-| exo:useWysiwyg | String | Define the Wysiwyg editor is used or not. |
-| exo:saveMsgInSent | Boolean | Define the sent email message is saved to the Sent folder or not. |
-| exo:layout | Long | Type of layout which is displayed to the user. |
-| exo:returnReceipt | Long | Action type of the user when receiving the "return receipt" to confirm the arrival of one email message, including: 0 = ask, 1 = never, 3 = always. |
+| *exo:numberMsgPerPage | {{long}} | Number of messages displayed in one page. |
+| *exo:formatAsOriginal | {{boolean}} | Define if the email message got from the mail server is kept in the original format or not. |
+| *exo:replyWithAttach | {{boolean}} | Make the original message as the attachment before replying or not. |
+| *exo:forwardWithAttach | {{boolean}} | Make the original message as the attachment before forwarding or not. |
+| *exo:prefixMsgWith | {{string}} | Prefix for the message. |
+| *exo:periodCheckAuto | {{long}} | Time interval to check the email messages automatically. |
+| *exo:defaultAccount | {{string}} | Id of the user account that is displayed by default when the user logged in the Mail application. |
+| *exo:useWysiwyg | {{string}} | Define the Wysiwyg editor is used or not. |
+| *exo:saveMsgInSent | {{boolean}} | Define the sent email message is saved to the Sent folder or not. |
+| *exo:layout | {{long}} | Type of layout which is displayed to the user. |
+| *exo:returnReceipt | {{long}} | Action type of the user when receiving the "return receipt" to confirm the arrival of one email message, including: 0 = ask, 1 = never, 3 = always. |
 
 h1. RSS JCR Structure {anchor:id=CSref.JCRStructure.RSS}
 
@@ -374,10 +374,10 @@ h1. RSS JCR Structure {anchor:id=CSref.JCRStructure.RSS}
 
 The node type *{noformat}exo:content{noformat}* has the following properties:
 || Property name || Required type || Description ||
-| id | String | Id of the content. |
-| ownerType | String | Type of the owner. Its default value is user. |
-| ownerId | String | User Id of owner. |
-| dataType | String | Type of data. |
-| data | String | XML string of the content navigation. |
-| createdDate | Date | Created date of the content. |
-| modifiedDate | Date | Modified date of the content. |
+| id | {{string}} | Id of the content. |
+| ownerType | {{string}} | Type of the owner. Its default value is user. |
+| ownerId | {{string}} | User Id of owner. |
+| dataType | {{string}} | Type of data. |
+| data | {{string}} | XML string of the content navigation. |
+| createdDate | {{date}} | Created date of the content. |
+| modifiedDate | {{date}} | Modified date of the content. |

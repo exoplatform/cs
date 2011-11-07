@@ -30,7 +30,7 @@ h2. Calendar Configuration {anchor:id=CSref.Configuration.CalendarConfiguration}
 
 h3. NewUserListener {anchor:id=CSref.Configuration.Calendar.NewUserListener}
 
-Each user can have a default personal calendar created. Use the NewUserListener to configure that. To use the plug-in in the component configuration, you must use the target-component:
+Each user can have a default personal calendar created. Use the _NewUserListener_ to configure that. To use the plug-in in the component configuration, you must use the target-component:
 
 {code:xml}
 <target-component>org.exoplatform.services.organization.OrganizationService</target-component>
@@ -123,31 +123,31 @@ The configuration is applied mainly in extension _/webapp/src/main/webapp/WEB-IN
 
 Details:
 
-* *Name*: {{calendar.new.user.event.listener}} - The unique key to avoid duplicate names. Users can change it.
-* *Set-method*: {{addListenerPlugin}} - The function is executed  at the target of the component to register NewUserListener.
-* *Type*: _{{org.exoplatform.calendar.service.impl.NewUserListener}} -  The class is set up to execute the creation of database.
+* *Name*: _calendar.new.user.event.listener_ - The unique key to avoid duplicate names. Users can change it.
+* *Set-method*: _addListenerPlugin_ - The function is executed  at the target of the component to register _NewUserListener_.
+* *Type*: _org.exoplatform.calendar.service.impl.NewUserListener_ -  The class is set up to execute the creation of database.
 * *Description*: It is a plug-in used to create default personal calendars. 
 
 
 See the details about the init-params of the component in the following table:
 
-||Value-params || Description || Possible value|| Default Value ||
-|*defaultEventCategories*| Default event categories for users. | {{ String (Comma separated list of category names)}} | {{Meeting,Calls,Clients,Holiday,Anniversary }}|
-|*defaultCalendarCategory*| Name of the calendar group. | {{String }} | {{Default }}|
-|*viewType*| Default view after user logins and goes to Calendar portlet. | {{0-6 (see below) }} | {{1}}|
-|*timeInterval*| The time unit interval when you drag and move the event (in Day view and Week view only). | {{integer in minutes }} | {{15}}|
-|*weekStartOn*| Day to use as the beginning of the week. It only affects the Week view. | {{1-7 (see below) }} | {{2}}|
-|*dateFormat*| The display format for dates. | {{valid Java Date format }} | {{MM/dd/yyyy}}|
-|*timeFormat*| The display format for time. | {{ valid Java Date format}} | {{HH:mm }}|
-|*localeId*| ID of the geographic locale. | {{valid locale ID}} | {{BEL}}|
-|*timezoneIds*| User time zone. | {{valid TimeZone id}} | {{Europe }}|
-|*baseUrlForRss*| The url to publish the RSS content. | {{none }} | {{none}}|
-|*isShowWorkingTime*| Indicate if the working time should be hilighted in the Day view. | {{true/false }} | {{false}}|
-|*workingTimeBegin*| The start time in working time. | {{time in timeFormat}} | {{08:00}}|
-|*workingTimeEnd*| The end time in working time. | {{time in timeFormat}} | {{18:00}}|
-|*ignoredUsers*| Definition users to ignore create the default calendar. | {{user id, use multiple by each line }} | {{demo/marry }}|
+||Value-params || Possible value|| Default Value || Description ||
+|*defaultEventCategories*| {{ String (Comma separated list of category names)}} | {{Meeting,Calls,Clients,Holiday,Anniversary }}| Default event categories for users. |
+|*defaultCalendarCategory*| {{string }} | {{Default }} | Name of the calendar group. |
+|*viewType*| {{0-6 (see below) }} | {{1}} | Default view after user logins and goes to Calendar portlet. |
+|*timeInterval*| {{integer in minutes }} | {{15}} | The time unit interval when you drag and move the event (in Day view and Week view only). |
+|*weekStartOn*| {{1-7 (see below) }} | {{2}}| Day to use as the beginning of the week. It only affects the Week view. |
+|*dateFormat*| {{valid Java Date format }} | {{MM/dd/yyyy}} | The display format for dates. |
+|*timeFormat*| {{ valid Java Date format}} | {{HH:mm }} | The display format for time. |
+|*localeId*| {{valid locale ID}} | {{BEL}} | ID of the geographic locale. |
+|*timezoneIds*| {{valid TimeZone id}} | {{Europe }} | User time zone. |
+|*baseUrlForRss*| {{none }} | {{none}} | The url to publish the RSS content. |
+|*isShowWorkingTime*| {{true/false }} | {{false}}| Indicate if the working time should be hilighted in the Day view. |
+|*workingTimeBegin*| {{time in timeFormat}} | {{08:00}} | The start time in working time. |
+|*workingTimeEnd*| {{time in timeFormat}} | {{18:00}} | The end time in working time. |
+|*ignoredUsers*| {{user id, use multiple by each line }} | {{demo/marry }}| Definition users to ignore create the default calendar. |
 
-*viewType* parameter is encoded by a number as follow:
+_viewType_ parameter is encoded by a number as follow:
 
 0 : Day view
 
@@ -223,18 +223,18 @@ The configuration is applied mainly in _extension/webapp/src/main/webapp/WEB-INF
 
 Details:
 
-* *Name*: {{calendar.new.group.event.listener}} is the unique key to avoid duplicate names. Users can change it.
-* *Set-method*: {{addListenerPlugin}} is the function is executed  at the target of the component to register NewGroupListener.
-* *Type*: {{org.exoplatform.calendar.service.impl.NewGroupListener}} is the class set up to execute the creation of database.
+* *Name*: _calendar.new.group.event.listener_ is the unique key to avoid duplicate names. Users can change it.
+* *Set-method*: _addListenerPlugin_ is the function is executed  at the target of the component to register _NewGroupListener_.
+* *Type*: _org.exoplatform.calendar.service.impl.NewGroupListener_ is the class set up to execute the creation of database.
 * *Description*: It is a plug-in used to create default group calendars.
 
 See the details about the init-params of the component in the following table:
-|| Value-params || Description || Possible values || Default values ||
-| *defaultEditPermission* | The default permission assigned to membership in a specific group to edit calendars and events/tasks of the calendar. | {{User id }} (Multi value membership, use coma (,) to split values) | {{*.* means that all members in that group can  modify and add, remove a calendar, events/tasks of the calendar}}|
-| *defaultViewPermission* | The default permission assigned to membership in a specific group to view a calendar and events /tasks of the calendar. }} | {{ User id }} (Multi value membership, use coma (,) to split values) | {{*.* means that all members in that group can view this calendar and all the events/tasks of this calendar.}}|
-| *defaultLocale* | The default locale of the calendar. | {{Valid locade id}} | {{BEL (see more locale ids http://userpage.chemie.fu-berlin.de/diverse/doc/ISO_3166.html )}}|
-| *defaultTimeZone* | The default time zone of the calendar. | {{Valid timezone id}} | {{Europe/Brussels (see more for timeZone ids http://www.unicode.org/cldr/data/docs/design/formatting/zone_log.html#windows_ids)}}|
-| *ignoredGroups* | Definition group to ignore create the default calendar. | {{ Group id (use line to define multiple value)}} | {{/platform/guests}}|
+|| Value-params || Possible values || Default values || Description ||
+| *defaultEditPermission* | {{User id }} (Multi value membership, use coma (,) to split values) | {{*.* means that all members in that group can  modify and add, remove a calendar, events/tasks of the calendar}}| The default permission assigned to membership in a specific group to edit calendars and events/tasks of the calendar. |
+| *defaultViewPermission* | {{ User id }} (Multi value membership, use coma (,) to split values) | {{*.* means that all members in that group can view this calendar and all the events/tasks of this calendar.}}| The default permission assigned to membership in a specific group to view a calendar and events /tasks of the calendar. }} |
+| *defaultLocale* | {{Valid locade id}} | {{BEL (see more locale ids http://userpage.chemie.fu-berlin.de/diverse/doc/ISO_3166.html )}}| The default locale of the calendar. |
+| *defaultTimeZone* | {{Valid timezone id}} | {{Europe/Brussels (see more for timeZone ids http://www.unicode.org/cldr/data/docs/design/formatting/zone_log.html#windows_ids)}}| The default time zone of the calendar. |
+| *ignoredGroups* | {{ Group id (use line to define multiple value)}} | {{/platform/guests}}| Definition group to ignore create the default calendar. |
 
 
 h3. NewMembershipListener {anchor:id=CSref.Configuration.NewGroup.NewMembershipListener}
@@ -297,17 +297,18 @@ Details:
 * *Name*: {{RecordsJob}} is the name of a schedule job.
 * *Set-method*: {{addPeriodJob}} is the plug-in registering method.
 * *Type*: {{org.exoplatform.calendar.service.ReminderPeriodJob}} is a class that executes to transfer the data into database of Job Scheduler.
-* *Description*: Add email reminder job to the JobSchedulerService.
+* *Description*: Add email reminder job to the _JobSchedulerService_.
 
 See the details about the init-params of the component in the following table:
+
 || Properties-param || Description || Property names || Description || Possible values || Default values ||
-| *job.info* | Save the monitor data  periodically. | {{jobName}} | The name of job | {{String}} | {{ReminderJob}}|
-| ** |  | {{groupName}} | The name of group job. | {{String}} | {{CollaborationSuite}} |
+| *job.info* | Save the monitor data  periodically. | {{jobName}} | The name of job. | {{string}} | {{ReminderJob}}|
+| ** |  | {{groupName}} | The name of group job. | {{string}} | {{CollaborationSuite}} |
 | ** |  | {{job}} | The name of actual job class. | {{Class path}} | {{org.exoplatform.calendar.service.ReminderJob}} |
-| ** |  | {{repeatCount}} | How many times to run this job. | {{Long}} | {{0, ( use '0' which means 'run forever)}}  |
-| ** |  | {{period}} | The time interval (millisecond) between job executions. | {{Long}} | {{180000}} |
-| ** |  | {{startTime}} | The time the job starts to run. | {{Integer}} | {{+0}} |
-| ** |  | {{endTime}} | The time the job ends to run. | {{Integer}} | {{none}} |
+| ** |  | {{repeatCount}} | How many times to run this job. | {{long}} | {{0, ( use '0' which means 'run forever)}}  |
+| ** |  | {{period}} | The time interval (millisecond) between job executions. | {{long}} | {{180000}} |
+| ** |  | {{startTime}} | The time the job starts to run. | {{integer}} | {{+0}} |
+| ** |  | {{endTime}} | The time the job ends to run. | {{integer}} | {{none}} |
 
 
 h3. PopupReminderPeriodJob {anchor:id=CSref.Configuration.PopupReminderPeriodJob}
@@ -349,25 +350,26 @@ The configuration is applied in _extension/webapp/src/main/webapp/WEB-INF/cs-ext
 
 Details:
 
-* *Name*: {{PopupRecordsJob}} is the name of the job. 
-* *Set-method*: {{addPeriodJob}} is the plug-in registering method.
-* *Type*: {{org.exoplatform.calendar.service.PopupReminderPeriodJob}} is a class that executes to transfer the data into database of Job Scheduler.
-* *Description*: Add popup reminder job to the JobSchedulerService.
+* *Name*: _PopupRecordsJob_ is the name of the job. 
+* *Set-method*: _addPeriodJob_ is the plug-in registering method.
+* *Type*: _org.exoplatform.calendar.service.PopupReminderPeriodJob_ is a class that executes to transfer the data into database of Job Scheduler.
+* *Description*: Add popup reminder job to the _JobSchedulerService_.
 
 See the details about the init-params of the component in the following table:
-|| Properties-param || Description || Property names || Description || Possible values || Default values ||
-| *job.info* | Save the monitor data  periodically. | {{jobName}} | The name of job | {{String}} | {{PopupReminderJob}}|
-| ** | {{}} | {{groupName}} | The name of group job. | {{String}} | {{CollaborationSuite}} |
-| ** | {{}} | {{job}} | The name of actual job class. | {{Class path}} | {{org.exoplatform.calendar.service.PopupReminderJob}} |
-| ** | {{}} | {{repeatCount}} | How many times to run this job. | {{Long}} | {{0, ( use '0' which means 'run forever)}} |
-| ** | {{}} | {{period}} | The time interval (millisecond) between job executions. | {{Long}} | {{6000}} |
-| ** | {{}} | {{startTime}} | The time the job starts to run. | {{Long}} | {{+0}} |
-| ** | {{}} | {{endTime}} | The time the job ends to run. | {{Integer}} | {{None}} |
-| *popupreminder.info* | save the monitor data  periodically. | {{portalName}} | The name of the portal| {{String}} | {{portal}} |‎‏
+
+|| Properties-param || Property names || Description || Possible values || Default values || Description ||
+| *job.info* | {{jobName}} | The name of job | {{string}} | {{PopupReminderJob}}| Save the monitor data periodically. |
+| ** | {{groupName}} | | {{string}} | {{CollaborationSuite}} | The name of group job. |
+| ** | {{job}} | | {{Class path}} | {{org.exoplatform.calendar.service.PopupReminderJob}} | The name of actual job class. |
+| ** | {{repeatCount}} | | {{long}} | {{0, ( use '0' which means 'run forever')}} | How many times this job will run. |
+| ** | {{period}} | {{long}} | | {{6000}} | The time interval (milliseconds) between each job executions. |
+| ** | {{startTime}} | {{long}} | | {{+0}} | The time the job starts. |
+| ** | {{endTime}} | {{integer}} | | {{None}} | The time the job ends. |
+| *popupreminder.info* | {{portalName}} | The name of the portal| {{string}} | {{portal}} |‎‏ Save the monitor data  periodically. |
 
 h2. AddActionsPlugin {anchor:id=CSref.Configuration.AddActionsPlugin}
 The configuration of the AddActionsPlugin is found in _WEB-INF/cs-extension/cs/webservice/webservice-configuration.xml_
-It is used to register the listener named {{org.exoplatform.webservice.cs.LastUpdateAction}} and it is executed, basing on eventTypes.
+It is used to register the listener named _org.exoplatform.webservice.cs.LastUpdateAction_ and it is executed, basing on _eventTypes_.
 
 {code:xml}
 <component>
@@ -407,13 +409,13 @@ It is used to register the listener named {{org.exoplatform.webservice.cs.LastUp
 </component>
 {code}
 
-* *object-param*: {{Actions}} is the name of the object.
-* *object type*: {{org.exoplatform.services.jcr.impl.ext.action.AddActionsPlugin$ActionsConfig}} is a class used to register the following field names in the table below:
+* *object-param*: _Actions_ is the name of the object.
+* *object type*: _org.exoplatform.services.jcr.impl.ext.action.AddActionsPlugin$ActionsConfig_ is a class used to register the following field names in the table below:
 
-|| Field name || Description || String ||
-| *eventTypes*| The type of the event. | {{addNode,changeProperty}} |
-| *nodeTypes* | The type of the node. | {{exo:calendarEvent}}|
-| *actionClassName* | The registration class to execute the actions that the plug-in requires. | {{org.exoplatform.webservice.cs.LastUpdateAction}} |
+|| Field name || String || Description ||
+| *eventTypes*| {{addNode,changeProperty}} | The type of the event. |
+| *nodeTypes* | {{exo:calendarEvent}}| The type of the node. |
+| *actionClassName* |  {{org.exoplatform.webservice.cs.LastUpdateAction}} | The registration class to execute the actions that the plug-in requires. |
  
 h2. Chat Configuration {anchor:id=CSref.Configuration.ChatConfiguration}
 The Chat congiguration is applied in _/extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/chat/chat-service-configuration.xml_.
@@ -452,22 +454,22 @@ h3. HistoryPeriodJob {anchor:id=CSref.Configuration.HistoryPeriodJob}
 
 Details:
 
-* *Name*: {{ChatRecordsJob}} is the name of the job.
-* *Set-method*: {{addPeriodJob}} is the plug-in registering method.
-* *Type*: {{org.exoplatform.services.xmpp.connection.impl.HistoryPeriodJob}} is a class that executes to transfer the data into the database of Job Scheduler.
+* *Name*: _ChatRecordsJob_ is the name of the job.
+* *Set-method*: _addPeriodJob_ is the plug-in registering method.
+* *Type*: _org.exoplatform.services.xmpp.connection.impl.HistoryPeriodJob_ is a class that executes to transfer the data into the database of Job Scheduler.
 * *Description*: It is used to save chat messages from Openfire Server to History.
 
 See the details about the init-params of the component in the following table:
 
-|| Properties-param || Description || Property names || Description || Possible values || Default values ||
-| *job.info* | Save the monitor data  periodically. | {{jobName}} | The name of job | {{String}} | {{messageToHistoricalMessageJob}}|
-| ** |  | {{groupName}} | The name of group name. | {{String}} | {{CollaborationSuite}} |
-| ** |  | {{job}} | The name of actual job class. | {{Class path}} | {{org.exoplatform.services.xmpp.connection.impl.HistoryJob}} |
-| ** |  | {{repeatCount}} | How many times to run this job. | {{integer}} | {{0}} ( use '0' which means 'run forever) |
-| ** |  | {{period}} | The time interval (millisecond) between job executions. | {{Long}} | {{3000}} |
-| ** |  | {{startTime}} | The time the job starts running. | {{Long}} | {{+0}} |
-| ** |  | {{endTime}} | The time the job ends running. | {{Long}} | {{none}} |
-| *history.info* | Save the monitor data  periodically. | {{logBatchSize}} | The maximum number of messages in the cache are saved once the job runs. | {{Integer}} | {{50}} |
+|| Properties-param || Property names || Description || Possible values || Default values || Description ||
+| *job.info* | {{jobName}} | The name of job | {{string}} | {{messageToHistoricalMessageJob}}| Save the monitor data  periodically. |
+| ** | {{groupName}} | | {{string}} |  {{CollaborationSuite}} | The name of group name. |
+| ** | {{job}} | |{{Class path}} | {{org.exoplatform.services.xmpp.connection.impl.HistoryJob}} | The name of actual job class. |
+| ** | {{repeatCount}} | | {{integer}} | {{0}} ( use '0' which means 'run forever) | How many times to run this job. |
+| ** | {{period}} | | {{long}} | {{3000}} | The time interval (millisecond) between job executions. |
+| ** | {{startTime}} | | {{long}} | {{+0}} | The time the job starts running. |
+| ** | {{endTime}} | | {{long}} | {{none}} | The time the job ends running. |
+| *history.info* | {{logBatchSize}} | The maximum number of messages in the cache are saved once the job runs. | {{Integer}} | {{50}} | Save the monitor data  periodically. |
 
 
 h3. RequestFilterComponentPlugin {anchor:id=CSref.Configuration.RequestFilterComponentPlugin}
@@ -490,20 +492,20 @@ h3. RequestFilterComponentPlugin {anchor:id=CSref.Configuration.RequestFilterCom
 
 Details:
 
-* *Name*: {{ws.rs.request.filter}} is the name of the filter. 
-* *Set-method*: {{addPlugin}} is the plug-in registering method.
-* *Type*: {{org.exoplatform.services.rest.impl.RequestFilterComponentPlugin}} is a class that executes the requests of the plugin.
+* *Name*: _ws.rs.request.filter_ is the name of the filter. 
+* *Set-method*: _addPlugin_ is the plug-in registering method.
+* *Type*: _org.exoplatform.services.rest.impl.RequestFilterComponentPlugin_ is a class that executes the requests of the plugin.
 * *Description*: It is used to delete the session of a user when he suddenly closes the browser or changes the session.
 
 See the details about the init-params of the component in the following table:
 
-|| Value-param || Description || Possible value || Default value ||
-| *RESTXMPPServiceFilter* | The name of the filter. | {{Class path}} | {{org.exoplatform.services.xmpp.rest.filter.RESTXMPPServiceFilter}}|
+|| Value-param || Possible value || Default value || Description ||
+| *RESTXMPPServiceFilter* | {{Class path}} | {{org.exoplatform.services.xmpp.rest.filter.RESTXMPPServiceFilter}}| The name of the filter. |
 
 
 h3. AuthenticationLoginListener and AuthenticationLogoutListener {anchor:id=CSref.Configuration.AuthenticationLoginListenerandAuthenticationLogoutListener}
 
-Two functions: login and logout of XMPPRestService are responsible for creating a new XMPPSessionImpl and destroying an existing XMPPSessionImpl. They can be called by listeners: AuthenticationLoginListener, AuthenticationLogoutListener or from client(browser) through Rest protocol (jabberLogin, jabberLogout in UIMainChatWindow.js).
+Two functions: login and logout of _XMPPRestService_ are responsible for creating a new _XMPPSessionImpl_ and destroying an existing _XMPPSessionImpl_. They can be called by listeners: _AuthenticationLoginListener_, _AuthenticationLogoutListener_ or from client(browser) through Rest protocol (_jabberLogin_, _jabberLogout_ in _UIMainChatWindow.js_).
  
 You must use the same target component for two external component plug-ins: 
 
@@ -524,9 +526,9 @@ h4. AuthenticationLoginListener {anchor:id=CSref.Configuration.AuthenticationLog
 
 Details:
 
-* *Name*: {{exo.core.security.ConversationRegistry.register}} is the name of plug-in.
-* *Set-method*: {{addListener}} is the plug-in registering method.
-* *Type*: {{org.exoplatform.services.xmpp.connection.impl.AuthenticationLoginListener}} is a class to execute the requests of the plug-in.
+* *Name*: _exo.core.security.ConversationRegistry.register_ is the name of plug-in.
+* *Set-method*: _addListener_ is the plug-in registering method.
+* *Type*: _org.exoplatform.services.xmpp.connection.impl.AuthenticationLoginListener_ is a class to execute the requests of the plug-in.
 * *Description*: It is used to start the session and log in the chat server.
 
 
@@ -543,19 +545,19 @@ h4. AuthenticationLogoutListener {anchor:id=CSref.Configuration.RequestFilterCom
 
 Details:
 
-* *Name*: {{exo.core.security.ConversationRegistry.register}} is the name of plug-in.
-* *Set-method*: {{addListener}} is the plug-in registering method.
-* *Type*: {{org.exoplatform.services.xmpp.connection.impl.AuthenticationLogoutListener}} is a class to execute the requests of the plug-in.
+* *Name*: _exo.core.security.ConversationRegistry.register_ is the name of plug-in.
+* *Set-method*: _addListener_ is the plug-in registering method.
+* *Type*: _org.exoplatform.services.xmpp.connection.impl.AuthenticationLogoutListener_ is a class to execute the requests of the plug-in.
 * *Description*: It is used to end the session and log in the chat server.
 
 
 
 h2. Contact Configuration {anchor:id=CSref.Configuration.ContactConfiguration}
-The Contact Application is configured by three external component plug-ins: {{NewUserListener}}, {{NewMembershipListener}}
-and {{UpdateUserProfileListener}}. They use the same target component:
+The Contact Application is configured by three external component plug-ins: _NewUserListener_, _NewMembershipListener_
+and _UpdateUserProfileListener_. They use the same target component:
 
 {code:xml}
-<target-component>org.exoplatform.services.organization.OrganizationService</target-component>	
+<target-component>org.exoplatform.services.organization.OrganizationService</target-component>
 {code}
 
 The Contact configuration is found in _extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/contact/contact-service-configuration.xml_.
@@ -573,9 +575,9 @@ h3. NewUserListener {anchor:id=CSref.Configuration.NewUserListener}
 
 Details:
 
-* *Name*: {{contact.new.user.event.listener}} is the name of listener.
-* *Set-method*: {{addListenerPlugin}} is the plug-in registering method.
-* *Type*: {{org.exoplatform.contact.service.impl.NewUserListener}} is a class that executes all the requires of the plug-in.
+* *Name*: _contact.new.user.event.listener_ is the name of listener.
+* *Set-method*: _addListenerPlugin_ is the plug-in registering method.
+* *Type*: _org.exoplatform.contact.service.impl.NewUserListener_ is a class that executes all the requires of the plug-in.
 * *Description*: It is used to initialize personal contact data for users.
 
 h3. NewMembershipListener {anchor:id=CSref.Configuration.NewUser.NewMembershipListener}
@@ -591,9 +593,9 @@ h3. NewMembershipListener {anchor:id=CSref.Configuration.NewUser.NewMembershipLi
 
 Details:
 
-* *Name*: {{contact.new.membership.event.listener}} is the name of the listener.
-* *Set-method*: {{addListenerPlugin}} is the plug-in registering method. Keep this value.
-* *Type*: {{org.exoplatform.contact.service.impl.NewMembershipListener}} is a class that executes all the requires of the plug-in.
+* *Name*: _contact.new.membership.event.listener_ is the name of the listener.
+* *Set-method*: _addListenerPlugin_ is the plug-in registering method. Keep this value.
+* *Type*: _org.exoplatform.contact.service.impl.NewMembershipListener_ is a class that executes all the requires of the plug-in.
 * *Description*: It is used to initialize an address book for a specific group.
 
 h3. UpdateUserProfileListener {anchor:id=CSref.Configuration.UpdateUserProfileListener}
@@ -610,14 +612,14 @@ h3. UpdateUserProfileListener {anchor:id=CSref.Configuration.UpdateUserProfileLi
 
 Details:
 
-* *Name*: {{contact.new.userprofile.event.listener}} is the name of the listener.
-* *Set-method*: {{addListenerPlugin}} is the plug-in registering method. Keep this value.
-* *Type*: {{org.exoplatform.contact.service.impl.UpdateUserProfileListener}} is a class that executes all the requires of the plug-in.
+* *Name*: _contact.new.userprofile.event.listener_ is the name of the listener.
+* *Set-method*: _addListenerPlugin_ is the plug-in registering method. Keep this value.
+* *Type*: _org.exoplatform.contact.service.impl.UpdateUserProfileListener_ is a class that executes all the requires of the plug-in.
 * *Description*: It is used to update the personal profile of a user when he changes it on the portal.
 
 h2. Content Configuration {anchor:id=CSref.Configuration.ContentConfiguration}
 
-The Content application, such as RSS reader of eXo Collaboration, is configured by two external component plug-ins: RSSContentPlugin and DescriptionPlugin.
+The Content application, such as RSS reader of eXo Collaboration, is configured by two external component plug-ins: _RSSContentPlugin_ and _DescriptionPlugin_.
 Both the external components plug-ins use the same target component:
 
 {code:xml}
@@ -638,9 +640,9 @@ h3. RSSContentPluginDescriptionPlugin {anchor:id=CSref.Configuration.RSSContentP
 
 Details:
 
-* *Name*: {{rssreader.listener}} is the name of the listener.
-* *Set-method*: {{addPlugin}} is the plugin registering method. Keep this value.
-* *Type*: {{org.exoplatform.content.service.RSSContentPlugin}} is a class extending ContentPlugin and implements loadContentMeta method to get content items.
+* *Name*: _rssreader.listener_ is the name of the listener.
+* *Set-method*: _addPlugin_ is the plugin registering method. Keep this value.
+* *Type*: _org.exoplatform.content.service.RSSContentPlugin_ is a class extending ContentPlugin and implements loadContentMeta method to get content items.
 * *Description*: It is a formater used to analyze the data from a RSS resource.
 
 h3. DescriptionPlugin {anchor:id=CSref.Configuration.DescriptionPlugin}
@@ -656,9 +658,9 @@ h3. DescriptionPlugin {anchor:id=CSref.Configuration.DescriptionPlugin}
 
 Details:
 
-* *Name*: {{description.listener}} is the name of the listener. 
-* *Set-method*: {{addPlugin}} is the plug-in registering method. Keep this value.
-* *Type*: {{org.exoplatform.content.service.DescriptionPlugin}} is a class that executes all the requires of the plug-in.
+* *Name*: _description.listener_ is the name of the listener. 
+* *Set-method*: _addPlugin_ is the plug-in registering method. Keep this value.
+* *Type*: _org.exoplatform.content.service.DescriptionPlugin_ is a class that executes all the requires of the plug-in.
 * *Description*: It is a plug-in to represent the data from a RSS source.
 
 h2. Mail Configuration {anchor:id=CSref.Configuration.MailConfiguration}
@@ -683,9 +685,9 @@ Since eXo Collaboration 1.2,  one capability is added to halt the background job
 
 Details:
 
-* *Name*: {{exo.core.security.ConversationRegistry.unregister}} is the name of listener.
-* *Set-method*: {{addListener}} is the plug-in registering method. Keep this value.
-* *Type*: {{org.exoplatform.mail.service.AuthenticationLogoutListener}} is a class that executes all the requires of the plug-in.
+* *Name*: _exo.core.security.ConversationRegistry.unregister_ is the name of listener.
+* *Set-method*: _addListener_ is the plug-in registering method. Keep this value.
+* *Type*: _org.exoplatform.mail.service.AuthenticationLogoutListener_ is a class that executes all the requires of the plug-in.
 * *Description*: It is a plug-in used to stop checking mails of a user when he logs out.
 
 h3. MailSettingConfigPlugin {anchor:id=CSref.Configuration.MailConfig.MailSettingConfigPlugin}
@@ -804,31 +806,31 @@ h3. MailSettingConfigPlugin {anchor:id=CSref.Configuration.MailConfig.MailSettin
 {code}
 
 Details:
-* *Name*: {{cs.mail.service.settings}} is the name of the mail settings.
-* *Set-method*: {{addPlugin}} is the plug-in registering method.
-* *Type*: {{org.exoplatform.mail.service.MailSettingConfigPlugin}} is the plug-in's class name.
-* *object type*: {{org.exoplatform.mail.service.MailSettingConfig}} is the class of object that contains a specific setting.
+* *Name*: _cs.mail.service.settings_ is the name of the mail settings.
+* *Set-method*: _addPlugin_ is the plug-in registering method.
+* *Type*: _org.exoplatform.mail.service.MailSettingConfigPlugin_ is the plug-in's class name.
+* *object type*: _org.exoplatform.mail.service.MailSettingConfig_ is the class of object that contains a specific setting.
 * *Description*: Describes what the setting is or what the settings is used to do.
 
 
 || Object-param||Desciption ||
-|leaveOnServer|Options to keep the message on the mail server after it has been downloaded to the Mail application of eXo Collaboration.|
-|incomingServer|The default incoming server used to check new mails.|
-|incomingPort|The default port of the incoming server used to check new mails.|
-|outgoingServer|The default port of the outgoing server used to send new mails.|
-|outgoingPort|The default outgoing port to send new mails.|
-|acceptIncomingSecureAuthentication|Accepts the secure authentication of the incoming server.|
-|incomingSecureAuthentication|The type of incoming secure authentication.|
-|incomingAuthenticationMechanism|The type of incoming authentication mechanism.|
-|acceptOutgoingSecureAuthentication|Accepts the secure authentication of the outgoing server.|
-|outgoingSecureAuthentication|The type of outgoing secure authentication.|
-|outgoingAuthenticationMechanism|The type of incoming authentication mechanism.|
+| *leaveOnServer* | Options to keep the message on the mail server after it has been downloaded to the Mail application of eXo Collaboration.|
+| *incomingServer* | The default incoming server used to check new mails.|
+| *incomingPort* | The default port of the incoming server used to check new mails.|
+| *outgoingServer* | The default port of the outgoing server used to send new mails.|
+| *outgoingPort* | The default outgoing port to send new mails.|
+| *acceptIncomingSecureAuthentication* | Accepts the secure authentication of the incoming server.|
+| *incomingSecureAuthentication* | The type of incoming secure authentication.|
+| *incomingAuthenticationMechanism* | The type of incoming authentication mechanism.|
+| *acceptOutgoingSecureAuthentication* | Accepts the secure authentication of the outgoing server.|
+| *outgoingSecureAuthentication* | The type of outgoing secure authentication.|
+| *outgoingAuthenticationMechanism* | The type of incoming authentication mechanism.|
 
 The object parameters have the same field names, but the values of the parameters are different.
-||Field names || Description || Possible values |
-|name|The field name in the account settings form. |String |
-|userAllowed|Allows users to edit the field in the account settings form or not. |Boolen |
-|defaultValue|The default value of the field in the account settings form. |String |
+||Field names || Possible values || Description ||
+| *name* | {{string}} | The field name in the account settings form. |
+| *userAllowed* | {{boolen}} | Allows users to edit the field in the account settings form or not. |
+| *defaultValue* | {{string}} | The default value of the field in the account settings form. |
 
 
 h2. Social Integration Configuration {anchor:id=CSref.Configuration.SocialIntegrationConfiguration}
@@ -856,15 +858,15 @@ h3. CalendarDataInitialize {anchor:id=CSref.Configuration.CalendarDataInitialize
 
 Details:
 
-* *Name*: {{CalendarDataInitialize}} is the name of plug-in.
-* *Set-method*: {{addSpaceListener}} is the plug-in registering method.
-* *Type*: {{org.exoplatform.cs.ext.impl.CalendarDataInitialize}} is a class that executes all the requires of the plug-in.
+* *Name*: _CalendarDataInitialize_ is the name of plug-in.
+* *Set-method*: _addSpaceListener_ is the plug-in registering method.
+* *Type*: _org.exoplatform.cs.ext.impl.CalendarDataInitialize_ is a class that executes all the requires of the plug-in.
 * *Description*: It is used to initialize a calendar for a group in a specific space.
 
 
 See the details about the init-params of the component in the following table:
-|| value-param || Description || Possible value || Default value ||
-| *portletName* | The name of the portlet | {{String}} | {{CalendarPortlet}}|
+|| value-param || Possible value || Default value ||  Description ||
+| *portletName* |  {{string}} | {{CalendarPortlet}}| The name of the portlet. |
 
 
 h3. ContactDataInitialize {anchor:id=CSref.Configuration.ContactDataInitialize}
@@ -887,15 +889,15 @@ h3. ContactDataInitialize {anchor:id=CSref.Configuration.ContactDataInitialize}
 
 Details:
 
-* *Name*: {{ContactDataInitialize}} is the name of the plug-in.
-* *Set-method*: {{addSpaceListener}} is the plug-in registering method.
-* *Type*: {{org.exoplatform.cs.ext.impl.ContactDataInitialize}} is a class that executes all the requires of the plug-in.
+* *Name*: _ContactDataInitialize_ is the name of the plug-in.
+* *Set-method*: _addSpaceListener_ is the plug-in registering method.
+* *Type*: _org.exoplatform.cs.ext.impl.ContactDataInitialize_ is a class that executes all the requires of the plug-in.
 * *Description*: It is a plug-in used to initialize an address book for a group in a specific space.
 
 
 See the details about the init-params of the component in the following table:
-|| value-param || Description || Possible value || Default value ||
-| *portletName* | The name of the portlet | {{String}} | {{ContactPortlet}}|
+|| value-param || Possible value || Default value || Description ||
+| *portletName* | {{string}} | {{ContactPortlet}}| The name of the portlet. |
 
 
 h3. ContactSpaceActivityPublisher {anchor:id=CSref.Configuration.ContactSpaceActivityPublisher}
@@ -913,9 +915,9 @@ h3. ContactSpaceActivityPublisher {anchor:id=CSref.Configuration.ContactSpaceAct
 
 Details:
 
-* *Name*: {{ContactEventListener}} is the name of the plug-in.
-* *Set-method*: {{addListenerPlugin}} is the plug-in registering method.
-* *Type*: {{org.exoplatform.cs.ext.impl.ContactSpaceActivityPublisher}} is a class that executes all the requires of the plug-in.
+* *Name*: _ContactEventListener_ is the name of the plug-in.
+* *Set-method*: _addListenerPlugin_ is the plug-in registering method.
+* *Type*: _org.exoplatform.cs.ext.impl.ContactSpaceActivityPublisher_ is a class that executes all the requires of the plug-in.
 * *Description*: It is a plug-in used to customize the activity status of a specific space when an event happens on an address book.
 
 h3. CalendarSpaceActivityPublisher {anchor:id=CSref.Configuration.CalendarSpaceActivityPublisher}
@@ -933,10 +935,10 @@ h3. CalendarSpaceActivityPublisher {anchor:id=CSref.Configuration.CalendarSpaceA
 
 Details:
 
-* *Name*: {{CalendarEventListener}} is the name of the plug-in.
-* *Set-method*: {{addEventListenerPlugin}} is the plug-in registering method.
-* *Type*: {{org.exoplatform.cs.ext.impl.CalendarSpaceActivityPublisher}} is a class that executes all the requires of the plug-in.
-* *Description*: It is a plug-in used to customize the activity status of a specific space when an event happens on a calendar.
+* *Name*: _CalendarEventListener_ is the name of the plug-in.
+* *Set-method*: _addEventListenerPlugin_ is the plug-in registering method.
+* *Type*: _org.exoplatform.cs.ext.impl.CalendarSpaceActivityPublisher_ is a class that executes all the requires of the plug-in.
+* *Description*: It is a plug-in used to customize the activity status of a specific space when an event happens.
 
 
 h3. PortletPreferenceRequiredPlugin {anchor:id=CSref.Configuration.PortletPreferenceRequiredPlugin}
@@ -961,12 +963,12 @@ h3. PortletPreferenceRequiredPlugin {anchor:id=CSref.Configuration.PortletPrefer
 
 Details:
 
-* *Name*: {{ortlets.prefs.required}} is the name of the plug-in.
-* *Set-method*: {{setPortletsPrefsRequired}} is the plug-in registering method.
-* *Type*: {{org.exoplatform.social.core.application.PortletPreferenceRequiredPlugin}} is a class that executes all the requires of the plug-in.
+* *Name*: _ortlets.prefs.required_ is the name of the plug-in.
+* *Set-method*: _setPortletsPrefsRequire_ is the plug-in registering method.
+* *Type*: _org.exoplatform.social.core.application.PortletPreferenceRequiredPlugin_ is a class that executes all the requires of the plug-in.
 * *Description*: It is a plug-in used to declare the application that will automatically create database.
 
 
 See the details about the init-params of the component in the following table:
-|| value-param || Description || Possible value || Default value ||
-| *portletsPrefsRequired* |  The name of plug-in added to SpaceService || {{String}} | {{ContactPortlet / ContactPortlet}}|
+|| value-param || Possible value || Default value || Description ||
+| *portletsPrefsRequired* |  {{string}} | {{ContactPortlet/ContactPortlet}}| The name of plug-in added to SpaceService. |
