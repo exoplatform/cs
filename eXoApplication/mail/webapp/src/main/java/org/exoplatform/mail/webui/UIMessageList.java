@@ -58,7 +58,6 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
@@ -1581,7 +1580,10 @@ public class UIMessageList extends UIForm {
       UIMessageList uiMessageList = event.getSource() ;   
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();      
-      String accId = dataCache.getSelectedAccountId();      
+      String username = event.getRequestContext().getRemoteUser();
+      String accId = dataCache.getSelectedAccountId();
+      Account delegatedAcc = dataCache.getDelegatedAccount(username, accId); 
+      String accountOwner = delegatedAcc != null ? delegatedAcc.getDelegateFrom() : username;
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
       List<Message> checkedMsgs = uiMessageList.getCheckedMessage(false) ;
       if(checkedMsgs.isEmpty()) {
@@ -1603,9 +1605,8 @@ public class UIMessageList extends UIForm {
         Message msg = checkedMsgs.get(0);
         if (msg != null) {
           UIExportForm uiExportForm = uiPopup.activate(UIExportForm.class, 600);
-          String username = uiPortlet.getCurrentUser() ;
           MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
-          msg = mailSrv.loadTotalMessage(username, accId, msg) ;  
+          msg = mailSrv.loadTotalMessage(accountOwner, accId, msg) ;  
           uiExportForm.setExportMessage(msg);
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
         }
