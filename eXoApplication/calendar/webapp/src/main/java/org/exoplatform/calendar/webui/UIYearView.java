@@ -74,11 +74,12 @@ public class UIYearView extends UICalendarView {
   
   public void refresh() throws Exception { 
     yearData_.clear() ;
-    Calendar cal =  new GregorianCalendar(getCurrentYear(), 0, 1, 0, 0, 0) ;
+    Calendar cal =  calendarSetting_.createCalendar(calendar_.getTime());
+    cal.set(Calendar.DAY_OF_YEAR, 1);
     Calendar beginYear = CalendarUtils.getBeginDay(cal) ;
     cal.add(Calendar.YEAR, 1) ;
-    cal.add(Calendar.MILLISECOND, -1) ;
-    Calendar endYear = cal ;
+    Calendar endYear = CalendarUtils.getBeginDay(cal);
+    endYear.add(Calendar.MILLISECOND, -1) ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = CalendarUtils.getCurrentUser() ;
     String timezone = CalendarUtils.getCurrentUserCalendarSetting().getTimeZone();
