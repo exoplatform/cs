@@ -309,7 +309,7 @@ public class UIMessagePreview extends UIContainer{
           popupChildWindow.setUIComponent(uiSaveAttach);
           uiSaveAttach.setFilePath(att.getPath());
           uiSaveAttach.setFileName(att.getName());
-          popupChildWindow.setWindowSize(800, 450);
+          popupChildWindow.setWindowSize(600, 0);
           popupChildWindow.setRendered(true);
           popupChildWindow.setShow(true);
 

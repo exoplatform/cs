@@ -1244,7 +1244,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
       }
       UIPopupWindow uiPopup = uiChildPopup.getChild(UIPopupWindow.class);
       uiPopup.setId("UIPopupWindowDMSSelector");
-      uiPopup.setWindowSize(800, 400);
+      uiPopup.setWindowSize(600, 0);
       UIAddAttachment uiAddAttach = uiChildPopup.createUIComponent(UIAddAttachment.class,
                                                                                    null,
                                                                                    null);
