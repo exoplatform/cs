@@ -56,6 +56,7 @@
   DateFormat wf = new  SimpleDateFormat("EEE, dd MMM", locale) ;
   DateFormat tempFormat =  new  SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss", Locale.ENGLISH) ;
   tempFormat.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;  
+  def eventList = [];
 %>
 <div class="UIWeekView">
  <%_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");%>
@@ -118,13 +119,20 @@
                   <div class="EventContainer EventAlldayContainer WeekViewEventBoxes $color" eventcat="$event.eventCategoryId" style="position:absolute; border: solid 1px grey;" caltype="$event.calType" eventid="$event.id" isOccur="$isOccur" recurId="$recurId" calid="$event.calendarId" startTime="$begindate"  endTime="$enddate" 
                   startTimeFull="<%=tempFormat.format(event.getFromDateTime())%>" endTimeFull="<%=tempFormat.format(event.getToDateTime())%>"
                     actionlink="$actionLink">
-                    <input type="hidden" name="${event.id}calType" value="$event.calType" />
-                    <input type="hidden" name="${event.id}calendarId" value="$event.calendarId" />          
-                    <input type="hidden" name="${event.id}startTime" value="" />
-                    <input type="hidden" name="${event.id}finishTime" value="" />
-                    <input type="hidden" name="${event.id}isOccur" value="$isOccur" />
-                    <input type="hidden" name="${event.id}recurId" value="$recurId" />
-                    <input type="hidden" name="${event.id}currentDate" value="" />
+                  <%
+                  if (!eventList.contains(event.id)) {
+                    eventList.add(event.id);
+                  %>
+                  <input type="hidden" name="${event.id}calType" value="$event.calType" />
+                  <input type="hidden" name="${event.id}calendarId" value="$event.calendarId" />          
+                  <input type="hidden" name="${event.id}startTime" value="" />
+                  <input type="hidden" name="${event.id}finishTime" value="" />
+                  <input type="hidden" name="${event.id}isOccur" value="$isOccur" />
+                  <input type="hidden" name="${event.id}recurId" value="$recurId" />
+                  <input type="hidden" name="${event.id}currentDate" value="" />
+                  <%
+                  }
+                  %>
                     <div class="$leftClass">
                       <span></span>
                     </div>
@@ -172,12 +180,15 @@
             actionLink =  uicomponent.event("UpdateEvent",event.id) ;
             Boolean isOccur = (event.getRepeatType() != null && !CalendarEvent.RP_NOREPEAT.equals(event.getRepeatType()) && (event.getIsExceptionOccurrence() == null || !event.getIsExceptionOccurrence()));
             String recurId = event.getRecurrenceId();
-            
         %>
         <div class="EventContainerBorder WeekViewEventBoxes $color" eventindex="$dayOfWeek"
           style="position: absolute;" eventcat="$event.eventCategoryId" caltype="$event.calType"
           eventid="$event.id" calid="$event.calendarId" actionlink="$actionLink" unselectable="on"
           startTime="$beginTime" endTime="$endTime" isOccur="$isOccur" recurId="$recurId">
+          <%
+            if (!eventList.contains(event.id)) {
+              eventList.add(event.id);
+          %>
           <input type="hidden" name="${event.id}calType" value="$event.calType" />
           <input type="hidden" name="${event.id}calendarId" value="$event.calendarId" />          
           <input type="hidden" name="${event.id}startTime" value="" />
@@ -185,6 +196,9 @@
           <input type="hidden" name="${event.id}isOccur" value="$isOccur" />
           <input type="hidden" name="${event.id}recurId" value="$recurId" />
           <input type="hidden" name="${event.id}currentDate" value="" />
+          <%
+            }
+          %>
            <div class="<%=event.eventState%>Icon">
              <div class="<%=event.getPriority()%>PriorityIcon" style="float: left;">
                 <span></span>

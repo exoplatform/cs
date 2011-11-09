@@ -1140,6 +1140,8 @@ UIResizeEvent.prototype.resizeCallback = function(evt){
 		var form = eXo.core.DOMUtil.findAncestorByTagName(eventBox,"form");
 	  form.elements[eventId + "startTime"].value = start;
 	  form.elements[eventId + "finishTime"].value = end;
+    form.elements[eventId + "isOccur"].value = isOccur;
+    form.elements[eventId + "recurId"].value = recurId;
 		UICalendarPortlet.setTimeValue(eventBox,start,end);
 		UICalendarPortlet.showEvent();
 		eval(actionLink);
@@ -1300,6 +1302,8 @@ UICalendarPortlet.prototype.dayviewDropCallback = function(){
     var form = eXo.core.DOMUtil.findAncestorByTagName(dragObject,"form");
     form.elements[eventId + "startTime"].value = currentStart;
     form.elements[eventId + "finishTime"].value = currentEnd;
+    form.elements[eventId + "isOccur"].value = isOccur;
+    form.elements[eventId + "recurId"].value = recurId;
 		eXo.calendar.UICalendarPortlet.setTimeValue(dragObject,currentStart,currentEnd);
 		eXo.calendar.UICalendarPortlet.showEvent();
 		eval(actionLink);
