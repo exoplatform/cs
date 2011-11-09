@@ -152,7 +152,7 @@ public class UICalendarPortlet extends UIPortletApplication {
         String url = pref.getValue("SPACE_URL", null);
         SpaceService sService = (SpaceService) PortalContainer.getInstance().getComponentInstanceOfType(SpaceService.class);
         Space space = sService.getSpaceByUrl(url) ;
-        return space.getId() ;
+        return space.getPrettyName();
       }
       return null;
     } catch (Exception e) {
