@@ -1,0 +1,15 @@
+Index: eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/UICalendars.java
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/UICalendars.java	(revision 73700)
++++ eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/UICalendars.java	(working copy)
+@@ -990,7 +990,9 @@
+       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
+       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
+       popupAction.deActivate() ;
+-      UICalendarSettingForm uiCalendarSettingForm = popupAction.activate(UICalendarSettingForm.class, 600) ;
++      UIPopupContainer uiPopupContainer = popupAction.activate(UIPopupContainer.class, 600) ;
++      uiPopupContainer.setId(UIPopupContainer.UICALENDAR_SETTING_POPUP);
++      UICalendarSettingForm uiCalendarSettingForm = uiPopupContainer.addChild(UICalendarSettingForm.class, null, null) ;
+       CalendarService cservice = CalendarUtils.getCalendarService() ;
+       CalendarSetting calendarSetting = uiComponent.getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ; 
+       uiCalendarSettingForm.init(calendarSetting, cservice) ;
