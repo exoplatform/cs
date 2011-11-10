@@ -17,6 +17,7 @@
 package org.exoplatform.calendar.webui;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 
@@ -35,5 +36,12 @@ public class UICalendarContainer extends UIContainer  {
     addChild(UISearchForm.class, null, null) ;
     addChild(UIMiniCalendar.class, null, null) ;
     addChild(UICalendars.class, null, null) ;    
-  } 
+  }
+  
+  public void applySeting() throws Exception {
+    for(UIComponent comp : getChildren()) {
+      if((comp instanceof CalendarView)) ((CalendarView)comp).applySeting() ;  
+    }
+  }
+  
 }
