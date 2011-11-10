@@ -187,7 +187,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
 //    calendar.setFirstDayOfWeek(Integer.parseInt(calendarSetting_.getWeekStartOn()));
 //    return calendar;
     
-    return  CalendarUtils.getCalendarInstanceBySetting(calendarSetting_);
+    return  CalendarUtils.getInstanceOfCurrentCalendar();
   } 
   public void applySeting() throws Exception {
     displayTimes_ = null ;
@@ -201,10 +201,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       calendarSetting_ = calService.getCalendarSetting(username) ;
     } 
     dateTimeFormat_ = getDateFormat() + " " + getTimeFormat() ;
-    Date selectedDate = calendar_ != null ? calendar_.getTime() : null;
-    calendar_ = CalendarUtils.getCalendarInstanceBySetting(calendarSetting_);
-    if (selectedDate != null) 
-      calendar_.setTime(selectedDate);
   }
   public void setViewType(String viewType) { this.viewType_ = viewType ; }
   public String getViewType() { return viewType_ ; }

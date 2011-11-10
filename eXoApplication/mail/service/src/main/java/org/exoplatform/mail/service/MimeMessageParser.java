@@ -233,7 +233,7 @@ public class MimeMessageParser {
   }
   
   public static String[] getInvitationHeader(javax.mail.Message message) throws Exception {
-    String[] exoInvitationHeaders = message.getHeader("x-exo-invitation".toLowerCase());
+    String[] exoInvitationHeaders = message.getHeader("X-Exo-Invitation");
     if (exoInvitationHeaders != null) return exoInvitationHeaders ;
     return null ;
   }

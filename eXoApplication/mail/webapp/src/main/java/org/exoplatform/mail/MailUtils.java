@@ -74,7 +74,6 @@ public class MailUtils {
     final public static String SUPPORTED_VIEW_TYPE_ATTACH[] = {"gif", "png", "jpg", "jpec", "bmp"} ;
     final public static String SIMPLECHARACTER[] = {GREATER_THAN, SMALLER_THAN, "'", "\""};
     final public static int MAX_POPUP_WIDTH = 900;
-    public static final String EXO_INVITATION = "x-exo-invitation".intern();
 
     static public MailService getMailService() throws Exception {
       return (MailService)PortalContainer.getComponent(MailService.class) ;
@@ -271,13 +270,13 @@ public class MailUtils {
     }
 
     public static boolean isInvitation(Message msg) throws Exception {
-      return (msg.getHeader(EXO_INVITATION) != null) ;
+      return (msg.getHeader("X-Exo-Invitation") != null) ;
     }
 
     public static String getEventFrom(Message msg) throws Exception {
       String from = null;
       if (isInvitation(msg)) {
-        from = msg.getHeader(EXO_INVITATION).split(";")[0].trim() ;
+        from = msg.getHeader("X-Exo-Invitation").split(";")[0].trim() ;
       }
       return from ;
     }
@@ -285,7 +284,7 @@ public class MailUtils {
     public static String getEventTo(Message msg) throws Exception {
       String to = null;
       if (isInvitation(msg)) {
-        to = msg.getHeader(EXO_INVITATION).split(";")[1].trim() ;
+        to = msg.getHeader("X-Exo-Invitation").split(";")[1].trim() ;
       }
       return to ;
     }
@@ -301,7 +300,7 @@ public class MailUtils {
     public static String getEventType(Message msg) throws Exception {
       String eventType = null;
       if (isInvitation(msg)) {
-        eventType = msg.getHeader(EXO_INVITATION).split(";")[2].trim() ;
+        eventType = msg.getHeader("X-Exo-Invitation").split(";")[2].trim() ;
       }
       return eventType ;
     }
@@ -309,7 +308,7 @@ public class MailUtils {
     public static String getCalendarId(Message msg) throws Exception {
       String calId = null;
       if (isInvitation(msg)) {
-        calId = msg.getHeader(EXO_INVITATION).split(";")[3].trim() ;
+        calId = msg.getHeader("X-Exo-Invitation").split(";")[3].trim() ;
       }
       return calId ;
     }
@@ -317,7 +316,7 @@ public class MailUtils {
     public static String getCalendarEventId(Message msg) throws Exception {
       String calEvenId = null;
       if (isInvitation(msg)) {
-        calEvenId = msg.getHeader(EXO_INVITATION).split(";")[4].trim() ;
+        calEvenId = msg.getHeader("X-Exo-Invitation").split(";")[4].trim() ;
       }
       return calEvenId ;
     }
