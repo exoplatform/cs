@@ -16,14 +16,17 @@
  */
 package org.exoplatform.cs.upgrade;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.Session;
+import javax.jcr.Value;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
@@ -174,7 +177,7 @@ public class UpgradeCalendarPlugin extends UpgradeProductPlugin {
       Map<String, String> spaceGroupIds = getSpaceGroups();
       while (iter.hasNext()) {
         Node calendarNode = iter.nextNode();
-        String spaceGroup = calendarNode.getProperty(Utils.EXO_CALENDAR_OWNER).getString();
+        List<String> spaceGroup = valuesToList(calendarNode.getProperty(Utils.EXO_GROUPS).getValues());
         String groupId = getGroupId(spaceGroup);
         String newId = groupId + SPACE_CALENDAR_ID_SUFFIX;
         if (spaceGroupIds.containsKey(groupId) && !newId.equals(calendarNode.getName())) {
@@ -189,7 +192,7 @@ public class UpgradeCalendarPlugin extends UpgradeProductPlugin {
     } else {
       log.info("[UpgradeCalendarPlugin] There is not any space calendars to migrate.");
     }
-    log.info("[UpgradeCalendarPlugin] Finished migrating space calendars. " + iter.getSize() + " calendars migrated.");
+    log.info("[UpgradeCalendarPlugin] Finished migrating space calendars. " + iter.getSize() + " calendars are migrated.");
   }
   
   private NodeIterator getSpaceCalendars() throws Exception {
@@ -229,13 +232,27 @@ public class UpgradeCalendarPlugin extends UpgradeProductPlugin {
     return groupIds;
   }
   
-  private String getGroupId(String spaceGroup) throws Exception {
-    if (spaceGroup != null && spaceGroup.indexOf("/spaces/") >= 0) {
-      spaceGroup = spaceGroup.substring(spaceGroup.lastIndexOf("/") + 1);
-      if (spaceGroup != null && spaceGroup.trim().length() > 0)
-        return spaceGroup;
+  private String getGroupId(List<String> spaceGroups) throws Exception {
+    for (String spaceGroup : spaceGroups) {
+      if (spaceGroup.indexOf("/spaces/") >= 0) {
+        spaceGroup = spaceGroup.substring(spaceGroup.lastIndexOf("/") + 1);
+        if (!Utils.isEmpty(spaceGroup)) {
+          return spaceGroup;
+        }
+      }
     }
     return "";
+  }
+
+  private List<String> valuesToList(Value[] values) throws Exception {
+    List<String> list = new ArrayList<String>();
+    for (int i = 0; i < values.length; i++) {
+      String s = values[i].getString();
+      if (!Utils.isEmpty(s)) {
+        list.add(s);
+      }
+    }
+    return list;
   }
 
 }
