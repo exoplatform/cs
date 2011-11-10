@@ -1,0 +1,47 @@
+Index: eXoApplication/calendar/webapp/src/main/webapp/skin/DefaultSkin/webui/Stylesheet.css
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/webapp/skin/DefaultSkin/webui/Stylesheet.css	(revision 73835)
++++ eXoApplication/calendar/webapp/src/main/webapp/skin/DefaultSkin/webui/Stylesheet.css	(working copy)
+@@ -273,11 +273,22 @@
+ .UICalendarPortlet .UIAttachFileForm .UIForm .UIFormGrid td.FieldComponent {
+ 	white-space: normal;
+ }
++.UICalendarPortlet .UIForm .HorizontalLayout input {
++ 	width: 200px;
++ 	}
++ 	
++.UICalendarPortlet .UIForm .HorizontalLayout input.checkbox {
++ 	width: auto;
++ 	}
+ 
+ .UICalendarPortlet .UIAttachFileForm .SelectFileFrame {
+ 	width: 350px;
+ }
+ 
++.UICalendarPortlet .UIAttachFileForm .SelectFileFrame {
++	width: 350px;
++}
++
+ .UICalendarPortlet .UIForm .UIGrid .ViewDescription {
+ 	height: auto;
+ 	overflow: hidden;
+Index: eXoApplication/calendar/webapp/src/main/webapp/templates/calendar/webui/UIPopup/UIGroupCalendarTab.gtmpl
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/webapp/templates/calendar/webui/UIPopup/UIGroupCalendarTab.gtmpl	(revision 73835)
++++ eXoApplication/calendar/webapp/src/main/webapp/templates/calendar/webui/UIPopup/UIGroupCalendarTab.gtmpl	(working copy)
+@@ -42,7 +42,7 @@
+ 	 		<td class="FieldComponent">
+ 	 			<%=uiForm.getLabel(uiForm.EDIT_PERMISSION)%>
+ 	 		</td>
+-	 		<td class="" width="10%">
++	 		<td class="" width="15%">
+ 	 			&nbsp;
+ 	 		</td>
+ 	 	</tr>
+@@ -71,4 +71,4 @@
+  		}
+ 	 	%>
+ 	 </table>
+-</div>
+\ No newline at end of file
++</div>
