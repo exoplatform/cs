@@ -142,7 +142,7 @@ public class CalendarUtils {
   public static final String DATETIMEFORMAT = DATEFORMAT +" " +TIMEFORMAT;   
   public static final int DEFAULT_TIMEITERVAL = 15;
   public static final long MILISECONS_OF_DAY = 24*60*59*1000;
-  public static final String EXO_INVITATION = "X-Exo-Invitation".intern();
+  public static final String EXO_INVITATION = "x-exo-invitation".intern();
   public static final String SPECIALCHARACTER[] = {SEMICOLON,COMMA,SLASH,BACKSLASH,
     SINGLE_QUOTE,OR,GREATER_THAN,SMALLER_THAN,QUOTE, QUESTION_MARK, EXCLAMATION, 
     AT, SHARP, MONEY_MARK, PERCENT,EXPONENT,AND,STAR};
