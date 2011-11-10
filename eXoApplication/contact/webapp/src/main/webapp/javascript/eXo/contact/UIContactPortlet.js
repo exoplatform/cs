@@ -353,8 +353,7 @@ UIContactPortlet.prototype.printpreview = function (obj){
 		}
 	}
 	var form = eXo.core.DOMUtil.findAncestorByTagName(obj, "form") ;
-	var printLabel = DOMUtil.findFirstDescendantByClass(obj, 'div','ButtonMiddle') ;
-	if(obj.getAttribute("printLabel")) printLabel.innerHTML = obj.getAttribute("printLabel") ;
+	if(obj.getAttribute("printLabel")) obj.innerHTML = obj.getAttribute("printLabel") ;
 	if(obj.getAttribute("onclick")) obj.removeAttribute("onclick") ;	
 	var printButton = obj.cloneNode(true) ;
 	printButton.href = "javascript:window.print() ;" ;

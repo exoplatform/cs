@@ -5,7 +5,7 @@
     directory_title="Unread Messages"
     title_url="http://www.exoplatform.org"
     description="Unread Messages list."
-    thumbnail="/csResources/gadgets/messages/skin/thumb.png">
+    thumbnail="/csResources/gadgets/messages/skin/Message.png">
     <Locale messages="/csResources/gadgets/messages/locale/default.xml" />
     <Locale lang="ar" messages="/csResources/gadgets/messages/locale/ar.xml" language_direction="rtl"/>
     <Locale lang="fr" messages="/csResources/gadgets/messages/locale/fr.xml" />
