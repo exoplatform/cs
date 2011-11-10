@@ -2684,14 +2684,14 @@ CalendarScrollManager.prototype.load = function(){
 	var uiNav = eXo.calendar.CalendarScrollManager ;
   var container = eXo.calendar.UICalendarPortlet.getElementById("UIActionBar") ;
   if(container) {
-    var mainContainer = eXo.core.DOMUtil.findFirstDescendantByClass(container, "div", "CenterBar") ;
+    var mainContainer = eXo.core.DOMUtil.findFirstDescendantByClass(container, "div", "CalendarActionBar") ;
 	  var randomId = eXo.core.DOMUtil.generateId("CalendarScrollbar");
   	mainContainer.setAttribute("id",randomId);
     uiNav.scrollMgr = eXo.portal.UIPortalControl.newScrollManager(randomId) ;
     uiNav.scrollMgr.initFunction = uiNav.initScroll ;
     uiNav.scrollMgr.mainContainer = mainContainer ;
     uiNav.scrollMgr.arrowsContainer = eXo.core.DOMUtil.findFirstDescendantByClass(container, "div", "ScrollButtons") ;
-    uiNav.scrollMgr.loadElements("ActionBarButton", true) ;
+    uiNav.scrollMgr.loadItems("ActionBarButton", true) ;
     var button = eXo.core.DOMUtil.findDescendantsByTagName(uiNav.scrollMgr.arrowsContainer, "div");
     if(button.length >= 2) {    
       uiNav.scrollMgr.initArrowButton(button[0],"left", "ScrollLeftButton", "HighlightScrollLeftButton", "DisableScrollLeftButton") ;

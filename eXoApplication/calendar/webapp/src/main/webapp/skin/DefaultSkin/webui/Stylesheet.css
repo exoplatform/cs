@@ -167,6 +167,14 @@
   left: 7px ;
 }
 
+.UICalendarPortlet .UIActionBar .LeftActionBar {
+  margin-right: 230px ;
+}
+
+.UICalendarPortlet .UIActionBar .CalendarActionBar  {
+  width:100%;
+}
+
 .selection {
   background-color: rgb(204, 204, 204);
   position: absolute ;

@@ -13,6 +13,8 @@
         <div class="RightBar">
           <div class="CenterBar">
 		    <%uicomponent.renderChild(UISearchForm.class)%>
+		        <div class="LeftActionBar">
+		        <div class="CalendarActionBar">
             <div class="Title ControlButton ActionBarButton">
               <span></span>
             </div>
@@ -128,6 +130,8 @@
 					</div>
               </div>
             <div style="clear: both;"><span></span></div>
+              </div>
+            </div>
           </div>
          
         </div>
