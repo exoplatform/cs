@@ -18,8 +18,8 @@
               <div class="MiddleLeftRightClickPopupMenu">
                 <div class="MiddleRightRightClickPopupMenu">
                       <div class="UIRightPopupMenuContainer">
-                        <div class="MenuItem" href="<%=uicomponent.event("AddTag")%>">   
-                          <a class="ItemIcon AddTagIcon">
+                        <div class="MenuItem">   
+                          <a class="ItemIcon AddTagIcon" href="<%=uicomponent.event("AddTag")%>">
                             <%=_ctx.appRes(uicomponent.getName() + ".label.addTag")%>
                           </a>
                         </div>
