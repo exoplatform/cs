@@ -164,7 +164,6 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
       return df.parse(fromField.getValue() + " " + timeFile.getValue()) ;
     }
     catch (Exception e) {
-      e.printStackTrace() ;
       return null ;
     }
   }
@@ -201,7 +200,6 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
       return df.parse(toField.getValue() + " " + timeFile.getValue()) ;
       
     } catch (Exception e) {
-      e.printStackTrace() ;
       return null ;
     }
   }
