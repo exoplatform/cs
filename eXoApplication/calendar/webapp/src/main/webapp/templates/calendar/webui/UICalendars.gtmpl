@@ -11,7 +11,7 @@
   String[] checkPerms = uicomponent.getCheckPermissionString().split(CalendarUtils.COMMA);
 %>
 <%uiform.begin()%>
-  <div class="UICalendars" >
+  <div class="UICalendars">
     <div class="TitleBar ClearFix">
       <h6 class="Title">
       <%=uiform.getLabel("calendars")%>
@@ -92,13 +92,14 @@
               
         %>
             <li class="CalendarItem  CalendarItemPrivate ClearFix" calColor="$calendar.calendarColor" canEdit="true" id="$calId" calType="0" isRemote="$isRemote">
+				<span class="IconHoverSetting"></span>
                 <a href="javascript:void(0);" class="$calendar.calendarColor">
                 	<span class="ColorOpacity">
                 		<span class="$css"></span>
                 	</span>
                 </a>
                 <a class="CalendarName" href="javascript:void(0);" title="$calendar.name">$calendar.name</a>
-								<span style="display:none"><%uiform.renderField(calId)%></span>
+					<span style="display:none"><%uiform.renderField(calId)%></span>
             </li>
         <%     }
             }
@@ -140,7 +141,8 @@
             if(UICalendarPortlet.isInSpace() && !uicomponent.isCalendarOfSpace(calId))  {css = "IconUnCheckBox checkbox";}
         %>
             <li class="CalendarItem CalendarItemShared ClearFix" calColor="$color" id="$calId" calType="1"  canEdit="<%=uicomponent.canEdit(Utils.getEditPerUsers(calendar), checkPerms)%>">
-                <a href="javascript:void(0);" class="$color">
+                <span class="IconHoverSetting"></span>
+				<a href="javascript:void(0);" class="$color">
                 	<span class="ColorOpacity">
                 		<span class="$css"></span>
                 	</span>
@@ -191,7 +193,8 @@
              if((UICalendarPortlet.isInSpace() && !uicomponent.isCalendarOfSpace(calId)))  {css = "IconUnCheckBox checkbox";}
         %>
             <li class="CalendarItem CalendarItemPublic ClearFix"  calColor="$calendar.calendarColor" canEdit="<%=uicomponent.canEdit(calendar.getEditPermission(), checkPerms)%>" id="$calId" calType="2" >
-                <a href="javascript:void(0);" class="$calendar.calendarColor">
+                <span class="IconHoverSetting"></span>
+				<a href="javascript:void(0);" class="$calendar.calendarColor">
                 	<span class="ColorOpacity">
                 		<span class="$css"></span>
                 	</span>

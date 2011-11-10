@@ -77,9 +77,23 @@
 }
 
 .UICalendarPortlet .UICalendars .MyCalendarContainer {
-  padding: 8px;
+  padding: 8px 1px;
   border-top: solid 1px #e1e1e1;
   border-bottom: solid 1px #e1e1e1;
+}
+
+.UICalendarPortlet .UICalendars .MyCalendarContainer ul:hover{
+	background: #f7f7f7;
+}
+
+.UICalendarPortlet .UICalendars .MyCalendarContainer ul:hover .IconHoverSetting{
+	background: url('../skinIcons/icons/CalendarIcons.gif') no-repeat right -2077px; /* orientation=lt */
+	background: url('../skinIcons/icons/CalendarIcons.gif') no-repeat left -2077px; /* orientation=rt */
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
+	height: 15px;
+	width: 23px;
+	cursor: pointer;
 }
 
 .UICalendarPortlet .UICalendars .MyCalendarContainer .GroupItem {
@@ -163,7 +177,7 @@
 	border-radius: 3px;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
-	margin-right: 7px;
+	margin: 1px 4px 0px 0px;
 	padding: 1px;
 }
 
