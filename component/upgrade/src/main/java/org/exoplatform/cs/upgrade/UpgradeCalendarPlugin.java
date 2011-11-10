@@ -184,6 +184,14 @@ public class UpgradeCalendarPlugin extends UpgradeProductPlugin {
           calendarNode.setProperty(Utils.EXO_ID, newId);
           calendarNode.setProperty(Utils.EXO_NAME, spaceGroupIds.get(groupId));
           calendarNode.save();
+          NodeIterator events = calendarNode.getNodes();
+          if (events.getSize() > 0) {
+            while (events.hasNext()) {
+              Node event = events.nextNode();
+              event.setProperty(Utils.EXO_CALENDAR_ID, newId);
+              event.save();
+            }
+          }
           Session session = publicCalendarHome.getSession();
           session.move(calendarNode.getPath(), publicCalendarHome.getPath() + "/" + newId);
           session.save();
