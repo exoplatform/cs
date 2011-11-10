@@ -1,0 +1,52 @@
+Index: eXoApplication/calendar/service/src/main/java/org/exoplatform/calendar/service/impl/ICalendarImportExport.java
+===================================================================
+--- eXoApplication/calendar/service/src/main/java/org/exoplatform/calendar/service/impl/ICalendarImportExport.java	(revision 73900)
++++ eXoApplication/calendar/service/src/main/java/org/exoplatform/calendar/service/impl/ICalendarImportExport.java	(working copy)
+@@ -62,6 +62,7 @@
+ import net.fortuna.ical4j.model.property.Due;
+ import net.fortuna.ical4j.model.property.Duration;
+ import net.fortuna.ical4j.model.property.Location;
++import net.fortuna.ical4j.model.property.Method;
+ import net.fortuna.ical4j.model.property.Priority;
+ import net.fortuna.ical4j.model.property.ProdId;
+ import net.fortuna.ical4j.model.property.RRule;
+@@ -84,7 +85,6 @@
+ import org.exoplatform.calendar.service.Utils;
+ import org.exoplatform.container.ExoContainerContext;
+ import org.exoplatform.container.PortalContainer;
+-import org.exoplatform.services.jcr.RepositoryService;
+ 
+ 
+ /**
+@@ -423,6 +423,7 @@
+     calendar.getProperties().add(new ProdId("-//Ben Fortuna//iCal4j 1.0//EN"));
+     calendar.getProperties().add(Version.VERSION_2_0);
+     calendar.getProperties().add(CalScale.GREGORIAN);
++    calendar.getProperties().add(Method.REQUEST);
+     for(CalendarEvent exoEvent : events) {
+       if(exoEvent.getEventType().equals(CalendarEvent.TYPE_EVENT)){
+         calendar = getVEvent(calendar, exoEvent) ;        
+@@ -459,6 +460,7 @@
+     calendar.getProperties().add(new ProdId("-//Ben Fortuna//iCal4j 1.0//EN"));
+     calendar.getProperties().add(Version.VERSION_2_0);
+     calendar.getProperties().add(CalScale.GREGORIAN);
++    calendar.getProperties().add(Method.REQUEST);
+     for(CalendarEvent exoEvent : events) {
+       if(exoEvent.getEventType().equals(CalendarEvent.TYPE_EVENT)){
+         calendar = getVEvent(calendar, exoEvent) ;        
+@@ -494,6 +496,7 @@
+     calendar.getProperties().add(new ProdId("-//Ben Fortuna//iCal4j 1.0//EN"));
+     calendar.getProperties().add(Version.VERSION_2_0);
+     calendar.getProperties().add(CalScale.GREGORIAN);
++    calendar.getProperties().add(Method.REQUEST);
+     for(CalendarEvent exoEvent : events) {
+       if(exoEvent.getId().equals(eventId)) {
+         if(exoEvent.getEventType().equals(CalendarEvent.TYPE_EVENT)){
+@@ -1101,6 +1104,7 @@
+     calendar.getProperties().add(new ProdId("-//Ben Fortuna//iCal4j 1.0//EN"));
+     calendar.getProperties().add(Version.VERSION_2_0);
+     calendar.getProperties().add(CalScale.GREGORIAN);
++    calendar.getProperties().add(Method.REQUEST);
+         if(exoEvent.getEventType().equals(CalendarEvent.TYPE_EVENT)){
+           calendar = getVEvent(calendar, exoEvent) ;
+         } else {
