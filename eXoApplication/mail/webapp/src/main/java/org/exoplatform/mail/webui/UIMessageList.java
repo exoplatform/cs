@@ -204,8 +204,7 @@ public class UIMessageList extends UIForm {
       if (pageList_ != null) {
         currentPage = pageList_.getCurrentPage();
       }
-      MessagePageList currentPageList = null;
-      currentPageList = mailSrv.getMessagePageList(username, filter);
+      MessagePageList currentPageList = mailSrv.getMessagePageList(username, filter);
       setMessagePageList(currentPageList, currentPage);
     } else {
       messageList_.clear();
@@ -272,6 +271,14 @@ public class UIMessageList extends UIForm {
       }
     }
   }
+  
+  @Override
+  public void processRender(WebuiRequestContext context) throws Exception {
+    if (!context.useAjax()) {
+      refreshBrowser(getAccountId());
+    }
+    super.processRender(context);
+  }
 
   public String getAccountId() { return accountId_ ; }
 
@@ -337,11 +344,11 @@ public class UIMessageList extends UIForm {
     getChildren().clear();
     messageList_.clear();    
     if(pageList_ != null) {
-      List<Message> msgList = new ArrayList<Message>() ;
+      List<Message> msgList = new ArrayList<Message>();
       try {
-        msgList = pageList_.getPage(page, MailUtils.getCurrentUser()) ;
+        msgList = pageList_.getPage(page, MailUtils.getCurrentUser());
         if (page > 1 && msgList.size() == 0) {
-          msgList = pageList_.getPage(page - 1, MailUtils.getCurrentUser()) ;
+          msgList = pageList_.getPage(page - 1, MailUtils.getCurrentUser());
         }
       } catch(Exception e) {
         String username = MailUtils.getCurrentUser();
