@@ -1,0 +1,69 @@
+Index: eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/connection/impl/XMPPSessionImpl.java
+===================================================================
+--- eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/connection/impl/XMPPSessionImpl.java	(revision 74060)
++++ eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/connection/impl/XMPPSessionImpl.java	(working copy)
+@@ -1439,7 +1439,7 @@
+         occupantBean.setAffiliation(occupant.getAffiliation());
+         occupantBean.setJid(occupant.getJid());
+         String username = decodeUsername(occupant.getNick());
+-        occupantBean.setNick(username);
++        occupantBean.setNick(occupant.getNick());
+         occupantBean.setRole(occupant.getRole());
+         UserInfo userInfo = organization.getUserInfo(username);
+         occupantBean.setFullName(userInfo.getFirstName() + " " + userInfo.getLastName());
+Index: eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/component/BuddyListControl.js
+===================================================================
+--- eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/component/BuddyListControl.js	(revision 74060)
++++ eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/component/BuddyListControl.js	(working copy)
+@@ -190,7 +190,7 @@
+  */
+ BuddyListControl.prototype.removeBuddy = function(buddyId){
+   window.jsconsole.warn('Removing buddy: ' + buddyId);
+-  var buddyItemObj = this.getBuddyItem(buddyId);
++  var buddyItemObj = this.buddyList[buddyId];
+   if (buddyItemObj) {
+     buddyItemObj.remove();
+     this.buddyList[buddyId] = null;
+@@ -204,12 +204,12 @@
+  */
+ BuddyListControl.prototype.addBuddy = function(buddyInfo){
+   window.jsconsole.warn('Adding new buddy: ' + buddyInfo.nickname);
+-  var buddyItemObj = this.buddyList[buddyInfo.nickname];
++  var buddyItemObj = this.buddyList[buddyInfo.user];
+   if (buddyItemObj) {
+     window.jsconsole.warn('User existed, skip add buddy');
+   } else {
+     buddyItemObj = this.getNewInstanceOfBuddyItem(buddyInfo);
+-    this.buddyList[buddyInfo.nickname] = buddyItemObj;
++    this.buddyList[buddyInfo.user] = buddyItemObj;
+     this.rootNode.appendChild(buddyItemObj.rootNode);
+   }
+ };
+Index: eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/component/BuddyListControl.js
+===================================================================
+--- eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/component/BuddyListControl.js	(revision 74060)
++++ eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/component/BuddyListControl.js	(working copy)
+@@ -193,7 +193,7 @@
+  */
+ BuddyListControl.prototype.removeBuddy = function(buddyId){
+   window.jsconsole.warn('Removing buddy: ' + buddyId);
+-  var buddyItemObj = this.getBuddyItem(buddyId);
++  var buddyItemObj = this.buddyList[buddyId];
+   if (buddyItemObj) {
+     buddyItemObj.remove();
+     this.buddyList[buddyId] = null;
+@@ -207,12 +207,12 @@
+  */
+ BuddyListControl.prototype.addBuddy = function(buddyInfo){
+   window.jsconsole.warn('Adding new buddy: ' + buddyInfo.nickname);
+-  var buddyItemObj = this.buddyList[buddyInfo.nickname];
++  var buddyItemObj = this.buddyList[buddyInfo.user];
+   if (buddyItemObj) {
+     window.jsconsole.warn('User existed, skip add buddy');
+   } else {
+     buddyItemObj = this.getNewInstanceOfBuddyItem(buddyInfo);
+-    this.buddyList[buddyInfo.nickname] = buddyItemObj;
++    this.buddyList[buddyInfo.user] = buddyItemObj;
+     this.rootNode.appendChild(buddyItemObj.rootNode);
+   }
+ };

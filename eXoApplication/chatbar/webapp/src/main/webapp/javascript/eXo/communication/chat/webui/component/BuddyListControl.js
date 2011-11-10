@@ -193,7 +193,7 @@ BuddyListControl.prototype.getBuddyItem = function(buddyId) {
  */
 BuddyListControl.prototype.removeBuddy = function(buddyId){
   window.jsconsole.warn('Removing buddy: ' + buddyId);
-  var buddyItemObj = this.getBuddyItem(buddyId);
+  var buddyItemObj = this.buddyList[buddyId];
   if (buddyItemObj) {
     buddyItemObj.remove();
     this.buddyList[buddyId] = null;
@@ -207,12 +207,12 @@ BuddyListControl.prototype.removeBuddy = function(buddyId){
  */
 BuddyListControl.prototype.addBuddy = function(buddyInfo){
   window.jsconsole.warn('Adding new buddy: ' + buddyInfo.nickname);
-  var buddyItemObj = this.buddyList[buddyInfo.nickname];
+  var buddyItemObj = this.buddyList[buddyInfo.user];
   if (buddyItemObj) {
     window.jsconsole.warn('User existed, skip add buddy');
   } else {
     buddyItemObj = this.getNewInstanceOfBuddyItem(buddyInfo);
-    this.buddyList[buddyInfo.nickname] = buddyItemObj;
+    this.buddyList[buddyInfo.user] = buddyItemObj;
     this.rootNode.appendChild(buddyItemObj.rootNode);
   }
 };

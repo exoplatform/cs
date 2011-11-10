@@ -1439,7 +1439,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
         occupantBean.setAffiliation(occupant.getAffiliation());
         occupantBean.setJid(occupant.getJid());
         String username = decodeUsername(occupant.getNick());
-        occupantBean.setNick(username);
+        occupantBean.setNick(occupant.getNick());
         occupantBean.setRole(occupant.getRole());
         UserInfo userInfo = organization.getUserInfo(username);
         occupantBean.setFullName(userInfo.getFirstName() + " " + userInfo.getLastName());
