@@ -1,0 +1,40 @@
+Index: extension/ear/pom.xml
+===================================================================
+--- extension/ear/pom.xml	(revision 72115)
++++ extension/ear/pom.xml	(working copy)
+@@ -151,13 +151,8 @@
+ 	   </exclusions>
+ 		
+ 	  </dependency>
++    
+ 	  <dependency>
+-        <groupId>openfire</groupId>
+-        <artifactId>openfire</artifactId>
+-        <version>${openfire.version}</version>
+-		<scope>compile</scope>
+-      </dependency>    
+-	  <dependency>
+         <groupId>commons-lang</groupId>
+         <artifactId>commons-lang</artifactId>
+         <version>${commons-lang.version}</version>
+@@ -210,8 +205,12 @@
+           <displayName>collaboration-extension</displayName>
+           <defaultLibBundleDir>lib</defaultLibBundleDir>
+           <modules>
+-           
+             <jarModule>
++              <groupId>openfire</groupId>
++              <artifactId>openfire</artifactId>
++              <excluded>true</excluded>
++            </jarModule>
++            <jarModule>
+               <groupId>org.exoplatform.cs</groupId>
+               <artifactId>exo.cs.web.webservice</artifactId>
+               <includeInApplicationXml>true</includeInApplicationXml>
+@@ -305,4 +304,4 @@
+       </plugin>
+     </plugins>
+   </build>
+-</project>
++</project>
+\ No newline at end of file
