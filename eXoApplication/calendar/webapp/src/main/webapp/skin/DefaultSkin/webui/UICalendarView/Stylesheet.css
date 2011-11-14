@@ -159,7 +159,7 @@
 }
 
 .UIDayView .Title{
-  width: 350px;
+  width: auto;
   text-align: center;
 }
 /*====================Week View============================*/
@@ -635,7 +635,7 @@
 }
 
 .UIYearView .Title{
-  width: 350px;
+  width: auto;
   text-align: center;
 }
 /*====================Event List View=====================*/
@@ -1123,7 +1123,7 @@
 }
 
 .UIMonthView .Title{
-  width: 350px;
+  width: auto;
   text-align: center;
 }
 

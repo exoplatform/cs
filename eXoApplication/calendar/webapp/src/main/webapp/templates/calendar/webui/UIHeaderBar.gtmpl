@@ -13,7 +13,7 @@ rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.ge
 uicomponent.update() ;
 uicomponent.setSelectedCategory(uicomponent.getSelectedCategory()) ;
 %>
-<div class="UIHeaderBar ListBar">
+<div class="UIHeaderBar ListBar ClearFix">
     <!--
 	<div onclick="<%=uicomponent.event("AddEvent",uicomponent.TYPE_EVENT)%>" class="ControlButton">
       <div class="IconHolder AddNewEvent">
@@ -27,6 +27,18 @@ uicomponent.setSelectedCategory(uicomponent.getSelectedCategory()) ;
       </div>
     </div>
 	-->
+	<div class="AddCategoryIcon" onclick="<%=uicomponent.event("AddCategory")%>" title="<%=_ctx.appRes('UIHeaderBar.label.addNewCategory')%>">
+	  <span></span>
+	</div>
+	<div class="EventCategory" msg="<%=_ctx.appRes('UICalendarView.msg.event-category-list-empty')%>">
+	  <% 
+		uiform.renderField("eventCategories") ;
+	  %>      
+	</div>
+	<div class="Label">
+	  <%=_ctx.appRes("UIHeaderBar.label.eventCategory")%>
+	</div> 
+	
 	<% 
 	 if(uicomponent instanceof UIWeekView) {
 	 String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT, String.valueOf(Calendar.WEEK_OF_YEAR)) ;
@@ -297,18 +309,5 @@ uicomponent.setSelectedCategory(uicomponent.getSelectedCategory()) ;
 	 
 	 }
 	%>
-     
-    
-    <div class="AddCategoryIcon" onclick="<%=uicomponent.event("AddCategory")%>" title="<%=_ctx.appRes('UIHeaderBar.label.addNewCategory')%>">
-      <span></span>
-    </div>
-    <div class="EventCategory" msg="<%=_ctx.appRes('UICalendarView.msg.event-category-list-empty')%>">
-      <% 
-        uiform.renderField("eventCategories") ;
-      %>      
-    </div>
-    <div class="Label">
-      <%=_ctx.appRes("UIHeaderBar.label.eventCategory")%>
-    </div> 
-    <div style="clear: both;"><span></span></div>
+
 </div>

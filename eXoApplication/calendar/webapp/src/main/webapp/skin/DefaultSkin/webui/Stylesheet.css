@@ -100,15 +100,11 @@
 .UICalendarPortlet .UIWeekView .TitleBar, .UICalendarPortlet .UIDayView .TitleBar, .UICalendarPortlet .UIMonthView .TitleBar, .UICalendarPortlet .UIYearView .TitleBar{
   border:none;
   padding-top: 0px;
-  width: 75%;
-  float: left;
 }
 
 .UICalendarPortlet .UIListContainer .TitleBar{
   border:none;
   padding-top: 0px;
-  width: 60%;
-  float: left;
 }
 
 .UICalendarPortlet .UIListContainer .TitleBar .Title a{
