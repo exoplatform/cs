@@ -6,8 +6,9 @@
   import org.exoplatform.calendar.CalendarUtils;
   import org.exoplatform.calendar.service.Utils;
   def rcontext = _ctx.getRequestContext() ;
+  rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendars','/calendar/javascript/') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarContainer.updateUICalendarsLayout();') ;
-  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.getFilterForm("' + uiform.id + '") ;') ;
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendars.init("' + uiform.id + '") ;') ;
   String[] checkPerms = uicomponent.getCheckPermissionString().split(CalendarUtils.COMMA);
 %>
 <%uiform.begin()%>
@@ -16,10 +17,10 @@
       <h6 class="Title">
       <%=uiform.getLabel("calendars")%>
       </h6>
-    <div class="ActionsButton" title="<%=uiform.getLabel("calendarActions")%>" onclick="eXo.calendar.UICalendarPortlet.showMainMenu(this, event);">
+    <div class="ActionsButton" title="<%=uiform.getLabel("calendarActions")%>" onclick="eXo.calendar.UICalendars.showMenu(this, event, 'CalendarMainPopupMenu', eXo.calendar.UICalendars.mainMenuCallback);">
       <% /*Begin Popup Menu - Main */ %>
 	  
-		<div class="UIRightClickPopupMenu" style="display: none ;"> 
+		<div class="UIRightClickPopupMenu CalendarMainPopupMenu" style="display: none ;"> 
 			 <div class="UIContextMenuContainer ContextMenuContainer">
 				<ul>
 					<li class="MenuItem">
@@ -75,6 +76,7 @@
         %>
          
 			<div class="GroupItem ClearFix" id="$groupData.id">
+			  <div class="IconHoverSetting" onclick="eXo.calendar.UICalendars.showMenu(this, event, 'CalendarGroupPopupMenu', eXo.calendar.UICalendars.calendarMenuCallback);"></div>
 				<a class="CollapserFlatStyle"></a>
 				<div class="CalendarGroupIcon" title="$groupData.name">$groupData.name</div>
 			</div>
@@ -92,14 +94,16 @@
               
         %>
             <li class="CalendarItem  CalendarItemPrivate ClearFix" calColor="$calendar.calendarColor" canEdit="true" id="$calId" calType="0" isRemote="$isRemote">
-				<span class="IconHoverSetting"></span>
-                <a href="javascript:void(0);" class="$calendar.calendarColor">
-                	<span class="ColorOpacity">
-                		<span class="$css"></span>
-                	</span>
-                </a>
-                <a class="CalendarName" href="javascript:void(0);" title="$calendar.name">$calendar.name</a>
-					<span style="display:none"><%uiform.renderField(calId)%></span>
+                <div class="IconHoverSetting" onclick="eXo.calendar.UICalendars.showMenu(this, event, 'CalendarPopupMenu', eXo.calendar.UICalendars.calendarMenuCallback);"></div>
+                <div class="CalendarCheckboxBlock" calId="$calId">
+                  <a href="javascript:void(0);" class="$calendar.calendarColor">
+                  	<span class="ColorOpacity">
+                  		<span class="$css"></span>
+                  	</span>
+                  </a>
+                  <a class="CalendarName" href="javascript:void(0);" title="$calendar.name">$calendar.name</a>
+                  <span style="display:none"><%uiform.renderField(calId)%></span>
+                </div>
             </li>
         <%     }
             }
@@ -141,14 +145,16 @@
             if(UICalendarPortlet.isInSpace() && !uicomponent.isCalendarOfSpace(calId))  {css = "IconUnCheckBox checkbox";}
         %>
             <li class="CalendarItem CalendarItemShared ClearFix" calColor="$color" id="$calId" calType="1"  canEdit="<%=uicomponent.canEdit(Utils.getEditPerUsers(calendar), checkPerms)%>">
-                <span class="IconHoverSetting"></span>
-				<a href="javascript:void(0);" class="$color">
-                	<span class="ColorOpacity">
-                		<span class="$css"></span>
-                	</span>
-                </a>
-                <a class="CalendarName" href="javascript:void(0);" title="<%=owner + calendar.getName()%>"><%=owner + calendar.getName()%></a>
-								<span style="display:none;"><%uiform.renderField(calendar.getId())%></span>
+            <div class="IconHoverSetting" onclick="eXo.calendar.UICalendars.showMenu(this, event, 'CalendarPopupMenu2', eXo.calendar.UICalendars.calendarMenuCallback);"></div>
+                <div class="CalendarCheckboxBlock" calId="$calId">
+                  <a href="javascript:void(0);" class="$color">
+                  	<span class="ColorOpacity">
+                  		<span class="$css"></span>
+                  	</span>
+                  </a>
+                  <a class="CalendarName" href="javascript:void(0);" title="<%=owner + calendar.getName()%>"><%=owner + calendar.getName()%></a>
+  								<span style="display:none;"><%uiform.renderField(calendar.getId())%></span>
+								</div>
             </li>
         <%
         }
@@ -193,14 +199,16 @@
              if((UICalendarPortlet.isInSpace() && !uicomponent.isCalendarOfSpace(calId)))  {css = "IconUnCheckBox checkbox";}
         %>
             <li class="CalendarItem CalendarItemPublic ClearFix"  calColor="$calendar.calendarColor" canEdit="<%=uicomponent.canEdit(calendar.getEditPermission(), checkPerms)%>" id="$calId" calType="2" >
-                <span class="IconHoverSetting"></span>
-				<a href="javascript:void(0);" class="$calendar.calendarColor">
+            <div class="IconHoverSetting" onclick="eXo.calendar.UICalendars.showMenu(this, event, 'CalendarPopupMenu', eXo.calendar.UICalendars.calendarMenuCallback);"></div>
+                <div class="CalendarCheckboxBlock" calId="$calId">
+                  <a href="javascript:void(0);" class="$calendar.calendarColor">
                 	<span class="ColorOpacity">
                 		<span class="$css"></span>
                 	</span>
-                </a>
-                <a class="CalendarName" href="javascript:void(0);" title="<%=calendar.getName()%>"><%=calendar.getName()%></a>
-								<span style="display:none"><%uiform.renderField(calendar.getId())%></span>
+                	</a>
+                	<a class="CalendarName" href="javascript:void(0);" title="<%=calendar.getName()%>"><%=calendar.getName()%></a>
+                	<span style="display:none"><%uiform.renderField(calendar.getId())%></span>
+               </div>
             </li>
         <%
         }
@@ -218,7 +226,7 @@
   </div>
   <% /*Begin Popup Menu - Calendar group*/ %>
         
-	<div class="UIRightClickPopupMenu" style="display: none;" id="CalendarGroupPopupMenu" eXoCallback="eXo.calendar.UICalendarPortlet.calendarMenuCallback">
+	<div class="UIRightClickPopupMenu CalendarGroupPopupMenu" style="display: none;" id="CalendarGroupPopupMenu" eXoCallback="eXo.calendar.UICalendarPortlet.calendarMenuCallback">
 		 <div class="UIContextMenuContainer ContextMenuContainer">
 			<ul>
 				<li class="MenuItem">
@@ -260,7 +268,7 @@
     
   <% /*Begin Popup Menu - Calendar*/ %>
         
-	<div class="UIRightClickPopupMenu" style="display: none;" id="CalendarPopupMenu" eXoCallback="eXo.calendar.UICalendarPortlet.calendarMenuCallback">
+	<div class="UIRightClickPopupMenu CalendarPopupMenu" style="display: none;" id="CalendarPopupMenu" eXoCallback="eXo.calendar.UICalendarPortlet.calendarMenuCallback">
 		 <div class="UIContextMenuContainer ContextMenuContainer">
 			<ul>
 				<li class="MenuItem">
@@ -334,7 +342,7 @@
       
   <% /*Begin Popup Menu - Calendar*/ %>
         
-		<div class="UIRightClickPopupMenu" style="display: none;" id="CalendarPopupMenu2" eXoCallback="eXo.calendar.UICalendarPortlet.calendarMenuCallback">
+		<div class="UIRightClickPopupMenu CalendarPopupMenu2" style="display: none;" id="CalendarPopupMenu2" eXoCallback="eXo.calendar.UICalendarPortlet.calendarMenuCallback">
 			 <div class="UIContextMenuContainer ContextMenuContainer">
 				<ul>
 					<li class="MenuItem">

@@ -555,92 +555,6 @@ UICalendarPortlet.prototype.showHide = function(obj){
     }
 };
 
-/**
- * Show/hide Calendar menu
- * @param {Object} obj DOM Element to click
- * @param {Object} evt Mouse event
- */
-UICalendarPortlet.prototype.showMainMenu = function(obj, evt){
-    var _e = window.event || evt;
-    _e.cancelBubble = true;
-    var d = new Date();
-    var currentTime = d.getTime();
-    var timezoneOffset = d.getTimezoneOffset();
-    var oldmenu = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "UIRightClickPopupMenu");
-    var actions = eXo.core.DOMUtil.findDescendantsByTagName(oldmenu, "div");
-    actions[0].onclick = String(actions[0].onclick).replace(/&.*/, "&ct=" + currentTime + "&tz=" + timezoneOffset + "')");
-    eXo.calendar.UICalendarPortlet.swapMenu(oldmenu, obj);
-};
-
-UICalendarPortlet.prototype.calendarMenuCallback = function(evt){
-  var DOMUtil = eXo.core.DOMUtil ;
-  var obj = eXo.core.EventManager.getEventTargetByClass(evt,"CalendarItem") || eXo.core.EventManager.getEventTargetByClass(evt,"GroupItem");
-  var calType = obj.getAttribute("calType");
-  var calName = obj.getAttribute("calName");
-  var calColor = obj.getAttribute("calColor");
-  var canEdit = String(obj.getAttribute("canedit")).toLowerCase();
-  var menu = eXo.webui.UIContextMenu.menuElement ;
-  	try {
-		var selectedCategory = (eXo.calendar.UICalendarPortlet.filterSelect) ? eXo.calendar.UICalendarPortlet.filterSelect : null;
-		if(selectedCategory) selectedCategory = selectedCategory.options[selectedCategory.selectedIndex].value;
-	} catch (e) { //Fix for IE
-		var selectedCategory = null;
-	}
-	if(!menu || !obj.id) {
-    eXo.webui.UIContextMenu.menuElement = null ;
-    return ;
-  } 
-  var value = "" ;
-  value = "objectId=" + obj.id;
-  if (calType) {
-      value += "&calType=" + calType;
-  }
-  if (calName) {
-      value += "&calName=" + calName;
-  }
-  if (calColor) {
-      value += "&calColor=" + calColor;
-  }
-  var items = DOMUtil.findDescendantsByTagName(menu, "a");  
-  for (var i = 0; i < items.length; i++) {
-      if (DOMUtil.hasClass(items[i].firstChild, "SelectedColorCell")) {
-          items[i].firstChild.className = items[i].firstChild.className.toString().replace(/SelectedColorCell/, "");
-      }
-      if (DOMUtil.hasClass(items[i], calColor)) {
-          var selectedCell = items[i].firstChild;
-          DOMUtil.addClass(selectedCell, "SelectedColorCell");
-      }
-      if (items[i].href.indexOf("ChangeColor") != -1) {
-          value = value.replace(/calColor\s*=\s*\w*/, "calColor=" + items[i].className.split(" ")[0]);
-      }
-      items[i].href = String(items[i].href).replace(/objectId\s*=.*(?='|")/, value);
-  }
-	
-  if (DOMUtil.hasClass(obj, "CalendarItem")) {
-      items[0].href = String(items[0].href).replace("')", "&categoryId=" + selectedCategory + "')");
-      items[1].href = String(items[1].href).replace("')", "&categoryId=" + selectedCategory + "')");      
-  }
-  if (calType && (calType != "0")) {
-  
-      var actions = DOMUtil.findDescendantsByTagName(menu, "a");
-      for (var j = 0; j < actions.length; j++) {
-          if ((actions[j].href.indexOf("EditCalendar") >= 0) ||
-          (actions[j].href.indexOf("RemoveCalendar") >= 0) ||
-          (actions[j].href.indexOf("ShareCalendar") >= 0) ||
-          (actions[j].href.indexOf("ChangeColorCalendar") >= 0)) {
-              actions[j].style.display = "none";
-          }
-      }
-  }
-  if (canEdit && (canEdit == "true")) {
-  	  var actions = DOMUtil.findDescendantsByTagName(menu, "a");
-      for (var j = 0; j < actions.length; j++) {
-          if (actions[j].href.indexOf("EditCalendar") >= 0 || actions[j].href.indexOf("RemoveCalendar") >= 0) {
-              actions[j].style.display = "block";
-          }
-      }
-  }  
-} ;
 
 UICalendarPortlet.prototype.switchLayoutCallback = function(layout,status){
   var UICalendarPortlet = eXo.calendar.UICalendarPortlet;
@@ -1332,10 +1246,6 @@ UICalendarPortlet.prototype.showContextMenu = function(compid){
     UIContextMenu.attach("EventBoxes", "UIDayViewEventRightMenu");
     UIContextMenu.attach(["Weekday","Weekend","Today", "EventAlldayContainer"], "UIWeekViewRightMenu");
     UIContextMenu.attach("UIListViewRow", "UIListViewEventRightMenu");
-    UIContextMenu.attach("CalendarItemPrivate", "CalendarPopupMenu");
-    UIContextMenu.attach("CalendarItemPublic", "CalendarPopupMenu");
-    UIContextMenu.attach("CalendarItemShared", "CalendarPopupMenu2");
-    UIContextMenu.attach("GroupItem", "CalendarGroupPopupMenu");
     if(document.getElementById("UIPageDesktop")) this.firstRun = false ;
     this.fixIE();
 };
@@ -1705,7 +1615,7 @@ UICalendarPortlet.prototype.resortEvents = function(){
  * Filters calendar event by calendar
  */
 UICalendarPortlet.prototype.filterByCalendar = function(){
-	var calid = this.id;
+	var calid = this.getAttribute("calId");
     var show = "block";
     var hide = "none";
     var stylEvent = "none";
@@ -1827,25 +1737,6 @@ UICalendarPortlet.prototype.runAction = function(obj){
 	eval(actionLink);
 };
 
-/**
- * Gets filtering form and sets up filtering actions for checkboxes containing calendar group id and calendar id
- * @param {Object} form Form id containing calendar group id and calendar id
- */
-UICalendarPortlet.prototype.getFilterForm = function(form){
-    if (typeof(form) == "string") 
-        form = eXo.calendar.UICalendarPortlet.getElementById(form);
-    this.filterForm = form;
-    var CalendarGroup = eXo.core.DOMUtil.findDescendantsByClass(form, "input", "CalendarGroup");
-    var CalendarItem = eXo.core.DOMUtil.findDescendantsByClass(form, "li", "CalendarItem");
-    var len = CalendarGroup.length;
-    var clen = CalendarItem.length;
-    for (var i = 0; i < len; i++) {
-        CalendarGroup[i].onclick = eXo.calendar.UICalendarPortlet.filterByGroup;
-    }
-    for (var j = 0; j < clen; j++) {
-        CalendarItem[j].onclick = eXo.calendar.UICalendarPortlet.filterByCalendar;
-    }
-};
 
 /**
  * Gets select element that contains event category and sets up filtering action by event category
