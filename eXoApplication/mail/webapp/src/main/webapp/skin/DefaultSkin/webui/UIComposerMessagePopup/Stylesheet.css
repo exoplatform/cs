@@ -10,28 +10,6 @@
   cursor: pointer;
 }
 
-.UIMailPortlet .UIMessageCompose .MailListActionsbar a {
-  color: #000000;
-  margin: 3px 1px 0px 1px;
-  line-height: 26px;
-}
-
-.UIMailPortlet .UIMessageCompose .MailListActionsbar a:hover {
-  background: url('background/ControlButtonBG1x26.gif') repeat-x ;
-  color: #058ee6; border: 1px solid #cbcbcb;
-  height: 24px;
-  margin: 3px 0px 0px 0px;
-}
-
-.UIMailPortlet .UIMessageCompose .MailListActionsbar .UIRightClickPopupMenu a {
-  margin: 0px;
-}
-
-.UIMailPortlet .UIMessageCompose .MailListActionsbar .UIRightClickPopupMenu a:hover {
-  background: none; height: auto;
-  color: #058ee6; border: none;
-}
-
 .UIMailPortlet .UIMessageCompose .MailListActionsbar .ControlButton .Label {
   line-height: 24px;
 }

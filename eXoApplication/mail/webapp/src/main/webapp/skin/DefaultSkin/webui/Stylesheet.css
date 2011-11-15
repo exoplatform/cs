@@ -388,7 +388,9 @@
 
 
 /*********************************MailContentWorkingArea*************************************/
-
+.UIMailPortlet .MailWorkingWorkspace .UIRightClickPopupMenu .MenuItem {
+	display: block;
+}
 
 /*=========================Mail ControlBar======================================*/
 
@@ -468,18 +470,6 @@
   width: 150px;
 }
 
-.UIMailPortlet .UIActionBar  .UIRightClickPopupMenu a {
-  color: #000000;
-  margin:4px 0px 0px 0px;
-}
-
-.UIMailPortlet .UIActionBar  .UIRightClickPopupMenu a:hover {
-  background: #dee4f2;
-  color: #058ee6; border: none;
-  line-height:26px;
-  margin:4px 0px 0px 0px;
-}
-
 /*================================= MailContainer ================*/
 
 .UIMailPortlet .MailWorkingWorkspace .MailContainer {
@@ -539,10 +529,6 @@
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageActionsBar .SelectButton {
   margin: 0px;
-}
-
-.UIMailPortlet .MailWorkingWorkspace a {
-  
 }
 
 .UIMailPortlet .MailWorkingWorkspace .RemoveBtn {
