@@ -290,6 +290,8 @@ public class UIListView extends UICalendarView {
   
   
   private void refreshBrowserList(){
+    UIListContainer uiListContainer = getParent() ;
+    if (uiListContainer.isDisplaySearchResult()) return ;
     if(!this.isClickChkCalendar()){
       try {
         refresh();

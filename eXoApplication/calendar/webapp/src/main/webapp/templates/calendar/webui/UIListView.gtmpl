@@ -124,6 +124,14 @@
       }
     %>
   </div>
+  <%
+    boolean isDisplaySearchResult = uicomponent.isDisplaySearchResult() ;
+    if(isDisplaySearchResult) {
+  %>
+    <div class="UIAction">
+      <a href="<%= uicomponent.event('CloseSearch')%>" class="ActionButton LightBlueStyle"><%=uiform.getLabel('CloseSearch')%></a>
+    </div>
+  <%}%>
     <% /*Begin Popup Menu*/ %>
   <div class="UIRightClickPopupMenu" id="UIListViewEventRightMenu" exocallback="eXo.calendar.UICalendarPortlet.listViewCallack">
     <div class="UIContextMenuContainer">
