@@ -547,7 +547,7 @@ UICalendarPortlet.prototype.showHide = function(obj){
         eXo.core.DOMUtil.cleanUpHiddenElements();
         obj.style.display = "block";
         eXo.core.EventManager.addEvent(obj,"mouseover",eXo.calendar.UICalendarPortlet.autoHide);
-        eXo.core.EventManager.addEvent(obj,"onmouseout",eXo.calendar.UICalendarPortlet.autoHide);
+        eXo.core.EventManager.addEvent(obj,"mouseout",eXo.calendar.UICalendarPortlet.autoHide);
         eXo.core.DOMUtil.listHideElements(obj);
     }
     else {
