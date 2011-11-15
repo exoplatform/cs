@@ -153,8 +153,16 @@ public class UICalendars extends UIForm  {
   }
 
   public void checkAll() {
-    if (this.getAncestorOfType(UICalendarPortlet.class).isInSpace()) {
+    if (UICalendarPortlet.getSpaceId() != null) {
       // As just one calendar is set to checked, this function is broken if the portlet is in Social Space.
+      for(UIComponent cpm : getChildren()){
+        if(isCalendarOfSpace(cpm.getId())){
+          getUIFormCheckBoxInput(cpm.getId()).setChecked(true) ;
+        }else{
+          getUIFormCheckBoxInput(cpm.getId()).setChecked(false) ;
+        }
+        
+      }
       return;
     }
     for(UIComponent cpm : getChildren())
@@ -169,6 +177,20 @@ public class UICalendars extends UIForm  {
         if (checkbox.isChecked()) list.add(cpm.getId());
       }    
     return list ;
+  }
+  
+  public String[] getCheckedPublicCalendars() {
+    List<String> lstCheck = getCheckedCalendars();
+    List<String> lstReturn = new ArrayList<String>();
+    String[] publicCal = getPublicCalendarIds();
+    if (publicCal != null && publicCal.length > 0) {
+      for (String calId : publicCal) {
+        if (lstCheck.contains(calId)) {
+          lstReturn.add(calId);
+        }
+      }
+    }
+    return lstReturn.toArray(new String[lstReturn.size()]);
   }
   
   public EventQuery getEventQuery(EventQuery eventQuery) throws Exception {
@@ -222,7 +244,16 @@ public class UICalendars extends UIForm  {
             checkbox.setChecked(isCalendarOfSpace(calendar.getId()));
             addUIFormInput(checkbox);
           } else {
-            checkbox.setChecked(isCalendarOfSpace(calendar.getId()));
+            boolean isListView = false;
+            UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+            if(UICalendarViewContainer.LIST_VIEW.equals(uiViewContainer.getCurrentViewType())){
+              isListView = true;
+            }
+            if(isListView){
+              checkbox.setChecked(checkbox.isChecked());
+            }else{
+              checkbox.setChecked(isCalendarOfSpace(calendar.getId()));
+            }
           }
         }
       }
@@ -258,7 +289,17 @@ public class UICalendars extends UIForm  {
           checkbox.setChecked(isCalendarOfSpace(calendar.getId()));
           addUIFormInput(checkbox);
         } else {
-          checkbox.setChecked(isCalendarOfSpace(calendar.getId()));
+          boolean isListView = false;
+          UICalendarPortlet calendarPortlet = this.getAncestorOfType(UICalendarPortlet.class);
+          UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+          if(UICalendarViewContainer.LIST_VIEW.equals(uiViewContainer.getCurrentViewType())){
+            isListView = true;
+          }
+          if(isListView){
+            checkbox.setChecked(checkbox.isChecked());
+          }else{
+            checkbox.setChecked(isCalendarOfSpace(calendar.getId()));
+          }
         }
       }
     }
@@ -290,7 +331,17 @@ public class UICalendars extends UIForm  {
           checkbox.setChecked(isCalendarOfSpace(calendar.getId()));
           addUIFormInput(checkbox);
         } else {
-          checkbox.setChecked(isCalendarOfSpace(calendar.getId()));
+          boolean isListView = false;
+          UICalendarPortlet calendarPortlet = this.getAncestorOfType(UICalendarPortlet.class);
+          UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+          if(UICalendarViewContainer.LIST_VIEW.equals(uiViewContainer.getCurrentViewType())){
+            isListView = true;
+          }
+          if(isListView){
+            checkbox.setChecked(checkbox.isChecked());
+          }else{
+            checkbox.setChecked(isCalendarOfSpace(calendar.getId()));
+          }
         }
       }
     }
@@ -890,6 +941,11 @@ public class UICalendars extends UIForm  {
       UICalendars uiCalendars = event.getSource() ;
       UICalendarPortlet uiPortlet = uiCalendars.getAncestorOfType(UICalendarPortlet.class) ;
       UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+      for(UIComponent comp : uiViewContainer.getChildren()) {
+        if(comp.isRendered() && comp instanceof UIListView){
+          ((UIListView)comp).setClickChkCalendar(true) ;
+        }
+      }
       uiViewContainer.refresh();
       UICalendarContainer uiVContainer = uiPortlet.findFirstComponentOfType(UICalendarContainer.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiVContainer.findFirstComponentOfType(UIMiniCalendar.class)) ;

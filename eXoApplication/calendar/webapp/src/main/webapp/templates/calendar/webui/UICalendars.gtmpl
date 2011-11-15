@@ -1,14 +1,16 @@
 <%
   import org.exoplatform.calendar.service.GroupCalendarData;
-  import org.exoplatform.calendar.webui.UICalendarPortlet;
-  import org.exoplatform.webui.form.UIFormCheckBoxInput;
   import org.exoplatform.calendar.service.CalendarEvent;
   import org.exoplatform.calendar.CalendarUtils;
   import org.exoplatform.calendar.service.Utils;
+  import org.exoplatform.webui.form.UIFormCheckBoxInput;
+  import org.exoplatform.calendar.webui.UICalendarPortlet;
   def rcontext = _ctx.getRequestContext() ;
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendars','/calendar/javascript/') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarContainer.updateUICalendarsLayout();') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendars.init("' + uiform.id + '") ;') ;
+  //rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;
+  
   String[] checkPerms = uicomponent.getCheckPermissionString().split(CalendarUtils.COMMA);
 %>
 <%uiform.begin()%>
@@ -91,7 +93,8 @@
               if(uicomponent.getChildById(calId) != null) {
                 def css = "IconCheckBox checkbox";
                 if(UICalendarPortlet.isInSpace() && !uicomponent.isCalendarOfSpace(calId))  {css = "IconUnCheckBox checkbox";}
-              
+                UIFormCheckBoxInput chk = (UIFormCheckBoxInput)uicomponent.getChildById(calId);
+                if(chk.isChecked()){css = "IconCheckBox checkbox";}
         %>
             <li class="CalendarItem  CalendarItemPrivate ClearFix" calColor="$calendar.calendarColor" canEdit="true" id="$calId" calType="0" isRemote="$isRemote">
                 <div class="IconHoverSetting" onclick="eXo.calendar.UICalendars.showMenu(this, event, 'CalendarPopupMenu', eXo.calendar.UICalendars.calendarMenuCallback);"></div>
@@ -143,6 +146,8 @@
             }
             def css = "IconCheckBox checkbox";
             if(UICalendarPortlet.isInSpace() && !uicomponent.isCalendarOfSpace(calId))  {css = "IconUnCheckBox checkbox";}
+            UIFormCheckBoxInput chk = (UIFormCheckBoxInput)uicomponent.getChildById(calId);
+            if(chk.isChecked()){css = "IconCheckBox checkbox";}
         %>
             <li class="CalendarItem CalendarItemShared ClearFix" calColor="$color" id="$calId" calType="1"  canEdit="<%=uicomponent.canEdit(Utils.getEditPerUsers(calendar), checkPerms)%>">
             <div class="IconHoverSetting" onclick="eXo.calendar.UICalendars.showMenu(this, event, 'CalendarPopupMenu2', eXo.calendar.UICalendars.calendarMenuCallback);"></div>
@@ -190,13 +195,15 @@
 
             </div>
           <ul class="UIVTabContent" >
-        <%
+        <%  true
             List calendarList = groupData.getCalendars() ;
             for(calendar in calendarList) {
               calId = calendar.getId() ;
               if(uicomponent.getChildById(calId) != null) {
-             def css = "IconCheckBox checkbox";
-             if((UICalendarPortlet.isInSpace() && !uicomponent.isCalendarOfSpace(calId)))  {css = "IconUnCheckBox checkbox";}
+                def css = "IconCheckBox checkbox";
+                if(UICalendarPortlet.isInSpace() && !uicomponent.isCalendarOfSpace(calId))  {css = "IconUnCheckBox checkbox";}
+                UIFormCheckBoxInput chk = (UIFormCheckBoxInput)uicomponent.getChildById(calId);
+                if(chk.isChecked()){css = "IconCheckBox checkbox";}
         %>
             <li class="CalendarItem CalendarItemPublic ClearFix"  calColor="$calendar.calendarColor" canEdit="<%=uicomponent.canEdit(calendar.getEditPermission(), checkPerms)%>" id="$calId" calType="2" >
             <div class="IconHoverSetting" onclick="eXo.calendar.UICalendars.showMenu(this, event, 'CalendarPopupMenu', eXo.calendar.UICalendars.calendarMenuCallback);"></div>

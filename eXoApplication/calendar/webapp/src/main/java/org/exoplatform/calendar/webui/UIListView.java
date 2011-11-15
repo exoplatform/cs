@@ -33,6 +33,7 @@ import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.service.impl.NewUserListener;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -40,6 +41,8 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
+
+import com.google.caja.parser.js.Reference;
 
 /**
  * Created by The eXo Platform SARL
@@ -91,6 +94,8 @@ public class UIListView extends UICalendarView {
   private String sortedField_ = EVENT_SUMMARY;
   private boolean isAscending_ = true;
   
+  private boolean clickChkCalendar = true;
+  
   public UIListView() throws Exception{
     if(getEvents().length > 0 ) {
       selectedEvent_ = getEvents()[0].getId() ;
@@ -118,12 +123,14 @@ public class UIListView extends UICalendarView {
   
   public void refresh() throws Exception{
     UIListContainer uiListContainer = getParent() ;
+    this.setClickChkCalendar(true);
     if (uiListContainer.isDisplaySearchResult()) return ;
     query = new EventQuery() ;
     if (!CalendarUtils.isEmpty(categoryId_) && !categoryId_.toLowerCase().equals("null") 
         && !categoryId_.equals("calId") && !categoryId_.equals(NewUserListener.DEFAULT_EVENTCATEGORY_ID_ALL)) {
       query.setCategoryId(new String[] { categoryId_ });
     }
+    
     java.util.Calendar fromcalendar = getBeginDay(new GregorianCalendar(getCurrentYear(),  getCurrentMonth(),  getCurrentDay())) ;
     query.setFromDate(fromcalendar) ;
     java.util.Calendar tocalendar = getEndDay(new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay())) ;
@@ -143,14 +150,6 @@ public class UIListView extends UICalendarView {
     query.setOrderBy(new String[] {Utils.EXO_SUMMARY});
     List<CalendarEvent> allEvents = getAllEvents(query);
     
-    List<CalendarEvent> allEventsTemp = new ArrayList<CalendarEvent>();
-    for(CalendarEvent event : allEvents){
-      if(calendarIds.contains(event.getCalendarId())){
-        allEventsTemp.add(event);
-      }
-    }
-    allEvents= allEventsTemp;
-    
     if(uiListContainer.isDisplaySearchResult())  { 
       update(pageList_) ;
     } else {
@@ -168,13 +167,11 @@ public class UIListView extends UICalendarView {
       if(getEvents().length > 0) { 
         String eventId = getEvents()[0].getId() ;
         setSelectedEvent(eventId) ;  
-        //setLastViewId(eventId) ;  
         setLastUpdatedEventId(eventId) ;
         view.setEvent(getEvents()[0]) ;
       } else {
         setSelectedEvent(null) ;
         view.setEvent(null) ;
-        //setLastViewId(null) ;
         setLastUpdatedEventId(null) ;
       }
     } else {
@@ -193,21 +190,26 @@ public class UIListView extends UICalendarView {
         setLastUpdatedEventId(null) ;
       }
     }
+    
   }
 
   private List<String> findCalendarIds() throws Exception {
     List<String> calendarIds = new ArrayList<String>();
     UICalendars uiCalendars = getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UICalendars.class);
     List<String> checkedCals = uiCalendars.getCheckedCalendars();
-    for (GroupCalendarData groupCalendarData : uiCalendars.getPrivateCalendars()) {
+    List<GroupCalendarData> privateCalendar = uiCalendars.getPrivateCalendars();
+    List<GroupCalendarData> publicCalendar = uiCalendars.getPublicCalendars();
+    GroupCalendarData shareClas = uiCalendars.getSharedCalendars();
+    
+    for (GroupCalendarData groupCalendarData : privateCalendar) {
       for (org.exoplatform.calendar.service.Calendar cal : groupCalendarData.getCalendars()) {
         if (checkedCals.contains(cal.getId())) {
           calendarIds.add(cal.getId());
         }
       }
     }
-
-    for (GroupCalendarData calendarData : uiCalendars.getPublicCalendars()) {
+    
+    for (GroupCalendarData calendarData : publicCalendar) {
       for (org.exoplatform.calendar.service.Calendar calendar : calendarData.getCalendars()) {
         if (checkedCals.contains(calendar.getId())) {
           calendarIds.add(calendar.getId());
@@ -215,7 +217,7 @@ public class UIListView extends UICalendarView {
       }
     }
 
-    GroupCalendarData shareClas = uiCalendars.getSharedCalendars();
+    
     if (shareClas != null) {
       for (org.exoplatform.calendar.service.Calendar cal : shareClas.getCalendars()) {
         if (checkedCals.contains(cal.getId())) {
@@ -229,12 +231,14 @@ public class UIListView extends UICalendarView {
   public List<CalendarEvent> getAllEvents (EventQuery eventQuery) throws Exception {
     CalendarService calendarService = CalendarUtils.getCalendarService();
     String username = CalendarUtils.getCurrentUser() ;
+    UICalendars uiCalendars = getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UICalendars.class);
+    String[] checkedPublicCalendars =  uiCalendars.getCheckedPublicCalendars();
     if (isDisplaySearchResult()) {
       eventQuery.setExcludeRepeatEvent(false);
-      return calendarService.getEvents(username, eventQuery, getPublicCalendars())  ;
+      return calendarService.getEvents(username, eventQuery, checkedPublicCalendars)  ;
     }
-    List<CalendarEvent> allEvents =  calendarService.getEvents(username, eventQuery, getPublicCalendars())  ;
-    List<CalendarEvent> originalRecurEvents = calendarService.getOriginalRecurrenceEvents(username, eventQuery.getFromDate(), eventQuery.getToDate(), getPublicCalendars());
+    List<CalendarEvent> allEvents =  calendarService.getEvents(username, eventQuery, checkedPublicCalendars)  ;
+    List<CalendarEvent> originalRecurEvents = calendarService.getOriginalRecurrenceEvents(username, eventQuery.getFromDate(), eventQuery.getToDate(), checkedPublicCalendars);
     String timezone = CalendarUtils.getCurrentUserCalendarSetting().getTimeZone();
     if (originalRecurEvents != null && originalRecurEvents.size() > 0) {
       Iterator<CalendarEvent> recurEventsIter = originalRecurEvents.iterator();
@@ -249,7 +253,7 @@ public class UIListView extends UICalendarView {
     }
     return allEvents;
   }
-  
+
   public void update(EventPageList pageList) throws Exception {
     pageList_ = pageList ;
     updateCurrentPage(pageList_.getCurrentPage()) ;
@@ -277,8 +281,22 @@ public class UIListView extends UICalendarView {
   }
 
   public CalendarEvent[] getEvents() throws Exception {
-    if(eventMap_ == null || eventMap_.size() == 0) return new CalendarEvent[]{} ;
-    return eventMap_.values().toArray(new CalendarEvent[]{}) ;    
+    if(eventMap_.size() == 0){
+      return new CalendarEvent[]{} ;
+    }else{
+      return eventMap_.values().toArray(new CalendarEvent[]{}) ;
+    } 
+  }
+  
+  
+  private void refreshBrowserList(){
+    if(!this.isClickChkCalendar()){
+      try {
+        refresh();
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
   }
   public long getAvailablePage(){
     return pageList_.getAvailablePage() ; 
@@ -296,6 +314,14 @@ public class UIListView extends UICalendarView {
 
   public void setSelectedEvent(String selectedEvent) { this.selectedEvent_ = selectedEvent ; }
   public String getSelectedEvent() { return selectedEvent_ ;}
+
+  public boolean isClickChkCalendar() {
+    return clickChkCalendar;
+  }
+
+  public void setClickChkCalendar(boolean clickChkCalendar) {
+    this.clickChkCalendar = clickChkCalendar;
+  }
 
   public LinkedHashMap<String, CalendarEvent> getDataMap(){
     return eventMap_ ;
@@ -317,7 +343,7 @@ public class UIListView extends UICalendarView {
           uiListView.setLastUpdatedEventId(eventId) ;
           uiListView.setSelectedEvent(null) ;
           uiPreview.setEvent(null);
-        } 
+        }
         event.getRequestContext().addUIComponentToUpdateByAjax(uiListContainer);
       }
     }
@@ -430,5 +456,13 @@ public class UIListView extends UICalendarView {
   public String getDefaultStartTimeOfEvent() {
     return String.valueOf(calendar_.getTimeInMillis());
   }
+
+  @Override
+  public void processAction(WebuiRequestContext context) throws Exception {
+    this.setClickChkCalendar(true);
+    super.processAction(context);
+  }
+  
+  
 }
 
