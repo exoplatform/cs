@@ -102,6 +102,11 @@ UICalendarContainer.prototype.collapseUICalendars = function() {
 
 UICalendarContainer.prototype.expandUICalendars = function() {
   this.UICalendarsListContentContainer.style.display = "block";
+  var containerHeight = this.calendarsListHeight;
+  if (this.UIMiniCalendarContainer.style.display == 'none') {
+    containerHeight += this.miniCalendarContainerHeight;
+  }
+  this.UICalendarsListContentContainer.style.height = containerHeight + "px";
   var downCssClass = this.UICalendarsToggleButton.getAttribute("downCssClass");
   var upCssClass = this.UICalendarsToggleButton.getAttribute("upCssClass");
   var buttonCssClassStr = this.UICalendarsToggleButton.className;

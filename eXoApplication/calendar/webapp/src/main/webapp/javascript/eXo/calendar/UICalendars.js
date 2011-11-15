@@ -60,7 +60,11 @@ UICalendars.prototype.calendarMenuCallback = function(anchorElm, evt) {
   var canEdit = String(obj.getAttribute("canedit")).toLowerCase();
   var UICalendars = eXo.calendar.UICalendars;
   var menu = UICalendars.currentMenuElm;
-    try {
+  var contentContainerElm = DOMUtil.findAncestorByClass(anchorElm, "ContentContainer");
+  if (contentContainerElm) {
+    menu.style.top = (eXo.core.Browser.findPosY(menu) - contentContainerElm.scrollTop) + 'px';
+  }
+  try {
     var selectedCategory = (eXo.calendar.UICalendarPortlet.filterSelect) ? eXo.calendar.UICalendarPortlet.filterSelect : null;
     if(selectedCategory) selectedCategory = selectedCategory.options[selectedCategory.selectedIndex].value;
   } catch (e) { //Fix for IE
