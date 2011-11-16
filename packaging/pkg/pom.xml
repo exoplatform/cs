@@ -833,6 +833,16 @@
 		<version>${org.jboss.version}</version>
 		<type>jar</type>
 	</dependency>
+  <dependency>
+    <groupId>org.jboss</groupId>
+    <artifactId>jbossxb</artifactId>
+    <version>${org.jbossxb.version}</version>
+  </dependency>
+  <dependency>
+    <groupId>org.staxnav</groupId>
+    <artifactId>staxnav.core</artifactId>
+    <version>${org.staxnav.version}</version>
+  </dependency>
 	<dependency>
 		<groupId>org.exoplatform.core</groupId>
 		<artifactId>exo.core.component.organization.jdbc</artifactId>
