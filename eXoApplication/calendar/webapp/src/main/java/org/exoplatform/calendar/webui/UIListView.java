@@ -17,7 +17,6 @@
 package org.exoplatform.calendar.webui;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -33,6 +32,8 @@ import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.service.impl.NewUserListener;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -41,8 +42,6 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
-
-import com.google.caja.parser.js.Reference;
 
 /**
  * Created by The eXo Platform SARL
@@ -75,6 +74,7 @@ import com.google.caja.parser.js.Reference;
     }
 )
 public class UIListView extends UICalendarView {
+  private static final Log log = ExoLogger.getLogger("org.exoplatform.calendar.webui.UIListView");
   private LinkedHashMap<String, CalendarEvent> eventMap_ = new LinkedHashMap<String, CalendarEvent>() ;
   private EventPageList pageList_ = null ;
   private String selectedEvent_ = null ;
@@ -94,7 +94,7 @@ public class UIListView extends UICalendarView {
   private String sortedField_ = EVENT_SUMMARY;
   private boolean isAscending_ = true;
   
-  private boolean clickChkCalendar = true;
+  private boolean calClicked = true;
   
   public UIListView() throws Exception{
     if(getEvents().length > 0 ) {
@@ -123,7 +123,7 @@ public class UIListView extends UICalendarView {
   
   public void refresh() throws Exception{
     UIListContainer uiListContainer = getParent() ;
-    this.setClickChkCalendar(true);
+    this.setCalClicked(true);
     if (uiListContainer.isDisplaySearchResult()) return ;
     query = new EventQuery() ;
     if (!CalendarUtils.isEmpty(categoryId_) && !categoryId_.toLowerCase().equals("null") 
@@ -289,14 +289,16 @@ public class UIListView extends UICalendarView {
   }
   
   
-  private void refreshBrowserList(){
+  private void refreshBrowser(){
     UIListContainer uiListContainer = getParent() ;
     if (uiListContainer.isDisplaySearchResult()) return ;
-    if(!this.isClickChkCalendar()){
+    if(!this.isCalClicked()){
       try {
         refresh();
       } catch (Exception e) {
-        e.printStackTrace();
+        if(log.isDebugEnabled()){
+          log.debug("Exception occurs in freshBrowserListMethod", e);
+        }
       }
     }
   }
@@ -317,12 +319,12 @@ public class UIListView extends UICalendarView {
   public void setSelectedEvent(String selectedEvent) { this.selectedEvent_ = selectedEvent ; }
   public String getSelectedEvent() { return selectedEvent_ ;}
 
-  public boolean isClickChkCalendar() {
-    return clickChkCalendar;
+  public boolean isCalClicked() {
+    return calClicked;
   }
 
-  public void setClickChkCalendar(boolean clickChkCalendar) {
-    this.clickChkCalendar = clickChkCalendar;
+  public void setCalClicked(boolean clickChkCalendar) {
+    this.calClicked = clickChkCalendar;
   }
 
   public LinkedHashMap<String, CalendarEvent> getDataMap(){
@@ -461,7 +463,7 @@ public class UIListView extends UICalendarView {
 
   @Override
   public void processAction(WebuiRequestContext context) throws Exception {
-    this.setClickChkCalendar(true);
+    this.setCalClicked(true);
     super.processAction(context);
   }
   

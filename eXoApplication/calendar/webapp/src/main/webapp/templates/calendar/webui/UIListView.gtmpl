@@ -25,8 +25,8 @@
   def rcontext = _ctx.getRequestContext() ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.listViewDblClick("'+uiform.id+'") ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.cs.CheckBox.init("'+uiform.id+'") ;') ;
-  uicomponent.refreshBrowserList();
-  uicomponent.setClickChkCalendar(false);
+  uicomponent.refreshBrowser();
+  uicomponent.setCalClicked(false);
 %>
  
   <div class="UIListView SpliterResizableListArea">
@@ -125,8 +125,7 @@
     %>
   </div>
   <%
-    boolean isDisplaySearchResult = uicomponent.isDisplaySearchResult() ;
-    if(isDisplaySearchResult) {
+    if(uicomponent.isDisplaySearchResult()) {
   %>
     <div class="UIAction">
       <a href="<%= uicomponent.event('CloseSearch')%>" class="ActionButton LightBlueStyle"><%=uiform.getLabel('CloseSearch')%></a>

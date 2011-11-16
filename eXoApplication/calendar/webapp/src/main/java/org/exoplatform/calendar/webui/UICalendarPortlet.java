@@ -43,7 +43,6 @@ import org.exoplatform.social.core.space.spi.SpaceService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.UIPortletApplication;
@@ -64,7 +63,7 @@ import org.mortbay.cometd.continuation.EXoContinuationBayeux;
 )
 public class UICalendarPortlet extends UIPortletApplication {
   
-  private static Log log = ExoLogger.getLogger(UICalendarPortlet.class);
+  private static Log log = ExoLogger.getLogger("org.exoplatform.calendar.webui.UICalendarPortlet");
   
   private static String SPACE_ID_KEY = "UICalendarPortlet_Space_Id";
   
