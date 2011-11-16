@@ -30,6 +30,12 @@ To see the portlet in the project, follow this path:
 h1. Chatbar portlet {anchor:id=CSref.Portlets.ChatbatPortlet}
 The Chatbar portlet is packaged in the _Chatbar.war_ file.
 
+{docbook}
+<warning><para>
+The Chatbar portlet and its services are deprecated. It remains fully supported for eXo customers, however it	will not receive any enhancement and will be removed from the product scope in the future.
+</para></warning>
+{docbook}
+
 h2. Description {anchor:id=CSref.Portlets.ChatbarPortletDescription}
 
 The Chatbar portlet shows the Chatbar application of eXo Collaboration that can be positioned in the portal or page layout as any other, but behaves as a floating box. The bar remains floating at its location even when the browser window is scrolled or resized. Its height is fixed, but can be expanded horizontally to any size available in its container. This allows the portlet to be placed in two layout cases:
@@ -111,6 +117,12 @@ _/eXoApplication/chatbar/webapp/src/main/webapp/WEB-INF/portlet.xml_.
 h1. Chat Portlet {anchor:id=CSref.Portlets.ChatPortlet}
 The Chat portlet is packaged in the _Chat.war_ file.
 
+{docbook}
+<warning><para>
+The Chat portlet and its services are deprecated. It remains fully supported for eXo customers, however it will not receive any enhancement and will be removed from the product scope in the future.
+</para></warning>
+{docbook}
+
 h2. Description {anchor:id=CSref.Portlets.ChatPortletDescription}
  The Chat Portlet shows the Chat application of eXo Collaboration that allows users to enter chat rooms and communicate with online others at real time.
 
@@ -134,6 +146,12 @@ _/eXoApplication/contact/webapp/src/main/webapp/WEB-INF/portlet.xml_.
 h1. Mail Portlet {anchor:id=CSref.Portlets.MailPortlet}
 The Mail Portlet is packaged in the _Mail.war_ file.
 
+{docbook}
+<warning><para>
+The Mail portlet and its services are deprecated. It remains fully supported for eXo customers, however it will not receive any enhancement and will be removed from the product scope in the future.
+</para></warning>
+{docbook}
+
 h2. Description {anchor:id=CSref.Portlets.MailPortletDescription}
 Mail Portlet shows the Mail application of eXo Collaboration that offers a lot of features to users such as sending, receiving or viewing their mails through Internet without actually downloading them to their computer. Users not only take advantages of eXo Mail by keeping and receiving all important messages, files and pictures forever but also by looking for and viewing their needed messages easily whenever they want. Additionally, the Mail application is smoothly integrated with other Collaboration modules, such as Address Book and Calendar.
 
@@ -145,6 +163,13 @@ _/eXoApplication/mail/webapp/src/main/webapp/WEB-INF/portlet.xml_.
 h1. RSSreader Portlet {anchor:id=CSref.Portlets.RSSreaderPortlet}
 
 The RSSreader Portlet is packaged in the _Rssreader.war_ file.
+
+{docbook}
+<warning><para>
+The RSSreader portlet and its services are deprecated. It remains fully supported for eXo customers, however it will not receive any enhancement and will be removed from the product scope in the future.
+</para></warning>
+{docbook}
+
 
 h2. Description {anchor:id=CSref.Portlets.RSSreaderDescription} 
 eXo Collaboration uses the RSS Reader Portlet that facilitates users to quickly get a view of their favorite feeds around the web. They will get the latest news, the last updated posts from their favorite blogs, latest emails, and more.

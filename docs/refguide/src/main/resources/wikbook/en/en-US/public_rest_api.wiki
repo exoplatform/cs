@@ -35,6 +35,12 @@ The Mail application of eXo Collaboration uses MailWebservice to provide all API
 
 REST API of the Mail portlet is exposed by _org.exoplatform.services.cs.mail.MailWebservice_ class.
 
+{docbook}
+<warning><para>
+The Mail portlet and its services are deprecated. It remains fully supported for eXo customers, however it will not receive any enhancement and will be removed from the product scope in the future.
+</para></warning>
+{docbook}
+
 || Service name || Service URL || Location || Description ||
 |*MailWebservice* | {{$portalname/$restcontextname/private/cs/mail}} | - Maven groupId: org.exoplatform.cs {example}{example} - artifactId: exo.cs.web.webservice |This service is used to call extended services of the Mail application. |
 
@@ -55,6 +61,12 @@ h1. Chat application {anchor:id=CSref.PublicREST_APIs.ChatApplication}
 The Chat application uses some APIs to help users create a room, join a room, invite other users to room, or send files, and more.
 
 The Chat application of eXo Collaboration uses two services: RESTXMPPService and FileExchangeService to do these tasks.
+
+{docbook}
+<warning><para>
+The Chat portlet and its services are deprecated. It remains fully supported for eXo customers, however it will not receive any enhancement and will be removed from the product scope in the future.
+</para></warning>
+{docbook}
 
 h2. RESTXMPPService {anchor:id=CSref.PublicREST_APIs.RESTXMPPService}
 

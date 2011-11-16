@@ -425,7 +425,13 @@ It is used to register the listener named {{org.exoplatform.webservice.cs.LastUp
 | *actionClassName* | {{org.exoplatform.webservice.cs.LastUpdateAction}} |The registration class to execute the actions that the plugin requires. |
  
 h2. Chat Configuration {anchor:id=CSref.Configuration.ChatConfiguration}
-The Chat congiguration is applied in _/extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/chat/chat-service-configuration.xml_.
+The Chat Configuration is applied in _/extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/chat/chat-service-configuration.xml_.
+
+{docbook}
+<warning><para>
+The Chat portlet and its services are deprecated. It remains fully supported for eXo customers, however it will not receive any enhancement and will be removed from the product scope in the future.
+</para></warning>
+{docbook}
 
 h3. HistoryPeriodJob {anchor:id=CSref.Configuration.HistoryPeriodJob}
 
@@ -669,6 +675,12 @@ Details:
 * *Description*: It is a plugin to represent data from a RSS source.
 
 h2. Mail Configuration {anchor:id=CSref.Configuration.MailConfiguration}
+
+{docbook}
+<warning><para>
+The Mail portlet and its services are deprecated. It remains fully supported for eXo customers, however it will not receive any enhancement and will be removed from the product scope in the future.
+</para></warning>
+{docbook}
 
 h3. AuthenticationLogoutListener {anchor:id=CSref.Configuration.AuthenticationLogoutListener}
 

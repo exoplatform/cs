@@ -208,6 +208,12 @@ The _{noformat}exo:calendarSetting{noformat}_ node type has the following proper
 
 h1. Chat JCR Structure {anchor:id=CSref.JCRStructure.Chat}
 
+{docbook}
+<warning><para>
+The Chat portlet and its services are deprecated. It remains fully supported for eXo customers, however it 	will not receive any enhancement and will be removed from the product scope in the future.
+</para></warning>
+{docbook}
+
 !Chat JCR Structure.png!
 
 The node type *{noformat}lr:conversation{noformat}* has the following properties:
@@ -255,6 +261,12 @@ The node type *{noformat}lr:presencestatus{noformat}* contains information regar
 
 
 h1. Address Book JCR Structure {anchor:id=CSref.JCRStructure.AddressBook}
+
+{docbook}
+<warning><para>
+The Address Book portlet and its services are deprecated. It remains fully supported for eXo customers, however it will not receive any enhancement and will be removed from the product scope in the future.
+</para></warning>
+{docbook}
 
 The Address Book portlet is a JCR-based application. The Address Book data are stored in the eXo-JCR under the ContactApplication data directory. The whole JCR structure of Address Book can be visualized in the diagram below:
 
@@ -351,6 +363,12 @@ When a contact or a address book is shared to other users, it is referred to the
 
 
 h1. Mail JCR Structure {anchor:id=CSref.JCRStructure.Mail}
+
+{docbook}
+<warning><para>
+The Mail portlet and its services are deprecated. It remains fully supported for eXo customers, however it will not receive any enhancement and will be removed from the product scope in the future.
+</para></warning>
+{docbook}
 
 !Mail JCR Structure.png!
 

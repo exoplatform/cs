@@ -1,6 +1,10 @@
 h1. Configure Address Books
 
-
+{docbook}
+<warning><para>
+The Address Book portlet and its services are deprecated. It remains fully supported for eXo customers, however it will not receive any enhancement and will be removed from the product scope in the future.
+</para></warning>
+{docbook}
 
 h1. Contact View
 
