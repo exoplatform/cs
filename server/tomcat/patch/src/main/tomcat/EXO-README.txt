@@ -15,9 +15,9 @@
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  **/
 
-============================================================ 
-    Release Notes - eXo Collaboration - Version 2.2.0
-============================================================ 
+====================================================== 
+    Release Notes - eXo Collaboration - Version 2.2.5
+====================================================== 
 
 ===============
 1 Introduction
@@ -49,17 +49,12 @@ experience more productive. It offers several ways to to view and organize your 
 
 
     * General
-	 -  Subscribe to remote calendar
-     - "Leave message on server" mail options
-     - define a service that allowed all settings to be preconfigured by admins and possibly set as not modifiable by users
-     - show warning message when create event with invitation mail but don't enter email address yet
-     - Improve repeating event rule
-     - Contacts selected on the current page are added.
-     - Do not display left panes of Calendar in spaces
-     - Highlight today not unique enough in Mac then it's hard to know what is date today
-     - Tasks and events are not created in calendar
-     - Upload file when select, no need to click to upload button 
-     - Fix bunch of bug
+	- Portuguese Translation
+        - Performance improvements 
+        - New Look in calendar Application 
+        - New Look in chatbar application
+        - DOM improvement 
+        - Many bugs fixes
      
     * Find the latest release notes here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Release+Notes            
           
@@ -163,6 +158,197 @@ All those accounts have the default password "gtn".
 ===========
 6 CHANGELOG
 ===========
+
+- 2.2.5
+
+** Bug
+    * [CS-4631] - Bad french statement in calendar
+    * [CS-4725] - The calendar application counts wrong
+    * [CS-4821] - Unknown error when export message by delegated user
+    * [CS-5354] - [Calendar] The Calendar portlet must use all the available space to be displayed on
+    * [CS-5420] - [Calendar] On View Day, Event located is in wrong time range
+    * [CS-5432] - Calendar: Error on creating an event or task with option All day 
+    * [CS-5433] - [Mail] Button Next Page doesn't work, Button Last Page works wrong
+    * [CS-5440] - Wrong URL of calendar feed
+    * [CS-5444] - Wrong error message when creating an account in CS Mail
+    * [CS-5445] - The calendar check boxes not un-cheched when unchecked the calendar check box
+    * [CS-5446] - The rename of a personal folder name is bugged
+    * [CS-5448] - Synchronize folder if a folder on Gmail is created don't work
+    * [CS-5461] - [Wiki] Page content is displayed in front of a chatbar window
+    * [CS-5463] - IE7 UI - Calendar - Some icons are not lined-up
+    * [CS-5464] - FF UI - Calendar - Almost all views are seriously broken
+    * [CS-5472] - [Calendar] Simple search doesn't work
+    * [CS-5493] - [Contact] Nothing happens when click on print preview button
+    * [CS-5505] - [Contact] Cannot add tag by Add tag action
+
+** Feedback
+    * [CS-4900] - Some errors in text of Mail 
+    * [CS-5435] - Calendar activities : poor usability
+
+** Improvement
+    * [CS-4761] - Remote Calendar : When suscribing to a remote URL we should automatically add the name and description from the content of the ICS
+    * [CS-4791] - Sort calendar search results by date by default
+    * [CS-5033] - [CS][Calendar] current date is not red-highlighted anymore when changing to next month
+    * [CS-5126] - [Mail] Advanced DMS UI/UXP Improvement
+    * [CS-5317] - Soft re-looking of calendar
+    * [CS-5380] - [Calendar] Calendars popups improvements
+    * [CS-5428] - Externalize some JCR Workspace properties
+
+- 2.2.4
+
+** Bug
+    * [CS-4602] - Check displaying Add participant form of Calendar in French
+    * [CS-4780] - Calendar - Alret message form is invalid display
+    * [CS-4806] - Left pane of calendar inside a space is shown as default
+    * [CS-4814] - [CS-Calendar] High light date is incorrect when add event with [All day] option
+    * [CS-5302] - [Mail] Can't not read mail after checking
+    * [CS-5360] - KS: Problem when show default group calendars
+    * [CS-5383] - IE7: Remove scrollbar in Search Results form
+    * [CS-5392] - [Mail] Can not sync imap folder
+    * [CS-5397] - [Calendar] Quick add event form disappear after submit
+    * [CS-5402] - [Mail] IE9/FF5/Chrome12: Error in Calendar application
+    * [CS-5412] - getissues REST service returns events from the following day if it starts at midnight
+    * [CS-5418] - [Mail] Unknow error when download attach file from mail
+    * [CS-5419] - [Mail] Java script error when Save attach file to server
+
+** Improvement
+    * [CS-5132] - [Calendar][Improvement] Inform msg shown when participant list is empty can make users confused
+    * [CS-5327] - Space Activity Stream tab - tell to which space the message was created for
+    * [CS-5379] - [Calendar] Soft relooking
+    * [CS-5401] - REST service to retrieve calendar events in a date range
+
+- 2.2.3
+
+** Bug
+    * [CS-4508] - Chat bar invalid link access to mail, calendar, contacts on csdemo
+    * [CS-4758] - Calendar - right click menu on an event/task does not work
+    * [CS-5070] - [CS][Mail] Can not get mail - error msg "Email account setting is invalid!"
+    * [CS-5129] - [Calendar] IE7: Remove scrollbar in confirmation form when add new event
+    * [CS-5130] - [Calendar] IE7: Error in preview event
+    * [CS-5134] - [Mail] Error in Manage Accounts menu
+    * [CS-5135] - [Mail] Error in Add folder menu
+    * [CS-5147] - [CS][Mail] Incorrect number of unread mails in Inbox right after being received
+    * [CS-5167] - [CS][Calendar] Timerange displayed at the header of Task/Event is wrong after task/event is dragged & dropped randomly - JS error
+    * [CS-5176] - [CS][Chat][IE8] Broken UI in Account list
+    * [CS-5177] - [CS][Chat][IE8] Can not close chat window
+    * [CS-5180] - Wrong date default when adding new event for next day - Daily view - Calendar
+    * [CS-5187] - Nothing happen when click on Home icon
+    * [CS-5189] - Nothing happen when create new folder with blank name
+    * [CS-5257] - ChatBar portlet raises javascript error under IE-7, IE-8
+    * [CS-5278] - IE9-Calendar: Can not drag & drop Event/Task and Don't show Add Event form when left click on working pane
+    * [CS-5283] - [CS][Chat] IE8 Broken GUI in contact list of Chat Room
+    * [CS-5284] - [Mail] Not show received mails in mail list with POP 3 method
+    * [CS-5288] - [Mail] Not show attachments that has space and no extension in file name (IMAP method)
+    * [CS-5297] - Backport patch for slow display of Calendar for a very large number of user (20K) for 3.5
+    * [CS-5301] - [Mail] Scroll bar in Create Account form
+    * [CS-5303] - PLF Integrated social with calendar, could not interact with action after created event
+    * [CS-5304] - PLF Integrated social with calendar, could not interact with action after created event
+    * [CS-5305] - Participant's event cannot be displayed after accept and import from email's invitation
+    * [CS-5307] - [CS] Gadget MyTasks request rest service sequential cause portal's time out function doesn't work
+    * [CS-5309] - [Mail] Create account button is covered in IE 7
+    * [CS-5320] - Incorrect label in Calendar portlet
+    * [CS-5326] - [Mail]  There is no message after refresh Mail application
+    * [CS-5337] - Cannot drag n drop an event
+    * [CS-5338] - UI problem in cs 
+    * [CS-5342] - [Packaging] Remove safely redundant the package client.openfire from CS server 
+    * [CS-5343] - [Calendar] Invitations email is not send after edit event
+    * [CS-5351] - [Calendar] Wrong confirm delete message
+    * [CS-5353] - Chat : chat room participants are not displayed
+    * [CS-5355] - Cannot resize an event
+    * [CS-5356] - [Mail] Can not display preview of attachment that's image type.
+    * [CS-5359] - [Chat] Name of an user is still displayed on list after she leaves a room
+    * [CS-5362] - CLONE - Minicalendar isn't translated into French in email
+    * [CS-5364] - Lose border in Calendar Group form
+    * [CS-5365] - Lose border in Share Calendar form
+    * [CS-5366] - Shared user/group is not listed on Share Calendar form
+    * [CS-5367] - CLONE - [Calendar] UI bug when adding reminder email, participants in French
+    * [CS-5370] - [CS]: Show duplicate pop-up messge after change edit mode of chatbar porltet
+    * [CS-5371] - IE7: Error in Export contact form
+    * [CS-5372] - No message to alert that message is sent on receipter side
+    * [CS-5374] - Impossible to open CS bar's shortcuts in PLF
+    * [CS-5375] - CLONE - The highlight is disappear after adding participant 
+    * [CS-5376] - CLONE - Cannot open ics file in the invitation's email with MS Office Outlook 2003
+    * [CS-5382] -  After refreshing browser, event/task is returned to original position
+    * [CS-5391] - [Mail] Can not delete account
+    * [CS-5394] - [Mail] Unknown error when edit delegate account
+    * [CS-5395] - [Calendar] Wrong tooltip message
+    * [CS-5398] - [Mail][Firefox 3.6] Bold line appear in UI
+    * [CS-5407] - [Mail] Add and save attachment to server appear in CS standalone
+
+** Feedback
+    * [CS-5296] - Improve default calendar view
+
+** Improvement
+    * [CS-5179] - Support IE 8
+    * [CS-5292] - UIPopup - check and improv. the UIPopup calls
+    * [CS-5318] - Improve some templates to fit PLF3.5 skin style
+    * [CS-5319] - Change the target xsd on xml file
+    * [CS-5358] - [Calendar] Avoid hostname hardcode in RSS URL
+
+- 2.2.2
+
+** Bug
+    * [CS-5071] - [CS][Mail] Don't show "attachment" icon right after getting mails with attached files into Inbox
+    * [CS-5138] - [Chat] IE7: Error in Chat form
+    * [CS-5142] - [CS][Calendar] UI of Minicalendar on left menu is broken - FF
+    * [CS-5148] - [CS][AddressBook] GUI of "Add Contact" window is broken
+    * [CS-5149] - [CS][Chat] Broken GUI in contact list of Chat Room
+    * [CS-5185] - Should show child nodes of selected folder in the left pane
+    * [CS-5188] - Show full attachment link
+    * [CS-5190] - Nothing happen when save file is not existing
+    * [CS-5242] - Cannot access to Calendar in Space
+    * [CS-5243] - Cannot share addressbook
+    * [CS-5255] - CS 2.2.x unit test fail
+    * [CS-5258] - [CS] [Calendar] Js problem that causes a blockage of the menu
+    * [CS-5260] - [Mail] Can not delete the file attachments in draft mail
+    * [CS-5270] - [Mail] Select acount context menu lose style sheet
+    * [CS-5272] - Cannot export a calendar which contains tasks
+    * [CS-5274] - Cannot Edit, Move, Delete ... contact
+    * [CS-5279] - [Mail] IE9/FF5/Chrome12: Lose border in Manage Account 
+    * [CS-5281] - Find and fix all JCR Sessions leaks
+    * [CS-5282] - Backport - Chat - there is no user notification of the session timeout
+    * [CS-5286] - Attachment in mail - cannot view, download, save to dms
+    * [CS-5287] - The position of text displayed incorrectly
+    * [CS-5290] - Not change color when edit tags in Mail
+
+** Improvement
+    * [CS-4980] - [DOM] CalendarUIActivity optimization
+    * [CS-5067] - [PLF3.5 Skin] - Redesign of Chat Bar
+    * [CS-5123] - [Gadget] My Task and Upcoming event  UI improvement for new skin plf 3.5
+    * [CS-5172] - Check compatible of UI new skin changed for UITabContainer, UIHorizontalTabs, UIPopupWindow
+    * [CS-5241] - Support UIPopupWindow improvement - CS
+    * [CS-5250] - Add priority for skin modules
+
+- 2.2.1
+
+** Bug
+    * [CS-4864] - [CS-mail] Don't stop get mail and don't show arlert message when check mail with incorrect account
+    * [CS-4984] - CS - Mail - Get message "Please select messages" when right-click on a message and select a menu item
+    * [CS-5002] - Display "null: stop" at the first moment getting mail
+    * [CS-5030] - [Chatbar] Search is case sensitive when trying to add a contact
+    * [CS-5068] - CS - Mail - render UIMessagePreview is error, show exception in terminal.
+    * [CS-5109] - CLONE - Ui problem with some events in week view 
+    * [CS-5120] - Created event in a space context is not displayed 
+    * [CS-5121] - [Calendar] Left Panel is not correctly displayed in Calendar of Space in PLF 3.5
+    * [CS-5131] - [Calendar] Can not send remind email
+    * [CS-5137] - Don't show list activity for added event/taks on space
+    * [CS-5143] - [CS][Calendar] Menu is hidden --> can not logout by clicking on LogOut button - IE
+    * [CS-5146] - [CS][Calendar] Timerange is displayed incorrectly on tooltip of Task/Event
+    * [CS-5162] - Build CS failed because of changes from GateIn 
+    * [CS-5169] - CS application links on AdminBar don't work
+    * [CS-5175] - ChatBar button url are wrong in csdemo
+    * [CS-5224] - [Mail] Can not check mail
+    * [CS-5229] - Delete openfire.jar artifact from EAR distribution
+
+** Improvement
+    * [CS-4946] - Tasks and events are not created in calendar
+    * [CS-5102] - Change calendar name display.
+    * [CS-5124] - [Mail] First mail account configuration must be more visual
+    * [CS-5128] - [Calendar] Should close form afer selecting user to share calendar
+    * [CS-5208] - Performances Issues for QACAP
+    * [CS-5223] - - Event category, default user calendar listbox must be filled by configuration 
+    * [CS-5244] - CS 2.1.x Portuguese Translation
+
 - 2.2.0-GA
 
 ** Bug
