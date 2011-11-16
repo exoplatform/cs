@@ -17,8 +17,7 @@
 
 .UIMailPortlet .UIMailSetting .UITabSelector .FlatTabStyle .TabIcon {
   margin: 1px 4px 0px 4px;
-  padding-left: 25px; /* orientation=rt */
-  padding-right: 25px; /* orientation=lt */
+  background: none;
 }
 
 .UIMailPortlet .UIMailSetting .UITabSelector .FlatTabStyle .ShortcutKeyIcon {
@@ -32,7 +31,15 @@
 }
 
 .UIMailPortlet .UIMailSetting .UITabSelector .UITabContentContainer {
-  border: 1px solid #d5d5d5;
+  border: none;
+}
+
+.UIMailPortlet .UIMailSetting .UITabSelector .UIHorizontalTabs {
+  height: 29px;
+}
+
+.UIMailPortlet .UIMailSetting .UITabSelector .UIHorizontalTabs .LineSeparator {
+  background: none;
 }
 
 .UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout {
