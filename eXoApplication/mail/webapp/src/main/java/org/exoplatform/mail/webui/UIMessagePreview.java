@@ -816,8 +816,6 @@ public class UIMessagePreview extends UIContainer implements UISelectable {
       MailService mailService = (MailService) this.getApplicationComponent(MailService.class);
       CmsService cmsService = (CmsService) this.getApplicationComponent(CmsService.class);
       Node folderNode = mailService.getDMSSelectedNode(CalendarUtils.getCurrentUser(), relPath);
-      try {
-
         if (folderNode == null || folderNode.isNodeType(Utils.NT_FILE)) {
           message = new ApplicationMessage("UIMessagePreview.msg.DMSSelector.notFolder",
                                            null,
@@ -846,10 +844,6 @@ public class UIMessagePreview extends UIContainer implements UISelectable {
           }
 
         }
-      } finally {
-        folderNode.getSession().logout();
-
-      }
 
       uiApp.addMessage(message);
       context.addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());

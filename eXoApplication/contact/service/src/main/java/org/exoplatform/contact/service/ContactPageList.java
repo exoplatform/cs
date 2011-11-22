@@ -66,11 +66,7 @@ public class ContactPageList extends JCRPageList {
     contactType_ = type;
     Session session = getJCRSession(username) ;
     if (session != null) {
-      try {    
-        setAvailablePage(((QueryResultImpl) createXPathQuery(session, username, value_).execute()).getTotalSize()) ;
-      } finally {
-        session.logout() ;
-      }      
+        setAvailablePage(((QueryResultImpl) createXPathQuery(session, username, value_).execute()).getTotalSize()) ;  
     }
   }
 
@@ -79,7 +75,6 @@ public class ContactPageList extends JCRPageList {
     Node currentNode;
     Session session = getJCRSession(username) ;
     long totalPage = 0 ;
-    try {
       QueryImpl queryImpl = createXPathQuery(session, username, value_);
       if( page > 1) {
         long position = (page - 1) * pageSize;
@@ -93,9 +88,6 @@ public class ContactPageList extends JCRPageList {
       QueryResult result = queryImpl.execute();
       iter_ = result.getNodes();      
       totalPage = ((QueryResultImpl) result).getTotalSize() ; 
-    } finally {
-      session.logout() ;
-    }
     setAvailablePage(totalPage) ;
     
     // cs- 1017
@@ -325,14 +317,10 @@ public class ContactPageList extends JCRPageList {
       session.logout();
     }*/
     Session session = getJCRSession(username_) ;    
-    try {
       QueryImpl queryImpl = createXPathQuery(session, username_, value_);
       //queryImpl.setLimit(pageSize);
       QueryResult result = queryImpl.execute();
       iter_ = result.getNodes();
-    } finally {
-      session.logout() ;
-    }
     List<Contact> contacts = new ArrayList<Contact>();
     while (iter_.hasNext()) {
       Node contactNode = iter_.nextNode();
@@ -355,15 +343,11 @@ public class ContactPageList extends JCRPageList {
       }
       session.logout();
     }*/    
-    Session session = getJCRSession(username_) ;    
-    try {
+    Session session = getJCRSession(username_) ;  
       QueryImpl queryImpl = createXPathQuery(session, username_, value_);
       //queryImpl.setLimit(pageSize);
       QueryResult result = queryImpl.execute();
       iter_ = result.getNodes();
-    } finally {
-      session.logout() ;
-    }
     NodeIterator inter = iter_;
     Map<String, String> emails = new LinkedHashMap<String, String>();
     while (inter.hasNext()) {
@@ -392,7 +376,7 @@ public class ContactPageList extends JCRPageList {
   private Session getJCRSession(String username) throws Exception {
     try {
       RepositoryService repositoryService = (RepositoryService) PortalContainer.getComponent(RepositoryService.class);
-      SessionProvider sessionProvider = SessionProvider.createSystemProvider();
+      SessionProvider sessionProvider = Utils.createSystemProvider();
       String defaultWS = repositoryService.getCurrentRepository()
       .getConfiguration()
       .getDefaultWorkspaceName();

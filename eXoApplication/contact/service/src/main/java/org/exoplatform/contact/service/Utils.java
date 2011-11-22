@@ -24,6 +24,10 @@ import java.util.List;
 
 import javax.mail.internet.InternetAddress;
 
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.services.jcr.ext.app.SessionProviderService;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen
@@ -80,6 +84,11 @@ public class Utils {
       else builder.append(str);
     }
     return builder.toString();
+  }
+  
+  public static SessionProvider createSystemProvider() {
+    SessionProviderService sessionProviderService = (SessionProviderService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(SessionProviderService.class);
+    return sessionProviderService.getSystemSessionProvider(null);
   }
   
 }

@@ -3345,8 +3345,7 @@ public class JCRDataStorage implements DataStorage {
   }
   
   public BufferAttachment getAttachmentFromDMS(String userName, String relPath) throws Exception {
-    SessionProvider sProvider = SessionProvider.createSystemProvider(); 
-    try {
+    SessionProvider sProvider = Utils.createSystemProvider();
       Node node = nodeHierarchyCreator_.getUserNode(sProvider, userName);
 
       Node fileNode = node.getNode(relPath);
@@ -3363,10 +3362,6 @@ public class JCRDataStorage implements DataStorage {
       attachFile.setMimeType(fileContentNode.getProperty(Utils.JCR_MIMETYPE).getString());
       
       return attachFile;
-    } finally {
-      sProvider.close();
-    }
-    
   }
   
   public String[] getDMSDataInfo(String userName) throws Exception {
@@ -3377,21 +3372,16 @@ public class JCRDataStorage implements DataStorage {
     arr[0] = service.getCurrentRepository().getConfiguration().getName();
 
     // service.getCurrentRepository().getConfiguration().getDefaultWorkspaceName();
-    SessionProvider sProvider = SessionProvider.createSystemProvider();
-    try {
-      Node node = nodeHierarchyCreator_.getUserNode(SessionProvider.createSystemProvider(),
-                                                    userName);
+    SessionProvider sProvider = Utils.createSystemProvider();
+      Node node = nodeHierarchyCreator_.getUserNode(sProvider, userName);
 
       arr[1] = node.getSession().getWorkspace().getName();
       arr[2] = node.getPath();
       return arr;
-    } finally {
-      sProvider.close();
-    }
   }
    
   public Node getDMSSelectedNode(String userName, String relPath) throws Exception {
-    SessionProvider sProvider = SessionProvider.createSystemProvider();
+    SessionProvider sProvider = Utils.createSystemProvider();
     Node userNode = nodeHierarchyCreator_.getUserNode(sProvider, userName);
     try {
       Node folderNode = userNode.getNode(relPath);

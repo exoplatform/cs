@@ -16,9 +16,9 @@
  **/
 package org.exoplatform.mail.service;
 
-import org.apache.poi.hssf.record.ContinueRecord;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer;
+import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.scheduler.JobInfo;
@@ -64,6 +64,10 @@ public class CheckMailJob implements Job, InterruptableJob {
       mailService.setContinuationService(continuationService);
     }
     
+    // Using SessionProviderService to avoid JCR sessions leak
+    SessionProviderService sessionProviderService = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
+    sessionProviderService.getSystemSessionProvider(null);
+    
     JobDetail jobDetail = context.getJobDetail();
     JobDataMap dataMap = jobDetail.getJobDataMap();
     username = dataMap.getString(USERNAME);
@@ -95,6 +99,14 @@ public class CheckMailJob implements Job, InterruptableJob {
         log.debug("\n\n####  Checking mail of " + context.getJobDetail().getName() + " finished ");        
       }
     }
+
+    try {
+      // remove SessionProvider
+      sessionProviderService.removeSessionProvider(null);
+    } catch (Exception e) {
+      log.warn("An error occured while cleaning the ThreadLocal", e);
+    }
+
   }
 
   private MailService getMailService() {

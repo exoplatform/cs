@@ -61,11 +61,7 @@ public class EventPageListQuery extends JCRPageList {
     */    
     Session session = getJCRSession(username) ;
     if (session != null) {
-      try {    
-        setAvailablePage(((QueryResultImpl) createXPathQuery(session, username, value_).execute()).getTotalSize()) ;
-      } finally {
-        session.logout() ;
-      }      
+        setAvailablePage(((QueryResultImpl) createXPathQuery(session, username, value_).execute()).getTotalSize()) ;  
     }
   }
 
@@ -74,7 +70,6 @@ public class EventPageListQuery extends JCRPageList {
     Node currentNode;
     Session session = getJCRSession(username) ;
     long totalPage = 0 ;
-    try {
       QueryImpl queryImpl = createXPathQuery(session, username, value_);
       if( page > 1) {
         long position = (page - 1) * pageSize;
@@ -88,9 +83,6 @@ public class EventPageListQuery extends JCRPageList {
       QueryResult result = queryImpl.execute();
       iter_ = result.getNodes();      
       totalPage = ((QueryResultImpl) result).getTotalSize() ; 
-    } finally {
-      session.logout() ;
-    }
     setAvailablePage(totalPage) ;
 
     currentListPage_ = new ArrayList<CalendarEvent>();
@@ -256,15 +248,11 @@ public class EventPageListQuery extends JCRPageList {
   
   @Override
   public List<CalendarEvent> getAll() throws Exception {
-    Session session = getJCRSession(username_) ;    
-    try {
+    Session session = getJCRSession(username_) ;   
       QueryImpl queryImpl = createXPathQuery(session, username_, value_);
       //queryImpl.setLimit(pageSize);
       QueryResult result = queryImpl.execute();
       iter_ = result.getNodes();
-    } finally {
-      session.logout() ;
-    }
     List<CalendarEvent> events = new ArrayList<CalendarEvent>();
     while (iter_.hasNext()) {
       Node eventNode = iter_.nextNode();
@@ -274,7 +262,7 @@ public class EventPageListQuery extends JCRPageList {
   }
   
   private String getPublicServiceHome() throws Exception {
-    SessionProvider provider = SessionProvider.createSystemProvider();
+    SessionProvider provider = Utils.createSystemProvider();
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     NodeHierarchyCreator nodeHierarchyCreator  = (NodeHierarchyCreator) container
     .getComponentInstanceOfType(NodeHierarchyCreator.class);
@@ -284,7 +272,7 @@ public class EventPageListQuery extends JCRPageList {
   }
   
   private String getPrivateServiceHome() throws Exception {
-    SessionProvider provider = SessionProvider.createSystemProvider();
+    SessionProvider provider = Utils.createSystemProvider();
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     NodeHierarchyCreator nodeHierarchyCreator  = (NodeHierarchyCreator) container
     .getComponentInstanceOfType(NodeHierarchyCreator.class);
@@ -297,7 +285,7 @@ public class EventPageListQuery extends JCRPageList {
   private Session getJCRSession(String username) throws Exception {
     try {
       RepositoryService repositoryService = (RepositoryService) PortalContainer.getComponent(RepositoryService.class);
-      SessionProvider sessionProvider = SessionProvider.createSystemProvider();
+      SessionProvider sessionProvider = Utils.createSystemProvider();
       String defaultWS = repositoryService.getCurrentRepository()
       .getConfiguration()
       .getDefaultWorkspaceName();
