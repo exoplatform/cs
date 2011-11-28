@@ -547,11 +547,11 @@
                  %>
                  
                 <% if (availableContact > 10) { %> 
-                <a href="<%=uicomponent.event("FirstPage")%>" title="<%=_ctx.appRes(uicomponent.getName() + ".label.firstPage")%>" class="$cssPreviousPage FirstPageArrow"/><span></span></a>        
-                <a href="<%=uicomponent.event("PreviousPage")%>" title="<%=_ctx.appRes(uicomponent.getName() + ".label.previousPage")%>" class="$cssPreviousPage PreviousPageArrow"><span></span></a>
+                <a href="$firstPageAction" title="<%=_ctx.appRes(uicomponent.getName() + ".label.firstPage")%>" class="$cssPreviousPage FirstPageArrow"/><span></span></a>        
+                <a href="$previousPageAction" title="<%=_ctx.appRes(uicomponent.getName() + ".label.previousPage")%>" class="$cssPreviousPage PreviousPageArrow"><span></span></a>
                 <div class="Number">$contactRange</div>
-                 <a href="<%=uicomponent.event("NextPage")%>" title="<%=_ctx.appRes(uicomponent.getName() + ".label.nextPage")%>" class="$cssNextPage NextPageArrow"/><span></span></a>
-                 <a href="<%=uicomponent.event("LastPage")%>" title="<%=_ctx.appRes(uicomponent.getName() + ".label.lastPage")%>" class="$cssNextPage LastPageArrow"><span></span></a>
+                 <a href="$nextPageAction" title="<%=_ctx.appRes(uicomponent.getName() + ".label.nextPage")%>" class="$cssNextPage NextPageArrow"/><span></span></a>
+                 <a href="$lastPageAction" title="<%=_ctx.appRes(uicomponent.getName() + ".label.lastPage")%>" class="$cssNextPage LastPageArrow"><span></span></a>
                 <div style="clear: left;"><span></span></div>
                 <% } %>
               <% } %>
