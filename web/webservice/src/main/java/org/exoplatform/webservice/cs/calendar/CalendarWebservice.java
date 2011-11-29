@@ -428,12 +428,15 @@ public class CalendarWebservice implements ResourceContainer{
     if (!validateEventType(type)) {
       return Response.status(HTTPStatus.BAD_REQUEST).cacheControl(cc).build();
     }
+    CalendarService calendarService = (CalendarService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+    if(calendarService == null) {
+      return Response.status(HTTPStatus.UNAVAILABLE).cacheControl(cc).build();
+    }
     List<String> calList = new LinkedList<String>();
     for (String s : calids.split(",")) {
       if (s.trim().length() > 0) 
         calList.add(s);
     }
-    CalendarService calendarService = (CalendarService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
     String username = ConversationState.getCurrent().getIdentity().getUserId();
     EventQuery eventQuery = new EventQuery();
     java.util.Calendar calendar = java.util.Calendar.getInstance();
@@ -453,7 +456,7 @@ public class CalendarWebservice implements ResourceContainer{
       data.setInfo(events);
       return Response.ok(data, MediaType.APPLICATION_JSON_TYPE).cacheControl(cc).build();
     } catch (Exception e) {
-      if (log.isWarnEnabled()) log.warn(String.format("Getting events for user $1s from $2s to $3s failed", username, from, to), e);
+      if (log.isWarnEnabled()) log.warn(String.format("Getting events for user %s from %s to %s failed", username, from, to), e);
       return Response.status(HTTPStatus.INTERNAL_ERROR).cacheControl(cc).build();
     }
   }
