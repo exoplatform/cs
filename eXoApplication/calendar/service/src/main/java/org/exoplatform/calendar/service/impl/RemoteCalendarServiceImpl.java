@@ -1051,10 +1051,11 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
       remoteCalendar.setType(type);
       InputStream inputStream = connectToRemoteServer(remoteCalendar);
       try {
-      CalendarBuilder calendarBuilder = new CalendarBuilder();
-      net.fortuna.ical4j.model.Calendar iCalendar = calendarBuilder.build(inputStream);
-      remoteCalendar.setCalendarName(iCalendar.getProperty(ICAL_PROPS_CALENDAR_NAME).getValue());
-      remoteCalendar.setDescription(iCalendar.getProperty(ICAL_PROPS_CALENDAR_DESCRIPTION).getValue());
+        CalendarBuilder calendarBuilder = new CalendarBuilder();
+        net.fortuna.ical4j.model.Calendar iCalendar = calendarBuilder.build(inputStream);
+        Property property = null;
+        remoteCalendar.setCalendarName((property = iCalendar.getProperty(ICAL_PROPS_CALENDAR_NAME)) != null ? property.getValue() : "");
+        remoteCalendar.setDescription((property = iCalendar.getProperty(ICAL_PROPS_CALENDAR_DESCRIPTION)) != null ? property.getValue() : "");
       } finally {
         if (inputStream != null)
           inputStream.close();
