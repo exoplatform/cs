@@ -30,15 +30,15 @@ Following these steps to configure a room:
 
 *Step 1.* Click the Option button in below form:
 
-!room_setting1.png|border=1!
+!images/room_setting1.png|border=1!
 
 The *Room Configuration* form will appear like when you [Create New Rooms].
 
 *Step 2.* Set values for fields in this form:
 
 General tab
-!room_setting2.png|border=1!
+!images/room_setting2.png|border=1!
 and Security tab 
-!room_setting3.png|border=1!
+!images/room_setting3.png|border=1!
 
 *Step 3.* Click *OK* button to accept the configuration or click *Cancel* button to quit without changes.

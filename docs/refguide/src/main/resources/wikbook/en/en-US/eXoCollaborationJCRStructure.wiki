@@ -12,7 +12,7 @@ The Calendar data are saved in eXo-JCR under the CalendarApplication data direct
 
 The whole JCR structure of Calendar can be visualized in the diagram below:
 
-!images/images/Calendar-JCR-Structure.png|align="center"!
+!images/Calendar-JCR-Structure.png|align="center"!
 
 h2. calendars  {anchor:id=CSref.JCRStructure.Calendar.JCR.calendars}
 
