@@ -31,9 +31,9 @@ h1. Chatbar portlet {anchor:id=CSref.Portlets.ChatbatPortlet}
 The Chatbar portlet is packaged in the _Chatbar.war_ file.
 
 {docbook}
-<warning><para>
+<note><para>
 The Chatbar portlet and its services are deprecated. It remains fully supported for eXo customers, however it	will not receive any enhancement and will be removed from the product scope in the future.
-</para></warning>
+</para></note>
 {docbook}
 
 h2. Description {anchor:id=CSref.Portlets.ChatbarPortletDescription}
@@ -118,9 +118,9 @@ h1. Chat Portlet {anchor:id=CSref.Portlets.ChatPortlet}
 The Chat portlet is packaged in the _Chat.war_ file.
 
 {docbook}
-<warning><para>
+<note><para>
 The Chat portlet and its services are deprecated. It remains fully supported for eXo customers, however it will not receive any enhancement and will be removed from the product scope in the future.
-</para></warning>
+</para></note>
 {docbook}
 
 h2. Description {anchor:id=CSref.Portlets.ChatPortletDescription}
@@ -147,9 +147,9 @@ h1. Mail Portlet {anchor:id=CSref.Portlets.MailPortlet}
 The Mail Portlet is packaged in the _Mail.war_ file.
 
 {docbook}
-<warning><para>
+<note><para>
 The Mail portlet and its services are deprecated. It remains fully supported for eXo customers, however it will not receive any enhancement and will be removed from the product scope in the future.
-</para></warning>
+</para></note>
 {docbook}
 
 h2. Description {anchor:id=CSref.Portlets.MailPortletDescription}
