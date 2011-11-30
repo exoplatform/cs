@@ -169,6 +169,10 @@ public class ImapConnector extends BaseConnector {
       return null;
     }
     
+    if (StringUtils.isEmpty(folder.getURLName())) {
+      folder.setURLName(folder.getName());
+    }
+    
     // In the case the message already exist, then delete old message
     List<Message> messagesToDelete = new ArrayList<Message>();
     for (Message message : msgs) {
@@ -183,7 +187,15 @@ public class ImapConnector extends BaseConnector {
     
     // Create new messages
     List<Message> successList = new ArrayList<Message>();
-    IMAPFolder remoteFolder = openFolderForReadWrite(folder.getURLName());
+    IMAPFolder remoteFolder = null;
+    try {
+      remoteFolder = openFolderForReadWrite(folder.getURLName());
+    } catch (Exception e) {
+      if (logger.isDebugEnabled()) {
+        logger.debug("Cannot open folder name: " + folder.getName() + " with url: " + folder.getURLName(), e);
+      }
+    }
+    
     if (remoteFolder == null) {
       createFolder(folder);
       remoteFolder = openFolderForReadWrite(folder.getURLName());
