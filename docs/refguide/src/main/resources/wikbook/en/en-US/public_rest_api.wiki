@@ -6,13 +6,13 @@ The Calendar application of eXo Collaboration uses CalendarWebservice to provide
 The REST API of Calendar portlet is exposed by _org.exoplatform.services.cs.calendar.CalendarWebservice_ class.
 
 || Service name || Service URL || Location || Description ||
-| *CalendarWebservice* | {{$portalname/$restcontextname/private/cs/calendar}} | - Maven groupId: org.exoplatform.cs {example}{example} - ArtifactId: exo.cs.web.webservice | Call extended services of the Calendar application. |
+| *CalendarWebservice* | {{$portalname/$restcontextname/cs/calendar}} | - Maven groupId: org.exoplatform.cs {example}{example} - ArtifactId: exo.cs.web.webservice | Call extended services of the Calendar application. |
 
 Details:
 
 * $portalname: The name of the portal
 * $restcontextname: The context name of rest webapplication which is deployed to the "$portalname" portal.
-* Private: is optional and used for the protected access only. Such calls will require authentication.
+
 
 
 * *APIs usage*:
@@ -20,14 +20,15 @@ Details:
 Use the following APIs to build all functions of the Calendar application:
 
 || Name || Service URL endpoint || Parameters || Expected Values || Description ||
-| *checkpermission* | {{{/private/cs/calendar/checkPermission/{username}/{calendarId}/type}}}} | username {example}{example} calendarid {example}{example} type | user id {example}{example} calendar id {example}{example} {{{ INVALID_TYPE = -1 / PRIVATE_TYPE = 0 / SHARED_TYPE = 1 / PUBLIC_TYPE = 2 }}}|Check the permission of a user to a calendar, aiming at defining if the user has the edit permission to the calendar or not. |
-| *event* | {{{/private/cs/calendar/event/{username}/{eventFeedName}}}} |username {example}{example} eventFeedName | user id {example}{example} string |Return a feed RSS that lists links to access a specific event.|
-| *feed* | {{{/private/cs/calendar/feed/{username}/{feedname}/{filename}}}} | username {example}{example} feedname {example}{example}filename | username {example}{example} string {example}{example} string |Show the content of a feed that is a list of events in the "filename" file. |
+| *checkpermission* | {{{/cs/calendar/checkPermission/{username}/{calendarId}/type}}}} | username {example}{example} calendarId {example}{example} type | user id {example}{example} calendar id {example}{example} {{{ INVALID_TYPE = -1 / PRIVATE_TYPE = 0 / SHARED_TYPE = 1 / PUBLIC_TYPE = 2 }}}|Check the permission of a user to a calendar, aiming at defining if the user has the edit permission to the calendar or not. |
+| *event* | {{{/cs/calendar/event/{username}/{eventFeedName}}}} |username {example}{example} eventFeedName | user id {example}{example} string |Return a feed RSS that lists links to access a specific event.|
+| *feed* | {{{/cs/calendar/feed/{username}/{feedname}/{filename}}}} | username {example}{example} feedname {example}{example}filename | username {example}{example} string {example}{example} string |Show the content of a feed that is a list of events in the "filename" file. |
 | *publicProcess* | {{{/cs/calendar/subscribe/{username}/{calendarId}/{type}}}} | username {example}{example} calendarId {example}{example} type| user id {example}{example} calendar id {example}{example} {{{INVALID_TYPE = -1 / PRIVATE_TYPE = 0 / SHARED_TYPE = 1 / PUBLIC_TYPE = 2}}}  |Process the public calendar when having a remote access request.|
-| *privateProcess* | {{{/private/cs/calendar/private/{username}/{calendarId}/{type}}}} | username {example}{example} calendarID {example}{example} type |user id {example}{example} calendar id {example}{example} {{{INVALID_TYPE = -1 / PRIVATE_TYPE = 0 / SHARED_TYPE = 1 / PUBLIC_TYPE = 2}}}|Process the public calendar when having a remote access request. User must enter username and password to access.|
-| *upcomingEvent* | {{{/private/cs/calendar/getissues/{currentdatetime}/{type}/{limit}}}} | currentdatatime {example}{example} type {example}{example} limit | valid time format {example}{example} {{{INVALID_TYPE = -1 / PRIVATE_TYPE = 0 / SHARED_TYPE = 1 / PUBLIC_TYPE = 2}}} {example}{example} integer |The list of upcoming events in a specific calendar.|
-| *updateStatus* | {{{/private/cs/calendar/updatestatus/{taskid}}}} | taskid | task id |Update the status of a task. |
-| *getCalendars* | /private/cs/calendar/getcalendars| {{no param}} | {{}} |Get a list of calendars. |
+| *privateProcess* | {{{cs/calendar/private/{username}/{calendarId}/{type}}}} | username {example}{example} calendarID {example}{example} type |user id {example}{example} calendar id {example}{example} {{{INVALID_TYPE = -1 / PRIVATE_TYPE = 0 / SHARED_TYPE = 1 / PUBLIC_TYPE = 2}}}|Process the public calendar when having a remote access request. User must enter username and password to access.|
+| *getEvents* | {{{/cs/calendar/events/personal/{type}/{calids}/{from}/{to}/{limit}}}}|type {example}{example}calids {example}{example}from {example}{example}to {example}{example}limit|Event/Task {example}{example} Personal calendar id {example}{example}long{example}{example}long{example}{example}integer |Get personal events/tasks of a particular calendar by time range and limit the number of returned events/tasks by the '{{limit}}' parameter. |
+| *upcomingEvent* | {{{/cs/calendar/getissues/{currentdatetime}/{type}/{limit}}}} | currentdatatime {example}{example} type {example}{example} limit | valid time format {example}{example} {{{INVALID_TYPE = -1 / PRIVATE_TYPE = 0 / SHARED_TYPE = 1 / PUBLIC_TYPE = 2}}} {example}{example} integer |The list of upcoming events in a specific calendar.|
+| *updateStatus* | {{{/cs/calendar/updatestatus/{taskid}}}} | taskid | task id |Update the status of a task. |
+| *getCalendars* | /cs/calendar/getcalendars| {{no param}} | {{}} |Get a list of calendars. |
 
 h1. Mail application {anchor:id=CSref.PublicRESTAPIs.MailApplication}
 
