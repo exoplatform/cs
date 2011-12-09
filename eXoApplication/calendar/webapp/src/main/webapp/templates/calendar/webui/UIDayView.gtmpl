@@ -102,16 +102,11 @@
                   style = "" ;
                   if(isShowWorkingTime) {style = "WorkOffTime" ;}  
                   for(full in uicomponent.getDisplayTimes(timeFormat, timeInterval, locale)){
-          String time = full.substring(0,full.lastIndexOf("_")) ;
-          String display = full.substring(full.lastIndexOf("_")+1) ;
-                    if(isShowWorkingTime) {
-                      if(time.equals(startWorkingTime)) {style = "" ;}
-                      if(time.equals(endWorkingTime)) {style = "WorkOffTime" ;}
-                    }
+          					String display = full.substring(full.lastIndexOf("_")+1) ;
                     cssClass = "TdDotLine" ;
                     if(flag) {cssClass = "TdLine" ;} ;
                   %>
-                  <tr class="$style">
+                  <tr>
                     <td class="TdTime">
                       <%if(flag){print display;} else { print "&nbsp;";}%>
                     </td>
@@ -129,12 +124,12 @@
                  for(ce in  uicomponent.getEventData()) {
                    cal = uicomponent.getInstanceTempCalendar() ;
                    cal.setTime(ce.getFromDateTime()) ;
-                  long   beginTime = cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;
-                  cal.setTime(ce.getToDateTime()) ;
-                  long  endTime = cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;
+                   long   beginTime = cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;
+                   cal.setTime(ce.getToDateTime()) ;
+                   long  endTime = cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;
                    color = uicomponent.getColors().get(ce.calType +CalendarUtils.COLON+ ce.getCalendarId()) ;                   
-                  actionLink = uicomponent.event("UpdateEvent",ce.id);
-                  Boolean isOccur = (ce.getRepeatType() != null && !CalendarEvent.RP_NOREPEAT.equals(ce.getRepeatType()) && (ce.getIsExceptionOccurrence() == null || !ce.getIsExceptionOccurrence()));
+                   actionLink = uicomponent.event("UpdateEvent",ce.id);
+                   Boolean isOccur = (ce.getRepeatType() != null && !CalendarEvent.RP_NOREPEAT.equals(ce.getRepeatType()) && (ce.getIsExceptionOccurrence() == null || !ce.getIsExceptionOccurrence()));
                   String recurId = ce.getRecurrenceId();
                   %>
                   <div class="EventContainerBorder EventBoxes $color" calType="$ce.calType" eventCat="$ce.eventCategoryId" eventid="$ce.id" calid="$ce.calendarId" actionlink="$actionLink"  startTime="$beginTime" endTime="$endTime" isOccur="$isOccur" recurId="$recurId">
@@ -172,26 +167,26 @@
                       Calendar cl = uicomponent.getInstanceTempCalendar() ;
                       cl.setTime(uicomponent.calendar_.getTime());
                       cl = uicomponent.getBeginDay(cl) ;
-					  def counter = 0;
-					  def timeName = "EvenRow";
-                    for(full in uicomponent.getDisplayTimes(timeFormat, timeInterval, locale)){
-					if((counter % 4) == 0 || (counter % 4) == 1) {
-					 timeName = "OddRow";
-					} else if((counter % 4) == 2 || (counter % 4) == 3) {
-					 timeName = "EvenRow";
-					}
-          String h = full.substring(0,full.lastIndexOf("_")) ;
-          String display = full.substring(full.lastIndexOf("_")+1) ;
-                        if(isShowWorkingTime) {
-                          if(h.equals(startWorkingTime)) {style=""}
-                          if(h.equals(endWorkingTime)) {style="WorkOffTime"}
-                        }
-                        cssClass = "TdDotLine" ;
-                        if(flag) {cssClass = "TdLine" ;} ;
+					  					def counter = 0;
+					  					def timeName = "EvenRow";
+		                  for(full in uicomponent.getDisplayTimes(timeFormat, timeInterval, locale)){
+													if((counter % 4) == 0 || (counter % 4) == 1) {
+													 timeName = "OddRow";
+													} else if((counter % 4) == 2 || (counter % 4) == 3) {
+													 timeName = "EvenRow";
+													}
+													String h = full.substring(0,full.lastIndexOf("_")) ;
+													String display = full.substring(full.lastIndexOf("_")+1) ;
+		                      if(isShowWorkingTime) {
+		                        if(h.equals(startWorkingTime)) {style=""}
+		                        if(h.equals(endWorkingTime)) {style="WorkOffTime"}
+		                      }
+		                      cssClass = "TdDotLine" ;
+		                      if(flag) {cssClass = "TdLine" ;} ;
                           
                       %>
-                      <tr startFull="<%=tempFormat.format(cl.getTime())%>" startTime="<%=cl.getTimeInMillis()%>"  class="$timeName $style">
-                        <td class="$cssClass"  startFull="<%=tempFormat.format(cl.getTime())%>" startTime="<%=cl.getTimeInMillis()%>"  unselectable="on" >
+                      <tr startFull="<%=tempFormat.format(cl.getTime())%>" startTime="<%=cl.getTimeInMillis()%>"  class="$style $timeName">
+                        <td class="$cssClass $style"  startFull="<%=tempFormat.format(cl.getTime())%>" startTime="<%=cl.getTimeInMillis()%>"  unselectable="on" >
                           &nbsp;
                         </td>
                       </tr>
