@@ -217,8 +217,9 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName,
   this.rootNode = (typeof (rootNode) == 'string') ? document
       .getElementById(rootNode) : rootNode;
   var DOMUtil = eXo.core.DOMUtil;
-  this.rootNode = DOMUtil.findDescendantById(this.rootNode,
+  var temp = DOMUtil.findDescendantById(this.rootNode,
       eXo.communication.chatbar.eXoChatBar.applicationId);
+  this.rootNode = (temp) ? temp : this.rootNode;
 
   this.AdvancedDOMEvent = eXo.communication.chatbar.core.AdvancedDOMEvent;
   this.XMPPCommunicator = eXo.communication.chatbar.core.XMPPCommunicator;

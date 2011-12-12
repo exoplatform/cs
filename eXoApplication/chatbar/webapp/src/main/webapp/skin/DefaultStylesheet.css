@@ -904,8 +904,6 @@ form {
 
 .UIChatBarPortlet{
 	min-width: 900px;
-	position:fixed;
-	bottom:1px;
 	padding:0px;
 }
 

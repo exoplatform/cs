@@ -69,14 +69,6 @@
     
     <page-body> </page-body>
     
-   <portlet-application>
-     <portlet>
-         <application-ref>chatbar</application-ref>
-         <portlet-ref>ChatBarPortlet</portlet-ref>
-       </portlet>
-       <access-permissions>*:/platform/users</access-permissions>
-       <show-info-bar>false</show-info-bar>      
-     </portlet-application>
      <portlet-application>
        <portlet>
          <application-ref>csdemo</application-ref>
@@ -93,7 +85,14 @@
        <access-permissions>Everyone</access-permissions>
        <show-info-bar>false</show-info-bar>
      </portlet-application>
-
+    <portlet-application>
+      <portlet>
+        <application-ref>chatbar</application-ref>
+        <portlet-ref>ChatBarPortlet</portlet-ref>
+      </portlet>
+      <access-permissions>*:/platform/users</access-permissions>
+      <show-info-bar>false</show-info-bar>      
+    </portlet-application>
    </portal-layout>
   
 </portal-config>
