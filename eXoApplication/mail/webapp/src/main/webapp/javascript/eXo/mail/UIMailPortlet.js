@@ -632,7 +632,7 @@ UIMailPortlet.prototype.setMenuWidth = function(menu){
 	while(i--){
 		if(items[i].offsetWidth > max) max = items[i].offsetWidth;
 	}
-	if(max < 140) max = 140;
+	if(max < 165) max = 165;
 	menu.style.width = max + "px";
 	menu.style.display = "none";
 };
