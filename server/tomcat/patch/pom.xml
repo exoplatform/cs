@@ -4,11 +4,11 @@
   <parent>
     <groupId>org.exoplatform.cs</groupId>
     <artifactId>cs</artifactId>
-    <version>2.1.7</version>
+    <version>2.1.8-SNAPSHOT</version>
     <relativePath>../../../pom.xml</relativePath>
   </parent>
   <artifactId>exo.cs.server.tomcat.patch</artifactId>
-  <version>2.1.7</version>
+  <version>2.1.8-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>eXo Tomcat Server</name>
   <description>eXo Tomcat Server</description>
