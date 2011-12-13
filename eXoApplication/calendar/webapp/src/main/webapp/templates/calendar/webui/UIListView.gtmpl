@@ -25,11 +25,12 @@
   def rcontext = _ctx.getRequestContext() ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.listViewDblClick("'+uiform.id+'") ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.cs.CheckBox.init("'+uiform.id+'") ;') ;
+  rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.CalendarLayout.updateUICalendarViewLayout();');
   uicomponent.refreshBrowser();
   uicomponent.setCalClicked(false);
 %>
  
-  <div class="UIListView SpliterResizableListArea">
+  <div class="UIListView SpliterResizableListArea MainWorkingPanel">
     <table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
       <thead>
         <tr>

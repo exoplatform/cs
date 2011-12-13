@@ -13,5 +13,33 @@
     <css-priority>1</css-priority>
   </portlet-skin>
   
+  <javascript>
+    <param>
+      <js-module>eXo.calendar.UICalendarPortlet</js-module>
+      <js-path>/javascript/eXo/calendar/UICalendarPortlet.js</js-path>
+    </param>
+  </javascript>
+  
+  <javascript>
+    <param>
+      <js-module>eXo.calendar.Highlighter</js-module>
+      <js-path>/javascript/eXo/calendar/Highlighter.js</js-path>
+    </param>
+  </javascript>
+  
+  <javascript>
+    <param>
+      <js-module>eXo.calendar.CalendarLayout</js-module>
+      <js-path>/javascript/eXo/calendar/CalendarLayout.js</js-path>
+    </param>
+  </javascript>
+  
+  <javascript>
+    <param>
+      <js-module>eXo.calendar.Reminder</js-module>
+      <js-path>/javascript/eXo/calendar/Reminder.js</js-path>
+    </param>
+  </javascript>
+  
 </gatein-resources>
 

@@ -8,7 +8,7 @@
   import java.util.Calendar;
   import org.exoplatform.webui.application.WebuiRequestContext;
   def rcontext = _ctx.getRequestContext();
-  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarContainer.updateMiniCalendarLayout();');
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.CalendarLayout.updateMiniCalendarLayout();');
   int currentYear = uicomponent.getCurrentYear() ;
   int currentMonth = uicomponent.getCurrentMonth() ;
   int currentDay = uicomponent.getCurrentCalendar().get(Calendar.DAY_OF_YEAR) ;
@@ -17,13 +17,11 @@
    String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS,String.valueOf(uicomponent.TYPE_MONTH)) ;
    String linkYearNext = uicomponent.event(uicomponent.ACT_NEXT, String.valueOf(uicomponent.TYPE_YEAR)) ;
    String linkYearPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS,String.valueOf(uicomponent.TYPE_YEAR)) ;
-  uiform.begin();
    monthName = uicomponent.getMonthName(currentMonth) ;
    cssClass = "CalendarContentNomal" ;
    if(uicomponent.isCurrentMonth(currentMonth, currentYear)) {
     cssClass = "CalendarMatchedEventContent" ;
   }
-  
   WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
    Locale locale = context.getParentAppRequestContext().getLocale() ;
   DateFormat sdf = new  SimpleDateFormat("d", locale) ;
@@ -32,7 +30,8 @@
    sdtf.setCalendar(uicomponent.getInstanceTempCalendar()) ;
   Map data = uicomponent.getData() ;
 %>
-<div class="UIMiniCalendar">
+<%uiform.begin();%>
+  <div class="UIMiniCalendar">
   <div class="MiniCalendarContainer">
     <div class="YearSelector">
       <div onclick="$linkDayNext" class="RightControlButton">
@@ -183,5 +182,5 @@
     
   </div>
   <div class="DownArrow1Icon UIMiniCalendarToggleButton" style="background-position:center;cursor:pointer;" onclick="javascript:eXo.calendar.UICalendarPortlet.switchLayout(2);" title="<%=_ctx.appRes('UIMiniCalendar.label.toggle-mini-calendar')%>" upCssClass="UpArrow1Icon" downCssClass="DownArrow1Icon">&nbsp;</div>
-</div>
+  </div>
 <%uiform.end();%>

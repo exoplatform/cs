@@ -71,25 +71,18 @@
       String timeFormat = calendarSetting.getTimeFormat() ;
       String settingTimeZone = uicomponent.getSettingTimeZone() ;
       def rcontext = _ctx.getRequestContext() ;
-      rcontext.getJavascriptManager().importJavascript('eXo.webui.UICalendar') ;
-      rcontext.getJavascriptManager().importJavascript('eXo.cs.CSUtils','/csResources/javascript/') ;
-      rcontext.getJavascriptManager().importJavascript('eXo.cs.UIContextMenu','/csResources/javascript/') ;
-      rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarPortlet','/calendar/javascript/') ;
       rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.setting(' + timeStep + ', "' + workingStart + '", "' + timeFormat +'", "'+uicomponent.id+'") ;') ;
       rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showContextMenu("'+ uicomponent.id +'") ;') ;
-      rcontext.getJavascriptManager().importJavascript('eXo.calendar.Highlighter','/calendar/javascript/') ;
-      rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarContainer','/calendar/javascript/') ;
-      rcontext.getJavascriptManager().importJavascript('eXo.core.JSON') ;       
       //rcontext.getJavascriptManager().addJavascript('if(eXo.core.Cometd) delete eXo.core.Cometd;') ;
       //rcontext.getJavascriptManager().addJavascript('eXo.require("eXo.core.Cometd","/cometd/javascript/");') ;
       //rcontext.getJavascriptManager().importJavascript('eXo.core.Cometd','/cometd/javascript/') ;
-      rcontext.getJavascriptManager().importJavascript('eXo.calendar.Reminder','/calendar/javascript/') ;
       rcontext.getJavascriptManager().addJavascript('eXo.calendar.Reminder.init("'+uicomponent.getRemoteUser()+'","'+uicomponent.getUserToken()+ '","' + uicomponent.getCometdContextName() + '");') ;
       rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.portletId="' + uicomponent.id + '";') ;
       rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.settingTimezone = "'+ settingTimeZone +'" ;') ;
       rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.isSpace = "'+ uicomponent.getSpaceId() +'" ;') ;
       rcontext.getJavascriptManager().addJavascript('eXo.calendar.LayoutManager.layoutId = "calendarlayout-' + uicomponent.getRemoteUser() + '";');
       rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkLayout();');
+      rcontext.getJavascriptManager().addJavascript('eXo.calendar.CalendarLayout.init();');
     %>
       <div class="CalendarWorkingWorkspace">
         <%uicomponent.renderChild(UIActionBar.class)%>

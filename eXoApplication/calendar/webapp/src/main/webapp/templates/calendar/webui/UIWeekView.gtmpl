@@ -31,7 +31,8 @@
   //rcontext.getJavascriptManager().addOnLoadJavascript('eXo.calendar.UICalendarPortlet.onLoad') ;
   rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.UICalendarPortlet.checkFilter();') ;
   rcontext.getJavascriptManager().addOnResizeJavascript('eXo.calendar.UIWeekView.onResize') ;
-  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.currentDate = ' + uicomponent.getDefaultStartTimeOfEvent() +';') ; 
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.currentDate = ' + uicomponent.getDefaultStartTimeOfEvent() +';') ;
+  rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.CalendarLayout.updateUICalendarViewLayout();');
    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
    Locale locale = context.getParentAppRequestContext().getLocale() ;
    String currentMonthName = uicomponent.getMonthName(currentMonth) ;
@@ -153,7 +154,7 @@
     </div>
     
     </div>
-    <div class="EventWeekContent" style="position: relative;" onresize="eXo.calendar.UIWeekView.onResize() ;">
+    <div class="EventWeekContent MainWorkingPanel" style="position: relative;" onresize="eXo.calendar.UIWeekView.onResize() ;">
       <div class="EventBoard">
         <%
         cl = uicomponent.getBeginDateOfWeek() ;        

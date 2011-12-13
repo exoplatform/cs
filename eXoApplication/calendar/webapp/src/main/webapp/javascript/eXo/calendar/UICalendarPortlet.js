@@ -4,6 +4,12 @@
  * @author <a href="mailto:dung14000@gmail.com">Hoang Manh Dung</a>
  * @constructor
  */
+
+eXo.require("eXo.webui.UICalendar");
+eXo.require('eXo.cs.CSUtils','/csResources/javascript/');
+eXo.require('eXo.cs.UIContextMenu','/csResources/javascript/');
+eXo.require('eXo.core.JSON');
+
 function UICalendarPortlet(){
 	this.clickone = 0 ;
 	this.portletId = "calendars";
@@ -566,10 +572,10 @@ UICalendarPortlet.prototype.switchLayoutCallback = function(layout,status){
 };
 
 UICalendarPortlet.prototype.checkLayoutCallback = function(layoutcookie){
-  var UICalendarContainer = eXo.calendar.UICalendarContainer;
-  UICalendarContainer.updateCalendarContainerLayout();
-  UICalendarContainer.updateMiniCalendarLayout();
-  UICalendarContainer.updateUICalendarsLayout();
+  var CalendarLayout = eXo.calendar.CalendarLayout;
+  CalendarLayout.updateCalendarContainerLayout();
+  CalendarLayout.updateMiniCalendarLayout();
+  CalendarLayout.updateUICalendarsLayout();
 };
 
 UICalendarPortlet.prototype.resetSpaceDefaultLayout = function(){
@@ -1810,23 +1816,18 @@ UICalendarPortlet.prototype.listViewDblClickCallback = function(){
 /**
  * Filter event when page load
  */
-UICalendarPortlet.prototype.checkFilter = function(){	
-		var w = eXo.calendar.UICalendarPortlet.getElementById("UICalendarViewContainer");
-		if(w.offsetParent && ((w.offsetParent.offsetWidth - w.offsetWidth) < 10)) {
-			eXo.calendar.UICalendarPortlet.firstLoadTimeout = window.setTimeout(eXo.calendar.UICalendarPortlet.checkFilter,0);
-			return ;
-		}
-		
-    var UICalendarPortlet = eXo.calendar.UICalendarPortlet;
-    for (var i = 0; i < UICalendarPortlet.filterSelect.options.length; i++) {
-        if (UICalendarPortlet.filterSelect.options[i].value == UICalendarPortlet.selectedCategory) {
-            UICalendarPortlet.filterSelect.options[i].selected = true;
-        }
+UICalendarPortlet.prototype.checkFilter = function() {
+  var UICalendarPortlet = eXo.calendar.UICalendarPortlet;
+  for ( var i = 0; i < UICalendarPortlet.filterSelect.options.length; i++) {
+    if (UICalendarPortlet.filterSelect.options[i].value == UICalendarPortlet.selectedCategory) {
+      UICalendarPortlet.filterSelect.options[i].selected = true;
     }
-    UICalendarPortlet.checkCalendarFilter();
-	eXo.calendar.UICalendarPortlet.resortEvents();
-	UICalendarPortlet.setFocus();
-	if(eXo.calendar.UICalendarPortlet.firstLoadTimeout) delete eXo.calendar.UICalendarPortlet.firstLoadTimeout;
+  }
+  UICalendarPortlet.checkCalendarFilter();
+  eXo.calendar.UICalendarPortlet.resortEvents();
+  UICalendarPortlet.setFocus();
+  if (eXo.calendar.UICalendarPortlet.firstLoadTimeout)
+    delete eXo.calendar.UICalendarPortlet.firstLoadTimeout;
 };
 
 /**

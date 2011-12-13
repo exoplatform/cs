@@ -1,11 +1,27 @@
 .UICalendarPortlet .UICalendars {
   background-color: #ffffff;
   border: 1px solid #c7c7c7;
-  margin: 4px 0px 0px 0px;
+  margin-top: 4px;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 14px;
+  bottom: 0px;
+    
+}
+
+.UICalendarPortlet .UICalendars .UIForm {
+  position: static;
 }
 
 .UICalendarPortlet .UICalendars .ContentContainer {
-  height: 280px;
+  display: block;
+  position: absolute;
+  left: 0pt;
+  top: 0pt;
+  bottom: 0pt;
+  margin-top: 27px;
+  margin-bottom: 14px;
   overflow: auto;
   width: 223px;
 }
@@ -269,6 +285,10 @@
 	border-bottom: 1px solid #c7c7c7;
 	height: 26px;
 	line-height: 26px;
+  position:absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
 }
 
 .UICalendarPortlet .UICalendarTasks .Title {
@@ -349,4 +369,8 @@
 	margin-right: 0px;
 	width: auto;
 	cursor: pointer;
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
 }

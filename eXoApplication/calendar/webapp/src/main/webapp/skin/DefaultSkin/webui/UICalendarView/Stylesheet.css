@@ -4,6 +4,10 @@
   margin-right: 243px; /* orientation=rt */
 }
 
+.UICalendarViewContainer .MainWorkingPanel {
+  height: 400px;
+}
+
 .UICalendarViewContainer .UIHeaderBar, .UIListContainer .Result{
 	border: solid 1px #c7c7c7;
 	height: 33px;
@@ -28,7 +32,7 @@
   margin : 0px;
 }
 /*======================== Day view ==========================*/
-.UIDayView  {
+.UIDayView {
 }
 
 .UIDayView .EventAllDay {
@@ -38,10 +42,13 @@
   height: 28px;
 }
 
-.UIDayView .EventDayContainer {
-  height: 437px;
+.UIDayView .MainWorkingPanel {
+	height: 400px;
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+.UIDayView .EventDayContainer {
   border-top: 1px solid #fff;
 }
 
@@ -163,11 +170,13 @@
   text-align: center;
 }
 /*====================Week View============================*/
-
-.UIWeekView .EventWeekContent {
+.UIWeekView .MainWorkingPanel {
   overflow-y:auto;
   overflow-x: hidden;
   height: 420px;
+}
+
+.UIWeekView .EventWeekContent {
 }
 
 .UIWeekView .UIGrid td.UICellBlock,
@@ -523,10 +532,13 @@
   *width: auto;
 }
 
-.UIYearView .DayWorkingArea {
+.UIYearView .MainWorkingPanel {
   overflow-y:auto;
   overflow-x: hidden;
-  height: 480px;
+  height: 480px;	
+}
+
+.UIYearView .DayWorkingArea {
   background-color: #ffffff;
 }
 
@@ -935,10 +947,13 @@
   background: none;
 }
 
-.UIMonthView .EventMonthContent .RowContainerDay {
-  height: 440px;
+.UIMonthView .MainWorkingPanel {
+  height: 450px;
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+.UIMonthView .EventMonthContent .RowContainerDay {
 }
 
 .UIMonthView .EventMonthContent .UIGrid{

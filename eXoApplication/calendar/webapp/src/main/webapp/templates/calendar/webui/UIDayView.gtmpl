@@ -48,6 +48,7 @@
   rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.UICalendarPortlet.checkFilter();') ;
   rcontext.getJavascriptManager().addOnResizeJavascript('eXo.calendar.UICalendarPortlet.browserResizeCallback') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.currentDate = ' + uicomponent.getDefaultStartTimeOfEvent() +';') ;
+  rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.CalendarLayout.updateUICalendarViewLayout();');
   cssClass = "Day" ;
   
   DateFormat tempFormat = new  SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss", Locale.ENGLISH) ;
@@ -89,7 +90,7 @@
     </tbody>
     </table>
   </div>
-  <div class="EventDayContainer" style="position:relative ;">
+  <div class="EventDayContainer MainWorkingPanel" style="position:relative ;">
     <div class="EventDayContent">
       <table class="UIGrid" id="UIDayViewGrid" cellspacing="0" borderspacing="0" cellpadding="0" style="table-layout: fixed;">
         <tbody>

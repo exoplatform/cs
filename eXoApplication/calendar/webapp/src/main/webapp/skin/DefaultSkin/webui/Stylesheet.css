@@ -67,6 +67,7 @@
 
 .UICalendarPortlet .UICalendarWorkingContainer {
   margin-top: 4px;
+  height: 500px;
 }
 
 .UICalendarPortlet .UICalendarWorkingContainer .SeparatorLine {
@@ -78,10 +79,13 @@
   height: 18px; 
   width: 0px;
 }
+
 .UICalendarPortlet .UICalendarContainer {
   float: left; /* orientation=lt */
   float: right; /* orientation=rt */
   width: 225px;
+  height: 100%;
+  position: relative;
 }
  
 /*==========================================*/
