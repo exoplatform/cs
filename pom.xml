@@ -27,13 +27,13 @@
     <url>https://ci.exoplatform.org/job/cs-2.1.x-ci/</url>
   </ciManagement>
   <properties>
-    <org.exoplatform.kernel.version>2.2.11-GA-SNAPSHOT</org.exoplatform.kernel.version>
-    <org.exoplatform.core.version>2.3.11-GA-SNAPSHOT</org.exoplatform.core.version>
-    <org.exoplatform.ws.version>2.1.11-GA-SNAPSHOT</org.exoplatform.ws.version>
-    <org.exoplatform.jcr.version>1.12.11-GA-SNAPSHOT</org.exoplatform.jcr.version>
-    <org.exoplatform.portal.version>3.1.11-PLF-SNAPSHOT</org.exoplatform.portal.version>
+    <org.exoplatform.kernel.version>2.2.11-GA</org.exoplatform.kernel.version>
+    <org.exoplatform.core.version>2.3.11-GA</org.exoplatform.core.version>
+    <org.exoplatform.ws.version>2.1.11-GA</org.exoplatform.ws.version>
+    <org.exoplatform.jcr.version>1.12.11-GA</org.exoplatform.jcr.version>
+    <org.exoplatform.portal.version>3.1.11-PLF</org.exoplatform.portal.version>
     
-    <org.exoplatform.ecms.version>2.1.7-SNAPSHOT</org.exoplatform.ecms.version> 
+    <org.exoplatform.ecms.version>2.1.7</org.exoplatform.ecms.version> 
     
     <gatein.wci.version>2.0.1-GA</gatein.wci.version>
     <exo.tool.framework.junit.version>1.2.0</exo.tool.framework.junit.version>
@@ -41,10 +41,10 @@
     <version.chromattic>1.0.4</version.chromattic>
     
 	<!--commons dependencies-->
-	<org.exoplatform.commons.version>1.0.7-SNAPSHOT</org.exoplatform.commons.version>
+	<org.exoplatform.commons.version>1.0.7</org.exoplatform.commons.version>
 	      
 	<!-- eXo extended service -->
-	<org.exoplatform.social.version>1.1.7-SNAPSHOT</org.exoplatform.social.version>
+	<org.exoplatform.social.version>1.1.7</org.exoplatform.social.version>
 		
     <!-- 3rd parties -->
     <org.gatein.shindig.version>1.0-r790473-Patch04</org.gatein.shindig.version>
