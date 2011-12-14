@@ -1278,11 +1278,75 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     }
   }
   
-
+  private boolean isSignificantChanged(CalendarEvent newCalendarEvent, CalendarEvent oldCalendarEvent) {
+    return newCalendarEvent != null && oldCalendarEvent != null && (
+          (oldCalendarEvent.getSummary() != null && !oldCalendarEvent.getSummary().equalsIgnoreCase(newCalendarEvent.getSummary()) || newCalendarEvent.getSummary() != null && !newCalendarEvent.getSummary().equalsIgnoreCase(oldCalendarEvent.getSummary()))
+       || (oldCalendarEvent.getDescription() != null && !oldCalendarEvent.getDescription().equalsIgnoreCase(newCalendarEvent.getDescription()) || newCalendarEvent.getDescription() != null && !newCalendarEvent.getDescription().equalsIgnoreCase(oldCalendarEvent.getDescription()))
+       || (oldCalendarEvent.getLocation() != null && !oldCalendarEvent.getLocation().equalsIgnoreCase(newCalendarEvent.getLocation()) || newCalendarEvent.getLocation() != null && !newCalendarEvent.getLocation().equalsIgnoreCase(oldCalendarEvent.getLocation()))
+       || (!oldCalendarEvent.getFromDateTime().equals(newCalendarEvent.getFromDateTime())) 
+       || (!oldCalendarEvent.getToDateTime().equals(newCalendarEvent.getToDateTime()))
+       );
+  }
   
-  public void SaveAndNoAsk(Event<UIEventForm> event, boolean isSend, boolean updateSeries)throws Exception {
+  private CalendarEvent sendInvitation(Event<UIEventForm> event, CalendarSetting calSetting, CalendarEvent calendarEvent) throws Exception {
+    String username = WebuiRequestContext.getCurrentInstance().getRemoteUser();
+    Account acc = CalendarUtils.getMailService().getDefaultAccount(username);
+    String toId = null;
+    if (this.isAddNew_ || this.isChangedSignificantly) {
+      toId = getParticipantValues();
+    } else {
+      // select new Invitation email
+      Map<String, String> invitations = new LinkedHashMap<String, String>();
+      for (String s : calendarEvent.getInvitation())
+        invitations.put(s, s);
+      for (String parSt : calendarEvent.getParticipantStatus()) {
+        String[] entry = parSt.split(":");
+        // is old
+        if (entry.length > 1 && entry[0].contains("@"))
+          invitations.remove(entry[0]);
+      }
+      calendarEvent.setInvitation(invitations.keySet().toArray(new String[invitations.size()]));
+      // select new User
+      StringBuilder builder = new StringBuilder("");
+      for (String parSt : calendarEvent.getParticipantStatus()) {
+        String[] entry = parSt.split(":");
+        // is new
+        if ((entry.length == 1) && (!entry[0].contains("@"))) {
+          if (builder.length() > 0)
+            builder.append(CalendarUtils.BREAK_LINE);
+          builder.append(entry[0]);
+        }
+      }
+      
+      if (builder.toString().trim().length() > 0 || invitations.size() > 0) {
+        toId = builder.toString();
+      }
+    }
+    try {
+      if (toId != null) {
+        sendMail(CalendarUtils.getMailService(), CalendarUtils.getOrganizationService(), calSetting, acc, username, toId, calendarEvent);
+        List<String> parsUpdated = new LinkedList<String>();
+        for (String parSt : calendarEvent.getParticipantStatus()) {
+          String[] entry = parSt.split(":");
+          if (entry.length > 1)
+            parsUpdated.add(entry[0] + ":" + entry[1]);
+          else
+            parsUpdated.add(entry[0] + ":" + STATUS_PENDING);
+        }
+        calendarEvent.setParticipantStatus(parsUpdated.toArray(new String[parsUpdated.size()]));
+      }
+      return calendarEvent;
+    } catch (Exception e) {
+      event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIEventForm.msg.error-send-email", null));
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to send mail ivitation to the participant", e);
+      }
+    }
+    return null;
+  }
+  
+  public void saveAndNoAsk(Event<UIEventForm> event, boolean isSend, boolean updateSeries)throws Exception {
     UIEventForm uiForm = event.getSource() ;
-    
     UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
     UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
     UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
@@ -1298,320 +1362,220 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage(uiForm.errorMsg_, null));
       uiForm.setSelectedTab(TAB_EVENTDETAIL) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
-      
       return ;
-    } else {
-      if(!uiForm.isReminderValid()) {
+    } 
+    if(!uiForm.isReminderValid()) {
         event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage(uiForm.errorMsg_, new String[] {uiForm.errorValues} ));
         uiForm.setSelectedTab(TAB_EVENTREMINDER) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
         return ;
+    } 
+    if(!uiForm.isParticipantValid()) {
+      event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage(uiForm.errorMsg_, new String[] { uiForm.errorValues }));
+      uiForm.setSelectedTab(TAB_EVENTSHARE) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
+      return ;
+    }
+    Date from = uiForm.getEventFromDate(calSetting.getDateFormat(), calSetting.getTimeFormat()) ;
+    Date to = uiForm.getEventToDate(calSetting.getDateFormat(),calSetting.getTimeFormat()) ;
+    if(from.after(to)) {
+      event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage(uiForm.getId() + ".msg.event-date-time-logic", null, ApplicationMessage.WARNING)) ;
+      return ;
+    }
+    String username = CalendarUtils.getCurrentUser() ;
+    String calendarId = uiForm.getCalendarId() ;
+    if(from.equals(to)) {
+      to = CalendarUtils.getEndDay(from).getTime() ;
+    } 
+    if(uiForm.getEventAllDate()) {
+      java.util.Calendar tempCal = CalendarUtils.getInstanceOfCurrentCalendar() ;
+      tempCal.setTime(to) ;
+      tempCal.add(java.util.Calendar.MILLISECOND, -1) ;
+      to = tempCal.getTime() ;
+    }
+    Calendar currentCalendar = CalendarUtils.getCalendar(uiForm.calType_, calendarId);
+    if(currentCalendar == null) {
+      uiPopupAction.deActivate() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1));
+      return ;
+    }
+    boolean canEdit = false ;
+    if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)) {
+      canEdit = CalendarUtils.canEdit(null, org.exoplatform.calendar.service.Utils.getEditPerUsers(currentCalendar), username) ;
+    } else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)) {
+      // cs-4429: fix for group calendar permission
+      canEdit = CalendarUtils.canEdit(
+        CalendarUtils.getOrganizationService(), currentCalendar.getEditPermission(), username) ;
+    }
+    if(!canEdit && !uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE) ) {
+      uiPopupAction.deActivate() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null,1));
+      return ;
+    }
+    CalendarEvent calendarEvent  = null ; 
+    CalendarEvent oldCalendarEvent = null;
+    String[] pars = uiForm.getParticipantValues().split(CalendarUtils.BREAK_LINE) ;
+    String eventId = null ;
+    if(uiForm.isAddNew_){
+      calendarEvent = new CalendarEvent() ;
+    } else {
+      calendarEvent = uiForm.calendarEvent_ ;
+      oldCalendarEvent = new CalendarEvent();
+      oldCalendarEvent.setSummary(calendarEvent.getSummary());
+      oldCalendarEvent.setDescription(calendarEvent.getDescription());
+      oldCalendarEvent.setLocation(calendarEvent.getLocation());
+      oldCalendarEvent.setFromDateTime(calendarEvent.getFromDateTime());
+      oldCalendarEvent.setToDateTime(calendarEvent.getToDateTime());
+    }
+    calendarEvent.setFromDateTime(from) ;
+    calendarEvent.setToDateTime(to);
+    
+    calendarEvent.setSendOption(uiForm.getSendOption());
+    calendarEvent.setMessage(uiForm.getMessage());
+    String[] parStatus = uiForm.getParticipantStatusValues().split(CalendarUtils.BREAK_LINE) ;
+    
+    
+    calendarEvent.setParticipantStatus(parStatus);
+    
+    calendarEvent.setParticipant(pars) ;
+    if(CalendarUtils.isEmpty(uiForm.getInvitationEmail())) calendarEvent.setInvitation(null) ;
+    else 
+      if(CalendarUtils.isValidEmailAddresses(uiForm.getInvitationEmail())) {
+        String addressList = uiForm.getInvitationEmail().replaceAll(CalendarUtils.SEMICOLON,CalendarUtils.COMMA) ;
+        Map<String, String> emails = new LinkedHashMap<String, String>() ;
+        for(String email : addressList.split(CalendarUtils.COMMA)) {
+          String address = email.trim() ;
+          if (!emails.containsKey(address)) emails.put(address, address) ;
+        }
+        if(!emails.isEmpty()) calendarEvent.setInvitation(emails.keySet().toArray(new String[emails.size()])) ;
       } else {
-        if(!uiForm.isParticipantValid()) {
-          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage(uiForm.errorMsg_, new String[] { uiForm.errorValues }));
-          uiForm.setSelectedTab(TAB_EVENTSHARE) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
-          return ;
-        }else {
-          String username = CalendarUtils.getCurrentUser() ;
-          String calendarId = uiForm.getCalendarId() ;
-          Date from = uiForm.getEventFromDate(calSetting.getDateFormat(), calSetting.getTimeFormat()) ;
-          Date to = uiForm.getEventToDate(calSetting.getDateFormat(),calSetting.getTimeFormat()) ;
-          if(from.after(to)) {
-            event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage(uiForm.getId() + ".msg.event-date-time-logic", null, ApplicationMessage.WARNING)) ;
-            return ;
-          } else if(from.equals(to)) {
-            to = CalendarUtils.getEndDay(from).getTime() ;
-          } 
-          if(uiForm.getEventAllDate()) {
-            java.util.Calendar tempCal = CalendarUtils.getInstanceOfCurrentCalendar() ;
-            tempCal.setTime(to) ;
-            tempCal.add(java.util.Calendar.MILLISECOND, -1) ;
-            to = tempCal.getTime() ;
-          }
-          Calendar currentCalendar = CalendarUtils.getCalendar(uiForm.calType_, calendarId);
-          if(currentCalendar == null) {
-            uiPopupAction.deActivate() ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-            //event.getRequestContext().addUIComponentToUpdateByAjax(calendarPortlet) ;
-            event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1));
-            
-            return ;
-          } else {
-            boolean canEdit = false ;
-            if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)) {
-              canEdit = CalendarUtils.canEdit(null, org.exoplatform.calendar.service.Utils.getEditPerUsers(currentCalendar), username) ;
-            } else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)) {
-              // cs-4429: fix for group calendar permission
-              canEdit = CalendarUtils.canEdit(
-                CalendarUtils.getOrganizationService(), currentCalendar.getEditPermission(), username) ;
-            }
-            if(!canEdit && !uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE) ) {
-              uiPopupAction.deActivate() ;
-              event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-              event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null,1));
-              return ;
-            }
-          }
-          CalendarEvent calendarEvent  = null ; 
-          CalendarEvent oldCalendarEvent = null;
-          String[] pars = uiForm.getParticipantValues().split(CalendarUtils.BREAK_LINE) ;
-          String eventId = null ;
-          if(uiForm.isAddNew_){
-            calendarEvent = new CalendarEvent() ;
-          } else {
-            calendarEvent = uiForm.calendarEvent_ ;
-            oldCalendarEvent = new CalendarEvent();
-            oldCalendarEvent.setSummary(calendarEvent.getSummary());
-            oldCalendarEvent.setDescription(calendarEvent.getDescription());
-            oldCalendarEvent.setLocation(calendarEvent.getLocation());
-            oldCalendarEvent.setFromDateTime(calendarEvent.getFromDateTime());
-            oldCalendarEvent.setToDateTime(calendarEvent.getToDateTime());
-          }
-          calendarEvent.setFromDateTime(from) ;
-          calendarEvent.setToDateTime(to);
-          
-          calendarEvent.setSendOption(uiForm.getSendOption());
-          calendarEvent.setMessage(uiForm.getMessage());
-          String[] parStatus = uiForm.getParticipantStatusValues().split(CalendarUtils.BREAK_LINE) ;
-          
-          
-          calendarEvent.setParticipantStatus(parStatus);
-          
-          calendarEvent.setParticipant(pars) ;
-          if(CalendarUtils.isEmpty(uiForm.getInvitationEmail())) calendarEvent.setInvitation(null) ;
-          else 
-            if(CalendarUtils.isValidEmailAddresses(uiForm.getInvitationEmail())) {
-              String addressList = uiForm.getInvitationEmail().replaceAll(CalendarUtils.SEMICOLON,CalendarUtils.COMMA) ;
-              Map<String, String> emails = new LinkedHashMap<String, String>() ;
-              for(String email : addressList.split(CalendarUtils.COMMA)) {
-                String address = email.trim() ;
-                if (!emails.containsKey(address)) emails.put(address, address) ;
-              }
-              if(!emails.isEmpty()) calendarEvent.setInvitation(emails.keySet().toArray(new String[emails.size()])) ;
-            } else {
-              event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIEventForm.msg.event-email-invalid"
-                , new String[] { CalendarUtils.invalidEmailAddresses(uiForm.getInvitationEmail())}));
-              uiForm.setSelectedTab(TAB_EVENTSHARE) ;
-              event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
-              
-              return ;
-            }
-          calendarEvent.setCalendarId(uiForm.getCalendarId()) ;
-          calendarEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
-          calendarEvent.setSummary(summary) ;
-          calendarEvent.setDescription(description) ;
-          calendarEvent.setCalType(uiForm.calType_) ;
-          calendarEvent.setCalendarId(calendarId) ;
-          calendarEvent.setEventCategoryId(uiForm.getEventCategory()) ;     
-          UIFormSelectBox selectBox = ((UIFormInputWithActions)uiForm.getChildById(TAB_EVENTDETAIL))
-          .getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY) ;
-          for (SelectItemOption<String> o : selectBox.getOptions()) {
-            if (o.getValue().equals(selectBox.getValue())) {
-              calendarEvent.setEventCategoryName(o.getLabel()) ;
-              break ;
-            }
-          }              
-          //}
-          calendarEvent.setLocation(location) ;
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIEventForm.msg.event-email-invalid"
+          , new String[] { CalendarUtils.invalidEmailAddresses(uiForm.getInvitationEmail())}));
+        uiForm.setSelectedTab(TAB_EVENTSHARE) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
+        
+        return ;
+      }
+    calendarEvent.setCalendarId(uiForm.getCalendarId()) ;
+    calendarEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
+    calendarEvent.setSummary(summary) ;
+    calendarEvent.setDescription(description) ;
+    calendarEvent.setCalType(uiForm.calType_) ;
+    calendarEvent.setCalendarId(calendarId) ;
+    calendarEvent.setEventCategoryId(uiForm.getEventCategory()) ;     
+    UIFormSelectBox selectBox = ((UIFormInputWithActions)uiForm.getChildById(TAB_EVENTDETAIL))
+    .getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY) ;
+    for (SelectItemOption<String> o : selectBox.getOptions()) {
+      if (o.getValue().equals(selectBox.getValue())) {
+        calendarEvent.setEventCategoryName(o.getLabel()) ;
+        break ;
+      }
+    }              
+    //}
+    calendarEvent.setLocation(location) ;
 
-          if (uiForm.getEventIsRepeat()) {
-            if (repeatEvent != null) {
-              // copy repeat properties from repeatEvent to calendarEvent
-              calendarEvent.setRepeatType(repeatEvent.getRepeatType());
-              calendarEvent.setRepeatInterval(repeatEvent.getRepeatInterval());
-              calendarEvent.setRepeatCount(repeatEvent.getRepeatCount());
-              calendarEvent.setRepeatUntilDate(repeatEvent.getRepeatUntilDate());
-              calendarEvent.setRepeatByDay(repeatEvent.getRepeatByDay());
-              calendarEvent.setRepeatByMonthDay(repeatEvent.getRepeatByMonthDay());
-            }
-          } else {
-            calendarEvent.setRepeatType(CalendarEvent.RP_NOREPEAT);
-            calendarEvent.setRepeatInterval(0);
-            calendarEvent.setRepeatCount(0);
-            calendarEvent.setRepeatUntilDate(null);
-            calendarEvent.setRepeatByDay(null);
-            calendarEvent.setRepeatByMonthDay(null);
-          }
-          
-          calendarEvent.setPriority(uiForm.getEventPriority()) ; 
-          calendarEvent.setPrivate(UIEventForm.ITEM_PRIVATE.equals(uiForm.getShareType())) ;
-          calendarEvent.setEventState(uiForm.getEventState()) ;
-          calendarEvent.setAttachment(uiForm.getAttachments(calendarEvent.getId(), uiForm.isAddNew_)) ;
-          calendarEvent.setReminders(uiForm.getEventReminders(from, calendarEvent.getReminders())) ;
-          eventId = calendarEvent.getId() ;
-          CalendarView calendarView = (CalendarView)uiViewContainer.getRenderedChild() ;
-          try {
-            if(uiForm.isAddNew_){
-              if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
-                calService.saveUserEvent(username, calendarId, calendarEvent, uiForm.isAddNew_) ;
-              }else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)){
-                calService.saveEventToSharedCalendar(username , calendarId, calendarEvent, uiForm.isAddNew_) ;
-              }else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)){
-                calService.savePublicEvent(calendarId, calendarEvent, uiForm.isAddNew_) ;          
-              }
-            } else  {
-              String fromCal = uiForm.oldCalendarId_.split(CalendarUtils.COLON)[1].trim() ;
-              String toCal = uiForm.newCalendarId_.split(CalendarUtils.COLON)[1].trim() ;
-              String fromType = uiForm.oldCalendarId_.split(CalendarUtils.COLON)[0].trim() ;
-              String toType = uiForm.newCalendarId_.split(CalendarUtils.COLON)[0].trim() ;
-              List<CalendarEvent> listEvent = new ArrayList<CalendarEvent>();
-              listEvent.add(calendarEvent) ;
-              
-              // if the event (before change) is a virtual occurrence
-              if (!uiForm.calendarEvent_.getRepeatType().equals(CalendarEvent.RP_NOREPEAT) && !CalendarUtils.isEmpty(uiForm.calendarEvent_.getRecurrenceId())) {
-                if (!updateSeries) {
-                  calService.updateOccurrenceEvent(fromCal, toCal, fromType, toType, listEvent, username);
-                } else {
-                  // update series:
-                  
-                  if (CalendarUtils.isSameDate(oldCalendarEvent.getFromDateTime(), calendarEvent.getFromDateTime())) {
-                    calService.updateRecurrenceSeries(fromCal, toCal, fromType, toType, calendarEvent, username);
-                  }
-                  else {
-                    //calService.updateRecurrenceSeries(fromCal, toCal, fromType, toType, calendarEvent, username);
-                    calService.updateOccurrenceEvent(fromCal, toCal, fromType, toType, listEvent, username);
-                  }
-                }
-              } 
-              else {
-                if (org.exoplatform.calendar.service.Utils.isExceptionOccurrence(calendarEvent_)) calService.updateOccurrenceEvent(fromCal, toCal, fromType, toType, listEvent, username);
-                else calService.moveEvent(fromCal, toCal, fromType, toType, listEvent, username) ;
-              }
-              UITaskForm.updateListView(calendarView, calendarEvent, calService, username);
-            }
-
-            if(calendarView instanceof UIListContainer) {
-              UIListContainer uiListContainer = (UIListContainer)calendarView ;
-              if (!uiListContainer.isDisplaySearchResult()) {
-                uiViewContainer.refresh() ;
-              }
-            } else {
-              uiViewContainer.refresh() ;
-            }  
-            calendarView.setLastUpdatedEventId(eventId) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
-            UIMiniCalendar uiMiniCalendar = calendarPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
-            uiPopupAction.deActivate() ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-          }catch (Exception e) {
-            event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIEventForm.msg.add-event-error", null));
-            if (log.isDebugEnabled()) {
-              log.debug("Fail to add the event", e);
-            }
-          }
-          if(calendarEvent != null && uiForm.isSendMail()) {
-            Account acc = CalendarUtils.getMailService().getDefaultAccount(username);
-            //if(acc != null) {
-            try {
-              uiForm.sendMail(CalendarUtils.getMailService(), CalendarUtils.getOrganizationService(), calSetting, acc, username, uiForm.getParticipantValues(), calendarEvent) ;
-            } catch (Exception e) {
-              event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIEventForm.msg.error-send-email", null));
-              if (log.isDebugEnabled()) {
-                log.debug("Fail to send mail ivitation to the participant", e);
-              }
-            }
-          } else {
-            if(calendarEvent != null && isSend){
-              Account acc = CalendarUtils.getMailService().getDefaultAccount(username);
-                if(oldCalendarEvent!=null){
-                if(oldCalendarEvent.getSummary()!=null && !oldCalendarEvent.getSummary().equalsIgnoreCase(calendarEvent.getSummary())||calendarEvent.getSummary()!=null && !calendarEvent.getSummary().equalsIgnoreCase(oldCalendarEvent.getSummary()))
-                  uiForm.isChangedSignificantly = true;
-                if(oldCalendarEvent.getDescription()!=null && !oldCalendarEvent.getDescription().equalsIgnoreCase(calendarEvent.getDescription())||calendarEvent.getDescription()!=null && !calendarEvent.getDescription().equalsIgnoreCase(oldCalendarEvent.getDescription()))
-                  uiForm.isChangedSignificantly = true;
-                if(oldCalendarEvent.getLocation()!=null && !oldCalendarEvent.getLocation().equalsIgnoreCase(calendarEvent.getLocation())||calendarEvent.getLocation()!=null && !calendarEvent.getLocation().equalsIgnoreCase(oldCalendarEvent.getLocation()))
-                  uiForm.isChangedSignificantly = true;
-                if(!oldCalendarEvent.getFromDateTime().equals(calendarEvent.getFromDateTime()))
-                    uiForm.isChangedSignificantly = true;
-                if(!oldCalendarEvent.getToDateTime().equals(calendarEvent.getToDateTime()))
-                  uiForm.isChangedSignificantly = true;
-                }                
-                if(uiForm.isAddNew_||uiForm.isChangedSignificantly){
-                  try {
-                    uiForm.sendMail(CalendarUtils.getMailService(), CalendarUtils.getOrganizationService(), calSetting, acc, username, uiForm.getParticipantValues(), calendarEvent) ;
-                  }catch (Exception e) {
-                    event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIEventForm.msg.error-send-email", null));
-                    
-                    if (log.isDebugEnabled()) {
-                      log.debug("Fail to send mail ivitation to the participant", e);
-                    }
-                  }                  
-                  Map<String, String> parsUpdated = new HashMap<String, String>() ;
-                  for(String parSt : calendarEvent.getParticipantStatus()) {
-                    String[] entry = parSt.split(":");
-                    parsUpdated.put(entry[0],STATUS_PENDING);
-                  }
-                  saveEvent(calendarEvent, calService, username, calendarId, parsUpdated);
-                }
-                else {
-                  //select new Invitation email
-                  Map<String, String> invitations = new LinkedHashMap<String, String>() ;
-                  for(String s: calendarEvent.getInvitation())
-                    invitations.put(s, s);
-                  for(String parSt : calendarEvent.getParticipantStatus()) {
-                    String[] entry = parSt.split(":");
-                    //is old
-                    if(entry.length > 1 && entry[0].contains("@"))
-                      invitations.remove(entry[0]);
-                  }
-                  calendarEvent.setInvitation(invitations.keySet().toArray(new String[invitations.size()])) ;
-                  //select new User
-                  StringBuilder buider = new StringBuilder("") ;
-                  for(String parSt : calendarEvent.getParticipantStatus()) {
-                    String[] entry = parSt.split(":");
-                    //is new
-                    if((entry.length == 1) && (!entry[0].contains("@"))){
-                      if (buider.length() > 0) buider.append(CalendarUtils.BREAK_LINE) ;
-                      buider.append(entry[0]) ;
-                    }
-                  }
-                  
-                  if(buider.toString().trim().length()>0 || invitations.size() > 0){
-                    try {
-                    uiForm.sendMail(CalendarUtils.getMailService(), CalendarUtils.getOrganizationService(), calSetting, acc, username, buider.toString(), calendarEvent) ;
-                    }catch (Exception e) {
-                      event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIEventForm.msg.error-send-email", null));
-                      
-                      if (log.isDebugEnabled()) {
-                        log.debug("Fail to send mail ivitation to the participant", e);
-                      }
-                    }                    
-                    Map<String, String> parsUpdated = new HashMap<String, String>() ;
-                    for(String parSt : calendarEvent.getParticipantStatus()) {
-                      String[] entry = parSt.split(":");
-                      if(entry.length > 1)
-                        parsUpdated.put(entry[0],entry[1]);
-                      else
-                        parsUpdated.put(entry[0], STATUS_PENDING);
-                    }
-                    saveEvent(calendarEvent, calService, username, calendarId, parsUpdated);
-                 }
-                }
-              
-            }
-          }
+    if (uiForm.getEventIsRepeat()) {
+      if (repeatEvent != null) {
+        // copy repeat properties from repeatEvent to calendarEvent
+        calendarEvent.setRepeatType(repeatEvent.getRepeatType());
+        calendarEvent.setRepeatInterval(repeatEvent.getRepeatInterval());
+        calendarEvent.setRepeatCount(repeatEvent.getRepeatCount());
+        calendarEvent.setRepeatUntilDate(repeatEvent.getRepeatUntilDate());
+        calendarEvent.setRepeatByDay(repeatEvent.getRepeatByDay());
+        calendarEvent.setRepeatByMonthDay(repeatEvent.getRepeatByMonthDay());
+      }
+    } else {
+      calendarEvent.setRepeatType(CalendarEvent.RP_NOREPEAT);
+      calendarEvent.setRepeatInterval(0);
+      calendarEvent.setRepeatCount(0);
+      calendarEvent.setRepeatUntilDate(null);
+      calendarEvent.setRepeatByDay(null);
+      calendarEvent.setRepeatByMonthDay(null);
+    }
+    
+    calendarEvent.setPriority(uiForm.getEventPriority()) ; 
+    calendarEvent.setPrivate(UIEventForm.ITEM_PRIVATE.equals(uiForm.getShareType())) ;
+    calendarEvent.setEventState(uiForm.getEventState()) ;
+    calendarEvent.setAttachment(uiForm.getAttachments(calendarEvent.getId(), uiForm.isAddNew_)) ;
+    calendarEvent.setReminders(uiForm.getEventReminders(from, calendarEvent.getReminders())) ;
+    eventId = calendarEvent.getId() ;
+    CalendarView calendarView = (CalendarView)uiViewContainer.getRenderedChild() ;
+    this.isChangedSignificantly = this.isSignificantChanged(calendarEvent, oldCalendarEvent);
+    
+    try {
+      if (calendarEvent != null && isSend) {
+        try {
+          CalendarEvent tempCal = sendInvitation(event, calSetting, calendarEvent);
+          calendarEvent = tempCal != null ? tempCal : calendarEvent;
+        } catch (Exception e) {
+          if (log.isWarnEnabled()) log.warn("Sending invitation failed!" , e);
         }
       }
+      if(uiForm.isAddNew_){
+        if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
+          calService.saveUserEvent(username, calendarId, calendarEvent, uiForm.isAddNew_) ;
+        }else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)){
+          calService.saveEventToSharedCalendar(username , calendarId, calendarEvent, uiForm.isAddNew_) ;
+        }else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)){
+          calService.savePublicEvent(calendarId, calendarEvent, uiForm.isAddNew_) ;          
+        }
+      } else  {
+        String fromCal = uiForm.oldCalendarId_.split(CalendarUtils.COLON)[1].trim() ;
+        String toCal = uiForm.newCalendarId_.split(CalendarUtils.COLON)[1].trim() ;
+        String fromType = uiForm.oldCalendarId_.split(CalendarUtils.COLON)[0].trim() ;
+        String toType = uiForm.newCalendarId_.split(CalendarUtils.COLON)[0].trim() ;
+        List<CalendarEvent> listEvent = new ArrayList<CalendarEvent>();
+        listEvent.add(calendarEvent) ;
+        
+        // if the event (before change) is a virtual occurrence
+        if (!uiForm.calendarEvent_.getRepeatType().equals(CalendarEvent.RP_NOREPEAT) && !CalendarUtils.isEmpty(uiForm.calendarEvent_.getRecurrenceId())) {
+          if (!updateSeries) {
+            calService.updateOccurrenceEvent(fromCal, toCal, fromType, toType, listEvent, username);
+          } else {
+            // update series:
+            
+            if (CalendarUtils.isSameDate(oldCalendarEvent.getFromDateTime(), calendarEvent.getFromDateTime())) {
+              calService.updateRecurrenceSeries(fromCal, toCal, fromType, toType, calendarEvent, username);
+            }
+            else {
+              //calService.updateRecurrenceSeries(fromCal, toCal, fromType, toType, calendarEvent, username);
+              calService.updateOccurrenceEvent(fromCal, toCal, fromType, toType, listEvent, username);
+            }
+          }
+        } 
+        else {
+          if (org.exoplatform.calendar.service.Utils.isExceptionOccurrence(calendarEvent_)) calService.updateOccurrenceEvent(fromCal, toCal, fromType, toType, listEvent, username);
+          else calService.moveEvent(fromCal, toCal, fromType, toType, listEvent, username) ;
+        }
+        UITaskForm.updateListView(calendarView, calendarEvent, calService, username);
+      }
+
+      if(calendarView instanceof UIListContainer) {
+        UIListContainer uiListContainer = (UIListContainer)calendarView ;
+        if (!uiListContainer.isDisplaySearchResult()) {
+          uiViewContainer.refresh() ;
+        }
+      } else {
+        uiViewContainer.refresh() ;
+      }  
+      calendarView.setLastUpdatedEventId(eventId) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
+      UIMiniCalendar uiMiniCalendar = calendarPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
+      uiPopupAction.deActivate() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+    }catch (Exception e) {
+      event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIEventForm.msg.add-event-error", null));
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to add the event", e);
+      }
     }
+    
     UIEventDetailTab uiDetailTab = uiForm.getChildById(TAB_EVENTDETAIL) ;
     for (Attachment att : uiDetailTab.getAttachments()) {
       UIAttachFileForm.removeUploadTemp(uiForm.getApplicationComponent(UploadService.class), att.getResourceId()) ;
-    }
-  }
-  
-  private void saveEvent(CalendarEvent calendarEvent,CalendarService calService,String username,String calendarId,Map<String, String> parsUpdated) throws Exception {
-    Map<String, String> participant = new HashMap<String, String>() ;
-    for (Entry<String, String> par : parsUpdated.entrySet()) {
-      participant.put(par.getKey()+":"+par.getValue(),"") ;
-    }
-    calendarEvent.setParticipantStatus(participant.keySet().toArray(new String[participant.keySet().size()]));
-    if(calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
-      calService.saveUserEvent(username, calendarId, calendarEvent, false) ;
-    }else if(calType_.equals(CalendarUtils.SHARED_TYPE)){
-      calService.saveEventToSharedCalendar(username , calendarId, calendarEvent, false) ;
-    }else if(calType_.equals(CalendarUtils.PUBLIC_TYPE)){
-      calService.savePublicEvent(calendarId, calendarEvent, false) ;          
     }
   }
   
@@ -2069,9 +2033,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
         } else { 
           if(CalendarSetting.ACTION_ALWAYS.equalsIgnoreCase(sendOption))
-            uiForm.SaveAndNoAsk(event, true, false);
+            uiForm.saveAndNoAsk(event, true, false);
           else
-            uiForm.SaveAndNoAsk(event, false, false);
+            uiForm.saveAndNoAsk(event, false, false);
         }            
       }
      }
@@ -2172,11 +2136,11 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       UIEventForm uiForm = event.getSource();
       String sendOption = uiForm.getSendOption();
       if (CalendarSetting.ACTION_ALWAYS.equals(sendOption)) {
-        uiForm.SaveAndNoAsk(event, true, false);
+        uiForm.saveAndNoAsk(event, true, false);
       }
       else {
         // update only this occurrence instance
-        uiForm.SaveAndNoAsk(event, false, false);
+        uiForm.saveAndNoAsk(event, false, false);
       }
     }
     
@@ -2190,10 +2154,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       String sendOption = uiForm.getSendOption();
       if (CalendarSetting.ACTION_ALWAYS.equals(sendOption)) {
         // update all occurrence in this series
-        uiForm.SaveAndNoAsk(event, true, true);
+        uiForm.saveAndNoAsk(event, true, true);
       }
       else {
-        uiForm.SaveAndNoAsk(event, false, true);
+        uiForm.saveAndNoAsk(event, false, true);
       }
     }
     
@@ -2241,7 +2205,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       confirmForm.setActions(actions);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     } else { 
-      uiEventForm.SaveAndNoAsk(event, isSend, false);
+      uiEventForm.saveAndNoAsk(event, isSend, false);
     }
   }
 
