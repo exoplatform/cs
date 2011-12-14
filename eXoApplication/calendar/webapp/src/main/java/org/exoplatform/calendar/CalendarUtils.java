@@ -165,6 +165,7 @@ public class CalendarUtils {
   final public static String ITEM_NERVER = "never".intern();
   final public static String ITEM_ASK = "ask".intern();
   final public static String emailRegex = "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+";
+  final public static String contactRegex = ".\\("+ emailRegex + "\\)";
   
   public final static String INVITATION_URL = "/invitation/".intern();
   public final static String INVITATION_IMPORT_URL = "/invitation/import/".intern();

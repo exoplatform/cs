@@ -983,7 +983,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   } 
   
   public void setParticipantStatus(String values) throws Exception{
-      for(String s : values.split(CalendarUtils.BREAK_LINE)) {
+    String[] array = values.split(CalendarUtils.BREAK_LINE);
+      for(String s : array) {
         if(s.trim().length()>0)
           if(participantStatus_.put(s.trim(), STATUS_EMPTY) == null)
             participantStatusList_.add(new ParticipantStatus(s.trim(),STATUS_EMPTY));
@@ -2250,18 +2251,22 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     private String email ;
     private String status ;
     
-    public ParticipantStatus(String participant,String status) throws Exception {
+    
+    public ParticipantStatus(String participant, String status) throws Exception {
       this.participant = participant;
       User user = CalendarUtils.getOrganizationService().getUserHandler().findUserByName(participant);
-      if (user == null) {
-        this.name = participant.substring(0, participant.lastIndexOf(CalendarUtils.OPEN_PARENTHESIS));
-        this.email = participant.substring(
-          participant.lastIndexOf(CalendarUtils.OPEN_PARENTHESIS) + 1).replace(CalendarUtils.CLOSE_PARENTHESIS, "");      
-      } else {
+      if (user != null) {
         this.name = user.getFullName();
-        this.email = user.getEmail();        
+        this.email = user.getEmail();
+      } else if (participant.matches(CalendarUtils.contactRegex)) {
+        this.name = participant.substring(0, participant.lastIndexOf(CalendarUtils.OPEN_PARENTHESIS));
+        this.email = participant.substring(participant.lastIndexOf(CalendarUtils.OPEN_PARENTHESIS) + 1)
+                                .replace(CalendarUtils.CLOSE_PARENTHESIS, "");
+      } else {
+        this.name = participant;
+        this.email = participant;
       }
-      this.status = status ;
+      this.status = status;
     }
 
     public String getParticipant() throws Exception {
