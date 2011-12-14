@@ -142,6 +142,7 @@
       <nameTooLong>الاسم الذي أدخلته في هذا المجال طويلٌ للغاية.</nameTooLong>
       <jobTooLong>المهنة التي أدخلتها في هذا المجال طويلةٌ للغاية.</jobTooLong>
       <invalid-email>Invalid email address.</invalid-email>
+      <name-not-allow-special-character>Name can not contain special characters.</name-not-allow-special-character>
     </msg>
   </UIContactForm>
   <!--

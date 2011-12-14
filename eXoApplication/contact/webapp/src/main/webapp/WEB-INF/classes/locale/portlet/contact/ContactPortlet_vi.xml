@@ -140,6 +140,7 @@
       <nameTooLong>Tên nhập quá dài</nameTooLong>
       <jobTooLong>Nghề nghiệp nhập quá dài</jobTooLong>
       <invalid-email>Địa chỉ email không hợp lệ.</invalid-email>
+      <name-not-allow-special-character>Trường name không thể chứa ký tự đặc biệt.</name-not-allow-special-character>
     </msg>
   </UIContactForm>
   <!--

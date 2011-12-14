@@ -206,12 +206,14 @@ public class UIContactForm extends UIFormTabPane {
       else contact = uiContactForm.contact_ ;
       String firstName = profileTab.getFieldFirstName().trim() ;
       String lastName = profileTab.getFieldLastName().trim() ;
-      /*if (ContactUtils.isNameLong(firstName) || ContactUtils.isNameLong(lastName)) {
-        uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.nameTooLong", null, 
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      
+      if(!ContactUtils.isNameValid(firstName, ContactUtils.specialString2) || !ContactUtils.isNameValid(lastName, ContactUtils.specialString2)) {
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIContactForm.msg.name-not-allow-special-character",
+                                                                                       null,
+                                                                                       ApplicationMessage.WARNING));
         return ;
-      }*/
+      }
+      
       contact.setFullName(firstName + " " + lastName);
       contact.setFirstName(firstName);
       contact.setLastName(lastName);
@@ -224,14 +226,9 @@ public class UIContactForm extends UIFormTabPane {
                                                                                        null,
                                                                                        ApplicationMessage.WARNING));
         return ;
-      }      
+      }
+      
       if (!ContactUtils.isEmpty(profileTab.getFieldJobName())) contact.setJobTitle(profileTab.getFieldJobName().trim());
-      /*if (ContactUtils.isNameLong(profileTab.getFieldJobName())) {
-        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIContactForm.msg.jobTooLong", null, 
-            ApplicationMessage.WARNING)) ;
-        
-        return ;
-      }*/
       String emails = profileTab.getFieldEmail();
       if (!ContactUtils.isEmpty(emails))
         emails = emails.replaceAll(CalendarUtils.SEMICOLON, CalendarUtils.COLON);
