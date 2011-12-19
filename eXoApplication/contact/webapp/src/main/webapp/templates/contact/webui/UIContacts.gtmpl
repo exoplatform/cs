@@ -181,10 +181,10 @@
           <table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
             <thead>
               <tr>
-                <th style="width: 18px; padding-left: 7px;" class="text">
+                <th style="width: 18px; padding: 0px;" class="text">
                   <input style="margin: 2px 0px 0px 0px; height: auto;" type="checkbox" class="checkbox" <%=uicomponent.checkedAll%> title="<%=_ctx.appRes("UIContacts.label.checkAll")%>" value="4"/>
                 </th>
-                <th style="width: 24px;" class="text"><div class="Icon BlueTagIcon"><span></span></div></th>
+                <th style="width: 24px; padding: 0px;" class="text"><div class="Icon BlueTagIcon"><span></span></div></th>
                 <th style="width: 20%;" class="text">
                   
                   <%
@@ -372,7 +372,7 @@
              %>
                 
               <tr class="UIContactList $cssClass" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" havePermissionAdd="<%=uicomponent.havePermissionAdd(contact)%>" isSharedAddress = "<%=uicomponent.isSharedAddress(contact)%>" isOwner="<%=contact.isOwner()%>"> 
-                <td class="text" style="padding-left: 7px; width:18px;">
+                <td class="text" style="padding: 0px; width:18px;">
                   <%
                     if(checkboxField != null) uicomponent.renderField(checkboxField) ;
                   %>
@@ -461,7 +461,7 @@
             %>
               
               <tr class="UIContactList $cssClass" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" havePermissionAdd="<%=uicomponent.havePermissionAdd(contact)%>" isSharedAddress = "<%=uicomponent.isSharedAddress(contact)%>" isOwner="<%=contact.isOwner()%>">
-                <td class="text" style="padding-left: 7px; width: 18px;">
+                <td class="text" style="padding: 0px; width: 18px;">
                   <%
                     if(checkboxField != null) uicomponent.renderField(checkboxField) ;
                   %>
