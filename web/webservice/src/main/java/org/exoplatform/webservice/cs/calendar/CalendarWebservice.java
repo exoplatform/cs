@@ -24,7 +24,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TimeZone;
@@ -35,6 +34,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -516,22 +516,34 @@ public class CalendarWebservice implements ResourceContainer{
   /**
    * Update status of a task
    * @param taskid 
+   * @param statusId id of the status. Possible values are: 1 - Need action, 2 - In Progress, 3 -Completed, 4 - Cancelled.
    * @return true/false
    */
   @GET
   @RolesAllowed("users")
   @Path("/updatestatus/{taskid}")
-  public Response updateStatus(@PathParam("taskid")
-                                String taskid) throws Exception {    
-    try{
-    CalendarService calService = (CalendarService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
-    String username = ConversationState.getCurrent().getIdentity().getUserId();
-    CalendarEvent task = calService.getEvent(username, taskid);
-    String calendarId = task.getCalendarId();
-    task.setEventState(CalendarEvent.COMPLETED);
-    calService.saveUserEvent(username, calendarId, task, false);
-    return Response.ok("true", MediaType.APPLICATION_JSON).cacheControl(cc).build();
-    } catch(Exception e){
+  public Response updateStatus(@PathParam("taskid") String taskid, @QueryParam("statusid") int statusId) throws Exception {
+    if (log.isDebugEnabled()) {
+      log.debug(String.format("Update status [%1$s] for task [%2$s] ..............", statusId, taskid));
+    }
+    try {
+      statusId = statusId != 0 ? statusId : 3; // if the status is not given, it is understood as "Completed".
+      CalendarService calService = (CalendarService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+      String username = ConversationState.getCurrent().getIdentity().getUserId();
+      String status = CalendarEvent.TASK_STATUS[(statusId - 1) % 4];
+      CalendarEvent task = calService.getEvent(username, taskid);
+      if (status.equals(task.getEventState())) {
+        return Response.ok(String.format("[%1$s] has been set for task %2$s before!", status, taskid), MediaType.APPLICATION_JSON).cacheControl(cc).build();
+      } else {
+        String calendarId = task.getCalendarId();
+        task.setEventState(status);
+        calService.saveUserEvent(username, calendarId, task, false);
+        return Response.ok("true", MediaType.APPLICATION_JSON).cacheControl(cc).build();
+
+      }
+    } catch (Exception e) {
+      if (log.isDebugEnabled())
+        log.debug("Updating task status failed!", e);
       return Response.status(HTTPStatus.INTERNAL_ERROR).cacheControl(cc).build();
     }
   }
