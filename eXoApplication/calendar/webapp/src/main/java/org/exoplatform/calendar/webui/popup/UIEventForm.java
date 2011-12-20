@@ -189,7 +189,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   protected LinkedList<ParticipantStatus> participantStatusList_ = new LinkedList<ParticipantStatus>();
   private String oldCalendarId_ = null ;
   private String newCalendarId_ = null ;
-  private String confirm_msg = "";
+  private String saveEventInvitation = "";
+  private String saveEventNoInvitation = "";
   private CalendarEvent repeatEvent;
   private String repeatSummary;
   
@@ -197,12 +198,15 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   public UIEventForm() throws Exception {
     super("UIEventForm");
     this.setId("UIEventForm");
-    confirm_msg = "confirm-msg" ;
+    saveEventInvitation = "SaveEvent-Invitation" ;
+    saveEventNoInvitation = "SaveEvent-NoSendInvitation" ;
     try{
-      confirm_msg = getLabel("confirm-msg") ;
+      saveEventInvitation = getLabel("SaveEvent-Invitation") ;
+      saveEventNoInvitation = getLabel("SaveEvent-NoSendInvitation") ;
     } catch (Exception e) {
       if (log.isDebugEnabled()) {
-        log.debug("Fail to get label: " + confirm_msg, e);
+        log.debug("Fail to get label: " + saveEventInvitation, e);
+        log.debug("Fail to get label: " + saveEventNoInvitation, e);
       }
     }
     UIEventDetailTab eventDetailTab =  new UIEventDetailTab(TAB_EVENTDETAIL) ;
@@ -1998,11 +2002,15 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         
       String sendOption = uiForm.getSendOption();
       List<ParticipantStatus>  lstPart = ((UIEventShareTab)uiForm.getChildById(TAB_EVENTSHARE)).getData();
-      if(CalendarSetting.ACTION_ASK.equalsIgnoreCase(sendOption) && lstPart.size() > 0){
+      if(CalendarSetting.ACTION_ASK.equalsIgnoreCase(sendOption)){
           // Show Confirm
         UIPopupAction pAction = uiPopupContainer.getChild(UIPopupAction.class) ;
         UIConfirmForm confirmForm =  pAction.activate(UIConfirmForm.class, 425);
-        confirmForm.setConfirmMessage(uiForm.confirm_msg);
+        if(lstPart.isEmpty()){
+          confirmForm.setConfirmMessage(uiForm.saveEventNoInvitation);
+        }else{
+          confirmForm.setConfirmMessage(uiForm.saveEventInvitation);
+        }
         confirmForm.setConfig_id(uiForm.getId()) ;
         
         String[] actions;
