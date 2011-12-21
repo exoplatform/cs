@@ -437,7 +437,7 @@ public class ContactFilter {
     }
 
     if (hasConjuntion)
-      queryString.append(stringBuffer.toString());
+      queryString.append(stringBuffer);
     return queryString.toString();
   }
 }

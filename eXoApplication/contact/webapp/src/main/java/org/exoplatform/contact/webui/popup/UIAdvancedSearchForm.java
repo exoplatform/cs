@@ -19,6 +19,7 @@ package org.exoplatform.contact.webui.popup;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.DataPageList;
@@ -28,6 +29,7 @@ import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UISearchForm;
 import org.exoplatform.contact.webui.UITags;
 import org.exoplatform.contact.webui.UIWorkingContainer;
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -99,65 +101,52 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
       String email = uiAdvancedSearchForm.getUIStringInput(FIELD_EMAIL_INPUT).getValue() ;
       String gender = uiAdvancedSearchForm.getUIFormSelectBox(FIELD_GENDER_BOX).getValue() ;
       
-      if (ContactUtils.isEmpty(text) && ContactUtils.isEmpty(fullName) && ContactUtils.isEmpty(firstName) &&
-          ContactUtils.isEmpty(lastName) && ContactUtils.isEmpty(nickName) &&
-          ContactUtils.isEmpty(jobTitle) && ContactUtils.isEmpty(email) && ContactUtils.isEmpty(gender)) {
+      String valueInput = new StringBuilder().append(text).append(fullName).append(lastName).append(firstName)
+                              .append(nickName).append(jobTitle).append(gender).append(email).toString();
+      valueInput = valueInput.replaceAll("(null)*", StringUtils.EMPTY).replaceAll("(\\s)*", StringUtils.EMPTY);
+      if (ContactUtils.isEmpty(valueInput)) {
         event.getRequestContext()
              .getUIApplication()
              .addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.no-text-to-search", null));
+        ((PortalRequestContext) event.getRequestContext().getParentAppRequestContext()).ignoreAJAXUpdateOnPortlets(true);
         return ;        
       }
       
-      if (!ContactUtils.isNameValid(text, ContactUtils.specialString2) || !ContactUtils.isNameValid(fullName, ContactUtils.specialString2) ||
-          !ContactUtils.isNameValid(firstName, ContactUtils.specialString2) || !ContactUtils.isNameValid(lastName, ContactUtils.specialString2) ||
-          !ContactUtils.isNameValid(nickName, ContactUtils.specialString2) || !ContactUtils.isNameValid(jobTitle, ContactUtils.specialString2) ||
-          !ContactUtils.isNameValid(gender, ContactUtils.specialString2) || 
-          !ContactUtils.isNameValid(email, ContactUtils.specialString2)) {
+      if (!ContactUtils.isNameValid(valueInput, ContactUtils.specialString2)) {
         event.getRequestContext()
         .getUIApplication().addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.text-search-error", null, ApplicationMessage.WARNING)) ;
+        ((PortalRequestContext) event.getRequestContext().getParentAppRequestContext()).ignoreAJAXUpdateOnPortlets(true);
         return ;  
       }
       
-      ContactFilter filter = new ContactFilter() ;
       UISearchForm.filter = new ContactFilter() ;
       if(!ContactUtils.isEmpty(text)) {
-        filter.setText(text) ;
         UISearchForm.filter.setText(text) ;
       }
       if(!ContactUtils.isEmpty(fullName)) {
-        filter.setFullName(fullName) ;   
         UISearchForm.filter.setFullName(fullName) ;
       }
       if(!ContactUtils.isEmpty(firstName)) {
-        filter.setFirstName(firstName) ;   
         UISearchForm.filter.setFirstName(firstName) ;
       }
       if(!ContactUtils.isEmpty(lastName)) {
-        filter.setLastName(lastName) ;
         UISearchForm.filter.setLastName(lastName) ;
       }
       if(!ContactUtils.isEmpty(nickName)) {
-        filter.setNickName(nickName) ;     
         UISearchForm.filter.setNickName(nickName) ; 
       }
       if(!ContactUtils.isEmpty(jobTitle)) {
-        filter.setJobTitle(jobTitle) ;  
         UISearchForm.filter.setJobTitle(jobTitle) ; 
       }
       if(!ContactUtils.isEmpty(email)) {
-        filter.setEmailAddress(email) ;
         UISearchForm.filter.setEmailAddress(email) ;
       }
       if(!ContactUtils.isEmpty(gender)) {
-        filter.setGender(gender) ;
         UISearchForm.filter.setGender(gender) ;
       }
-      DataPageList resultPageList = null ;
-      if (!ContactUtils.isEmpty(filter.getText()) || !ContactUtils.isEmpty(filter.getFullName()) || !ContactUtils.isEmpty(filter.getFirstName()) || 
-          !ContactUtils.isEmpty(filter.getLastName()) || !ContactUtils.isEmpty(filter.getNickName()) || !ContactUtils.isEmpty(filter.getJobTitle()) || 
-          !ContactUtils.isEmpty(filter.getEmailAddress()) || !ContactUtils.isEmpty(filter.getText()) || !ContactUtils.isEmpty(filter.getGender()))
-      resultPageList = ContactUtils.getContactService()
-        .searchContact(ContactUtils.getCurrentUser(), filter) ;
+      DataPageList resultPageList = ContactUtils.getContactService()
+                                                .searchContact(ContactUtils.getCurrentUser(), UISearchForm.filter) ;
+      
       UIContactPortlet uiContactPortlet = uiAdvancedSearchForm.getAncestorOfType(UIContactPortlet.class) ;
       uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class).setSelectedGroup(null) ;
       uiContactPortlet.findFirstComponentOfType(UITags.class).setSelectedTag(null) ;      
