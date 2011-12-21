@@ -265,7 +265,8 @@ public class ContactFilter {
     // Declared full text query
     if (!Utils.isEmpty(text)) {
       String textUpper = text.toUpperCase();
-      stringBuffer.append("(fn:upper-case(@exo:id) = '").append(textUpper).append("' or")
+      stringBuffer.append("((jcr:contains(., '").append(text).append("')) or")
+                  .append(" fn:upper-case(@exo:id) = '").append(textUpper).append("' or")
                   .append(" fn:upper-case(@exo:fullName) = '").append(textUpper).append("' or")
                   .append(" fn:upper-case(@exo:firstName) = '").append(textUpper).append("' or")
                   .append(" fn:upper-case(@exo:lastName) = '").append(textUpper).append("' or")
