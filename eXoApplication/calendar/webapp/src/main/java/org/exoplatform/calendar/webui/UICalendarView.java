@@ -851,7 +851,6 @@ public abstract class UICalendarView extends UIForm implements CalendarView {
         List<CalendarEvent> list = ((UIMonthView) uiCalendarView).getSelectedEvents();
         if (list.isEmpty()) {
           event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendarView.msg.check-box-required", null));
-          
         } else {
           try {
             uiCalendarView.removeEvents(list);
@@ -861,13 +860,11 @@ public abstract class UICalendarView extends UIForm implements CalendarView {
             } else {
               event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendarView.msg.can-not-delete-all-event", null));
             }
-            
           } catch (Exception e) {
             if (log.isDebugEnabled()) {
               log.debug("Fail to delete the events", e);
             }
             event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendarView.msg.delete-event-error", null, ApplicationMessage.WARNING));
-            
             return;
           }
         }
@@ -876,7 +873,6 @@ public abstract class UICalendarView extends UIForm implements CalendarView {
         List<CalendarEvent> list = ((UIListView) uiCalendarView).getSelectedEvents();
         if (uiListView.getSelectedEvents().isEmpty()) {
           event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendarView.msg.check-box-required", null));
-          
           return;
         }
         try {
@@ -893,8 +889,6 @@ public abstract class UICalendarView extends UIForm implements CalendarView {
           } else {
             event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendarView.msg.can-not-delete-all-event", null));
           }
-          
-
         } catch (Exception e) {
           if (log.isDebugEnabled()) {
             log.debug("Fail to delete the events", e);

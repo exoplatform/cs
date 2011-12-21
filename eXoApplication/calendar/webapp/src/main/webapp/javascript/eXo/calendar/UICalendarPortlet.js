@@ -184,7 +184,7 @@ UICalendarPortlet.prototype.addQuickShowHiddenWithId = function(obj, type, id){
  * @param {obj, type, from, to} has action object, type of form : event 1 | task 2, from in milliseconds, to in milliseconds
  */
 UICalendarPortlet.prototype.addQuickShowHiddenWithTime = function(obj, type, fromMilli, toMilli, id){
-    var CalendarWorkingWorkspace =  eXo.calendar.UICalendarPortlet.getElementById("UICalendarWorkingContainer");
+	var CalendarWorkingWorkspace =  eXo.calendar.UICalendarPortlet.getElementById("UICalendarWorkingContainer");
     var id = (id)?id:this.getCheckedCalendar(this.filterForm);
     var UIQuckAddEventPopupWindow = eXo.core.DOMUtil.findDescendantById(CalendarWorkingWorkspace,"UIQuckAddEventPopupWindow");
     var UIQuckAddTaskPopupWindow = eXo.core.DOMUtil.findDescendantById(CalendarWorkingWorkspace,"UIQuckAddTaskPopupWindow");
@@ -1660,6 +1660,11 @@ UICalendarPortlet.prototype.filterByCalendar = function(){
     for (var i = 0; i < len; i++) {
         if (events[i].getAttribute("calId") == calid) {
             events[i].style.display = stylEvent;
+            var chkEvent = eXo.core.DOMUtil.findFirstDescendantByClass(events[i], "input", "checkbox");
+            if (chkEvent && !checked) {
+              chkEvent.checked = false;
+              chkEvent.setAttribute('value', false);
+            }
         }
     }
     

@@ -137,7 +137,6 @@ public class UIMonthView extends UICalendarView {
       }
       input.setBindingField(event.getCalendarId()) ;
       addChild(input) ;
-      
       eventIter.remove() ;
     }  
   }
@@ -186,11 +185,14 @@ public class UIMonthView extends UICalendarView {
     UIFormCheckBoxInput<Boolean>  checkbox;
     for(String id : dataMap_.keySet()) {
       checkbox = getChildById(id )  ;
-      if(checkbox != null && checkbox.isChecked()) events.add(dataMap_.get(id)) ;
+      if (checkbox != null) {
+        events.add(dataMap_.get(id));
+        dataMap_.get(id).getCalendarId();
+      }
     }
-    
-    if (recurrenceEventsMap.isEmpty()) return events;
-    
+    if (recurrenceEventsMap.isEmpty()) {
+      return events;
+    }
     // get all selected events with occurrence event
     Iterator<String> occurIter = recurrenceEventsMap.keySet().iterator();
     while (occurIter.hasNext()) {
@@ -199,10 +201,11 @@ public class UIMonthView extends UICalendarView {
       while (recurIdIter.hasNext()) {
         String recurId = recurIdIter.next();
         checkbox = getChildById(eventId + "-" + recurId);
-        if(checkbox != null && checkbox.isChecked()) events.add(recurrenceEventsMap.get(eventId).get(recurId)) ;
+        if (checkbox != null && checkbox.isChecked()) {
+          events.add(recurrenceEventsMap.get(eventId).get(recurId));
+        }
       }
     }
-    
     return events ; 
   }
   
@@ -234,7 +237,6 @@ public class UIMonthView extends UICalendarView {
       try {
         List<CalendarEvent> list = calendarview.getSelectedEvents() ;
         List<CalendarEvent> dataList = new ArrayList<CalendarEvent>(){} ;
-        List<CalendarEvent> occurrenceList = new ArrayList<CalendarEvent>();
         java.util.Calendar tempCalFrom = calendarview.getInstanceTempCalendar() ;
         tempCalFrom.setTimeInMillis((Long.parseLong(value))) ;
         java.util.Calendar cal = CalendarUtils.getInstanceOfCurrentCalendar() ;
@@ -245,8 +247,9 @@ public class UIMonthView extends UICalendarView {
             if(ce.getCalType().equals(CalendarUtils.PRIVATE_TYPE)) {
               calendar = calService.getUserCalendar(username, calendarId) ;
             } else if(ce.getCalType().equals(CalendarUtils.SHARED_TYPE)){
-              if(calService.getSharedCalendars(username, true) != null)
-                calendar = calService.getSharedCalendars(username, true).getCalendarById(calendarId) ;
+              if (calService.getSharedCalendars(username, true) != null) {
+                calendar = calService.getSharedCalendars(username, true)  .getCalendarById(calendarId);
+              }
             } else if(ce.getCalType().equals(CalendarUtils.PUBLIC_TYPE)) {
               calendar = calService.getGroupCalendar(calendarId) ;
             }
@@ -254,10 +257,12 @@ public class UIMonthView extends UICalendarView {
               continue ;
             } else {
               // cs-4429: fix for group calendar permission
-              if((CalendarUtils.SHARED_TYPE.equals(ce.getCalType()) && !CalendarUtils.canEdit(CalendarUtils.getOrganizationService(), Utils.getEditPerUsers(calendar), username)) ||
-                 (CalendarUtils.PUBLIC_TYPE.equals(ce.getCalType()) && !CalendarUtils.canEdit(CalendarUtils.getOrganizationService(), calendar.getEditPermission(), username))) 
-              {
-                continue ;
+              boolean bGroupPermit = (CalendarUtils.SHARED_TYPE.equals(ce.getCalType()) 
+                  && !CalendarUtils.canEdit(CalendarUtils.getOrganizationService(), Utils.getEditPerUsers(calendar), username))
+                  || (CalendarUtils.PUBLIC_TYPE.equals(ce.getCalType()) 
+                      && !CalendarUtils.canEdit(CalendarUtils.getOrganizationService(), calendar.getEditPermission(), username));
+              if (bGroupPermit) {
+                continue;
               }
               CalendarEvent calEvent = ce ;
               Long amount = calEvent.getToDateTime().getTime() - calEvent.getFromDateTime().getTime() ;
@@ -272,15 +277,15 @@ public class UIMonthView extends UICalendarView {
             }
           }
         }
-        if(!dataList.isEmpty()) calendarview.moveEvents(dataList, null, null) ;
+        if (!dataList.isEmpty()) {
+          calendarview.moveEvents(dataList, null, null);
+        }
         if(dataList.size() < list.size()) {
           int number = list.size() - dataList.size() ;
           event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendarView.msg.some-events-cannot-move", new Object[]{String.valueOf(number)}, 1)) ;
           calendarview.refresh() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
         }
-         
-
       } catch (PathNotFoundException e) {
         if (log.isDebugEnabled()) {
           log.debug("The calendar is not found", e);

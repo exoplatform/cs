@@ -66,7 +66,9 @@ UICalendars.prototype.calendarMenuCallback = function(anchorElm, evt) {
   }
   try {
     var selectedCategory = (eXo.calendar.UICalendarPortlet.filterSelect) ? eXo.calendar.UICalendarPortlet.filterSelect : null;
-    if(selectedCategory) selectedCategory = selectedCategory.options[selectedCategory.selectedIndex].value;
+    if (selectedCategory) {
+    	selectedCategory = selectedCategory.options[selectedCategory.selectedIndex].value;
+    } 
   } catch (e) { //Fix for IE
     var selectedCategory = null;
   }
