@@ -72,10 +72,8 @@ public class UISearchForm extends UIForm {
       }
       DataPageList resultPageList =  null ;
       if (!ContactUtils.isEmpty(text)) {
-        ContactFilter filter = new ContactFilter() ;
-        filter.setText(text) ;
-        UISearchForm.filter = new ContactFilter() ;
-        UISearchForm.filter.setText(text) ;        
+        filter = new ContactFilter() ;
+        filter.setText(text) ;        
         resultPageList = ContactUtils.getContactService()
           .searchContact(ContactUtils.getCurrentUser(), filter) ;
       }      

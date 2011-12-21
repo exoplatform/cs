@@ -256,84 +256,83 @@ public class ContactFilter {
   }
 
   public String getStatement() throws Exception {
-    StringBuffer queryString = new StringBuffer("/jcr:root" + (accountPath == null ? "" : accountPath) + "//element(*,exo:contact)");
+    StringBuffer queryString = new StringBuffer("/jcr:root").append((accountPath == null ? "" : accountPath)).append("//element(*,exo:contact)");
     boolean hasConjuntion = false;
     StringBuffer stringBuffer = new StringBuffer("[");
 
     if (hasEmails)
       stringBuffer.append("( ");
-    // desclared full text query
-    if (text != null && text.length() > 0) {
-      text = text.toUpperCase();
-      // if (username != null && text.equalsIgnoreCase(username)) {
-      stringBuffer.append("(fn:upper-case(@exo:id) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:fullName) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:firstName) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:lastName) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:nickName) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:jobTitle) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:workAddress) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:workCity) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:workState_province) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:workPhone1) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:workPhone2) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:workFax) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:mobilePhone) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:webPage) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:exoId) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:googleId) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:msnId) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:aolId) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:yahooId) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:icrId) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:skypeId) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:icqId) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:homeAddress) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:homeCity) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:homeState_province) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:homePostalCode) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:homeCountry) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:homePhone1) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:homePhone2) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:homeFax) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:personalSite) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:note) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:emailAddress) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:workCountry) = '" + text + "')");
+    // Declared full text query
+    if (!Utils.isEmpty(text)) {
+      String textUpper = text.toUpperCase();
+      stringBuffer.append("(fn:upper-case(@exo:id) = '").append(textUpper).append("' or")
+                  .append(" fn:upper-case(@exo:fullName) = '").append(textUpper).append("' or")
+                  .append(" fn:upper-case(@exo:firstName) = '").append(textUpper).append("' or")
+                  .append(" fn:upper-case(@exo:lastName) = '").append(textUpper).append("' or")
+                  .append(" fn:upper-case(@exo:nickName) = '").append(textUpper).append("' or")
+                  .append(" fn:upper-case(@exo:jobTitle) = '").append(textUpper).append("' or")
+                  .append(" fn:upper-case(@exo:workAddress) = '").append(textUpper).append("' or")
+                  .append(" fn:upper-case(@exo:workCity) = '").append(textUpper).append("' or")
+                  .append(" fn:upper-case(@exo:workState_province) = '").append(textUpper).append("' or")
+                  .append(" fn:upper-case(@exo:workPhone1) = '").append(textUpper).append("' or")
+                  .append(" fn:upper-case(@exo:workPhone2) = '").append(textUpper).append("' or")
+                  .append(" fn:upper-case(@exo:workFax) = '").append(textUpper).append("' or")
+                  .append(" fn:upper-case(@exo:mobilePhone) = '").append(textUpper).append("' or")
+                  .append(" fn:upper-case(@exo:webPage) = '").append(textUpper).append("' or")
+                  .append(" fn:upper-case(@exo:exoId) = '").append(textUpper).append("' or")
+                  .append(" fn:upper-case(@exo:googleId) = '").append(textUpper).append("' or")
+                  .append(" fn:upper-case(@exo:msnId) = '").append(textUpper).append("' or")
+                  .append(" fn:upper-case(@exo:aolId) = '").append(textUpper).append("' or")
+                  .append(" fn:upper-case(@exo:yahooId) = '").append(textUpper).append("' or")
+                  .append(" fn:upper-case(@exo:icrId) = '").append(textUpper).append("' or")
+                  .append(" fn:upper-case(@exo:skypeId) = '").append(textUpper).append("' or")
+                  .append(" fn:upper-case(@exo:icqId) = '").append(textUpper).append("' or")
+                  .append(" fn:upper-case(@exo:homeAddress) = '").append(textUpper).append("' or")
+                  .append(" fn:upper-case(@exo:homeCity) = '").append(textUpper).append("' or")
+                  .append(" fn:upper-case(@exo:homeState_province) = '").append(textUpper).append("' or")
+                  .append(" fn:upper-case(@exo:homePostalCode) = '").append(textUpper).append("' or")
+                  .append(" fn:upper-case(@exo:homeCountry) = '").append(textUpper).append("' or")
+                  .append(" fn:upper-case(@exo:homePhone1) = '").append(textUpper).append("' or")
+                  .append(" fn:upper-case(@exo:homePhone2) = '").append(textUpper).append("' or")
+                  .append(" fn:upper-case(@exo:homeFax) = '").append(textUpper).append("' or")
+                  .append(" fn:upper-case(@exo:personalSite) = '").append(textUpper).append("' or")
+                  .append(" fn:upper-case(@exo:note) = '").append(textUpper).append("' or")
+                  .append(" fn:upper-case(@exo:emailAddress) = '").append(textUpper).append("' or")
+                  .append(" fn:upper-case(@exo:workCountry) = '").append(textUpper).append("')");
       hasConjuntion = true;
     }
 
-    if (categories != null && categories.length > 0) {
+    if (!Utils.isEmpty(categories)) {
       if (hasConjuntion)
         stringBuffer.append(relate + "(");
       else
         stringBuffer.append("(");
       for (int i = 0; i < categories.length; i++) {
         if (i == 0)
-          stringBuffer.append("@exo:categories='" + categories[i] + "'");
+          stringBuffer.append("@exo:categories='").append(categories[i]).append("'");
         else
-          stringBuffer.append(" or @exo:categories='" + categories[i] + "'");
+          stringBuffer.append(" or @exo:categories='").append(categories[i]).append("'");
       }
       stringBuffer.append(")");
       hasConjuntion = true;
     }
 
-    if (tag != null && tag.length > 0) {
+    if (!Utils.isEmpty(tag)) {
       if (hasConjuntion)
         stringBuffer.append(relate + "(");
       else
         stringBuffer.append("(");
       for (int i = 0; i < tag.length; i++) {
         if (i == 0)
-          stringBuffer.append("@exo:tags='" + tag[i] + "'");
+          stringBuffer.append("@exo:tags='").append(tag[i]).append("'");
         else
-          stringBuffer.append(" or @exo:tags='" + tag[i] + "'");
+          stringBuffer.append(" or @exo:tags='").append(tag[i]).append("'");
       }
       stringBuffer.append(")");
       hasConjuntion = true;
     }
 
-    if (viewQuery != null && viewQuery.trim().length() > 0) {
+    if (!Utils.isEmpty(viewQuery)) {
       if (hasConjuntion)
         stringBuffer.append(" and (");
       else
@@ -343,77 +342,77 @@ public class ContactFilter {
       hasConjuntion = true;
     }
 
-    if (fullName != null && fullName.trim().length() > 0) {
+    if (!Utils.isEmpty(fullName)) {
       if (hasConjuntion)
         stringBuffer.append(relate + "(");
       else
         stringBuffer.append("(");
-      stringBuffer.append("jcr:like(fn:upper-case(@exo:fullName),'%" + fullName.toUpperCase() + "%')");
+      stringBuffer.append("jcr:like(fn:upper-case(@exo:fullName),'%").append(fullName.toUpperCase()).append("%')");
       stringBuffer.append(")");
       hasConjuntion = true;
     }
-    if (firstName != null && firstName.trim().length() > 0) {
+    if (!Utils.isEmpty(firstName)) {
       if (hasConjuntion)
         stringBuffer.append(relate + "(");
       else
         stringBuffer.append("(");
-      stringBuffer.append("jcr:like(fn:upper-case(@exo:firstName),'%" + firstName.toUpperCase() + "%')");
+      stringBuffer.append("jcr:like(fn:upper-case(@exo:firstName),'%").append(firstName.toUpperCase()).append("%')");
       stringBuffer.append(")");
       hasConjuntion = true;
     }
-    if (lastName != null && lastName.trim().length() > 0) {
+    if (!Utils.isEmpty(lastName)) {
       if (hasConjuntion)
         stringBuffer.append(relate + "(");
       else
         stringBuffer.append("(");
-      stringBuffer.append("jcr:like(fn:upper-case(@exo:lastName), '%" + lastName.toUpperCase() + "%')");
+      stringBuffer.append("jcr:like(fn:upper-case(@exo:lastName), '%").append(lastName.toUpperCase()).append("%')");
       stringBuffer.append(")");
       hasConjuntion = true;
     }
-    if (nickName != null && nickName.trim().length() > 0) {
+    if (!Utils.isEmpty(nickName)) {
       if (hasConjuntion)
         stringBuffer.append(relate + "(");
       else
         stringBuffer.append("(");
-      stringBuffer.append("jcr:like(fn:upper-case(@exo:nickName),'%" + nickName.toUpperCase() + "%')");
+      stringBuffer.append("jcr:like(fn:upper-case(@exo:nickName),'%").append(nickName.toUpperCase()).append("%')");
       stringBuffer.append(")");
       hasConjuntion = true;
     }
-    if (gender != null && gender.trim().length() > 0) {
+    if (!Utils.isEmpty(gender)) {
       if (hasConjuntion)
         stringBuffer.append(relate + "(");
       else
         stringBuffer.append("(");
-      stringBuffer.append("@exo:gender='" + gender + "'");
+      stringBuffer.append("@exo:gender='").append(gender).append("'");
       stringBuffer.append(")");
       hasConjuntion = true;
     }
-    if (jobTitle != null && jobTitle.trim().length() > 0) {
+    if (!Utils.isEmpty(jobTitle)) {
       if (hasConjuntion)
         stringBuffer.append(relate + "(");
       else
         stringBuffer.append("(");
-      stringBuffer.append("jcr:like(fn:upper-case(@exo:jobTitle), '%" + jobTitle.toUpperCase() + "%')");
+      stringBuffer.append("jcr:like(fn:upper-case(@exo:jobTitle), '%").append(jobTitle.toUpperCase()).append("%')");
       stringBuffer.append(")");
       hasConjuntion = true;
     }
-    if (emailAddress != null && emailAddress.trim().length() > 0) {
+    if (!Utils.isEmpty(emailAddress)) {
       if (hasConjuntion)
         stringBuffer.append(relate + "(");
       else
         stringBuffer.append("(");
-      stringBuffer.append("jcr:like(fn:upper-case(@exo:emailAddress), '%" + emailAddress.toUpperCase() + "%')");
+      stringBuffer.append("jcr:like(fn:upper-case(@exo:emailAddress), '%").append(emailAddress.toUpperCase()).append("%')");
       stringBuffer.append(")");
       hasConjuntion = true;
     }
 
-    if (isOwner != null && isOwner.trim().length() > 0) {
+    if (!Utils.isEmpty(isOwner)) {
       if (hasConjuntion)
         stringBuffer.append(" and (");
       else
         stringBuffer.append("(");
       // if (isOwner.equals("true"))
-      stringBuffer.append("@exo:isOwner='" + isOwner + "'");
+      stringBuffer.append("@exo:isOwner='").append(isOwner).append("'");
       stringBuffer.append(")");
       hasConjuntion = true;
     }
@@ -429,12 +428,12 @@ public class ContactFilter {
 
     stringBuffer.append("]");
 
-    if (orderBy != null && orderBy.trim().length() > 0) {
-      stringBuffer.append(" order by @exo:" + orderBy + " ");
+    if (!Utils.isEmpty(orderBy)) {
+      stringBuffer.append(" order by @exo:").append(orderBy);
       if (isAscending)
-        stringBuffer.append("ascending");
+        stringBuffer.append(" ascending");
       else
-        stringBuffer.append("descending");
+        stringBuffer.append(" descending");
     }
 
     if (hasConjuntion)
