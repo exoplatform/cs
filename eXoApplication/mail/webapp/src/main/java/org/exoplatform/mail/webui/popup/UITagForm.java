@@ -35,7 +35,6 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIPopupComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
@@ -116,23 +115,23 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       String subject = (msg.getSubject() != null) ? msg.getSubject() : "";
       String mesSub = getLabel("subject") + " : " + ((subject.length() >= 30) ? (subject.substring(0, 30) + "...") : subject);
       UIFormInputInfo uiTags = new UIFormInputInfo(TAG_MESSAGE, TAG_MESSAGE, null);
-      String tags = "";
+      StringBuffer tags = new StringBuffer();
       if (msg.getTags() != null && msg.getTags().length > 0) {
         checkedTagList = new ArrayList<String>();
         for (int i = 0; i < msg.getTags().length; i++) {
           if (i > 0) {
-            tags += ", ";
+            tags.append(", ");
           }
           Tag tag = mailSrv.getTag(username, accountId, msg.getTags()[i]);
-          tags += "[" + tag.getName() + "]";
+          tags.append("[").append(tag.getName()).append("]");
           checkedTagList.add(tag.getName());
         }
       } else {
-        tags = getLabel("no-tag");
+        tags.append(getLabel("no-tag"));
       }
 
       uiTags.setName(mesSub);
-      uiTags.setValue(tags);
+      uiTags.setValue(tags.toString());
       addUIFormInput(uiTags);
       messageMap.put(msg.getId(), msg);
     }

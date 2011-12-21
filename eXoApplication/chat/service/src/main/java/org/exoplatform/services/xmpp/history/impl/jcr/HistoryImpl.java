@@ -46,7 +46,6 @@ import org.exoplatform.services.log.Log;
 import org.exoplatform.services.xmpp.history.HistoricalMessage;
 import org.exoplatform.services.xmpp.history.Interlocutor;
 import org.exoplatform.services.xmpp.util.CodingUtils;
-import org.exoplatform.services.xmpp.util.XMPPConnectionUtils;
 import org.jcrom.Jcrom;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.util.StringUtils;

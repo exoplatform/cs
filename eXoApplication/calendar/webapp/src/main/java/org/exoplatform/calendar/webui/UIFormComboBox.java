@@ -116,8 +116,7 @@ public class UIFormComboBox extends UIFormInputBase<String>  {
     if(options_ == null || options_.size() < 1) return this;
     value_ = options_.get(0).getValue();
     return this ;
-  } 
-  @SuppressWarnings("unused")
+  }
   public void decode(Object input, WebuiRequestContext context) throws Exception {
     value_ = (String) input;
     if(value_ != null && value_.length() == 0) value_ = null ;
@@ -143,27 +142,32 @@ public class UIFormComboBox extends UIFormInputBase<String>  {
   }
   
   public void processRender(WebuiRequestContext context) throws Exception {
-  String parentId = ((UIComponent) this.getParent()).getId();
-    context.getJavascriptManager().addJavascript("eXo.calendar.UICombobox.init('" + parentId+ "','" + getId() + "');") ;  
-    Writer w =  context.getWriter() ;
+    String parentId = ((UIComponent) this.getParent()).getId();
+    context.getJavascriptManager().addJavascript("eXo.calendar.UICombobox.init('" + parentId + "','" + getId() + "');");
+    Writer w = context.getWriter();
     String options = "[";
-    String text = "<div class='UIComboboxComponent'><div class='UIComboboxList'><div class='UIComboboxContainer'><div class='UIComboboxItemContainer'>" ;
-        for(SelectItemOption item : options_) {
-          options += "'"+item.getValue()+"',";
-          text += "<div onclick='eXo.calendar.UICombobox.getValue(this);' value='" + item.getValue()+ "' class='UIComboboxItem'>" ;
-          text += "<div class='UIComboboxIcon'>" ;
-          text += "<div class='UIComboboxLabel'>" + item.getLabel() + "</div>" ;
-          text += "</div>";
-          text += "</div>" ;
-        }
-      text += "</div></div></div>" ;
-      options = options.substring(0,options.length() - 1) + "]";
-      text += "<input class='UIComboboxInput' options=\"" + options + "\" onkeyup='eXo.calendar.UICombobox.complete(this,event);' name='"+getName()+"' type='text'" + " id='"+getId()+"' " + renderJsActions();
-      if(value_ != null && value_.trim().length() > 0) {      
-        text += " value='"+encodeValue(value_).toString()+"'";
-      }
-      text += " /></div>" ;
-      w.write(text);
+    StringBuffer text = new StringBuffer(
+        "<div class='UIComboboxComponent'><div class='UIComboboxList'><div class='UIComboboxContainer'><div class='UIComboboxItemContainer'>");
+    for (SelectItemOption item : options_) {
+      options += "'" + item.getValue() + "',";
+      text.append("<div onclick='eXo.calendar.UICombobox.getValue(this);' value='").append(item.getValue()).append("' class='UIComboboxItem'>");
+      text.append("<div class='UIComboboxIcon'>");
+      text.append("<div class='UIComboboxLabel'>").append(item.getLabel()).append("</div>");
+      text.append("</div>");
+      text.append("</div>");
+    }
+    text.append("</div></div></div>");
+    options = options.substring(0, options.length() - 1) + "]";
+    
+    text.append("<input class='UIComboboxInput' options=\"").append(options)
+        .append("\" onkeyup='eXo.calendar.UICombobox.complete(this,event);' name='").append(getName())
+        .append("' type='text'").append(" id='").append(getId()).append("' ").append(renderJsActions());
+    
+    if (value_ != null && value_.trim().length() > 0) {
+      text.append(" value='").append(encodeValue(value_).toString()).append("'");
+    }
+    text.append(" /></div>");
+    w.write(text.toString());
   }
 
   private StringBuilder encodeValue(String value){
@@ -189,5 +193,4 @@ public class UIFormComboBox extends UIFormInputBase<String>  {
     }
     return -1;
   }
-
 }

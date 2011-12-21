@@ -258,6 +258,7 @@ public class UIListView extends UICalendarView {
     pageList_ = pageList ;
     updateCurrentPage(pageList_.getCurrentPage()) ;
   }
+  
   @SuppressWarnings("unchecked")
   protected void updateCurrentPage(long page) throws Exception{
     getChildren().clear() ;
@@ -289,7 +290,7 @@ public class UIListView extends UICalendarView {
   }
   
   
-  private void refreshBrowser(){
+  protected void refreshBrowser(){
     UIListContainer uiListContainer = getParent() ;
     if (uiListContainer.isDisplaySearchResult()) return ;
     if(!this.isCalClicked()){

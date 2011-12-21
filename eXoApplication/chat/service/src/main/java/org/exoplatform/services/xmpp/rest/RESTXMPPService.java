@@ -78,7 +78,6 @@ import org.exoplatform.services.xmpp.history.impl.jcr.HistoryImpl;
 import org.exoplatform.services.xmpp.userinfo.UserInfo;
 import org.exoplatform.services.xmpp.userinfo.UserInfoService;
 import org.exoplatform.services.xmpp.util.CometdChannels;
-import org.exoplatform.services.xmpp.util.HistoryUtils;
 import org.exoplatform.services.xmpp.util.PresenceUtil;
 import org.exoplatform.services.xmpp.util.SearchFormFields;
 import org.exoplatform.services.xmpp.util.TransformUtils;

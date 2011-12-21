@@ -1278,21 +1278,23 @@ public class JCRDataStorage implements DataStorage {
   }
 
   public String getAddresses(javax.mail.Message msg, javax.mail.Message.RecipientType type) throws Exception {
-    String recipients = "";
+    StringBuffer recipients = new StringBuffer();
     String t = "To";
     if (type.equals(javax.mail.Message.RecipientType.CC))
       t = "Cc";
     else if (type.equals(javax.mail.Message.RecipientType.BCC))
       t = "Bcc";
     try {
-      recipients = InternetAddress.toString(msg.getRecipients(type));
+      recipients.append(InternetAddress.toString(msg.getRecipients(type)));
     } catch (Exception e) {
       String[] ccs = msg.getHeader(t);
-      for (int i = 0; i < ccs.length; i++)
-        if (!Utils.isEmptyField(ccs[i]))
-          recipients += ccs[i].replaceAll("\"", "") + ",";
+      for (int i = 0; i < ccs.length; i++) {
+        if (!Utils.isEmptyField(ccs[i])) {
+          recipients.append(ccs[i].replaceAll("\"", "")).append(",");
+        }
+      }
     }
-    return Utils.decodeText(recipients);
+    return Utils.decodeText(recipients.toString());
   }
 
   private void increaseFolderItem(SessionProvider sProvider, String username, String accId, String folderId, boolean isReadMessage) throws Exception {

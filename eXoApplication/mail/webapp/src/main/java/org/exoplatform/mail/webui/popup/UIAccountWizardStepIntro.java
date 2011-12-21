@@ -22,7 +22,6 @@ import java.util.List;
 import org.exoplatform.mail.DataCache;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Utils;
-import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.WizardStep;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;

@@ -149,10 +149,7 @@ public class ExoGroupProvider implements GroupProvider {
     getGroupsForUserParams_ = Utils.parseQuery(JiveGlobals.getXMLProperties(GET_GROUPS_FORUSER_PARAMS));
   }
 
-  /*
-   * (non-Javadoc)
-   * @see org.jivesoftware.openfire.group.GroupProvider#getGroup(java.lang.String)
-   */
+  @Override
   public Group getGroup(String group) throws GroupNotFoundException {
     String url = groupInfoURL_;
     String method = groupInfoMethod_;
@@ -190,10 +187,7 @@ public class ExoGroupProvider implements GroupProvider {
     throw new IllegalStateException("Unknown response status : " + resp.getStatus());
   }
 
-  /*
-   * (non-Javadoc)
-   * @see org.jivesoftware.openfire.group.GroupProvider#getGroupCount()
-   */
+  @Override
   public int getGroupCount() {
     String url = groupsCountURL_;
     String method = groupsCountMethod_;
@@ -220,10 +214,7 @@ public class ExoGroupProvider implements GroupProvider {
     throw new IllegalStateException("Unknown response status : " + resp.getStatus());
   }
 
-  /*
-   * (non-Javadoc)
-   * @see org.jivesoftware.openfire.group.GroupProvider#getGroupNames()
-   */
+  @Override
   public Collection<String> getGroupNames() {
     String url = getGroupsAllURL_;
     String method = getGroupsAllMethod_;
@@ -231,10 +222,7 @@ public class ExoGroupProvider implements GroupProvider {
     return getGroupNames(url, method, params);
   }
 
-  /*
-   * (non-Javadoc)
-   * @see org.jivesoftware.openfire.group.GroupProvider#getGroupNames(int, int)
-   */
+  @Override
   public Collection<String> getGroupNames(int startIndex, int numResults) {
     String url = getGroupsRangeURL_;
     String method = getGroupsRangeMethod_;
@@ -243,10 +231,7 @@ public class ExoGroupProvider implements GroupProvider {
     return getGroupNames(url, method, params);
   }
 
-  /*
-   * (non-Javadoc)
-   * @see org.jivesoftware.openfire.group.GroupProvider#getGroupNames(org.xmpp.packet.JID)
-   */
+  @Override
   public Collection<String> getGroupNames(JID user) {
     String url = getGroupsForUserURL_;
     String method = getGroupsForUserMethod_;
@@ -255,45 +240,30 @@ public class ExoGroupProvider implements GroupProvider {
     return getGroupNames(url, method, params);
   }
 
-  /*
-   * (non-Javadoc)
-   * @see org.jivesoftware.openfire.group.GroupProvider#getSharedGroupsNames()
-   */
+  @Override
   public Collection<String> getSharedGroupsNames() {
     // search is not supported
     return Collections.emptyList();
   }
 
-  /*
-   * (non-Javadoc)
-   * @see org.jivesoftware.openfire.group.GroupProvider#search(java.lang.String)
-   */
+  @Override
   public Collection<String> search(String query) {
     // search is not supported
     return Collections.emptyList();
   }
 
-  /*
-   * (non-Javadoc)
-   * @see org.jivesoftware.openfire.group.GroupProvider#search(java.lang.String, int, int)
-   */
+  @Override
   public Collection<String> search(String query, int startIndex, int numResults) {
     // search is not supported
     return Collections.emptyList();
   }
 
-  /*
-   * (non-Javadoc)
-   * @see org.jivesoftware.openfire.group.GroupProvider#isReadOnly()
-   */
+  @Override
   public boolean isReadOnly() {
     return true;
   }
 
-  /*
-   * (non-Javadoc)
-   * @see org.jivesoftware.openfire.group.GroupProvider#isSearchSupported()
-   */
+  @Override
   public boolean isSearchSupported() {
     return false;
   }
@@ -373,16 +343,17 @@ public class ExoGroupProvider implements GroupProvider {
       if (groupList.getLength() == 0)
         return group;
 
-      String compositeGroupName = group;
+      StringBuffer compositeGroupName = new StringBuffer(group);
       for (int i = 0; i < groupList.getLength(); i++) {
         Node descendantGroup = groupList.item(i);
         NamedNodeMap attribs = descendantGroup.getAttributes();
         String groupId = attribs.getNamedItem("groupId").getNodeValue();
 
-        compositeGroupName += ":" + getGroupNameWithDescendants(groupId);
+        compositeGroupName.append(":");
+        compositeGroupName.append(getGroupNameWithDescendants(groupId));
       }
 
-      return compositeGroupName;
+      return compositeGroupName.toString();
 
     } else if (resp.getStatus() == HttpStatus.SC_NOT_FOUND) {
       throw new IllegalStateException("Group not found");
@@ -391,60 +362,38 @@ public class ExoGroupProvider implements GroupProvider {
 
   }
 
-  /*
-   * (non-Javadoc)
-   * @see org.jivesoftware.openfire.group.GroupProvider#addMember(java.lang.String, org.xmpp.packet.JID, boolean)
-   */
+  @Override
   public void addMember(String groupName, JID user, boolean administrator) throws UnsupportedOperationException {
     throw new UnsupportedOperationException();
   }
 
-  /*
-   * (non-Javadoc)
-   * @see org.jivesoftware.openfire.group.GroupProvider#createGroup(java.lang.String)
-   */
+  @Override
   public Group createGroup(String name) throws UnsupportedOperationException, GroupAlreadyExistsException {
     throw new UnsupportedOperationException();
   }
 
-  /*
-   * (non-Javadoc)
-   * @see org.jivesoftware.openfire.group.GroupProvider#deleteGroup(java.lang.String)
-   */
+  @Override
   public void deleteGroup(String name) throws UnsupportedOperationException {
     throw new UnsupportedOperationException();
   }
 
-  /*
-   * (non-Javadoc)
-   * @see org.jivesoftware.openfire.group.GroupProvider#deleteMember(java.lang.String, org.xmpp.packet.JID)
-   */
+  @Override
   public void deleteMember(String groupName, JID user) throws UnsupportedOperationException {
     throw new UnsupportedOperationException();
   }
 
-  /*
-   * (non-Javadoc)
-   * @see org.jivesoftware.openfire.group.GroupProvider#setDescription(java.lang.String, java.lang.String)
-   */
+  @Override
   public void setDescription(String name, String description) throws GroupNotFoundException {
     throw new UnsupportedOperationException();
   }
 
-  /*
-   * (non-Javadoc)
-   * @see org.jivesoftware.openfire.group.GroupProvider#setName(java.lang.String, java.lang.String)
-   */
+  @Override
   public void setName(String oldName, String newName) throws UnsupportedOperationException, GroupAlreadyExistsException {
     throw new UnsupportedOperationException();
   }
 
-  /*
-   * (non-Javadoc)
-   * @see org.jivesoftware.openfire.group.GroupProvider#updateMember(java.lang.String, org.xmpp.packet.JID, boolean)
-   */
+  @Override
   public void updateMember(String groupName, JID user, boolean administrator) throws UnsupportedOperationException {
     throw new UnsupportedOperationException();
   }
-
 }

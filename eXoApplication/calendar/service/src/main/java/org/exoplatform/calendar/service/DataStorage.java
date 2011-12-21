@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.jcr.Node;
-import javax.jcr.NodeIterator;
 import javax.jcr.Session;
 
 import org.exoplatform.services.jcr.ext.common.SessionProvider;

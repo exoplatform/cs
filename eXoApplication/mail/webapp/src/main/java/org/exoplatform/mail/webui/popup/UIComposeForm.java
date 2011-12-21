@@ -75,21 +75,20 @@ import org.exoplatform.webui.commons.EventUIComponent;
 import org.exoplatform.webui.commons.UIAddAttachment;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIPopupComponent;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputInfo;
+import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
-import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 import org.exoplatform.webui.form.wysiwyg.FCKEditorConfig;
 import org.exoplatform.webui.form.wysiwyg.UIFormWYSIWYGInput;
 
@@ -502,8 +501,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
       setFieldToValue(replyTo);
       setPriority(msg.getPriority());
 
-      String replyCc = "";
-
+      StringBuffer replyCc = new StringBuffer();
       String msgTo = (msg.getMessageTo() != null) ? msg.getMessageTo() : "";
       InternetAddress[] msgToAdds = Utils.getInternetAddress(msgTo);
 
@@ -515,9 +513,10 @@ import com.sun.mail.smtp.SMTPSendFailedException;
             && !msgToAdds[i].getAddress().equalsIgnoreCase(account.getEmailAddress())
             && !msgToAdds[i].getAddress().equalsIgnoreCase(account.getIncomingUser())
             && !msgToAdds[i].getAddress().equalsIgnoreCase(replyTo)) {
-          if (replyCc.trim().length() > 0)
-            replyCc += ", ";
-          replyCc += msgToAdds[i].toString();
+          if (replyCc.toString().trim().length() > 0) {
+            replyCc.append(", ");
+          }
+          replyCc.append(msgToAdds[i].toString());
         }
       }
 
@@ -527,14 +526,15 @@ import com.sun.mail.smtp.SMTPSendFailedException;
         if (msgCcAdds[i] != null
             && !msgCcAdds[i].getAddress().equalsIgnoreCase(account.getEmailAddress())
             && !msgCcAdds[i].getAddress().equalsIgnoreCase(account.getIncomingUser())) {
-          if (replyCc.trim().length() > 0)
-            replyCc += ", ";
-          replyCc += msgCcAdds[i].toString();
+          if (replyCc.toString().trim().length() > 0) {
+            replyCc.append(", ");
+          }
+          replyCc.append(msgCcAdds[i].toString());
         }
       }
 
-      if (replyCc.trim().length() > 0) {
-        setFieldCcValue(replyCc);
+      if (replyCc.toString().trim().length() > 0) {
+        setFieldCcValue(replyCc.toString());
         setShowCc(true);
       }
       refreshUploadUI(msg, mailSetting, inputSet);
@@ -556,7 +556,6 @@ import com.sun.mail.smtp.SMTPSendFailedException;
       }
 
       StringBuffer forwardTxt = new StringBuffer("");
-      ;
       if (!mailSetting.forwardWithAtt()) {
         forwardTxt.append("<br><br>-------- Original Message --------<br>");
         forwardTxt.append("Subject: ")

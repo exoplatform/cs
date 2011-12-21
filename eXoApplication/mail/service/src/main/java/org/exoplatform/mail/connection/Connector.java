@@ -16,13 +16,9 @@
  */
 package org.exoplatform.mail.connection;
 
-import java.util.List;
-
 import javax.mail.MessagingException;
 
 import org.exoplatform.mail.service.Account;
-import org.exoplatform.mail.service.Folder;
-import org.exoplatform.mail.service.Message;
 
 /**
  * Created by The eXo Platform SAS

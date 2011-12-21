@@ -121,9 +121,9 @@ public class UIAddressSearchForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UIAddressSearchForm> event) throws Exception { 
       UIAddressSearchForm uiAddressSearchForm = event.getSource();
       UIMailPortlet uiPortlet = uiAddressSearchForm.getAncestorOfType(UIMailPortlet.class);
-      String toAddress = "";
-      for (Contact contact : uiAddressSearchForm.getCheckedContact()) {   
-        toAddress += MailUtils.listToString(contact.getEmailAddresses()) + "," ;
+      StringBuffer toAddress = new StringBuffer();
+      for (Contact contact : uiAddressSearchForm.getCheckedContact()) {
+        toAddress.append(MailUtils.listToString(contact.getEmailAddresses())).append(",");
       }
       UIAdvancedSearchForm uiAdvancedSearchForm = uiPortlet.findFirstComponentOfType(UIAdvancedSearchForm.class);
       
@@ -132,7 +132,7 @@ public class UIAddressSearchForm extends UIForm implements UIPopupComponent {
       }  
       
       if(uiAddressSearchForm.getType().equals("From")) {
-        uiAdvancedSearchForm.setFieldEmailFrom(toAddress);       
+        uiAdvancedSearchForm.setFieldEmailFrom(toAddress.toString());       
       }      
       uiAddressSearchForm.deActivate();
     }  

@@ -100,12 +100,14 @@ class Utils {
       return doGet(url);
     HttpClient httpClient = new HttpClient();
     httpClient.getState().setCredentials(new AuthScope(url.getHost(), url.getPort()), usernamePasswordCredentials);
-    String _url = url.toString();
+    StringBuffer _url = new StringBuffer(url.toString());
     Set<String> key_set = params.keySet();
-    _url += (key_set.size() > 0) ? "?" : "";
-    for (String key : key_set)
-      _url += (key + "=" + params.get(key));
-    GetMethod get = new GetMethod(_url);
+    _url.append((key_set.size() > 0) ? "?" : "");
+    for (String key : key_set) {
+      _url.append(key).append("=").append(params.get(key));
+    }
+    
+    GetMethod get = new GetMethod(_url.toString());
     get.setDoAuthentication(true);
     int status = httpClient.executeMethod(get);
     Document resDoc = null;

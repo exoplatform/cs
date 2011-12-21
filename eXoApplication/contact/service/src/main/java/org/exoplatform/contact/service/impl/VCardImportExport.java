@@ -447,14 +447,15 @@ public class VCardImportExport implements ContactImportExport {
           else if (workPhone2 == null)
             workPhone2 = phone.getNumber();
         }
-        String emailAddress = "";
+        StringBuffer emailAddress = new StringBuffer();
         for (Iterator iters = communication.getEmailAddresses(); iters.hasNext();) {
           EmailAddress email = (EmailAddress) iters.next();
-          if (!emailAddress.equals(""))
-            emailAddress += "; ";
-          emailAddress += email.getAddress();
+          if (!emailAddress.toString().equals("")) {
+            emailAddress.append("; ");
+          }
+          emailAddress.append(email.getAddress());
         }
-        contact.setEmailAddress(emailAddress);
+        contact.setEmailAddress(emailAddress.toString());
       }
 
       if (mobilePhone != null)

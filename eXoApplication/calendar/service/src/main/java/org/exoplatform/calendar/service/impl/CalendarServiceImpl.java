@@ -26,7 +26,6 @@ import java.util.ResourceBundle;
 
 import javax.jcr.ItemExistsException;
 import javax.jcr.Node;
-import javax.jcr.RepositoryException;
 
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;

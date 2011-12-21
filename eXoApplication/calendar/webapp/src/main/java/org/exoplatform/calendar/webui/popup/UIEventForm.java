@@ -194,7 +194,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   private CalendarEvent repeatEvent;
   private String repeatSummary;
   
-  //private String newCategoryId_ = null ;
   public UIEventForm() throws Exception {
     super("UIEventForm");
     this.setId("UIEventForm");
@@ -1642,18 +1641,19 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       if (endType.equals(RP_END_AFTER)) {
         //pattern = "Daily, {count} times";
         //pattern = "Every {interval} days, {count} times";
-        pattern += (", " + getLabel("count-times"));
+        pattern += ", ";
+        pattern += getLabel("count-times");
       } 
       if (endType.equals(RP_END_BYDATE)) {
         //pattern = "Daily, until {until}";
         //pattern = "Every {interval} days, until {until}";
-        pattern += (", " + getLabel("until"));
+        pattern += ", ";
+        pattern += getLabel("until");
       }
 
       summary = pattern.replace("{interval}", String.valueOf(interval)).replace("{count}", String.valueOf(repeatEvent.getRepeatCount()))
                 .replace("{until}", repeatEvent.getRepeatUntilDate()==null?"":format.format(repeatEvent.getRepeatUntilDate()));
       return summary;
-      
     }
     
     if (repeatType.equals(CalendarEvent.RP_WEEKLY)) {   
@@ -1667,22 +1667,28 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       if (endType.equals(RP_END_AFTER)) {
         //pattern = "Weekly on {byDays}, {count} times";
         //pattern = "Every {interval} weeks on {byDays}, {count} times";
-        pattern += ", " + getLabel("count-times");
+        pattern += ", ";
+        pattern += getLabel("count-times");
       }
       if (endType.equals(RP_END_BYDATE)) {
         //pattern = "Weekly on {byDays}, until {until}";
         //pattern = "Every {interval} weeks on {byDays}, until {until}";
-        pattern += ", " + getLabel("until");
+        pattern += ", ";
+        pattern += getLabel("until");
       }
       
       String[] weeklyByDays = repeatEvent.getRepeatByDay();
-      String byDays = ""; // 
+      StringBuffer byDays = new StringBuffer();
       for (int i = 0; i < weeklyByDays.length; i++) {
-        if (i == 0) byDays = byDays + dayOfWeeks[UIRepeatEventForm.convertToDayOfWeek(weeklyByDays[0])];
-        else byDays += ", " + dayOfWeeks[UIRepeatEventForm.convertToDayOfWeek(weeklyByDays[i])];
+        if (i == 0) {
+          byDays.append(dayOfWeeks[UIRepeatEventForm.convertToDayOfWeek(weeklyByDays[0])]);
+        } else {
+          byDays.append(", ");
+          byDays.append(dayOfWeeks[UIRepeatEventForm.convertToDayOfWeek(weeklyByDays[i])]);
+        }
       }
       summary = pattern.replace("{interval}", String.valueOf(interval)).replace("{count}", String.valueOf(repeatEvent.getRepeatCount()))
-                .replace("{until}", repeatEvent.getRepeatUntilDate()==null?"":format.format(repeatEvent.getRepeatUntilDate())).replace("{byDays}", byDays);
+                .replace("{until}", repeatEvent.getRepeatUntilDate()==null?"":format.format(repeatEvent.getRepeatUntilDate())).replace("{byDays}", byDays.toString());
       return summary;
       
     }
@@ -1702,23 +1708,26 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       if (monthlyType.equals(UIRepeatEventForm.RP_MONTHLY_BYDAY)) {
         // pattern = "Monthly on {theNumber} {theDay}
         // pattern = "Every {interval} months on {theNumber} {theDay}
-        pattern += " " + getLabel("monthly-by-day");
+        pattern += " ";
+        pattern += getLabel("monthly-by-day");
       } else {
         // pattern = "Monthly on day {theDay}
         // pattern = "Every {interval} months on day {theDay}
-        pattern += " " + getLabel("monthly-by-month-day");
+        pattern += " ";
+        pattern += getLabel("monthly-by-month-day");
       }
       
       if (endType.equals(RP_END_AFTER)) {
-        pattern = pattern += ", " + getLabel("count-times");
+        pattern += ", ";
+        pattern += getLabel("count-times");
       }
       if (endType.equals(RP_END_BYDATE)) {
-        pattern = pattern += ", " + getLabel("until");
+        pattern += ", ";
+        pattern += getLabel("until");
       } 
 
       String theNumber = ""; // the first, the second, the third, ...
       String theDay = ""; // in monthly by day, it's Monday, Tuesday, ... (day of week), in monthly by monthday, it's 1-31 (day of month)
-      
       if (monthlyType.equals(UIRepeatEventForm.RP_MONTHLY_BYDAY)) {
         java.util.Calendar temp = CalendarUtils.getInstanceOfCurrentCalendar();
         temp.setTime(repeatEvent.getFromDateTime());
@@ -1755,12 +1764,14 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       if (endType.equals(RP_END_AFTER)) {
         // pattern = "Yearly on {theDay}, {count} times"
         // pattern = "Every {interval} years on {theDay}, {count} times" 
-        pattern += ", " +getLabel("count-times");
+        pattern += ", ";
+        pattern += getLabel("count-times");
       }
       if (endType.equals(RP_END_BYDATE)) {
         // pattern = "Yearly on {theDay}, until {until}"
         // pattern = "Every {interval} years on {theDay}, until {until}" 
-        pattern += ", " + getLabel("until");
+        pattern += ", ";
+        pattern += getLabel("until");
       }
 
       String theDay = format.format(repeatEvent.getFromDateTime()); //
@@ -2151,7 +2162,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         uiForm.saveAndNoAsk(event, false, false);
       }
     }
-    
   }
   
   public static class ConfirmUpdateAllSeries extends EventListener<UIEventForm> {
@@ -2168,7 +2178,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         uiForm.saveAndNoAsk(event, false, true);
       }
     }
-    
   }
   
   public static class ConfirmUpdateCancel extends EventListener<UIEventForm> {
@@ -2223,7 +2232,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     private String email ;
     private String status ;
     
-    
     public ParticipantStatus(String participant, String status) throws Exception {
       this.participant = participant;
       User user = CalendarUtils.getOrganizationService().getUserHandler().findUserByName(participant);
@@ -2272,6 +2280,5 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     public void setStatus(String status) {
       this.status = status;
     }
-
   }
 }
