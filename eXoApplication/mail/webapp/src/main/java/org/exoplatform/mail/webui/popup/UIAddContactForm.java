@@ -40,6 +40,7 @@ import org.exoplatform.cs.common.webui.UIPopupAction;
 import org.exoplatform.cs.common.webui.UIPopupActionContainer;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -54,8 +55,8 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.core.model.SelectOption;
 import org.exoplatform.webui.core.model.SelectOptionGroup;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormRadioBoxInput;
@@ -169,11 +170,6 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
     addUIFormInput(new UIFormStringInput(JOBTITLE, JOBTITLE, null));
     uiFormMultiValue.setType(UIFormStringInput.class);
     addUIFormInput(uiFormMultiValue);
-
-    /*
-     * addUIFormInput(new UIFormStringInput(EMAIL, EMAIL, null)
-     * .addValidator(EmailAddressValidator.class));
-     */
   }
 
   public boolean isPrivateGroup(String groupId) {
@@ -244,8 +240,6 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
                                                                                      scg.getName()),
                                                   scg.getId()));
     }
-    // sharedContacts.addOption(new SelectOption(sharedContacts_,
-    // sharedContacts_));
     options.add(sharedContacts);
     return options;
   }
@@ -256,9 +250,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
     selectedContact_ = ct;
     tempContact = ct;
     ((UIFormSelectBoxWithGroups) getChildById(SELECT_GROUP)).setSelectedValues(new String[] { groupId });
-    // ((UIFormSelectBoxWithGroups)getChildById(SELECT_GROUP)).setEditable(false)
-    // ;
-    ((UIFormSelectBoxWithGroups) getChildById(SELECT_GROUP)).setEnable(false);
+    ((UIFormSelectBoxWithGroups) getChildById(SELECT_GROUP)).setDisabled(true);
     getUIStringInput(FIRST_NAME).setValue(ct.getFirstName());
     getUIStringInput(LAST_NAME).setValue(ct.getLastName());
     getUIStringInput(NICKNAME).setValue(ct.getNickName());
@@ -266,7 +258,6 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
     setFieldBirthday(ct.getBirthday());
     getUIStringInput(JOBTITLE).setValue(ct.getJobTitle());
 
-    // getUIStringInput(EMAIL).setValue(ct.getEmailAddress());
     List<String> list;
     String emails = MailUtils.listToString(ct.getEmailAddresses());
     if (MailUtils.isFieldEmpty(emails))
@@ -397,34 +388,33 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
 
   public void deActivate() throws Exception {
   }
+  
+  private static void renderMessage(WebuiRequestContext context, String key, int type) throws Exception {
+    context.getUIApplication().addMessage(new ApplicationMessage(key, null, type));
+    ((PortalRequestContext) context.getParentAppRequestContext()).ignoreAJAXUpdateOnPortlets(false);
+  }
 
   public static class SaveActionListener extends EventListener<UIAddContactForm> {
     public void execute(Event<UIAddContactForm> event) throws Exception {
       UIAddContactForm uiContact = event.getSource();
       UIMailPortlet uiPortlet = uiContact.getAncestorOfType(UIMailPortlet.class);      
       String groupId = ((UIFormSelectBoxWithGroups) uiContact.getChildById(SELECT_GROUP)).getValue();
-      if (uiContact.isEdited_)
+      if (uiContact.isEdited_){
         groupId = uiContact.selectedGroup_;
-
+      }
       String firstName = uiContact.getUIStringInput(FIRST_NAME).getValue();
       String lastName = uiContact.getUIStringInput(LAST_NAME).getValue();
       String emails = uiContact.getFieldEmail();
       if (!MailUtils.isValidEmailAddresses(emails.replaceAll(Utils.SEMI_COLON, ","))) {
-        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAddContactForm.msg.email-invalid",
-                                                null,
-                                                ApplicationMessage.WARNING));
+        renderMessage(event.getRequestContext(), "UIAddContactForm.msg.email-invalid", ApplicationMessage.WARNING);
         return;
       }
 
       if (!uiContact.isEdited_ && MailUtils.isFieldEmpty(groupId)) {
-        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAddContactForm.msg.group-required",
-                                                null,
-                                                ApplicationMessage.INFO));
+        renderMessage(event.getRequestContext(), "UIAddContactForm.msg.group-required", ApplicationMessage.WARNING);
         return;
       } else if (MailUtils.isFieldEmpty(firstName) && MailUtils.isFieldEmpty(lastName)) {
-        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAddContactForm.msg.name-required",
-                                                null,
-                                                ApplicationMessage.INFO));
+        renderMessage(event.getRequestContext(), "UIAddContactForm.msg.name-required", ApplicationMessage.WARNING);
         return;
       }
       Contact contact;
@@ -432,7 +422,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
         contact = uiContact.selectedContact_;
       else
         contact = new Contact();
-      contact.setFullName(firstName + " " + lastName);
+      contact.setFullName(firstName.concat(" ").concat(lastName));
       contact.setFirstName(firstName);
       contact.setLastName(lastName);
       contact.setNickName(uiContact.getNickName());
@@ -441,15 +431,12 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
         Date birthday = uiContact.getFieldBirthday();
         Date today = new Date();
         if (birthday != null && birthday.after(today)) {
-          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAddContactForm.msg.date-time-invalid", null));
-          
+          renderMessage(event.getRequestContext(), "UIAddContactForm.msg.date-time-invalid", ApplicationMessage.WARNING);
           return;
         }
         contact.setBirthday(birthday);
       } catch (IllegalArgumentException e) {
-        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAddContactForm.msg.birthday-incorrect",
-                                                null,
-                                                ApplicationMessage.INFO));
+        renderMessage(event.getRequestContext(), "UIAddContactForm.msg.birthday-incorrect", ApplicationMessage.WARNING);
         return;
       }
       contact.setEmailAddress(emails);
@@ -469,39 +456,33 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
         if (!uiContact.isEdited_) {
           contact.setAddressBookIds(new String[] { groupId });
           if (uiContact.isPrivateGroup(groupId)) {
-            contactSrv.saveContact(username, contact, true);//
+            contactSrv.saveContact(username, contact, true);
             contact = contactSrv.getContact(username, contact.getId());
           } else {
             if (!MailUtils.havePermission(groupId)) {
-              event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAddContactForm.msg.non-permission",
-                                                      null,
-                                                      ApplicationMessage.INFO));
+              renderMessage(event.getRequestContext(), "UIAddContactForm.msg.non-permission", ApplicationMessage.WARNING);
               return;
             }
-            contactSrv.saveContactToSharedAddressBook(username, groupId, contact, true);//
+            contactSrv.saveContactToSharedAddressBook(username, groupId, contact, true);
             contact = contactSrv.getSharedContactAddressBook(username, contact.getId());
           }
         } else {
           if (groupId == null || groupId.equals(uiContact.sharedContacts_)) {
             if (!uiContact.havePermission(contact)) {
-              event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIAddContactForm.msg.non-permission",
-                                                      null,
-                                                      ApplicationMessage.INFO));
+              renderMessage(event.getRequestContext(), "UIAddContactForm.msg.non-permission", ApplicationMessage.WARNING);
               return;
             }
-            contactSrv.saveSharedContact(username, contact);//
+            contactSrv.saveSharedContact(username, contact);
             contact = contactSrv.getSharedContact(username, contact.getId());
           } else if (uiContact.isPrivateGroup(groupId)) {
-            contactSrv.saveContact(uiPortlet.getCurrentUser(), contact, false);//
+            contactSrv.saveContact(uiPortlet.getCurrentUser(), contact, false);
             contact = contactSrv.getContact(username, contact.getId());
           } else {
             if (!MailUtils.havePermission(groupId)) {
-              event.getRequestContext()
-                   .getUIApplication()
-                   .addMessage(new ApplicationMessage("UIAddContactForm.msg.non-permission", null, ApplicationMessage.INFO));
+              renderMessage(event.getRequestContext(), "UIAddContactForm.msg.non-permission", ApplicationMessage.WARNING);
               return;
             }
-            contactSrv.saveContactToSharedAddressBook(username, groupId, contact, false);//
+            contactSrv.saveContactToSharedAddressBook(username, groupId, contact, false);
             contact = contactSrv.getSharedContactAddressBook(username, contact.getId());
           }
         }
@@ -515,10 +496,9 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
           uiAddress.refrestContactList(selectedGroupId, contact);
           uiAddress.setCheckAll();
           ((UIFormSelectBoxWithGroups) uiAddress.getChildById(SELECT_GROUP)).setValue(selectedGroupId);
-          uiContact.getAncestorOfType(UIPopupAction.class).cancelPopupAction();
-        } else {
-          uiContact.getAncestorOfType(UIPopupAction.class).cancelPopupAction();
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiAddress);
         }
+        uiContact.getAncestorOfType(UIPopupAction.class).cancelPopupAction();
       } catch (Exception e) {
         if (log.isDebugEnabled()) {
           log.debug("Exception in method execute of class SaveActionListener", e);
