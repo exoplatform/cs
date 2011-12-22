@@ -37,7 +37,6 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
-import org.exoplatform.commons.exception.ExoException;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -88,7 +87,8 @@ public class ExoMailTrustManager implements X509TrustManager {
   /**
    * @param {@link String} the path name of cert file
    * @param {@link Boolean} whether is store the certs permanent?
-   * @throws ExoException **/
+   * @throws GeneralSecurityException
+   **/
   public ExoMailTrustManager(String pathCertFile, boolean storePermanent) throws GeneralSecurityException {
     this.isStoreCertPermanent = storePermanent;
     File temFile = null;
