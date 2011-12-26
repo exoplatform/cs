@@ -251,8 +251,7 @@ public class UIAddressBooks extends UIComponent {
           contactService.getContactPageListByTag(username, selectedTag)) ;
     }    
     if (uiContacts.isDisplaySearchResult()) {
-      uiContacts.setContacts(contactService.searchContact(username
-        , workingContainer.findFirstComponentOfType(UISearchForm.class).filter)) ;
+      uiContacts.setContacts(contactService.searchContact(username, UISearchForm.filter)) ;
     }
     if (uiContacts.getSelectedGroup() != null && groupId.equals(uiContacts.getSelectedGroup()))
       uiContacts.setSelectedGroup(null) ;
@@ -596,7 +595,6 @@ public class UIAddressBooks extends UIComponent {
   }
 
   static public class DeleteGroupActionListener extends EventListener<UIAddressBooks> {
-    @SuppressWarnings("static-access")
     public void execute(Event<UIAddressBooks> event) throws Exception {
       UIAddressBooks uiAddressBook = event.getSource();
       uiAddressBook.getAncestorOfType(UIContactPortlet.class).cancelAction() ;
@@ -611,7 +609,6 @@ public class UIAddressBooks extends UIComponent {
   }
   
   static public class DeleteSharedGroupActionListener extends EventListener<UIAddressBooks> {
-    @SuppressWarnings("static-access")
     public void execute(Event<UIAddressBooks> event) throws Exception {
       UIAddressBooks uiAddressBook = event.getSource();
       uiAddressBook.getAncestorOfType(UIContactPortlet.class).cancelAction() ;
