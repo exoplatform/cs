@@ -58,6 +58,8 @@ public class Utils {
   public static final String MEMBERSHIP    = "*.".intern();
 
   final static public String MANAGER       = "manager";
+  
+  public static final String ADDRESSBOOK_ID_PREFIX = "ContactGroupInSpace".intern();
 
   public static String formatDate(String format, Date date) {
     Format formatter = new SimpleDateFormat(format);

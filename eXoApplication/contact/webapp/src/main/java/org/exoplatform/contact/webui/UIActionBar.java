@@ -77,6 +77,10 @@ public class UIActionBar extends UIContainer  {
           addresses.put(address.getId(), ContactUtils.getDisplayAdddressShared(address.getSharedUserId(), address.getName())) ;
         }
       uiCategorySelect.setPrivateGroupMap(addresses) ;
+      String selectedGroup = uiAddressBooks.getSelectedGroup();
+      if(!ContactUtils.isEmpty(selectedGroup)) {
+        uiCategorySelect.setValue(selectedGroup) ;
+      }
       UIContactForm contactForm = uiPopupContainer.addChild(UIContactForm.class, null, null) ;
       contactForm.setNew(true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;

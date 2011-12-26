@@ -16,10 +16,18 @@
  */
 package org.exoplatform.contact.webui;
 
+import javax.portlet.PortletPreferences;
+
 import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.contact.service.Utils;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.social.core.space.SpaceUtils;
+import org.exoplatform.social.core.space.model.Space;
+import org.exoplatform.social.core.space.spi.SpaceService;
+import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.UIPortletApplication;
@@ -47,6 +55,30 @@ public class UIContactPortlet extends UIPortletApplication {
     uiPopupAction.setId("UIContactPopupAction");
     UIPopupWindow uiPopupWindow = uiPopupAction.getChild(UIPopupWindow.class);
     uiPopupWindow.setId("UIContactPopupWindow");
+  }
+
+  public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception {
+    if (ContactUtils.isEmpty(context.getRequestParameter(OBJECTID)) && !context.getParentAppRequestContext().useAjax()) {
+      //render by group of space
+      processByGroupInSpace((PortletRequestContext) context);
+    }
+    super.processRender(app, context);
+  }
+  
+  private void processByGroupInSpace(PortletRequestContext pcontext) throws Exception {
+    try {
+      PortletPreferences pref = pcontext.getRequest().getPreferences();
+      String url;
+      UIAddressBooks addressBooks = findFirstComponentOfType(UIAddressBooks.class);
+      if ((url = pref.getValue(SpaceUtils.SPACE_URL, null)) != null) {
+        SpaceService sService = (SpaceService) getApplicationComponent(SpaceService.class);
+        Space space = sService.getSpaceByUrl(url);
+        String groupId = Utils.ADDRESSBOOK_ID_PREFIX + space.getPrettyName();
+        addressBooks.processSelectGroup(pcontext, groupId);
+      }
+    } catch (Exception e) {
+      log.debug("Failed to rendering portlet by group in space", e);
+    }
   }
 
   public void cancelAction() throws Exception {

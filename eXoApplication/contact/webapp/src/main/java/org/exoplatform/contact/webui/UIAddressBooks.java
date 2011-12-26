@@ -627,23 +627,27 @@ public class UIAddressBooks extends UIComponent {
     }
   }
 
+  public void processSelectGroup(WebuiRequestContext context, String groupId) throws Exception {
+    UIWorkingContainer uiWorkingContainer = getAncestorOfType(UIWorkingContainer.class);
+    uiWorkingContainer.findFirstComponentOfType(UITags.class).setSelectedTag(null);
+    this.selectedGroup = groupId;
+    UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class);
+    uiContacts.setContacts(ContactUtils.getContactService()
+                           .getPersonalContactsByAddressBook(ContactUtils.getCurrentUser(), groupId));
+    uiContacts.setSortedBy(UIContacts.fullName);
+    uiContacts.setSelectedGroup(groupId);
+    uiContacts.setSelectedTag(null);
+    uiContacts.setDisplaySearchResult(false);
+    uiContacts.setDefaultNameSorted(true);
+    uiContacts.setSelectSharedContacts(false);
+    context.addUIComponentToUpdateByAjax(uiWorkingContainer);
+  }
+
   static public class SelectGroupActionListener extends EventListener<UIAddressBooks> {
     public void execute(Event<UIAddressBooks> event) throws Exception {
-      UIAddressBooks uiAddressBook = event.getSource();
-      UIWorkingContainer uiWorkingContainer = uiAddressBook.getAncestorOfType(UIWorkingContainer.class);
-      uiWorkingContainer.findFirstComponentOfType(UITags.class).setSelectedTag(null);
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID);
-      uiAddressBook.selectedGroup = groupId ;
-      UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class);
-      uiContacts.setContacts(ContactUtils.getContactService().getPersonalContactsByAddressBook(
-          ContactUtils.getCurrentUser(), groupId));
-      uiContacts.setSortedBy(UIContacts.fullName) ;
-      uiContacts.setSelectedGroup(groupId);
-      uiContacts.setSelectedTag(null);
-      uiContacts.setDisplaySearchResult(false) ;
-      uiContacts.setDefaultNameSorted(true) ;
-      uiContacts.setSelectSharedContacts(false) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer);
+      UIAddressBooks uiAddressBook = event.getSource();
+      uiAddressBook.processSelectGroup(event.getRequestContext(), groupId);
     }
   }
 
