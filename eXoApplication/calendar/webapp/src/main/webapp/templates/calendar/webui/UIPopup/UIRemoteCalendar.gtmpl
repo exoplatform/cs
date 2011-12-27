@@ -1,6 +1,7 @@
 <%
   def jsMan = _ctx.getRequestContext().getJavascriptManager() ;
   jsMan.addJavascript("eXo.calendar.UICalendarPortlet.useAuthenticationForRemoteCalendar('" + uicomponent.id + "') ;");
+  uiform.setLocale();
 %>
 <div class="UIForm UIRemoteCalendar">
   <%uiform.begin()%>

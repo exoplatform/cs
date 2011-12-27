@@ -33,6 +33,8 @@ import org.exoplatform.calendar.service.RemoteCalendar;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarWorkingContainer;
+import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -45,11 +47,11 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.ext.UIFormColorPicker;
+import org.exoplatform.webui.form.input.UICheckBoxInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 
@@ -80,10 +82,11 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
   private static final String PASSWORD = "password".intern();
   private static final String COLOR = "color".intern();
   private static final String AUTO_REFRESH = "autoRefresh".intern();
-  private static final String LAST_UPDATED = "lastUpdated".intern();
   private static final String FIELD_BEFORE_DATE_SELECTBOX = "beforeDate".intern();
   private static final String FIELD_AFTER_DATE_SELECTBOX = "afterDate".intern();
+  protected static final String LAST_UPDATED = "lastUpdated".intern();
   
+  private static Locale locale_ = null;
   private String remoteType;
   private boolean isAddNew_ = true; 
   private String calendarId_ = null;
@@ -96,7 +99,7 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
     addUIFormInput(remoteUrl);
     addUIFormInput(new UIFormStringInput(NAME, NAME, null).addValidator(MandatoryValidator.class));
     addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, null));
-    addUIFormInput(new UIFormCheckBoxInput<Boolean>(USE_AUTHENTICATION, USE_AUTHENTICATION, null));
+    addUIFormInput(new UICheckBoxInput(USE_AUTHENTICATION, USE_AUTHENTICATION, null));
 
     UIFormSelectBox beforeDate = new UIFormSelectBox(FIELD_BEFORE_DATE_SELECTBOX, FIELD_BEFORE_DATE_SELECTBOX, getOptionsSelectBox());
     beforeDate.setDefaultValue("0t");
@@ -117,6 +120,19 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
     }
     addUIFormInput(new UIFormSelectBox(AUTO_REFRESH, AUTO_REFRESH, options));  
     addUIFormInput(new UIFormColorPicker(COLOR, COLOR)); 
+  }
+  
+  protected void setLocale() throws Exception {
+    PortalRequestContext portalContext = Util.getPortalRequestContext();
+    Locale locale = portalContext.getLocale();
+    if (locale_ == null || !locale.getLanguage().equals(locale_.getLanguage())) {
+      locale_ = locale;
+      List<SelectItemOption<String>> ls = getOptionsSelectBox();
+      UIFormSelectBox beforeDate = getUIFormSelectBox(FIELD_BEFORE_DATE_SELECTBOX);
+      beforeDate.setOptions(ls);
+      UIFormSelectBox afterDate = getUIFormSelectBox(FIELD_AFTER_DATE_SELECTBOX);
+      afterDate.setOptions(ls);
+    }
   }
   
   /*
@@ -140,7 +156,7 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
     isAddNew_ = true;
     this.remoteType = remoteType;
     setUrl(url);
-    this.getUIStringInput(URL).setEditable(false);
+    this.getUIStringInput(URL).setReadOnly(true);
     setSyncPeriod(Utils.SYNC_AUTO);
     setSelectColor(Calendar.COLORS[new  Random().nextInt(Calendar.COLORS.length)]);
     setUseAuthentication(true);
@@ -168,14 +184,10 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
     String username = CalendarUtils.getCurrentUser();
     CalendarService calService = CalendarUtils.getCalendarService();
     CalendarSetting calSettings = calService.getCalendarSetting(username);
-//    
-//    if (!calService.isRemoteCalendar(username, calendarId_)) {
-//      return;
-//    }
     remoteCalendar = calService.getRemoteCalendar(username, calendarId_);
     this.remoteType = remoteCalendar.getType();
     setUrl(remoteCalendar.getRemoteUrl());
-    this.getUIStringInput(URL).setEditable(true);
+    this.getUIStringInput(URL).setReadOnly(false);
     setCalendarName(calService.getUserCalendar(username, calendarId_).getName());
     setDescription(calendar.getDescription());
     setSelectColor(calendar.getCalendarColor());
@@ -261,11 +273,11 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
   }
   
   protected void setUseAuthentication(Boolean checked) {
-    this.getUIFormCheckBoxInput(USE_AUTHENTICATION).setChecked(checked);
+    this.getUICheckBoxInput(USE_AUTHENTICATION).setChecked(checked);
   }
   
   protected Boolean getUseAuthentication() {
-    return this.getUIFormCheckBoxInput(USE_AUTHENTICATION).isChecked();
+    return this.getUICheckBoxInput(USE_AUTHENTICATION).isChecked();
   }
   
   protected void setLastUpdated(String lastUpdated) {
