@@ -708,6 +708,7 @@
       <checkMessage-select-many-messages>Thao tác này chỉ thực hiện được trên một thư.</checkMessage-select-many-messages>
       <deleted_account>Tài khoản này đã bị xóa.</deleted_account>
       <confirm-remove-message>Bạn có chắc muốn xóa các thư này ?</confirm-remove-message>
+      <selected-message-do-not-exist>Thư bạn đã chọn không còn tồn tại trên server mail</selected-message-do-not-exist>
     </msg>
     <label>
       <there-are-no-account>Chưa có tài khoản nào, nhấn vào đây để tạo mới</there-are-no-account>

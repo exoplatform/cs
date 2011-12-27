@@ -89,15 +89,18 @@ public class UIImportForm extends UIForm implements UIPopupComponent {
                                                                                        ApplicationMessage.WARNING));
         return ;
       }
-      String name = uploadResource.getFileName() ;
-      String fileType = name.substring(name.lastIndexOf(".") + 1, name.length()) ;
+      String name = uploadResource.getFileName();
       boolean validType = false ;
-      for (String type : Utils.MIME_MAIL_TYPES) {
-        if(fileType.trim().toLowerCase().equals(type.toLowerCase())) {
-          validType = true ;
-          break ;
+      if (name.lastIndexOf(".") >= 0) {
+        String fileType = name.substring(name.lastIndexOf(".") + 1, name.length()) ;
+        for (String type : Utils.MIME_MAIL_TYPES) {
+          if(fileType.trim().toLowerCase().equals(type.toLowerCase())) {
+            validType = true ;
+            break ;
+          }
         }
       }
+      
       if(!validType)  {
         event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIImportForm.msg.file-upload-error", null, ApplicationMessage.WARNING));
         return ;

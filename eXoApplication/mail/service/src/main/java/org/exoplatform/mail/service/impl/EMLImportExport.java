@@ -51,10 +51,6 @@ public class EMLImportExport implements MailImportExport {
   }
 
   public boolean importMessage(String username, String accountId, String folderId, MimeMessage mimeMessage, long[] msgUID) throws Exception {
-    try {
-      return jcrDataStorage_.saveMessage(username, accountId, msgUID, mimeMessage, new String[] { folderId }, null, null, null, null, true, username);
-    } catch (Exception e) {
-      return false;
-    }
+    return jcrDataStorage_.saveMessage(username, accountId, msgUID, mimeMessage, new String[] { folderId }, null, null, null, null, true, username);
   }
 }

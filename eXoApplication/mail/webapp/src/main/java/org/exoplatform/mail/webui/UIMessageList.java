@@ -455,10 +455,15 @@ public class UIMessageList extends UIForm {
       String username = MailUtils.getDelegateFrom(accountId, dataCache);
       
       if (msg != null) {
-        msg = mailSrv.loadTotalMessage(username, accountId, msg) ;
-        Account account = dataCache.getAccountById(username, accountId);
+        try {
+          msg = mailSrv.loadTotalMessage(username, accountId, msg) ;
+        } catch (Exception e) {
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.selected-message-do-not-exist", null, ApplicationMessage.WARNING));
+          return;
+        }
         
         // Update message list
+        Account account = dataCache.getAccountById(username, accountId);
         uiMessageList.setSelectedMessageId(msgId);
         for (Message uncheckedMsg : uiMessageList.messageList_.values()) {
           UIFormCheckBoxInput<Boolean> uiCheckbox = uiMessageList.getChildById(Utils.encodeMailId(uncheckedMsg.getId()));
@@ -967,7 +972,12 @@ public class UIMessageList extends UIForm {
         String username = MailUtils.getDelegateFrom(accId, uiPortlet.getDataCache());
         MailService mService = MailUtils.getMailService();
         if (message != null) {
-          message = mService.loadTotalMessage(username, accId, message);
+          try {
+            message = mService.loadTotalMessage(username, accId, message);
+          } catch (Exception e) {
+            event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.selected-message-do-not-exist", null, ApplicationMessage.WARNING));
+            return;
+          }
         }
         uiComposeForm.init(accId, message, uiComposeForm.MESSAGE_FOWARD);
       } catch (Exception e) {
@@ -1279,7 +1289,12 @@ public class UIMessageList extends UIForm {
       }
       
       if (message != null && !message.isLoaded()) {
-        message = mailSrv.loadTotalMessage(uid, accountId, message);
+        try {
+          message = mailSrv.loadTotalMessage(uid, accountId, message);
+        } catch (Exception e) {
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.selected-message-do-not-exist", null, ApplicationMessage.WARNING));
+          return;
+        }
       }
       uiPrintPreview.setPrintMessage(message);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
@@ -1608,6 +1623,7 @@ public class UIMessageList extends UIForm {
                                                 ApplicationMessage.INFO));
         return;
       }
+      
       try {
         Message msg = checkedMsgs.get(0);
         if (msg != null) {
@@ -1618,7 +1634,8 @@ public class UIMessageList extends UIForm {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
         }
       } catch (Exception e) {
-        log.debug("\n\n error when export", e);
+        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.selected-message-do-not-exist", null, ApplicationMessage.WARNING));
+        return;
       }
     }
   }
@@ -1804,7 +1821,12 @@ public class UIMessageList extends UIForm {
       String uid = MailUtils.getDelegateFrom(accId, dataCache);
       
       if (message != null) {
-        message = mService.loadTotalMessage(uid, accId, message);
+        try {
+          message = mService.loadTotalMessage(uid, accId, message);
+        } catch (Exception ex) {
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIMessageList.msg.selected-message-do-not-exist", null, ApplicationMessage.WARNING));
+          return;
+        }
       }
       
       if(isReplyAll) {

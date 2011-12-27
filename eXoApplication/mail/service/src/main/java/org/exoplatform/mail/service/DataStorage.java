@@ -63,11 +63,7 @@ public interface DataStorage {
 
   public void removeMessages(String username, String accountId, List<Message> messages, boolean moveReference) throws Exception;
 
-  public void moveMessages(String username, String accountId, List<Message> msgList, String currentFolderId, String destFolderId) throws Exception;
-
-  public void moveMessage(String username, String accountId, Message msg, String currentFolderId, String destFolderId, boolean updateReference) throws Exception;
-
-  public void moveMessages(String username, String accountId, List<Message> msgList, String currentFolderId, String destFolderId, boolean updateReference) throws Exception;
+  public void moveMessages(String username, String accountId, List<Message> msgList, String currentFolderId, String destFolderId, boolean updateReference, long[] newUUIDs) throws Exception;
 
   public void saveAccount(String username, Account account, boolean isNew) throws Exception;
 

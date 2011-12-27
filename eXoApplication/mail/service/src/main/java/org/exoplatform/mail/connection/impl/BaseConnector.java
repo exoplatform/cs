@@ -38,13 +38,13 @@ public abstract class BaseConnector implements Connector {
   
   protected Account account_;
 
-  public abstract Session getSession(Account account, MailSSLSocketFactory sslSocket) throws Exception;
+  public abstract Session getSession(Account account, MailSSLSocketFactory sslSocket) throws MessagingException;
   
   public boolean isConnected() {
     return (store_ != null) && store_.isConnected();
   }
   
-  public void openStore(Account account) throws Exception {
+  public void openStore(Account account) throws MessagingException {
     if (store_ == null) {
       return;
     }

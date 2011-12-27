@@ -18,6 +18,7 @@ package org.exoplatform.mail.connection.impl;
 
 import java.util.Properties;
 
+import javax.mail.MessagingException;
 import javax.mail.Session;
 
 import org.exoplatform.mail.service.Account;
@@ -35,7 +36,7 @@ import com.sun.mail.util.MailSSLSocketFactory;
 public class Pop3Connector extends BaseConnector {
   protected POP3Store pop3Store;
   
-  public Pop3Connector(Account account, MailSSLSocketFactory sslSocket) throws Exception {
+  public Pop3Connector(Account account, MailSSLSocketFactory sslSocket) throws MessagingException {
     Session session = getSession(account, sslSocket);
     
     String protocolName = Utils.SVR_POP3;
@@ -50,7 +51,7 @@ public class Pop3Connector extends BaseConnector {
   }
   
   @Override
-  public Session getSession(Account account, MailSSLSocketFactory sslSocket) throws Exception {
+  public Session getSession(Account account, MailSSLSocketFactory sslSocket) throws MessagingException {
     Properties props = System.getProperties();
 
     props.put("mail.mime.base64.ignoreerrors", "true");

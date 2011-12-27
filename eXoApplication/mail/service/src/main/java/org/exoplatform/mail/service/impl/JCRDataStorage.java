@@ -49,6 +49,7 @@ import javax.mail.internet.ContentType;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMultipart;
 
+import org.apache.commons.lang.StringUtils;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
@@ -594,181 +595,112 @@ public class JCRDataStorage implements DataStorage {
     }
   }
 
-  public void moveMessages(String username, String accountId, List<Message> msgList, String currentFolderId, String destFolderId) throws Exception {
+  public void moveMessages(String username, String accountId, List<Message> msgList, String currentFolderId, String destFolderId, boolean updateReference, long[] newUUIDs) throws Exception {
     SessionProvider sProvider = null;
     try {
       sProvider = createSessionProvider();
       Node messageHome = getMessageHome(sProvider, username, accountId);
       Node currentFolderNode = getFolderNodeById(sProvider, username, accountId, currentFolderId);
       Node destFolderNode = getFolderNodeById(sProvider, username, accountId, destFolderId);
-      int inUnreadNumber = 0, deUnreadNumber = 0, inTotalMessage = 0, deTotalMessage = 0;
-      for (Message msg : msgList) {
-        try {
-          Node msgNode = (Node) messageHome.getSession().getItem(msg.getPath());
-          boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
-          String sentFolderId = Utils.generateFID(accountId, Utils.FD_SENT, false);
-          Value[] propFolders = msgNode.getProperty(Utils.MSG_FOLDERS).getValues();
-          boolean moveReference = true;
-          String[] folderIds = new String[propFolders.length];
-          if (propFolders.length == 1) {
-            if (destFolderId.equals(sentFolderId)) {
-              folderIds[0] = sentFolderId;
-              if (!propFolders[0].getString().equals(sentFolderId)) {
-                if (isUnread) {
-                  inUnreadNumber++;
-                  deUnreadNumber++;
-                }
-                deTotalMessage++;
-                inTotalMessage++;
-              } else {
-                if (isUnread) {
-                  inUnreadNumber++;
-                }
-                inTotalMessage++;
-              }
-              moveReference = false;
-            } else {
-              folderIds[0] = destFolderId;
-              if (propFolders[0].getString().equals(sentFolderId)) {
-                if (isUnread) {
-                  inUnreadNumber++;
-                }
-                inTotalMessage++;
-              } else if (!currentFolderId.equals(destFolderId)) {
-                if (isUnread) {
-                  inUnreadNumber++;
-                  deUnreadNumber++;
-                }
-                deTotalMessage++;
-                inTotalMessage++;
-              }
-            }
-          } else {
-            for (int i = 0; i < propFolders.length; i++) {
-              String folderId = propFolders[i].getString();
-              if (currentFolderId.equals(folderId))
-                folderIds[i] = destFolderId;
-              else
-                folderIds[i] = folderId;
-            }
-            if (isUnread) {
-              inUnreadNumber++;
-              deUnreadNumber++;
-            }
-            deTotalMessage++;
-            inTotalMessage++;
-          }
-
-          msgNode.setProperty(Utils.MSG_FOLDERS, folderIds);
-          msgNode.setProperty(Utils.EXO_UID, msg.getUID());
-          if (moveReference)
-            msgNode = moveReference(accountId, msgNode);
-          msgNode.save();
-        } catch (Exception e) {
-          if (logger.isDebugEnabled()) {
-            logger.debug("Exception in method moveMessages", e);
-          }
-        }
-      }
-      try {
-        if (currentFolderNode != null){
-          currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, decreaseNumber(currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong(), deUnreadNumber));
-        }
-        if (destFolderNode != null){
-          destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES,increaseNumber(destFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong(), inUnreadNumber));
-        }
-      } catch (Exception e) {
-        if (logger.isDebugEnabled()) {
-          logger.debug("Exception in method moveMessages", e);
-        }
-      }
-
-      try {
-        if (currentFolderNode != null){
-          currentFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, decreaseNumber(currentFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong(), deTotalMessage));
-        }
-        if (destFolderNode != null){
-          destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, increaseNumber(destFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong(), inTotalMessage));
-        }
-      } catch (Exception e) {
-        if (logger.isDebugEnabled()) {
-          logger.debug("Exception in method moveMessages", e);
-        }
-      }
-      if (currentFolderNode != null)
-        currentFolderNode.save();
-      if (destFolderNode != null)
-        destFolderNode.save();
-    } finally {
-      closeSessionProvider(sProvider);
-    }
-  }
-
-  public void moveMessage(String username, String accountId, Message msg, String currentFolderId, String destFolderId, boolean updateReference) throws Exception {
-    List<Message> msgList = new ArrayList<Message>();
-    msgList.add(msg);
-    moveMessages(username, accountId, msgList, currentFolderId, destFolderId, updateReference);
-  }
-
-  public void moveMessages(String username, String accountId, List<Message> msgList, String currentFolderId, String destFolderId, boolean updateReference) throws Exception {
-    SessionProvider sProvider = null;
-    try {
-      sProvider = createSessionProvider();
-      Node messageHome = getMessageHome(sProvider, username, accountId);
-      Node currentFolderNode = getFolderNodeById(sProvider, username, accountId, currentFolderId);
-      Node destFolderNode = getFolderNodeById(sProvider, username, accountId, destFolderId);
-      int inUnreadNumber = 0, inTotalMessage = 0;
-      Value[] propFolders;
-      String[] folderIds;
-      String folderId;
-      Node msgNode;
-      for (Message msg : msgList) {
-        msgNode = (Node) messageHome.getSession().getItem(msg.getPath());
-        if (updateReference)
+      int inUnreadNumber = 0; 
+      int deUnreadNumber = 0; 
+      int inTotalMessage = 0; 
+      int deTotalMessage = 0;
+      
+      for (int i = 0; i < msgList.size(); i++) {
+        Message msg = msgList.get(i);
+        Node msgNode = (Node) messageHome.getSession().getItem(msg.getPath());
+        if (updateReference) {
           msgNode = moveReference(accountId, msgNode);
-        try {
-          Boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
-          propFolders = msgNode.getProperty(Utils.MSG_FOLDERS).getValues();
-          folderIds = new String[propFolders.length];
-          for (int i = 0; i < propFolders.length; i++) {
-            folderId = propFolders[i].getString();
-            if (currentFolderId.equals(folderId)) {
-              folderIds[i] = destFolderId;
+        }
+        
+        boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
+        String sentFolderId = Utils.generateFID(accountId, Utils.FD_SENT, false);
+        Value[] propFolders = msgNode.getProperty(Utils.MSG_FOLDERS).getValues();
+        boolean moveReference = true;
+        String[] folderIds = new String[propFolders.length];
+        
+        if (propFolders.length == 1) {
+          if (destFolderId.equals(sentFolderId)) {
+            folderIds[0] = sentFolderId;
+            if (!propFolders[0].getString().equals(sentFolderId)) {
+              if (isUnread) {
+                inUnreadNumber++;
+                deUnreadNumber++;
+              }
+              deTotalMessage++;
+              inTotalMessage++;
             } else {
-              folderIds[i] = folderId;
+              if (isUnread) {
+                inUnreadNumber++;
+              }
+              inTotalMessage++;
+            }
+            moveReference = false;
+          } else {
+            folderIds[0] = destFolderId;
+            if (propFolders[0].getString().equals(sentFolderId)) {
+              if (isUnread) {
+                inUnreadNumber++;
+              }
+              inTotalMessage++;
+            } else if (!currentFolderId.equals(destFolderId)) {
+              if (isUnread) {
+                inUnreadNumber++;
+                deUnreadNumber++;
+              }
+              deTotalMessage++;
+              inTotalMessage++;
             }
           }
-          msgNode.setProperty(Utils.MSG_FOLDERS, folderIds);
-          msgNode.setProperty(Utils.EXO_UID, msg.getUID());
+        } else {
+          for (int j = 0; j < propFolders.length; j++) {
+            String folderId = propFolders[j].getString();
+            if (currentFolderId.equals(folderId)) {
+              folderIds[j] = destFolderId;
+            } else {
+              folderIds[j] = folderId;
+            }
+          }
           if (isUnread) {
             inUnreadNumber++;
+            deUnreadNumber++;
           }
+          deTotalMessage++;
           inTotalMessage++;
-
-          msgNode.save();
-        } catch (Exception e) {
         }
+
+        msgNode.setProperty(Utils.MSG_FOLDERS, folderIds);
+        if (newUUIDs != null) {
+          msgNode.setProperty(Utils.EXO_UID, String.valueOf(newUUIDs[i]));
+        } else {
+          msgNode.setProperty(Utils.EXO_UID, msg.getUID());
+        }
+        
+        msg.setFolders(folderIds);
+        if (moveReference) {
+          msgNode = moveReference(accountId, msgNode);
+        }
+        msgNode.save();
+      }
+      
+      // Update unread messages property
+      if (currentFolderNode != null){
+        currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, decreaseNumber(currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong(), deUnreadNumber));
+      }
+      if (destFolderNode != null){
+        destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES,increaseNumber(destFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong(), inUnreadNumber));
       }
 
-      try {
-        if (currentFolderNode != null) {
-          currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, decreaseNumber(currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong(), inUnreadNumber));
-        }
-        if (destFolderNode != null) {
-          destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, increaseNumber(destFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong(), inUnreadNumber));
-        }
-      } catch (Exception e) {
+      // Update total message property
+      if (currentFolderNode != null){
+        currentFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, decreaseNumber(currentFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong(), deTotalMessage));
       }
-
-      try {
-        if (currentFolderNode != null) {
-          currentFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, decreaseNumber(currentFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong(), inTotalMessage));
-        }
-        if (destFolderNode != null) {
-          destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, increaseNumber(destFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong(), inTotalMessage));
-        }
-      } catch (Exception e) {
+      if (destFolderNode != null){
+        destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, increaseNumber(destFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong(), inTotalMessage));
       }
+      
+      // Save nodes
       if (currentFolderNode != null) {
         currentFolderNode.save();
       }
@@ -778,6 +710,12 @@ public class JCRDataStorage implements DataStorage {
     } finally {
       closeSessionProvider(sProvider);
     }
+  }
+
+  private void moveMessage(String username, String accountId, Message msg, String currentFolderId, String destFolderId, boolean updateReference, long[] newUUIDs) throws Exception {
+    List<Message> msgList = new ArrayList<Message>();
+    msgList.add(msg);
+    moveMessages(username, accountId, msgList, currentFolderId, destFolderId, updateReference, newUUIDs);
   }
 
   public void saveAccount(String username, Account account, boolean isNew) throws Exception {
@@ -936,6 +874,7 @@ public class JCRDataStorage implements DataStorage {
         nodeMsg.setProperty(Utils.EXO_IN_REPLY_TO_HEADER, message.getInReplyToHeader());
         nodeMsg.setProperty(Utils.EXO_ACCOUNT, accountId);
         nodeMsg.setProperty(Utils.EXO_PATH, message.getPath());
+        
         if (!Utils.isEmptyField(message.getFrom()))
           from = message.getFrom().replaceAll("\"", "");
         nodeMsg.setProperty(Utils.EXO_FROM, from);
@@ -1087,48 +1026,19 @@ public class JCRDataStorage implements DataStorage {
     SessionProvider sProvider = null;
     try {
       sProvider = createSessionProvider();
-      long t1, t2, t4;
       String from;
 
       String msgId = MimeMessageParser.getMessageId(msg);
-      logger.debug("MessageId = " + msgId);
       Calendar gc = MimeMessageParser.getReceivedDate(msg);
       boolean isReadMessage = MimeMessageParser.isSeenMessage(msg);
       boolean isReturnReceipt = MimeMessageParser.requestReturnReceipt(msg);
       String inReplyToHeader = MimeMessageParser.getInReplyToHeader(msg);
 
       Node msgHomeNode = getDateStoreNode(sProvider, username, accId, gc.getTime());
-
-      t1 = System.currentTimeMillis();
-      if (msgHomeNode == null)
+      if (msgHomeNode == null) {
         return false;
-      try {
-        Node msgNode = msgHomeNode.getNode(msgId);
-        logger.debug("Check duplicate ......................................");
-        String folderId;
-        for (int i = 0; i < folderIds.length; i++) {
-          folderId = folderIds[i];
-          t1 = System.currentTimeMillis();
-          byte checkDuplicate = checkDuplicateStatus(sProvider, username, msgHomeNode, accId, msgNode, folderId);
-
-          if (checkDuplicate == Utils.MAIL_DUPLICATE_IN_OTHER_FOLDER) {
-            // there is a duplicate but in another folder
-            return false;
-          }
-
-          if (checkDuplicate == Utils.MAIL_DUPLICATE_IN_SAME_FOLDER) {
-            // will "never" come here
-            // but we need to make sure ...
-            return false;
-          }
-        }
-      } catch (Exception e) {
-        if (logger.isDebugEnabled())
-          logger.debug(e);
       }
-
-      logger.debug("Saving message to JCR ...");
-      t1 = System.currentTimeMillis();
+      
       Node node = null;
       try {
         node = msgHomeNode.addNode(msgId, Utils.EXO_MESSAGE);
@@ -1138,14 +1048,12 @@ public class JCRDataStorage implements DataStorage {
         logger.debug("The MessageId is NOT GOOD, generated another one = " + msgId);
         node = msgHomeNode.addNode(msgId, Utils.EXO_MESSAGE);
       }
+      
       try {
         msgHomeNode.save();
         node.setProperty(Utils.EXO_ID, msgId);
-        try {
-          String uid = String.valueOf(msgUID[0]);
-          node.setProperty(Utils.EXO_UID, uid);
-        } catch (Exception e) {
-        }
+        String uid = String.valueOf(msgUID[0]);
+        node.setProperty(Utils.EXO_UID, uid);
         node.setProperty(Utils.EXO_ACCOUNT, accId);
         from = Utils.decodeText(InternetAddress.toString(msg.getFrom())).replaceAll("\"", "");
         node.setProperty(Utils.EXO_FROM, from);
@@ -1155,10 +1063,11 @@ public class JCRDataStorage implements DataStorage {
         node.setProperty(Utils.EXO_REPLYTO, Utils.decodeText(InternetAddress.toString(msg.getReplyTo())));
 
         String subject = msg.getSubject();
-        if (!Utils.isEmptyField(subject))
+        if (!Utils.isEmptyField(subject)) {
           subject = Utils.decodeText(subject);
-        else
+        } else {
           subject = "";
+        }
         node.setProperty(Utils.EXO_SUBJECT, subject);
         node.setProperty(Utils.EXO_RECEIVEDDATE, gc);
         node.setProperty(Utils.EXO_LAST_UPDATE_TIME, gc);
@@ -1178,10 +1087,11 @@ public class JCRDataStorage implements DataStorage {
         node.setProperty(Utils.EXO_ISUNREAD, !isReadMessage);
         node.setProperty(Utils.EXO_STAR, false);
 
-        if (isReturnReceipt)
+        if (isReturnReceipt) {
           node.setProperty(Utils.IS_RETURN_RECEIPT, true);
-        else
+        } else {
           node.setProperty(Utils.IS_RETURN_RECEIPT, false);
+        }
 
         if (spamFilter != null && spamFilter.checkSpam(msg)) {
           folderIds = new String[] { Utils.generateFID(accId, Utils.FD_SPAM, false) };
@@ -1189,8 +1099,9 @@ public class JCRDataStorage implements DataStorage {
 
         node.setProperty(Utils.MSG_FOLDERS, folderIds);
 
-        if (tagList != null && tagList.size() > 0)
+        if (tagList != null && tagList.size() > 0) {
           node.setProperty(Utils.EXO_TAGS, tagList.toArray(new String[] {}));
+        }
 
         node.setProperty(Utils.EXO_IN_REPLY_TO_HEADER, inReplyToHeader);
 
@@ -1214,14 +1125,7 @@ public class JCRDataStorage implements DataStorage {
           saveTotalMessage(username, accId, msgId, msg, sProvider);
         }
 
-        t4 = System.currentTimeMillis();
-        logger.debug("Saved total message to JCR finished : " + (t4 - t1) + " ms");
-        logger.debug("Adding message to thread ...");
-        t1 = System.currentTimeMillis();
         addMessageToThread(sProvider, username, accId, inReplyToHeader, node);
-        t2 = System.currentTimeMillis();
-        logger.debug("Added message to thread finished : " + (t2 - t1) + " ms");
-
         for (int i = 0; i < folderIds.length; i++) {
           increaseFolderItem(sProvider, username, accId, folderIds[i], isReadMessage);
         }
@@ -1259,11 +1163,12 @@ public class JCRDataStorage implements DataStorage {
         node = msgHomeNode.getNode(msgId);
       } catch (Exception e) {
       }
+      
       if (node != null) {
-        try {
-          if (node.getProperty(Utils.IS_LOADED).getBoolean())
+        if (node.hasProperty(Utils.IS_LOADED)) {
+          if (node.getProperty(Utils.IS_LOADED).getBoolean()) {
             return true;
-        } catch (PathNotFoundException e) {
+          }
         }
         node.setProperty(Utils.IS_LOADED, true);
         node.save();
@@ -1877,7 +1782,7 @@ public class JCRDataStorage implements DataStorage {
       if (folder != null && (msg.getFolders()[0] != applyFolder)) {
         Folder appFolder = getFolderById(sProvider, accountNode, applyFolder);
         if (appFolder != null)
-          moveMessage(username, accountId, msg, msg.getFolders()[0], applyFolder, true);
+          moveMessage(username, accountId, msg, msg.getFolders()[0], applyFolder, true, null);
       }
     }
     if (!Utils.isEmptyField(applyTag)) {
@@ -2297,7 +2202,7 @@ public class JCRDataStorage implements DataStorage {
         while (it.hasNext()) {
           Message msg = getMessage(it.nextNode());
           if (folder != null) {
-            moveMessage(username, accountId, msg, msg.getFolders()[0], applyFolder, true);
+            moveMessage(username, accountId, msg, msg.getFolders()[0], applyFolder, true, null);
           }
             
           if (!Utils.isEmptyField(applyTag)) {

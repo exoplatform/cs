@@ -19,7 +19,10 @@ package org.exoplatform.mail.webui;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.mail.DataCache;
+import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Folder;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.model.SelectItem;
 import org.exoplatform.webui.core.model.SelectOption;
 import org.exoplatform.webui.core.model.SelectOptionGroup;
@@ -64,12 +67,26 @@ public class UISelectFolder extends UIFormInputSet {
   
   public List<Folder> getSubFolders(String parentPath) throws Exception {
     UIMailPortlet mailPortlet = getAncestorOfType(UIMailPortlet.class);
+    if (mailPortlet == null) {
+      DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
+      String accountId = dataCache.getSelectedAccountId();
+      String username = MailUtils.getDelegateFrom(accountId, dataCache);
+      List<Folder> folders = dataCache.getSubFolders(username, accountId, parentPath);
+      return folders;
+    }
     UIFolderContainer folderContainer = mailPortlet.findFirstComponentOfType(UIFolderContainer.class);
     return folderContainer.getSubFolders(parentPath);
   }
 
   public List<Folder> getFolders(boolean isPersonal) throws Exception {
     UIMailPortlet mailPortlet = getAncestorOfType(UIMailPortlet.class);
+    if (mailPortlet == null) {
+      DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
+      String accountId = dataCache.getSelectedAccountId();
+      String username = MailUtils.getDelegateFrom(accountId, dataCache);
+      List<Folder> folders = dataCache.getFolders(username, accountId, isPersonal);
+      return folders;
+    }
     UIFolderContainer folderContainer = mailPortlet.findFirstComponentOfType(UIFolderContainer.class);
     return folderContainer.getFolders(isPersonal);
   }

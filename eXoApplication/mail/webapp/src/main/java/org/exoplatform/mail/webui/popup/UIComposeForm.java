@@ -1159,9 +1159,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
                                                   null,
                                                   ApplicationMessage.INFO));
         }
-      }
-      // CS-4462
-      catch (AuthenticationFailedException e) {
+      } catch (AuthenticationFailedException e) {
         if (logger.isDebugEnabled()) {
           logger.debug("AuthenticationFailedException in method execute of class SaveDraftActionListener", e);
         }
@@ -1177,6 +1175,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
              .getUIApplication()
              .addMessage(new ApplicationMessage("UIComposeForm.msg.save-draft-error", null));
       }
+      
       // update ui
       String selectedFolder = uiFolderContainer.getSelectedFolder();
       if (selectedFolder != null && selectedFolder.equals(Utils.generateFID(accountId, Utils.FD_DRAFTS, false))) {

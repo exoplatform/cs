@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.mail.AuthenticationFailedException;
 
@@ -408,7 +409,9 @@ public class TestMailService extends BaseMailTestCase {
     Account accountImap = createAccountObj(Utils.IMAP);
     mailService_.createAccount(username, accountImap);
     
-    Folder desfolder1 = createFolder(accountImap.getId(), "desFolderId", "desFolderName", "desFolderUrl");
+    Folder desfolder1 = createFolder(accountImap.getId(), "desFolderId1", "desFolderName1", "desFolderUrl1");
+//    desfolder1 = mailService_.getFolders(username, accountImap.getId()).get(0);
+    String[] messageFolderIds1 = new String[] {desfolder1.getId()};
     
     // Create attachment
     Attachment attachment1 = new Attachment() {
@@ -431,10 +434,10 @@ public class TestMailService extends BaseMailTestCase {
     message1.setFrom(accountImap.getEmailAddress());
     message1.setMessageTo(accountImap.getEmailAddress());
     message1.setMessageBody(messageBody);
-    message1.setFolders(messageFolderIds);
+    message1.setFolders(messageFolderIds1);
     message1.setReceivedDate(messageReceivedDate);
     message1.setAttachements(Arrays.asList(attachment));
-    mailService_.saveMessage(username, accountImap.getId(), desfolder1.getPath(), message1, true);
+    mailService_.saveMessage(username, accountImap, desfolder1.getPath(), message1, true);
     
     // Test loadTotalMessage
     Message expectedMessage5 = mailService_.loadTotalMessage(username, accountImap.getId(), message1);
@@ -490,7 +493,7 @@ public class TestMailService extends BaseMailTestCase {
       Account accountPop = createAccountObj(Utils.POP3);
       mailService_.createAccount(username, accountPop);
       
-      Folder folder = createFolder(accountPop.getId(), "folderId", "folderName", "folderUrl");
+      Folder folder = createFolder(accountPop.getId(), "folderId" + UUID.randomUUID().toString(), "folderName", "folderUrl");
       
       // Create filter data
       String filterName = "testFilter";
