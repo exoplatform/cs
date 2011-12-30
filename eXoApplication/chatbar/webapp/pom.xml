@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.exoplatform.cs</groupId>
     <artifactId>exo.cs.eXoApplication.chatbar</artifactId>
-    <version>2.2.7</version>
+    <version>2.2.8-SNAPSHOT</version>
   </parent>
   <artifactId>exo.cs.eXoApplication.chatbar.webapp</artifactId>
   <packaging>war</packaging>
