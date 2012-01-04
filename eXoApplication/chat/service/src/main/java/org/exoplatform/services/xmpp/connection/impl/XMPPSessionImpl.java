@@ -30,9 +30,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.ResourceBundle;
 import java.util.UUID;
-import java.util.Map.Entry;
 
 import javax.jcr.RepositoryException;
 
@@ -103,8 +103,8 @@ import org.jivesoftware.smack.packet.IQ;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.packet.Presence;
-import org.jivesoftware.smack.packet.XMPPError;
 import org.jivesoftware.smack.packet.Presence.Type;
+import org.jivesoftware.smack.packet.XMPPError;
 import org.jivesoftware.smackx.Form;
 import org.jivesoftware.smackx.FormField;
 import org.jivesoftware.smackx.ReportedData;
@@ -124,10 +124,10 @@ import org.jivesoftware.smackx.muc.Occupant;
 import org.jivesoftware.smackx.muc.RoomInfo;
 import org.jivesoftware.smackx.muc.SubjectUpdatedListener;
 import org.jivesoftware.smackx.packet.DiscoverInfo;
-import org.jivesoftware.smackx.packet.DiscoverItems;
-import org.jivesoftware.smackx.packet.MUCUser;
 import org.jivesoftware.smackx.packet.DiscoverInfo.Identity;
+import org.jivesoftware.smackx.packet.DiscoverItems;
 import org.jivesoftware.smackx.packet.DiscoverItems.Item;
+import org.jivesoftware.smackx.packet.MUCUser;
 import org.jivesoftware.smackx.packet.MUCUser.Invite;
 import org.jivesoftware.smackx.search.UserSearchManager;
 
@@ -2019,7 +2019,7 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
     }
     String lusername = username.toLowerCase();
     if (username.equals(lusername)) {
-      return username;
+      return username.replaceAll(" ", "autb3nx8s847w022s");
     }
     StringBuilder sb = new StringBuilder("");
     for (int i = 0; i < username.length(); i++) {
@@ -2031,7 +2031,7 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
         sb.append("s220w748s8xn3btua").append(lc);
       }
     }
-    return sb.toString();
+    return sb.toString().replaceAll(" ", "autb3nx8s847w022s");
   }
   
   /**
@@ -2040,8 +2040,11 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
    * @return
    */
   public static String decodeUsername(String username) {
-    if (username == null || username.indexOf("s220w748s8xn3btua") < 0) {
-      return username;
+    if (username == null) {
+      return null;
+    }
+    if (username.indexOf("s220w748s8xn3btua") < 0) {
+      return username.replaceAll("autb3nx8s847w022s", " ");
     }
     String[] tokens = username.split("s220w748s8xn3btua");
     StringBuilder sb = new StringBuilder("");
@@ -2051,7 +2054,7 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
       }
       sb.append(tokens[i]);
     }
-    return sb.toString();
+    return sb.toString().replaceAll("autb3nx8s847w022s", " ");
   }
 
   /**

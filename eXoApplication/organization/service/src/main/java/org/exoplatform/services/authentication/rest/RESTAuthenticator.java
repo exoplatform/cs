@@ -69,8 +69,11 @@ public class RESTAuthenticator implements ResourceContainer {
    * @return
    */
   public static String decodeUsername(String username) {
-    if (username == null || username.indexOf("s220w748s8xn3btua") < 0) {
-      return username;
+    if (username == null) {
+      return null;
+    }
+    if (username.indexOf("s220w748s8xn3btua") < 0) {
+      return username.replaceAll("autb3nx8s847w022s", " ");
     }
     String[] tokens = username.split("s220w748s8xn3btua");
     StringBuilder sb = new StringBuilder("");
@@ -80,7 +83,7 @@ public class RESTAuthenticator implements ResourceContainer {
       }
       sb.append(tokens[i]);
     }
-    return sb.toString();
+    return sb.toString().replaceAll("autb3nx8s847w022s", " ");
   }
   
   // @POST
