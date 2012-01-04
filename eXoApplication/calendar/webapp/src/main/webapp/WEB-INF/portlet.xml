@@ -33,9 +33,5 @@
         <read-only>false</read-only>
       </preference>
     </portlet-preferences>
-    
-    <supported-processing-event>
-      <name>RefreshCalendar</name>
-    </supported-processing-event>
   </portlet>  
 </portlet-app>
