@@ -26,31 +26,6 @@
       <short-title>RSS Reader Portlet</short-title>
       <keywords>collaboration</keywords>
     </portlet-info>
-  </portlet>  
-  
-  <!--  <portlet>
-    <description xml:lang="EN">Crawler Portlet</description>
-    <portlet-name>CrawlerPortlet</portlet-name>
-    <display-name xml:lang="EN">Crawler Portlet</display-name>
-    <portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>    
-    
-    <init-param>
-      <name>webui.configuration</name>
-      <value>/WEB-INF/conf/portlet/content/CrawlerPortlet/webui/configuration.xml</value>
-    </init-param>    
-
-    <expiration-cache>0</expiration-cache>
-    <supports>
-      <mime-type>text/html</mime-type>
-      <portlet-mode>help</portlet-mode>
-    </supports>
-    <supported-locale>en</supported-locale>
-    <resource-bundle>locale.portlet.crawler.CrawlerPortlet</resource-bundle>
-    <portlet-info>
-      <title>Crawler Portlet</title>
-      <short-title>Crawler Portlet</short-title>
-      <keywords>crawler</keywords>
-    </portlet-info>
-  </portlet>   -->  
+  </portlet>
     
 </portlet-app>
