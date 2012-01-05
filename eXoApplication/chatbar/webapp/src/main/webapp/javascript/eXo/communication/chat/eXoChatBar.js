@@ -9,6 +9,7 @@ eXo.require("eXo.core.JSON");
 eXo.require("eXo.core.HTMLUtil");
 eXo.require("eXo.core.Resize");
 eXo.require("eXo.webui.UIHorizontalTabs");
+eXo.require("eXo.cs.CSUtils", "/csResources/javascript/");
 if(!eXo.communication) eXo.communication = {};
 eXo.communication.chatbar = {
     eXoChat : {},

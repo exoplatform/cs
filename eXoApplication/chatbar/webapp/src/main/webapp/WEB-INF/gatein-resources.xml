@@ -12,7 +12,7 @@
     <css-path>/skin/DefaultStylesheet.css</css-path>
     <css-priority>1</css-priority>
   </portlet-skin>
-  <!--
+  
   <javascript>
     <param>
       <js-module>eXo.communication.chat.eXoChatBar</js-module>
@@ -165,10 +165,9 @@
   </javascript>
   <javascript>
     <param>
-      <js-module>eXo.communication.chat.webui.UIPopupMessages</js-module>
-      <js-path>/javascript/eXo/communication/chat/webui/UIPopupMessages.js</js-path>
+      <js-module>eXo.communication.chat.webui.UITooltipAtTop</js-module>
+      <js-path>/javascript/eXo/communication/chat/webui/UITooltipAtTop.js</js-path>
     </param>
-  </javascript>
--->  
+  </javascript>   
 </gatein-resources>
 
