@@ -2691,7 +2691,7 @@ eXo.calendar.EventTooltip = {
 	},
 	disable: function(evt){
 		this.hideElement();
-		if(eXo.core.EventManager.getMouseButton(evt) != 2) this.isDnD = true;
+		if(evt && eXo.core.EventManager.getMouseButton(evt) != 2) this.isDnD = true;
 	},
 	enable: function(){
 		this.isDnD = false;

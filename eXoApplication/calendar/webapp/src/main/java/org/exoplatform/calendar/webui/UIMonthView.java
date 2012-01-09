@@ -185,9 +185,8 @@ public class UIMonthView extends UICalendarView {
     UIFormCheckBoxInput<Boolean>  checkbox;
     for(String id : dataMap_.keySet()) {
       checkbox = getChildById(id )  ;
-      if (checkbox != null) {
+      if (checkbox != null && checkbox.isChecked()) {
         events.add(dataMap_.get(id));
-        dataMap_.get(id).getCalendarId();
       }
     }
     if (recurrenceEventsMap.isEmpty()) {
