@@ -1661,7 +1661,7 @@ UICalendarPortlet.prototype.filterByCalendar = function(){
         if (events[i].getAttribute("calId") == calid) {
             events[i].style.display = stylEvent;
             var chkEvent = eXo.core.DOMUtil.findFirstDescendantByClass(events[i], "input", "checkbox");
-            if (chkEvent && !checked) {
+            if (chkEvent) {
               chkEvent.checked = false;
               chkEvent.setAttribute('value', false);
             }
