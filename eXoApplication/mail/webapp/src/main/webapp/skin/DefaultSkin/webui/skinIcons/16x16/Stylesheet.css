@@ -408,8 +408,8 @@
 }
 
 .UIMailPortlet .CheckItem {
-  background: url('icons/CheckItem.gif') no-repeat left center; /* orientation=lt */
-  background: url('icons/CheckItem.gif') no-repeat right center; /* orientation=rt */
+  background: url('icons/CheckItem.gif') no-repeat -1px; /* orientation=lt */
+  background: url('icons/CheckItem.gif') no-repeat -1px; /* orientation=rt */
 }
 
 .UIMailPortlet .CloseFolder {

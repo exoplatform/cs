@@ -91,12 +91,25 @@
         <div class="ContactContainer">
           <div class="Title ContactIcon">
       <div style="float:left;">
-                <%=_ctx.appRes(uicomponent.id+ ".label.contact") %>
+        <%=_ctx.appRes(uicomponent.id+ ".label.contact") %>
       </div>
-       <div style="margin-left: 180px;">
-        <!-- input type="checkbox" class="checkbox" value="4" / -->
-        <% uiform.renderField(uiform.SELECT_ALL) %>
-       </div>
+      <%
+        String checkAllContactLink = uicomponent.event("CheckAllContact");
+        String checkedAllCss = "NormalBoxCheckAll";
+        if (uicomponent.isCheckedAllContact()) {
+          checkedAllCss += " CheckItem"
+        }
+        String checkUncheckLabel = _ctx.appRes(uicomponent.id+ ".label.check-uncheck");
+      %>
+      <div style="margin-left: 191px;margin-top:3px;padding-top:2px;">
+       <!-- input type="checkbox" class="checkbox" value="4" / -->
+        <div onclick="$checkAllContactLink" style="cursor:pointer;">
+          <div class="$checkedAllCss"  title="$checkUncheckLabel"></div>
+        </div>
+        <span style="display:none">
+          <% uiform.renderField(uiform.SELECT_ALL) %>
+        </span>
+      </div>
           </div>
 
           <div class="ListContact">
@@ -105,9 +118,13 @@
               if (uicomponent.getContacts().size() > 0) {
                 for (Contact contact :uicomponent.getContacts()) {
                   String checkBoxCss ="NormalBox";
-                  if(uicomponent.isCheckedContact(contact.getId())) checkBoxCss += " CheckItem"; 
+                  if (uicomponent.isCheckedContact(contact.getId())) {
+                    checkBoxCss += " CheckItem";
+                  } 
                   String classCss = "NormalItem";
-                  if (contact.getId().equals(uicomponent.getSelectedContact().getId())) classCss += "  SelectedContact";
+                  if (contact.getId().equals(uicomponent.getSelectedContact().getId())) {
+                    classCss += "  SelectedContact";
+                  }
                   String checkContact = uicomponent.event("CheckContact", contact.getId());
                   String selectContact = uicomponent.event("SelectContact", contact.getId());
                   String contactName=contact.getFullName() ;
@@ -116,16 +133,18 @@
                     subName = "_";
                     contactName="";
                   }
-                  else if (contactName.length() > 30) subName=MailUtils.encodeHTML(contactName.substring(0, 20)) + "...";
+                  else if (contactName.length() > 30) {
+                    subName=MailUtils.encodeHTML(contactName.substring(0, 20)) + "...";
+                  }
             %>
                   <tr>
                     <td>
-                      <div onclick="$checkContact" style="cursor:pointer;"><div class="$checkBoxCss" title="check/uncheck"></div></div>
+                      <div onclick="$checkContact" style="cursor:pointer;"><div class="$checkBoxCss"  title="$checkUncheckLabel"></div></div>
                     </td>
                     <td>
                       <div onclick="$selectContact" style="cursor:pointer;"><div class="$classCss" title="$contactName"><a href="#"><%= subName %></a></div></div>
                     </td>
-                  </tr>                  
+                  </tr>                   
             <% 
                 } 
               }

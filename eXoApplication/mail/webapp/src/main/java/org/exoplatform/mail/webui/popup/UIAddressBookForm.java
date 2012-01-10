@@ -110,7 +110,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
     uiSelectGroup.setOnChange("ChangeGroup");
     addUIFormInput(uiSelectGroup);
 
-    UIFormCheckBoxInput<Boolean> uiSelectAll = new UIFormCheckBoxInput<Boolean>(SELECT_ALL, SELECT_ALL, true);
+    UIFormCheckBoxInput<Boolean> uiSelectAll = new UIFormCheckBoxInput<Boolean>(SELECT_ALL, SELECT_ALL, false);
     uiSelectAll.setOnChange("CheckAllContact");
     addUIFormInput(uiSelectAll);
     refrestContactList(uiSelectGroup.getValue(), null);
@@ -241,6 +241,10 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
         selectedContactMap.clear();
       }
     }
+  }
+  
+  public boolean isCheckedAllContact(){
+    return getUIFormCheckBoxInput(UIAddressBookForm.SELECT_ALL).isChecked();
   }
 
   public void setCheckAll() throws Exception{
@@ -592,6 +596,9 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
   static public class CheckAllContactActionListener extends EventListener<UIAddressBookForm> {
     public void execute(Event<UIAddressBookForm> event) throws Exception {
       UIAddressBookForm uiAddressBook = event.getSource();
+      UIFormCheckBoxInput<Boolean> uiFormCheckBox = uiAddressBook.getUIFormCheckBoxInput(UIAddressBookForm.SELECT_ALL);
+      boolean bAllChecked = uiFormCheckBox.isChecked();
+      uiFormCheckBox.setChecked(!bAllChecked);
       uiAddressBook.checkAll();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
     }

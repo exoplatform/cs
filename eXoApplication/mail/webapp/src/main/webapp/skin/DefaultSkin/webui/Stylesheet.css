@@ -1544,15 +1544,24 @@
 
 .UIMailPortlet .UIContactsPopup .ContactContainer .Title {
   background: #e7e7e7;
-  padding: 0px 0px 0px 5px ; /* orientation=lt */
+  padding: 0px 0px 0px 2px ; /* orientation=lt */
   padding: 0px 5px 0px 0px ; /* orientation=rt */
-  height: 20px;
+  height: 22px;
   line-height: 20px;
 }
 
 .UIMailPortlet .UIContactsPopup .WorkContainer .CleanRTL{
   clear: left; /* orientation=lt */
   clear: right; /* orientation=rt */
+}
+
+.UIMailPortlet .UIContactsPopup .ContactContainer .NormalBoxCheckAll {
+	background-color: white;
+  height: 12px;
+  width: 12px;
+  vertical-align: text-bottom;
+  margin-top:2px;
+  border: 1px solid #C0C0C0;
 }
 
 .UIMailPortlet .UIContactsPopup .ContactContainer .ListContact {
@@ -1569,14 +1578,23 @@
   overflow: hidden;
   white-space: nowrap;
   width:150px;
+  padding-left: 2px
 }
 
 .UIMailPortlet .UIContactsPopup .ContactContainer .NormalBox {
-  height: 20px;
-  width: 24px;
+  height: 12px;
+  width: 12px;
+  vertical-align: text-bottom;
+  margin-top:2px;
+  margin-right:2px;
 }
 
-.UIMailPortlet .UIContactsPopup .ContactContainer .NormalBox:hover {
+.UIMailPortlet .UIContactsPopup .ContactContainer tr:hover .NormalBox {
+  background-color: white;
+  border: 1px solid #C0C0C0;
+  margin-right:0px;
+}
+.UIMailPortlet .UIContactsPopup .ContactContainer .ListContact tr:hover{
   background-color:#E8E8E8;
 }
 
