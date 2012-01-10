@@ -306,6 +306,7 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
       UIMessageFilter uiMsgFilter = uiPortlet.findFirstComponentOfType(UIMessageFilter.class);
       if (uiMsgFilter != null) {
         uiMsgFilter.setSelectedFilterId(filter.getId());
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgFilter);
       }
       UIPopupAction uiPopupAction = uiAddFilter.getAncestorOfType(UIPopupAction.class);
       uiPopupAction.cancelPopupAction();
