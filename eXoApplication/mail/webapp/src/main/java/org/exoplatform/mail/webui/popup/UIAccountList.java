@@ -32,6 +32,7 @@ import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UISelectAccount;
+import org.exoplatform.mail.webui.action.FullDelegationEventListener;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -77,6 +78,11 @@ public class UIAccountList extends UIGrid  implements UIPopupComponent{
       accounts.add(new AccountData(acc.getId(), acc.getLabel(), acc.getEmailAddress(), 
           acc.getServerProperties().get(Utils.SVR_INCOMING_HOST), acc.getProtocol())) ;
     }
+    
+    for(Account acc : dataCache.getDelegatedAccounts(userId)) {
+      accounts.add(new AccountData(acc.getId(), acc.getLabel(), acc.getEmailAddress(), 
+          acc.getServerProperties().get(Utils.SVR_INCOMING_HOST), acc.getProtocol())) ;
+    }
 
     //ObjectPageList objPageList = new ObjectPageList(accounts, 10) ;
     LazyPageList<AccountData> pageList = new LazyPageList<AccountData>(new ListAccessImpl<AccountData>(AccountData.class, accounts), 10);
@@ -110,8 +116,8 @@ public class UIAccountList extends UIGrid  implements UIPopupComponent{
     public String getProtocol() {return protocol ;}
   }
 
-  static public class DeleteActionListener extends EventListener<UIAccountList> {
-    public void execute(Event<UIAccountList> event) throws Exception {
+  static public class DeleteActionListener extends FullDelegationEventListener<UIAccountList> {
+    public void processEvent(Event<UIAccountList> event) throws Exception {
       UIAccountList uiAccountList = event.getSource();
       UIMailPortlet uiPortlet = uiAccountList.getAncestorOfType(UIMailPortlet.class);
       DataCache dataCache = uiPortlet.getDataCache();
@@ -123,7 +129,12 @@ public class UIAccountList extends UIGrid  implements UIPopupComponent{
       String accId = event.getRequestContext().getRequestParameter(OBJECTID);
       MailService mailSvr = uiAccountList.getApplicationComponent(MailService.class);
       String username = event.getRequestContext().getRemoteUser();
-
+      Account acc = dataCache.getAccountById(username, accId);
+      if (acc == null) {
+        acc = dataCache.getDelegatedAccount(username, accId);
+        username = acc.getDelegateFrom();
+      }
+      
       try {
         mailSvr.removeAccount(username, accId);
         dataCache.clearAccountCache();

@@ -373,7 +373,12 @@ public class UIAccountSetting extends UIFormTabPane {
   public void fillField() throws Exception {
     DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
     String username = Util.getPortalRequestContext().getRemoteUser();
-    Account account = dataCache.getAccountById(username, getSelectedAccountId());
+    String accountId = getSelectedAccountId();
+    Account account = dataCache.getAccountById(username, accountId);
+    if (account == null) {
+      account = dataCache.getDelegatedAccount(username, accountId);
+    }
+    
     UIFormInputWithActions uiIdentityInput = getChildById(TAB_IDENTITY_SETTINGS);
     uiIdentityInput.getUIStringInput(FIELD_ACCOUNT_NAME).setValue(account.getLabel());
     uiIdentityInput.getUIStringInput(FIELD_DISPLAY_NAME).setValue(account.getUserDisplayName());
@@ -542,8 +547,12 @@ public class UIAccountSetting extends UIFormTabPane {
       String username = Util.getPortalRequestContext().getRemoteUser();
       String editedAccountId = uiSetting.getSelectedAccountId();
       Account acc = dataCache.getAccountById(username, editedAccountId);
+      if (acc == null) {
+        acc = dataCache.getDelegatedAccount(username, editedAccountId);
+        username = acc.getDelegateFrom();
+      }
       
-      String userName = uiSetting.getFieldIncomingAccount();
+      String mailUserName = uiSetting.getFieldIncomingAccount();
       String email = uiSetting.getFieldMailAddress();
       String reply = uiSetting.getFieldReplyAddress();
       String incomingPort = uiSetting.getFieldIncomingPort();
@@ -586,7 +595,7 @@ public class UIAccountSetting extends UIFormTabPane {
       acc.setEmailReplyAddress(reply);
       acc.setSignature(uiSetting.getFieldMailSignature());
       acc.setCheckedAuto(uiSetting.getFieldCheckMailAuto());
-      acc.setIncomingUser(userName);
+      acc.setIncomingUser(mailUserName);
       if (uiSetting.isSavePassword()) {
         acc.setIncomingPassword(password);
       } else {
@@ -614,7 +623,7 @@ public class UIAccountSetting extends UIFormTabPane {
         acc.setOutgoingPassword(uiSetting.getOutgoingPassword());
       }
       acc.setIsSavePassword(uiSetting.isSavePassword());
-      acc.setServerProperty(Utils.SVR_SMTP_USER, userName);
+      acc.setServerProperty(Utils.SVR_SMTP_USER, mailUserName);
       acc.setIsCustomInbox(uiSetting.isCustomInbox());
 
       if (acc.getProtocol().equals(Utils.IMAP)) {
@@ -636,6 +645,7 @@ public class UIAccountSetting extends UIFormTabPane {
       try {
         mailSrv.updateAccount(username, acc);
         UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class);
+        dataCache.clearAccountCache();
         String accountId = dataCache.getSelectedAccountId();
         uiSelectAccount.updateAccount();
         uiSelectAccount.setSelectedValue(accountId);
