@@ -12,7 +12,7 @@ The Calendar data are saved in eXo-JCR under the CalendarApplication data direct
 
 The whole JCR structure of Calendar can be visualized in the diagram below:
 
-!images/Calendar-JCR-Structure.png|align="center"!
+!images/Calendar-JCR-Structure.png|align="center" width="150mm" fo:scalefit="1" html:scalefit="0"!
 
 h2. calendars  {anchor:id=CSref.JCRStructure.Calendar.JCR.calendars}
 
@@ -214,7 +214,7 @@ The Chat portlet and its services are deprecated. It remains fully supported for
 </para></warning>
 {docbook}
 
-!images/Chat JCR Structure.png|align="center"!
+!images/Chat JCR Structure.png|align="center" width="100mm" fo:scalefit="1" html:scalefit="0"!
 
 The node type *{noformat}lr:conversation{noformat}* has the following properties:
 
@@ -270,7 +270,7 @@ The Address Book portlet and its services are deprecated. It remains fully suppo
 
 The Address Book portlet is a JCR-based application. The Address Book data are stored in the eXo-JCR under the ContactApplication data directory. The whole JCR structure of Address Book can be visualized in the diagram below:
 
-!images/Addressbook-JCR-Structure.png|align="center"!
+!images/Addressbook-JCR-Structure.png|align="center" width="120mm" fo:scalefit="1" html:scalefit="0"!
 
 h2. Contacts {anchor:id=CSref.JCRStructure.AddressBook.Contacts}
 The *Contacts* node of the _{noformat}nt:unstructured{noformat}_ type has the child nodes of the _{noformat}exo:contact{noformat}_. When a contact is created and added to an address book, it is stored in a node defined at the path: _{noformat}ContactAppication/Contacts/%contact_id%{noformat}_.
@@ -370,7 +370,7 @@ The Mail portlet and its services are deprecated. It remains fully supported for
 </para></warning>
 {docbook}
 
-!images/Mail JCR Structure.png|align="center"!
+!images/Mail JCR Structure.png|align="center" width="150mm" fo:scalefit="1" html:scalefit="0"!
 
 The node type *{noformat}exo:account{noformat}* has the following properties:
 || Property name || Required type || Description ||
@@ -476,7 +476,7 @@ The node type *{noformat}exo:mailSetting{noformat}* has the following properties
 
 h1. RSS JCR Structure {anchor:id=CSref.JCRStructure.RSS}
 
-!images/RSS JCR Structure.png|align="center"!
+!images/RSS JCR Structure.png|align="center" width="70mm" fo:scalefit="1" html:scalefit="0"!
 
 The node type *{noformat}exo:content{noformat}* has the following properties:
 || Property name || Required type || Description ||
