@@ -97,12 +97,22 @@ public class CalendarWebservice implements ResourceContainer{
     cc.setNoStore(true);
   }
   
+  private static CalendarService calendarService = null;
+  private Object getCalendarService() {
+    calendarService = (CalendarService)ExoContainerContext.getCurrentContainer()
+                                          .getComponentInstanceOfType(CalendarService.class);
+    if(calendarService == null){
+      return Response.status(HTTPStatus.UNAVAILABLE).cacheControl(cc).build();
+    }
+    return calendarService;
+  }
+  
   public CalendarWebservice() {}
   
   private boolean validateEventType(String type) {
     return type != null && (CalendarEvent.TYPE_EVENT.equals(type) || CalendarEvent.TYPE_TASK.equals(type));
   }
-
+  
   /**
    * 
    * @param username : user id
@@ -124,25 +134,26 @@ public class CalendarWebservice implements ResourceContainer{
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
     try {
-      CalendarService calService = (CalendarService)ExoContainerContext
-      .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+      if(getCalendarService() instanceof Response) {
+        return (Response) getCalendarService();
+      }
       Calendar cal = null ;
       eventData.setPermission(false);
       if(Utils.PRIVATE_TYPE == Integer.parseInt(type)) {
-        if(calService.isRemoteCalendar(username, calendarId)) {
+        if(calendarService.isRemoteCalendar(username, calendarId)) {
           eventData.setPermission(false);
         } else eventData.setPermission(true);
       } else if(Utils.PUBLIC_TYPE == Integer.parseInt(type)) {
         OrganizationService oService = (OrganizationService)ExoContainerContext
         .getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
-        cal = calService.getGroupCalendar(calendarId) ;
+        cal = calendarService.getGroupCalendar(calendarId) ;
         // cs-4429: fix for group calendar permission
         if(Utils.canEdit(oService, cal.getEditPermission(), username)) {
           eventData.setPermission(true);
         } 
       } else if(Utils.SHARED_TYPE == Integer.parseInt(type)) {
-        if(calService.getSharedCalendars(username, true) != null) {
-          cal = calService.getSharedCalendars(username, true).getCalendarById(calendarId) ;
+        if(calendarService.getSharedCalendars(username, true) != null) {
+          cal = calendarService.getSharedCalendars(username, true).getCalendarById(calendarId) ;
           if(Utils.canEdit(null, Utils.getEditPerUsers(cal), username)) {
             eventData.setPermission(true);
           }  
@@ -164,7 +175,6 @@ public class CalendarWebservice implements ResourceContainer{
    * @return : Rss feeds
    * @throws Exception
    */
-  @SuppressWarnings("unchecked")
   @GET
   @RolesAllowed("users")
   @Path("/event/{username}/{eventFeedName}/")
@@ -175,22 +185,23 @@ public class CalendarWebservice implements ResourceContainer{
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
     try {
-      CalendarService calService = (CalendarService)ExoContainerContext
-      .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
-      CalendarImportExport icalEx = calService.getCalendarImportExports(CalendarService.ICALENDAR);
+      if(getCalendarService() instanceof Response) {
+        return (Response) getCalendarService();
+      }
+      CalendarImportExport icalEx = calendarService.getCalendarImportExports(CalendarService.ICALENDAR);
       String eventId = eventFeedName.split(Utils.SPLITTER)[0];
       String type = eventFeedName.split(Utils.SPLITTER)[1].replace(Utils.ICS_EXT, "");
       CalendarEvent event = null;
       if (type.equals(Utils.PRIVATE_TYPE + "")) {
-        event = calService.getEvent(username, eventId);
+        event = calendarService.getEvent(username, eventId);
       } else if (type.equals(Utils.SHARED_TYPE + "")) {
         EventQuery eventQuery = new EventQuery();
         eventQuery.setText(eventId);
-        event = calService.getEvents(username, eventQuery, null).get(0);        
+        event = calendarService.getEvents(username, eventQuery, null).get(0);        
       } else {
         EventQuery eventQuery = new EventQuery();
         eventQuery.setText(eventId);
-        event = calService.getPublicEvents(eventQuery).get(0);
+        event = calendarService.getPublicEvents(eventQuery).get(0);
       }
       if (event == null) {
         return Response.status(HTTPStatus.NOT_FOUND).entity("Event " + eventId + "is removed").cacheControl(cacheControl).build();
@@ -227,11 +238,12 @@ public class CalendarWebservice implements ResourceContainer{
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
     try {
-      CalendarService calService = (CalendarService)ExoContainerContext
-      .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+      if(getCalendarService() instanceof Response) {
+        return (Response) getCalendarService();
+      }
 
       FeedData feed = null;
-      for (FeedData feedData : calService.getFeeds(username)) {
+      for (FeedData feedData : calendarService.getFeeds(username)) {
         if (feedData.getTitle().equals(feedname)) {
           feed = feedData;
           break;
@@ -245,23 +257,23 @@ public class CalendarWebservice implements ResourceContainer{
         String calendarId = entry.getLink().substring(entry.getLink().lastIndexOf("/")+1) ;
         List<String> calendarIds = new ArrayList<String>();
         calendarIds.add(calendarId);
-        Calendar calendar = calService.getUserCalendar(username, calendarId) ;
+        Calendar calendar = calendarService.getUserCalendar(username, calendarId) ;
         if (calendar != null) {
-          events.addAll(calService.getUserEventByCalendar(username, calendarIds));
+          events.addAll(calendarService.getUserEventByCalendar(username, calendarIds));
         } else {
           try {
-            calendar = calService.getSharedCalendars(username, false).getCalendarById(calendarId);
+            calendar = calendarService.getSharedCalendars(username, false).getCalendarById(calendarId);
           } catch (NullPointerException e) {
             calendar = null;
           }
           if (calendar != null) {
-            events.addAll(calService.getSharedEventByCalendars(username, calendarIds));
+            events.addAll(calendarService.getSharedEventByCalendars(username, calendarIds));
           } else {
-            calendar = calService.getGroupCalendar(calendarId);
+            calendar = calendarService.getGroupCalendar(calendarId);
             if (calendar != null) {
               EventQuery eventQuery = new EventQuery();
               eventQuery.setCalendarId(calendarIds.toArray(new String[]{}));
-              events.addAll(calService.getPublicEvents(eventQuery));
+              events.addAll(calendarService.getPublicEvents(eventQuery));
             }
           }
         }        
@@ -338,18 +350,19 @@ public class CalendarWebservice implements ResourceContainer{
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
     try {
-      CalendarService calService = (CalendarService)ExoContainerContext
-      .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+      if(getCalendarService() instanceof Response) {
+        return (Response) getCalendarService();
+      }
       Calendar calendar = null;
       if (type.equals(Utils.PRIVATE_TYPE + "")) {
-        calendar = calService.getUserCalendar(username, calendarId);
+        calendar = calendarService.getUserCalendar(username, calendarId);
       } else if (type.equals(Utils.SHARED_TYPE + "")) {
         try {
-          calendar = calService.getSharedCalendars(username, false).getCalendarById(calendarId);
+          calendar = calendarService.getSharedCalendars(username, false).getCalendarById(calendarId);
         } catch (NullPointerException ex) {}
       } else {
         try {
-          calendar = calService.getGroupCalendar(calendarId);
+          calendar = calendarService.getGroupCalendar(calendarId);
         } catch (PathNotFoundException ex) {}
       }
       if ((calendar == null) || Utils.isEmpty(calendar.getPublicUrl())) {
@@ -357,7 +370,7 @@ public class CalendarWebservice implements ResourceContainer{
         .entity("Calendar " + calendarId + " is not public access").cacheControl(cacheControl).build();
       }
 
-      CalendarImportExport icalEx = calService.getCalendarImportExports(CalendarService.ICALENDAR);
+      CalendarImportExport icalEx = calendarService.getCalendarImportExports(CalendarService.ICALENDAR);
       OutputStream out = icalEx.exportCalendar(username, Arrays.asList(calendarId), type, -1);
       InputStream in = new ByteArrayInputStream(out.toString().getBytes());
       return Response.ok(in, "text/calendar")
@@ -393,9 +406,10 @@ public class CalendarWebservice implements ResourceContainer{
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
     try {
-      CalendarService calService = (CalendarService)ExoContainerContext
-      .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
-      CalendarImportExport icalEx = calService.getCalendarImportExports(CalendarService.ICALENDAR);
+      if(getCalendarService() instanceof Response) {
+        return (Response) getCalendarService();
+      }
+      CalendarImportExport icalEx = calendarService.getCalendarImportExports(CalendarService.ICALENDAR);
       OutputStream out = icalEx.exportCalendar(username, Arrays.asList(calendarId), type, -1);
       InputStream in = new ByteArrayInputStream(out.toString().getBytes());
       return Response.ok(in, "text/calendar")
@@ -480,9 +494,11 @@ public class CalendarWebservice implements ResourceContainer{
       if (!validateEventType(type)) {
         return Response.status(HTTPStatus.BAD_REQUEST).cacheControl(cc).build();
       }
+      if(getCalendarService() instanceof Response) {
+        return (Response) getCalendarService();
+      }
       String username = ConversationState.getCurrent().getIdentity().getUserId();
-      CalendarService calService = (CalendarService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
-      CalendarSetting calSetting = calService.getCalendarSetting(username);
+      CalendarSetting calSetting = calendarService.getCalendarSetting(username);
       SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd") ;
       sf.setTimeZone(TimeZone.getTimeZone(calSetting.getTimeZone()));
       Date currentDate = sf.parse(currentdatetime);
@@ -496,7 +512,7 @@ public class CalendarWebservice implements ResourceContainer{
       eventQuery.setLimitedItems(limit);
       eventQuery.setOrderBy(new String[]{Utils.EXO_FROM_DATE_TIME});
       eventQuery.setEventType(type);
-      EventPageList data =  calService.searchEvent(username, eventQuery, null);
+      EventPageList data =  calendarService.searchEvent(username, eventQuery, null);
       String timezoneId = calSetting.getTimeZone();
       TimeZone userTimezone = TimeZone.getTimeZone(timezoneId);
       int timezoneOffset = userTimezone.getRawOffset() + userTimezone.getDSTSavings();
@@ -528,16 +544,18 @@ public class CalendarWebservice implements ResourceContainer{
     }
     try {
       statusId = statusId != 0 ? statusId : 3; // if the status is not given, it is understood as "Completed".
-      CalendarService calService = (CalendarService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+      if(getCalendarService() instanceof Response) {
+        return (Response) getCalendarService();
+      }
       String username = ConversationState.getCurrent().getIdentity().getUserId();
       String status = CalendarEvent.TASK_STATUS[(statusId - 1) % 4];
-      CalendarEvent task = calService.getEvent(username, taskid);
+      CalendarEvent task = calendarService.getEvent(username, taskid);
       if (status.equals(task.getEventState())) {
         return Response.ok(String.format("[%1$s] has been set for task %2$s before!", status, taskid), MediaType.APPLICATION_JSON).cacheControl(cc).build();
       } else {
         String calendarId = task.getCalendarId();
         task.setEventState(status);
-        calService.saveUserEvent(username, calendarId, task, false);
+        calendarService.saveUserEvent(username, calendarId, task, false);
         return Response.ok("true", MediaType.APPLICATION_JSON).cacheControl(cc).build();
 
       }
@@ -552,9 +570,11 @@ public class CalendarWebservice implements ResourceContainer{
   @Path("/getcalendars")
   public Response getCalendars() throws Exception{
     try{      
-      CalendarService calService = (CalendarService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+      if(getCalendarService() instanceof Response) {
+        return (Response) getCalendarService();
+      }
       String username = ConversationState.getCurrent().getIdentity().getUserId();
-      List<Calendar> calList = calService.getUserCalendars(username, true);
+      List<Calendar> calList = calendarService.getUserCalendars(username, true);
       EventData data = new EventData();
       data.setCalendars(calList);
       return Response.ok(data, MediaType.APPLICATION_JSON).cacheControl(cc).build();
@@ -587,10 +607,12 @@ public class CalendarWebservice implements ResourceContainer{
   @Path("/getevent/{eventid}")
   public Response getEvent(@PathParam("eventid") String eventid) throws Exception{
     try{      
-      CalendarService calService = (CalendarService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+      if(getCalendarService() instanceof Response) {
+        return (Response) getCalendarService();
+      }
       String username = ConversationState.getCurrent().getIdentity().getUserId();
-      CalendarEvent calEvent = calService.getEvent(username, eventid);
-      CalendarSetting calSetting = calService.getCalendarSetting(username);
+      CalendarEvent calEvent = calendarService.getEvent(username, eventid);
+      CalendarSetting calSetting = calendarService.getCalendarSetting(username);
       if(!calEvent.getAttachment().isEmpty()) calEvent.setAttachment(null);
       SingleEvent data = makeSingleEvent(calSetting, calEvent);
       //data.setCalendars(calList);
@@ -611,12 +633,12 @@ public class CalendarWebservice implements ResourceContainer{
                                          String eXoId, @PathParam("answer") 
                                          String answer) throws Exception {
     try {
-      CalendarService calService = (CalendarService)ExoContainerContext
-                                    .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+      if(getCalendarService() instanceof Response) {
+        return (Response) getCalendarService();
+      }
       String userId = eXoId.equals("null")?null:eXoId;
       // save invitation status
-      //calService.confirmInvitation(inviter, invitee, Integer.parseInt(calType), calendarId, eventId, Integer.parseInt(answer));
-      calService.confirmInvitation(inviter, invitee, userId, Integer.parseInt(calType), calendarId, eventId, Integer.parseInt(answer));
+      calendarService.confirmInvitation(inviter, invitee, userId, Integer.parseInt(calType), calendarId, eventId, Integer.parseInt(answer));
       
       int ans = Integer.parseInt(answer);
       StringBuffer response = new StringBuffer();
