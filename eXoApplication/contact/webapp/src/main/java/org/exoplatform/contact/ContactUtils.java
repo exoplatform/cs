@@ -78,7 +78,8 @@ public class ContactUtils {
   final public static String COMMA = ",".intern() ;
   final public static String SEMI_COMMA = ";".intern() ;
   public static final String HTTP = "http://" ; 
-  public static String[] specialString2 = {"'"} ;
+  public static String[] specialString2 = {"?", "[", "(", "|", ")", "*", "\\", "+", "}", "{", "^", "$", "\"" 
+    ,"!", "#", "%", "&", ":", ">", "<", "~", "`", "]", "'", "/"};
   
   final static public String FIELD_USER = "user".intern() ;
   final static public String FIELD_GROUP = "group".intern() ;  
