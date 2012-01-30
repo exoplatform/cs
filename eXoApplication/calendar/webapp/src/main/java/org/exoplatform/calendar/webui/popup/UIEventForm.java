@@ -483,12 +483,20 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       errorMsg_ = getId() +  ".msg.event-fromdate-notvalid" ;
       return false ;
     }
+    if(from == null){
+      errorMsg_ = getId() +  ".msg.event-fromdate-notvalid" ;
+      return false ;
+    }
     try {
       to = getEventToDate(dateFormat, timeFormat) ;
     } catch (Exception e) {
       if (log.isDebugEnabled()) {
         log.debug("Fail to get event to date", e);
       }
+      errorMsg_ = getId() +  ".msg.event-fromdate-notvalid" ;
+      return false ;
+    }
+    if(to == null){
       errorMsg_ = getId() +  ".msg.event-fromdate-notvalid" ;
       return false ;
     }
