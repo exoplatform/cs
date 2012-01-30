@@ -33,6 +33,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Attachment;
@@ -1451,7 +1452,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     calendarEvent.setParticipantStatus(parStatus);
     
     calendarEvent.setParticipant(pars) ;
-    if(CalendarUtils.isEmpty(uiForm.getInvitationEmail())) calendarEvent.setInvitation(null) ;
+    if(CalendarUtils.isEmpty(uiForm.getInvitationEmail())) calendarEvent.setInvitation(ArrayUtils.EMPTY_STRING_ARRAY);
     else 
       if(CalendarUtils.isValidEmailAddresses(uiForm.getInvitationEmail())) {
         String addressList = uiForm.getInvitationEmail().replaceAll(CalendarUtils.SEMICOLON,CalendarUtils.COMMA) ;
