@@ -106,6 +106,8 @@ public class Utils {
 
   public static final String        POP3_CONECT_TIMEOUT                   = "mail.pop3.connectiontimeout".intern();
 
+  public static final String        NULL                                  = "null";
+  
   // in MS Exchange, a big message maybe insufficience of bytes when received. set it is false to get rid this problem
   // But neet to certain that Mail server do not implement Imap Partial FETCH
   public static final String        IMAP_MSX_PARTIAL_FETCH                = "mail.imap.partialfetch".intern();
@@ -909,8 +911,13 @@ public class Utils {
       msg.setMessageTo(messageNode.getProperty(Utils.EXO_TO).getString());
     if (messageNode.hasProperty(Utils.EXO_SUBJECT))
       msg.setSubject(messageNode.getProperty(Utils.EXO_SUBJECT).getString());
-    if (messageNode.hasProperty(Utils.EXO_CC))
-      msg.setMessageCc(messageNode.getProperty(Utils.EXO_CC).getString());
+    if (messageNode.hasProperty(Utils.EXO_CC)) {
+      if (NULL.equals(messageNode.getProperty(Utils.EXO_CC).getString())) {
+        msg.setMessageCc(StringUtils.EMPTY);
+      } else {
+        msg.setMessageCc(messageNode.getProperty(Utils.EXO_CC).getString());
+      }
+    }
     if (messageNode.hasProperty(Utils.EXO_BCC))
       msg.setMessageBcc(messageNode.getProperty(Utils.EXO_BCC).getString());
     if (messageNode.hasProperty(Utils.EXO_REPLYTO))
@@ -1130,5 +1137,4 @@ public class Utils {
     SessionProviderService sessionProviderService = (SessionProviderService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(SessionProviderService.class);
     return sessionProviderService.getSystemSessionProvider(null);
   }
-
 }
