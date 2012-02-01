@@ -1652,7 +1652,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
     RepositoryService repoService = (RepositoryService) PortalContainer.getInstance()
                                                                        .getComponentInstanceOfType(RepositoryService.class);
     String defaultWorkspace = repoService.getCurrentRepository().getConfiguration().getDefaultWorkspaceName();
-    return repoService.getDefaultRepository().getSystemSession(defaultWorkspace);
+    return repoService.getCurrentRepository().getSystemSession(defaultWorkspace);
   }
 
 }
