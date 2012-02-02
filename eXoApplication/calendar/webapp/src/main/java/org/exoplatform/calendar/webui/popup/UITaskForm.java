@@ -51,6 +51,8 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -109,6 +111,7 @@ import org.exoplatform.webui.organization.account.UIUserSelector;
 
 })
 public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISelector{
+  public static final Log log = ExoLogger.getLogger(UITaskForm.class);
   final public static String TAB_TASKDETAIL = "eventDetail".intern() ;
   final public static String TAB_TASKREMINDER = "eventReminder".intern() ;
   final public static String ITEM_PUBLIC = "public".intern() ;
@@ -346,14 +349,18 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     try {
       from = getEventFromDate(dateFormat, timeFormat) ;
     } catch (Exception e) {
-      e.printStackTrace() ;
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to get event's from-date", e);
+      }
       errorMsg_ = getId() +  ".msg.event-fromdate-notvalid" ;
       return false ;
     }
     try {
       to = getEventToDate(dateFormat, timeFormat) ;
     } catch (Exception e) {
-      e.printStackTrace() ;
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to get event's to-date", e);
+      }
       errorMsg_ = getId() +  ".msg.event-fromdate-notvalid" ;
       return false ;
     }

@@ -1,0 +1,84 @@
+Index: eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UIEventForm.java
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UIEventForm.java	(revision 79111)
++++ eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UIEventForm.java	(working copy)
+@@ -62,6 +62,8 @@
+ import org.exoplatform.mail.service.MailService;
+ import org.exoplatform.mail.service.Message;
+ import org.exoplatform.mail.service.Utils;
++import org.exoplatform.services.log.ExoLogger;
++import org.exoplatform.services.log.Log;
+ import org.exoplatform.services.organization.OrganizationService;
+ import org.exoplatform.services.organization.User;
+ import org.exoplatform.upload.UploadService;
+@@ -136,6 +138,7 @@
+ }
+ )
+ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISelector{
++  public static final Log log = ExoLogger.getLogger(UIEventForm.class);
+   final public static String TAB_EVENTDETAIL = "eventDetail".intern() ;
+   final public static String TAB_EVENTREMINDER = "eventReminder".intern() ;
+   final public static String TAB_EVENTSHARE = "eventShare".intern() ;
+@@ -453,14 +456,18 @@
+     try {
+       from = getEventFromDate(dateFormat, timeFormat) ;
+     } catch (Exception e) {
+-      e.printStackTrace() ;
++      if (log.isDebugEnabled()) {
++        log.debug("Fail to get event's from-date", e);
++      }
+       errorMsg_ = getId() +  ".msg.event-fromdate-notvalid" ;
+       return false ;
+     }
+     try {
+       to = getEventToDate(dateFormat, timeFormat) ;
+     } catch (Exception e) {
+-      e.printStackTrace() ;
++      if (log.isDebugEnabled()) {
++        log.debug("Fail to get event's to-date", e);
++      }
+       errorMsg_ = getId() +  ".msg.event-fromdate-notvalid" ;
+       return false ;
+     }
+Index: eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UITaskForm.java
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UITaskForm.java	(revision 79111)
++++ eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/popup/UITaskForm.java	(working copy)
+@@ -51,6 +51,8 @@
+ import org.exoplatform.download.DownloadResource;
+ import org.exoplatform.download.DownloadService;
+ import org.exoplatform.download.InputStreamDownloadResource;
++import org.exoplatform.services.log.ExoLogger;
++import org.exoplatform.services.log.Log;
+ import org.exoplatform.services.organization.OrganizationService;
+ import org.exoplatform.upload.UploadService;
+ import org.exoplatform.web.application.ApplicationMessage;
+@@ -109,6 +111,7 @@
+ 
+ })
+ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISelector{
++  public static final Log log = ExoLogger.getLogger(UITaskForm.class);
+   final public static String TAB_TASKDETAIL = "eventDetail".intern() ;
+   final public static String TAB_TASKREMINDER = "eventReminder".intern() ;
+   final public static String ITEM_PUBLIC = "public".intern() ;
+@@ -346,14 +349,18 @@
+     try {
+       from = getEventFromDate(dateFormat, timeFormat) ;
+     } catch (Exception e) {
+-      e.printStackTrace() ;
++      if (log.isDebugEnabled()) {
++        log.debug("Fail to get event's from-date", e);
++      }
+       errorMsg_ = getId() +  ".msg.event-fromdate-notvalid" ;
+       return false ;
+     }
+     try {
+       to = getEventToDate(dateFormat, timeFormat) ;
+     } catch (Exception e) {
+-      e.printStackTrace() ;
++      if (log.isDebugEnabled()) {
++        log.debug("Fail to get event's to-date", e);
++      }
+       errorMsg_ = getId() +  ".msg.event-fromdate-notvalid" ;
+       return false ;
+     }
