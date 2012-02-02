@@ -1,0 +1,162 @@
+Index: eXoApplication/chat/service/src/test/java/org/exoplatform/services/xmpp/test/UtilsTest.java
+===================================================================
+--- eXoApplication/chat/service/src/test/java/org/exoplatform/services/xmpp/test/UtilsTest.java	(revision 79111)
++++ eXoApplication/chat/service/src/test/java/org/exoplatform/services/xmpp/test/UtilsTest.java	(working copy)
+@@ -33,6 +33,7 @@
+     assertEquals("js220w748s8xn3btuaohn", XMPPSessionImpl.encodeUserName("jOhn"));
+     assertEquals("jos220w748s8xn3btuahn", XMPPSessionImpl.encodeUserName("joHn"));
+     assertEquals("johs220w748s8xn3btuan", XMPPSessionImpl.encodeUserName("johN"));
++    assertEquals("s220w748s8xn3btuaexochatautb3nx8s847w022ss220w748s8xn3btuats220w748s8xn3btuaes220w748s8xn3btuass220w748s8xn3btuat", XMPPSessionImpl.encodeUserName("Exochat TEST"));
+   }
+ 
+   public void testDecodeUsername() {
+@@ -40,6 +41,7 @@
+     assertEquals("jOhn", XMPPSessionImpl.decodeUsername("js220w748s8xn3btuaohn"));
+     assertEquals("joHn", XMPPSessionImpl.decodeUsername("jos220w748s8xn3btuahn"));
+     assertEquals("johN", XMPPSessionImpl.decodeUsername("johs220w748s8xn3btuan"));
++    assertEquals("Exochat TEST", XMPPSessionImpl.decodeUsername("s220w748s8xn3btuaexochatautb3nx8s847w022ss220w748s8xn3btuats220w748s8xn3btuaes220w748s8xn3btuass220w748s8xn3btuat"));
+   }
+ 
+ }
+Index: eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/connection/impl/XMPPSessionImpl.java
+===================================================================
+--- eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/connection/impl/XMPPSessionImpl.java	(revision 79111)
++++ eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/connection/impl/XMPPSessionImpl.java	(working copy)
+@@ -2224,7 +2224,7 @@
+     }
+     String lusername = username.toLowerCase();
+     if (username.equals(lusername)) {
+-      return username;
++      return username.replaceAll(" ", "autb3nx8s847w022s");
+     }
+     StringBuilder sb = new StringBuilder("");
+     for (int i = 0; i < username.length(); i++) {
+@@ -2236,7 +2236,7 @@
+         sb.append("s220w748s8xn3btua").append(lc);
+       }
+     }
+-    return sb.toString();
++    return sb.toString().replaceAll(" ", "autb3nx8s847w022s");
+   }
+ 
+   /**
+@@ -2245,9 +2245,12 @@
+    * @return
+    */
+   public static String decodeUsername(String username) {
+-    if (username == null || username.indexOf("s220w748s8xn3btua") < 0) {
+-      return username;
++    if (username == null) {
++      return null;
+     }
++    if (username.indexOf("s220w748s8xn3btua") < 0) {
++      return username.replaceAll("autb3nx8s847w022s", " ");
++    }
+     String[] tokens = username.split("s220w748s8xn3btua");
+     StringBuilder sb = new StringBuilder("");
+     for (int i = 0; i < tokens.length; i++) {
+@@ -2256,7 +2259,7 @@
+       }
+       sb.append(tokens[i]);
+     }
+-    return sb.toString();
++    return sb.toString().replaceAll("autb3nx8s847w022s", " ");
+   }
+   
+   /**
+Index: eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js
+===================================================================
+--- eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js	(revision 79111)
++++ eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js	(working copy)
+@@ -128,6 +128,7 @@
+     }
+     sb += tokens[i];
+   }
++  sb = sb.replace('autb3nx8s847w022s', ' ');
+   //
+   userName += '@' + this.UIMainChatWindow.serverInfo.mainServiceName;
+   var buddyInfo = {
+@@ -200,7 +201,7 @@
+     }
+     var userName = contactInfo.buddyInfo.user;
+     var shortUserName = userName.substring(0, userName.indexOf('@'));
+-    if (shortUserName && shortUserName.indexOf('s220w748s8xn3btua') >= 0) {
++    if (shortUserName && (shortUserName.indexOf('s220w748s8xn3btua') >= 0 || shortUserName.indexOf('autb3nx8s847w022s') >= 0)) {
+       shortUserName = contactInfo.buddyInfo.nickname;
+     }
+     if (shortUserName == contact['userName'] ||
+Index: eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIAddContactPopupWindow.js
+===================================================================
+--- eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIAddContactPopupWindow.js	(revision 79111)
++++ eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIAddContactPopupWindow.js	(working copy)
+@@ -150,7 +150,7 @@
+     }
+     var userName = contactInfo.buddyInfo.user;
+     var shortUserName = userName.substring(0, userName.indexOf('@'));
+-    if (shortUserName && shortUserName.indexOf('s220w748s8xn3btua') >= 0) {
++    if (shortUserName && (shortUserName.indexOf('s220w748s8xn3btua') >= 0 || shortUserName.indexOf('autb3nx8s847w022s') >= 0)) {
+       shortUserName = contactInfo.buddyInfo.nickname;
+     }
+     if (shortUserName == contact['userName'] ||
+Index: eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js
+===================================================================
+--- eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js	(revision 79111)
++++ eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js	(working copy)
+@@ -128,6 +128,7 @@
+     }
+     sb += tokens[i];
+   }
++  sb = sb.replace('autb3nx8s847w022s', ' ');
+   //
+   userName += '@' + this.UIMainChatWindow.serverInfo.mainServiceName;
+   var buddyInfo = {
+@@ -200,7 +201,7 @@
+     }
+     var userName = contactInfo.buddyInfo.user;
+     var shortUserName = userName.substring(0, userName.indexOf('@'));
+-    if (shortUserName && shortUserName.indexOf('s220w748s8xn3btua') >= 0) {
++    if (shortUserName && (shortUserName.indexOf('s220w748s8xn3btua') >= 0 || shortUserName.indexOf('autb3nx8s847w022s') >= 0)) {
+       shortUserName = contactInfo.buddyInfo.nickname;
+     }
+     if (shortUserName == contact['userName'] ||
+Index: eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIAddContactPopupWindow.js
+===================================================================
+--- eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIAddContactPopupWindow.js	(revision 79111)
++++ eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIAddContactPopupWindow.js	(working copy)
+@@ -150,7 +150,7 @@
+     }
+     var userName = contactInfo.buddyInfo.user;
+     var shortUserName = userName.substring(0, userName.indexOf('@'));
+-    if (shortUserName && shortUserName.indexOf('s220w748s8xn3btua') >= 0) {
++    if (shortUserName && (shortUserName.indexOf('s220w748s8xn3btua') >= 0 || shortUserName.indexOf('autb3nx8s847w022s') >= 0)) {
+       shortUserName = contactInfo.buddyInfo.nickname;
+     }
+     if (shortUserName == contact['userName'] ||
+Index: eXoApplication/organization/service/src/main/java/org/exoplatform/services/authentication/rest/RESTAuthenticator.java
+===================================================================
+--- eXoApplication/organization/service/src/main/java/org/exoplatform/services/authentication/rest/RESTAuthenticator.java	(revision 79111)
++++ eXoApplication/organization/service/src/main/java/org/exoplatform/services/authentication/rest/RESTAuthenticator.java	(working copy)
+@@ -67,9 +67,12 @@
+      * @return
+      */
+     public static String decodeUsername(String username) {
+-      if (username == null || username.indexOf("s220w748s8xn3btua") < 0) {
+-        return username;
++      if (username == null) {
++        return null;
+       }
++      if (username.indexOf("s220w748s8xn3btua") < 0) {
++        return username.replaceAll("autb3nx8s847w022s", " ");
++      }
+       String[] tokens = username.split("s220w748s8xn3btua");
+       StringBuilder sb = new StringBuilder("");
+       for (int i = 0; i < tokens.length; i++) {
+@@ -78,7 +81,7 @@
+         }
+         sb.append(tokens[i]);
+       }
+-      return sb.toString();
++      return sb.toString().replaceAll("autb3nx8s847w022s", " ");
+     }
+     
+     

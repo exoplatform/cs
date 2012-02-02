@@ -33,6 +33,7 @@ public class UtilsTest extends TestCase {
     assertEquals("js220w748s8xn3btuaohn", XMPPSessionImpl.encodeUserName("jOhn"));
     assertEquals("jos220w748s8xn3btuahn", XMPPSessionImpl.encodeUserName("joHn"));
     assertEquals("johs220w748s8xn3btuan", XMPPSessionImpl.encodeUserName("johN"));
+    assertEquals("s220w748s8xn3btuaexochatautb3nx8s847w022ss220w748s8xn3btuats220w748s8xn3btuaes220w748s8xn3btuass220w748s8xn3btuat", XMPPSessionImpl.encodeUserName("Exochat TEST"));
   }
 
   public void testDecodeUsername() {
@@ -40,6 +41,7 @@ public class UtilsTest extends TestCase {
     assertEquals("jOhn", XMPPSessionImpl.decodeUsername("js220w748s8xn3btuaohn"));
     assertEquals("joHn", XMPPSessionImpl.decodeUsername("jos220w748s8xn3btuahn"));
     assertEquals("johN", XMPPSessionImpl.decodeUsername("johs220w748s8xn3btuan"));
+    assertEquals("Exochat TEST", XMPPSessionImpl.decodeUsername("s220w748s8xn3btuaexochatautb3nx8s847w022ss220w748s8xn3btuats220w748s8xn3btuaes220w748s8xn3btuass220w748s8xn3btuat"));
   }
 
 }
