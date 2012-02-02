@@ -1,0 +1,11 @@
+Index: eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/portlet.xml
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/portlet.xml	(revision 79111)
++++ eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/portlet.xml	(working copy)
+@@ -25,6 +25,5 @@
+       <short-title>Calendar Portlet</short-title>
+       <keywords>calendar</keywords>
+     </portlet-info>
+-	  <supported-processing-event><name>RefreshCalendar</name></supported-processing-event>
+   </portlet>  
+ </portlet-app>
