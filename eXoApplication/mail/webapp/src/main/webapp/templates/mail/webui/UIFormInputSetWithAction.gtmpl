@@ -22,7 +22,7 @@
         for(inputEntry in uicomponent.getChildren()) {
           if(inputEntry.isRendered()) {
       %>
-          <div class="FormContainer">fasdfa
+          <div class="FormContainer">
             <table class="UIFormGrid">
               <tbody>
                 <tr>

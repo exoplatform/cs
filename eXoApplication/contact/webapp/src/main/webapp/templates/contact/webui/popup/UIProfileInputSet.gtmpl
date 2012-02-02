@@ -5,7 +5,7 @@
   import org.exoplatform.container.PortalContainer;
 %>
 <div id="$uicomponent.id" >
-<div class="Profile">
+<div class="Profile ClearFix">
   <div class="FormContainer ProfileContainer">
     <table class="UIFormGrid">
       <tbody>
@@ -159,6 +159,5 @@
     </div>
   </div>
   
-  <div style="clear: left;"><span></span></div>
 </div> 
 </div>       

@@ -5,13 +5,12 @@
 <div><div style="width:720px;" ><span style="display:none;"></span></div></div>
 <div  style="_width:expression(this.previousSibling.offsetWidth - 2 + 'px'); !border:1px solid white; _margin:auto;">
 <div class="UIAccountSetting">
-  <div class="AccountSetting">
+  <div class="AccountSetting ClearFix">
   
     <div class="AccountSettingCategory">
-      <div class="CategoryControlBar">
+      <div class="CategoryControlBar ClearFix">
         <div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.accounts") %></div>
         <a href="<%=uicomponent.event("DeleteAccount", uicomponent.id, "id")%>" title="<%=_ctx.appRes(uicomponent.id+  ".label.delete-acc") %>"><div class="DeleteIcon"><span></span></div></a>
-        <div style="clear:both;"><span></span></div> 
       </div>
       <div class="AccountSettingList">
         <%
@@ -98,7 +97,6 @@
         </div>        
       </div>
     </div>
-    <div style="clear:left;"><span></span></div>
   </div>  
   
   <div class="UIAction">

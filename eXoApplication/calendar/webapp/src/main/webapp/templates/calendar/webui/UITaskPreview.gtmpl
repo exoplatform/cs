@@ -11,12 +11,11 @@ uiform.begin() ;
 %>
 <div class="UIPreview">
   <%if(!uicomponent.isShowPopup()){%>
-    <div class="ViewBar">
+    <div class="ViewBar ClearFix">
       <div class="Label">
        <%=uiform.getLabel('taskDetail')%>
       </div> 
       <div class="MaximizeButton" title="View full - size task" onclick = "eXo.cs.Utils.showHidePane(this,document.getElementById('UIListUsers').parentNode,'<%=uicomponent.getId()%>')"><span></span></div>
-      <div style="clear: both"><span></span></div>
     </div>
   <%}%>    
     <div class="ViewContainer SpliterResizableListArea">
@@ -50,7 +49,6 @@ uiform.begin() ;
 				   </a> 
 				 <%}%>
 				 </div> 
-				 <div style="clear:left;"><span></span></div>
 				 <%}%> 
 				<td >
 				  <div class="TaskDescription" style="font-weight: bold;"><%=task.getSummary()%></div>
@@ -131,7 +129,7 @@ uiform.begin() ;
 					</tr>  
 				  </table>
 				  <%if(!uicomponent.isShowPopup()){%>
-				  <div class="ActionsContainer">
+				  <div class="ActionsContainer ClearFix">
 					<a href="<%=uicomponent.event("Edit",task.getId()+"&"+uicomponent.CALENDARID+"="+task.getCalendarId()+"&calType=" +task.getCalType())%>" class="ControlButton">
 					  <div class="IconHolder EditTaskIcon">
 						<%=uiform.getLabel('EditTask')%>
@@ -143,7 +141,6 @@ uiform.begin() ;
 						<%=uiform.getLabel('DeleteTask')%>
 					  </div>
 					</a>
-					<div style="clear:left;"><span></span></div>
 				  </div>
 				  <%}%>
 				</td>

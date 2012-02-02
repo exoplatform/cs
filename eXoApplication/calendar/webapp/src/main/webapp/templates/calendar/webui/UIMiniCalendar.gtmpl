@@ -33,7 +33,7 @@
 <%uiform.begin();%>
   <div class="UIMiniCalendar">
   <div class="MiniCalendarContainer">
-    <div class="YearSelector">
+    <div class="YearSelector ClearFix">
       <div onclick="$linkDayNext" class="RightControlButton">
         <div class="NextYearSelector" title="<%=_ctx.appRes('UIMonthView.label.nextMonth')%>"><span></span></div>
       </div>
@@ -72,10 +72,9 @@
       <div onclick="$linkDayPrevious" class="RightControlButton">
         <div class="PreviousYearSelector" title="<%=_ctx.appRes('UIMonthView.label.previousMonth')%>"><span></span></div>
       </div>
-      <div style="clear: right;"><span></span></div>
     </div> 
     <div class="MonthList">
-      <div class="WeekList">
+      <div class="WeekList ClearFix">
         <%
         dfs_ = new DateFormatSymbols(locale) ;
         Calendar calendar = uicomponent.getInstanceTempCalendar();
@@ -90,7 +89,6 @@
           calendar.add(Calendar.DAY_OF_WEEK, 1);
         }
         %>
-            <div style="clear: left;"><span></span></div>
           </div>
           <div class="DayList">
             <table class="UIGrid" id="" cellspacing="0" cellpadding="0">

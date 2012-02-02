@@ -49,20 +49,6 @@ ul {
   list-style: none;
 }
 
-.ClearFix:after {  
-  clear: both;
-  content: ".";
-  display: block;
-  height: 0px;
-  visibility: hidden;
-}
-
-.ClearFix {
-  !display: inline-block;
-  !zoom: 1;
-  !display: block; 
-}
-
 
 
 /*Css one selector using for general css has same*/

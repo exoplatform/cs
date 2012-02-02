@@ -82,7 +82,7 @@
     </div>   
   </div> 
   <div class="WorkContainer">
-    <div class="BoxWorkContainer">
+    <div class="BoxWorkContainer ClearFix">
       <div class="LeftContacts">
         <div class="UISelectAccount">
           <%uicomponent.renderField(uicomponent.SELECT_GROUP)%>
@@ -186,6 +186,7 @@
                         } catch (Exception e) {}
                       }
                     %>
+					<div class="ClearFix">
                     <img src="$imageLink" width=63 height=81  class="Avatar"/>         
                       <div class="Member">
                      <!-- <% 
@@ -196,10 +197,10 @@
                         <div class="State"><%=selectedContact.getFullName()%></div>
                         <div class="Job"><%= (selectedContact.getJobTitle() != null) ? selectedContact.getJobTitle() : ""%></div>
                       </div>
-                      <div style="clear:left;"><span></span></div>
+                    </div>  
                       <div class="InfoContainer">
                         <div class="TitleInfo"><%=_ctx.appRes(uicomponent.id+ ".label.profile") %></div>
-                          <div class="Content">
+                          <div class="Content ClearFix">
                             <div class="LeftContent">
                         
                           <table>
@@ -338,7 +339,6 @@
                             </tr>
                           </table>
                          </div>
-                         <div style="clear:left;"><span></span></div>
                         </div>
                       </div>
                       
@@ -356,7 +356,6 @@
           </div>
         </div>    
       </div>
-      <div style="clear:left;"><span></span></div>
     </div>
   </div>
   <div class="UIAction">

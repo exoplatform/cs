@@ -19,7 +19,7 @@
 %>
 <% /*Start Message Action Bar*/ %>
 <%uiform.begin()%>  
-  <div class="UIMessageActionsBar" >
+  <div class="UIMessageActionsBar ClearFix">
   <a href="<%=uicomponent.event("Reply")%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.reply-to-sender") %>">
     <div class="IconHolder ReplyIcon"><span></span></div>
   </a>
@@ -132,7 +132,6 @@
                       <div>
                         <a class="ItemIcon ListIcon" href="<%=uicomponent.event("ViewAsList")%>"><%=_ctx.appRes(uicomponent.id+ ".label.list") %></a>
                       </div>
-                      <div style="clear:both;"><span></span></div>
                     </div>
                     <% 
                       String threadSelected = "";
@@ -149,7 +148,6 @@
                       <div>
                         <a class="ItemIcon ThreadIcon" href="<%=uicomponent.event("ViewAsThread")%>"><%=_ctx.appRes(uicomponent.id+ ".label.thread") %></a>
                       </div>
-                      <div style="clear:both;"><span></span></div>
                     </div>
                     <% 
                       String conversationSelected = "";
@@ -167,7 +165,6 @@
                       <div>
                         <a class="ItemIcon ConversationIcon"  href="<%=uicomponent.event("ViewAsConversation")%>"><%=_ctx.appRes(uicomponent.id+ ".label.conversation") %></a>
                       </div>
-                      <div style="clear:both;"><span></span></div>
                     </div>
                    <!-- 
                     <div class ="HorizontalLine"><span></span></div>
@@ -248,7 +245,7 @@
                       viewSelected = "";
                       if (uicomponent.viewing_ == uicomponent.VIEW_UNREAD) viewSelected = "SelectItem" ;  
                     %>
-                    <div class="MenuItem $viewSelected">   
+                    <div class="MenuItem $viewSelected ClearFix">   
                       <%
                         if (!viewSelected.equals("")) { 
                       %> 
@@ -259,7 +256,6 @@
                       <div>
                         <a class="ItemIcon UnreadMessagesIcon" href="<%=uicomponent.event("ViewUnread")%>"><%=_ctx.appRes(uicomponent.id+ ".label.view-unread-messages") %></a>
                       </div>
-                      <div style="clear:both;"><span></span></div>
                     </div>
                     <% 
                       viewSelected = "";
@@ -276,7 +272,6 @@
                       <div>
                         <a class="ItemIcon StarredIcon" href="<%=uicomponent.event("ViewStarred")%>"><%=_ctx.appRes(uicomponent.id+ ".label.view-starred-messages") %></a>
                       </div>
-                      <div style="clear:both;"><span></span></div>
                     </div>
                     <% 
                       viewSelected = "";
@@ -293,7 +288,6 @@
                       <div>
                         <a class="ItemIcon MessagesAttachmentIcon" href="<%=uicomponent.event("ViewAttachment")%>"><%=_ctx.appRes(uicomponent.id+ ".label.view-with-attachment") %></a>
                       </div>
-                      <div style="clear:both;"><span></span></div>  
                     </div>
                     <div class ="HorizontalLine"><span></span></div>
                     <% 
@@ -311,7 +305,6 @@
                       <div>
                         <a class="ItemIcon AllMessagesIcon" href="<%=uicomponent.event("ViewAll")%>"><%=_ctx.appRes(uicomponent.id+ ".label.view-all-messages") %></a>
                       </div>
-                      <div style="clear:both;"><span></span></div>  
                     </div>
                   </div>
                 </div>
@@ -331,7 +324,7 @@
     if (pageList != null && pageList.getAvailablePage() > 1 && (uicomponent.getMessageList().size() != 0)) {
   %>
     <div class="UIMessagePageList">
-      <div class="MailIteratorContainer">
+      <div class="MailIteratorContainer ClearFix">
         <div class="RightPageIteratorBlock">
           <%
             String cssPreviousPage = "FloatBlockHidden";
@@ -352,7 +345,6 @@
             <div class="Number">$currentPage / <%=pageList.getAvailablePage()%></div>
             <a title="<%=_ctx.appRes(uicomponent.id+ '.label.next-page') %>" class="$cssNextPage NextPageArrow" href="<%=uicomponent.event("NextPage")%>"/></a>
             <a title="<%=_ctx.appRes(uicomponent.id+ '.label.last-page') %>" class="$cssNextPage LastPageArrow" href="<%=uicomponent.event("LastPage")%>"><span></span></a>
-            <div style="clear: left;"><span></span></div>
         </div>
         <div class="LeftPageIteratorBlock">
           <%
@@ -366,13 +358,11 @@
             <span class="MailQuantity"> $mailRange </span>
           </div>
         </div>
-        <div style="clear: right;"><span></span></div>
       </div>
     </div>
   <%
     }
   %>
-  <div style="clear: left;"><span></span></div>
   </div>
   
   <% /*End Message Action Bar*/ %>
@@ -619,7 +609,6 @@
                 %>
                   <%=((msg.getSubject() != null && msg.getSubject().trim().length() > 0) ? MailUtils.encodeHTML(msg.getSubject()) : _ctx.appRes(uicomponent.id+ ".label.no-subject"))%></div>
                 </a>
-                <div style="clear: left;"><span></span></div>
                 </div>
               </td>          
               <td class="$readStatus">

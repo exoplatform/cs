@@ -1,4 +1,4 @@
-<div class="MailContainer">
+<div class="MailContainer ClearFix">
   <div class="UINavigationContainer">
     
     // render UISelectAccount here
@@ -19,5 +19,4 @@
     
     //render UIMessagePreview here
   </div>
-  <div style="clear:left;"><span></span></div>
 </div>

@@ -56,7 +56,7 @@
                 </a>
               </div>
               <div class="MonthList">
-                <div class="WeekList">
+                <div class="WeekList ClearFix">
                   <%
                     dfs_ = new DateFormatSymbols(locale) ;
                     Calendar calendar = uicomponent.getInstanceTempCalendar();
@@ -71,7 +71,6 @@
                       calendar.add(Calendar.DAY_OF_WEEK, 1);
                     }
                     %>
-                  <div style="clear: both"><span></span></div>
                 </div>
                 <div class="DayList">
                   <table class="UIGrid" id="" cellspacing="0" borderspacing="0">

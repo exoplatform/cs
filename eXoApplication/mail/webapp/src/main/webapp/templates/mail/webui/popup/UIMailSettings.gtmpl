@@ -35,7 +35,6 @@
                                         layoutIcon="DelegationIcon";        
                                    %>
                                   <div class="TabIcon $layoutIcon"><a href="#" class="Title" style="padding-left:5px;">$tabName</a></div>
-                                  <div style="clear:left;"><span></span></div>
                                 </div>
                               </div>
                             </div>

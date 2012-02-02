@@ -6,7 +6,7 @@
   uiform.begin()
 %>
 <div class="UITagContainer">
-  <div class="TitleBar">
+  <div class="TitleBar ClearFix">
     <div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
     <div class="TagTitle BlueTag"><%=_ctx.appRes(uicomponent.id+ ".label.tags") %></div>
     <div class="ActionIcon" onclick="eXo.cs.Utils.show(this, event);">
@@ -34,7 +34,6 @@
       </div>
       <% /*End Popup Menu*/ %>
     </div>
-  <div style="clear: both"><span></span></div>
   </div>  
   <div>
   <% /*Popup menu*/ %>

@@ -14,20 +14,18 @@
     <div class="CategoryControlBar">
       <div class="LeftBar">
         <div class="RightBar">
-          <div class="MiddleBar">
+          <div class="MiddleBar ClearFix">
             <div class="BreadcumbsContainer">
               <%uicomponent.renderChild(UIBreadcumbs.class) ;%>
             </div>
-            <div class="RefreshBar">
+            <div class="RefreshBar ClearFix">
               <div class="SeparatorLine"><span></span></div>
               <a class="LeftRefreshBar" href="<%=uicomponent.event("Refresh")%>" title="<%=_ctx.appRes(uicomponent.getName() + ".title.refreshbar")%>">
                 <div class="RightRefreshBar">
                   <div class="CenterRefreshBar"><%=_ctx.appRes(uicomponent.getName() + ".label.refreshbar")%></div>
                 </div>
               </a>
-              <div style="clear: left;"><span></span></div>
             </div>
-            <div style="clear: both;"><span></span></div>
           </div>
         </div>
       </div>

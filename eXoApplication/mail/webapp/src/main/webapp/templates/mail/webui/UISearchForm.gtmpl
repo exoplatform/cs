@@ -4,7 +4,7 @@
   action = uicomponent.event("Search") ;
   rcontext.getJavascriptManager().addJavascript('eXo.cs.Utils.captureInput("search") ;') ;
 %>
-<div class="SearchForm">
+<div class="SearchForm ClearFix">
   <a href="<%=uicomponent.event("Advanced")%>"><div class="AdvancedSearch" title="<%=_ctx.appRes(uicomponent.id+ '.label.advance-search') %>"><span></span></div></a>
   <div class="SeparatorLine"><span></span></div>
   <a href="<%=uicomponent.event("Search")%>" class="Search"><div title="<%=_ctx.appRes(uicomponent.id+ '.label.search') %>"><span></span></div></a>
@@ -12,6 +12,5 @@
   <% 
     String label = _ctx.appRes(uicomponent.getName() + ".label.search") ;
   %>
-  <div style="clear:right;"><span></span></div>
 </div>
 <%uiform.end()%>

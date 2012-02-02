@@ -58,7 +58,7 @@
                   </div>
               <%}%>
             </div>
-            <div class="UIWizardAction">
+            <div class="UIWizardAction ClearFix">
               <%if(uicomponent.showStepActions()){%>
                 <div class="StepNavigationBar">         
                   <div class="StepNavigationTitle">
@@ -94,7 +94,6 @@
 				<a href="#" onclick="$link" class="ActionButton LightBlueStyle">$actionLabel</a>
 				<%}%>
               </div>
-               <div style="clear:right;"><span></span></div>
              </div>
             <%uiform.end()%>
           </div>

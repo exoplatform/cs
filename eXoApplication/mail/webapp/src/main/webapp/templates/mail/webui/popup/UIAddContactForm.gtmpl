@@ -26,7 +26,7 @@
 </div>
   
 <div class="UIForm ProfileContent">
-  <div class="HorizontalLayout">
+  <div class="HorizontalLayout ClearFix">
     <table class="UIFormGrid">
       <tbody>
         <tr>
@@ -128,7 +128,6 @@
       </div>
     </div>
     
-    <div style="clear:left;"><span></span></div>
   </div>
 </div>
 

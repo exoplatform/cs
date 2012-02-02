@@ -143,9 +143,6 @@
                     <div class="$rightClass">
                       <span></span>
                     </div>
-                    <div style="clear: left;">
-                      <span></span>
-                    </div>
                   </div>
                   <%}%>
               </div>
@@ -200,19 +197,18 @@
           <%
             }
           %>
-           <div class="<%=event.eventState%>Icon">
-             <div class="<%=event.getPriority()%>PriorityIcon" style="float: left;">
-                <span></span>
-              </div>
-            </div>
-          <div class="EventContainerBar EventTitle" title="<%=uiform.getLabel('moveEvent')%>" >
-            <p unselectable="on">
-              $begin - $end
-            </p>
-          </div>
-          <div style="clear: left;">
-            <span></span>
-          </div>
+		  <div class="ClearFix">
+			   <div class="<%=event.eventState%>Icon">
+				 <div class="<%=event.getPriority()%>PriorityIcon">
+					<span></span>
+				  </div>
+				</div>
+			  <div class="EventContainerBar EventTitle" title="<%=uiform.getLabel('moveEvent')%>" >
+				<p unselectable="on">
+				  $begin - $end
+				</p>
+			  </div>
+		  </div>
           <div unselectable="on" class="EventContainer">$event.summary</div>
           <div class="ResizeEventContainer" unselectable="on">
             <span></span>

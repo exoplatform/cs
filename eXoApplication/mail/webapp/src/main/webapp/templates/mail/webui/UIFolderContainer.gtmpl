@@ -10,7 +10,7 @@
   rcontext.getJavascriptManager().addOnLoadJavascript('eXo.mail.UIMailPortlet.restoreFolderState()');  
   rcontext.getJavascriptManager().addJavascript('eXo.mail.UIMailPortlet.initNavigationAction("'+compId+'");'); 
 %>
-<div class="TitleBar">
+<div class="TitleBar ClearFix">
   <div class="DownArrow3Icon" title="Collapse this Panel"><span></span></div>
   <div class="Title FolderIcon"><%=_ctx.appRes(uicomponent.id+ ".label.folders") %></div>
   <div class="ActionIcon" onclick="eXo.cs.Utils.show(this, event);">
@@ -36,7 +36,6 @@
       </div>
   <% /*End Popup Menu*/ %>
   </div>
-  <div style="clear: both"><span></span></div>
 </div>
 <div>
 <div class="MailFolderList">
@@ -213,13 +212,12 @@ def customFolders = uicomponent.getCustomizeFolders();
 def enableSync = uicomponent.isImap();
 %>
 
-<div class="TitleBar">
+<div class="TitleBar ClearFix">
   <div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
   <div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.my-folders") %></div>
   <% if(enableSync){ %>
     <div id="SynchronizeIconRefreshFolder" class="SyncIcon" title="" onclick="javascript:eXo.mail.MailServiceHandler.synchImapFolders(true); this.className = 'SyncingIcon';"><span></span></div>
   <% } %>
-  <div style="clear: both"><span></span></div>
 </div>
 <div class="MyFolderContent">
 <% 

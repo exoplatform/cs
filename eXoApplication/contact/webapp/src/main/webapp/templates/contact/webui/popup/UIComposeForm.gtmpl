@@ -20,7 +20,7 @@
           <div class="LeftBar">
             <div class="RightBar">
               <div class="CenterBar">
-                <div class="MailListActionsbar">
+                <div class="MailListActionsbar ClearFix">
                 
                   <a href="<%=uicomponent.event("Send")%>" class="ControlButton">
                     <div class="IconHolder SendMailIcon">
@@ -45,7 +45,6 @@
                   
                   <div class="SeparatorLine"><span></span></div>
                 -->
-                  <div style="clear:left;"><span></span></div>
                   
                 </div>
               </div>

@@ -53,13 +53,12 @@
         <%uicomponent.renderChild(UIActionBar.class);%>
   <!-- End Mail ControlBar -->
   <!-- Start Mail Container -->
-          <div class="MailContainer" id="MailContainer">
+          <div class="MailContainer ClearFix" id="MailContainer">
             <%uicomponent.renderChild(UINavigationContainer.class);%>
   <!-- End Mail AccountManagement -->
   <!-- Start Mail Working Details -->
             <%uicomponent.renderChild(UIMessageArea.class);%>
             <%uicomponent.renderChild(UIPopupAction.class);%>
-            <div style="clear:left;"><span></span></div>
           </div>
         </div>
       </div>

@@ -70,18 +70,17 @@
     rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.cs.CheckBox.init("' + uiform.id + '");') ;
     if(isDisplaySearchResult) {
 %>
-        <div class="Result">
+        <div class="Result ClearFix">
           
           <% if (availableContact > 10) { %>
           <div class="UIAddressPageList" style="float: right; width: 250px">
             <div class="ContactIteratorContainer">
-              <div class="RightPageIteratorBlock">
+              <div class="RightPageIteratorBlock ClearFix">
                 <a href="$firstPageAction" title="<%=_ctx.appRes(uicomponent.getName() + ".label.firstPage")%>" class="$cssPreviousPage FirstPageArrow"/></a>        
                 <a href="$previousPageAction" title="<%=_ctx.appRes(uicomponent.getName() + ".label.previousPage")%>" class="$cssPreviousPage PreviousPageArrow"></a>
                 <div class="Number">$contactRange</div>
                  <a href="$nextPageAction" title="<%=_ctx.appRes(uicomponent.getName() + ".label.nextPage")%>" class="$cssNextPage NextPageArrow"/></a>
                  <a href="$lastPageAction" title="<%=_ctx.appRes(uicomponent.getName() + ".label.lastPage")%>" class="$cssNextPage LastPageArrow"><span></span></a>
-                <div style="clear: left;"><span></span></div>
               </div>
             </div>
           </div>
@@ -117,7 +116,6 @@
           <a href="javascript:void(0);" <%=uicomponent.getOnclickEvent("SharedContacts", confirm);%> actionLink="<%=uicomponent.event("SharedContacts")%>" class="ControlButton">
               <div class="Icon ShareIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.sharedContacts")%>"><span></span></div>
           </a>
-          <div style="clear: both;"><span></span></div>
         </div>
         <div class="TitleSearch" ><%=_ctx.appRes(uicomponent.getName() + ".label.searchResult")%></div>
   <% } else if (uicomponent.selectedGroup != null || uicomponent.selectedTag_ != null || uicomponent.isSelectSharedContacts || isDisplaySearchResult) { %>
@@ -158,19 +156,17 @@
           <% if (availableContact > 10) { %>
           <div class="UIAddressPageList">
             <div class="ContactIteratorContainer">
-              <div class="RightPageIteratorBlock">
+              <div class="RightPageIteratorBlock ClearFix">
                 <a href="$firstPageAction" title="<%=_ctx.appRes(uicomponent.getName() + ".label.firstPage")%>" class="$cssPreviousPage FirstPageArrow"/></a>        
                 <a href="$previousPageAction" title="<%=_ctx.appRes(uicomponent.getName() + ".label.previousPage")%>" class="$cssPreviousPage PreviousPageArrow"></a>
                 <div class="Number">$contactRange</div>
                  <a href="$nextPageAction" title="<%=_ctx.appRes(uicomponent.getName() + ".label.nextPage")%>" class="$cssNextPage NextPageArrow"/></a>
                  <a href="$lastPageAction" title="<%=_ctx.appRes(uicomponent.getName() + ".label.lastPage")%>" class="$cssNextPage LastPageArrow"><span></span></a>
-                <div style="clear: left;"><span></span></div>
               </div>
             </div>
           </div>
           <% } %>
           
-          <div style="clear: both;"><span></span></div>
         </div>
         <% } %>
         
@@ -537,28 +533,26 @@
   } else {      // begin Vcard
 %>
   <div class="UIVCards" id="UIVCards">
-  <div class="VCardsBar">
+  <div class="VCardsBar ClearFix">
     <div class="Subject"><%=_ctx.appRes(uicomponent.getName() + ".label.vcard")%></div>
     <div class="UIAddressPageList">
-            <div class="ContactIteratorContainer">
-              <div class="RightPageIteratorBlock">
-                <% 
-                  if (!uicomponent.isPrintForm()) {  
-                 %>
-                 
-                <% if (availableContact > 10) { %> 
-                <a href="$firstPageAction" title="<%=_ctx.appRes(uicomponent.getName() + ".label.firstPage")%>" class="$cssPreviousPage FirstPageArrow"/><span></span></a>        
-                <a href="$previousPageAction" title="<%=_ctx.appRes(uicomponent.getName() + ".label.previousPage")%>" class="$cssPreviousPage PreviousPageArrow"><span></span></a>
-                <div class="Number">$contactRange</div>
-                 <a href="$nextPageAction" title="<%=_ctx.appRes(uicomponent.getName() + ".label.nextPage")%>" class="$cssNextPage NextPageArrow"/><span></span></a>
-                 <a href="$lastPageAction" title="<%=_ctx.appRes(uicomponent.getName() + ".label.lastPage")%>" class="$cssNextPage LastPageArrow"><span></span></a>
-                <div style="clear: left;"><span></span></div>
-                <% } %>
-              <% } %>
-              </div>
-            </div>
+		<div class="ContactIteratorContainer">
+		  <div class="RightPageIteratorBlock ClearFix">
+			<% 
+			  if (!uicomponent.isPrintForm()) {  
+			 %>
+			 
+			<% if (availableContact > 10) { %> 
+			<a href="$firstPageAction" title="<%=_ctx.appRes(uicomponent.getName() + ".label.firstPage")%>" class="$cssPreviousPage FirstPageArrow"/><span></span></a>        
+			<a href="$previousPageAction" title="<%=_ctx.appRes(uicomponent.getName() + ".label.previousPage")%>" class="$cssPreviousPage PreviousPageArrow"><span></span></a>
+			<div class="Number">$contactRange</div>
+			 <a href="$nextPageAction" title="<%=_ctx.appRes(uicomponent.getName() + ".label.nextPage")%>" class="$cssNextPage NextPageArrow"/><span></span></a>
+			 <a href="$lastPageAction" title="<%=_ctx.appRes(uicomponent.getName() + ".label.lastPage")%>" class="$cssNextPage LastPageArrow"><span></span></a>
+			<% } %>
+		  <% } %>
+		  </div>
+		</div>
     </div>
-    <div style="clear: both;"><span></span></div>  
     
   </div>
   
@@ -595,7 +589,7 @@
           <tr>
             <td style="border: none;">
         <div class="VCardContent NormalVCard" id="<%=contact.getId()%>" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" havePermissionAdd="<%=uicomponent.havePermissionAdd(contact)%>" isSharedAddress = "<%=uicomponent.isSharedAddress(contact)%>" isOwner="<%=contact.isOwner()%>">
-          <div class="TitleVCards" >
+          <div class="TitleVCards ClearFix" >
             <% 
               icon = "OfflineIcon";
               if (contact.getContactType().equals(JCRDataStorage.PERSONAL) && contact.isOwner()&& contact.getOwnerId().equals(ContactUtils.getCurrentUser())) icon = "OwnerIcon" ;
@@ -653,9 +647,8 @@
                   <% /*End Popup Menu*/ %>
                 </div>
             <% } %>
-            <div style="clear: both;"><span></span></div>
           </div>
-          <div class="ContainerVCards">
+          <div class="ContainerVCards ClearFix">
             <% 
             String img = "/contact/skin/DefaultSkin/webui/background/Img2.gif" ;
                 ContactAttachment att = contact.getAttachment() ;
@@ -738,7 +731,6 @@
               
               </div>
             </div>
-            <div class="ClearContact"><span></span></div>
           </div>
         </div>
       </td>
@@ -764,7 +756,7 @@
       %>
       
         <div class="VCardContent NormalVCard" id="<%=contact.getId()%>" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" havePermissionAdd="<%=uicomponent.havePermissionAdd(contact)%>" isSharedAddress = "<%=uicomponent.isSharedAddress(contact)%>"  isOwner="<%=contact.isOwner()%>">
-          <div class="TitleVCards" >
+          <div class="TitleVCards ClearFix" >
           <% 
             icon = "OfflineIcon";
             if (contact.getContactType().equals(JCRDataStorage.PERSONAL) && contact.isOwner()&& contact.getOwnerId().equals(ContactUtils.getCurrentUser())) icon = "OwnerIcon" ;          
@@ -822,9 +814,8 @@
                 <% /*End Popup Menu*/ %>
               </div>
             <% } %>  
-            <div style="clear: both;"><span></span></div>
           </div>
-          <div class="ContainerVCards">
+          <div class="ContainerVCards ClearFix">
             <% 
             img = "/contact/skin/DefaultSkin/webui/background/Img2.gif" ;
                 att = contact.getAttachment() ;
@@ -835,7 +826,7 @@
                   } catch (Exception e) {}
                 }
             %>
-            <img src="$img" width=63 height=81 class="AvatasIcon"/>
+            <img src="$img" width=63 height=81 class="AvatasIcon" alt="AvatasIcon"/>
             <div class="WorkContainerVCards">
             <% if (!ContactUtils.isEmpty(contact.getJobTitle())) { %>
               <div class="JobMember"><%= ContactUtils.encodeHTML(contact.getJobTitle())%></div>
@@ -906,7 +897,6 @@
                 </div>
               </div>
             </div>
-            <div class="ClearContact"><span></span></div>
           </div>
         </div>      
         <% } %>

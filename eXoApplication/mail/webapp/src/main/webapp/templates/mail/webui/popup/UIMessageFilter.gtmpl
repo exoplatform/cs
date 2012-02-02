@@ -4,9 +4,9 @@
 %>
 <%uiform.begin()%>  
 <div class="UIMessageFilter">
-  <div class="FilterSetting">
+  <div class="FilterSetting ClearFix">
     <div class="FilterSettingCategory">
-      <div class="CategoryControlBar">
+      <div class="CategoryControlBar ClearFix">
         <div class="Title">
           <%=_ctx.appRes(uicomponent.id+ ".label.filter") %>
         </div>
@@ -28,7 +28,6 @@
         <a href="<%=uicomponent.event("AddFilter")%>" title="<%=_ctx.appRes(uicomponent.id+  ".label.add-filter") %>">
           <div class="ControlBarIcon FilterAdd"><span></span></div>
         </a>
-        <div style="clear:both;"><span></span></div>
       </div>
       <div class="FilterSettingList">
         <%
@@ -121,7 +120,6 @@
           </div>
         <%}%>
       </div>
-    <div style="clear:left;"><span></span></div>
   </div>  
   <div class="UIAction">
       <% for(action in uicomponent.getActions()) { 

@@ -150,7 +150,6 @@
                         <%=tf.format(ce.getFromDateTime())%> - <%=tf.format(ce.getToDateTime())%>
                       </p>
                     </div>
-                    <div style="clear:left;"><span></span></div>
                     <div class="EventContainer">
                       <%=ce.getSummary()%>
                     </div>

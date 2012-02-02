@@ -3,7 +3,7 @@
   def currentPage = uicomponent.getCurrentPage();
 %>
 
-<div class="UIPageIterator">
+<div class="UIPageIterator ClearFix">
       <% if(currentPage + 10 <= totalPage) {%>        
            <a href="<%=uicomponent.event("ShowPage","${currentPage + 10}")%>" class="Icon NextTopPageIcon" title="<%=_ctx.appRes("UIPageIterator.label.nextTenPages")%>"></a>
       <% } else if(currentPage + 1 <= totalPage) { %>
@@ -50,5 +50,4 @@
       
     <a class="PagesTotalNumber"><%=totalPage%></a>
     <a class="TotalPages"><%=_ctx.appRes("UIPageIterator.label.totalPage")%>:</a>
-    <div style="clear:right"><span></span></div> 
 </div>

@@ -3,7 +3,7 @@
     <div class="HeaderToolbar">
       <div class="LeftBar">
         <div class="RightBar">
-          <div class="CenterBar">
+          <div class="CenterBar ClearFix">
             <div onclick="<%=uicomponent.event("CheckMail")%>" class="ControlButton">
               <div class="IconHolder CheckMailIcon">
                 <%=_ctx.appRes(uicomponent.id+ ".label.check-mail") %>
@@ -43,7 +43,6 @@
                 <%=_ctx.appRes(uicomponent.id+ ".label.settings") %>
               </div>
             </div>
-            <div style="clear:left;"><span></span></div>
           </div>
         </div>
       </div>

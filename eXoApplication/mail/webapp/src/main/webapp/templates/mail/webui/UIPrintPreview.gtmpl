@@ -45,7 +45,6 @@
   <div class="PrintPreview">
     <div class="PrintHeader" >
       <div class="PrintUser"><%=acc.getUserDisplayName()%> &lt; <%=acc.getEmailAddress()%> &gt;</div>
-      <div style="clear:left;"><span></span></div>
     </div>
     <div id="headerPrintData" style='display:none;' >
       <div style='border-bottom: 1px solid #BBBBBB; font-size:13px; font-weight:bolder; height: 14px; margin: 8px; padding: 5px 0;'>
@@ -84,7 +83,7 @@
             }
           }
       %>
-        <div>
+        <div class="ClearFix">
           <div>
           <%
             if (isImage) {
@@ -102,7 +101,6 @@
             <div style="font-weight:bolder;"><%=MailUtils.decodeAttachName(attach.getName())%></div>
             <div><%=_ctx.appRes(uicomponent.id+ ".label.size") %>: <%=MailUtils.convertSize(attach.getSize())%></div>
           </div>
-          <div style="clear:left;"><span></span></div>
         </div>
       <% } %>
       </div>

@@ -1,4 +1,4 @@
-<div class="UISelectAccount">
+<div class="UISelectAccount ClearFix">
   <%uiform.begin();%>
   <% 
     String accId = uicomponent.getSelectedValue();
@@ -31,6 +31,5 @@
         </div>
     <% /*End Popup Menu*/ %>
     </div>
-    <div style="clear:left;"><span></span></div>
   <%uiform.end();%>
 </div>

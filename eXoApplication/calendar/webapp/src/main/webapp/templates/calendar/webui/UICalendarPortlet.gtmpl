@@ -23,7 +23,7 @@
     <div class="UICalendarPortlet" id="$uicomponent.id">
       <div class="UICalendarEventTooltip" title="Click to edit"><span></span></div>
       <div class="UINotification" style="display:none;">
-        <div class="UIControlInfo">
+        <div class="UIControlInfo ClearFix">
           <div class="LeftControlInfo">
             <div class="RightControlInfo">
               <div class="CenterControlInfo">
@@ -31,7 +31,6 @@
               </div>
             </div>
           </div>  
-          <div style="clear: right"><span></span></div>
         </div>
         <div class="UIPopupNotification" style="visibility: hidden;">
           <div class="TLPopupNotification">

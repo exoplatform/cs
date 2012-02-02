@@ -1,15 +1,13 @@
-<div class="ReadingPaneBar">
+<div class="ReadingPaneBar ClearFix">
   <div class="Subject"><span><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.title")%></span>
     <span><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.subject")%></span>  <!-- Welcome to eXo Mail - eXo Collaboration Suite. -->
   </div>
   <div><a href="javascript:void(0);" onclick="eXo.mail.UIMailPortlet.showHidePreviewPane(this);"><span id="ActionReadingPane" class="MaximizeReadingPane" title="<%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.action.title.togglePreview")%>"></span></a></div>
-  <div style="clear:both;"><span></span></div>
 </div>
 <div class="ReadingPaneDetails SpliterResizableListArea">
   <div class="SubjectMail">
-    <div class="WelcomeMail">
+    <div class="WelcomeMail ClearFix">
       <div class="LabelWelcomeMail"><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.welcome")%></div>
-      <div style="clear:both;"><span></span></div>
     </div>
     <!-- div class="LogoMail">
       <span></span>

@@ -11,10 +11,9 @@
         
           <div class="UIWelcomeContact" >
           
-            <div class="WelcomeContact">
+            <div class="WelcomeContact ClearFix">
               <div class="LabelWelcomeContact"><%=_ctx.appRes("UIWelcomeContact.label.label0")%></div>
               <div class="LabelComment"><%=_ctx.appRes("UIWelcomeContact.label.label1")%></div>
-              <div style="clear: both;"><span></span></div>
             </div>
             <div class="LogoContact">
               <span></span>

@@ -4,7 +4,7 @@
       <div class="LeftBar">
         <div class="RightBar">
         
-          <div class="CenterBar">
+          <div class="CenterBar ClearFix">
           
           <div onclick="<%=uicomponent.event("AddContact")%>" class="SelectButton">
             <a class="IconHolder AddContactIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.addContact")%>">
@@ -148,7 +148,6 @@
             <!--a href="#">
               <div class="IconHolder AddressOptionIcon">Address Book Options</div>
             </a-->
-            <div style="clear:left;"><span></span></div>
           </div>
         </div>
       </div>

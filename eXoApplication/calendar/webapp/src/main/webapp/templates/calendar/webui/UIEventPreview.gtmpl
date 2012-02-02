@@ -18,12 +18,11 @@ color = uicomponent.getColors().get(event.getCalType() + CalendarUtils.COLON + e
 uiform.begin() %>
 <div class="UIPreview">
   <%if(!uicomponent.isShowPopup()){%>
-    <div class="ViewBar">
+    <div class="ViewBar ClearFix">
       <div class="Label">
        <%=uiform.getLabel('eventDetail')%>
       </div> 
       <div class="MaximizeButton" title="<%=uiform.getLabel('fullSize')%>" onclick = "eXo.cs.Utils.showHidePane(this,document.getElementById('UIListUsers').parentNode,'<%=uicomponent.getId()%>')"><span></span></div>
-      <div style="clear: both"><span></span></div>
     </div>
   <%}%>
   <div class="ViewContainer">
@@ -62,13 +61,11 @@ uiform.begin() %>
                </a> 
              <%}%>
              </div> 
-             <div style="clear:left;"><span></span></div>
            <%}%>
           </td>
               <td >
                <div class="EventDescription $color"><span></span></div>
                <div style="font-weight: bold;">$event.summary</div>
-               <div style="clear:left;"><span></span></div>
                
                <table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
                 <tr>
@@ -164,7 +161,6 @@ uiform.begin() %>
                     <%=uiform.getLabel('DeleteEvent')%>
                   </div>
                 </a>
-                <div style="clear:left;"><span></span></div>
                </div>
                <%}%>
           </td>

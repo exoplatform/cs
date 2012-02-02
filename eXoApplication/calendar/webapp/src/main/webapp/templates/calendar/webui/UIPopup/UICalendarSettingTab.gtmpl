@@ -96,7 +96,6 @@
             <%=uiForm.getLabel(uicomponent.WORKINGTIME_END)%>
             <%uiForm.renderField(uicomponent.WORKINGTIME_END)%>
           </div>
-          <div style="clear:left;"><span></span></div>
         </td>
       </tr>
       <tr>

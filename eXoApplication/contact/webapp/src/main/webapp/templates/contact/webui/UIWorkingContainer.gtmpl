@@ -4,7 +4,7 @@
 %>
 
 
-<div class="UIWorkingContainer" id="<%=uicomponent.getId()%>">
+<div class="UIWorkingContainer ClearFix" id="<%=uicomponent.getId()%>">
 <!-- Start UINavigationContainer -->
   <% uicomponent.renderChild(UINavigationContainer.class) ;%>    
 <!-- End UINavigationContainer -->
@@ -13,5 +13,4 @@
   <% uicomponent.renderChild(UIContactContainer.class) ;%>    
 <!-- End UIContactContainer -->
 
-    <div class="ClearContact"><span></span></div>
   </div>

@@ -17,7 +17,7 @@
 <div class="UIContactPreview" id="<%=uicomponent.getId()%>">
 <% if(contact != null) { %>  
   <% if (!uicomponent.isPopup()) { uiContacts = uicomponent.uiContacts(); %>
-  <div class="ContactPreviewBar" >
+  <div class="ContactPreviewBar ClearFix">
     <div class="Subject"><%=_ctx.appRes("UIContactPreview.label.contactDetails")%></div>
     <div class="MaximizeButton" title="<%=_ctx.appRes("UIContactPreview.label.viewFull")%>" onclick = "eXo.cs.Utils.showHidePane(this,document.getElementById('UIListUsers').parentNode,'<%=uicomponent.getId()%>')"><span></span></div>
     <%
@@ -28,7 +28,6 @@
           <%=_ctx.appRes("UIContactPreview.label.lastUpdated")%> : <%=lastUpdated%>
       </span>
     <% } %>    
-    <div style="clear:both;"><span></span></div>
   </div>
   <div class="ContactPreviewDetails SpliterResizableListArea" id="<%=contact.getId()%>" type="<%=contact.getContactType()%>" havePermission="<%=uiContacts.havePermission(contact)%>" havePermissionAdd="<%=uiContacts.havePermissionAdd(contact)%>" isSharedAddress = "<%=uiContacts.isSharedAddress(contact)%>" isOwner="<%=contact.isOwner()%>">
   <% } else { %>
@@ -46,7 +45,7 @@
           <div class="MiddleRightViewBoxStyle">
             <div class="MiddleCenterViewBoxStyle">
             
-              <div class="ContactPreviewContainer"  >    
+              <div class="ContactPreviewContainer ClearFix"  >    
                 <% 
                 stylePrint = "display:none;";
                 if (uicomponent.isPopup()) stylePrint = "";
@@ -61,7 +60,7 @@
                 %>
                 
                 <div class="InfoContainer"  style="padding:0px;">
-                  <div class="Content" style="padding:0px;">
+                  <div class="Content ClearFix" style="padding:0px;">
                     
                     <div class="LeftContentProfile" id="widthFirstProfileField" >
                       <table>
@@ -371,12 +370,9 @@
                       
                       <% } %>
                     </div>
-                    <div style="clear: left;"><span></span></div>
+                    
                   </div>
                 </div>
-
-                <div class="ClearContact"><span></span></div>
-                            
                 <div class="InfoContainer">
                   <div class="TitleInfo">
                     <table>
@@ -386,7 +382,7 @@
                       </tr>
                     </table>    
                   </div>                  
-                    <div class="Content">
+                    <div class="Content ClearFix">
                       <div class="LeftContent">
                         <table>
                           <% if (!ContactUtils.isEmpty(contact.getWorkAddress()) || !ContactUtils.isEmpty(contact.getWorkPostalCode()) || !ContactUtils.isEmpty(contact.getWorkCity())) { %>
@@ -602,8 +598,6 @@
                         </table>
                       </div>
                       
-                      
-                      <div style="clear: left;"><span></span></div>
                     </div>
                 </div>        
                 
@@ -626,7 +620,6 @@
                     </div>-->
                   </div>
                 </div>
-                <div style="clear: left;"><span></span></div>
                 
               </div>
               
@@ -685,10 +678,9 @@
           
             <div class="UIWelcomeContact" >
             
-              <div class="WelcomeContact">
+              <div class="WelcomeContact ClearFix">
                 <div class="LabelWelcomeContact"><%=_ctx.appRes("UIWelcomeContact.label.label0")%></div>
                 <div class="LabelComment"><%=_ctx.appRes("UIWelcomeContact.label.label1")%></div>
-                <div style="clear: both;"><span></span></div>
               </div>
               <div class="LogoContact">
                 <span></span>

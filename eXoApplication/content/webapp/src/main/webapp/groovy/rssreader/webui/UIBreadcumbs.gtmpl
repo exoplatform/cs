@@ -8,7 +8,7 @@
 <div class="UIBreadcumbs">
   <div class="LeftBreadcumbsBar">
     <div class="RightBreadcumbsBar">
-      <div class="BreadcumbsInfoBar">
+      <div class="BreadcumbsInfoBar ClearFix">
         <div class="HomeIcon LeftBlock BCHome16x16Icon"><span></span></div>
         <%if(list.size() > 0) {
             String note = "LeftBlock";
@@ -27,7 +27,6 @@
             }
           }
         %>
-        <div class="ClearLeft"><span></span></div>
       </div>
     </div>
   </div>

@@ -14,21 +14,18 @@
         <div class="NormalBarStyle">
           <div class="LeftBar">
             <div class="RightBar">
-              <div class="MiddleBar">
+              <div class="MiddleBar ClearFix">
                 <div class="UIAddressSearchForm">
-                  <div class="QuickSearch">
+                  <div class="QuickSearch ClearFix">
                     <div class="SearchTitle"><%=uiform.getLabel(uiform.FIELD_KEYWORD)%></div>
                     <%uiform.renderField(uiform.FIELD_KEYWORD)%>
                     <a class="SearchIcon" href="<%=uicomponent.event('Search')%>" title="<%=uiform.getLabel(uiform.FIELD_KEYWORD)%>"><span></span></a>
-                    <div style="clear:left;"><span></span></div>
                   </div>  
                 </div>
-                <div class="AddressesGroup">
+                <div class="AddressesGroup ClearFix">
                   <div class="AddressLabel"><%=uiform.getLabel(uiform.FIELD_GROUP)%></div>
                    <%uiform.renderField(uiform.FIELD_GROUP)%>
-                  <div style="clear: left;"><span></span></div>
                 </div>
-                <div style="clear: left;"><span></span></div>
               </div>
             </div>
           </div>

@@ -6,7 +6,7 @@
 %>
 
 <div class="UIAddressBooks" id="<%=uicomponent.getId()%>">
-  <div class="TitleBar">
+  <div class="TitleBar ClearFix">
     <div class="TitleIcon "><%=_ctx.appRes(uicomponent.getName() + ".label.addressBooks")%></div>
     <div class="ActionIcon" onclick="eXo.contact.UIContactPortlet.show(this, event);">
       <% /*Begin Popup Menu*/ %>
@@ -50,7 +50,6 @@
       <% /*End Popup Menu*/ %>
     </div>
   
-  <div style="clear: both"><span></span></div>
   </div>
   <div class="PersonalAddress">
     <div class="AddressTitle">

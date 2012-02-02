@@ -1,5 +1,5 @@
 <%uiform.begin()%>  
-  <div style="background: #ffe98f; padding: 2px 0px 5px 10px; height: 18px; display: none" id="checkMailInfobar">
+  <div style="background: #ffe98f; padding: 2px 0px 5px 10px; height: 18px; display: none;" id="checkMailInfobar" class="ClearFix">
     <div class="LoadingIcon"><span></span></div>
     <div style=" float: left; margin-top: 2px" class="StatusText"> 
       <%=_ctx.appRes(uicomponent.id+ ".label.starting") %> ...
@@ -14,7 +14,6 @@
     <%if (uicomponent.isUpdate()) {%>
       <div id="UpdateList" style="float: right; padding-right: 5px; margin-top: 2px;" class="UpdateList"><a style=" color: #00f;" href="<%=uicomponent.event("UpdateList", "msgId")%>"></a></div>
     <%}%>
-    <div style="clear: both;"><span></span></div>
     
     <div style=" float: left; margin: 2px 0px 0px 5px; color: #00f; cursor: pointer; display:none" class="StopingCheckMail" ><%=_ctx.appRes(uicomponent.id+ ".label.stoping") %>...</div>
     <div id="checkmail-notice" style="display:none;"><%= _ctx.appRes(uicomponent.id+ ".label.checkmail-notice") %></div>

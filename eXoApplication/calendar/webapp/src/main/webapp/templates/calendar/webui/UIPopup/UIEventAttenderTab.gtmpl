@@ -10,13 +10,13 @@
   def userSettingTimezoneOffset = uicomponent.getUserTimeZone();
   rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.UICalendarPortlet.initCheck("' + uicomponent.id + '",' + userSettingTimezoneOffset + ') ;') ;
 %>
-<div class="UIAddNewEvent $uicomponent.id" id="$uicomponent.id" >
+<div class="UIAddNewEvent $uicomponent.id" id="$uicomponent.id">
   <div class="NewEventAttendee">
     <div class="UIFormInputSet">
       <div class="UIFormInputSetWithAction">
         <div class="FormContainer">
-          <div class="DateTimeContainer">
-            <div class="ApplySelectedDate">
+          <div class="DateTimeContainer ClearFix">
+            <div class="ApplySelectedDate ClearFix">
               <div class="Field">
                 <%uiForm.renderField(uicomponent.FIELD_CHECK_TIME)%>
               </div>
@@ -24,11 +24,8 @@
                 <%=_ctx.appRes(uiForm.id + ".label." + uicomponent.FIELD_CHECK_TIME)%>
                 :
               </div>
-              <div style="clear: both;">
-                <span></span>
-              </div>
             </div>
-            <div>
+            <div class="ClearFix">
               <div class="Field">
                 <%uiForm.renderField(uicomponent.FIELD_DATEALL)%>
               </div>
@@ -52,12 +49,6 @@
                   :
                 </div>
               </div>
-              <div style="clear: right;">
-                <span></span>
-              </div>
-            </div>
-            <div style="clear: left;">
-              <span></span>
             </div>
           </div>
           <table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0" dateValue="<%=uicomponent.getDateValue()%>" exocallback="eXo.calendar.UICalendarPortlet.callbackSelectionX() ;">
@@ -103,8 +94,6 @@
                     <div class="Title">
                       <%=uiForm.getLabel('Participants')%>
                     </div>
-                    <div style="clear: both">
-                    </div>
                 </td>
                 <%
                   styleClassF = "ParticipantsFreeTime" ;
@@ -130,9 +119,6 @@
                       <%uiForm.renderField(p)%>
                     </div>
                     <div class="Title">$fullname</div>
-                    <div style="clear: left;">
-                      <span></span>
-                    </div>
                   </div>
                 </td>
                 <%
@@ -149,22 +135,19 @@
               <%}%>
             </tbody>
           </table>
-          <div class="ThiefBox">
-            <div class="Label">
-              <%=uiForm.getLabel('BusyTimes')%>
-            </div>
-            <div class="BusyTime">
-              <span></span>
-            </div>
-            <div class="Label">
-              <%=uiForm.getLabel('FreeTimes')%>
-            </div>
-            <div class="FreeTime">
-              <span></span>
-            </div>
-            <div style="clear: both;">
-              <span></span>
-            </div>
+          <div class="ThiefBox ClearFix">
+				<div class="Label">
+				  <%=uiForm.getLabel('BusyTimes')%>
+				</div>
+				<div class="BusyTime">
+				  <span></span>
+				</div>
+				<div class="Label">
+				  <%=uiForm.getLabel('FreeTimes')%>
+				</div>
+				<div class="FreeTime">
+				  <span></span>
+				</div>
           </div>
         </div>
       </div>
