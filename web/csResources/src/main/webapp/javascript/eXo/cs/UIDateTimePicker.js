@@ -35,7 +35,7 @@ UIDateTimePicker.prototype.init = function(field, isDisplayTime) {
 	}
 	this.dateField = field ;
 	if (!document.getElementById(this.calendarId)) this.create();
-  this.show() ;
+    this.show() ;
 
 	// fix bug for IE 6
   var cld = document.getElementById(this.calendarId);
@@ -232,5 +232,13 @@ UIDateTimePicker.prototype.renderCalendar = function() {
 	//table += 		'</div>' ;
 	return table ;
 } ;
+
+UIDateTimePicker.prototype.hide = function() {
+	if (this.dateField) {
+		document.getElementById(this.calendarId).firstChild.style.display = 'none';
+		this.dateField = null;
+	}
+	document.onclick = null;
+}
 
 eXo.cs.UIDateTimePicker = new UIDateTimePicker() ;

@@ -2901,48 +2901,54 @@ UICombobox.prototype.init = function() {
 //For validating
 
 UICombobox.prototype.correct = function() {	
-	 
 	var UICombobox = eXo.webui.UICombobox ; 
 	var value = this.value ;
 	this.value = UICombobox.setValue(value) ;
 	var hiddenField = eXo.core.DOMUtil.findPreviousElementByTagName(this,"input");
 	hiddenField.value = this.value;
+	UICombobox.hide();
 } ;
 
 UICombobox.prototype.setValue = function(value) {
-	var value = String(value).trim().toLowerCase() ;
-	var UICombobox = eXo.webui.UICombobox ;
-	var time = UICombobox.digitToTime(value) ;
-	var hour = Number(time.hour) ;
-	var min = Number(time.minutes) ;
-	if (min > 60) min = "00" ;
-	else min = time.minutes ;
-	var timeFormat = UICombobox.getTimeFormat() ;
+	var value = String(value).trim().toLowerCase();
+	var UICombobox = eXo.webui.UICombobox;
+	var time = UICombobox.digitToTime(value);
+	var hour = Number(time.hour);
+	var min = Number(time.minutes);
+	var timeFormat = UICombobox.getTimeFormat();
+	var formatTime = "";
 	if (timeFormat.am) {
-		var am = String(timeFormat.am).toLowerCase() ;	
-		var pm = String(timeFormat.pm).toLowerCase() ;
+		var am = String(timeFormat.am).toLowerCase();
+		var pm = String(timeFormat.pm).toLowerCase();
 		if (!time) {
-			return UICombobox.defaultValue ;
+			return UICombobox.defaultValue;
 		}
-		if (hour > 12) {			
-			hour = "12" ;
-		} else if(hour == 0) {			
-			hour = "12" ;
-		}	else {			
-			hour = time.hour ;
+		if (hour > 24) {
+			hour = "0";
+			formatTime = " AM";
+		} else if (hour == 12 || hour == 24) {
+			hour = "0"
+			formatTime = " PM";
+		} else if (hour > 12 && hour < 24) {
+			hour = hour - 12;
+			formatTime = " PM";
+		} else {
+			hour = time.hour;
+			formatTime = " AM";
 		}
-		if (value.indexOf(am) >= 0)	min += " " + timeFormat.am ;
-		else if(value.indexOf(pm) >= 0)	min += " " + timeFormat.pm ;
-		else 	min += " " + timeFormat.am ;
 	} else {
 		if (!time) {
-			return "12:00" ;
+			return "12:00";
 		}
-		if (hour > 23) hour = "23" ;
-		else hour = time.hour ;
+		if (hour > 23)
+			hour = "23";
+		else
+			hour = time.hour;
 	}
-	return hour + ":" + min ;
-} ;
+	var strHour = hour < 10 ? "0" + Number(hour) : "" + hour;
+	var strMinute = min < 10 ? "0" + Number(min) : "" + min;
+	return strHour + ":" + strMinute + formatTime;
+};
 
 UICombobox.prototype.getTimeFormat= function() {
 	var items = eXo.webui.UICombobox.items ;
@@ -2955,38 +2961,54 @@ UICombobox.prototype.getTimeFormat= function() {
 } ;
 
 UICombobox.prototype.digitToTime = function(stringNo) {
-	stringNo = new String(eXo.webui.UICombobox.getDigit(stringNo)) ;
-	var len = stringNo.length ;
-	if (len <= 0) return false ;
-	switch(len) {
-		case 1 : 
-			stringNo += "0" ;
-			return {"hour": stringNo,"minutes":"00" } ;
-			break ;
-		case 2 :			
-			return {"hour": stringNo,"minutes": "00" } ;
-			break ;
-		case 3 :
-			return {"hour": "0" + stringNo.charAt(0),"minutes": stringNo.charAt(1) + stringNo.charAt(2) } ;
-			break ;
-		case 4 :
-			return {"hour": stringNo.charAt(0) + stringNo.charAt(1),"minutes": stringNo.charAt(2) + stringNo.charAt(3) } ;
-			break ;
-		default: 
-			var newString = stringNo.substring(0,3) ;
-			return eXo.webui.UICombobox.digitToTime(newString) ;
+	stringNo = new String(eXo.webui.UICombobox.getDigit(stringNo));
+	var len = stringNo.length;
+	var hour = 0;
+	var minute = 0;
+	if (len <= 0) {
+		return false;
 	}
-} ;
+	hour = Number(stringNo.substring(0, 2));
+	minute = Number(stringNo.substring(2, 4));
+	if (minute == 60) {
+		hour = hour + 1;
+		minute = 0;
+		if (hour == 24) {
+			hour = 0;
+		}
+	} else if (minute > 60) {
+		minute = 0;
+	}
+	return { "hour" : hour, "minutes" : minute };
+};
 
 UICombobox.prototype.getDigit = function(stringNo) {
 	var parsedNo = "";
-	for(var n=0; n<stringNo.length; n++) {
-		var i = stringNo.substring(n,n+1);
-		if(i=="1"||i=="2"||i=="3"||i=="4"||i=="5"||i=="6"||i=="7"||i=="8"||i=="9"||i=="0")
+	var index = stringNo.indexOf(':');
+	for ( var n = 0; n < stringNo.length; n++) {
+		var i = stringNo.substring(n, n + 1);
+		if (i == "1" || i == "2" || i == "3" || i == "4" || i == "5" || i == "6" || i == "7" || i == "8" || i == "9" || i == "0")
 			parsedNo += i;
 	}
-	return parsedNo.toString() ;
-} ;
+	if (parsedNo.length == 1) {
+		parsedNo = "0" + parsedNo + "00"
+	} else if (parsedNo.length == 2) {
+		if (index == 1) {
+			parsedNo = "0" + parsedNo + "0";
+		} else {
+			parsedNo = parsedNo + 00;
+		}
+	} else if (parsedNo.length == 3) {
+		if (index == 1) {
+			parsedNo = "0" + parsedNo;
+		} else {
+			parsedNo = parsedNo + "0";
+		}
+	} else if (parsedNo.length >= 4) {
+		parsedNo = parsedNo.substring(0, 4);
+	}
+	return parsedNo;
+};
 
 UICalendarPortlet.prototype.useAuthenticationForRemoteCalendar = function(id) {
   var USE_AUTHENTICATION = "useAuthentication";
