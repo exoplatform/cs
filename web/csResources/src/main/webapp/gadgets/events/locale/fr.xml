@@ -21,27 +21,27 @@
 
 <messagebundle>
 	<msg name="title">
-  	Upcoming Events
+  	Evénements à venir
   </msg>
 	<msg name="baseurl">
   	Base url
   </msg>
 	<msg name="subscribeurl">
-  	Subscription url
+  	Lien d'abonnement
   </msg>
 	<msg name="limit">
-  	Number of items is displayed
+  	Nombre d'article affiché
   </msg>
 	<msg name="format">
-  	Date time format
+  	Format de la Date et de l'Heure
   </msg>
   <msg name="showall">
-  	Show all
+  	Montrer tout
   </msg>
 	<msg name="noevent">
-  	No event on today
+  	Aucun événement aujourd'hui
   </msg>
 	<msg name="back">
-  	Back
+  	Retour
   </msg>
 </messagebundle>
