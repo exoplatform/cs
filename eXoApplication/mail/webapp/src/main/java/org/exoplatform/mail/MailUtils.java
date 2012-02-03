@@ -17,7 +17,6 @@
 package org.exoplatform.mail;
 
 import java.io.ByteArrayInputStream;
-
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -67,8 +66,6 @@ public class MailUtils {
   final public static String BACKSLASH = "\\".intern() ;
   public static final String GREATER_THAN = ">".intern() ;
   public static final String SMALLER_THAN = "<".intern() ;
-  private static String PLUS_ENCODE = "PLUS_ENCODE_043";
-  private static String EQUAL_ENCODE = "EQUAL_ENCODE_061";
   final public static String SPECIALCHARACTER[] = {"?", "[", "(", "|", ")", "*", "\\", "+", "}", "{", "^", "$", "\""
     ,"!", "#", "%", "&", ":", ">", "<", "~", "`", "]", "'", "/", "-"} ; ;
     final public static String SUPPORTED_VIEW_TYPE_ATTACH[] = {"gif", "png", "jpg", "jpec", "bmp"} ;
@@ -143,16 +140,6 @@ public class MailUtils {
       
       sb.delete(sb.length() - 1, sb.length());
       return sb.toString();
-    }
-    
-    public static String encodeMailId(String id) {
-      if (id == null) return "";
-      return id.replaceAll("\\+", PLUS_ENCODE).replaceAll("=", EQUAL_ENCODE);
-    }
-
-    public static String decodeMailId(String id) {
-      if (id == null) return "";
-      return id.replaceAll(PLUS_ENCODE, "+").replaceAll(EQUAL_ENCODE, "=");
     }
     
     public static String convertSize(long size) throws Exception {

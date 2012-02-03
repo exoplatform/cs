@@ -281,6 +281,11 @@ public class Utils {
   
   public static final boolean SHOWCONVERSATION = true ;
   
+  private static String             PLUS_ENCODE                      = "PLUS_ENCODE_043";
+
+  private static String             EQUAL_ENCODE                     = "EQUAL_ENCODE_061";
+
+  private static String             AND_ENCODE                       = "AND_ENCODE_038";
   
   public static boolean isEmptyField(String value) {
     return value == null || value.trim().length() == 0 ;
@@ -626,6 +631,18 @@ public class Utils {
   public static SessionProvider createSystemProvider() {
     SessionProviderService sessionProviderService = (SessionProviderService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(SessionProviderService.class);
     return sessionProviderService.getSystemSessionProvider(null);
+  } 
+
+  public static String encodeMailId(String id) {
+    if (id == null)
+      return "";
+    return id.replaceAll("\\+", PLUS_ENCODE).replaceAll("=", EQUAL_ENCODE).replaceAll("&", AND_ENCODE);
   }
-  
+
+  public static String decodeMailId(String id) {
+    if (id == null)
+      return "";
+    return id.replaceAll(PLUS_ENCODE, "+").replaceAll(EQUAL_ENCODE, "=").replaceAll(AND_ENCODE, "&");
+  }
+
 }

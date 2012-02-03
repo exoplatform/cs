@@ -70,7 +70,7 @@
     int msgIndex = 0;
     boolean hasUnreadMsg = false, showDetail;
     if (msgRoot != null) { for(Message msg : uicomponent.getShowedMessages()) {  if (msg != null) {
-      newId = MailUtils.encodeMailId(msg.getId());
+      newId = Utils.encodeMailId(msg.getId());
       showDetail = false;
       if (uicomponent.getUnreadMessages().contains(msg.getId())) {
         showDetail = true;

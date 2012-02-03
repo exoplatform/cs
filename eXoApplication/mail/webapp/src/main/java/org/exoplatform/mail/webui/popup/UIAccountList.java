@@ -101,7 +101,6 @@ public class UIAccountList extends UIGrid  implements UIPopupComponent{
 
   static  public class DeleteActionListener extends EventListener<UIAccountList> {
     public void execute(Event<UIAccountList> event) throws Exception {
-      System.out.println("=====>>> DeleteActionListener");
       UIAccountList uiAccountList = event.getSource() ;
       UIMailPortlet uiPortlet = uiAccountList.getAncestorOfType(UIMailPortlet.class) ;
       UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;

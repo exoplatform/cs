@@ -1273,7 +1273,7 @@ public class JCRDataStorage implements DataStorage {
       
         if (infoObj != null && continuation != null) {
           infoObj.setFrom(from);
-          infoObj.setMsgId(msgId);
+          infoObj.setMsgId(Utils.encodeMailId(msgId));
           infoObj.setIsRead(isReadMessage);
           infoObj.setSubject(subject);
           infoObj.setSize(Utils.convertSize(msgSize));

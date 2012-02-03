@@ -1,0 +1,713 @@
+Index: eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/Utils.java
+===================================================================
+--- eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/Utils.java	(revision 79171)
++++ eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/Utils.java	(working copy)
+@@ -281,6 +281,11 @@
+   
+   public static final boolean SHOWCONVERSATION = true ;
+   
++  private static String             PLUS_ENCODE                      = "PLUS_ENCODE_043";
++
++  private static String             EQUAL_ENCODE                     = "EQUAL_ENCODE_061";
++
++  private static String             AND_ENCODE                       = "AND_ENCODE_038";
+   
+   public static boolean isEmptyField(String value) {
+     return value == null || value.trim().length() == 0 ;
+@@ -626,6 +631,18 @@
+   public static SessionProvider createSystemProvider() {
+     SessionProviderService sessionProviderService = (SessionProviderService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(SessionProviderService.class);
+     return sessionProviderService.getSystemSessionProvider(null);
++  } 
++
++  public static String encodeMailId(String id) {
++    if (id == null)
++      return "";
++    return id.replaceAll("\\+", PLUS_ENCODE).replaceAll("=", EQUAL_ENCODE).replaceAll("&", AND_ENCODE);
+   }
+-  
++
++  public static String decodeMailId(String id) {
++    if (id == null)
++      return "";
++    return id.replaceAll(PLUS_ENCODE, "+").replaceAll(EQUAL_ENCODE, "=").replaceAll(AND_ENCODE, "&");
++  }
++
+ }
+Index: eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/impl/JCRDataStorage.java
+===================================================================
+--- eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/impl/JCRDataStorage.java	(revision 79171)
++++ eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/impl/JCRDataStorage.java	(working copy)
+@@ -1273,7 +1273,7 @@
+       
+         if (infoObj != null && continuation != null) {
+           infoObj.setFrom(from);
+-          infoObj.setMsgId(msgId);
++          infoObj.setMsgId(Utils.encodeMailId(msgId));
+           infoObj.setIsRead(isReadMessage);
+           infoObj.setSubject(subject);
+           infoObj.setSize(Utils.convertSize(msgSize));
+Index: eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/MailUtils.java
+===================================================================
+--- eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/MailUtils.java	(revision 79171)
++++ eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/MailUtils.java	(working copy)
+@@ -17,7 +17,6 @@
+ package org.exoplatform.mail;
+ 
+ import java.io.ByteArrayInputStream;
+-
+ import java.io.InputStream;
+ import java.io.UnsupportedEncodingException;
+ import java.net.URLDecoder;
+@@ -67,8 +66,6 @@
+   final public static String BACKSLASH = "\\".intern() ;
+   public static final String GREATER_THAN = ">".intern() ;
+   public static final String SMALLER_THAN = "<".intern() ;
+-  private static String PLUS_ENCODE = "PLUS_ENCODE_043";
+-  private static String EQUAL_ENCODE = "EQUAL_ENCODE_061";
+   final public static String SPECIALCHARACTER[] = {"?", "[", "(", "|", ")", "*", "\\", "+", "}", "{", "^", "$", "\""
+     ,"!", "#", "%", "&", ":", ">", "<", "~", "`", "]", "'", "/", "-"} ; ;
+     final public static String SUPPORTED_VIEW_TYPE_ATTACH[] = {"gif", "png", "jpg", "jpec", "bmp"} ;
+@@ -145,16 +142,6 @@
+       return sb.toString();
+     }
+     
+-    public static String encodeMailId(String id) {
+-      if (id == null) return "";
+-      return id.replaceAll("\\+", PLUS_ENCODE).replaceAll("=", EQUAL_ENCODE);
+-    }
+-
+-    public static String decodeMailId(String id) {
+-      if (id == null) return "";
+-      return id.replaceAll(PLUS_ENCODE, "+").replaceAll(EQUAL_ENCODE, "=");
+-    }
+-    
+     public static String convertSize(long size) throws Exception {
+       return Utils.convertSize(size);
+     }
+Index: eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIMessageList.java
+===================================================================
+--- eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIMessageList.java	(revision 79171)
++++ eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIMessageList.java	(working copy)
+@@ -59,7 +59,6 @@
+ import org.exoplatform.webui.config.annotation.ComponentConfig;
+ import org.exoplatform.webui.config.annotation.EventConfig;
+ import org.exoplatform.webui.core.UIApplication;
+-import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+ import org.exoplatform.webui.event.Event;
+ import org.exoplatform.webui.event.EventListener;
+ import org.exoplatform.webui.form.UIForm;
+@@ -75,7 +74,7 @@
+  */
+ 
+ @ComponentConfig(
+-    lifecycle = UIFormLifecycle.class,
++    lifecycle = UIMessageListLifecycle.class,
+     template =  "app:/templates/mail/webui/UIMessageList.gtmpl",
+     events = {
+       @EventConfig(listeners = UIMessageList.SelectMessageActionListener.class),
+@@ -314,7 +313,7 @@
+         return ;
+       }
+       for (Message message : msgList) {
+-        String encodeId = MailUtils.encodeMailId(message.getId());
++        String encodeId = Utils.encodeMailId(message.getId());
+         UIFormCheckBoxInput<Boolean> uiCheckBox = new UIFormCheckBoxInput<Boolean>(encodeId, encodeId, false);
+         addUIFormInput(uiCheckBox);
+         messageList_.put(message.getId(), message);
+@@ -331,7 +330,7 @@
+     List<Message> checkedList = new ArrayList<Message>();
+     UIFormCheckBoxInput uiCheckbox;
+     for (Message msg : getMessageList()) {
+-      uiCheckbox = getUIFormCheckBoxInput(MailUtils.encodeMailId(msg.getId()));
++      uiCheckbox = getUIFormCheckBoxInput(Utils.encodeMailId(msg.getId()));
+       if (uiCheckbox != null && uiCheckbox.isChecked()) {
+         checkedList.add(msg);
+         if (viewMode == MODE_CONVERSATION && includeGroupedMsgs) {
+@@ -384,7 +383,7 @@
+   static public class SelectMessageActionListener extends EventListener<UIMessageList> {
+     public void execute(Event<UIMessageList> event) throws Exception {
+       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+-      msgId = MailUtils.decodeMailId(msgId);
++      msgId = Utils.decodeMailId(msgId);
+       UIMessageList uiMessageList = event.getSource();
+       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+       UIMessagePreview uiMessagePreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class);
+@@ -404,7 +403,7 @@
+         currentFolder = mailSrv.getFolder(username, accountId, folderId);              
+         uiMessageList.setSelectedMessageId(msgId);
+         for (Message uncheckedMsg : uiMessageList.messageList_.values()) {
+-          UIFormCheckBoxInput<Boolean> uiCheckbox = uiMessageList.getChildById(MailUtils.encodeMailId(uncheckedMsg.getId()));
++          UIFormCheckBoxInput<Boolean> uiCheckbox = uiMessageList.getChildById(Utils.encodeMailId(uncheckedMsg.getId()));
+           if (uiCheckbox != null ) {
+             if (uncheckedMsg.getId().equals(msg.getId())) uiCheckbox.setChecked(true);
+             else uiCheckbox.setChecked(false); 
+@@ -538,7 +537,7 @@
+   static public class EditDraftActionListener extends EventListener<UIMessageList> {
+     public void execute(Event<UIMessageList> event) throws Exception {
+       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+-      msgId = MailUtils.decodeMailId(msgId);
++      msgId = Utils.decodeMailId(msgId);
+       UIMessageList uiMessageList = event.getSource();
+       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+@@ -569,7 +568,7 @@
+   static public class AddStarActionListener extends EventListener<UIMessageList> {
+     public void execute(Event<UIMessageList> event) throws Exception {
+       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+-      msgId = MailUtils.decodeMailId(msgId);
++      msgId = Utils.decodeMailId(msgId);
+       UIMessageList uiMessageList = event.getSource();
+       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+       String username = uiPortlet.getCurrentUser();
+@@ -975,7 +974,7 @@
+       UIMessageList uiMessageList = event.getSource() ; 
+       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
+       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+-      msgId = MailUtils.decodeMailId(msgId);
++      msgId = Utils.decodeMailId(msgId);
+       String accId = uiPortlet.getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue() ;
+ 
+       // Verify
+@@ -1003,8 +1002,10 @@
+       UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
+ 
+       Message message = null;
+-      if (!Utils.isEmptyField(msgId)) message = uiMessageList.messageList_.get(msgId) ; 
+-      else  message = checkedMsgs.get(0);
++      if (!Utils.isEmptyField(msgId) && !"null".equals(msgId))
++        message = uiMessageList.messageList_.get(msgId);
++      else
++        message = checkedMsgs.get(0);
+       try {
+         if (message != null) message = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(uiPortlet.getCurrentUser(), accId, message);
+         uiComposeForm.init(accId, message, uiComposeForm.MESSAGE_REPLY);
+@@ -1018,8 +1019,7 @@
+       }
+       uiPopupContainer.addChild(uiComposeForm) ;
+ 
+-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class));
++      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;      
+     }
+   }
+ 
+@@ -1028,7 +1028,7 @@
+       UIMessageList uiMessageList = event.getSource() ; 
+       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
+       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+-      msgId = MailUtils.decodeMailId(msgId);
++      msgId = Utils.decodeMailId(msgId);
+       String accId = uiPortlet.getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue() ;
+ 
+       // Verify
+@@ -1056,8 +1056,10 @@
+       UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
+ 
+       Message message = null;
+-      if (!Utils.isEmptyField(msgId)) message = uiMessageList.messageList_.get(msgId) ;
+-      else  message = checkedMsgs.get(0);
++      if (!Utils.isEmptyField(msgId) && !"null".equals(msgId))
++        message = uiMessageList.messageList_.get(msgId);
++      else
++        message = checkedMsgs.get(0);
+       try {
+         if (message != null) message = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(uiPortlet.getCurrentUser(), accId, message);
+         uiComposeForm.init(accId, message, uiComposeForm.MESSAGE_REPLY_ALL);
+@@ -1072,8 +1074,7 @@
+       }
+       uiPopupContainer.addChild(uiComposeForm) ;
+ 
+-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class));
++      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;      
+     }
+   }
+ 
+@@ -1082,7 +1083,7 @@
+       UIMessageList uiMessageList = event.getSource() ; 
+       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
+       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+-      msgId = MailUtils.decodeMailId(msgId);
++      msgId = Utils.decodeMailId(msgId);
+       String accId = uiPortlet.getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue() ;
+ 
+       // Verify
+@@ -1108,8 +1109,10 @@
+       UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
+ 
+       Message message = null;
+-      if (!Utils.isEmptyField(msgId)) message = uiMessageList.messageList_.get(msgId) ;
+-      else  message = checkedMsgs.get(0);
++      if (!Utils.isEmptyField(msgId) && !"null".equals(msgId))
++        message = uiMessageList.messageList_.get(msgId);
++      else
++        message = checkedMsgs.get(0);
+       try {
+         if (message != null) message = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(uiPortlet.getCurrentUser(), accId, message);
+         uiComposeForm.init(accId, message, uiComposeForm.MESSAGE_FOWARD);
+@@ -1123,8 +1126,7 @@
+       }
+       uiPopupContainer.addChild(uiComposeForm) ;
+ 
+-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class));
++      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;      
+     }
+   }  
+ 
+@@ -1134,7 +1136,7 @@
+       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+-      msgId = MailUtils.decodeMailId(msgId);
++      msgId = Utils.decodeMailId(msgId);
+       // Verify
+       UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+       List<Message> checkedMsgs = uiMessageList.getCheckedMessage(false) ;
+@@ -1149,8 +1151,10 @@
+       }
+       
+       Message message = null;
+-      if (!Utils.isEmptyField(msgId)) message = uiMessageList.messageList_.get(msgId) ;
+-      else  message = uiMessageList.getCheckedMessage().get(0);
++      if (!Utils.isEmptyField(msgId) && !"null".equals(msgId))
++        message = uiMessageList.messageList_.get(msgId);
++      else
++        message = checkedMsgs.get(0);
+       
+       String from = Utils.getAddresses(message.getFrom())[0];
+       MessageFilter filter = new MessageFilter(from);
+@@ -1243,7 +1247,7 @@
+     public void execute(Event<UIMessageList> event) throws Exception {
+       UIMessageList uiMessageList = event.getSource();
+       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+-      msgId = MailUtils.decodeMailId(msgId);
++      msgId = Utils.decodeMailId(msgId);
+       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
+       String username = MailUtils.getCurrentUser();
+       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+@@ -1300,7 +1304,7 @@
+     public void execute(Event<UIMessageList> event) throws Exception {
+       UIMessageList uiMessageList = event.getSource();
+       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+-      msgId = MailUtils.decodeMailId(msgId);
++      msgId = Utils.decodeMailId(msgId);
+       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
+       String username = MailUtils.getCurrentUser();
+       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+@@ -1358,7 +1362,7 @@
+     public void execute(Event<UIMessageList> event) throws Exception {
+       UIMessageList uiMessageList = event.getSource();
+       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+-      msgId = MailUtils.decodeMailId(msgId);
++      msgId = Utils.decodeMailId(msgId);
+       UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+       List<Message> checkedMsgs = uiMessageList.getCheckedMessage(false);
+@@ -1631,7 +1635,7 @@
+     public void execute(Event<UIMessageList> event) throws Exception {
+       UIMessageList uiMessageList = event.getSource() ;   
+       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+-      msgId = MailUtils.decodeMailId(msgId);
++      msgId = Utils.decodeMailId(msgId);
+       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+       Message msg = uiMessageList.messageList_.get(msgId);
+       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
+@@ -1821,14 +1825,14 @@
+     public void execute(Event<UIMessageList> event) throws Exception {
+       UIMessageList uiMsgList = event.getSource() ;  
+       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+-      msgId = MailUtils.decodeMailId(msgId);
++      msgId = Utils.decodeMailId(msgId);
+       UIMailPortlet uiPortlet = uiMsgList.getAncestorOfType(UIMailPortlet.class);
+       MailService mailSrv = uiMsgList.getApplicationComponent(MailService.class);
+       String username = uiPortlet.getCurrentUser();
+       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+       try {
+         Message msg = mailSrv.getMessageById(username, accountId, msgId);        
+-        String newId = MailUtils.encodeMailId(msg.getId());
++        String newId = Utils.encodeMailId(msg.getId());
+         UIFormCheckBoxInput<Boolean> uiCheckBox = new UIFormCheckBoxInput<Boolean>(newId, newId, false);
+         uiMsgList.addUIFormInput(uiCheckBox);
+         uiMsgList.messageList_.put(msg.getId(), msg);
+Index: eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/popup/UIAccountList.java
+===================================================================
+--- eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/popup/UIAccountList.java	(revision 79171)
++++ eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/popup/UIAccountList.java	(working copy)
+@@ -101,7 +101,6 @@
+ 
+   static  public class DeleteActionListener extends EventListener<UIAccountList> {
+     public void execute(Event<UIAccountList> event) throws Exception {
+-      System.out.println("=====>>> DeleteActionListener");
+       UIAccountList uiAccountList = event.getSource() ;
+       UIMailPortlet uiPortlet = uiAccountList.getAncestorOfType(UIMailPortlet.class) ;
+       UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
+Index: eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/popup/UIComposeForm.java
+===================================================================
+--- eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/popup/UIComposeForm.java	(revision 79171)
++++ eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/popup/UIComposeForm.java	(working copy)
+@@ -333,7 +333,7 @@
+       if (!attachdata.isShownInBody()) {
+         ActionData fileUpload = new ActionData();
+         fileUpload.setActionListener("Download");
+-        fileUpload.setActionParameter(MailUtils.encodeMailId(attachdata.getId()));
++        fileUpload.setActionParameter(Utils.encodeMailId(attachdata.getId()));
+         fileUpload.setActionType(ActionData.TYPE_ICON);
+         fileUpload.setCssIconClass("AttachmentIcon");
+         fileUpload.setActionName(attachdata.getName() + " ("
+@@ -343,7 +343,7 @@
+         ActionData removeAction = new ActionData();
+         removeAction.setActionListener("RemoveAttachment");
+         removeAction.setActionName(ACT_REMOVE);
+-        removeAction.setActionParameter(MailUtils.encodeMailId(attachdata.getId()));
++        removeAction.setActionParameter(Utils.encodeMailId(attachdata.getId()));
+         removeAction.setCssIconClass("LabelLink");
+         removeAction.setActionType(ActionData.TYPE_LINK);
+         removeAction.setBreakLine(true);
+@@ -1253,7 +1253,7 @@
+     public void execute(Event<UIComposeForm> event) throws Exception {
+       UIComposeForm uiComposeForm = event.getSource();
+       String attId = event.getRequestContext().getRequestParameter(OBJECTID);
+-      attId = MailUtils.decodeMailId(attId);
++      attId = Utils.decodeMailId(attId);
+       for (Attachment attach : uiComposeForm.getAttachFileList()) {
+         if (attach.getId().equals(attId)) {
+           DownloadResource dresource = new InputStreamDownloadResource(attach.getInputStream(),
+@@ -1276,7 +1276,7 @@
+     public void execute(Event<UIComposeForm> event) throws Exception {
+       UIComposeForm uiComposeForm = event.getSource();
+       String attFileId = event.getRequestContext().getRequestParameter(OBJECTID);
+-      attFileId = MailUtils.decodeMailId(attFileId);
++      attFileId = Utils.decodeMailId(attFileId);
+       Iterator<Attachment> iter = uiComposeForm.attachments_.iterator();
+       Attachment att;
+       while (iter.hasNext()) {
+Index: eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIMessagePreview.java
+===================================================================
+--- eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIMessagePreview.java	(revision 79171)
++++ eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIMessagePreview.java	(working copy)
+@@ -281,7 +281,7 @@
+     public void execute(Event<UIMessagePreview> event) throws Exception {
+       UIMessagePreview uiMsgPreview = event.getSource();
+       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
+-      msgId = MailUtils.decodeMailId(msgId);
++      msgId = Utils.decodeMailId(msgId);
+       String attId = event.getRequestContext().getRequestParameter("attachId");
+       UIMailPortlet portlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
+       
+@@ -331,7 +331,7 @@
+     public void execute(Event<UIMessagePreview> event) throws Exception {
+       UIMessagePreview uiMsgPreview = event.getSource();
+       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
+-      msgId = MailUtils.decodeMailId(msgId);
++      msgId = Utils.decodeMailId(msgId);
+       String attId = event.getRequestContext().getRequestParameter("attachId");
+       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
+       Message msg = uiMsgPreview.getShowedMessageById(msgId);
+@@ -360,7 +360,7 @@
+     public void execute(Event<UIMessagePreview> event) throws Exception {
+       UIMessagePreview uiMsgPreview = event.getSource();
+       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
+-      msgId = MailUtils.decodeMailId(msgId);
++      msgId = Utils.decodeMailId(msgId);
+       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
+       UIMessageArea uiMsgArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
+       UIMessageList uiMessageList = uiMsgArea.getChild(UIMessageList.class);
+@@ -390,7 +390,7 @@
+     public void execute(Event<UIMessagePreview> event) throws Exception {
+       UIMessagePreview uiMsgPreview = event.getSource();
+       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
+-      msgId = MailUtils.decodeMailId(msgId);
++      msgId = Utils.decodeMailId(msgId);
+       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
+       String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
+@@ -416,7 +416,7 @@
+     public void execute(Event<UIMessagePreview> event) throws Exception {
+       UIMessagePreview uiMsgPreview = event.getSource();
+       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
+-      msgId = MailUtils.decodeMailId(msgId);
++      msgId = Utils.decodeMailId(msgId);
+       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
+       String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+ 
+@@ -443,7 +443,7 @@
+     public void execute(Event<UIMessagePreview> event) throws Exception {
+       UIMessagePreview uiMsgPreview = event.getSource();
+       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
+-      msgId = MailUtils.decodeMailId(msgId);
++      msgId = Utils.decodeMailId(msgId);
+       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
+       String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+ 
+@@ -470,7 +470,7 @@
+     public void execute(Event<UIMessagePreview> event) throws Exception {
+       UIMessagePreview uiMsgPreview = event.getSource();
+       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
+-      msgId = MailUtils.decodeMailId(msgId);
++      msgId = Utils.decodeMailId(msgId);
+       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
+       String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
+@@ -509,7 +509,7 @@
+     public void execute(Event<UIMessagePreview> event) throws Exception {
+       UIMessagePreview uiMsgPreview = event.getSource();
+       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
+-      msgId = MailUtils.decodeMailId(msgId);
++      msgId = Utils.decodeMailId(msgId);
+       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
+       UIMessageArea uiMsgArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
+       UIMessageList uiMsgList = uiMsgArea.getChild(UIMessageList.class);
+@@ -555,7 +555,7 @@
+     public void execute(Event<UIMessagePreview> event) throws Exception {
+       UIMessagePreview uiMsgPreview = event.getSource();
+       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
+-      msgId = MailUtils.decodeMailId(msgId);
++      msgId = Utils.decodeMailId(msgId);
+       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
+       Message msg = uiMsgPreview.getShowedMessageById(msgId);
+       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
+@@ -577,7 +577,7 @@
+     public void execute(Event<UIMessagePreview> event) throws Exception {
+       UIMessagePreview uiMsgPreview = event.getSource();
+       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
+-      msgId = MailUtils.decodeMailId(msgId);
++      msgId = Utils.decodeMailId(msgId);
+       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
+ 
+       Message msg = uiMsgPreview.getShowedMessageById(msgId);
+@@ -614,7 +614,7 @@
+     public void execute(Event<UIMessagePreview> event) throws Exception {
+       UIMessagePreview uiMsgPreview = event.getSource();
+       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
+-      msgId = MailUtils.decodeMailId(msgId);
++      msgId = Utils.decodeMailId(msgId);
+       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
+       try {
+         Message msg = uiMsgPreview.getShowedMessageById(msgId);
+@@ -634,7 +634,7 @@
+     public void execute(Event<UIMessagePreview> event) throws Exception {
+       UIMessagePreview uiMsgPreview = event.getSource();
+       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
+-      msgId = MailUtils.decodeMailId(msgId);
++      msgId = Utils.decodeMailId(msgId);
+       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
+       Message msg = uiMsgPreview.getShowedMessageById(msgId);
+       if (msg != null) {
+@@ -659,7 +659,7 @@
+     public void execute(Event<UIMessagePreview> event) throws Exception {
+       UIMessagePreview uiMsgPreview = event.getSource();
+       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
+-      msgId = MailUtils.decodeMailId(msgId);
++      msgId = Utils.decodeMailId(msgId);
+       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
+       Message msg = uiMsgPreview.getShowedMessageById(msgId);
+       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
+@@ -685,7 +685,7 @@
+       UIMessagePreview uiMsgPreview = event.getSource();
+       String answer = event.getRequestContext().getRequestParameter(OBJECTID);
+       String msgId = event.getRequestContext().getRequestParameter("messageId");
+-      msgId = MailUtils.decodeMailId(msgId);
++      msgId = Utils.decodeMailId(msgId);
+       CalendarService calService = uiMsgPreview.getApplicationComponent(CalendarService.class);
+       Message msg = uiMsgPreview.getShowedMessageById(msgId);
+       String fromUserId = MailUtils.getEventFrom(msg);
+@@ -778,7 +778,7 @@
+     public void execute(Event<UIMessagePreview> event) throws Exception {
+       UIMessagePreview uiMsgPreview = event.getSource();
+       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
+-      msgId = MailUtils.decodeMailId(msgId);
++      msgId = Utils.decodeMailId(msgId);
+       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
+       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
+       Message msg = uiMsgPreview.getShowedMessageById(msgId);
+Index: eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIMessageListLifecycle.java
+===================================================================
+--- eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIMessageListLifecycle.java	(revision 0)
++++ eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIMessageListLifecycle.java	(revision 0)
+@@ -0,0 +1,116 @@
++package org.exoplatform.mail.webui;
++import java.util.ArrayList;
++import java.util.Iterator;
++import java.util.List;
++import java.util.Map.Entry;
++
++import javax.portlet.PortletRequest;
++
++import org.exoplatform.mail.MailUtils;
++import org.exoplatform.mail.service.MailService;
++import org.exoplatform.mail.service.Utils;
++import org.exoplatform.webui.application.WebuiRequestContext;
++import org.exoplatform.webui.core.UIComponent;
++import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
++import org.exoplatform.webui.event.Event;
++import org.exoplatform.webui.form.UIForm;
++import org.exoplatform.webui.form.UIFormCheckBoxInput;
++import org.exoplatform.webui.form.UIFormInputBase;
++
++/*
++ * Copyright (C) 2003-2011 eXo Platform SAS.
++ *
++ * This program is free software: you can redistribute it and/or modify
++ * it under the terms of the GNU Affero General Public License as published by
++ * the Free Software Foundation, either version 3 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU Affero General Public License for more details.
++ *
++ * You should have received a copy of the GNU Affero General Public License
++ * along with this program. If not, see <http://www.gnu.org/licenses/>.
++ */
++
++/**
++ * Created by The eXo Platform SAS
++ * Author : Lai Trung Hieu
++ *          hieult@exoplatform.com
++ * Jul 22, 2011  
++ */
++public class UIMessageListLifecycle extends UIFormLifecycle {
++  
++    @Override
++    public void processDecode(UIForm uicomponent, WebuiRequestContext context) throws Exception {
++  
++      uicomponent.setSubmitAction(null);
++  
++      processNormalRequest(uicomponent, context);
++  
++      List<UIComponent> children = uicomponent.getChildren();
++      for (UIComponent uiChild : children) {
++        uiChild.processDecode(context);
++      }
++      String action = uicomponent.getSubmitAction();
++      String subComponentId = context.getRequestParameter(UIForm.SUBCOMPONENT_ID);
++      if (subComponentId == null || subComponentId.trim().length() < 1) {
++        Event<UIComponent> event = uicomponent.createEvent(action, Event.Phase.DECODE, context);
++        if (event != null) {
++          event.broadcast();
++        }
++        return;
++      }
++      UIComponent uiSubComponent = uicomponent.findComponentById(subComponentId);
++      Event<UIComponent> event = uiSubComponent.createEvent(action, Event.Phase.DECODE, context);
++      if (event == null) {
++        event = uicomponent.createEvent(action, Event.Phase.DECODE, context);
++      }
++      if (event != null) {
++        event.broadcast();
++      }
++    }
++  
++    private void processNormalRequest(UIForm uiForm, WebuiRequestContext context) throws Exception {
++  
++      uiForm.setSubmitAction(context.getRequestParameter(UIForm.ACTION));
++      PortletRequest request = context.getRequest();
++      Iterator<Entry<String, String[]>> paramsIter = request.getParameterMap().entrySet().iterator();
++      while (paramsIter.hasNext()) {
++        Entry<String, String[]> entry = paramsIter.next();
++        String paramName = entry.getKey();
++        String[] paramValue = entry.getValue();
++        if (paramName.contains("@")) {
++          String msgId = Utils.decodeMailId(paramName);
++          UIFormCheckBoxInput<Boolean> uiCheckBox = uiForm.getChildById(paramName);
++          if (uiCheckBox == null) {
++            MailService mailSrv = MailUtils.getMailService();
++            String username = MailUtils.getCurrentUser();
++            UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class);
++            String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
++            org.exoplatform.mail.service.Message message = mailSrv.getMessageById(username, accountId, msgId);
++            if (message != null) {
++              UIMessageList uiMsgList = UIMessageList.class.cast(uiForm);
++              boolean value = Boolean.valueOf(paramValue[0]);
++              uiForm.addUIFormInput(new UIFormCheckBoxInput<Boolean>(paramName, paramName, false).setChecked(value));
++              uiMsgList.messageList_.put(msgId, message);
++            }
++          }
++        }
++      }
++      List<UIFormInputBase> inputs = new ArrayList<UIFormInputBase>();
++      uiForm.findComponentOfType(inputs, UIFormInputBase.class);
++      for (UIFormInputBase input : inputs) {
++        if (!input.isValid()) {
++          continue;
++        }
++        String inputValue = context.getRequestParameter(input.getId());
++        if (inputValue == null || inputValue.trim().length() == 0) {
++          inputValue = context.getRequestParameter(input.getName());
++        }
++        input.decode(inputValue, context);
++      }
++    }
++  
++}
+Index: eXoApplication/mail/webapp/src/main/webapp/javascript/eXo/mail/UpdateList.js
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/javascript/eXo/mail/UpdateList.js	(revision 79171)
++++ eXoApplication/mail/webapp/src/main/webapp/javascript/eXo/mail/UpdateList.js	(working copy)
+@@ -139,24 +139,8 @@
+ 		  		tr.className = "OddItem";
+ 		  	}
+ 		  }
+-		  var form = eXo.core.DOMUtil.findAncestorByTagName(tbodyMsgList, "form");
+-		  if (this.msgCount < 10) {
+-			  this.msgCount++;
+-		  } else {
+-			  this.msgCount = 0;
+-			  eXo.mail.UpdateList.sendRequest(form.action,data.msgId, form);
+-		  }
+ 		}
+   }
+ } ;
+ 
+-UpdateList.prototype.sendRequest = function(url, msgId, form){
+-//	url += "&formOp=UpdateList&objectId=" + msgId + "&ajaxRequest=true";
+-	url += "&formOp=Refresh&objectId=" + msgId + "&ajaxRequest=true";
+-	if(form == null) {
+-		url = (url).split("?")[0];
+-	}
+-	ajaxAsyncGetRequest(url, false);
+-} ;
+-
+ eXo.mail.UpdateList = new UpdateList();
+Index: eXoApplication/mail/webapp/src/main/webapp/templates/mail/webui/UIMessageList.gtmpl
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/templates/mail/webui/UIMessageList.gtmpl	(revision 79171)
++++ eXoApplication/mail/webapp/src/main/webapp/templates/mail/webui/UIMessageList.gtmpl	(working copy)
+@@ -540,9 +540,9 @@
+         public int show(Message msg, int i, int l, Locale locale) {
+           if (msg != null && (uicomponent.viewMode != uicomponent.MODE_CONVERSATION || msg.isRootConversation())) {
+             l ++ ;
+-            String actionLink = uicomponent.event("SelectMessage", MailUtils.encodeMailId(msg.getId()));
+-            checkboxField = uicomponent.getChildById(MailUtils.encodeMailId(msg.getId()));
+-            String actionAddStar = uicomponent.event("AddStar", MailUtils.encodeMailId(msg.getId()));
++            String actionLink = uicomponent.event("SelectMessage", Utils.encodeMailId(msg.getId()));
++            checkboxField = uicomponent.getChildById(Utils.encodeMailId(msg.getId()));
++            String actionAddStar = uicomponent.event("AddStar", Utils.encodeMailId(msg.getId()));
+             String selectedClass = "OddItem" ;
+             if ((i%2) == 1) selectedClass = "EvenItem";
+             String readStatus = "ReadItem" ;
+@@ -552,7 +552,7 @@
+             String starClass = "UnStarredIcon" ;
+             if (msg.hasStar()) starClass = "StarredIcon";
+       %>
+-            <tr class="MessageItem $selectedClass" msgId="<%=MailUtils.encodeMailId(msg.getId())%>">
++            <tr class="MessageItem $selectedClass" msgId="<%=Utils.encodeMailId(msg.getId())%>">
+               <td>
+                 <%
+                   if (checkboxField != null) uicomponent.renderField(checkboxField);
+Index: eXoApplication/mail/webapp/src/main/webapp/templates/mail/webui/UIMessagePreview.gtmpl
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/templates/mail/webui/UIMessagePreview.gtmpl	(revision 79171)
++++ eXoApplication/mail/webapp/src/main/webapp/templates/mail/webui/UIMessagePreview.gtmpl	(working copy)
+@@ -70,7 +70,7 @@
+     int msgIndex = 0;
+     boolean hasUnreadMsg = false, showDetail;
+     if (msgRoot != null) { for(Message msg : uicomponent.getShowedMessages()) {  if (msg != null) {
+-      newId = MailUtils.encodeMailId(msg.getId());
++      newId = Utils.encodeMailId(msg.getId());
+       showDetail = false;
+       if (uicomponent.getUnreadMessages().contains(msg.getId())) {
+         showDetail = true;
