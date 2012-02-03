@@ -231,7 +231,7 @@
   margin: 0px ;
   white-space:nowrap ;
   font-size: 10px;
-  line-height: 20px;
+  line-height: 17px;
 }
 
 .UserSelectionBlock {
@@ -316,7 +316,7 @@
 .UICalendarPortlet .busyIcon {
   padding-left: 16px; /* orientation=lt */
   padding-right: 16px; /* orientation=rt */
-  height: 19px;
+  height: 17px;
 }
 
 .UICalendarPortlet .outsideIcon {
