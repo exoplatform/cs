@@ -1,0 +1,220 @@
+Index: eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/popup/UIAddressBookForm.java
+===================================================================
+--- eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/popup/UIAddressBookForm.java	(revision 79171)
++++ eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/popup/UIAddressBookForm.java	(working copy)
+@@ -103,7 +103,7 @@
+     uiSelectGroup.setOnChange("ChangeGroup");
+     addUIFormInput(uiSelectGroup);
+ 
+-    UIFormCheckBoxInput<Boolean> uiSelectAll = new UIFormCheckBoxInput<Boolean>(SELECT_ALL, SELECT_ALL, true);
++    UIFormCheckBoxInput<Boolean> uiSelectAll = new UIFormCheckBoxInput<Boolean>(SELECT_ALL, SELECT_ALL, false);
+     uiSelectAll.setOnChange("CheckAllContact");
+     addUIFormInput(uiSelectAll);
+     refrestContactList(uiSelectGroup.getValue(), null);
+@@ -254,6 +254,9 @@
+       }
+     }
+   }
++  public boolean isCheckedAllContact(){
++	  return getUIFormCheckBoxInput(UIAddressBookForm.SELECT_ALL).isChecked();
++  }
+ 
+   public void setCheckAll() throws Exception{
+     List<Contact> contactList = getContacts();
+@@ -631,6 +634,9 @@
+   static public class CheckAllContactActionListener extends EventListener<UIAddressBookForm> {
+     public void execute(Event<UIAddressBookForm> event) throws Exception {
+       UIAddressBookForm uiAddressBook = event.getSource();
++      UIFormCheckBoxInput<Boolean> uiFormCheckBox = uiAddressBook.getUIFormCheckBoxInput(UIAddressBookForm.SELECT_ALL);
++      boolean bAllChecked = uiFormCheckBox.isChecked();
++      uiFormCheckBox.setChecked(!bAllChecked);
+       uiAddressBook.checkAll();
+       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
+     }
+Index: eXoApplication/mail/webapp/src/main/webapp/skin/DefaultSkin/webui/Stylesheet.css
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/skin/DefaultSkin/webui/Stylesheet.css	(revision 79171)
++++ eXoApplication/mail/webapp/src/main/webapp/skin/DefaultSkin/webui/Stylesheet.css	(working copy)
+@@ -9,7 +9,7 @@
+ @import url("UIQuickAddEvent/Stylesheet.css");
+ @import url("UIAddMessageFilter/Stylesheet.css");
+ @import url("UIMessageFilter/Stylesheet.css");
+-@import url("UIAddNewEvent/Stylesheet.css");
++@import url("UIAddNewEvent/Stylesheet.css");
+ @import url("UICombobox/Stylesheet.css");
+ @import url("UINotification/Stylesheet.css");
+ 
+@@ -303,6 +303,7 @@
+ 	padding: 5px 0px 0px 0px;
+ 	width: 210px;
+ 	overflow: hidden;
++
+ }
+ 
+ .UIMailPortlet .UIFolderContainer .NormalLabel {
+@@ -1594,9 +1595,9 @@
+ 
+ .UIMailPortlet .UIContactsPopup .ContactContainer .Title {
+ 	background: #e7e7e7;
+-	padding: 0px 0px 0px 5px ; /* orientation=lt */
++	padding: 0px 0px 0px 2px ; /* orientation=lt */
+ 	padding: 0px 5px 0px 0px ; /* orientation=rt */
+-	height: 20px;
++	height: 22px;
+ 	line-height: 20px;
+ }
+ 
+@@ -1604,6 +1605,14 @@
+ 	clear: left; /* orientation=lt */
+ 	clear: right; /* orientation=rt */
+ }
++.UIMailPortlet .UIContactsPopup .ContactContainer .NormalBoxCheckAll {
++	background-color: white;
++	height: 12px;
++	width: 12px;
++	vertical-align: text-bottom;
++	margin-top:2px;
++	border: 1px solid #C0C0C0;
++}
+ 
+ .UIMailPortlet .UIContactsPopup .ContactContainer .ListContact {
+ 	overflow: auto;
+@@ -1619,14 +1628,23 @@
+ 	overflow: hidden;
+ 	white-space: nowrap;
+ 	width:150px;
++	padding-left: 2px
+ }
+ 
+ .UIMailPortlet .UIContactsPopup .ContactContainer .NormalBox {
+-	height: 20px;
+-	width: 24px;
++	height: 12px;
++	width: 12px;
++	vertical-align: text-bottom;
++	margin-top:2px;
++	margin-right:2px;
+ }
+ 
+-.UIMailPortlet .UIContactsPopup .ContactContainer .NormalBox:hover {
++.UIMailPortlet .UIContactsPopup .ContactContainer tr:hover .NormalBox {
++	background-color: white;
++	border: 1px solid #C0C0C0;
++	margin-right:0px;
++}
++.UIMailPortlet .UIContactsPopup .ContactContainer .ListContact tr:hover{
+ 	background-color:#E8E8E8;
+ }
+ 
+@@ -2076,4 +2094,4 @@
+ 
+ .UIMailPortlet .MailContainer .UIPopupWindow  .UIFormUploadInput .UploadIframe iframe{
+ 	width: auto;
+-}
+\ No newline at end of file
++}
+Index: eXoApplication/mail/webapp/src/main/webapp/skin/DefaultSkin/webui/skinIcons/16x16/Stylesheet.css
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/skin/DefaultSkin/webui/skinIcons/16x16/Stylesheet.css	(revision 79171)
++++ eXoApplication/mail/webapp/src/main/webapp/skin/DefaultSkin/webui/skinIcons/16x16/Stylesheet.css	(working copy)
+@@ -403,8 +403,8 @@
+ }
+ 
+ .UIMailPortlet .CheckItem {
+-	background: url('icons/CheckItem.gif') no-repeat left center; /* orientation=lt */
+-	background: url('icons/CheckItem.gif') no-repeat right center; /* orientation=rt */
++	background: url('icons/CheckItem.gif') no-repeat -1px; /* orientation=lt */
++	background: url('icons/CheckItem.gif') no-repeat -1px; /* orientation=rt */
+ }
+ 
+ .UIMailPortlet .CloseFolder {
+@@ -572,4 +572,4 @@
+   width: 17px;
+   height: 17px;
+   margin-left: 5px;
+-}
+\ No newline at end of file
++}
+Index: eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet.properties
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet.properties	(revision 79171)
++++ eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet.properties	(working copy)
+@@ -410,6 +410,7 @@
+ UIAddressForm.label.contact-group=Group
+ UIAddressForm.label.contact-search=Search
+ UIAddressForm.label.change-group=ChangeGroup
++UIAddressForm.label.check-uncheck=check/uncheck
+ 
+ UIAddressForm.label.quick-search=Quick search
+ UIAddressForm.label.addresses-from-group=Address book
+Index: eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_en.properties
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_en.properties	(revision 79171)
++++ eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_en.properties	(working copy)
+@@ -409,6 +409,7 @@
+ UIAddressForm.label.contact-group=Group
+ UIAddressForm.label.contact-search=Search
+ UIAddressForm.label.change-group=ChangeGroup
++UIAddressForm.label.check-uncheck=check/uncheck
+ 
+ UIAddressForm.label.quick-search=Quick search
+ UIAddressForm.label.addresses-from-group=Address book
+Index: eXoApplication/mail/webapp/src/main/webapp/templates/mail/webui/popup/UIAddressBookForm.gtmpl
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/templates/mail/webui/popup/UIAddressBookForm.gtmpl	(revision 79171)
++++ eXoApplication/mail/webapp/src/main/webapp/templates/mail/webui/popup/UIAddressBookForm.gtmpl	(working copy)
+@@ -93,9 +93,22 @@
+ 			<div style="float:left;">
+ 		            <%=_ctx.appRes(uicomponent.id+ ".label.contact") %>
+ 			</div>
+-			 <div style="margin-left: 180px;">
++			 <%
++			 	String checkAllContactLink = uicomponent.event("CheckAllContact");
++			 	String checkedAllCss = "NormalBoxCheckAll";
++			 	if (uicomponent.isCheckedAllContact()) {
++			 	checkedAllCss += " CheckItem"
++			 	}
++			 	String checkUncheckLabel = _ctx.appRes(uicomponent.id+ ".label.check-uncheck");
++			 %>
++			 	<div style="margin-left: 191px;margin-top:3px;padding-top:2px;">
+ 				<!-- input type="checkbox" class="checkbox" value="4" / -->
++				<div onclick="$checkAllContactLink" style="cursor:pointer;">
++				<div class="$checkedAllCss"  title="$checkUncheckLabel"></div>
++				</div>
++				<span style="display:none">
+ 				<% uiform.renderField(uiform.SELECT_ALL) %>
++				</span>
+ 			 </div>
+           </div>
+ 
+@@ -106,8 +119,13 @@
+                 for (Contact contact :uicomponent.getContacts()) {
+                 	String checkBoxCss ="NormalBox";
+                   if(uicomponent.isCheckedContact(contact.getId())) checkBoxCss += " CheckItem"; 
++                  if (uicomponent.isCheckedContact(contact.getId())) {
++                  checkBoxCss += " CheckItem";
++                  }
+                   String classCss = "NormalItem";
+-                  if (contact.getId().equals(uicomponent.getSelectedContact().getId())) classCss += "  SelectedContact";
++                  if (contact.getId().equals(uicomponent.getSelectedContact().getId())) {
++                  classCss += "  SelectedContact";
++                  }
+                   String checkContact = uicomponent.event("CheckContact", contact.getId());
+                   String selectContact = uicomponent.event("SelectContact", contact.getId());
+                   String contactName=contact.getFullName() ;
+@@ -116,11 +134,13 @@
+                   	subName = "_";
+                   	contactName="";
+                   }
+-                  else if (contactName.length() > 30) subName=MailUtils.encodeHTML(contactName.substring(0, 20)) + "...";
++                  else if (contactName.length() > 30) {
++                  subName=MailUtils.encodeHTML(contactName.substring(0, 20)) + "...";
++                  }
+             %>
+             			<tr>
+             				<td>
+-            					<div onclick="$checkContact" style="cursor:pointer;"><div class="$checkBoxCss" title="check/uncheck"></div></div>
++            					<div onclick="$checkContact" style="cursor:pointer;"><div class="$checkBoxCss"  title="$checkUncheckLabel"></div></div>
+             				</td>
+             				<td>
+             					<div onclick="$selectContact" style="cursor:pointer;"><div class="$classCss" title="$contactName"><a href="#"><%= subName %></a></div></div>
