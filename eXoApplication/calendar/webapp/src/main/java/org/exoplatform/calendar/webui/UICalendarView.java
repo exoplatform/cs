@@ -1167,12 +1167,9 @@ public abstract class UICalendarView extends UIForm implements CalendarView {
             if (uiListView.isDisplaySearchResult()) {
               if (uiListView.getDataMap().containsKey(eventId)) {
                 uiListView.getDataMap().remove(eventId);
-                try {
-                  UIPreview preview = ((UIListContainer) uiContainer.getRenderedChild()).findFirstComponentOfType(UIPreview.class);
-                  if (preview.getEvent() != null && preview.getEvent().getId().equals(eventId)) {
-                    preview.setEvent(null);
-                  }
-                } catch (Exception ex) {
+                UIPreview preview = ((UIListContainer) uiContainer.getRenderedChild()).findFirstComponentOfType(UIPreview.class);
+                if (preview.getEvent() != null && preview.getEvent().getId().equals(eventId)) {
+                  preview.setEvent(null);
                 }
               }
               event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer);

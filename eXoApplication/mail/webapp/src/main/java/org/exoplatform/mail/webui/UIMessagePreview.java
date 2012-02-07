@@ -564,6 +564,11 @@ public class UIMessagePreview extends UIContainer{
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
         }
       } catch (Exception e) {
+        log.warn("Failed to export message", e);
+        event.getRequestContext()
+             .getUIApplication()
+             .addMessage(new ApplicationMessage("UIMessagePreview.msg.fail-export-message", null));
+        
       }
     }
   }

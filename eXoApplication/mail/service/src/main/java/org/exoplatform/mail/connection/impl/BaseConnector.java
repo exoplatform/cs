@@ -72,12 +72,9 @@ public abstract class BaseConnector implements Connector {
     return store_.getFolder(folderUrl);
   }
   
-  public void close() {
+  public void close() throws MessagingException {
     if (store_ != null) {
-      try {
-        store_.close();
-      } catch (MessagingException e) {
-      }
+      store_.close();
     }
   }
 }

@@ -682,10 +682,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           contact = null;
         }
         if (contact == null) {
-          try {
-            contact = service.getSharedContactAddressBook(username, contactId);
-          } catch (NullPointerException e) {
-          }
+          contact = service.getSharedContactAddressBook(username, contactId);
         }
       }
       if (contact == null) {
@@ -969,13 +966,14 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           copyedContacts.remove(contactId);
         if (contact.getContactType().equals(DataStorage.SHARED)) {
           // check for existing contact
-          Contact tempContact = null;
+          Contact tempContact;
           if (uiContacts.isSharedAddress(contact)) {
             tempContact = contactService.getSharedContactAddressBook(username, contactId);
           } else {
             try {
               tempContact = contactService.getSharedContact(username, contactId);
             } catch (PathNotFoundException e) {
+              tempContact = null;
             }
           }
           if (tempContact == null) {
@@ -1209,6 +1207,13 @@ public class UIContacts extends UIForm implements UIPopupComponent {
             try {
               contactService.removeSharedContact(username, addressBookId, id);
             } catch (PathNotFoundException e) {
+              if (log.isDebugEnabled()) {
+                log.debug(String.format("Failed to find shared contact of contact %s of address book %s belongs to user %s to remove",
+                                        id,
+                                        addressBookId,
+                                        username),
+                          e);
+              }
             }
           } else {
             try {

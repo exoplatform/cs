@@ -16,6 +16,8 @@
  */
 package org.exoplatform.mail.service;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Phung Hai Nam
@@ -63,21 +65,21 @@ public class MailSetting {
 
   public static final long    SEND_RECEIPT_ALWAYS = 2;
 
-  private long                numberMsgPerPage_;
+  private long                numberMsgPerPage_   = 10;
 
-  private boolean             formatAsOriginal_;
+  private boolean             formatAsOriginal_   = true;
 
-  private boolean             replyWithAtt_;
+  private boolean             replyWithAtt_       = false;
 
-  private boolean             forwardWithAtt_;
+  private boolean             forwardWithAtt_     = false;
 
-  private String              prefixMsgWith_;
+  private String              prefixMsgWith_      = StringUtils.EMPTY;
 
-  private long                periodCheckAuto_;
+  private long                periodCheckAuto_    = 0;
 
-  private String              defaultAccount_;
+  private String              defaultAccount_     = StringUtils.EMPTY;
 
-  private boolean             useWysiwyg_;
+  private boolean             useWysiwyg_         = true;
 
   private boolean             saveMsgInSent_      = true;
 

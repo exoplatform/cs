@@ -90,10 +90,12 @@ public class UIEventReminderTab extends UIFormInputWithActions {
   
   public List<SelectItemOption<String>> getReminderTimes(int steps, int maxValue) {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    String label = "minutes" ; 
+    String label;
     try {
-      label = getParentFrom().getLabel("minutes") ;
-    } catch(Exception e) {} 
+      label = getParentFrom().getLabel("minutes");
+    } catch (Exception e) {
+      label = "minutes";
+    }
     for(int i = 1; i <= maxValue/steps ; i++) {
       options.add(new SelectItemOption<String>(String.valueOf(i*steps) + " " + label, String.valueOf(i*steps))) ;      
     }

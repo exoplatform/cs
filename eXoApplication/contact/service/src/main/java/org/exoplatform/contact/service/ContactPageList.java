@@ -30,6 +30,7 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
+import org.apache.commons.lang.StringUtils;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -217,6 +218,7 @@ public class ContactPageList extends JCRPageList {
           strs.append(";" + value.getString());
       }
     } catch (Exception e) {
+      return StringUtils.EMPTY;
     }
     return strs.toString();
   }

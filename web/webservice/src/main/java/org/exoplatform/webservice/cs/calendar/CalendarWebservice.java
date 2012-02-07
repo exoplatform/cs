@@ -357,13 +357,9 @@ public class CalendarWebservice implements ResourceContainer{
       if (type.equals(Utils.PRIVATE_TYPE + "")) {
         calendar = calendarService.getUserCalendar(username, calendarId);
       } else if (type.equals(Utils.SHARED_TYPE + "")) {
-        try {
-          calendar = calendarService.getSharedCalendars(username, false).getCalendarById(calendarId);
-        } catch (NullPointerException ex) {}
+        calendar = calendarService.getSharedCalendars(username, false).getCalendarById(calendarId);       
       } else {
-        try {
-          calendar = calendarService.getGroupCalendar(calendarId);
-        } catch (PathNotFoundException ex) {}
+        calendar = calendarService.getGroupCalendar(calendarId);
       }
       if ((calendar == null) || Utils.isEmpty(calendar.getPublicUrl())) {
         return Response.status(HTTPStatus.LOCKED)

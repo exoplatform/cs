@@ -130,9 +130,7 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
       String username = MailUtils.getCurrentUser() ;
       List<String> tempContact = new ArrayList<String>() ;
       tempContact.add(org.exoplatform.contact.service.Utils.contactTempId) ;
-      try {
-        contactSrv.removeContacts(username, tempContact) ;
-      } catch (PathNotFoundException e) {}
+      contactSrv.removeContacts(username, tempContact);
       contactSrv.saveContact(username, contact, true) ;
       uiContactForm.setTempContact(contactSrv
         .getContact(username, contact.getId())) ;      

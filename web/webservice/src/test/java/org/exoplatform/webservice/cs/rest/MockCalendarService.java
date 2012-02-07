@@ -78,12 +78,7 @@ public class MockCalendarService implements CalendarService{
   }
 
   @Override
-  public void confirmInvitation(String fromUserId,
-                                String toUserId,
-                                int calType,
-                                String calendarId,
-                                String eventId,
-                                int answer) throws Exception {
+  public void confirmInvitation(String fromUserId, String toUserId, int calType, String calendarId, String eventId, int answer) {
 
   }
 

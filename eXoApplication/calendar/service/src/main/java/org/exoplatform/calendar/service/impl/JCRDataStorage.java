@@ -1140,6 +1140,9 @@ public class JCRDataStorage implements DataStorage {
           reminders.getNode(eventNode.getName()).remove();
           reminders.save();
         } catch (Exception e) {
+          if (log.isDebugEnabled()) {
+            log.debug("Failed to remove reminder for an event", e);
+          }
         }
         Node events = reminders.getParent().getNode(Utils.CALENDAR_REMINDER);
         if (events != null && events.hasNode(eventNode.getName())) {
@@ -3835,7 +3838,7 @@ public class JCRDataStorage implements DataStorage {
   /**
    * {@inheritDoc}
    */
-  public void confirmInvitation(String fromUserId, String toUserId, int calType, String calendarId, String eventId, int answer) throws Exception {
+  public void confirmInvitation(String fromUserId, String toUserId, int calType, String calendarId, String eventId, int answer) {
     try {
       Map<String, String> pars = new HashMap<String, String>();
       CalendarEvent event = getInvitationEvent(calType, calendarId, eventId, fromUserId);
@@ -3864,6 +3867,11 @@ public class JCRDataStorage implements DataStorage {
         }
       }
     } catch (Exception e) {
+      log.error(String.format("Failed to confirm an invitation from user %s to user %s with event %s in calendar %s",
+                              fromUserId,
+                              toUserId,
+                              eventId,
+                              calendarId), e);
     } finally {
       // session.close() ;
     }
@@ -3957,11 +3965,17 @@ public class JCRDataStorage implements DataStorage {
       getUserCalendarHome(userName).getNode(calendarId);
       return Utils.PRIVATE_TYPE;
     } catch (Exception e) {
+      if (log.isDebugEnabled()) {
+        log.debug(String.format("Failed to find calendar %s from user node of user %s", calendarId, userName), e);
+      }
     }
     try {
       getPublicCalendarHome().getNode(calendarId);
       return Utils.PUBLIC_TYPE;
     } catch (Exception e) {
+      if (log.isDebugEnabled()) {
+        log.debug(String.format("Failed to find calendar %s from public node of user %s", calendarId, userName), e);
+      }
     }
     try {
       Node sharedCalendarHome = getSharedCalendarHome();
@@ -3976,6 +3990,9 @@ public class JCRDataStorage implements DataStorage {
         }
       }
     } catch (Exception e) {
+      if (log.isDebugEnabled()) {
+        log.debug(String.format("Failed to find calendar %s from shared node of user %s", calendarId, userName), e);
+      }
     }
     return Utils.INVALID_TYPE;
   }

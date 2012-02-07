@@ -231,13 +231,15 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     String label = getId() + ".label." + id;    
     return res.getString(label);
   }
+
   public String getLabel(String id) {
-    String label = id ;
+    String label;
     try {
-      label = super.getLabel(id) ;
+      label = super.getLabel(id);
     } catch (Exception e) {
+      label = id;
     }
-    return label ;
+    return label;
   }
   protected List<String> getUnCheckedList(List<Calendar> calendars) {
     List<String> list = new ArrayList<String>() ;

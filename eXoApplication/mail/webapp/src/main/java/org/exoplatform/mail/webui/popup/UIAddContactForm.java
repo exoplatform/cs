@@ -506,10 +506,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
       }
       List<String> tempContact = new ArrayList<String>();
       tempContact.add(Utils.contactTempId);
-      try {
-        contactSrv.removeContacts(uiPortlet.getCurrentUser(), tempContact);
-      } catch (PathNotFoundException e) {
-      }
+      contactSrv.removeContacts(uiPortlet.getCurrentUser(), tempContact);
     }
   }
 

@@ -93,11 +93,8 @@ public class ExoMailTrustManager implements X509TrustManager {
     this.isStoreCertPermanent = storePermanent;
     File temFile = null;
     boolean isLoged = false;
-    try {
-      if (pathCertFile != null)
-        temFile = new File(pathCertFile);
-    } catch (Exception e) {
-    }// do nothing
+    if (pathCertFile != null)
+      temFile = new File(pathCertFile);
 
     if (pathCertFile == null || temFile == null || (!temFile.isDirectory() && !temFile.isFile()))
       this.pathCertFile = PATH_CERTS_FILE;

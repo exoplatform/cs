@@ -558,10 +558,9 @@ public interface CalendarService {
    * @param calType type of calendar contants the event
    * @param calendarId given calendar id
    * @param eventId given event id
-   * @param answer The answer of the receive user 
-   * @throws Exception
+   * @param answer The answer of the receive user
    */
-  public void confirmInvitation(String fromUserId, String toUserId, int calType, String calendarId, String eventId, int answer) throws Exception;
+  public void confirmInvitation(String fromUserId, String toUserId, int calType, String calendarId, String eventId, int answer);
 
   public void confirmInvitation(String fromUserId, String confirmingEmail, String confirmingUser, int calType, String calendarId, String eventId, int answer) throws Exception;
 

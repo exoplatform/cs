@@ -161,8 +161,6 @@ public class NewMembershipListener extends MembershipEventListener {
           }
         }
       }
-    } catch (ReferentialIntegrityException e) {
-
     } catch (Exception ex) {
       if (log.isDebugEnabled()) {
         log.debug("Exception in method preDelete", ex);

@@ -229,13 +229,8 @@ public class UIMailPortlet extends UIPortletApplication {
   }
   
   protected String getCometdContextName() {
-    String cometdContextName = "cometd";
-    try {
-      EXoContinuationBayeux bayeux = (EXoContinuationBayeux) PortalContainer.getInstance()
-                                                                                .getComponentInstanceOfType(AbstractBayeux.class);
-      return (bayeux == null ? "cometd" : bayeux.getCometdContextName());
-    } catch (Exception e) {
-    }
-    return cometdContextName;
+    EXoContinuationBayeux bayeux = (EXoContinuationBayeux) PortalContainer.getInstance()
+                                                                          .getComponentInstanceOfType(AbstractBayeux.class);
+    return (bayeux == null ? "cometd" : bayeux.getCometdContextName());
   }
 } 

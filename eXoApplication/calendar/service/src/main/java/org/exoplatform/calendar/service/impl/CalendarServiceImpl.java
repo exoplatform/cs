@@ -140,6 +140,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     try {
       rb_ = rbs_.getResourceBundle(Utils.RESOURCEBUNDLE_NAME, Locale.getDefault());
     } catch (MissingResourceException e) {
+      rb_ = null;
     }
     return storage_.getUserCalendars(username, isShowAll);
   }
@@ -462,7 +463,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   /**
    * {@inheritDoc}
    */
-  public void confirmInvitation(String fromUserId, String toUserId, int calType, String calendarId, String eventId, int answer) throws Exception {
+  public void confirmInvitation(String fromUserId, String toUserId, int calType, String calendarId, String eventId, int answer) {
     storage_.confirmInvitation(fromUserId, toUserId, calType, calendarId, eventId, answer);
   }
 
@@ -522,21 +523,18 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     return rb_;
   }
 
-  public EventCategory getEventCategoryByName(String username, String eventCategoryName) throws Exception {
-    ResourceBundle rb = null;
-    try {
-      rb = rbs_.getResourceBundle(Utils.RESOURCEBUNDLE_NAME, Locale.getDefault());
-    } catch (MissingResourceException e) {
-      // the fist time load
-    }
+  public EventCategory getEventCategoryByName(String username, String eventCategoryName) throws Exception {    
     for (EventCategory ev : storage_.getEventCategories(username)) {
       if (ev.getName().equalsIgnoreCase(eventCategoryName)) {
         return ev;
-      } else if (rb != null) {
+      } else {
         try {
+          ResourceBundle rb = null;
+          rb = rbs_.getResourceBundle(Utils.RESOURCEBUNDLE_NAME, Locale.getDefault());
           if (eventCategoryName.equalsIgnoreCase(rb.getString("UICalendarView.label." + ev.getId())))
             return ev;
         } catch (MissingResourceException e) {
+          continue;
         }
       }
     }

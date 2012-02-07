@@ -109,9 +109,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
     UIGrid permissionList = getChild(UIGrid.class) ;
     // cs-1702
     int currentPage = 1 ;
-    try {
-      currentPage = permissionList.getUIPageIterator().getPageList().getCurrentPage() ;
-    } catch (NullPointerException e) { }
+    currentPage = permissionList.getUIPageIterator().getPageList().getCurrentPage();
     //ObjectPageList objPageList = new ObjectPageList(dataRow, 10) ;
     LazyPageList<PermissionData> pageList = new LazyPageList<PermissionData>(new ListAccessImpl<PermissionData>(PermissionData.class, dataRow), 10); 
     permissionList.getUIPageIterator().setPageList(pageList) ;
@@ -288,24 +286,20 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
           }
         } else {
           removePerUser(contact, remover + DataStorage.HYPHEN) ;
-          try {
-//          add to fix bug cs-1592
-            OrganizationService organizationService = 
-              (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
-            boolean sharedByGroup = false ;
-            if (contact.getViewPermissionGroups() != null) {
-              Object[] groups = organizationService.getGroupHandler().findGroupsOfUser(remover).toArray() ;
-              for (Object object : groups) {
-                if (Arrays.asList(contact.getViewPermissionGroups()).contains(((Group)object).getId())) {
-                  sharedByGroup = true ;
-                  break ;
-                }               
+          // add to fix bug cs-1592
+          OrganizationService organizationService = (OrganizationService) PortalContainer.getComponent(OrganizationService.class);
+          boolean sharedByGroup = false;
+          if (contact.getViewPermissionGroups() != null) {
+            Object[] groups = organizationService.getGroupHandler().findGroupsOfUser(remover).toArray();
+            for (Object object : groups) {
+              if (Arrays.asList(contact.getViewPermissionGroups()).contains(((Group) object).getId())) {
+                sharedByGroup = true;
+                break;
               }
             }
-            if (!sharedByGroup)
-              contactService.removeUserShareContact(username
-                  , uiForm.contactId_, remover) ;            
-          } catch (PathNotFoundException e) { }
+          }
+          if (!sharedByGroup)
+            contactService.removeUserShareContact(username, uiForm.contactId_, remover);
         }        
         contactService.saveContact(username, contact, false) ;
         uiForm.updateContactGrid(contact);

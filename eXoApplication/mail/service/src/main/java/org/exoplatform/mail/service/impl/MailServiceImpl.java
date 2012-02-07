@@ -73,6 +73,7 @@ import javax.mail.util.ByteArrayDataSource;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import org.apache.commons.lang.StringUtils;
 import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.mail.connection.Connector;
@@ -361,6 +362,7 @@ public class MailServiceImpl implements MailService, Startable {
           storage_.saveFolder(userName, accountId, parentFolder.getId(), folder);
         }
       } catch (Exception e) {
+        logger.warn(String.format("Failed to save folder %s of account %s belongs to user %s", folderId, accountId, userName), e);        
       }
     }
   }
@@ -823,6 +825,9 @@ public class MailServiceImpl implements MailService, Startable {
       smtpMessage.setNotifyOptions(SMTPMessage.NOTIFY_FAILURE);// need improve to custom in form compose new mail.
       smtpMessage.saveChanges();
     } catch (Exception ex) {
+      if (logger.isDebugEnabled()){
+        logger.debug("Failed to set notify options for smtp messages", ex);
+      }
     }
     try {
       transport.sendMessage(smtpMessage, smtpMessage.getAllRecipients());
@@ -2229,7 +2234,7 @@ public class MailServiceImpl implements MailService, Startable {
     MailSetting mailSetting = storage_.getMailSetting(userName);
     String defaultAccount = mailSetting.getDefaultAccount();
     Account account = null;
-    if (defaultAccount != null) {
+    if (!StringUtils.isEmpty(defaultAccount)) {
       account = getAccountById(userName, defaultAccount);
     } else {
       List<Account> accList = getAccounts(userName);
@@ -2263,6 +2268,9 @@ public class MailServiceImpl implements MailService, Startable {
       try {
         msg = storage_.loadTotalMessage(userName, accountId, msg, null);
       } catch (Exception ex) {
+        if (logger.isDebugEnabled()) {
+          logger.debug("Failed to load total message", e);
+        }
       }
       logger.info("Download content failure");
     }

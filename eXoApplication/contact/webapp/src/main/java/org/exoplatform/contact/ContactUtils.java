@@ -417,10 +417,8 @@ public class ContactUtils {
       }
     }
     UIGrid permissionList = uiContainer.getChild(UIGrid.class) ;
-    int currentPage = 1 ;
-    try {
-      currentPage = permissionList.getUIPageIterator().getPageList().getCurrentPage() ;
-    } catch (NullPointerException e) { }
+    int currentPage = 1;
+    currentPage = permissionList.getUIPageIterator().getPageList().getCurrentPage();
     LazyPageList<PermissionData> pageList = new LazyPageList<PermissionData>(new ListAccessImpl<PermissionData>(PermissionData.class, dataRow), 10);
     permissionList.getUIPageIterator().setPageList(pageList) ;
     if (currentPage > 1 && currentPage <= permissionList.getUIPageIterator().getAvailablePage()) {
@@ -459,10 +457,12 @@ public class ContactUtils {
   public static int getLimitUploadSize() {
     PortletRequestContext pcontext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     PortletPreferences portletPref = pcontext.getRequest().getPreferences();
-    int limitMB = DEFAULT_VALUE_UPLOAD_PORTAL;
+    int limitMB;
     try {
       limitMB = Integer.parseInt(portletPref.getValue("uploadFileSizeLimitMB", "").trim());
-    } catch (Exception e) {}
+    } catch (Exception e) {
+      limitMB = DEFAULT_VALUE_UPLOAD_PORTAL;
+    }
     return limitMB;
   }
   

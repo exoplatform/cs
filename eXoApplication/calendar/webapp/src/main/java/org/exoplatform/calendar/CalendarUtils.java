@@ -404,12 +404,9 @@ public class CalendarUtils {
     }
     
     if (locale != null) {
-      try {
-        String country = locale.getISO3Country();
-        if (country != null && country.trim().length() > 0)
-          return locale.getDisplayCountry() + "(" + locale.getDisplayLanguage() + ")";
-      } catch (MissingResourceException e) {
-      }
+      String country = locale.getISO3Country();
+      if (country != null && country.trim().length() > 0)
+        return locale.getDisplayCountry() + "(" + locale.getDisplayLanguage() + ")";
     }
     return locationName;
   }
@@ -417,12 +414,11 @@ public class CalendarUtils {
   @SuppressWarnings("unchecked")
   public static List<SelectItemOption<String>> getLocaleSelectBoxOptions(Locale[] locale) {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    for(Locale local :  locale) {
-      try {
-        String country = local.getISO3Country() ;
-        if( country != null && country.trim().length() > 0)  options.add(new SelectItemOption<String>(local.getDisplayCountry() + "(" +local.getDisplayLanguage()+")" ,country)) ;
-      } catch (MissingResourceException e) {}
-    }  
+    for (Locale local : locale) {
+      String country = local.getISO3Country();
+      if (country != null && country.trim().length() > 0)
+        options.add(new SelectItemOption<String>(local.getDisplayCountry() + "(" + local.getDisplayLanguage() + ")", country));
+    }
     Collections.sort(options, new SelectComparator()) ;
     return options ;
   }
@@ -1069,10 +1065,12 @@ public class CalendarUtils {
   public static int getLimitUploadSize() {
     PortletRequestContext pcontext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     PortletPreferences portletPref = pcontext.getRequest().getPreferences();
-    int limitMB = DEFAULT_VALUE_UPLOAD_PORTAL;
+    int limitMB;
     try {
       limitMB = Integer.parseInt(portletPref.getValue("uploadFileSizeLimitMB", "").trim());
-    } catch (Exception e) {}
+    } catch (Exception e) {
+      limitMB = DEFAULT_VALUE_UPLOAD_PORTAL;
+    }
     return limitMB;
   }
 }

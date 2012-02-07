@@ -512,10 +512,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
               if (!isPrivate) {
                 if (((UIFormSelectBoxWithGroups) uiAddressBook.getChildById(SELECT_GROUP)).getValue()
                     .equals(uiAddressBook.sharedContacts_)) {
-                  try {
-                    contactServ.removeUserShareContact(contact.getAuthor(), contact.getId(), username);
-                  } catch (PathNotFoundException e) {
-                  }
+                  contactServ.removeUserShareContact(contact.getAuthor(), contact.getId(), username);                 
                 } else {
                   event.getRequestContext()
                        .getUIApplication()

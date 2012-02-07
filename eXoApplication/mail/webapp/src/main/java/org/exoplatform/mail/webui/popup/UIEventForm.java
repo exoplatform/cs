@@ -145,12 +145,13 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
   }
   
   public String getLabel(String id) {
-    String label = id ;
+    String label;
     try {
-      label = super.getLabel(id) ;
+      label = super.getLabel(id);
     } catch (Exception e) {
+      label = id;
     }
-    return label ;
+    return label;
   }
   public void reset() {
     super.reset() ;
@@ -768,7 +769,11 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
         try {
           String eventCategoryName = CalendarUtils.getCalendarService().getEventCategory(username, uiForm.getEventCategory()).getName() ;
           calendarEvent.setEventCategoryName(eventCategoryName) ;
-        } catch (Exception e) { }
+        } catch (Exception e) {
+          if (log.isDebugEnabled()){
+            log.debug(String.format("Failed to set category name for event %s", summary), e);
+          }
+        }
         calendarEvent.setLocation(eventPlace) ;
         calendarEvent.setRepeatType(uiForm.getEventRepeat()) ;
         calendarEvent.setPriority(uiForm.getEventPriority()) ; 

@@ -26,6 +26,7 @@ import javax.jcr.Node;
 import javax.jcr.Value;
 import javax.mail.internet.InternetAddress;
 
+import org.apache.commons.lang.StringUtils;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -279,6 +280,7 @@ public class Utils {
         }
       }
     } catch (Exception e) {
+      return StringUtils.EMPTY;
     }
     return strs.toString();
   }

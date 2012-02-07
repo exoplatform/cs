@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.exoplatform.services.jcr.util.IdGenerator;
 
 /**
@@ -30,51 +31,51 @@ import org.exoplatform.services.jcr.util.IdGenerator;
  * 
  */
 public class Account {
-  private String              id;
+  private String              id                   = StringUtils.EMPTY;
 
-  private String              label;
+  private String              label                = StringUtils.EMPTY;
 
-  private String              userDisplayName;
+  private String              userDisplayName      = StringUtils.EMPTY;
 
-  private String              emailAddress;
+  private String              emailAddress         = StringUtils.EMPTY;
 
-  private String              emailReplyAddress;
+  private String              emailReplyAddress    = StringUtils.EMPTY;
 
-  private String              signature;
+  private String              signature            = StringUtils.EMPTY;
 
-  private String              description;
+  private String              description          = StringUtils.EMPTY;
 
-  private boolean             checkedAuto_;
+  private boolean             checkedAuto_         = false;
 
-  private boolean             emptyTrashWhenExit;
+  private boolean             emptyTrashWhenExit   = false;
 
-  private boolean             isSavePassword_;
+  private boolean             isSavePassword_      = false;
 
-  private String              placeSignature;
+  private String              placeSignature       = StringUtils.EMPTY;
 
-  private Date                lastCheckedDate_;
+  private Date                lastCheckedDate_     = new Date();
 
-  private Date                lastStartCheckingTime_;
+  private Date                lastStartCheckingTime_ = new Date();
 
-  private boolean             checkAll_           = false;
+  private boolean             checkAll_            = false;
 
-  private Date                checkFromDate_;
+  private Date                checkFromDate_       = new Date();
 
-  private Map<String, String> serverProperties;
+  private Map<String, String> serverProperties     = new HashMap<String, String>();
 
-  private Map<String, String> smtpServerProperties;
+  private Map<String, String> smtpServerProperties = new HashMap<String, String>();
 
-  private String              secureAuthsIncoming = Utils.getIncomingSecureAuthentication();
+  private String              secureAuthsIncoming  = Utils.getIncomingSecureAuthentication();
 
-  private String              secureAuthsOutgoing = Utils.getOutgoingSecureAuthentication();
+  private String              secureAuthsOutgoing  = Utils.getOutgoingSecureAuthentication();
 
-  private String              authMechsIncoming   = Utils.PLAIN;
+  private String              authMechsIncoming    = Utils.PLAIN;
 
-  private String              authMechsOutgoing   = Utils.PLAIN;
+  private String              authMechsOutgoing    = Utils.PLAIN;
 
-  private Map<String, String> permissions         = null;
+  private Map<String, String> permissions          = new HashMap<String, String>();
 
-  private String              delegateFrom_       = null;
+  private String              delegateFrom_        = StringUtils.EMPTY;
 
   public String getSecureAuthsIncoming() {
     if (secureAuthsIncoming == Utils.TLS_SSL)

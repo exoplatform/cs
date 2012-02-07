@@ -33,6 +33,8 @@ import org.exoplatform.mail.webui.action.FullDelegationEventListener;
 import org.exoplatform.mail.webui.action.HasAccountEventListener;
 import org.exoplatform.mail.webui.popup.UIFolderForm;
 import org.exoplatform.mail.webui.popup.UIRenameFolderForm;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -60,6 +62,9 @@ import org.exoplatform.webui.event.Event;
                  }
 )
 public class UIFolderContainer extends UIContainer {
+  
+  private static final Log log = ExoLogger.getLogger(UIFolderContainer.class);
+  
   private String currentFolder_ = null;
   
   public int i = 1;
@@ -190,12 +195,16 @@ public class UIFolderContainer extends UIContainer {
       
       boolean isRefesh = true;
       uiFolder.setIsChecking(true);
-      if (uiFolder.getSelectedFolder() != null  && uiFolder.getSelectedFolder().equals(folderId)) {
+      if (uiFolder.getSelectedFolder() != null && uiFolder.getSelectedFolder().equals(folderId)) {
         try {
           uiMessageList.updateList();
-          isRefesh = false ;
-        } catch(Exception e) { } 
-      } 
+          isRefesh = false;
+        } catch (Exception e) {
+          if (log.isDebugEnabled()) {
+            log.debug("Failed to update message list", e);
+          }
+        }
+      }
       if (isRefesh) {
         uiFolder.setSelectedFolder(folderId) ;
         MessageFilter filter = new MessageFilter("Folder"); 

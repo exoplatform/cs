@@ -360,9 +360,7 @@ public class UIContactForm extends UIFormTabPane {
       }
       List<String> tempContact = new ArrayList<String>() ;
       tempContact.add(Utils.contactTempId) ;
-      try {
-        contactService.removeContacts(username, tempContact) ;
-      } catch (PathNotFoundException e) {}
+      contactService.removeContacts(username, tempContact);
       String selectedContact = uiContacts.getSelectedContact() ;
       //if(uiContacts.isDisplaySearchResult()) {
       List<Contact> contacts = new ArrayList<Contact>() ;

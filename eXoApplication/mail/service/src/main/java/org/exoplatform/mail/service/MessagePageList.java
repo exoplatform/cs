@@ -34,12 +34,16 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.impl.core.query.QueryImpl;
 import org.exoplatform.services.jcr.impl.core.query.lucene.QueryResultImpl;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 
 /**
  * @author Phung Nam (phunghainam@gmail.com) 
  * @since July 25, 2007
  */
 public class MessagePageList extends JCRPageList {
+  
+  private Log          log   = ExoLogger.getLogger(MessagePageList.class);
 
   private NodeIterator iter_ = null;
 
@@ -111,6 +115,9 @@ public class MessagePageList extends JCRPageList {
               }
             }
           } catch (Exception e) {
+            if (log.isDebugEnabled()){
+              log.debug("Failed to populate message list has structure", e);
+            }
           }
 
           if (!currentNode.isNodeType("exo:messageMixin") || !existRefNode) {
@@ -155,6 +162,9 @@ public class MessagePageList extends JCRPageList {
             }
           }
         } catch (Exception e) {
+          if (log.isDebugEnabled()){
+            log.debug(String.format("Failed to get reference messages in folder %s", folderId), e);
+          }
         }
       }
     }
@@ -194,6 +204,9 @@ public class MessagePageList extends JCRPageList {
           }
         }
       } catch (Exception e) {
+        if (log.isDebugEnabled()) {
+          log.debug("Failed to update reference messages", e);
+        }
       }
 
       List<String> groupedMessageIds = new ArrayList<String>();
@@ -220,6 +233,9 @@ public class MessagePageList extends JCRPageList {
             break;
           }
         } catch (Exception e) {
+          if (log.isDebugEnabled()){
+            log.debug("Failed to get reference message Ids", e);
+          }
         }
       }
     }
@@ -247,6 +263,9 @@ public class MessagePageList extends JCRPageList {
             }
           }
         } catch (Exception e) {
+          if (log.isDebugEnabled()){
+            log.debug("Failed to get group message Ids", e);
+          }
         }
       }
     }

@@ -363,11 +363,8 @@ public class ContactServiceImpl implements ContactService {
     if (contact == null)
       return;
     contact.setNickName(userProfile.getAttribute("user.name.nickName"));
-    try {
-      Date date = new Date(userProfile.getAttribute("user.bdate"));
-      contact.setBirthday(date);
-    } catch (Exception e) {
-    }
+    Date date = new Date(userProfile.getAttribute("user.bdate"));
+    contact.setBirthday(date);
     contact.setGender(userProfile.getAttribute("user.gender"));
 
     StringBuilder builderNote = new StringBuilder();

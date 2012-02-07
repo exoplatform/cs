@@ -601,7 +601,7 @@ public class Utils {
     return personal;
   }
 
-  public static String[] getAddresses(String addressList) throws Exception {
+  public static String[] getAddresses(String addressList) {
     String[] strs = new String[1];
     try {
       InternetAddress[] internetAddresses = getInternetAddress(addressList);

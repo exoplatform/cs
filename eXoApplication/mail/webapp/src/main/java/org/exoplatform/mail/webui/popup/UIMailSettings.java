@@ -401,10 +401,6 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
 
   static  public class SelectUserActionListener extends EventListener<UIMailSettings> {
     public void execute(Event<UIMailSettings> event) throws Exception {
-      try {
-      } catch (Exception e) {
-
-      }
     }
   }
 

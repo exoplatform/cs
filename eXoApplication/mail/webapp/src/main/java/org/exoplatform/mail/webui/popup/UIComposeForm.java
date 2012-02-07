@@ -602,16 +602,13 @@ import com.sun.mail.smtp.SMTPSendFailedException;
     }
   }
 
-  private String getReplyContent(Message msg) throws Exception {
+  private String getReplyContent(Message msg) {
     String msgContent = formatContent(msg);
     String content = msgContent;
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
     Locale locale = context.getParentAppRequestContext().getLocale();
     String from = "";
-    try {
       from = Utils.getAddresses(msg.getFrom())[0];
-    } catch (Exception e) {
-    }
     if (isVisualEditor) {
       content = "<br><br><div> On "
         + MailUtils.formatDate("MMM dd, yyyy HH:mm aaa", msg.getSendDate(), locale) + ", " + from
@@ -627,7 +624,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
     return content;
   }
 
-  private String formatContent(Message msg) throws Exception {
+  private String formatContent(Message msg) {
     String msgContent = msg.getMessageBody();
     if (isVisualEditor
         && (msg.getContentType() != null && msg.getContentType().indexOf("text/plain") > -1)) {
@@ -1195,6 +1192,9 @@ import com.sun.mail.smtp.SMTPSendFailedException;
             }
           }
         } catch (Exception e) {
+          if (logger.isDebugEnabled()){
+            logger.debug(String.format("Failed to load total message of account %s belongs to user %s", accountId, username), e);
+          }
         }
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgList.getParent());
       }
@@ -1408,28 +1408,19 @@ import com.sun.mail.smtp.SMTPSendFailedException;
                                                .getRequestParameter(OBJECTID));
       String content = "";
       if (isVisualEditor) {
-        try {
-          content = uiForm.getUIFormTextAreaInput(FIELD_MESSAGECONTENT).getValue();
-          uiForm.removeChildById(FIELD_MESSAGECONTENT);
-          UIFormWYSIWYGInput wysiwyg = new UIFormWYSIWYGInput(FIELD_MESSAGECONTENT,
-                                                              null,
-                                                              null,
-                                                              true);
-          uiForm.addUIFormInput(wysiwyg);
-          wysiwyg.setValue(MailUtils.text2html(content));
-          uiForm.setVisualEditor(true);
-        } catch (Exception e) {
-        }
+        content = uiForm.getUIFormTextAreaInput(FIELD_MESSAGECONTENT).getValue();
+        uiForm.removeChildById(FIELD_MESSAGECONTENT);
+        UIFormWYSIWYGInput wysiwyg = new UIFormWYSIWYGInput(FIELD_MESSAGECONTENT, null, null, true);
+        uiForm.addUIFormInput(wysiwyg);
+        wysiwyg.setValue(MailUtils.text2html(content));
+        uiForm.setVisualEditor(true);
       } else {
-        try {
-          content = uiForm.getChild(UIFormWYSIWYGInput.class).getValue();
-          uiForm.removeChild(UIFormWYSIWYGInput.class);
-          UIFormTextAreaInput textArea = new UIFormTextAreaInput(FIELD_MESSAGECONTENT, null, null);
-          textArea.setValue(MailUtils.html2text(content));
-          uiForm.addUIFormInput(textArea);
-          uiForm.setVisualEditor(false);
-        } catch (Exception e) {
-        }
+        content = uiForm.getChild(UIFormWYSIWYGInput.class).getValue();
+        uiForm.removeChild(UIFormWYSIWYGInput.class);
+        UIFormTextAreaInput textArea = new UIFormTextAreaInput(FIELD_MESSAGECONTENT, null, null);
+        textArea.setValue(MailUtils.html2text(content));
+        uiForm.addUIFormInput(textArea);
+        uiForm.setVisualEditor(false);
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
     }

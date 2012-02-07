@@ -106,14 +106,9 @@ public class UIChatBarPortlet extends UIPortletApplication {
   }
 
   protected String getCometdContextName() {
-    String cometdContextName = "cometd";
-    try {
-      EXoContinuationBayeux bayeux = (EXoContinuationBayeux) PortalContainer.getInstance()
-      .getComponentInstanceOfType(AbstractBayeux.class);
-      return (bayeux == null ? "cometd" : bayeux.getCometdContextName());
-    } catch (Exception e) {
-    }
-    return cometdContextName;
+    EXoContinuationBayeux bayeux = (EXoContinuationBayeux) PortalContainer.getInstance()
+                                                                          .getComponentInstanceOfType(AbstractBayeux.class);
+    return (bayeux == null ? "cometd" : bayeux.getCometdContextName());
   }
 
   public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception {    
@@ -161,13 +156,10 @@ public class UIChatBarPortlet extends UIPortletApplication {
   
   private String getShortcutBaseUrl() {
     String sUrl = null;
-    try {
-      sUrl = System.getProperties().getProperty(BASE_URL_KEY);
-    } catch (Exception e) {
-    }
-    if(!StringUtils.isNotBlank(sUrl)){
+    sUrl = System.getProperties().getProperty(BASE_URL_KEY);
+    if (!StringUtils.isNotBlank(sUrl)) {
       sUrl = BASE_URL_VALUE;
-    } 
+    }
     return sUrl;
   }
 

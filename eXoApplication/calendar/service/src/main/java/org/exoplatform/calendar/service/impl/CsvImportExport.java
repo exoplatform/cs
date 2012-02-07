@@ -216,19 +216,15 @@ public class CsvImportExport implements CalendarImportExport {
               if (!Utils.isEmpty(l.get(dataMap.get(EV_STATUS)))) {
                 String eventState = l.get(dataMap.get(EV_STATUS));
                 // fix for csv export form outlook
-                try {
-                  int value = Integer.parseInt(eventState);
-                  if (value == 0 || value == 1) {
-                    eventState = CalendarEvent.ST_AVAILABLE;
-                  }
-                  if (value == 2) {
-                    eventState = CalendarEvent.ST_BUSY;
-                  }
-                  if (value == 3) {
-                    eventState = CalendarEvent.ST_OUTSIDE;
-                  }
-                } catch (Exception e) {
-
+                int value = Integer.valueOf(eventState);
+                if (value == 0 || value == 1) {
+                  eventState = CalendarEvent.ST_AVAILABLE;
+                }
+                if (value == 2) {
+                  eventState = CalendarEvent.ST_BUSY;
+                }
+                if (value == 3) {
+                  eventState = CalendarEvent.ST_OUTSIDE;
                 }
                 eventObj.setEventState(eventState);
               }

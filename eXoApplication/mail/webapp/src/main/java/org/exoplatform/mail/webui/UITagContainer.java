@@ -30,6 +30,8 @@ import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.action.FullDelegationEventListener;
 import org.exoplatform.mail.webui.popup.UIEditTagForm;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -119,6 +121,8 @@ public class UITagContainer extends UIForm {
       SIANNA, SILVER, SKYBLUE, THISTLE, TOMATO, TURQUOISE, VIOLET, WHEAT, YELLOW };
 
   private String               selectedTagId_;
+  
+  private Log                  log           = ExoLogger.getLogger(UITagContainer.class);
 
   public UITagContainer() throws Exception {
   }
@@ -131,18 +135,20 @@ public class UITagContainer extends UIForm {
     selectedTagId_ = selectedTagId;
   }
 
-  public List<Tag> getTags() throws Exception {
+  public List<Tag> getTags() {
     List<Tag> tagList = new ArrayList<Tag>();
+    MailService mailService = MailUtils.getMailService();
+    UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
+    String username = uiPortlet.getCurrentUser();
+    String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
     try {
-      MailService mailService = MailUtils.getMailService();
-      UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
-      String username = uiPortlet.getCurrentUser();
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class)
-                                  .getSelectedValue();
-      if (!Utils.isEmptyField(accountId)){
+      if (!Utils.isEmptyField(accountId)) {
         tagList = mailService.getTags(username, accountId);
-      }  
+      }
     } catch (Exception e) {
+      if (log.isDebugEnabled()) {
+        log.debug(String.format("Failed to get tag list of account %s belongs to user %s", accountId, username), e);
+      }
     }
     return tagList;
   }

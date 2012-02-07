@@ -224,16 +224,16 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
           }          
           feedCalendars.put(Utils.PRIVATE_TYPE + Utils.COLON +  calendar.getId() , calendar.getName());
         } else {
-          try {
-            calendar = calendarService.getSharedCalendars(username, false).getCalendarById(calendarId);
-          } catch (NullPointerException e) {}
+          calendar = calendarService.getSharedCalendars(username, false).getCalendarById(calendarId);
           if (calendar != null) {
-            if (calendar.getId().equals(Utils.getDefaultCalendarId(calendar.getCalendarOwner())) && calendar.getName().equals(NewUserListener.defaultCalendarName)) {
-              String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId, NewUserListener.defaultCalendarId);
+            if (calendar.getId().equals(Utils.getDefaultCalendarId(calendar.getCalendarOwner()))
+                && calendar.getName().equals(NewUserListener.defaultCalendarName)) {
+              String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.defaultCalendarId,
+                                                               NewUserListener.defaultCalendarId);
               calendar.setName(newName);
             }
-            feedCalendars.put(Utils.SHARED_TYPE + Utils.COLON + calendar.getId()
-                              , Utils.getDisplaySharedCalendar(calendar.getCalendarOwner(), calendar.getName()));
+            feedCalendars.put(Utils.SHARED_TYPE + Utils.COLON + calendar.getId(),
+                              Utils.getDisplaySharedCalendar(calendar.getCalendarOwner(), calendar.getName()));
           } else {
             calendar = calendarService.getGroupCalendar(calendarId);
             List<SelectItemOption<String>> options = getCalendarsOptions();

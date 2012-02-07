@@ -618,10 +618,7 @@ public class UIAddressBooks extends UIComponent {
       List <Contact> removedContacts = new ArrayList<Contact>() ;
       if (uiAddressBook.sharedAddressBookMap_.containsKey(groupId)) {
         removedContacts = contactService.getSharedContactsByAddressBook(username, uiAddressBook.sharedAddressBookMap_.get(groupId)).getAll() ;
-        try {
-          contactService.unshareAddressBook(uiAddressBook.sharedAddressBookMap_.get(groupId).getSharedUserId()
-              , groupId, username) ;          
-        } catch (PathNotFoundException e) { }
+        contactService.unshareAddressBook(uiAddressBook.sharedAddressBookMap_.get(groupId).getSharedUserId(), groupId, username);        
       }   
       uiAddressBook.updateAfterDeleteAddress(uiAddressBook, event, removedContacts);
     }

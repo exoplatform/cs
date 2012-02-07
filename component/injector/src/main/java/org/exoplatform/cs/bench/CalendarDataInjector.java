@@ -548,6 +548,7 @@ public class CalendarDataInjector extends DataInjector {
         categoryIds.addAll(convertStringToList(strs[3]));
       }
     } catch (Exception e) {
+      log.warn("Failed to get calendar settings", e);
     }
   }
 

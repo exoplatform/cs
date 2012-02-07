@@ -115,9 +115,7 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
       
       ContactService service = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;
-      try {
-        service.removeContacts(username, tempContact) ;
-      } catch (PathNotFoundException e) {}
+      service.removeContacts(username, tempContact);
       service.saveContact(username, contact, true) ;
       uiProfileInputSet.setContact(service.getContact(username, contact.getId())) ; 
       uiProfileInputSet.setImage(inputStream) ;

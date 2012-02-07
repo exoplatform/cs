@@ -114,13 +114,15 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
     addChild(eventReminderTab) ;
     //setRenderedChild(TAB_EVENTDETAIL) ;
   }
+
   public String getLabel(String id) {
-    String label = id ;
+    String label;
     try {
-      label = super.getLabel(id) ;
+      label = super.getLabel(id);
     } catch (Exception e) {
+      label = id;
     }
-    return label ;
+    return label;
   }
   public void reset() {
     super.reset() ;

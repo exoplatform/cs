@@ -557,17 +557,15 @@ public class UIMessageList extends UIForm {
     MailUtils.getMailService().toggleMessageProperty(username, accountId, msgs, folderId, Utils.EXO_ISUNREAD, value);
   }
 
-  public boolean isShowUnread(Message msg) throws Exception {
+  public boolean isShowUnread(Message msg) {
     boolean showUnread = false;
-    try {
-      if ((viewMode == MODE_CONVERSATION) && (msg.getGroupedMessageIds().size() > 0)) {
-        for (String id : msg.getGroupedMessageIds()) {
-          Message m = messageList_.get(id);
-          if (m.isUnread()) showUnread = true; 
-        }
+    if ((viewMode == MODE_CONVERSATION) && (msg.getGroupedMessageIds().size() > 0)) {
+      for (String id : msg.getGroupedMessageIds()) {
+        Message m = messageList_.get(id);
+        if (m.isUnread())
+          showUnread = true;
       }
-    } catch(Exception e) { }
-
+    }
     return showUnread;
   }
 
@@ -1770,6 +1768,12 @@ public class UIMessageList extends UIForm {
         uiMsgList.addUIFormInput(uiCheckBox);
         uiMsgList.messageList_.put(msg.getId(), msg);
       } catch(Exception e) {
+        if (log.isDebugEnabled()) {
+          log.debug(String.format("Failed to update message list of message %s of account %s belongs to user %s",
+                                  msgId,
+                                  accountId,
+                                  uid), e);
+        }
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgList);
     }

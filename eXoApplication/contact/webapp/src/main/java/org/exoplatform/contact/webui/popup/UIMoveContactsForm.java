@@ -148,12 +148,10 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
           // check for existing contact
           Contact tempContact = null ;
           if (uiContacts.isSharedAddress(contact)) {
-            tempContact = contactService.getSharedContactAddressBook(username, id) ;
+            tempContact = contactService.getSharedContactAddressBook(username, id);
           } else {
-            try {
-              tempContact = contactService.getSharedContact(username, id) ;              
-            } catch (PathNotFoundException e) { }
-          }  
+            tempContact = contactService.getSharedContact(username, id);
+          }
           if (!uiContacts.havePermission(contact) && uiContacts.isSharedAddress(contact)) {;
             event.getRequestContext()
                  .getUIApplication()

@@ -18,6 +18,8 @@ package org.exoplatform.mail.service;
 
 import java.util.Date;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Nam Phung
@@ -28,27 +30,27 @@ import java.util.Date;
  * 
  */
 public class Folder {
-  private String  id;
+  private String  id                     = StringUtils.EMPTY;
 
-  private String  path;
+  private String  path                   = StringUtils.EMPTY;
 
-  private String  name;
+  private String  name                   = StringUtils.EMPTY;
 
-  private String  urlName          = "";
+  private String  urlName                = StringUtils.EMPTY;
 
-  private long    unreadMessage    = 0;
+  private long    unreadMessage          = 0;
 
-  private long    allMessages      = 0;
+  private long    allMessages            = 0;
 
-  private boolean isPersonalFolder = true;
+  private boolean isPersonalFolder       = true;
 
-  private Date    lastCheckedDate_;
+  private Date    lastCheckedDate_       = new Date();
 
-  private Date    lastStartCheckingTime_;
+  private Date    lastStartCheckingTime_ = new Date();
 
-  private Date    checkFromDate_;
+  private Date    checkFromDate_         = new Date();
 
-  private long    type_            = 3;
+  private long    type_                  = 3;
 
   /**
    * The id folder should have the form AccountId/DefaultFolder/folderName or AccountId/UserFolder/folderName

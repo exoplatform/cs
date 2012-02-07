@@ -93,7 +93,7 @@ public class MailUtils {
   final public static int MAX_POPUP_WIDTH = 900;
   public static final int DEFAULT_VALUE_UPLOAD_PORTAL = -1;
 
-  static public MailService getMailService() throws Exception {
+  static public MailService getMailService() {
     return (MailService) PortalContainer.getComponent(MailService.class);
   }
 
@@ -253,7 +253,7 @@ public class MailUtils {
         + encodeJCRPath2URLPath(att.getPath());
   }
 
-  public static String encodeHTML(String htmlContent) throws Exception {
+  public static String encodeHTML(String htmlContent) {
     return (!isFieldEmpty(htmlContent)) ? htmlContent.replaceAll("&", "&amp;").replaceAll("\"", "&quot;").replaceAll("<", "&lt;")
         .replaceAll(">", "&gt;").replaceAll("'", "&#39;") : "";
   }
@@ -339,13 +339,13 @@ public class MailUtils {
     return str.replaceAll("<[^>]*>", "").replaceAll("&nbsp;", "").replaceAll("&quot;", "\"").replaceAll("\n", "");
   }
 
-  public static String html2text(String str) throws Exception {
+  public static String html2text(String str) {
     if (isFieldEmpty(str))
       return "";
     return str.replaceAll("<br*/?>", "\n").replaceAll("<[^>]*>", "").replaceAll("&nbsp;", "").replaceAll("&quot;", "\"");
   }
 
-  public static String text2html(String str) throws Exception {
+  public static String text2html(String str) {
     if (isFieldEmpty(str))
       return "";
     return str.replaceAll("\n", "<br />");
@@ -564,10 +564,11 @@ public class MailUtils {
   public static int getLimitUploadSize() {
     PortletRequestContext pcontext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     PortletPreferences portletPref = pcontext.getRequest().getPreferences();
-    int limitMB = DEFAULT_VALUE_UPLOAD_PORTAL;
+    int limitMB;
     try {
       limitMB = Integer.parseInt(portletPref.getValue("uploadFileSizeLimitMB", "").trim());
     } catch (Exception e) {
+      limitMB = DEFAULT_VALUE_UPLOAD_PORTAL;
     }
     return limitMB;
   }

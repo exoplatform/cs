@@ -67,7 +67,9 @@ public class MimeMessageParser {
               return msgDate;
           }
         } catch (ParseException ex) {
-          // exception
+          if (logger.isDebugEnabled()) {
+            logger.debug("Failed to parse the received field from message's header", ex);
+          }
         }
       }
     }
@@ -80,7 +82,9 @@ public class MimeMessageParser {
         if (!msgDate.after(today))
           return msgDate;
       } catch (ParseException ex) {
-        // exception
+        if (logger.isDebugEnabled()) {
+          logger.debug("Failed to parse the date field from message's header", ex);
+        }
       }
     }
 
@@ -164,6 +168,9 @@ public class MimeMessageParser {
       if (msgIdHeaders != null && msgIdHeaders[0] != null)
         return msgIdHeaders[0];
     } catch (Exception e) {
+      if (logger.isDebugEnabled()) {
+        logger.debug("Failed to get header from message", e);
+      }
     }
     return "";
   }

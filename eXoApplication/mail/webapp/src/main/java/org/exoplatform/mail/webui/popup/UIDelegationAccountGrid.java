@@ -103,7 +103,9 @@ public class UIDelegationAccountGrid extends UIGrid {
         deInputSet.addChild(cb);
       }
     } catch (Exception e) {
-
+      if (log.isDebugEnabled()){
+        log.debug("Failed to get delegation data", e);
+      }
     }
   }
 

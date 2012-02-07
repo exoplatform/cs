@@ -253,7 +253,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         if (roomInfo != null)
           return joinRoom(username, room, nickname, null);
       } catch (XMPPException e) {
-        // nothing to do
+        if (log.isDebugEnabled()){
+          log.debug(String.format("Failed to join room %s with nick name %s belongs to user %s", room, nickname, username), e);          
+        }
       }
       try {
         FormBean formBean = session.createRoom(roomEscape, nickname);
@@ -1525,16 +1527,13 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       initInfoBean.setMucServicesNames(collectionMUCService);
       initInfoBean.setRoster(TransformUtils.rosterToRosterBean(buddyList));
 
-      try {
-        List<ContactBean> list = new ArrayList<ContactBean>();
-        for (ContactBean b : initInfoBean.getRoster()) {
-          UserInfo info = session.getUserInfo(b.getUser().split("@")[0]);
-          b.setFullName(info.getFirstName() + " " + info.getLastName());
-          list.add(b);
-        }
-        initInfoBean.setRoster(list);
-      } catch (Exception e) {
+      List<ContactBean> list = new ArrayList<ContactBean>();
+      for (ContactBean b : initInfoBean.getRoster()) {
+        UserInfo info = session.getUserInfo(b.getUser().split("@")[0]);
+        b.setFullName(info.getFirstName() + " " + info.getLastName());
+        list.add(b);
       }
+      initInfoBean.setRoster(list);
 
       ContactBean myProfile = new ContactBean();
       myProfile.setUser(username);

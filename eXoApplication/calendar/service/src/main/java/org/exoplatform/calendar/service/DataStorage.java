@@ -752,9 +752,8 @@ public interface DataStorage {
    * @param calendarId
    * @param eventId
    * @param answer
-   * @throws Exception
    */
-  public void confirmInvitation(String fromUserId, String toUserId, int calType, String calendarId, String eventId, int answer) throws Exception;
+  public void confirmInvitation(String fromUserId, String toUserId, int calType, String calendarId, String eventId, int answer);
 
   /**
    * @param fromUserId
