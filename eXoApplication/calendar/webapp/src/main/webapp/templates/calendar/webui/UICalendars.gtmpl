@@ -92,7 +92,7 @@
               if(calendar.getViewPermission()!= null && calendar.getViewPermission().length > 0) { icon = "SharedCalendarIcon"}
               if(uicomponent.getChildById(calId) != null) {
                 def css = "IconCheckBox checkbox";
-                if(UICalendarPortlet.isInSpace() && !uicomponent.isCalendarOfSpace(calId))  {css = "IconUnCheckBox checkbox";}
+                if(UICalendarPortlet.isInSpace() && !uicomponent.isCalendarOfSpace(calendar.getGroups()))  {css = "IconUnCheckBox checkbox";}
                 UIFormCheckBoxInput chk = (UIFormCheckBoxInput)uicomponent.getChildById(calId);
                 if(chk.isChecked()){css = "IconCheckBox checkbox";}
         %>
@@ -145,7 +145,7 @@
               owner = calendar.getCalendarOwner() + "- " ;
             }
             def css = "IconCheckBox checkbox";
-            if(UICalendarPortlet.isInSpace() && !uicomponent.isCalendarOfSpace(calId))  {css = "IconUnCheckBox checkbox";}
+            if(UICalendarPortlet.isInSpace() && !uicomponent.isCalendarOfSpace(calendar.getGroups()))  {css = "IconUnCheckBox checkbox";}
             UIFormCheckBoxInput chk = (UIFormCheckBoxInput)uicomponent.getChildById(calId);
             if(chk.isChecked()){css = "IconCheckBox checkbox";}
         %>
@@ -201,7 +201,7 @@
               calId = calendar.getId() ;
               if(uicomponent.getChildById(calId) != null) {
                 def css = "IconCheckBox checkbox";
-                if(UICalendarPortlet.isInSpace() && !uicomponent.isCalendarOfSpace(calId))  {css = "IconUnCheckBox checkbox";}
+                if(UICalendarPortlet.isInSpace() && !uicomponent.isCalendarOfSpace(calendar.getGroups()))  {css = "IconUnCheckBox checkbox";}
                 UIFormCheckBoxInput chk = (UIFormCheckBoxInput)uicomponent.getChildById(calId);
                 if(chk.isChecked()){css = "IconCheckBox checkbox";}
         %>

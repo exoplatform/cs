@@ -154,14 +154,32 @@ public class UICalendars extends UIForm  {
 
   public void checkAll() {
     if (UICalendarPortlet.getSpaceId() != null) {
+      CalendarService calendarService = null;
+      try {
+        calendarService = CalendarUtils.getCalendarService() ;
+      } catch (Exception e) {
+        if(log.isDebugEnabled()){
+          log.debug("Can not get calendar service", e);
+        }
+      }
       // As just one calendar is set to checked, this function is broken if the portlet is in Social Space.
+      String [] groupIds = null;
       for(UIComponent component : getChildren()){
-        if(isCalendarOfSpace(component.getId())){
+        groupIds = new String[]{};
+        if(calendarService != null){
+          try {
+            groupIds = calendarService.getGroupCalendar(component.getId()).getGroups();
+          } catch (Exception e) {
+            if(log.isDebugEnabled()){
+              log.debug("Can not get group calendar id", e);
+            }
+          }
+        }
+        if(isCalendarOfSpace(groupIds)){
           getUIFormCheckBoxInput(component.getId()).setChecked(true) ;
         }else{
           getUIFormCheckBoxInput(component.getId()).setChecked(false) ;
         }
-        
       }
       return;
     }
@@ -240,7 +258,7 @@ public class UICalendars extends UIForm  {
           UIFormCheckBoxInput checkbox = getUIFormCheckBoxInput(calendar.getId());
           if (checkbox == null) {
             checkbox = new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false);
-            checkbox.setChecked(isCalendarOfSpace(calendar.getId()));
+            checkbox.setChecked(isCalendarOfSpace(calendar.getGroups()));
             addUIFormInput(checkbox);
           } else {
             setCheckedCheckbox(checkbox, calendar);
@@ -261,19 +279,29 @@ public class UICalendars extends UIForm  {
     if(isListView){
       checkbox.setChecked(checkbox.isChecked());
     }else{
-      checkbox.setChecked(isCalendarOfSpace(calendar.getId()));
+      checkbox.setChecked(isCalendarOfSpace(calendar.getGroups()));
     }
   }
 
   /**
    * 
-   * @param calendarId
+   * @param groupIds
    * @return true if the calendar is made by Social Space
    * else return false.
    */
-  protected boolean isCalendarOfSpace(String calendarId) {
+  protected boolean isCalendarOfSpace(String[] groupIds) {
     String spaceId = UICalendarPortlet.getSpaceId();
-    return (spaceId == null || (spaceId != null && calendarId.contains(spaceId)));
+    if (spaceId == null) {
+      return true;
+    }
+    if (groupIds != null && groupIds.length > 0) {
+      for (String groupId : groupIds) {
+        if (groupId.contains(spaceId)) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
   
   public List<GroupCalendarData> getPublicCalendars() throws Exception{
@@ -290,7 +318,7 @@ public class UICalendars extends UIForm  {
         UIFormCheckBoxInput checkbox = getUIFormCheckBoxInput(calendar.getId());
         if (checkbox == null) {
           checkbox = new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false);
-          checkbox.setChecked(isCalendarOfSpace(calendar.getId()));
+          checkbox.setChecked(isCalendarOfSpace(calendar.getGroups()));
           addUIFormInput(checkbox);
         } else {
           setCheckedCheckbox(checkbox, calendar);
@@ -322,7 +350,7 @@ public class UICalendars extends UIForm  {
         UIFormCheckBoxInput checkbox = getUIFormCheckBoxInput(calendar.getId());
         if (checkbox == null) {
           checkbox = new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false);
-          checkbox.setChecked(isCalendarOfSpace(calendar.getId()));
+          checkbox.setChecked(isCalendarOfSpace(calendar.getGroups()));
           addUIFormInput(checkbox);
         } else {
           setCheckedCheckbox(checkbox, calendar);
