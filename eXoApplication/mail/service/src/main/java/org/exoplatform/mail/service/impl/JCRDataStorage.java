@@ -1933,20 +1933,19 @@ public class JCRDataStorage implements DataStorage {
       for (Message msg : msgList) {
         try {
           Node msgNode = (Node) mailHome.getSession().getItem(msg.getPath());
-          try {
-            Value[] propTags = msgNode.getProperty(Utils.EXO_TAGS).getValues();
-            String[] oldTagIds = new String[propTags.length];
-            for (int i = 0; i < propTags.length; i++) {
-              oldTagIds[i] = propTags[i].getString();
-            }
-            List<String> tagList = new ArrayList<String>(Arrays.asList(oldTagIds));
-            tagList.removeAll(tagIds);
-            String[] newTagIds = tagList.toArray(new String[tagList.size()]);
-            msgNode.setProperty(Utils.EXO_TAGS, newTagIds);
-            msgNode.save();
-          } catch (Exception e) {
+
+          Value[] propTags = msgNode.getProperty(Utils.EXO_TAGS).getValues();
+          String[] oldTagIds = new String[propTags.length];
+          for (int i = 0; i < propTags.length; i++) {
+            oldTagIds[i] = propTags[i].getString();
           }
-        } catch (PathNotFoundException e) {
+          List<String> tagList = new ArrayList<String>(Arrays.asList(oldTagIds));
+          tagList.removeAll(tagIds);
+          String[] newTagIds = tagList.toArray(new String[tagList.size()]);
+          msgNode.setProperty(Utils.EXO_TAGS, newTagIds);
+          msgNode.save();
+        } catch (Exception e) {
+          logger.warn(String.format("Failed to remove tags in message %s", msg.getId()));
         }
       }
     } finally {
