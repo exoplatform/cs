@@ -595,6 +595,7 @@ public class CalendarWebservice implements ResourceContainer{
     event.setStartTimeOffset(timeZone.getOffset(cEvent.getFromDateTime().getTime()));
     event.setEndDateTime(cEvent.getToDateTime().getTime());
     event.setEndTimeOffset(timeZone.getOffset(cEvent.getToDateTime().getTime()));
+    event.setDateFormat(calSetting.getDateFormat());
     return event;
   }
   

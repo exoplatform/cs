@@ -24,23 +24,25 @@ package org.exoplatform.webservice.cs.bean;
  */
 public class SingleEvent {
 
-  private String        summary       = "";
+  private String summary         = "";
 
-  private String        description   = "";
+  private String description     = "";
 
-  private String        location      = "";
+  private String location        = "";
 
-  private String        eventState    = "";
+  private String eventState      = "";
 
-  private String        priority      = "";
+  private String priority        = "";
 
-  private long          startDateTime = -1;
+  private long   startDateTime   = -1;
 
-  private long          endDateTime   = -1;
+  private long   endDateTime     = -1;
 
-  private long          startTimeOffset    = 0;
-  
-  private long          endTimeOffset    = 0;
+  private long   startTimeOffset = 0;
+
+  private long   endTimeOffset   = 0;
+
+  private String dateFormat      = "";
 
   public String getSummary() {
     return summary;
@@ -112,6 +114,14 @@ public class SingleEvent {
 
   public void setEndTimeOffset(long endTimeOffset) {
     this.endTimeOffset = endTimeOffset;
+  }
+
+  public String getDateFormat() {
+    return dateFormat;
+  }
+
+  public void setDateFormat(String dateFormat) {
+    this.dateFormat = dateFormat;
   }
   
 }

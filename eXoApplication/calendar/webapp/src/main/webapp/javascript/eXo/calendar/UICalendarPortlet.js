@@ -2744,17 +2744,18 @@ eXo.calendar.EventTooltip = {
 		var currentDate = new Date();
 		var d = new Date(parseInt(data.startDateTime) + parseInt(data.startTimeOffset));
 		var d1 = new Date(parseInt(data.endDateTime) + parseInt(data.endTimeOffset));
+		var dateFormat = data.dateFormat.toLowerCase();
 		var df = eXo.cs.DateTimeFormater;
 		if(type == 1){
-			time = df.format(d,"dd/mm/yyyy", this.UTC_0);
+			time = df.format(d, dateFormat, this.UTC_0);
 		}
 		else if(type == 2){
-			time = df.format(d,"dd/mm/yyyy", this.UTC_0) + " " + df.format(d,timeFormat, this.UTC_0) + " - ";
-			time += df.format(d1,"dd/mm/yyyy", this.UTC_0) + " " + df.format(d1,timeFormat, this.UTC_0);			
+			time = df.format(d, dateFormat, this.UTC_0) + " " + df.format(d, timeFormat, this.UTC_0) + " - ";
+			time += df.format(d1, dateFormat, this.UTC_0) + " " + df.format(d1, timeFormat, this.UTC_0);
 		}
 		else{
-			time = df.format(d,"dd/mm/yyyy", this.UTC_0) + " " + df.format(d,timeFormat, this.UTC_0);
-			time += " - " + df.format(d1,timeFormat, this.UTC_0);
+			time = df.format(d, dateFormat, this.UTC_0) + " " + df.format(d, timeFormat, this.UTC_0);
+			time += " - " + df.format(d1, timeFormat, this.UTC_0);
 		}
 		return time;
 	},
