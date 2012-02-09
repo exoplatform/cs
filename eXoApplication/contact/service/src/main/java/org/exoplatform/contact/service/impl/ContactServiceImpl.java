@@ -16,6 +16,8 @@
  */
 package org.exoplatform.contact.service.impl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -42,6 +44,8 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
@@ -56,6 +60,8 @@ import org.exoplatform.services.security.Identity;
  * Jul 11, 2007  
  */
 public class ContactServiceImpl implements ContactService {
+
+  private static final Log                 log                            = ExoLogger.getLogger(ContactServiceImpl.class);
 
   final private static String              VCARD                          = "x-vcard".intern();
 
@@ -357,14 +363,19 @@ public class ContactServiceImpl implements ContactService {
     storage_.registerNewUser(user, isNew);
   }
 
-  @SuppressWarnings("deprecation")
   public void updateProfile(UserProfile userProfile) throws Exception {
     Contact contact = storage_.loadPublicContactByUser(userProfile.getUserName());
     if (contact == null)
       return;
     contact.setNickName(userProfile.getAttribute("user.name.nickName"));
-    Date date = new Date(userProfile.getAttribute("user.bdate"));
-    contact.setBirthday(date);
+    try {
+      Date date = new SimpleDateFormat().parse(userProfile.getAttribute("user.bdate"));
+      contact.setBirthday(date);
+    } catch (ParseException e) {
+      if (log.isDebugEnabled()) {
+        log.debug(String.format("Failed to parse input user birth day with value %s", userProfile.getAttribute("user.bdate")), e);
+      }
+    }
     contact.setGender(userProfile.getAttribute("user.gender"));
 
     StringBuilder builderNote = new StringBuilder();
