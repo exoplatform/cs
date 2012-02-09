@@ -368,12 +368,15 @@ public class ContactServiceImpl implements ContactService {
     if (contact == null)
       return;
     contact.setNickName(userProfile.getAttribute("user.name.nickName"));
-    try {
-      Date date = new SimpleDateFormat().parse(userProfile.getAttribute("user.bdate"));
-      contact.setBirthday(date);
-    } catch (ParseException e) {
-      if (log.isDebugEnabled()) {
-        log.debug(String.format("Failed to parse input user birth day with value %s", userProfile.getAttribute("user.bdate")), e);
+    if (!Utils.isEmpty(userProfile.getAttribute("user.bdate"))) {
+      try {
+        Date date = new SimpleDateFormat().parse(userProfile.getAttribute("user.bdate"));
+        contact.setBirthday(date);
+      } catch (ParseException e) {
+        if (log.isDebugEnabled()) {
+          log.debug(String.format("Failed to parse input user birth day with value %s", userProfile.getAttribute("user.bdate")),
+                    e);
+        }
       }
     }
     contact.setGender(userProfile.getAttribute("user.gender"));
