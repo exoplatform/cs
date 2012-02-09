@@ -1169,6 +1169,10 @@ form {
 	visibility: visible;
 }
 
+*+html .UIConversation .UIActionbar .SendFileIcon .SendFileLabel{
+	margin-left: -60px;
+}
+
 
 /* Copyright */
 .UIChatBarPortlet .Copyright {
