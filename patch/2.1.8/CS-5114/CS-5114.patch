@@ -1,0 +1,12 @@
+Index: eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/UICalendarView.java
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/UICalendarView.java	(revision 79171)
++++ eXoApplication/calendar/webapp/src/main/java/org/exoplatform/calendar/webui/UICalendarView.java	(working copy)
+@@ -815,7 +815,6 @@
+         UICalendarView uiCalendarView = event.getSource() ;
+         UICalendarPortlet uiPortlet = uiCalendarView.getAncestorOfType(UICalendarPortlet.class) ;
+         uiPortlet.cancelAction() ;
+-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
+         CalendarEvent eventCalendar = null ;
+         if(uiCalendarView instanceof UIListView) {
+           UIListView uiListView = (UIListView)uiCalendarView ;
