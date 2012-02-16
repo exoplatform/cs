@@ -483,6 +483,7 @@
   </profiles>
 
   <modules>
+    <module>component</module>
     <module>web</module>
     <module>eXoApplication</module>
     <module>migration2.1</module>

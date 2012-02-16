@@ -112,7 +112,9 @@ addDependency(new Project("org.exoplatform.ecms", "exo-ecms-core-parser", "jar",
    // demo portal
    module.demo.portal = 
 	   new Project("org.exoplatform.cs", "exo.cs.demo.webapp", "war", module.version).
-	   addDependency(new Project("org.exoplatform.cs", "exo.cs.demo.config", "jar", module.version));
+	   addDependency(new Project("org.exoplatform.cs", "exo.cs.demo.config", "jar", module.version)).
+	   addDependency(new Project("org.exoplatform.cs", "exo.cs.component.injector", "jar", module.version)).
+	   addDependency(new Project("org.exoplatform.commons", "exo.platform.commons.component", "jar", "${org.exoplatform.commons.version}"));
    module.demo.portal.deployName = "csdemo";  
 	   
   module.demo.cometd=

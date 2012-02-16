@@ -1,0 +1,1441 @@
+Index: packaging/pkg/pom.xml
+===================================================================
+--- packaging/pkg/pom.xml	(revision 79503)
++++ packaging/pkg/pom.xml	(working copy)
+@@ -158,6 +158,12 @@
+     <version>${org.exoplatform.commons.version}</version>
+     <type>war</type>
+     </dependency>
++    <dependency>
++    <groupId>org.exoplatform.commons</groupId>
++    <artifactId>exo.platform.commons.component</artifactId>
++    <version>${org.exoplatform.commons.version}</version>
++    <scope>provided</scope>
++    </dependency>
+ 	  <dependency>
+ 		<groupId>org.exoplatform.commons</groupId>
+ 		<artifactId>exo.platform.commons.fck</artifactId>
+Index: packaging/module/src/main/javascript/cs.packaging.module.js
+===================================================================
+--- packaging/module/src/main/javascript/cs.packaging.module.js	(revision 79503)
++++ packaging/module/src/main/javascript/cs.packaging.module.js	(working copy)
+@@ -112,7 +112,9 @@
+    // demo portal
+    module.demo.portal = 
+ 	   new Project("org.exoplatform.cs", "exo.cs.demo.webapp", "war", module.version).
+-	   addDependency(new Project("org.exoplatform.cs", "exo.cs.demo.config", "jar", module.version));
++	   addDependency(new Project("org.exoplatform.cs", "exo.cs.demo.config", "jar", module.version)).
++	   addDependency(new Project("org.exoplatform.cs", "exo.cs.component.injector", "jar", module.version)).
++	   addDependency(new Project("org.exoplatform.commons", "exo.platform.commons.component", "jar", "${org.exoplatform.commons.version}"));
+    module.demo.portal.deployName = "csdemo";  
+ 	   
+   module.demo.cometd=
+Index: pom.xml
+===================================================================
+--- pom.xml	(revision 79503)
++++ pom.xml	(working copy)
+@@ -483,6 +483,7 @@
+   </profiles>
+ 
+   <modules>
++    <module>component</module>
+     <module>web</module>
+     <module>eXoApplication</module>
+     <module>migration2.1</module>
+Index: component/pom.xml
+===================================================================
+--- component/pom.xml	(revision 0)
++++ component/pom.xml	(revision 0)
+@@ -0,0 +1,15 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
++  <modelVersion>4.0.0</modelVersion>
++  <parent>
++    <groupId>org.exoplatform.cs</groupId>
++    <artifactId>cs</artifactId>
++    <version>2.1.7-SNAPSHOT</version>
++  </parent>
++  <artifactId>exo.cs.component</artifactId>
++  <packaging>pom</packaging>
++  <name>eXo CS Components</name>
++  <modules>
++    <module>injector</module>
++  </modules>
++</project>
+Index: component/injector/src/main/java/org/exoplatform/cs/bench/CalendarDataInjector.java
+===================================================================
+--- component/injector/src/main/java/org/exoplatform/cs/bench/CalendarDataInjector.java	(revision 0)
++++ component/injector/src/main/java/org/exoplatform/cs/bench/CalendarDataInjector.java	(revision 0)
+@@ -0,0 +1,569 @@
++/*
++ * Copyright (C) 2003-2011 eXo Platform SAS.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Affero General Public License
++ * as published by the Free Software Foundation; either version 3
++ * of the License, or (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see<http://www.gnu.org/licenses/>.
++ */
++package org.exoplatform.cs.bench;
++
++import java.util.ArrayList;
++import java.util.Arrays;
++import java.util.Date;
++import java.util.GregorianCalendar;
++import java.util.HashMap;
++import java.util.HashSet;
++import java.util.List;
++import java.util.Random;
++import java.util.Set;
++
++import org.exoplatform.calendar.service.Calendar;
++import org.exoplatform.calendar.service.CalendarCategory;
++import org.exoplatform.calendar.service.CalendarEvent;
++import org.exoplatform.calendar.service.CalendarService;
++import org.exoplatform.calendar.service.CalendarSetting;
++import org.exoplatform.calendar.service.EventCategory;
++import org.exoplatform.container.xml.InitParams;
++import org.exoplatform.services.bench.DataInjector;
++import org.exoplatform.services.log.ExoLogger;
++import org.exoplatform.services.log.Log;
++import org.exoplatform.services.security.ConversationState;
++import org.exoplatform.services.security.Identity;
++
++/**
++ * Created by The eXo Platform SAS
++ * Author : Vu Duy Tu
++ *          tu.duy@exoplatform.com
++ * Aug 3, 2011  
++ */
++public class CalendarDataInjector extends DataInjector {
++  private static final Log       log                = ExoLogger.getLogger(CalendarDataInjector.class);
++
++  private static final String    EMPTY              = "".intern();
++
++  private int                    maxCategories      = 3;
++
++  private int                    maxEventCategories = 3;
++
++  private int                    maxCalendars       = 3;
++
++  private int                    maxEvents          = 4;
++
++  private int                    maxTasks           = 4;
++
++  private String                 baseURL            = EMPTY;
++
++  private String                 typeOfInject       = "all";
++
++  private boolean                randomize          = true;
++
++  private CalendarService        calService;
++
++  private String                 currentUser        = EMPTY;
++
++  private CalendarSetting        setting            = new CalendarSetting();
++
++  private List<EventCategory>    eventCategory      = new ArrayList<EventCategory>();
++
++  private List<CalendarCategory> categories         = new ArrayList<CalendarCategory>();
++
++  private Set<String>            eventCategorys     = new HashSet<String>();
++
++  private Set<String>            categoryIds        = new HashSet<String>();
++
++  private Set<String>            publicCalendar     = new HashSet<String>();
++
++  private Set<String>            privateCalendar    = new HashSet<String>();
++
++  private List<String>           name               = new ArrayList<String>();
++
++  private String[]               groupShare         = new String[] { EMPTY };
++
++  private String[]               groups             = new String[] { EMPTY };
++
++  private Random                 rand               = new Random();
++
++  public CalendarDataInjector(CalendarService calService, InitParams params) {
++    initParams(params);
++    this.calService = calService;
++  }
++
++  private void initDatas() {
++    String str = "/:*.*";
++    rand = new Random();
++    try {
++      Identity identity = ConversationState.getCurrent().getIdentity();
++      currentUser = identity.getUserId();
++      Set<String> set = new HashSet<String>(identity.getGroups());
++      groupShare = new String[set.size() + 1];
++      int i = 0;
++      for (String string : set) {
++        groupShare[i] = string + str;
++        i++;
++      }
++      groupShare[i] = currentUser;
++      set.add(currentUser);
++      groups = set.toArray(new String[set.size()]);
++    } catch (Exception e) {
++      log.info("Can not inint user...", e);
++    }
++  }
++
++  @Override
++  public Log getLog() {
++    return log;
++  }
++
++  private int getParam(InitParams initParams, String param, int df) {
++    try {
++      return Integer.parseInt(initParams.getValueParam(param).getValue());
++    } catch (Exception e) {
++      return df;
++    }
++  }
++
++  private boolean getParam(InitParams initParams, String param) {
++    try {
++      return Boolean.parseBoolean(initParams.getValueParam(param).getValue());
++    } catch (Exception e) {
++      return false;
++    }
++  }
++
++  private String getParam(InitParams initParams, String param, String df) {
++    try {
++      return String.valueOf(initParams.getValueParam(param).getValue());
++    } catch (Exception e) {
++      return df;
++    }
++  }
++
++  public void initParams(InitParams initParams) {
++    maxCategories = getParam(initParams, "mCt", maxCategories);
++    maxEventCategories = getParam(initParams, "mEcat", maxEventCategories);
++    maxCalendars = getParam(initParams, "mCal", maxCalendars);
++    maxEvents = getParam(initParams, "mEv", maxEvents);
++    maxTasks = getParam(initParams, "mTa", maxTasks);
++    baseURL = getParam(initParams, "baseURL", baseURL);
++    typeOfInject = getParam(initParams, "typeOfInject", typeOfInject);
++    randomize = getParam(initParams, "rand");
++  }
++
++  @Override
++  public void inject(HashMap<String, String> queryParams) throws Exception {
++    log.info("Start inject datas for calendar....");
++    setHistoryInject();
++    if ("all".equals(typeOfInject)) {
++      if (currentUser.length() > 0) {
++        initPrivateCalendar();
++      }
++      initPublicCalendar();
++    } else if ("public".equals(typeOfInject)) {
++      initPublicCalendar();
++    } else if (currentUser.length() > 0) {
++      initPrivateCalendar();
++    }
++  }
++
++  private void removePrivateData() throws Exception {
++    try {
++      log.info(String.format("removing private datas..... \n  removing %s calendars.....", privateCalendar.size()));
++      for (String calId : privateCalendar) {
++        if (!isEmpty(calId)) {
++          calService.removeUserCalendar(currentUser, calId);
++        }
++      }
++      log.info(String.format("removing %s event catetories.....", eventCategorys.size()));
++      for (String evCatId : eventCategorys) {
++        if (!isEmpty(evCatId)) {
++          calService.removeEventCategory(currentUser, evCatId);
++        }
++      }
++      log.info(String.format("removing %s catetories.....", categoryIds.size()));
++      for (String catId : categoryIds) {
++        if (!isEmpty(catId)) {
++          calService.removeCalendarCategory(currentUser, catId);
++        }
++      }
++    } catch (Exception e) {
++      log.debug("Failed to remove private injecter datas", e);
++    }
++  }
++
++  private void removePublicData() throws Exception {
++    try {
++      log.info(String.format("remove public datas..... \n  removing %s calendars.....", publicCalendar.size()));
++      for (String calId : publicCalendar) {
++        if (!isEmpty(calId)) {
++          calService.removePublicCalendar(calId);
++        }
++      }
++    } catch (Exception e) {
++      log.debug("Failed to remove public injecter datas", e);
++    }
++  }
++
++  @Override
++  public void reject(HashMap<String, String> queryParams) throws Exception {
++    setHistoryInject();
++    if ("all".equals(typeOfInject)) {
++      // remove public
++      removePublicData();
++      if (currentUser.length() > 0) {
++        // remove private
++        removePrivateData();
++      }
++    } else if ("public".equals(typeOfInject)) {
++      // remove public
++      removePublicData();
++    } else if (currentUser.length() > 0) {
++      // remove private
++      removePrivateData();
++    }
++    log.info("Complated reject datas..");
++    publicCalendar.clear();
++    privateCalendar.clear();
++    eventCategorys.clear();
++    categoryIds.clear();
++    saveHistoryInject();
++  }
++
++  private void initPublicCalendar() throws Exception {
++    // save public calendar
++    List<Calendar> calendars = findCalendars(true);
++    log.info("Inject public datas ....");
++    int index = 0, size = calendars.size(), evsCal, tasCal, evs = 0, tas = 0;
++    long t, t1 = System.currentTimeMillis();
++    for (Calendar calendar : calendars) {
++      t = System.currentTimeMillis();
++      evsCal = tasCal = 0;
++      calService.savePublicCalendar(calendar, true);
++      publicCalendar.add(calendar.getId());
++      // save event in public calendar
++      for (CalendarEvent event : findCalendarEvent(calendar.getId(), "2", CalendarEvent.TYPE_EVENT, true)) {
++        calService.savePublicEvent(calendar.getId(), event, true);
++        evsCal++;
++      }
++      // save task in public calendar
++      for (CalendarEvent event : findCalendarEvent(calendar.getId(), "2", CalendarEvent.TYPE_TASK, true)) {
++        calService.savePublicEvent(calendar.getId(), event, true);
++        tasCal++;
++      }
++      log.info(String.format("Saved Calendar %s/%s with %s Events and %s Tasks in %sms",
++                             (++index), size, evsCal, tasCal, (System.currentTimeMillis()) - t));
++      evs += evsCal;
++      tas += tasCal;
++    }
++    log.info(String.format("INITIALIZED: Calendars=%s / Events=%s / Tasks=%s in %sms",
++                           publicCalendar.size(), evs, tas, (System.currentTimeMillis() - t1)));
++    saveHistoryInject();
++  }
++
++  private void initPrivateCalendar() throws Exception {
++    log.info("Inject private datas ....");
++    // save setting
++    try {
++      setting = calService.getCalendarSetting(currentUser);
++      log.info(String.format("Save calendar setting for user %s ....", currentUser));
++    } catch (Exception e) {
++      setting = newCalendarSetting();
++      calService.saveCalendarSetting(currentUser, setting);
++    }
++    long t = System.currentTimeMillis(), t1 = t;
++    // save category
++    for (CalendarCategory cate : findCalendarCategorys()) {
++      calService.saveCalendarCategory(currentUser, cate, true);
++      categories.add(cate);
++      categoryIds.add(cate.getId());
++    }
++    log.info(String.format("Saved %s calendarCategorys in %sms", categories.size(), (System.currentTimeMillis() - t)));
++    t = System.currentTimeMillis();
++    // save EventCategoy
++    List<EventCategory> eventCategories = findEventCategorys();
++    for (EventCategory evCat : eventCategories) {
++      calService.saveEventCategory(currentUser, evCat, true);
++      eventCategory.add(evCat);
++      eventCategorys.add(evCat.getId());
++    }
++    log.info(String.format("Saved %s eventCategories in %sms", eventCategories.size(), (System.currentTimeMillis() - t)));
++    // save calendar
++    List<Calendar> calendars = findCalendars(false);
++    List<CalendarEvent> events;
++    int index = 0, size = calendars.size(), evsCal, evs = 0, tas = 0;
++    for (Calendar calendar : calendars) {
++      t = System.currentTimeMillis();
++      calService.saveUserCalendar(currentUser, calendar, true);
++      privateCalendar.add(calendar.getId());
++      // save Event
++      events = findCalendarEvent(calendar.getId(), "0", CalendarEvent.TYPE_EVENT, false);
++      for (CalendarEvent event : events) {
++        calService.saveUserEvent(currentUser, calendar.getId(), event, true);
++      }
++      evsCal = events.size();
++      evs += evsCal;
++      // save Task
++      events = findCalendarEvent(calendar.getId(), "0", CalendarEvent.TYPE_TASK, false);
++      tas += events.size();
++      for (CalendarEvent event : events) {
++        calService.saveUserEvent(currentUser, calendar.getId(), event, true);
++      }
++      log.info(String.format("Saved Calendar %s/%s with %s Events and %s Tasks in %sms",
++                             (++index), size, evsCal, events.size(), (System.currentTimeMillis()) - t));
++    }
++    log.info(String.format("INITIALIZED CalendarCategorys=%s / EventCategorys=%s / Calendars=%s / Events=%s / Tasks=%s in %sms",
++                           categories.size(), eventCategories.size(), calendars.size(), evs, tas, (System.currentTimeMillis() - t1)));
++    categories.clear();
++    saveHistoryInject();
++  }
++
++  private List<EventCategory> findEventCategorys() throws Exception {
++    List<EventCategory> categories = new ArrayList<EventCategory>();
++    int mCat = getMaxItem(maxEventCategories);
++    name.clear();
++    for (int i = 0; i < mCat; i++) {
++      categories.add(newEventCategory());
++    }
++    return categories;
++  }
++
++  private List<CalendarCategory> findCalendarCategorys() throws Exception {
++    List<CalendarCategory> categories = new ArrayList<CalendarCategory>();
++    int mCat = getMaxItem(maxCategories);
++    name.clear();
++    for (int i = 0; i < mCat; i++) {
++      categories.add(newCalendarCategory());
++    }
++    return categories;
++  }
++
++  private List<Calendar> findCalendars(boolean isPublic) throws Exception {
++    List<Calendar> calendars = new ArrayList<Calendar>();
++    int mCal = getMaxItem(maxCalendars);
++    name.clear();
++    for (int i = 0; i < mCal; i++) {
++      calendars.add((isPublic) ? newPublicCalendar() : newPrivateCalendar());
++    }
++    return calendars;
++  }
++
++  private List<CalendarEvent> findCalendarEvent(String calendarId, String CalType, String type, boolean isPublic) throws Exception {
++    List<CalendarEvent> calendars = new ArrayList<CalendarEvent>();
++    int mCe = (type.equals(CalendarEvent.TYPE_EVENT)) ? getMaxItem(maxEvents) : getMaxItem(maxTasks);
++    name.clear();
++    for (int i = 0; i < mCe; i++) {
++      calendars.add(newCalendarEvent(calendarId, CalType, type, isPublic));
++    }
++    return calendars;
++  }
++
++  private int getMaxItem(int maxType) {
++    return (randomize) ? (new Random(maxType + 1).nextInt(maxType) + 1) : maxType;
++  }
++
++  private CalendarCategory newCalendarCategory() {
++    CalendarCategory category = new CalendarCategory();
++    category.setName(calRandomWords(10));
++    category.setDescription(randomWords(20));
++    return category;
++  }
++
++  private CalendarSetting newCalendarSetting() {
++    CalendarSetting setting = new CalendarSetting();
++    setting.setViewType("1");
++    setting.setBaseURL(baseURL);
++    setting.setWeekStartOn(String.valueOf(java.util.Calendar.MONDAY));
++    setting.setWorkingTimeBegin("08:00");
++    setting.setWorkingTimeEnd("18:00");
++    setting.setShowWorkingTime(false);
++    setting.setLocation("VNM");
++    setting.setTimeZone("Asia/Ho_Chi_Minh");
++    return setting;
++  }
++
++  private Calendar newPrivateCalendar() {
++    Calendar calendar = new Calendar();
++    calendar.setCalendarOwner(currentUser);
++    calendar.setCategoryId(randomCategory().getId());
++    calendar.setDataInit(true);
++    calendar.setName(calRandomWords(5));
++    calendar.setDescription(randomWords(20));
++    calendar.setCalendarColor(getRandomColor());
++    calendar.setEditPermission(new String[] {});
++    calendar.setGroups(new String[] {});
++    calendar.setViewPermission(new String[] {});
++    calendar.setPrivateUrl(EMPTY);
++    calendar.setPublicUrl(EMPTY);
++    calendar.setPublic(false);
++    calendar.setLocale(setting.getLocation());
++    calendar.setTimeZone(setting.getTimeZone());
++    return calendar;
++  }
++
++  private Calendar newPublicCalendar() {
++    Calendar calendar = new Calendar();
++    calendar.setCalendarOwner(currentUser);
++    calendar.setDataInit(true);
++    calendar.setName(calRandomWords(5));
++    calendar.setDescription(randomWords(20));
++    calendar.setCalendarColor(getRandomColor());
++    calendar.setEditPermission(groupShare);
++    calendar.setGroups(groups);
++    calendar.setViewPermission(new String[] { "*.*" });
++    calendar.setPrivateUrl(EMPTY);
++    calendar.setPublicUrl(EMPTY);
++    calendar.setPublic(true);
++    calendar.setLocale("VNM");
++    calendar.setTimeZone("Asia/Ho_Chi_Minh");
++    return calendar;
++  }
++
++  private EventCategory newEventCategory() {
++    EventCategory eventCategory = new EventCategory();
++    eventCategory.setDataInit(true);
++    eventCategory.setDescription(randomWords(20));
++    eventCategory.setName(calRandomWords(5));
++    return eventCategory;
++  }
++
++  private CalendarEvent newCalendarEvent(String calendarId, String CalType, String type, boolean isPublic) {
++    CalendarEvent categoryEvent = new CalendarEvent();
++    categoryEvent.setCalendarId(calendarId);
++    categoryEvent.setCalType(CalType);
++    categoryEvent.setDescription(randomWords(20));
++    if (!isPublic) {
++      EventCategory eventCategory = randomEventCategory();
++      categoryEvent.setEventCategoryId(eventCategory.getId());
++      categoryEvent.setEventCategoryName(eventCategory.getName());
++    }
++    categoryEvent.setEventState(randomState());
++    categoryEvent.setEventType(type);
++    long time = randomDateTime(rand.nextInt(365), 0);
++    categoryEvent.setFromDateTime(getTime(time));
++    time = randomDateTime(rand.nextInt(5), time);
++    categoryEvent.setToDateTime(getTime(time));
++
++    categoryEvent.setLocation(setting.getLocation());
++    categoryEvent.setMessage(randomWords(30));
++
++    categoryEvent.setInvitation(new String[] { EMPTY });
++    categoryEvent.setParticipant(new String[] { currentUser });
++    categoryEvent.setParticipantStatus(new String[] { currentUser + ":" });
++    categoryEvent.setPriority(CalendarEvent.PRIORITY[rand.nextInt(CalendarEvent.PRIORITY.length)]);
++    categoryEvent.setSendOption(CalendarSetting.ACTION_NEVER);
++    categoryEvent.setStatus(EMPTY);
++    categoryEvent.setTaskDelegator(EMPTY);
++    categoryEvent.setRepeatType(CalendarEvent.REPEATTYPES[rand.nextInt(CalendarEvent.REPEATTYPES.length)]);
++
++    categoryEvent.setSummary(calRandomWords(5));
++    categoryEvent.setPrivate(!isPublic);
++    return categoryEvent;
++  }
++
++  private String randomState() {
++    String[] srts = new String[] { CalendarEvent.ST_AVAILABLE, CalendarEvent.ST_BUSY, CalendarEvent.ST_OUTSIDE };
++    return srts[rand.nextInt(srts.length)];
++  }
++
++  private String calRandomWords(int i) {
++    String s = "qwertyuiopasdfghjkzxcvbnm";
++    s = randomWords(i) + String.valueOf(s.charAt(new Random().nextInt(s.length())));
++    if (name.contains(s)) {
++      return calRandomWords(i + 1);
++    } else {
++      name.add(s);
++    }
++    return s;
++  }
++
++  private static int clIndex = -1;
++
++  private static int l       = 1;
++
++  private String getRandomColor() {
++    if (clIndex <= 0) {
++      l = 1;
++    } else if (clIndex >= Calendar.COLORS.length - 1) {
++      l = -1;
++    }
++    clIndex += l;
++    return Calendar.COLORS[clIndex];
++  }
++
++  private long randomDateTime(long days, long oldTime) {
++    long time = (rand.nextInt(107) + 7) * 600000;
++    if (days > 0) {
++      time = days * 86400000 + (time / 10);
++    }
++    if (oldTime > 0) {
++      time += oldTime;
++    }
++    return time;
++  }
++
++  private Date getTime(long time) {
++    java.util.Calendar calendar = GregorianCalendar.getInstance();
++    calendar.setLenient(false);
++    long gmtoffset = calendar.get(java.util.Calendar.DST_OFFSET) + calendar.get(java.util.Calendar.ZONE_OFFSET);
++    calendar.setTimeInMillis(System.currentTimeMillis() - gmtoffset + time);
++    return calendar.getTime();
++  }
++
++  private CalendarCategory randomCategory() {
++    int i = categories.size();
++    return categories.get(new Random().nextInt(i));
++  }
++
++  private EventCategory randomEventCategory() {
++    int i = eventCategory.size();
++    return eventCategory.get(new Random().nextInt(i));
++  }
++
++  private void saveHistoryInject() throws Exception {
++    baseURL = publicCalendar.toString();
++    baseURL += ";" + privateCalendar.toString();
++    baseURL += ";" + eventCategorys.toString();
++    baseURL += ";" + categoryIds.toString();
++    setting.setBaseURL(baseURL);
++    calService.saveCalendarSetting(currentUser, setting);
++  }
++
++  private void setHistoryInject() {
++    initDatas();
++    try {
++      String s = calService.getCalendarSetting(currentUser).getBaseURL();
++      if (!isEmpty(s) && s.indexOf(";") > 0) {
++        String[] strs = s.split(";");
++        publicCalendar.addAll(convertStringToList(strs[0]));
++        privateCalendar.addAll(convertStringToList(strs[1]));
++        eventCategorys.addAll(convertStringToList(strs[2]));
++        categoryIds.addAll(convertStringToList(strs[3]));
++      }
++    } catch (Exception e) {
++    }
++  }
++
++  private List<String> convertStringToList(String s) {
++    s = s.replace("[", "").replace("]", "");
++    s = s.trim().replaceAll("(,\\s*)", ",").replaceAll("(\\s*,)", ",");
++    String[] strs = s.split(",");
++    return new ArrayList<String>(Arrays.asList(strs));
++  }
++
++  private boolean isEmpty(String s) {
++    return (s == null || s.trim().length() <= 0);
++  }
++
++  @Override
++  public Object execute(HashMap<String, String> arg0) throws Exception {
++    return new Object();
++  }
++}
+Index: component/injector/src/main/java/org/exoplatform/cs/bench/ContactDataInjector.java
+===================================================================
+--- component/injector/src/main/java/org/exoplatform/cs/bench/ContactDataInjector.java	(revision 0)
++++ component/injector/src/main/java/org/exoplatform/cs/bench/ContactDataInjector.java	(revision 0)
+@@ -0,0 +1,169 @@
++/*
++ * Copyright (C) 2003-2011 eXo Platform SAS.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Affero General Public License
++ * as published by the Free Software Foundation; either version 3
++ * of the License, or (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see<http://www.gnu.org/licenses/>.
++ */
++package org.exoplatform.cs.bench;
++
++import java.util.ArrayList;
++import java.util.HashMap;
++import java.util.List;
++import java.util.Random;
++import java.util.Stack;
++
++import org.exoplatform.contact.service.AddressBook;
++import org.exoplatform.contact.service.Contact;
++import org.exoplatform.contact.service.ContactAttachment;
++import org.exoplatform.contact.service.ContactService;
++import org.exoplatform.container.xml.InitParams;
++import org.exoplatform.container.xml.ValueParam;
++import org.exoplatform.services.bench.DataInjector;
++import org.exoplatform.services.jcr.util.IdGenerator;
++import org.exoplatform.services.log.ExoLogger;
++import org.exoplatform.services.log.Log;
++import org.exoplatform.services.security.ConversationState;
++
++/**
++ * Created by The eXo Platform SAS
++ * @author <a href="mailto:quanglt@exoplatform.com">Le Thanh Quang</a>
++ * Aug 2, 2011  
++ */
++public class ContactDataInjector extends DataInjector {
++
++  private static Log log = ExoLogger.getExoLogger(ContactDataInjector.class);
++  
++  private ContactService contactService;
++  
++  private int maxAddressBooks = 5;
++  
++  private int maxContacts = 10;
++  
++  private boolean randomize = false;
++  
++  private Random rand = new Random();
++  
++  private Stack<String> catsStack = new Stack<String>();
++  
++  public ContactDataInjector(ContactService contactService, InitParams initParams) {
++    this.contactService = contactService;
++    initParams(initParams);
++  }
++  
++  private AddressBook newAddressBook() {
++    AddressBook addressBook = new AddressBook();
++    addressBook.setName(randomWords(5));
++    addressBook.setDescription(randomParagraphs(5));
++    return addressBook;
++  }
++  
++  private Contact newContact() {
++    Contact contact = new Contact();
++    contact.setFirstName(randomWords(1));
++    contact.setLastName(randomWords(1));
++    contact.setNote(randomParagraphs(3));
++    contact.setHomeAddress(randomWords(5));
++    contact.setEmailAddress("fake@example.com");
++    ContactAttachment attachment = new ContactAttachment();
++    attachment.setId("attachment" + IdGenerator.generate());
++//    attachment.setInputStream(input);
++//    contact.setAttachment(new ContactAttachment());
++    return contact;
++  }
++  
++  private int addressBookSize() {
++    if (randomize) {
++      return rand.nextInt(maxAddressBooks);
++    }
++    return maxAddressBooks;
++  }
++  
++  private int contactsSize() {
++    if (randomize) {
++      return rand.nextInt(maxContacts);
++    }
++    return maxContacts;
++  }
++  
++  private List<AddressBook> generateAddressBooks() {
++    List<AddressBook> addressBooks = new ArrayList<AddressBook>();
++    for (int i = 1; i < addressBookSize(); i++) {
++      addressBooks.add(newAddressBook());
++    }
++    return addressBooks;
++  }
++  
++  private List<Contact> generateContacts() {
++    List<Contact> contacts = new ArrayList<Contact>();
++    for (int i = 0; i < contactsSize(); i++) {
++      contacts.add(newContact());
++    }
++    return contacts;
++  }
++  
++  @Override
++  public Log getLog() {
++    return log;
++  }
++  
++  /* (non-Javadoc)
++   * @see org.exoplatform.services.bench.DataInjector#initParams(org.exoplatform.container.xml.InitParams)
++   */
++  public void initParams(InitParams initParams) {
++    ValueParam param = initParams.getValueParam("mA");
++    if (param != null)
++      maxAddressBooks = Integer.parseInt(param.getValue());
++    param = initParams.getValueParam("mC");
++    if (param != null)
++      maxContacts = Integer.parseInt(param.getValue());
++    param = initParams.getValueParam("rand");
++    if (param != null) 
++      randomize = Boolean.parseBoolean(param.getValue());
++  }
++
++  @Override
++  public void inject(HashMap<String, String> queryParams) throws Exception {
++    String userId = ConversationState.getCurrent().getIdentity().getUserId();
++    catsStack.clear();
++    List<AddressBook> addressBooks = generateAddressBooks();
++    for (int i = 0; i < addressBooks.size(); i++) {
++      AddressBook ab = addressBooks.get(i);
++      log.info(String.format("\tCreate Address Book " + (i + 1)  + "/" + addressBooks.size() + " .......... "));
++      contactService.saveAddressBook(userId, ab, true);
++      catsStack.push(ab.getId());
++      List<Contact> contacts = generateContacts();
++      int contactSize = contacts.size();
++      for (int j = 0; j < contactSize; j++) {
++        Contact c = contacts.get(j);
++        c.setAddressBook(new String[] {ab.getId()});
++        contactService.saveContact(userId, c, true);
++        log.info("\t\t Adding Contact " + (j + 1) + "/" + contactSize + " to the address book");
++      }
++      
++    }
++  }
++
++  @Override
++  public void reject(HashMap<String, String> queryParams) throws Exception {
++    String userId = ConversationState.getCurrent().getIdentity().getUserId();
++    while (!catsStack.isEmpty()) {
++      contactService.removeAddressBook(userId, catsStack.pop());
++    }
++  }
++
++  @Override
++  public Object execute(HashMap<String, String> arg0) throws Exception {
++    return new Object();
++  }
++  
++}
+Index: component/injector/src/main/java/org/exoplatform/cs/bench/SimpleMailServerInitializer.java
+===================================================================
+--- component/injector/src/main/java/org/exoplatform/cs/bench/SimpleMailServerInitializer.java	(revision 0)
++++ component/injector/src/main/java/org/exoplatform/cs/bench/SimpleMailServerInitializer.java	(revision 0)
+@@ -0,0 +1,149 @@
++/*
++ * Copyright (C) 2003-2011 eXo Platform SAS.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Affero General Public License
++ * as published by the Free Software Foundation; either version 3
++ * of the License, or (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see<http://www.gnu.org/licenses/>.
++ */
++package org.exoplatform.cs.bench;
++
++import java.io.IOException;
++import java.util.Date;
++
++import javax.activation.DataHandler;
++import javax.activation.DataSource;
++import javax.mail.Address;
++import javax.mail.MessagingException;
++import javax.mail.Part;
++import javax.mail.Session;
++import javax.mail.Transport;
++import javax.mail.internet.InternetAddress;
++import javax.mail.internet.MimeBodyPart;
++import javax.mail.internet.MimeMessage;
++import javax.mail.internet.MimeMultipart;
++import javax.mail.util.ByteArrayDataSource;
++
++import org.exoplatform.mail.service.MailService;
++import org.picocontainer.Startable;
++
++import com.icegreen.greenmail.util.GreenMail;
++import com.icegreen.greenmail.util.GreenMailUtil;
++import com.icegreen.greenmail.util.ServerSetupTest;
++
++/**
++ * The service is used to create and handle a simple mail server for testing purpose.
++ * GreenMail package is used in this service to provide the mail server. 
++ * Created by The eXo Platform SAS
++ * @author <a href="mailto:quanglt@exoplatform.com">Le Thanh Quang</a>
++ * Aug 8, 2011  
++ */
++public class SimpleMailServerInitializer implements Startable {
++  
++  private GreenMail greenMail;
++  
++  private String host = "localhost";
++  
++  private MimeMessage newMimeMessage(String to, String from, String subject, String body, final byte[] attachment, final String contentType, final String filename, String description) throws MessagingException {
++    Address[] froms = new InternetAddress[]{new InternetAddress(from)};
++    MimeMessage mimeMessage = new MimeMessage(getSmtpSession());
++    mimeMessage.setSubject(subject);
++    mimeMessage.setFrom(froms[0]);
++    mimeMessage.setSentDate(new Date());
++    MimeMultipart multipPartContent = new MimeMultipart();
++    MimeBodyPart mimeBodyPart = new MimeBodyPart();
++    mimeBodyPart.setContent(body, "text/html; charset=utf-8");
++    multipPartContent.addBodyPart(mimeBodyPart);
++
++ // Part two is attachment
++    mimeBodyPart = new MimeBodyPart();
++    DataSource source = new ByteArrayDataSource(attachment, contentType);
++    mimeBodyPart.setDataHandler(new DataHandler(source));
++    mimeBodyPart.setDisposition(Part.ATTACHMENT);
++    mimeBodyPart.setFileName(filename);
++    multipPartContent.addBodyPart(mimeBodyPart);
++    mimeMessage.setContent(multipPartContent);
++    return mimeMessage;
++  }
++  
++  public SimpleMailServerInitializer(MailService mailService) {
++    greenMail = new GreenMail();
++  }
++ 
++  public Session getSmtpSession() {
++    return GreenMailUtil.getSession(ServerSetupTest.SMTP);
++  }
++  
++  public Session getImapSession() {
++    return GreenMailUtil.getSession(ServerSetupTest.IMAP);
++  }
++  
++  public Session getPop3Session() {
++    return GreenMailUtil.getSession(ServerSetupTest.POP3);
++  }
++  
++  public void addUser(String email, String password) {
++    greenMail.setUser(email, password);
++  }
++  
++  public void addUser(String email, String username, String password) {
++    greenMail.setUser(email, username, password);
++  }
++  
++  public void sendMailMessage(String to, String from, String subject, String body, byte[] attachment, String filename, String description) throws MessagingException, IOException {
++    MimeMessage message = newMimeMessage(to, from, subject, body, attachment, "text/html; charset=utf-8", filename, description);
++    Address[] tos = new InternetAddress[]{new InternetAddress(to)};
++    Transport.send(message, tos);
++  }
++  
++  public void sendMailMessage(String to, String from, String subject, String body) {
++    GreenMailUtil.sendTextEmail(to, from, subject, body, ServerSetupTest.SMTP);
++  }
++  
++  public String getImapPort() {
++    return String.valueOf(ServerSetupTest.IMAP.getPort());
++  }
++  
++  public String getImapProtocol() {
++    return ServerSetupTest.IMAP.getProtocol();
++  }
++  
++  public String getPop3Port() {
++    return String.valueOf(ServerSetupTest.POP3.getPort());
++  }
++  
++  public String getPop3Protocol() {
++    return ServerSetupTest.POP3.getProtocol();
++  }
++  
++  public String getSmtpPort() {
++    return String.valueOf(ServerSetupTest.SMTP.getPort());
++  }
++  
++  public String getSmtpProtocol() {
++    return ServerSetupTest.SMTP.getProtocol();
++  }
++  
++  public String getHost() {
++    return host;
++  }
++  
++  @Override
++  public void start() {
++    greenMail.start();
++  }
++
++  @Override
++  public void stop() {
++    greenMail.stop();
++  }
++
++}
+Index: component/injector/src/main/java/org/exoplatform/cs/bench/MailDataInjector.java
+===================================================================
+--- component/injector/src/main/java/org/exoplatform/cs/bench/MailDataInjector.java	(revision 0)
++++ component/injector/src/main/java/org/exoplatform/cs/bench/MailDataInjector.java	(revision 0)
+@@ -0,0 +1,284 @@
++/*
++ * Copyright (C) 2003-2011 eXo Platform SAS.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Affero General Public License
++ * as published by the Free Software Foundation; either version 3
++ * of the License, or (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see<http://www.gnu.org/licenses/>.
++ */
++package org.exoplatform.cs.bench;
++
++import java.util.ArrayList;
++import java.util.HashMap;
++import java.util.Iterator;
++import java.util.LinkedList;
++import java.util.List;
++import java.util.Random;
++
++import org.exoplatform.container.xml.InitParams;
++import org.exoplatform.mail.service.Account;
++import org.exoplatform.mail.service.Folder;
++import org.exoplatform.mail.service.MailService;
++import org.exoplatform.mail.service.Utils;
++import org.exoplatform.services.bench.DataInjector;
++import org.exoplatform.services.jcr.util.IdGenerator;
++import org.exoplatform.services.log.ExoLogger;
++import org.exoplatform.services.log.Log;
++import org.exoplatform.services.organization.OrganizationService;
++
++/**
++ * Created by The eXo Platform SAS
++ * @author <a href="mailto:quanglt@exoplatform.com">Le Thanh Quang</a>
++ * Aug 5, 2011  
++ */
++public class MailDataInjector extends DataInjector {
++  
++  enum CONSTANTS {
++    POP3("pop3"), IMAP("imap");
++    
++    private final String name; 
++    
++    CONSTANTS(String name) {
++      this.name = name;
++    }
++    
++    public String getName() {
++      return name;
++    }
++    
++  }
++  
++  private static Log log = ExoLogger.getExoLogger(MailDataInjector.class);
++  
++  public static final String          ARRAY_SPLIT     = ",";
++  
++  final static public String          FD_INBOX        = "Inbox".intern();
++
++  final static public String          FD_DRAFTS       = "Drafts".intern();
++
++  final static public String          FD_SENT         = "Sent".intern();
++
++  final static public String          FD_SPAM         = "Spam".intern();
++
++  final static public String          FD_TRASH        = "Trash".intern();
++
++  final static public String[] defaultFolders_ = { FD_INBOX, FD_DRAFTS, FD_SENT, FD_SPAM, FD_TRASH };
++  
++  private MailService mailService;
++  
++  private SimpleMailServerInitializer mailServerInitializer;
++  
++  private OrganizationService organizationService;
++
++  public MailDataInjector(MailService mailService, SimpleMailServerInitializer mailServerInitializer, OrganizationService organizationService, InitParams initParams) {
++    this.mailService = mailService;
++    this.mailServerInitializer = mailServerInitializer;
++    this.organizationService = organizationService;
++  }
++  
++  private void printInputParameters(HashMap<String, String> params) {
++    StringBuilder sb = new StringBuilder();
++    sb.append("PARAMS: \n");
++    Iterator<String> keys = params.keySet().iterator();
++    while (keys.hasNext()) {
++      String key = keys.next();
++      sb.append(String.format("%1$10s    :    %2$10s \n", key, params.get(key)));
++    }
++    log.info(sb.toString());
++  }
++  
++  private String makeAccountId(String prefix, String userId, int order) {
++    return prefix + "_" + userId + "_" + order;
++  }
++  
++  private String makeEmailAddress(String username) {
++    return username + "@example.com";
++  }
++  
++  private Account newAccount(String accountId, String incomingProtocol) {
++    String email = makeEmailAddress(accountId);
++    Account account = new Account();
++    account.setId(accountId);
++    account.setIncomingUser(email);
++    account.setLabel(accountId);
++    account.setIncomingPassword("password");
++    account.setUseIncomingForAuthentication(true);
++    account.setEmailAddress(email);
++    account.setIncomingHost(mailServerInitializer.getHost());
++    
++    if (CONSTANTS.POP3.getName().equals(incomingProtocol)) {
++      account.setProtocol("pop3");
++      account.setIncomingPort(mailServerInitializer.getPop3Port());
++    } else {
++      account.setProtocol("imap");
++      account.setIncomingPort(mailServerInitializer.getImapPort());
++    }
++    account.setOutgoingHost(mailServerInitializer.getHost());
++    account.setOutgoingPort(mailServerInitializer.getSmtpPort());
++    account.setUserDisplayName(randomWords(3));
++    account.setDescription(randomWords(10));
++    account.setIsSavePassword(true);
++    account.setIncomingSsl(true);
++    account.setOutgoingSsl(true);
++    account.setIncomingFolder(FD_INBOX);
++    account.setCheckAll(true);
++    return account;
++  }
++  
++  private List<String> readUsers(HashMap<String, String> queryParams) {
++    List<String> users = new LinkedList<String>();
++    String value = queryParams.get("users");
++    String[] usersString = value.split(ARRAY_SPLIT);
++    for (String user : usersString) {
++      users.add(user);
++    }
++    return users;
++  }
++  
++  private int readNumOfAccounts(HashMap<String, String> queryParams) {
++    String value = queryParams.get("accounts");
++    String num = value.split(ARRAY_SPLIT)[0];
++    return Integer.parseInt(num);
++  }
++  
++  private String readPrefix(HashMap<String, String> queryParams) {
++    String value = queryParams.get("accounts");
++    return value.split(ARRAY_SPLIT)[1];
++  }
++  
++  private String readInComingProtocol(HashMap<String, String> queryParams) {
++    return queryParams.get("inPro");
++  }
++  
++  private boolean readCheckNow(HashMap<String, String> queryParams) {
++    return Boolean.parseBoolean(queryParams.get("check"));
++  }
++  
++  private int readNumberOfMessages(HashMap<String, String> queryParams) {
++    return Integer.parseInt(queryParams.get("msgs"));
++  }
++  
++  private int readAttachmentSize(HashMap<String, String> queryParams) {
++    return Integer.parseInt(queryParams.get("attSize"));
++  }
++  
++  private void validateUsers(List<String> users) throws Exception {
++    for (String user : users) {
++      if (organizationService.getUserHandler().findUserByName(user) == null) {
++        log.info(String.format("\t Validate User: %s does not exist!", user));
++        users.remove(user);
++      }
++    }
++  }
++  
++  private List<Folder> generateDefaultFolders(String accountId) {
++    List<Folder> folders = new ArrayList<Folder>();
++    for (String folderName : defaultFolders_) {
++      String folderId = Utils.generateFID(accountId, folderName, false);
++      Folder folder = new Folder();
++      folder.setId(folderId);
++      folder.setName(folderName);
++      folder.setPersonalFolder(false);
++      folders.add(folder);
++    }
++    return folders;
++  }
++  
++  @Override
++  public Log getLog() {
++    return log;
++  }
++  
++  @Override
++  public void inject(HashMap<String, String> queryParams) throws Exception {
++    log.info("Start to inject data ................. ");
++    printInputParameters(queryParams);
++    List<String> users = readUsers(queryParams);
++    validateUsers(users);
++    int numOfAccounts = readNumOfAccounts(queryParams);
++    String accPref = readPrefix(queryParams);
++    String incProtocol = readInComingProtocol(queryParams);
++    int numOfMsgs = readNumberOfMessages(queryParams);
++    int attSize = readAttachmentSize(queryParams);
++    boolean checkNow = readCheckNow(queryParams);
++    for (String userId : users) {
++      log.info("\t Process user: " + userId + " .....................");
++      for (int i = 0; i < numOfAccounts; i++) {
++        String accId = makeAccountId(accPref, userId, i + 1);
++        Account account = mailService.getAccountById(userId, accId);
++        if (account == null) {
++          account = newAccount(accId, incProtocol);
++          mailService.createAccount(userId, account);
++          mailServerInitializer.addUser(account.getEmailAddress(), account.getIncomingPassword());
++        }
++        List<Folder> folders = generateDefaultFolders(accId);
++        for (Folder folder : folders) {
++          mailService.saveFolder(userId, accId, folder);
++        }
++        Random rand = new Random();
++        byte[] attachment = createTextResource(attSize).getBytes();
++        log.info("\t\t\t Pouring " + numOfMsgs + " messages into account: " + accId + " .............. ");
++        for (int j = 0; j < numOfMsgs; j++) {
++          if (attSize == 0) {
++            mailServerInitializer.sendMailMessage(account.getEmailAddress(), makeEmailAddress(makeAccountId(accPref, userId, rand.nextInt())), randomWords(100), randomParagraphs(4));
++          } else {
++            mailServerInitializer.sendMailMessage(account.getEmailAddress(),
++                                                  makeEmailAddress(makeAccountId(accPref, userId, rand.nextInt())),
++                                                  randomWords(100),
++                                                  randomParagraphs(4),
++                                                  attachment,
++                                                  "filename" + IdGenerator.generate() + ".txt",
++                                                  null);
++          }
++        }
++        
++        if (checkNow) {
++          log.info("\t\t\t Pulling messages from mail server to eXo Mail ........");
++          mailService.checkNewMessage(userId, account.getId(), FD_INBOX);
++          log.info(String.format("\tAccount %1$s has been created successfully!", account.getEmailAddress()));
++        }
++        
++      }
++    }
++    
++  }
++
++
++  @Override
++  public void reject(HashMap<String, String> queryParams) throws Exception {
++    log.info("Start to reject data ................. ");
++    printInputParameters(queryParams);
++    List<String> users = readUsers(queryParams);
++    validateUsers(users);
++    int numOfAccounts = readNumOfAccounts(queryParams);
++    String accPref = readPrefix(queryParams);
++    for (String user : users) {
++      log.info("\t Process user: " + user + " .....................");
++      for (int i = 0; i < numOfAccounts; i++) {
++        String accId = makeAccountId(accPref, user, i + 1);
++        Account acc = mailService.getAccountById(user, accId);
++        if (acc != null) {
++          log.info(String.format("Remove account: %1$s of %2$s ...........", accId, user));
++          long t1 = System.currentTimeMillis();
++          mailService.removeAccount(user, accId);
++          long t2 = System.currentTimeMillis() - t1;
++          log.info("Account has been removed in " + t2 + " (ms)!");
++        }
++      }
++    }
++    log.info("Data has been rejected successfully!");
++  }
++
++  @Override
++  public Object execute(HashMap<String, String> arg0) throws Exception {
++    return new Object();
++  }
++}
+Index: component/injector/src/main/resources/conf/portal/configuration.xml
+===================================================================
+--- component/injector/src/main/resources/conf/portal/configuration.xml	(revision 0)
++++ component/injector/src/main/resources/conf/portal/configuration.xml	(revision 0)
+@@ -0,0 +1,116 @@
++<?xml version="1.0" encoding="ISO-8859-1"?>
++<!--
++
++    Copyright (C) 2009 eXo Platform SAS.
++    
++    This is free software; you can redistribute it and/or modify it
++    under the terms of the GNU Lesser General Public License as
++    published by the Free Software Foundation; either version 2.1 of
++    the License, or (at your option) any later version.
++    
++    This software is distributed in the hope that it will be useful,
++    but WITHOUT ANY WARRANTY; without even the implied warranty of
++    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++    Lesser General Public License for more details.
++    
++    You should have received a copy of the GNU Lesser General Public
++    License along with this software; if not, write to the Free
++    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
++    02110-1301 USA, or see the FSF site: http://www.fsf.org.
++
++-->
++
++<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
++  xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
++  <component>
++    <type>org.exoplatform.services.bench.DataInjectorService</type>
++  </component>
++  
++  <!--  component>
++    <type>org.exoplatform.cs.bench.SimpleMailServerInitializer</type>
++  </component -->
++
++  <external-component-plugins>
++    <target-component>org.exoplatform.services.bench.DataInjectorService</target-component>
++    <component-plugin>
++      <name>ContactDataInjector</name>
++      <set-method>addInjector</set-method>
++      <type>org.exoplatform.cs.bench.ContactDataInjector</type>
++      <description>inject data for Contact</description>
++      <init-params>
++        <value-param>
++          <name>mA</name> <!-- maximum number of address books -->
++          <value>5</value>
++        </value-param>
++        <value-param>
++          <name>mC</name> <!-- maximum number of contacts per a address books -->
++          <value>10</value>
++        </value-param>
++        <value-param>
++          <name>rand</name> <!-- randomize or not -->
++          <value>false</value>
++        </value-param>
++      </init-params>
++    </component-plugin>
++    <component-plugin>
++      <name>CalendarDataInjector</name>
++      <set-method>addInjector</set-method>
++      <type>org.exoplatform.cs.bench.CalendarDataInjector</type>
++      <description>inject data for Calendar</description>
++      <init-params>
++        <value-param>
++          <name>mCt</name> <!-- maximum number of categories -->
++          <value>5</value>
++        </value-param>
++        <value-param>
++          <name>mEcat</name> <!-- maximum number of event categories -->
++          <value>10</value>
++        </value-param>
++        <value-param>
++          <name>mCal</name> <!-- maximum number of calendars -->
++          <value>10</value>
++        </value-param>
++        <value-param>
++          <name>mEv</name> <!-- maximum number of events -->
++          <value>5</value>
++        </value-param>
++        <value-param>
++          <name>mTa</name> <!-- maximum number of tasks -->
++          <value>5</value>
++        </value-param>
++        <value-param>
++          <name>typeOfInject</name> <!-- type of inject -->
++          <value>all</value> <!-- string all/public/private -->
++        </value-param>
++        <value-param>
++          <name>rand</name> <!-- randomize or not -->
++          <value>true</value>
++        </value-param>
++      </init-params>
++    </component-plugin>
++    <!-- component-plugin>
++      <name>MailDataInjector</name>
++      <set-method>addInjector</set-method>
++      <type>org.exoplatform.cs.bench.MailDataInjector</type>
++      <description>inject data for Contact</description>
++      <init-params>
++        <value-param>
++          <name>mA</name> 
++          <value>2</value>
++        </value-param>
++        <value-param>
++          <name>mM</name> 
++          <value>100</value>
++        </value-param>
++        <value-param>
++          <name>rand</name> 
++          <value>false</value>
++        </value-param>
++        <value-param>
++          <name>attSize</name> 
++          <value>100</value>
++        </value-param>
++      </init-params>
++    </component-plugin -->
++  </external-component-plugins>
++</configuration>
+Index: component/injector/pom.xml
+===================================================================
+--- component/injector/pom.xml	(revision 0)
++++ component/injector/pom.xml	(revision 0)
+@@ -0,0 +1,60 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
++  <modelVersion>4.0.0</modelVersion>
++  <parent>
++    <groupId>org.exoplatform.cs</groupId>
++    <artifactId>exo.cs.component</artifactId>
++    <version>2.1.7-SNAPSHOT</version>
++  </parent>
++  <artifactId>exo.cs.component.injector</artifactId>
++  <name>eXo CS Data Injector</name>
++  <dependencies>
++    <dependency>
++      <groupId>org.exoplatform.kernel</groupId>
++      <artifactId>exo.kernel.commons</artifactId>
++      <version>${org.exoplatform.kernel.version}</version>
++      <scope>provided</scope>
++    </dependency>
++    <dependency>
++      <groupId>org.exoplatform.kernel</groupId>
++      <artifactId>exo.kernel.container</artifactId>
++      <version>${org.exoplatform.kernel.version}</version>
++      <scope>provided</scope>
++    </dependency>
++    <dependency>
++      <groupId>org.exoplatform.jcr</groupId>
++      <artifactId>exo.jcr.component.core</artifactId>
++      <version>${org.exoplatform.jcr.version}</version>
++      <scope>provided</scope>
++    </dependency>
++    <dependency>
++      <groupId>org.exoplatform.commons</groupId>
++      <artifactId>exo.platform.commons.component</artifactId>
++      <version>${org.exoplatform.commons.version}</version>
++      <scope>provided</scope>
++    </dependency>
++    <dependency>
++      <groupId>org.exoplatform.cs</groupId>
++      <artifactId>exo.cs.eXoApplication.calendar.service</artifactId>
++      <version>${project.version}</version>
++      <scope>provided</scope>
++    </dependency>
++    <dependency>
++      <groupId>org.exoplatform.cs</groupId>
++      <artifactId>exo.cs.eXoApplication.contact.service</artifactId>
++      <version>${project.version}</version>
++      <scope>provided</scope>
++    </dependency>
++    <dependency>
++      <groupId>org.exoplatform.cs</groupId>
++      <artifactId>exo.cs.eXoApplication.mail.service</artifactId>
++      <version>${project.version}</version>
++      <scope>provided</scope>
++    </dependency>
++    <dependency>
++      <groupId>com.icegreen</groupId>
++      <artifactId>greenmail</artifactId>
++      <version>1.3.1b</version>
++    </dependency>
++  </dependencies>
++</project>
