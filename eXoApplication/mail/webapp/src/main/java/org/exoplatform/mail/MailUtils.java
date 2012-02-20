@@ -43,6 +43,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeUtility;
 import javax.portlet.PortletPreferences;
 
+import org.apache.commons.lang.StringUtils;
 import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
@@ -472,7 +473,7 @@ public class MailUtils {
   }
 
   public static boolean isDelegatedAccount(Account acc, String recieve) {
-    return (acc != null && acc.getDelegateFrom() != null && recieve != null && !recieve.equalsIgnoreCase(acc.getDelegateFrom()));
+    return (acc != null && !StringUtils.isEmpty(acc.getDelegateFrom()) && !StringUtils.isEmpty(recieve) && !recieve.equalsIgnoreCase(acc.getDelegateFrom()));
   }
 
   public static boolean isFull(String user, String perms) {
