@@ -44,11 +44,11 @@ public class Folder {
 
   private boolean isPersonalFolder       = true;
 
-  private Date    lastCheckedDate_       = new Date();
+  private Date    lastCheckedDate_       ;
 
-  private Date    lastStartCheckingTime_ = new Date();
+  private Date    lastStartCheckingTime_ ;
 
-  private Date    checkFromDate_         = new Date();
+  private Date    checkFromDate_         ;
 
   private long    type_                  = 3;
 

@@ -53,13 +53,13 @@ public class Account {
 
   private String              placeSignature       = StringUtils.EMPTY;
 
-  private Date                lastCheckedDate_     = new Date();
+  private Date                lastCheckedDate_     ;
 
-  private Date                lastStartCheckingTime_ = new Date();
+  private Date                lastStartCheckingTime_ ;
 
-  private boolean             checkAll_            = false;
+  private boolean             checkAll_              = false;
 
-  private Date                checkFromDate_       = new Date();
+  private Date                checkFromDate_         ;
 
   private Map<String, String> serverProperties     = new HashMap<String, String>();
 
