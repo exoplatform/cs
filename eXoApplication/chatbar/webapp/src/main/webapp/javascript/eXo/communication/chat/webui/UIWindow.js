@@ -12,7 +12,6 @@ UIWindow.prototype.init = function(popup, isShow, posX, posY) {
 	if(popup == null) return ;
 
 	var DOMUtil = eXo.core.DOMUtil ;
-	var uiPageDesktop = document.getElementById("UIPageDesktop") ;
 	var uiApplication = DOMUtil.findFirstDescendantByClass(popup, "div", "UIApplication") ;
 	if(!uiApplication) return ;
 
@@ -28,11 +27,11 @@ UIWindow.prototype.init = function(popup, isShow, posX, posY) {
 		alert("Error In DND: " + err) ;
 	}
 	
-	var windowPortletControl = DOMUtil.findFirstDescendantByClass(popup, "div", "WindowPortletControl") ;
-	var minimizedIcon = DOMUtil.findFirstDescendantByClass(windowPortletControl, "div", "MinimizedIcon") ;
+	var minimizedIcon = DOMUtil.findFirstDescendantByClass(popup, "div", "MinimizedIcon") ;
 	minimizedIcon.onmouseup = this.minimizeWindowEvt ; 
-	var maximizedIcon = DOMUtil.findFirstDescendantByClass(windowPortletControl, "div", "MaximizedIcon") ;
+	var maximizedIcon = DOMUtil.findFirstDescendantByClass(popup, "div", "MaximizedIcon") ;
 	maximizedIcon.onmouseup = this.maximizeWindowEvt ;
+	windowPortletInfo.ondblclick = function() {eXo.desktop.UIWindow.maximizeWindowEvt.call(maximizedIcon)};
 	var resizeArea = DOMUtil.findFirstDescendantByClass(popup, "div", "ResizeArea") ;
 	resizeArea.onmousedown = this.startResizeWindowEvt ;
  /*
@@ -87,7 +86,6 @@ UIWindow.prototype.maximizeWindowEvt = function(evt) {
 	
 	var uiWindow = eXo.desktop.UIWindow ;
 	var uiPageDesktop = document.getElementById("UIPageDesktop") ;
-  var desktopWidth = uiPageDesktop.offsetWidth  ;
   var desktopHeight = uiPageDesktop.offsetHeight  ;
   var uiResizableBlock = DOMUtil.findDescendantsByClass(portletWindow, "div", "UIResizableBlock") ;
   if(portletWindow.maximized) {
