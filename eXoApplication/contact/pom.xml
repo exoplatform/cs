@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.exoplatform.cs</groupId>
     <artifactId>exo.cs.eXoApplication</artifactId>
-    <version>2.1.8</version>
+    <version>2.1.9-SNAPSHOT</version>
   </parent>
   <artifactId>exo.cs.eXoApplication.contact</artifactId>
   <packaging>pom</packaging>
