@@ -19,7 +19,7 @@ To activate the _DataInjectorService_ component, you need to register it to a po
 </component>
 {code}
 
-When you want to inject data for a specific product, you must implement a class which extends "org.exoplatform.services.bench.DataInjector" and register it to the _DataInjectorService_ component as a plug-in.
+When you want to inject data for a specific product, you must implement a class which extends "org.exoplatform.services.bench.DataInjector" and register it to the _DataInjectorService_ component as a plug\-in.
 
 In eXo Collaboration, there are three plug-ins attached to the _DataInjectorService_ component:
 
@@ -31,7 +31,7 @@ In eXo Collaboration, there are three plug-ins attached to the _DataInjectorServ
 
 
 h2. ContactDataInjector    {anchor:id=CSref.Configuration.DataInjectorService.ContactDataInjector}
-The _ContactDataInjector_ plug-in is used to manage data injection of the Address Book application.
+The _ContactDataInjector_ plug\-in is used to manage data injection of the Address Book application.
 
 To use this plug-in, do as follows:
 
@@ -80,15 +80,15 @@ http://{domain}/{rest}/bench/inject/ContactDataInjector?mA=5&mC=10
 
 In which:
 
-* *{noformat}{domain}{noformat}*: The domain name of the server.
+* *{{{{domain}}}}*: The domain name of the server.
 
-* *{noformat}{rest}{noformat}*: The name of eXo REST service.
+* *{{{{rest}}}}*: The name of eXo REST service.
 
 
 h2. CalendarDataInjector    {anchor:id=CSref.Configuration.DataInjectorService.CalendarDataInjector}
-The _CalendarDataInjector_ plug-in is used to manage data injection in the Calendar application.
+The _CalendarDataInjector_ plug\-in is used to manage data injection in the Calendar application.
 
-To use this plug-in, do as follows:
+To use this plug\-in, do as follows:
 
 1. Add the following configuration to the _configuration.xml_ file to register the plug-in to the _DataInjectorService_ component:
 {code:xml}
@@ -201,8 +201,8 @@ h2. Usage of MailDataInjector  {anchor:id=CSref.Configuration.DataInjectorServic
 {code}
 
 || Params || Values || Description  ||
-| users | String| The list of users sepereated by commas.  |
-| accounts | String|The number of accounts injected by the data injector. This value consists of two parts seperated by commas: the first is the number of accounts of an user, the second is the prefix of the account Id.|
+| users | String| The list of users separated by commas.  |
+| accounts | String|The number of accounts injected by the data injector. This value consists of two parts separated by commas: the first is the number of accounts of an user, the second is the prefix of the account Id.|
 | inPro | String | The incoming protocol. The possible values are: POP3 and IMAP. |
 | check | Boolean | Specify if checking mails after the data are created on the mail server or not. If the value is true, the injector will execute checking new message tasks sequentially. This task can take some time if the data are large.|
 | msgs  | Number  | The number of messages will be available in each account. |
@@ -215,5 +215,5 @@ http://{domain}/{rest}/bench/reject/MailDataInjector/?users=root&accounts=2,acco
 This link will request for removing 2 accounts of "root" of which Id starts with "account".
 
 {note}
-By default, such settings have been declared in "csdemo.war/WEB-INF/conf/csdemo/cs/bench-configuration.xml". Therefore, to save time, you should import the _bench-configuration.xml_ file to "_csdemo.war/WEB-INF/conf/configuration.xml_", and then modify it as your purpose rather than create a new one.
+By default, such settings have been declared in "csdemo.war/WEB-INF/conf/csdemo/cs/bench\-configuration.xml". Therefore, to save time, you should import the _bench-configuration.xml_ file to "_csdemo.war/WEB\-INF/conf/configuration.xml_", and then modify it as your purpose rather than create a new one.
 {note}

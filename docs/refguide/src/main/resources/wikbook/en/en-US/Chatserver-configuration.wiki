@@ -8,12 +8,12 @@ You have the full latitude to configure Openfire. There are two possible ways to
 
 * The admin console: http://localhost:9090/.
 
-* The openfire.xml file in _{noformat}$openfire_home/conf/{noformat}_.
+* The openfire.xml file in _$openfire\_home/conf/_.
 
 
 h3. Configuration in Openfire.xml {anchor:id=CSref.Configuration.ConfigurationinOpenfirexml}
 
-The Openfire server has a single configuration file called _openfire.xml_ and located under the _exo-openfire/conf_ directory. Configuration is based on properties expressed in an XML syntax. For example, to set the property prop.name.is.blah=value, you would write this xml snippet:
+The Openfire server has a single configuration file called _openfire.xml_ and located under the _exo\-openfire/conf_ directory. Configuration is based on properties expressed in an XML syntax. For example, to set the property prop.name.is.blah=value, you would write this xml snippet:
 
 {code:xml}
 <prop>
@@ -75,9 +75,9 @@ The _eXo.env.restContextName_ system property can be set by specifying the {{{ -
 
 For example:
 
-* If the Openfire server is dedicated for the portal named "portal", the command will have the following format: _{{{ java -DeXo.env.restContextName=rest -jar ../lib/startup.jar }}}_. 
+* If the Openfire server is dedicated for the portal named "portal", the command will have the following format: _{{{ java -DeXo.env.restContextName=rest -jar ../lib/startup.jar}}}_.
 
-* If the Openfire server is dedicated for the portal named "csdemo", the command will have following format: _{{{ java -DeXo.env.restContextName=rest-csdemo -jar ../lib/startup.jar.}}}_.
+* If the Openfire server is dedicated for the portal named "csdemo", the command will have following format: _{{{ java -DeXo.env.restContextName=rest-csdemo -jar ../lib/startup.jar}}}_.
 
 By default, the Openfire server is dedicated to the portal named "portal".
 {note}
@@ -90,7 +90,7 @@ Openfire makes use of several ports for communication.
 | *All addresses* | {{7777}} | {{File Transfer Proxy}} | The port used for the proxy service that allows files to be transferred between two entities on the XMPP network.|
 | *All addresses* | {{3478 & 3479}} | {{STUN Service}} | The port used for the service that ensures connectivity between entities behind a NAT.|
 
-You can view the table above in _{noformat}http://hostname:9090/index.jsp{noformat}_ after you have logged into the Openfire's web console and also customize those ports by yourself.
+You can view the table above in _http\://hostname\:9090/index.jsp_ after you have logged into the Openfire's web console and also customize those ports by yourself.
 
 h2. AS configuration {anchor:id=CSref.Configuration.ASConfiguration}
 To enable the propagation of identity across the Chat webapp, you are required to enable the SSO valve on the Tomcat-based Application server.

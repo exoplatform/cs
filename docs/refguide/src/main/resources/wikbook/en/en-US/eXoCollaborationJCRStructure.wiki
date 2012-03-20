@@ -16,8 +16,8 @@ The whole JCR structure of Calendar can be visualized in the diagram below:
 
 h2. calendars  {anchor:id=CSref.JCRStructure.Calendar.JCR.calendars}
 
-The *Calendars* node of the nt:unstructured type contains the child nodes of the *{noformat}exo:calendar{noformat}* type. When a calendar is created by users or the default ones in the system, it is stored under the *calendars* node: _{noformat}CalendarApplication/calendars/%calendar_id%{noformat}_.
-Its node type is _{noformat}exo:calendar{noformat}_ that has the following properties:
+The *Calendars* node of the nt:unstructured type contains the child nodes of the *exo\:calendar* type. When a calendar is created by users or the default ones in the system, it is stored under the *calendars* node: _{{{CalendarApplication/calendars/%calendar_id%}}}_.
+Its node type is _exo\:calendar_ that has the following properties:
 
 || Property name || Required type || Multiple || Description ||
 | exo:id | String | false | The Id of the calendar. |
@@ -34,11 +34,11 @@ Its node type is _{noformat}exo:calendar{noformat}_ that has the following prope
 | exo:publicUrl | String | false |The public ICAL link of the calendar. |
 | exo:privateUrl | String |  false | The private ICAL link of the calendar. |
 
-When a user shares his own calendar with other users, the Id of the calendar node is referred to the node under the *sharedCalendar* node: _{noformat}CalendarApplication/sharedCalendars/%user_id%{noformat}_ following the JCR reference mechanism.
+When a user shares his own calendar with other users, the Id of the calendar node is referred to the node under the *sharedCalendar* node: _CalendarApplication/sharedCalendars/%user\_id%_ following the JCR reference mechanism.
 
-In case of users' private calendar, two mixin node types _{noformat}exo:remoteCalendar{noformat}_ and _{noformat}exo:calendarShared{noformat}_ can be added to the _{noformat}exo:calendar{noformat}_ node type.
+In case of users' private calendar, two mixin node types _exo\:remoteCalendar_ and _exo\:calendarShared_ can be added to the _exo\:calendar_ node type.
 
-* The _{noformat}exo:remoteCalendar{noformat}_ mixin node type has the following properties:
+* The _exo\:remoteCalendar_ mixin node type has the following properties:
 
 || Property name || Required type ||  Multiple|| Description ||
 | exo:remoteUrl| String| false|The URL of the remote calendar.|
@@ -50,19 +50,19 @@ In case of users' private calendar, two mixin node types _{noformat}exo:remoteCa
 | exo:beforeDate| String| false|The period before the  current date in which the calendar is checked out, including the values: None (the unlimited time), 1 week, 2 weeks, 1month, 2 months, 3 months, 6 months and 1 year.|
 | exo:afterDate|  String| false|The period after the current date in which the calendar is checked out, including the values: Forever (the unlimited time), 1 week, 2 weeks, 1month, 2 months, 3 months, 6 months and 1 year.||
 
-* The _{noformat}exo:calendarShared{noformat}_ mixin node type has the following properties:
+* The _exo\:calendarShared_ mixin node type has the following properties:
 || Property name || Required type ||  Multiple|| Description ||
 |exo:sharedId|Reference|true|The user Ids who are shared the calendars.|
 
-An event can have many attachments which are stored under the *attachment* node of the _{noformat}exo:eventAttachment{noformat}_type: _{noformat}CalendarApplication/calendars/%calendar_id%/%event_id%/attachment/%attachment_id%{noformat}_.
-The _{noformat}exo:eventAttachment{noformat}_ node type has the following properties:
+An event can have many attachments which are stored under the *attachment* node of the _exo\:eventAttachment_type: _CalendarApplication/calendars/%calendar\_id%/%event\_id%/attachment/%attachment\_id%_.
+The _exo\:eventAttachment_ node type has the following properties:
 
 || Property name || Required type ||Multiple|| Description ||
 | exo:fileName | String |false| The name of the attached file. |
 
 h2. eventCategories  {anchor:id=CSref.JCRStructure.Calendar.JCR.eventCategories}
 
-The *eventCategories* node contains all event categories. When an event category is created, it is stored in a node of the _{noformat}exo:eventCategory{noformat}_ type, under the *eventCategories* node defined at the path: {noformat}CalendarApplication/eventCategories/%eventcategory_id%{noformat}.
+The *eventCategories* node contains all event categories. When an event category is created, it is stored in a node of the _exo\:eventCategory_ type, under the *eventCategories* node defined at the path: {{{CalendarApplication/eventCategories/%eventcategory_id%}}}.
 
 This node type has the following properties:
 
@@ -71,7 +71,7 @@ This node type has the following properties:
 | exo:name | String |false| The name of the category to which an event belongs. |
 | exo:description | String |false| The brief description of the category to which an event belongs. |
 
-Each event category node contains the calendar event node of the _{noformat}exo:calendarEvent){noformat}_ type. This node of the _{noformat}exo:calendarEvent{noformat}_ type is stored at the path: _{noformat}CalendarApplication/eventCategories/%eventcategory_id%/%event_id%{noformat}_.
+Each event category node contains the calendar event node of the _exo\:calendarEvent_ type. This node of the _exo\:calendarEvent_ type is stored at the path: _{{{CalendarApplication/eventCategories/%eventcategory_id%/%event_id%}}}_.
 
 This node type has the following properties:
 
@@ -98,10 +98,10 @@ This node type has the following properties:
 | exo:sendOption | String |false| The option to notify users before sending the invitation via email: never (not sending all time), always (sending without asking) and ask (asking before sending). |
 
 h2. categories   {anchor:id=CSref.JCRStructure.Calendar.JCR.categories}
-The *categories* node of the _{noformat}nt:unstructured{noformat}_ type contains the child nodes of the _{noformat}exo:calendarCategory{noformat}_ type.
-These child nodes containing the Id of the calendars in the categories are stored under the *categories* node: _{noformat}CalendarApplication/categories/%calendarcategories_id%{noformat}_.
+The *categories* node of the _nt\:unstructured_ type contains the child nodes of the _exo\:calendarCategory_ type.
+These child nodes containing the Id of the calendars in the categories are stored under the *categories* node: _CalendarApplication/categories/%calendarcategories\_id%_.
 
-The _{noformat}exo:calendarCategory{noformat}_ node type has the following properties:
+The _exo\:calendarCategory_ node type has the following properties:
 
 || Property name || Required type || Multiple|| Description ||
 | exo:id | String |false| The Id of the category to which a calendar belongs. |
@@ -111,39 +111,39 @@ The _{noformat}exo:calendarCategory{noformat}_ node type has the following prope
 
 h2. eXoCalendarFeed   {anchor:id=CSref.JCRStructure.Calendar.JCR.eXoCalendarFeed}
 
-The *eXoCalendarFeed* of the _{noformat}nt:unstructured{noformat}_ type contains *iCalendars*, *webDavCalendars* as child nodes and others of the _{noformat}exo:rssData{noformat}_ type.
+The *eXoCalendarFeed* of the _nt\:unstructured_ type contains *iCalendars*, *webDavCalendars* as child nodes and others of the _exo\:rssData_ type.
 
-The _{noformat}exo:rssData{noformat}_ node type has the following properties:
+The _exo\:rssData_ node type has the following properties:
 || Property name || Required type ||  Multiple|| Description ||
 | exo:baseUrl | String |false| The original link to the RSS source. |
 | exo:title | String | false| The title of the feed. |
 | exo:content | Binary |false| The content of the feed. |
 
-The *iCalendars* node of the _{noformat}nt:unstructured{noformat}_ type contains the child nodes of _{noformat}exo:iCalData{noformat}_ type.
+The *iCalendars* node of the _nt\:unstructured_ type contains the child nodes of _exo\:iCalData_ type.
 
-The _{noformat}exo:iCalData{noformat}_ node type has the following properties:
+The _exo\:iCalData_ node type has the following properties:
 || Property name || Required type ||  Multiple|| Description ||
 |exo:data|Binary|false| The exported content of the calendar in the ics.format.|
 
-The *webDavCalendars* node of the _{noformat}nt:unstructured{noformat}_ type contains the child nodes of the _{noformat}exo:caldavCalendarEvent{noformat}_ type.
+The *webDavCalendars* node of the _nt\:unstructured_ type contains the child nodes of the _exo\:caldavCalendarEvent_ type.
 
-The _{noformat}exo:caldavCalendarEvent{noformat}_ node type has the following properties:
+The _exo\:caldavCalendarEvent_ node type has the following properties:
 || Property name || Required type ||  Multiple|| Description ||
 | exo:caldavHref| String| false|The URL of the remote calendar event.|
 | exo:caldavEtag| String| false|The tag of the remote calendar event.|
 
 h2. Y%yyyy%     {anchor:id=CSref.JCRStructure.Calendar.JCR.Year}
 
-The *Y%yyyy%* of the _{noformat}nt:unstructured{noformat}_ type has the name beginning with the Y character followed by the year name having 4 numbers. It contains all the child nodes of *M%mm%*.
+The *Y%yyyy%* of the _nt\:unstructured_ type has the name beginning with the Y character followed by the year name having 4 numbers. It contains all the child nodes of *M%mm%*.
 
-The *M%mm%* of the _{noformat}nt:unstructured{noformat}_ type has the name beginning with the M character followed by the month name having 2 numbers. It contains all the child nodes of *D%dd%*.
+The *M%mm%* of the _nt\:unstructured_ type has the name beginning with the M character followed by the month name having 2 numbers. It contains all the child nodes of *D%dd%*.
 
-The *D%dd%* of the _{noformat}nt:unstructured{noformat}_ type has the name beginning with the D character followed by the date having 2 numbers. This node has two child nodes: *reminder* and *events*.
+The *D%dd%* of the _nt\:unstructured_ type has the name beginning with the D character followed by the date having 2 numbers. This node has two child nodes: *reminder* and *events*.
 
-The *reminder* node of the _{noformat}nt:unstructured{noformat}_ type contains the child nodes named basing on the Id of the event. This child node also has the nt:unstructured type.
-Each node is used to classify reminders of the same event. Each reminder is stored under a node of the _{noformat}exo:reminder{noformat}_ type: _{noformat}CalendarApplication/Y%yyyy%/M%mm%/D%dd%/reminders/%event_id%/%reminder_id%{noformat}_.
+The *reminder* node of the _nt\:unstructured_ type contains the child nodes named basing on the Id of the event. This child node also has the nt:unstructured type.
+Each node is used to classify reminders of the same event. Each reminder is stored under a node of the _exo\:reminder_ type: _{{{CalendarApplication/Y%yyyy%/M%mm%/D%dd%/reminders/%event_id%/%reminder_id%}}}_.
 
-The _{noformat}exo:reminder{noformat}_ node type has the following properties:
+The _exo\:reminder_ node type has the following properties:
 
 || Property name || Required type || Multiple || Description ||
 | exo:id | String |false|The Id of the reminder. |
@@ -160,7 +160,7 @@ The _{noformat}exo:reminder{noformat}_ node type has the following properties:
 | exo:summary | String |false| The summary of the reminder. |
 | exo:description | String |false|The brief description of the reminder. |
 
-The *events* node of the _{noformat}nt:unstructured{noformat}_ type contains the child node of the  _{noformat}exo:calendarPublicEvent{noformat}_ type defined at the path: _{noformat}CalendarApplication/Y%yyyy%/M%mm%/D%dd%/events/%event_id%{noformat}_.
+The *events* node of the _nt\:unstructured_ type contains the child node of the  _exo\:calendarPublicEvent_ type defined at the path: _{{{CalendarApplication/Y%yyyy%/M%mm%/D%dd%/events/%event_id%}}}_.
 
 || Property name || Required type || Multiple|| Description ||
 | exo:id | String |false| The Id of the public event. |
@@ -172,7 +172,7 @@ The *events* node of the _{noformat}nt:unstructured{noformat}_ type contains the
 | exo:participant | String |true| The list of users being invited to the public event. |
 | exo:eventState | String | false|The state of the public event, including: busy, available, outside. |
 
-The *events* node can add the *{noformat}exo:repeatCalendarEvent{noformat}* mixin node that has the following properties:
+The *events* node can add the *exo\:repeatCalendarEvent* mixin node that has the following properties:
 || Property name || Required type ||  Multiple|| Description ||
 | exo:repeatCount| Long | false |The number of times that the event is repeated. |
 | exo:repeatUntil| Date | false|The given time until when the event is repeated.|
@@ -186,11 +186,11 @@ The *events* node can add the *{noformat}exo:repeatCalendarEvent{noformat}* mixi
 | exo:repeatFinishDate| Date | false| The end date on which the event is repeated.|
 
 h2. calendarSetting    {anchor:id=CSref.JCRStructure.Calendar.JCR.CalendarSetting}
-The *calendarSetting* node of the _{noformat}exo:calendarSetting{noformat}_ type is stored in _{noformat}CalendarApplication/calendarsetting{noformat}_.
-The _{noformat}exo:calendarSetting{noformat}_ node type has the following properties:
+The *calendarSetting* node of the _exo\:calendarSetting_ type is stored in _CalendarApplication/calendarsetting_.
+The _exo\:calendarSetting_ node type has the following properties:
 
 || Property name || Required type ||Multiple|| Description ||
-| exo:viewType | String | false| View type of the calendar. For more details, refer to the _org.exoplatform.calendar.service.__ CalendarSetting class. |
+| exo:viewType | String | false| View type of the calendar. For more details, refer to the _org.exoplatform.calendar.service._ CalendarSetting class. |
 | exo:timeInterval | Long | false| The interval for each action displayed each UI, for example, dragging and dropping one event in the Calendar application. |
 | exo:weekStartOn | String |false| Define the start date of one week, complying with the _org.exoplatform.cal__ endar.service.CalendarSetting class. |
 | exo:dateFormat | String | false| Define the date format, including dd/MM/yyyy, dd-MM-yyyy, MM/dd/yyyy, and MM-dd-yyyy. |
@@ -216,13 +216,13 @@ The Chat portlet and its services are deprecated. It remains fully supported for
 
 !images/Chat JCR Structure.png|align="center" width="100mm" fo:scalefit="1" html:scalefit="0"!
 
-The node type *{noformat}lr:conversation{noformat}* has the following properties:
+The node type *lr\:conversation* has the following properties:
 
 || Property name || Required type || Description ||
 | lr:conversationstartDate | Date | Start date of the conversation. |
 | lr:conversationlastActiveDate | Date | Last date when the conversation is updated. |
 
-The node type *{noformat}lr:historicalmessage{noformat}* has the following properties:
+The node type *lr\:historicalmessage* has the following properties:
 
 || Property name || Required type || Description ||
 | lr:messagefrom | String | Jabber Id of the user (or chat room) sending (or containing) the message respectively. |
@@ -232,14 +232,14 @@ The node type *{noformat}lr:historicalmessage{noformat}* has the following prope
 | lr:messagedateSend | Date | Date when the message was sent. |
 | lr:messagereceive | Boolean | Check if the message has been received or not. |
 
-The node type *{noformat}lr:participantchat{noformat}* has the following properties:
+The node type *lr\:participantchat* has the following properties:
 
 || Property name || Required type || Description ||
 | lr:participantchatjid | String | Jabber Id of the user. |
 | lr:participantchatusername | String | Username of the portal. |
 
 
-The node type *{noformat}lr:interlocutor{noformat}* contains information regarding to the conversation between two users or of the chat room. It has the following properties:
+The node type *lr\:interlocutor* contains information regarding to the conversation between two users or of the chat room. It has the following properties:
 
 || Property name || Required type || Description ||
 | lr:conversationId | String | Id of the conversation which is the JCR node name of lr:conversation. |
@@ -247,13 +247,13 @@ The node type *{noformat}lr:interlocutor{noformat}* contains information regardi
 | lr:interlocutorname | String | Username or name of the chat room. |
 | lr:interlocutorisRoom | Boolean | Define if the conversation is performed between two users or is of chat room. |
 
-The node type *{noformat}lr:defaultpresencestatus{noformat}* has the following properties:
+The node type *lr\:defaultpresencestatus* has the following properties:
 
 || Property name || Required type || Description ||
 | lr:conversationlastActiveDate | Date | Date when the conversation is last updated. |
 
 
-The node type *{noformat}lr:presencestatus{noformat}* contains information regarding to the current status of user. It has the following properties:
+The node type *lr\:presencestatus* contains information regarding to the current status of user. It has the following properties:
 
 || Property name || Required type || Description ||
 | lr:userid | String | Id of the user. |
@@ -273,9 +273,9 @@ The Address Book portlet is a JCR-based application. The Address Book data are s
 !images/Addressbook-JCR-Structure.png|align="center" width="120mm" fo:scalefit="1" html:scalefit="0"!
 
 h2. Contacts {anchor:id=CSref.JCRStructure.AddressBook.Contacts}
-The *Contacts* node of the _{noformat}nt:unstructured{noformat}_ type has the child nodes of the _{noformat}exo:contact{noformat}_. When a contact is created and added to an address book, it is stored in a node defined at the path: _{noformat}ContactAppication/Contacts/%contact_id%{noformat}_.
-When a contact is tagged, it is saved in the *tags* node with the _{noformat}exo:tags{noformat}_ property. In case, a contact is shared to other users, it is referred to the *SharedContact* node of the _{noformat}exo:sharedId{noformat}_ type.
-The _{noformat}exo:contact{noformat}_ node type has the following properties:
+The *Contacts* node of the _nt\:unstructured_ type has the child nodes of the _exo\:contact_. When a contact is created and added to an address book, it is stored in a node defined at the path: _{{{ContactAppication/Contacts/%contact_id%}}}_.
+When a contact is tagged, it is saved in the *tags* node with the _exo\:tags_ property. In case, a contact is shared to other users, it is referred to the *SharedContact* node of the _exo\:sharedId_ type.
+The _exo\:contact_ node type has the following properties:
 
 || Property name || Required type ||Multiple || Description ||
 | exo:id | String |false| Node name of the exo:contact property.  |
@@ -325,18 +325,18 @@ The _{noformat}exo:contact{noformat}_ node type has the following properties:
 | exo:isOwner | Boolean | false|Show if this contact is the contact of the user in the system or not. |
 | exo:ownerId| String| false| If the contact is a user in the system, the owner Id will be the username of this user.|
 
-This node type may add the _{noformat}exo:contactShared{noformat}_ mixin that has the following properties:
+This node type may add the _exo\:contactShared_ mixin that has the following properties:
 
 || Property name || Required type ||Multiple|| Description ||
 | exo:sharedUserId | String | false| The name of the user sharing the contact. |
 | exo:sharedId | Reference | true| The list of the references to shared users/groups.s|
 
 h2. ContactGroup {anchor:id=CSref.JCRStructure.AddressBook.ContactGroup}
-The *ContactGroup* node of the _{noformat}nt:unstructured{noformat}_ type contains all the child nodes of the _{noformat}exo:contactGroup{noformat}_ type. These child nodes store address books and are stored in _{noformat}ContactApplication/ContactGroup/%addressbook_id{noformat}_.
-This node is also referred to the _{noformat}exo:contact{noformat}_ node type with the _{noformat}exo:categories{noformat}_ property.
-When an address book is shared, it is referred to the *SharedAddressBook* node with the _{noformat}exo:sharedId{noformat}_ property.
+The *ContactGroup* node of the _nt\:unstructured_ type contains all the child nodes of the _exo\:contactGroup_ type. These child nodes store address books and are stored in _{{{ContactApplication/ContactGroup/%addressbook_id}}}_.
+This node is also referred to the _exo\:contact_ node type with the _exo\:categories_ property.
+When an address book is shared, it is referred to the *SharedAddressBook* node with the _exo\:sharedId_ property.
 
-The information of each address book is contained in a node of the _{noformat}exo:contactGroup{noformat}_ type that has the following properties:
+The information of each address book is contained in a node of the _exo\:contactGroup_ type that has the following properties:
 || Property name || Required type ||Multiple|| Description ||
 | exo:id | String | false| The Id of the address book. |
 | exo:name | String |false| The name of the address book. |
@@ -347,8 +347,8 @@ The information of each address book is contained in a node of the _{noformat}ex
 | exo:viewPermissionGroups | String | true| The list of groups having the permission to view the address book. |
 
 h2. tags {anchor:id=CSref.JCRStructure.AddressBook.tags}
-Tags are used to categorize the contacts in groups, so users can easily find the contacts. The *tags* node of the _{noformat}nt:unstructured{noformat}_ type contains the child nodes of the _{noformat}exo:contactTag{noformat}_ type. When a new tag is created, it is stored in a node defined at the path: _{noformat}ApplicationData/ContactApplications/tags/%tags_id%{noformat}_.
-The information of each tag is contained in a node of the _{noformat}exo:contactTag{noformat}_ type that has the following properties:
+Tags are used to categorize the contacts in groups, so users can easily find the contacts. The *tags* node of the _nt\:unstructured_ type contains the child nodes of the _exo\:contactTag_ type. When a new tag is created, it is stored in a node defined at the path: _{{{ApplicationData/ContactApplications/tags/%tags_id%}}}_.
+The information of each tag is contained in a node of the _exo\:contactTag_ type that has the following properties:
 
 || Property name || Required type ||Multiple|| Description ||
 | exo:id | String |false| The Id of the tag. |
@@ -357,7 +357,7 @@ The information of each tag is contained in a node of the _{noformat}exo:contact
 | exo:color | String | false| The color of the tag. |
 
 h2. Shared {anchor:id=CSref.JCRStructure.AddressBook.Shared}
-When a contact or a address book is shared to other users, it is referred to the *SharedContact* or *SharedAddressBook* node. Both of these child nodes have the _{noformat}nt:unstructured{noformat}_ type.
+When a contact or a address book is shared to other users, it is referred to the *SharedContact* or *SharedAddressBook* node. Both of these child nodes have the _nt\:unstructured_ type.
 
 
 
@@ -372,7 +372,7 @@ The Mail portlet and its services are deprecated. It remains fully supported for
 
 !images/Mail JCR Structure.png|align="center" width="150mm" fo:scalefit="1" html:scalefit="0"!
 
-The node type *{noformat}exo:account{noformat}* has the following properties:
+The node type *exo\:account* has the following properties:
 || Property name || Required type || Description ||
 | exo:id | String | Id of the account. |
 | exo:label | String | Name of the account. |
@@ -395,7 +395,7 @@ The node type *{noformat}exo:account{noformat}* has the following properties:
 | exo:authMechsOutgoing | String | Authentication mechanism of the outgoing connections. Its values consist of ntlm, plain, login, digest-md5, kerberos/gssapi, cram-md5. |
 | exo:permissions | String | Permissions of delegators. |
 
-The node type *{noformat}exo:folder{noformat}* has the following properties:
+The node type *exo\:folder* has the following properties:
 
 || Property name || Required type || Description ||
 | exo:id | String | Id of the folder. |
@@ -409,7 +409,7 @@ The node type *{noformat}exo:folder{noformat}* has the following properties:
 | exo:lastCheckedTime | Date | End time of the last check in the folder. |
 
 
-The node type *{noformat}exo:message{noformat}* has the following properties:
+The node type *exo\:message* has the following properties:
 || Property name || Required type || Description ||
 | exo:id | String | Id of the message. |
 | exo:uid | String | Id of the message on the IMAP server.  |
@@ -434,19 +434,19 @@ The node type *{noformat}exo:message{noformat}* has the following properties:
 | exo:priority | Long | Preference order of the message with 3 default values: 1 = High, 3 = Normal, 5 = Low. |
 | exo:lastUpdateTime | Date | Time when the message was last updated. |
 
-The node type *{noformat}exo:mailAttachment{noformat}* has the following property:
+The node type *exo\:mailAttachment* has the following property:
 || Property name || Required type || Description ||
 | exo:fileName | String | Name of the file attached in the mail. |
 
 
-The node type *{noformat}exo:mailtag{noformat}* has the following properties:
+The node type *exo\:mailtag* has the following properties:
 || Property name || Required type || Description ||
 | exo:id | String | Tag id of the mail. |
 | exo:name | String | Name of the tag. |
 | exo:description | String | Brief description of the mail tag. |
 | exo:color | String | Color of the tag which is defined in the _org.exoplatform.webui.form.ext.UIFormColorPicker_ class. |
 
-The node type *{noformat}exo:filter{noformat}* has the following properties:
+The node type *exo\:filter* has the following properties:
 
 || Property name || Required type || Description ||
 | exo:id | String | Filter id which is a unique and randomized value.|
@@ -459,7 +459,7 @@ The node type *{noformat}exo:filter{noformat}* has the following properties:
 | exo:applyForAll | Boolean | If the value is set to "true" into the exo:applyForAll property, the filter will be executed for all email messages. |
 
 
-The node type *{noformat}exo:mailSetting{noformat}* has the following properties:
+The node type *exo\:mailSetting* has the following properties:
 
 || Property name || Required type || Description ||
 | exo:numberMsgPerPage | Long | Number of messages displayed in one page. |
@@ -478,7 +478,7 @@ h1. RSS JCR Structure {anchor:id=CSref.JCRStructure.RSS}
 
 !images/RSS JCR Structure.png|align="center" width="70mm" fo:scalefit="1" html:scalefit="0"!
 
-The node type *{noformat}exo:content{noformat}* has the following properties:
+The node type *exo\:content* has the following properties:
 || Property name || Required type || Description ||
 | id | String | Id of the content. |
 | ownerType | String | Type of the owner. Its default value is user. |
