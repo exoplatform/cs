@@ -40,7 +40,7 @@
      <org.exoplatform.commons.version>1.1.8-SNAPSHOT</org.exoplatform.commons.version>	      
     <org.hsqldb.version>2.0.0</org.hsqldb.version>
      <!-- eXo extended service -->
-     <org.exoplatform.social.version>1.2.7-SNAPSHOT</org.exoplatform.social.version>
+     <org.exoplatform.social.version>1.2.9-SNAPSHOT</org.exoplatform.social.version>
      <!-- 3rd parties -->
     <org.aspectj.version>1.6.10</org.aspectj.version>
     <ehcache.version>1.6.0</ehcache.version>
