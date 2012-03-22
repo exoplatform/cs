@@ -371,7 +371,7 @@ See details about the init-params of the component in the following table:
 | | |{{period}}|The time interval (millisecond) between job executions.|{{Long}}|{{6000}}|
 | | |{{startTime}}|The time when the job starts running.|{{Long}}|{{+0}}|
 | | |{{endTime}}|The time when the job ends running.|{{Integer}}|{{None}}|
-|*popupreminder.info*|Save the monitor data periodically.|{{portalName}}|The name of the portal.|{{String}}|{{portal}}|‎‏
+|*popupreminder.info*|Save the monitor data periodically.|{{portalName}}|The name of the portal.|{{String}}|{{portal}}|
 
 h2. AddActionsPlugin {anchor:id=CSref.Configuration.AddActionsPlugin}
 The configuration of the AddActionsPlugin is found in _WEB-INF/cs-extension/cs/webservice/webservice-configuration.xml_.
