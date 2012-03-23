@@ -77,7 +77,7 @@ public class MailSetting {
 
   private long                periodCheckAuto_    = 0;
 
-  private String              defaultAccount_     = StringUtils.EMPTY;
+  private String              defaultAccount_     ;
 
   private boolean             useWysiwyg_         = true;
 
