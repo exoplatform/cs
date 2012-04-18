@@ -14,9 +14,9 @@
   <description>eXo Collaboration made of Address Book, Calendar, Mail and Chat.</description>
   <url>http://wiki.exoplatform.org/xwiki/bin/view/CS/</url>
   <scm>
-   <connection>scm:svn:http://svn.exoplatform.org/projects/cs/branches/2.2.x</connection>
-   <developerConnection>scm:svn:http://svn.exoplatform.org/projects/cs/branches/2.2.x</developerConnection>
-   <url>https://fisheye.exoplatform.org/browse/cs/branches/2.2.x</url>
+    <connection>scm:git:git://github.com/exoplatform/cs.git</connection>
+	<developerConnection>scm:git:ssh://git@github.com/exoplatform/cs.git</developerConnection>
+	<url>http://fisheye.exoplatform.org/browse/cs</url>
   </scm>
   <issueManagement>
     <system>jira</system>
@@ -129,6 +129,9 @@
     <!-- ************** -->
     <!-- We enforce Java 6 to build to use Chromattic and APT -->
     <jdk.min.version>1.6</jdk.min.version>
+    <!-- config-scm-maven-plugin -->
+	<org.apache.maven.scm.version>1.6</org.apache.maven.scm.version>
+	<version.buildnumber.plugin>1.0</version.buildnumber.plugin>
     <!-- maven-release-plugin -->
     <arguments>-Prelease,pkg-tomcat,arc-tomcat,run-its -Dgatein.working.dir=target</arguments>
   </properties>
