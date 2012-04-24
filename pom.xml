@@ -15,7 +15,7 @@
   <url>http://wiki.exoplatform.org/xwiki/bin/view/CS/</url>
   <scm>
     <connection>scm:git:git://github.com/exoplatform/cs.git</connection>
-	<developerConnection>scm:git:ssh://git@github.com/exoplatform/cs.git</developerConnection>
+	<developerConnection>scm:git:git@github.com:exoplatform/cs.git</developerConnection>
 	<url>http://fisheye.exoplatform.org/browse/cs</url>
   </scm>
   <issueManagement>
