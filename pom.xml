@@ -123,13 +123,13 @@
     <org.staxnav.version>0.9.6</org.staxnav.version>
     <nekohtml.version>1.9.14</nekohtml.version>
     <caja.version>r1</caja.version>
-
     <!-- ************** -->
     <!-- Build settings -->
     <!-- ************** -->
     <!-- We enforce Java 6 to build to use Chromattic and APT -->
     <jdk.min.version>1.6</jdk.min.version>
     <!-- config-scm-maven-plugin -->
+    <version.release.plugin>2.2.1</version.release.plugin>
 	<org.apache.maven.scm.version>1.6</org.apache.maven.scm.version>
 	<version.buildnumber.plugin>1.0</version.buildnumber.plugin>
     <!-- maven-release-plugin -->
