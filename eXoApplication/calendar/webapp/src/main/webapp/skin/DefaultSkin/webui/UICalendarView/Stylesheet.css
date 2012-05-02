@@ -646,6 +646,13 @@
 .UIYearView .MonthList .Highlight a{
 	font-weight:bold;
 }
+
+.UIYearView .MonthList .UIGrid .Today {
+  background: #ABC7FE;
+}
+.UIYearView .MonthList .UIGrid .Today a{
+  color:red;
+}
 /*====================Event List View=====================*/
 
 .UIListView {
