@@ -1144,7 +1144,9 @@ public class JCRDataStorage implements DataStorage {
 //    dateTime.setTimeZone(TimeZone.getTimeZone("GMT"));
     dateTime.setTime(event.getFromDateTime()) ;
     eventNode.setProperty(Utils.EXO_FROM_DATE_TIME, dateTime) ;
-    dateTime.setTime(event.getToDateTime()) ;
+    if (event.getToDateTime()!=null){
+      dateTime.setTime(event.getToDateTime()) ;
+    }
     eventNode.setProperty(Utils.EXO_TO_DATE_TIME, dateTime) ;
     eventNode.setProperty(Utils.EXO_EVENT_TYPE, event.getEventType()) ;
     eventNode.setProperty(Utils.EXO_REPEAT, event.getRepeatType()) ;
@@ -1265,7 +1267,9 @@ public class JCRDataStorage implements DataStorage {
     fromDate = dateTime.get(java.util.Calendar.DAY_OF_YEAR) ;
     publicEvent.setProperty(Utils.EXO_FROM_DATE_TIME, dateTime) ;
     publicEvent.setProperty(Utils.EXO_EVENT_STATE, event.getEventState()) ;
-    dateTime.setTime(event.getToDateTime()) ;
+    if (event.getToDateTime()!=null){
+      dateTime.setTime(event.getToDateTime()) ;
+    }
     toDate = dateTime.get(java.util.Calendar.DAY_OF_YEAR) ;
     if(toDate > fromDate) {
       java.util.Calendar tmpTime = Utils.getInstanceTempCalendar() ;

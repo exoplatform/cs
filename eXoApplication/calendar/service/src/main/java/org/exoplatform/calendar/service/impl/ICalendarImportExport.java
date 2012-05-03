@@ -879,7 +879,7 @@ public class ICalendarImportExport implements CalendarImportExport{
     //Map<String, VEvent> vEventData = new HashMap<String, VEvent>() ;
     Map<String, VFreeBusy> vFreeBusyData = new HashMap<String, VFreeBusy>() ;
     Map<String, VAlarm> vAlarmData = new HashMap<String, VAlarm>() ;
-    CalendarService  calService = (CalendarService)PortalContainer.getInstance().getComponentInstanceOfType(CalendarService.class) ;
+    CalendarService  calService = (CalendarService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class) ;
     ComponentList componentList = iCalendar.getComponents() ;
     CalendarEvent exoEvent ;
     for(Object obj : componentList) {

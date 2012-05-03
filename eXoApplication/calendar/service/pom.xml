@@ -161,4 +161,32 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <build>
+    <testResources>
+      <testResource>
+        <directory>src/test/java</directory>
+        <includes>
+          <include>**/*.properties</include>
+          <include>**/login.conf</include>
+          <include>**/*.xml</include>
+          <include>**/*.drl</include>
+          <include>**/*.vm</include>
+          <include>**/*.doc</include>
+          <include>**/*.xls</include>
+          <include>**/*.ppt</include>
+          <include>**/*.txt</include>
+          <include>**/*.tiff</include>
+          <include>**/*.pdf</include>
+          <include>**/*.dtd</include>
+        </includes>
+      </testResource>
+      <testResource>
+        <directory>src/test/resources</directory>
+        <includes>
+          <include>**/*.ics</include>
+        </includes>
+      </testResource>
+    </testResources>
+  </build>
 </project>

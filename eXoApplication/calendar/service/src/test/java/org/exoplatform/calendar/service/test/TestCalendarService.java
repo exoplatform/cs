@@ -17,6 +17,7 @@
 package org.exoplatform.calendar.service.test;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,6 +27,7 @@ import java.util.List;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarEvent;
+import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
@@ -523,6 +525,29 @@ public class TestCalendarService extends BaseCalendarServiceTestCase {
     assertTrue(Utils.isSameDate(date1, date2));
     assertTrue(Utils.isSameDate(date2, date3));
     assertTrue(Utils.isSameDate(date3, date1));
+  }
+  
+  public void testImportIcs() throws Exception {
+    CalendarImportExport calIE = calendarService_.getCalendarImportExports(CalendarService.ICALENDAR);
+    String categoryId = "IcsCategory";
+    String calendarId = "IcsCalendar";
+    CalendarCategory calCategory = new CalendarCategory();
+    calCategory.setName(categoryId);
+    calendarService_.saveCalendarCategory(username, calCategory, true);
+    Calendar cal = new Calendar();
+    cal.setId(calendarId);
+    cal.setName(calendarId);
+    cal.setCategoryId(calCategory.getId());
+    cal.setPublic(true);
+    calendarService_.saveUserCalendar(username, cal, true);
+    InputStream icalInputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("ObmCalendar_isolated.ics");
+    
+    calIE.importToCalendar(username, icalInputStream, calendarId);
+    List<String> calendarIds = new ArrayList<String>();
+    calendarIds.add(calendarId);
+    List<CalendarEvent> events = calendarService_.getUserEventByCalendar(username, calendarIds);
+    assertTrue(events.size() > 0);
+    icalInputStream.close();
   }
 
 }
