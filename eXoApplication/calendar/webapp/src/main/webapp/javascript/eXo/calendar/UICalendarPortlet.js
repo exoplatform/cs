@@ -987,7 +987,7 @@ UICalendarPortlet.prototype.browserResizeCallback = function(){
  * Callback method when double click on a calendar event
  */
 UICalendarPortlet.prototype.ondblclickCallback = function(){
-    var eventId = this.getAttribute("eventId");
+	var eventId = this.getAttribute("eventId");
     var calendarId = this.getAttribute("calid");
     var calendarType = this.getAttribute("caltype");
     eXo.webui.UIForm.submitEvent(eXo.calendar.UICalendarPortlet.portletId + '#' + eXo.calendar.UICalendarPortlet.viewType, 'Edit', '&subComponentId=' + eXo.calendar.UICalendarPortlet.viewType + '&objectId=' + eventId + '&calendarId=' + calendarId + '&calType=' + calendarType);
@@ -1673,7 +1673,9 @@ UICalendarPortlet.prototype.resortEvents = function(){
         if (eXo.calendar.UICalendarPortlet.getElementById("UIDayViewGrid")) 
             eXo.calendar.UICalendarPortlet.showEvent();
         if (eXo.calendar.UICalendarPortlet.getElementById("UIWeekViewGrid")) {
-            eXo.calendar.UICalendarMan.initWeek();
+        	try{
+        	  eXo.calendar.UICalendarMan.initWeek();
+        	}catch(err){};
             eXo.calendar.UIWeekView.init();
         }
     } 
