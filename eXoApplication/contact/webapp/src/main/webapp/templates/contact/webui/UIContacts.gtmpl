@@ -394,7 +394,7 @@
 										if (ContactUtils.isEmpty(email)) subEmail = "_" ;
 	  		  					else {
 	  		  						email = email.replaceAll(";", "; ") ;
-	  		  					  if (email.length() > 30) subEmail = email.substring(0, 30) + "..." ;
+	  		  					  if (email.length() > uicomponent.EMAIL_TEXT_SHOW_LENGTH) subEmail = email.substring(0, uicomponent.EMAIL_TEXT_SHOW_LENGTH) + "..." ;
   		  						  else subEmail = email ;	
 	  		  					}
 									 %>
@@ -481,7 +481,7 @@
 										if (ContactUtils.isEmpty(email)) subEmail = "_" ;
 			  		  					else {
 			  		  						email = email.replaceAll(";", "; ") ;
-			  		  					  if (email.length() > 30) subEmail = email.substring(0, 30) + "..." ;
+			  		  					  if (email.length() > uicomponent.EMAIL_TEXT_SHOW_LENGTH) subEmail = email.substring(0, uicomponent.EMAIL_TEXT_SHOW_LENGTH) + "..." ;
 		  		  						  else subEmail = email ;	
 			  		  					}
 									 %>
@@ -686,7 +686,7 @@
 									for (int index = 1; index <= emails.length; index ++) {
 										emailAdd = emails[index-1].trim() ;
 	                	subEmail = emailAdd ;	
-	                	if (emailAdd.length() > 30) subEmail = emailAdd.substring(0, 30) + "..." ;
+	                	if (emailAdd.length() > uicomponent.EMAIL_TEXT_SHOW_LENGTH) subEmail = emailAdd.substring(0, uicomponent.EMAIL_TEXT_SHOW_LENGTH) + "..." ;
 								%>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent"><%=_ctx.appRes(uicomponent.getName() + ".label.email") +" " + index %> :</span>
@@ -857,7 +857,7 @@
 									for (int index =1; index <= emails.length; index ++) {
 										emailAdd = emails[index-1].trim() ;
 	                	subEmail = emailAdd ;	
-	                	if (emailAdd.length() > 30) subEmail = emailAdd.substring(0, 30) + "..." ;
+	                	if (emailAdd.length() > uicomponent.EMAIL_TEXT_SHOW_LENGTH) subEmail = emailAdd.substring(0, uicomponent.EMAIL_TEXT_SHOW_LENGTH) + "..." ;
 								%>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent"><%=_ctx.appRes(uicomponent.getName() + ".label.email") +" " + index %> :</span>

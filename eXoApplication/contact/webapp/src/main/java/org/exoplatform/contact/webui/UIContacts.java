@@ -157,6 +157,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
 
   private String                         checkedAll                         = "";
 
+  public static final int                EMAIL_TEXT_SHOW_LENGTH             = 60;
+
   public UIContacts() throws Exception {
   }
 
