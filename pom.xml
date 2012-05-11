@@ -98,7 +98,6 @@
     <!--exo.cs.eXoApplication.organization.client.openfire-->
     <openfire.version>3.6.4</openfire.version>
     <!--need when deploy CS-->
-    <org.apache.pdfbox.fontbox.version>1.1.0</org.apache.pdfbox.fontbox.version>
     <jdom.version>1.0</jdom.version>
 	<c3p0.version>0.9.1.2</c3p0.version>
 	<net.oauth.version>20080621</net.oauth.version>
