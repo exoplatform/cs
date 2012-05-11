@@ -30,6 +30,18 @@
       </properties-param>
     </init-params>
   </component>
+  
+  <component>
+	<key>org.exoplatform.services.scheduler.JobSchedulerService</key>
+	<type>org.exoplatform.services.scheduler.impl.JobSchedulerServiceImpl</type>
+  </component>
+  
+  <component>
+  	<type>org.exoplatform.services.scheduler.impl.QuartzSheduler</type>
+  </component>
+  <component>
+	<type>org.exoplatform.services.scheduler.QueueTasks</type>
+  </component>
    
    <component>
   	<key>org.exoplatform.calendar.service.CalendarService</key>
