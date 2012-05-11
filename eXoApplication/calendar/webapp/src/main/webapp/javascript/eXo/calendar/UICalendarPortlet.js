@@ -7,6 +7,7 @@
 function UICalendarPortlet(){
 	this.clickone = 0 ;
 	this.portletId = "calendars";
+	this.currentDate = 0;
 }
 
 /**
@@ -133,7 +134,11 @@ UICalendarPortlet.prototype.getCheckedCalendar = function(calendarForm){
  * @param {obj, type} has action object, type of form : event 1 | task 2
  */
 UICalendarPortlet.prototype.addQuickShowHidden = function(obj, type){
-	var startTime = new Date().getTime() ;
+	if (this.currentDate) {
+		var startTime = new Date(this.currentDate).getTime();
+	} else {
+		var startTime = new Date().getTime();
+	}
 	var id = this.getCheckedCalendar(this.filterForm);	
 	this.addQuickShowHiddenWithTime(obj, type, startTime, startTime + 15*60*1000,id) ;
 } ;

@@ -376,6 +376,12 @@ public class UIListView extends UICalendarView {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiListView); 
     }
   }
+  
+  @Override
+  public String getDefaultStartTimeOfEvent() {
+    return String.valueOf(calendar_.getTimeInMillis());
+  }
+  
   /* TODO CS-2731
   public static class CalendarEventComparator implements Comparator {
     public static final int EVENT_SUMMARY = 0;

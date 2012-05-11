@@ -234,4 +234,21 @@ public class UIMonthView extends UICalendarView {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
     }
   }
+  
+  @Override
+  public String getDefaultStartTimeOfEvent() {
+    if (isCurrentMonth(calendar_.get(Calendar.MONTH), calendar_.get(Calendar.YEAR))) {
+      // if selected month is current month, the start time is present
+      return String.valueOf(System.currentTimeMillis());
+    } else {
+      Calendar c = Calendar.getInstance();
+      c.setTime(calendar_.getTime());
+      int month = c.get(Calendar.MONTH);
+      while (c.get(Calendar.MONTH) == month) {
+        c.add(Calendar.DATE, 1);
+      }
+      c.add(Calendar.DATE, -1);
+      return String.valueOf(c.getTimeInMillis());
+    }
+  }
 }

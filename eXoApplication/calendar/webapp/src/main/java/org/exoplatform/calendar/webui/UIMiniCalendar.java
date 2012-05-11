@@ -150,4 +150,9 @@ public class UIMiniCalendar extends UICalendarView  {
       event.getRequestContext().addUIComponentToUpdateByAjax(miniCal.getParent()) ;
     }
   }
+  
+  @Override
+  public String getDefaultStartTimeOfEvent() {
+    return String.valueOf(calendar_.getTimeInMillis());
+  }
 }

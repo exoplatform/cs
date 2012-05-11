@@ -136,4 +136,9 @@ public class UIYearView extends UICalendarView {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiYearView);           
     }
   }
+  
+  @Override
+  public String getDefaultStartTimeOfEvent() {
+    return String.valueOf(calendar_.getTimeInMillis());
+  }
 }

@@ -686,7 +686,8 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           return ;
         }  
         String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
-        String formTime = CalendarUtils.getCurrentTime(uiForm) ;
+	//String formTime = CalendarUtils.getCurrentTime(uiForm) ;
+	String formTime = uiForm.getDefaultStartTimeOfEvent() ;
         //String formTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
         String value = uiForm.getUIFormSelectBox(EVENT_CATEGORIES).getValue() ;
         UICalendarPortlet uiPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
@@ -1372,4 +1373,10 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
 		   }		   
 	   }
    }
+   
+   /**
+    * The returned value of this function is used to initialize start time for event form which is rendered when user click "add event" or "add task"
+    * @return string of time value in milliseconds.
+    */
+    public abstract String getDefaultStartTimeOfEvent();
 }

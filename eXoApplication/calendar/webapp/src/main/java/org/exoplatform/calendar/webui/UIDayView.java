@@ -216,4 +216,9 @@ public class UIDayView extends UICalendarView {
       }
     }
   }
+  
+  @Override
+  public String getDefaultStartTimeOfEvent() {
+    return String.valueOf(calendar_.getTimeInMillis());
+  }
 }

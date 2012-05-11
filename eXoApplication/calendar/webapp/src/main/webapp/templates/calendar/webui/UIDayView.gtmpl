@@ -32,26 +32,27 @@
  	Locale locale = context.getParentAppRequestContext().getLocale() ;
  	
 	DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
-	df.setCalendar(uicomponent.getInstanceTempCalendar()) ;
+	df.setCalendar(uicomponent.getCurrentCalendar()) ;
 	//String currentDate = df.format(uicomponent.getCurrentCalendar().getTime()) ;
 	DateFormat tf = new SimpleDateFormat(timeFormat, locale) ;
-	tf.setCalendar(uicomponent.getInstanceTempCalendar()) ;
+	tf.setCalendar(uicomponent.getCurrentCalendar()) ;
 	DateFormat dtf = new SimpleDateFormat(dateTimeFormat, locale) ;
-	dtf.setCalendar(uicomponent.getInstanceTempCalendar()) ;
+	dtf.setCalendar(uicomponent.getCurrentCalendar()) ;
 	def rcontext = _ctx.getRequestContext() ;	
 	String startWorkingTime = uicomponent.getStartTime() ;
 	String endWorkingTime = uicomponent.getEndTime() ;
 	def hoursMap = uicomponent.getTimeSteps(timeFormat, timeInterval) ;
 	boolean isShowWorkingTime = uicomponent.isShowWorkingTime() ;
-  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showEvent() ;') ;
-  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.initSelection() ;') ;
-  //rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;
+	rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showEvent() ;') ;
+	rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.initSelection() ;') ;
+	//rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;
 	rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.UICalendarPortlet.checkFilter();') ;
  	rcontext.getJavascriptManager().addOnResizeJavascript('eXo.calendar.UICalendarPortlet.browserResizeCallback') ;
-  cssClass = "Day" ;
+	rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.currentDate = ' + uicomponent.getDefaultStartTimeOfEvent() +';') ;
+	cssClass = "Day" ;
   
-  DateFormat tempFormat = new  SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss", Locale.ENGLISH) ;
-  tempFormat.setCalendar(uicomponent.getInstanceTempCalendar()) ;
+	DateFormat tempFormat = new  SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss", Locale.ENGLISH) ;
+	tempFormat.setCalendar(uicomponent.getCurrentCalendar()) ;
   
 %>
 <div class="UIDayView">
@@ -148,7 +149,7 @@
                 <div class="EventBoardContainer" lastUpdatedId="<%=uicomponent.getLastUpdatedEventId()%>">
                   <%
 								 for(ce in	uicomponent.getEventData().values()) {
-								 	cal = uicomponent.getInstanceTempCalendar() ;
+								 	cal = uicomponent.getCurrentCalendar() ;
 								 	cal.setTime(ce.getFromDateTime()) ;
 								  long 	beginTime = cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;
 								  cal.setTime(ce.getToDateTime()) ;
@@ -182,7 +183,7 @@
 			            		flag = true ;
 			            		style = "" ;
 			            		if(isShowWorkingTime) {style = "WorkOffTime" ;}
-			            		Calendar cl = uicomponent.getInstanceTempCalendar() ;
+			            		Calendar cl = uicomponent.getCurrentCalendar() ;
 								cl = uicomponent.getBeginDay(cl) ;	
 									  for(full in uicomponent.getDisplayTimes(timeFormat, timeInterval, locale)){
 					String h = full.substring(0,full.lastIndexOf("_")) ;
