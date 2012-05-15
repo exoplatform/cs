@@ -2,25 +2,48 @@ function Reminder() {
   
 } ;
 
-Reminder.prototype.init = function(eXoUser, eXoToken, cometdContextName){
-	if(!eXo.cs.CSCometd) eXo.cs.CSCometd = eXo.core.Cometd;
+Reminder.prototype.init = function(eXoUser, eXoToken, cometdContextName) {
+	if (!eXo.cs.CSCometd)
+		eXo.cs.CSCometd = eXo.core.Cometd;
 	eXo.cs.CSCometd.exoId = eXoUser;
 	eXo.cs.CSCometd.exoToken = eXoToken;
-	if(cometdContextName)
+	if (cometdContextName)
 		eXo.cs.CSCometd.url = '/' + cometdContextName + '/cometd';
-	eXo.cs.CSCometd.subscribe('/eXo/Application/Calendar/messages', function(eventObj) {		
-		eXo.calendar.Reminder.alarm(eventObj) ;
-  });
-  //eXo.cs.CSCometd.addOnConnectionReadyCallback(this.initCometd);
+	eXo.cs.CSCometd.subscribe('/eXo/Application/Calendar/messages', function(
+			eventObj) {
+		eXo.calendar.Reminder.alarm(eventObj);
+	});
+	eXo.cs.CSCometd.subscribe('/eXo/Application/Calendar/notifySharaCalendar',
+			function(eventObj) {
+				eXo.calendar.Reminder.notifySharaCalendar(eventObj);
+			});
+	// eXo.cs.CSCometd.addOnConnectionReadyCallback(this.initCometd);
 	if (!eXo.cs.CSCometd.isConnected()) {
 		eXo.cs.CSCometd.init();
-  }
-} ;
+	}
+}
 
 Reminder.prototype.initCometd = function() {
-	eXo.cs.CSCometd.subscribe('/eXo/Application/Calendar/messages', function(eventObj) {		
-		eXo.calendar.Reminder.alarm(eventObj) ;
-  });
+	eXo.cs.CSCometd.subscribe('/eXo/Application/Calendar/messages', function(
+			eventObj) {
+		eXo.calendar.Reminder.alarm(eventObj);
+	});
+	eXo.cs.CSCometd.subscribe('/eXo/Application/Calendar/notifySharaCalendar',
+			function(eventObj) {
+				eXo.calendar.Reminder.notifySharaCalendar(eventObj);
+			});
+}
+
+Reminder.prototype.notifySharaCalendar = function(eventObj) {
+	dataMsg = eventObj.data
+	var message = dataMsg;
+	var html = this.generateHTML(message);
+	var popup = eXo.core.DOMUtil.findFirstDescendantByClass(this.createMessage(
+			html, message), "div", "UIPopupNotification");
+	eXo.webui.Box.config(popup, popup.offsetHeight, 5, this.openCallback,
+			this.closeBox);
+	window.focus();
+	return;
 }
 
 Reminder.prototype.alarm = function(eventObj){
