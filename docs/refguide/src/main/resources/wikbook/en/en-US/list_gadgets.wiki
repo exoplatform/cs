@@ -2,9 +2,17 @@ eXo Collaboration consists of three gadgets: eventslist, taskslist and messagesl
 
 h1. Eventslist {anchor:id=CSref.Gadgets.Evenslist}
 
-h2. Description  {anchor:id=CSref.Gadgets.Eventlist.Description}
 Eventslist lists the maximum number of upcoming events, that is configurable by users. For example, they can set the preference list to 5 or 10 events.
 
+{docbook}
+<para>
+<citetitle>
+<emphasis role="bold">
+Preferences
+</emphasis>
+</citetitle>
+</para>
+{docbook}
 See preferences of this gadget in the following sample code:
 
 {code:xml}
@@ -24,7 +32,15 @@ Details:
 
 For more details on the preferences of gadgets, see [here.|http://code.google.com/apis/gadgets/docs/basic.html#Userprefs]
 
-h2. Links to used REST services {anchor:id=CSref.Gadgets.Eventslist.LinksToUsedRESTServices}
+{docbook}
+<para xml:id="CSref.Gadgets.Eventslist.LinksToUsedRESTServices">
+<citetitle>
+<emphasis role="bold">
+Links to used REST services
+</emphasis>
+</citetitle>
+</para>
+{docbook}
 
 It uses the _upcomingEvent_ service in the following package:
 _org.exoplatform.webservice.cs.calendar.CalendarWebservice.java_.
@@ -33,7 +49,16 @@ _org.exoplatform.webservice.cs.calendar.CalendarWebservice.java_.
 h1. Taskslist {anchor:id=CSref.Gadgets.Taskslist}
 Taskslist lists the maximum number of upcoming tasks that is configurable by users. For example, they can set the preference list to 5 or 10 tasks.
 
-h2. Description {anchor:id=CSref.Gadgets.Taskslist.Description}
+{docbook}
+<para>
+<citetitle>
+<emphasis role="bold">
+Preferences
+</emphasis>
+</citetitle>
+</para>
+{docbook}
+
 See the preferences of this gadget in the following sample code:
 
 {code:xml}
@@ -42,14 +67,32 @@ See the preferences of this gadget in the following sample code:
 
 Accordingly, _setting_ collects all the configuration of upcoming tasks and add some more functions to help developers change the configuration of the default skin.
 
-h2. Links to used REST services  {anchor:id=CSref.Gadgets.Taskslist.LinksToUsedRESTServices}
+
+{docbook}
+<para xml:id="CSref.Gadgets.Taskslist.LinksToUsedRESTServices">
+<citetitle>
+<emphasis role="bold">
+Links to used REST services
+</emphasis>
+</citetitle>
+</para>
+{docbook}
+
 It uses upcomingEvent service in the following package:
 _org.exoplatform.webservice.cs.calendar.CalendarWebservice.java_.
 
 h1. Messageslist {anchor:id=CSref.Gadgets.Messageslist}
 It lists the maximum number of unread messages, that is configurable by users.
 
-h2. Description {anchor:id=CSref.Gadgets.Messageslist.Description}
+{docbook}
+<para>
+<citetitle>
+<emphasis role="bold">
+Preferences
+</emphasis>
+</citetitle>
+</para>
+{docbook}
 
 See the prefereces of this gadget in the following sample code:
 
@@ -72,7 +115,15 @@ Details:
 | *Folder* | The folder which consists of unread messages. |
 | *Tag* | The tags in all unread messages. |
 
-h2. Links to used REST services {anchor:id=CSref.Gadgets.LinksToUsedRESTServices}
+{docbook}
+<para xml:id="CSref.Gadgets.LinksToUsedRESTServices">
+<citetitle>
+<emphasis role="bold">
+Links to used REST services
+</emphasis>
+</citetitle>
+</para>
+{docbook}
 
 It uses the unreadMail service in the following package:
 _org.exoplatform.webservice.cs.mail.MailWebservice.java_.
