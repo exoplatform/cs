@@ -50,11 +50,7 @@ public class ShareCalendarJob implements Job, InterruptableJob {
 
   public static final String JCR_JATA_STORAGE     = "JCRDataStorage";
 
-  public static final String START_SHARE_MSG      = "Calendar is started to share";
-
   public static final String START_SHARE_ID       = "startShareCalendar";
-
-  public static final String FINISH_SHARE_MSG     = "Calendar is finished to share";
 
   public static final String FINISH_SHARE_ID      = "finishShareCalendar";
 
@@ -74,13 +70,13 @@ public class ShareCalendarJob implements Job, InterruptableJob {
     String user = jobDataMap.getString(USER_NAME);
     String calendarId = jobDataMap.getString(CALENDAR_ID);
     JCRDataStorage jcrDataStorage = (JCRDataStorage) jobDataMap.get(JCR_JATA_STORAGE);
-    continuation.sendMessage(user, SHARE_CAL_CHANEL, START_SHARE_MSG, START_SHARE_ID);
+    continuation.sendMessage(user, SHARE_CAL_CHANEL, jobDataMap.get(START_SHARE_ID), START_SHARE_ID);
     try {
       jcrDataStorage.shareCalendar(user, calendarId, receiverUsers);
     } catch (Exception e) {
       log.debug("Exception in method:" + e);
     }
-    continuation.sendMessage(user, SHARE_CAL_CHANEL, FINISH_SHARE_MSG, FINISH_SHARE_ID);
+    continuation.sendMessage(user, SHARE_CAL_CHANEL, jobDataMap.get(FINISH_SHARE_ID) , FINISH_SHARE_ID);
   }
 
   public static JobInfo getJobInfo(String userId) {
@@ -88,7 +84,7 @@ public class ShareCalendarJob implements Job, InterruptableJob {
                                ShareCalendarJob.SHARE_CALENDAR_GROUP,
                                ShareCalendarJob.class);
 
-    info.setDescription("Share calendar to large of user");
+    info.setDescription("There are too many users");
     return info;
   }
 

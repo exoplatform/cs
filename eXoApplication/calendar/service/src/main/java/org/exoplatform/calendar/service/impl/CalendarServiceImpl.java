@@ -407,12 +407,17 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     JobSchedulerServiceImpl  schedulerService_ = (JobSchedulerServiceImpl)PortalContainer.getInstance().getComponentInstance(JobSchedulerService.class) ;
     JobInfo jobInfo = ShareCalendarJob.getJobInfo(username);
     String message = "Sharing calendar is still running";
+    rb_ = rbs_.getResourceBundle(Utils.RESOURCEBUNDLE_NAME, Locale.getDefault()) ;
+    
+    int maxUserRunJboec = Integer.parseInt(rb_.getString("ShareCalendarJob.max_user_run_job").trim());
     if(findActiveShareClaJob(jobInfo.getJobName(), schedulerService_)){
       ContinuationService continuation = (ContinuationService) PortalContainer.getInstance().getComponentInstanceOfType(ContinuationService.class);
       continuation.sendMessage(username, "/eXo/Application/Calendar/notifySharaCalendar", message, "stillJobRunning");
       return;
     }
-    if(receiverUsers.size() > MAX_USER_RUN_JOB){
+    if(receiverUsers.size() > maxUserRunJboec){
+      String startShareMsg = rb_.getString("ShareCalendarJob.start_share_job");
+      String finishShareMsg = rb_.getString("ShareCalendarJob.finish_share_job");
       SimpleTrigger trigger = new SimpleTrigger(jobInfo.getJobName(), jobInfo.getGroupName(), new Date());
       JobDetail job = new JobDetail(jobInfo.getJobName(), jobInfo.getGroupName(), jobInfo.getJob());
       job.setDescription(jobInfo.getDescription());
@@ -420,6 +425,8 @@ public class CalendarServiceImpl implements CalendarService, Startable {
       job.getJobDataMap().put(ShareCalendarJob.USER_NAME, username);
       job.getJobDataMap().put(ShareCalendarJob.CALENDAR_ID, calendarId);
       job.getJobDataMap().put(ShareCalendarJob.JCR_JATA_STORAGE, storage_);
+      job.getJobDataMap().put(ShareCalendarJob.START_SHARE_ID, startShareMsg);
+      job.getJobDataMap().put(ShareCalendarJob.FINISH_SHARE_ID, finishShareMsg);
       schedulerService_.addJob(job, trigger);
     }else{
       storage_.shareCalendar(username, calendarId, receiverUsers);
