@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<preface xml:id="AboutDeveloperGuide">
+	<title>Prerequisites</title>
+<abstract>
+        <para>You can refer to the following links to understand more about the eXo Collaboration Reference Guide:</para>
+        <itemizedlist>
+          <listitem>
+            <para>
+              <emphasis role="bold">
+                <ulink url="http://docs.exoplatform.org/PLF35/topic/org.exoplatform.doc.35/GateInReferenceGuide.html">GateIn Reference Guide</ulink>
+              </emphasis></para>
+          </listitem>
+          <listitem>
+            <para>
+              <emphasis role="bold">
+                <ulink url="http://wiki.opensocial.org/index.php?title=Main_Page">OpenSocial gadget</ulink>
+              </emphasis></para>
+          </listitem>
+          <listitem>
+            <para>
+              <emphasis role="bold">
+                <ulink url="http://docs.jboss.org/exojcr/1.12.4-GA/developer/en-US/html/part-ws.html">WebService</ulink>
+              </emphasis></para>
+          </listitem>
+          <listitem>
+            <para>
+              <emphasis role="bold">
+                <ulink url="http://www.igniterealtime.org/builds/openfire/docs/latest/documentation/javadoc/index.html">Chatserver</ulink>
+              </emphasis></para>
+          </listitem>
+          <listitem>
+            <para>
+              <emphasis role="bold">
+                <ulink url="http://en.wikipedia.org/wiki/VCard">Vcard</ulink>
+              </emphasis></para>
+          </listitem>
+          <listitem>
+            <para>
+              <emphasis role="bold">
+                <ulink url="http://en.wikipedia.org/wiki/ICalendar">iCalendar</ulink> and <ulink url="http://www.ietf.org/rfc/rfc2445.txt">its Internet standard</ulink>
+              </emphasis></para>
+          </listitem>
+        </itemizedlist>
+</abstract>
+</preface>
