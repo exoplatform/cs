@@ -1,14 +1,42 @@
-eXo Collaboration is a JCR-based product, so data of eXo Collaboration are managed by the eXo-JCR service with each specific structure. The chapter aims at outlining the JCR structure of each application in eXo Collaboration through diagrams and then describing properties of main node types.
-
-Each diagram shows nodes and their primary node types. Every node/child node must have only one primary node type represented in the round bracket () under the node/childnode, but may also have many mixin node types. Because mixin nodes cannot define the node structure like the primary nodes, they are not shown in the diagrams and their properties hereafter are not described.
-
-This chapter describes the structure of the main applications in eXo Collaboration via the following topics:
-* [Calendar JCR Structure|#CSref.JCRStructure.Calendar.JCR]
-* [Chat JCR Structure|#CSref.JCRStructure.Chat]
-* [Address Book JCR Structure|#CSref.JCRStructure.AddressBook]
-* [Mail JCR Structure|#CSref.JCRStructure.Mail]
-* [RSS JCR Structure|#CSref.JCRStructure.RSS]
-
+{docbook}
+<abstract>
+ <para>eXo Collaboration is a JCR-based product, so data of eXo Collaboration are managed by the eXo-JCR service with each specific structure. The chapter aims at outlining the JCR structure of each application in eXo Collaboration through diagrams and then describing properties of main node types.</para>
+ <para>Each diagram shows nodes and their primary node types. Every node/child node must have only one primary node type represented in the round bracket () under the node/childnode, but may also have many mixin node types. Because mixin nodes cannot define the node structure like the primary nodes, they are not shown in the diagrams and their properties hereafter are not described.</para>
+ <para>This chapter describes the structure of the main applications in eXo Collaboration via the following topics:</para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="CSref.JCRStructure.Calendar.JCR">Calendar JCR Structure</link>
+          </emphasis> </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="CSref.JCRStructure.Chat">Chat JCR Structure</link>
+          </emphasis> </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="CSref.JCRStructure.AddressBook">Address Book JCR Structure</link>
+          </emphasis> </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="CSref.JCRStructure.Mail">Mail JCR Structure</link>
+          </emphasis> </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="CSref.JCRStructure.RSS">RSS JCR Structure</link>
+          </emphasis> </para>
+      </listitem>
+    </itemizedlist>
+	</abstract>
+{docbook}
 
 {note}
 To learn more about the eXo Collaboration JCR Structure, you should have the certain knowledge of [JCR|http://jcp.org/en/jsr/detail?id=170].
