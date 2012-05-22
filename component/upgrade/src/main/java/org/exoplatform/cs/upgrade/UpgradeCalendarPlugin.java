@@ -31,6 +31,7 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
+import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.service.impl.JCRDataStorage;
 import org.exoplatform.commons.upgrade.UpgradeProductPlugin;
@@ -40,6 +41,7 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
@@ -119,7 +121,8 @@ public class UpgradeCalendarPlugin extends UpgradeProductPlugin {
   }
 
   private Node getPublicCalendarHome() throws Exception {
-    JCRDataStorage storage_ = new JCRDataStorage(this.nodeHierarchy_, this.repoService_);
+    CacheService cacheService = (CacheService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CacheService.class);
+    JCRDataStorage storage_ = new JCRDataStorage(this.nodeHierarchy_, this.repoService_, cacheService);
     return storage_.getPublicCalendarHome();
   }
   

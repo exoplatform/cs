@@ -16,17 +16,6 @@
  **/
 package org.exoplatform.calendar.service.impl;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-
-import javax.jcr.ItemExistsException;
-import javax.jcr.Node;
-
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -48,6 +37,7 @@ import org.exoplatform.commons.utils.ExoProperties;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.organization.Group;
@@ -59,6 +49,17 @@ import org.exoplatform.services.scheduler.PeriodInfo;
 import org.picocontainer.Startable;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+
+import javax.jcr.ItemExistsException;
+import javax.jcr.Node;
 
 /**
  * Created by The eXo Platform SARL Author : Hung Nguyen Quang
@@ -80,8 +81,9 @@ public class CalendarServiceImpl implements CalendarService, Startable {
 
   private RemoteCalendarService               remoteCalendarService;
 
-  public CalendarServiceImpl(InitParams params, NodeHierarchyCreator nodeHierarchyCreator, RepositoryService reposervice, ResourceBundleService rbs) throws Exception {
-    storage_ = new JCRDataStorage(nodeHierarchyCreator, reposervice);
+  public CalendarServiceImpl(InitParams params, NodeHierarchyCreator nodeHierarchyCreator, RepositoryService reposervice, 
+     ResourceBundleService rbs, CacheService cservice) throws Exception {
+    storage_ = new JCRDataStorage(nodeHierarchyCreator, reposervice, cservice);
     calendarImportExport_.put(CalendarService.ICALENDAR, new ICalendarImportExport(storage_));
     calendarImportExport_.put(CalendarService.EXPORTEDCSV, new CsvImportExport(storage_));
     remoteCalendarService = new RemoteCalendarServiceImpl(storage_);
@@ -91,6 +93,10 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     Utils.EVENT_NUMBER = Integer.parseInt(eventNumber);
   }
 
+  public JCRDataStorage getDataStorage() {
+    return storage_;
+  }
+  
   /**
    * {@inheritDoc}
    */
@@ -801,6 +807,20 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   @Override
   public Map<Integer, String> searchHighlightRecurrenceEvent(String username, EventQuery eventQuery, String[] publicCalendarIds, String timezone) throws Exception {
     return storage_.searchHighlightRecurrenceEvent(username, eventQuery, publicCalendarIds, timezone);
+  }
+
+  /**
+   * @see org.exoplatform.calendar.service.CalendarService#autoShareCalendar(java.util.List, java.lang.String)
+   */
+  public void autoShareCalendar(List<String> groupsOfUser, String reciever) throws Exception {
+    storage_.autoShareCalendar(groupsOfUser, reciever);
+  }
+
+  /**
+   * @see org.exoplatform.calendar.service.CalendarService#autoRemoveShareCalendar(java.lang.String, java.lang.String)
+   */
+  public void autoRemoveShareCalendar(String groupId, String username) throws Exception {
+    storage_.autoRemoveShareCalendar(groupId, username);
   }
 
 }
