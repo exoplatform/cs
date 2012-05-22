@@ -16,20 +16,6 @@
  */
 package org.exoplatform.calendar.service.test;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
-
-import javax.jcr.PathNotFoundException;
-
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
@@ -44,15 +30,29 @@ import org.exoplatform.calendar.service.RemoteCalendar;
 import org.exoplatform.calendar.service.RemoteCalendarService;
 import org.exoplatform.calendar.service.RssData;
 import org.exoplatform.calendar.service.Utils;
+import org.exoplatform.calendar.service.impl.CalendarServiceImpl;
 import org.exoplatform.calendar.service.impl.JCRDataStorage;
 import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TimeZone;
+
+import javax.jcr.PathNotFoundException;
 
 /**
  * Created by The eXo Platform SARL
@@ -75,8 +75,7 @@ public class TestCalendarService extends BaseCalendarTestCase {
   public TestCalendarService() throws Exception {
     super();
     calendarService_ = (CalendarService) container.getComponentInstanceOfType(CalendarService.class);
-    NodeHierarchyCreator nodeHierarchyCreator = (NodeHierarchyCreator) container.getComponentInstanceOfType(NodeHierarchyCreator.class);
-    storage_ = new JCRDataStorage(nodeHierarchyCreator, repositoryService);
+    storage_ = ((CalendarServiceImpl)calendarService_).getDataStorage();
     organizationService = (OrganizationService) container.getComponentInstanceOfType(OrganizationService.class);
   }
 
