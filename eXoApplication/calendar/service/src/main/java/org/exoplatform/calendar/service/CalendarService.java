@@ -16,16 +16,16 @@
  **/
 package org.exoplatform.calendar.service;
 
+import org.exoplatform.calendar.service.impl.CalendarEventListener;
+import org.exoplatform.services.scheduler.JobSchedulerService;
+import org.quartz.JobDetail;
+
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.jcr.Node;
-
-import org.exoplatform.calendar.service.impl.CalendarEventListener;
-import org.exoplatform.services.scheduler.JobSchedulerService;
-import org.quartz.JobDetail;
 
 /**
  * Created by The eXo Platform SARL
@@ -784,4 +784,8 @@ public interface CalendarService {
    * @throws Exception
    */
   public Map<Integer, String> searchHighlightRecurrenceEvent(String username, EventQuery eventQuery, String[] publicCalendarIds, String timezone) throws Exception;
+  
+  public void autoShareCalendar(List<String> groupsOfUser, String reciever) throws Exception;
+
+  public void autoRemoveShareCalendar(String groupId, String username) throws Exception;  
 }

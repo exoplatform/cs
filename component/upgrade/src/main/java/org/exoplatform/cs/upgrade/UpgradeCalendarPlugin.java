@@ -16,6 +16,24 @@
  */
 package org.exoplatform.cs.upgrade;
 
+import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.Utils;
+import org.exoplatform.calendar.service.impl.CalendarServiceImpl;
+import org.exoplatform.commons.upgrade.UpgradeProductPlugin;
+import org.exoplatform.commons.version.util.VersionComparator;
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.component.RequestLifeCycle;
+import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.app.SessionProviderService;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
+import org.exoplatform.services.organization.Group;
+import org.exoplatform.services.organization.OrganizationService;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -30,25 +48,6 @@ import javax.jcr.Value;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
-
-import org.exoplatform.calendar.service.Utils;
-import org.exoplatform.calendar.service.impl.JCRDataStorage;
-import org.exoplatform.commons.upgrade.UpgradeProductPlugin;
-import org.exoplatform.commons.version.util.VersionComparator;
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.container.PortalContainer;
-import org.exoplatform.container.component.ComponentRequestLifecycle;
-import org.exoplatform.container.xml.InitParams;
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.app.SessionProviderService;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
-import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.log.Log;
-import org.exoplatform.services.organization.Group;
-import org.exoplatform.services.organization.OrganizationService;
 
 /**
  * Created by The eXo Platform SAS
@@ -68,15 +67,24 @@ public class UpgradeCalendarPlugin extends UpgradeProductPlugin {
   
   private static final Log     log             = ExoLogger.getLogger(UpgradeCalendarPlugin.class);
 
-  private RepositoryService    repoService_;
+  private final RepositoryService    repoService_;
 
-  private NodeHierarchyCreator nodeHierarchy_;
+  private final NodeHierarchyCreator nodeHierarchy_;
 
-  public UpgradeCalendarPlugin(InitParams initParams) {
+  private final CalendarServiceImpl calendarService_;
+  
+  private final SessionProviderService sessionProviderService_;
+  
+  private final OrganizationService organizationService_;
+
+  public UpgradeCalendarPlugin(InitParams initParams, RepositoryService repoService, NodeHierarchyCreator nodeHierarchy, 
+     CalendarService calendarService, SessionProviderService sessionProviderService, OrganizationService organizationService) {
     super(initParams);
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
-    this.repoService_ = ((RepositoryService) container.getComponentInstance(RepositoryService.class));
-    this.nodeHierarchy_ = ((NodeHierarchyCreator) container.getComponentInstance(NodeHierarchyCreator.class));
+    this.repoService_ = repoService;
+    this.nodeHierarchy_ = nodeHierarchy;
+    this.calendarService_ = (CalendarServiceImpl) calendarService;
+    this.sessionProviderService_ = sessionProviderService;
+    this.organizationService_ = organizationService;
   }
 
   public void processUpgrade(String oldVersion, String newVersion) {
@@ -119,8 +127,7 @@ public class UpgradeCalendarPlugin extends UpgradeProductPlugin {
   }
 
   private Node getPublicCalendarHome() throws Exception {
-    JCRDataStorage storage_ = new JCRDataStorage(this.nodeHierarchy_, this.repoService_);
-    return storage_.getPublicCalendarHome();
+    return calendarService_.getDataStorage().getPublicCalendarHome();
   }
   
   private Node getUserCalendarAppHomeNode(String username) throws Exception {
@@ -138,8 +145,7 @@ public class UpgradeCalendarPlugin extends UpgradeProductPlugin {
   }
 
   private SessionProvider getSystemSessionProvider() {
-    SessionProviderService sessionProviderService = (SessionProviderService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(SessionProviderService.class);
-    return sessionProviderService.getSystemSessionProvider(null);
+    return sessionProviderService_.getSystemSessionProvider(null);
   }
   
   private void migrateCalendarRSS() throws Exception {
@@ -222,20 +228,23 @@ public class UpgradeCalendarPlugin extends UpgradeProductPlugin {
 
   private Map<String, String> getSpaceGroups() throws Exception {
     Map<String, String> groupIds = new HashMap<String, String>();
+    boolean started = false;
     try {
-      PortalContainer container = PortalContainer.getInstance();
-      OrganizationService organizationService = (OrganizationService) container.getComponentInstanceOfType(OrganizationService.class);
-      ((ComponentRequestLifecycle) organizationService).startRequest(container);
-      Group group = organizationService.getGroupHandler().findGroupById(SPACE_GROUP_ID);
+      RequestLifeCycle.begin(ExoContainerContext.getCurrentContainer());
+      started = true;
+      Group group = organizationService_.getGroupHandler().findGroupById(SPACE_GROUP_ID);
       if (group != null) {
-        Collection<Group> groups = organizationService.getGroupHandler().findGroups(group);
+        Collection<Group> groups = organizationService_.getGroupHandler().findGroups(group);
         for (Group gr : groups) {
           groupIds.put(gr.getGroupName(), gr.getLabel());
         }
       }
-      ((ComponentRequestLifecycle) organizationService).endRequest(container);
     } catch (Exception e) {
       log.warn("\nFailed to get all space groups.", e);
+    } finally {
+      if (started) {
+        RequestLifeCycle.end();
+      }
     }
     return groupIds;
   }

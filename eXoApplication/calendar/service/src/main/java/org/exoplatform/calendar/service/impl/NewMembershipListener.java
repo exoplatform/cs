@@ -16,14 +16,12 @@
  */
 package org.exoplatform.calendar.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.exoplatform.calendar.service.DataStorage;
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.MembershipEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by The eXo Platform SARL
@@ -32,30 +30,24 @@ import org.exoplatform.services.organization.MembershipEventListener;
  * Nov 23, 2007 3:09:21 PM
  */
 public class NewMembershipListener extends MembershipEventListener {
-  private NodeHierarchyCreator nodeHierarchyCreator_;
+  private CalendarService calendarService_;
 
-  private RepositoryService    reposervice_;
-
-  public NewMembershipListener(NodeHierarchyCreator nodeHierarchyCreator, RepositoryService rservice) throws Exception {
-    nodeHierarchyCreator_ = nodeHierarchyCreator;
-    reposervice_ = rservice;
+  public NewMembershipListener(CalendarService calendarService) throws Exception {
+    calendarService_ = calendarService;
   }
 
   public void postSave(Membership m, boolean isNew) throws Exception {
     String username = m.getUserName();
     String groupId = m.getGroupId();
-    DataStorage storage_ = new JCRDataStorage(nodeHierarchyCreator_, reposervice_);
     List<String> group = new ArrayList<String>();
     group.add(groupId);
-    storage_.autoShareCalendar(group, username);
-
+    calendarService_.autoShareCalendar(group, username);
   }
 
   public void preDelete(Membership m) throws Exception {
     String username = m.getUserName();
     String groupId = m.getGroupId();
-    DataStorage storage_ = new JCRDataStorage(nodeHierarchyCreator_, reposervice_);
-    storage_.autoRemoveShareCalendar(groupId, username);
+    calendarService_.autoRemoveShareCalendar(groupId, username);
   }
 
 }
