@@ -1351,7 +1351,6 @@
     </msg>
   </UIEditFeed>
   <ShareCalendarJob>
-  	<max_user_run_job>500</max_user_run_job>
   	<is_still_running>Chia sẻ lịch đang chạy</is_still_running>
   	<start_share_job>Bắt đầu chia sẻ lịch</start_share_job>
   	<finish_share_job>Kết thúc chia sẻ lịch</finish_share_job>
