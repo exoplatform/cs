@@ -1,18 +1,13 @@
-
 h1. Default Address Book Configuration
-
-
 
 h1. Overview
 
-eXo AddressBook is a contact management application which is part of the eXo Collaboration Suite product. It is written with eXo's [Portal:WebUI] framework as a portlet. It leverage [JCR|JCR:WebHome] as its data storage. As usual, main components are Exo Container components and can be configured through XML. System integration and extension points are  defined as [Component Plugins| Products Tech Overview:Components Registry#CS].
-
-
+AddressBook is a contact management application which is part of the eXo Collaboration Suite product. It is written with eXo's [Portal:WebUI] framework as a portlet. It leverage [JCR|JCR:WebHome] as its data storage. As usual, main components are Exo Container components and can be configured through XML. System integration and extension points are  defined as [Component Plugins| Products Tech Overview:Components Registry#CS].
 
 h1. Configuration
 
-CS configuration is applied mainly in *WEB-INF/conf/cs/cs-plugins-configuration.xml*.
-The following information will explain details of  eXo AdressBook configuration.
+Collaboration configuration is applied mainly in *WEB-INF/conf/cs/cs-plugins-configuration.xml*.
+The following information will explain details of AdressBook configuration.
 
 When cs-plugins-configuration.xml file is executed, the component-plugin named *contact.new.user.event.listener* will be referred to org.exoplatform.contact.service.impl.NewUserListener to create Users for Contact correspondingly to the Users existing in the Organization database. Users for Contact are saved in eXo JCR.
 
@@ -33,9 +28,9 @@ When cs-plugins-configuration.xml file is executed, the component-plugin named *
 ......
 {code}
 
-Explanation:
+Details:
 
-* *contact.new.user.event.listener*: unique key to avoid duplicate names.
+* *contact.new.user.event.listener*: The unique key to avoid duplicate names.
 
 * *addListenerPlugin*: This API of Organization service to allow other listener overwrite.
 

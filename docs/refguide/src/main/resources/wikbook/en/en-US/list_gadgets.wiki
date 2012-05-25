@@ -1,6 +1,4 @@
-
-eXo Collaboration consists of three gadgets: eventslist, taskslist and messageslist. They are packaged in the csResources.war file.
-
+The Collaboration function consists of three gadgets: eventslist, taskslist and messageslist. They are packaged in the csResources.war file.
 
 h1. Eventslist {anchor:id=CSref.Gadgets.Evenslist}
 
@@ -18,10 +16,10 @@ See the preferences of this gadget in the following sample code:
 {code}
 Details:
 || Preferences || Description ||
-| *url* | link to Calendar portlet |
-| *Subscribeurl* | link to upcoming events |
-| *limit* | The maximum number of upcoming events |
-| *timeformat* | The time format for upcoming events |
+| *url* | Link to the Calendar portlet. |
+| *Subscribeurl* | Link to the upcoming events. |
+| *limit* | The maximum number of upcoming events. |
+| *timeformat* | The time format for upcoming events. |
 
 For more details on the preferences of gadgets, see [here|http://code.google.com/apis/gadgets/docs/basic.html#Userprefs].
 
@@ -40,13 +38,12 @@ See the preferences of this gadget in the following sample code:
 {code}
 
 Details:
-Setting: It collects all the configuration of upcoming tasks and add some more functions to help developers change the configuration of the default skin.  
+
+Accordingly, _setting_ collects all the configuration of upcoming tasks and add some more functions to help developers change the configuration of the default skin.
 
 h2. Links to used REST services {anchor:id=CSref.Gadgets.Taskslist.LinksToUsedRESTServices}
-It uses upcomingEvent service in the following package:
-_org.exoplatform.webservice.cs.calendar.CalendarWebservice.java_
-
-
+It uses the unreadMail service in the following package:
+_org.exoplatform.webservice.cs.mail.MailWebservice.java_.
 
 h1. Messageslist {anchor:id=CSref.Gadgets.Messageslist}
  It lists the maximum number of unread messages, that is configurable by users.
@@ -64,13 +61,15 @@ See the prefereces of this gadget in the following sample code:
 
 Details:
 || Preferences || Description ||
-| *Url* | The Url of Mail Application |
-| *Subscribeurl* | link to upcoming messages  |
-| *Limit* | The number of displayed unread messages that is set by users |
-| *Account* | The mail account in Mail application |
-| *Folder* | The folder consists of unread messages |
-| *Tag* | The tags in all unread messages |
+| *Url* | The Url of Mail Application. |
+| *Subscribeurl* | Link to upcoming messages. |
+| *Limit* | The number of displayed unread messages that is set by users. |
+| *Account* | The mail account in Mail application. |
+| *Folder* | The folder consists of unread messages. |
+| *Tag* | The tags in all unread messages. |
 
 h2. Links to used REST services {anchor:id=CSref.Gadgets.LinksToUsedRESTServices}
-It uses unreadMail service in the following package:
+
+It uses the unreadMail service in the following package:
+
 _org.exoplatform.webservice.cs.mail.MailWebservice.java_

@@ -78,7 +78,7 @@ Utils.prototype.getElementByClass = function(parentNode,clazz)
 || Name || Type || Description ||
 | *parentNode* | {{HTML element}} | It is a parent element including the element that needs finding. |
 | *clazz* | {{string}} | It is a CSS selector of the elements that needs finding. |
-| * return*| {{HTML element}}| It returns HTML element if HTML element is found; null if it doesn't |
+| * return*| {{HTML element}}| It returns HTML element if HTML element is found; null if it does not |
 
 * *Example*
 To find a _div_ having class _Child3_, do the following example:

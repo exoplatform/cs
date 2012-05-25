@@ -5,11 +5,11 @@ Only the owner of a room can configure the room's information. Thus if you are n
 Following these steps to configure a room:
 
 
-!Options.png!
+!images/Options.png!
 
 
 *Step 1\.* Click the
-!Options1.png!
+!images/Options1.png!
      button in the *Conversation* form of that room. The *Room Configuration* form will appear like when you [Create New Rooms].
 
 *Step 2.* Set values for fields in this form.
