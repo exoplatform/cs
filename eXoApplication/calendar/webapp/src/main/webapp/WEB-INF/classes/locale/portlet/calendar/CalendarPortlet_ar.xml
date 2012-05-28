@@ -1340,5 +1340,10 @@
       <UIQuickAddTask>Quick add task</UIQuickAddTask>
     </title>
   </UIQuckAddTaskPopupWindow>
+  <ShareCalendarJob>
+    <is_still_running>Sharing calendar is still running</is_still_running>
+    <start_share_job>Calendar is started to share</start_share_job>
+    <finish_share_job>Calendar is finished to share</finish_share_job>
+  </ShareCalendarJob>
 </bundle>
 

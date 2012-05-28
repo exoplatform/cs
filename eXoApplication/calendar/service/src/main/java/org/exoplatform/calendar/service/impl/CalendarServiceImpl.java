@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 import javax.jcr.ItemExistsException;
@@ -87,7 +88,9 @@ public class CalendarServiceImpl implements CalendarService, Startable {
 
   private RemoteCalendarService               remoteCalendarService;
   
-  public static final int                     MAX_USER_RUN_JOB      = 500;
+  public static final String                  MAX_USER_RUN_JOB_KEY     = "cs.calendar.sharing.max_user_run_job";
+  
+  public static final String                  MAX_USER_RUN_JOB_DEFAULT = "500";
 
   public CalendarServiceImpl(InitParams params, NodeHierarchyCreator nodeHierarchyCreator, RepositoryService reposervice, ResourceBundleService rbs) throws Exception {
     storage_ = new JCRDataStorage(nodeHierarchyCreator, reposervice);
@@ -401,13 +404,13 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   public void shareCalendar(String username, String calendarId, List<String> receiverUsers) throws Exception {
     JobSchedulerServiceImpl  schedulerService_ = (JobSchedulerServiceImpl)PortalContainer.getInstance().getComponentInstance(JobSchedulerService.class) ;
     JobInfo jobInfo = ShareCalendarJob.getJobInfo(username);
-    String message = "Sharing calendar is still running";
+    int maxUserRunJob = getMaxUserRunJob();
     if(findActiveShareClaJob(jobInfo.getJobName(), schedulerService_)){
       ContinuationService continuation = (ContinuationService) PortalContainer.getInstance().getComponentInstanceOfType(ContinuationService.class);
-      continuation.sendMessage(username, "/eXo/Application/Calendar/notifySharaCalendar", message, "stillJobRunning");
+      continuation.sendMessage(username, "/eXo/Application/Calendar/notifySharaCalendar", ShareCalendarJob.STILL_SHARE_ID, ShareCalendarJob.STILL_SHARE_ID);
       return;
     }
-    if(receiverUsers.size() > MAX_USER_RUN_JOB){
+    if(receiverUsers.size() > maxUserRunJob){
       SimpleTrigger trigger = new SimpleTrigger(jobInfo.getJobName(), jobInfo.getGroupName(), new Date());
       JobDetail job = new JobDetail(jobInfo.getJobName(), jobInfo.getGroupName(), jobInfo.getJob());
       job.setDescription(jobInfo.getDescription());
@@ -439,6 +442,16 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     }
     return false;
   }
+  
+  private int getMaxUserRunJob(){
+    Properties props = new Properties(System.getProperties());
+    String maxUserStr = props.getProperty(MAX_USER_RUN_JOB_KEY);
+    if(Utils.isEmpty(maxUserStr)){
+      maxUserStr = MAX_USER_RUN_JOB_DEFAULT;
+    }
+    return Integer.parseInt(maxUserStr);
+  }
+
 
   /**
    * {@inheritDoc}

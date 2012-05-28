@@ -34,17 +34,16 @@ Reminder.prototype.initCometd = function() {
 			});
 }
 
-Reminder.prototype.notifySharaCalendar = function(eventObj) {
+Reminder.prototype.notifySharaCalendar = function(eventObj){
 	dataMsg = eventObj.data
-	var message = dataMsg;
-	var html = this.generateHTML(message);
-	var popup = eXo.core.DOMUtil.findFirstDescendantByClass(this.createMessage(
-			html, message), "div", "UIPopupNotification");
-	eXo.webui.Box.config(popup, popup.offsetHeight, 5, this.openCallback,
-			this.closeBox);
-	window.focus();
-	return;
-}
+	var classId = dataMsg;
+	var message = document.getElementById(classId).innerHTML;
+	var html = this.generateHTML(message) ;
+	var popup = eXo.core.DOMUtil.findFirstDescendantByClass(this.createMessage(html, message), "div","UIPopupNotification") ;
+	eXo.webui.Box.config(popup,popup.offsetHeight, 5, this.openCallback, this.closeBox) ;
+	window.focus() ;
+	return ;
+} ;
 
 Reminder.prototype.alarm = function(eventObj){
 	var a = eXo.core.JSON.parse(eventObj.data);	

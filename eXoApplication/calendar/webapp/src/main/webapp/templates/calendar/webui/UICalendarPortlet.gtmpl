@@ -3,6 +3,7 @@
   import org.exoplatform.calendar.webui.UICalendarWorkingContainer ;
   import org.exoplatform.calendar.webui.popup.UIPopupAction ;
   import org.exoplatform.calendar.service.CalendarSetting;
+  import org.exoplatform.calendar.CalendarUtils;
   try {
     def rcontext = _ctx.getRequestContext() ;
     rcontext.getJavascriptManager().addJavascript('eXo.calendar.restContext = "'+ uicomponent.getRestContextName() +'" ;') ;
@@ -60,6 +61,11 @@
             <div class="BRPopupNotification">
               <div class="BCPopupNotification"><span></span></div>
             </div>
+          </div>
+          <div class="ShareCalendarResourceBundle">
+            <div id="StartToShare"><%=CalendarUtils.getResourceBundle(CalendarUtils.START_SHARE_CALENDAR_JOB_KEY, "")%></div>
+            <div id="FinishToShare"><%=CalendarUtils.getResourceBundle(CalendarUtils.FINISH_SHARE_CALENDAR_JOB_KEY, "")%></div>
+            <div id="StillToShare"><%=CalendarUtils.getResourceBundle(CalendarUtils.STILL_SHARE_CALENDAR_JOB_KEY, "")%></div>
           </div>
         </div>
       </div>

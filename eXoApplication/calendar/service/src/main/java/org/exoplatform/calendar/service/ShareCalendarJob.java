@@ -17,6 +17,7 @@
 package org.exoplatform.calendar.service;
 
 import java.util.List;
+
 import org.exoplatform.calendar.service.impl.JCRDataStorage;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.log.ExoLogger;
@@ -32,8 +33,7 @@ import org.quartz.UnableToInterruptJobException;
 
 /**
  * Created by The eXo Platform SARL 
- * Author : Haiddd 
- *          haidd@exoplatform.com 
+ * Author : Haiddd haidd@exoplatform.com 
  * May 11, 2012
  */
 
@@ -49,17 +49,15 @@ public class ShareCalendarJob implements Job, InterruptableJob {
 
   public static final String JCR_JATA_STORAGE     = "JCRDataStorage";
 
-  public static final String START_SHARE_MSG      = "Calendar is started to share";
+  public static final String START_SHARE_ID       = "StartToShare";
 
-  public static final String START_SHARE_ID       = "startShareCalendar";
+  public static final String FINISH_SHARE_ID      = "FinishToShare";
 
-  public static final String FINISH_SHARE_MSG     = "Calendar is finished to share";
-
-  public static final String FINISH_SHARE_ID      = "finishShareCalendar";
+  public static final String STILL_SHARE_ID       = "StillToShare";
 
   public static final String SHARE_CAL_CHANEL     = "/eXo/Application/Calendar/notifySharaCalendar";
 
-  private static Log         log                  = ExoLogger.getLogger(ShareCalendarJob.class);
+  private static Log         log                  = ExoLogger.getLogger("cs.service.job");
 
   public ShareCalendarJob() throws Exception {
 
@@ -73,13 +71,13 @@ public class ShareCalendarJob implements Job, InterruptableJob {
     String user = jobDataMap.getString(USER_NAME);
     String calendarId = jobDataMap.getString(CALENDAR_ID);
     JCRDataStorage jcrDataStorage = (JCRDataStorage) jobDataMap.get(JCR_JATA_STORAGE);
-    continuation.sendMessage(user, SHARE_CAL_CHANEL, START_SHARE_MSG, START_SHARE_ID);
+    continuation.sendMessage(user, SHARE_CAL_CHANEL, START_SHARE_ID, START_SHARE_ID);
     try {
       jcrDataStorage.shareCalendar(user, calendarId, receiverUsers);
     } catch (Exception e) {
       log.debug("Exception in method:" + e);
     }
-    continuation.sendMessage(user, SHARE_CAL_CHANEL, FINISH_SHARE_MSG, FINISH_SHARE_ID);
+    continuation.sendMessage(user, SHARE_CAL_CHANEL, FINISH_SHARE_ID, FINISH_SHARE_ID);
   }
 
   public static JobInfo getJobInfo(String userId) {
@@ -87,7 +85,7 @@ public class ShareCalendarJob implements Job, InterruptableJob {
                                ShareCalendarJob.SHARE_CALENDAR_GROUP,
                                ShareCalendarJob.class);
 
-    info.setDescription("Share calendar to large of user");
+    info.setDescription("There are too many users");
     return info;
   }
 
