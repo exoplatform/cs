@@ -295,7 +295,6 @@
 .UIMailPortlet .StarredIcon {
 	background: url('icons/HighLightStarIcon.gif') no-repeat left center;
 	cursor: pointer;	 
-	height: 16px;
 }
 
 .UIMailPortlet .AttachmentIcon {
