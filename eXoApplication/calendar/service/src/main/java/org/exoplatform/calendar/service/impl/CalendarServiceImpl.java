@@ -535,7 +535,6 @@ public class CalendarServiceImpl implements CalendarService, Startable {
         }
       }
     }
-    new Exception("RB called " + rb_).printStackTrace();
     return rb_;
   }
 
