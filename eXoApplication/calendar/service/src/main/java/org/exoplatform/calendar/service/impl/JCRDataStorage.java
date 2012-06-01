@@ -188,7 +188,8 @@ public class JCRDataStorage implements DataStorage {
    */
   public Node getPublicCalendarServiceHome() throws Exception {
     SessionProvider sProvider = createSystemProvider();
-    Node publicApp = getNodeByPath(nodeHierarchyCreator_.getPublicApplicationNode(sProvider).getPath(), sProvider);
+    //Node publicApp = getNodeByPath(nodeHierarchyCreator_.getPublicApplicationNode(sProvider).getPath(), sProvider);
+    Node publicApp = nodeHierarchyCreator_.getPublicApplicationNode(sProvider);
     try {
       return publicApp.getNode(Utils.CALENDAR_APP);
     } catch (Exception e) {
@@ -218,7 +219,8 @@ public class JCRDataStorage implements DataStorage {
    */
   public Node getPublicRoot() throws Exception {
     SessionProvider sProvider = createSystemProvider();
-    return getNodeByPath(nodeHierarchyCreator_.getPublicApplicationNode(sProvider).getPath(), sProvider);
+    //return getNodeByPath(nodeHierarchyCreator_.getPublicApplicationNode(sProvider).getPath(), sProvider);
+    return nodeHierarchyCreator_.getPublicApplicationNode(sProvider);
   }
 
   /**
@@ -228,8 +230,9 @@ public class JCRDataStorage implements DataStorage {
     // CS-2356
     // SessionProvider sProvider = createSessionProvider();
     SessionProvider sProvider = createSystemProvider();
-    Node userNode = nodeHierarchyCreator_.getUserApplicationNode(sProvider, username);
-    Node userApp = getNodeByPath(userNode.getPath(), sProvider);
+    //Node userNode = nodeHierarchyCreator_.getUserApplicationNode(sProvider, username);
+    //Node userApp = getNodeByPath(userNode.getPath(), sProvider);
+    Node userApp = nodeHierarchyCreator_.getUserApplicationNode(sProvider, username);
     Node calendarRoot;
     try {
       return userApp.getNode(Utils.CALENDAR_APP);

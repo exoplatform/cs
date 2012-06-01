@@ -9,6 +9,7 @@
   import org.exoplatform.calendar.CalendarUtils;
   import org.exoplatform.webui.application.WebuiRequestContext;
   import org.exoplatform.calendar.service.CalendarEvent;
+  import java.util.LinkedHashMap;
   uiform.begin() ;
   
   def rcontext = _ctx.getRequestContext() ;
@@ -18,19 +19,19 @@
   rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.UICalendarPortlet.checkFilter();') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.currentDate = ' + uicomponent.getDefaultStartTimeOfEvent() +';') ;
   rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.CalendarLayout.updateUICalendarViewLayout();');
-   int currentDay = uicomponent.getCurrentDay() ;
+  int currentDay = uicomponent.getCurrentDay() ;
   int currentMonth = uicomponent.getCurrentMonth() ;
   String currentMonthName = uicomponent.getMonthName(currentMonth) ;
   int currentYear = uicomponent.getCurrentYear() ;
-   String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT, String.valueOf(Calendar.MONTH)) ;
-   String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS, String.valueOf(Calendar.MONTH)) ;
+  String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT, String.valueOf(Calendar.MONTH)) ;
+  String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS, String.valueOf(Calendar.MONTH)) ;
   Calendar calendar = uicomponent.getCurrentCalendar() ;
-   yearViewAction = uicomponent.TYPE_YEAR +"&currentTime="+ uicomponent.getCurrentCalendar().getTimeInMillis();
+  yearViewAction = uicomponent.TYPE_YEAR +"&currentTime="+ uicomponent.getCurrentCalendar().getTimeInMillis();
   dateFormat = uicomponent.getDateFormat() ;
   timeFormat = uicomponent.getTimeFormat() ;
   dateTimeFormat = uicomponent.getDateTimeFormat() ;
   WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-   Locale locale = context.getParentAppRequestContext().getLocale() ;
+  Locale locale = context.getParentAppRequestContext().getLocale() ;
   
   DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
   df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
@@ -44,6 +45,7 @@
   dtf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
   DateFormat tempFormat = new  SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss", Locale.ENGLISH) ;
   tempFormat.setCalendar(uicomponent.getInstanceTempCalendar()) ;
+  LinkedHashMap<String, String> colors = uicomponent.getColors();
   %>
   <div class="UIMonthView">
     <% _ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");%>
@@ -134,7 +136,7 @@
             cal.setTime(event.fromDateTime) ;
             startIndex = cal.get(Calendar.WEEK_OF_MONTH) ;
           }
-          color = uicomponent.getColors().get(event.calType +CalendarUtils.COLON+ event.calendarId) ;
+          color = colors.get(event.calType +CalendarUtils.COLON+ event.calendarId) ;
           moveAction = uicomponent.url("MoveEvent",event.getId());
           Boolean isOccur = (!CalendarEvent.RP_NOREPEAT.equals(event.getRepeatType()) && (event.getIsExceptionOccurrence() == null || !event.getIsExceptionOccurrence()))?true:false;
           String recurId = event.getRecurrenceId();
