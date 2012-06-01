@@ -528,10 +528,8 @@ public class CalendarServiceImpl implements CalendarService, Startable {
         if (!isRBLoaded_.get()) {
           try {
             rb_ = rbs_.getResourceBundle(Utils.RESOURCEBUNDLE_NAME, Locale.getDefault());
-            new Exception("RB Loaded successfuly !!").printStackTrace();
           } catch (MissingResourceException e) {
             rb_ = null;
-            e.printStackTrace();
           }
           isRBLoaded_.set(true);
         }
