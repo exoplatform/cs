@@ -139,7 +139,7 @@ public class CalendarDataInjector extends DataInjector {
 
   @Override
   public void inject(HashMap<String, String> queryParams) throws Exception {
-    log.info("Start inject datas for calendar....");
+    log.info("Start inject data for calendar....");
     String typeOfInject = readInjectType(queryParams);
     if ("all".equals(typeOfInject)) {
       // inject private calendars 
@@ -162,33 +162,33 @@ public class CalendarDataInjector extends DataInjector {
           calService.removeUserCalendar(currentUser, calId);
         }
       }
-      log.info(String.format("removing %s event catetories.....", eventCategorys.size()));
+      log.info(String.format("removing %s event categories.....", eventCategorys.size()));
       for (String evCatId : eventCategorys) {
         if (!isEmpty(evCatId)) {
           calService.removeEventCategory(currentUser, evCatId);
         }
       }
-      log.info(String.format("removing %s catetories.....", categoryIds.size()));
+      log.info(String.format("removing %s categories.....", categoryIds.size()));
       for (String catId : categoryIds) {
         if (!isEmpty(catId)) {
           calService.removeCalendarCategory(currentUser, catId);
         }
       }
     } catch (Exception e) {
-      log.debug("Failed to remove private injecter datas", e);
+      log.debug("Failed to remove private injecter data", e);
     }
   }
 
   private void removePublicData() throws Exception {
     try {
-      log.info(String.format("remove public datas..... \n  removing %s calendars.....", publicCalendar.size()));
+      log.info(String.format("remove public data..... \n  removing %s calendars.....", publicCalendar.size()));
       for (String calId : publicCalendar) {
         if (!isEmpty(calId)) {
           calService.removePublicCalendar(calId);
         }
       }
     } catch (Exception e) {
-      log.debug("Failed to remove public injecter datas", e);
+      log.debug("Failed to remove public injecter data", e);
     }
   }
 
@@ -210,7 +210,7 @@ public class CalendarDataInjector extends DataInjector {
       // remove private
       removePrivateData();
     }
-    log.info("Complated reject datas..");
+    log.info("Complated reject data..");
     publicCalendar.clear();
     privateCalendar.clear();
     eventCategorys.clear();
@@ -220,7 +220,7 @@ public class CalendarDataInjector extends DataInjector {
   private void injectPublicCalendars(HashMap<String, String> queryParams) throws Exception {
     // save public calendar
     List<Calendar> calendars = findCalendars(queryParams, true);
-    log.info("Inject public datas ....");
+    log.info("Inject public data ....");
     int index = 0, size = calendars.size(), evsCal, tasCal, evs = 0, tas = 0;
     long t, t1 = System.currentTimeMillis();
     for (Calendar calendar : calendars) {
@@ -248,7 +248,7 @@ public class CalendarDataInjector extends DataInjector {
   }
 
   private void injectPrivateCalendars(HashMap<String, String> queryParams) throws Exception {
-    log.info("Inject private datas ....");
+    log.info("Inject private data ....");
     // save setting
     String currentUser = ConversationState.getCurrent().getIdentity().getUserId();
     try {
@@ -260,12 +260,12 @@ public class CalendarDataInjector extends DataInjector {
     }
     long t = System.currentTimeMillis(), t1 = t;
     // save category
-    for (CalendarCategory cate : findCalendarCategorys(queryParams)) {
+    for (CalendarCategory cate : findCalendarCategories(queryParams)) {
       calService.saveCalendarCategory(currentUser, cate, true);
       categories.add(cate);
       categoryIds.add(cate.getId());
     }
-    log.info(String.format("Saved %s calendarCategorys in %sms", categories.size(), (System.currentTimeMillis() - t)));
+    log.info(String.format("Saved %s calendarCategories in %sms", categories.size(), (System.currentTimeMillis() - t)));
     t = System.currentTimeMillis();
     // save EventCategoy
     List<EventCategory> eventCategories = findEventCategorys(queryParams);
@@ -299,7 +299,7 @@ public class CalendarDataInjector extends DataInjector {
       log.info(String.format("Saved Calendar %s/%s with %s Events and %s Tasks in %sms",
                              (++index), size, evsCal, events.size(), (System.currentTimeMillis()) - t));
     }
-    log.info(String.format("INITIALIZED CalendarCategorys=%s / EventCategorys=%s / Calendars=%s / Events=%s / Tasks=%s in %sms",
+    log.info(String.format("INITIALIZED CalendarCategories=%s / EventCategories=%s / Calendars=%s / Events=%s / Tasks=%s in %sms",
                            categories.size(), eventCategories.size(), calendars.size(), evs, tas, (System.currentTimeMillis() - t1)));
     categories.clear();
   }
@@ -313,7 +313,7 @@ public class CalendarDataInjector extends DataInjector {
     return categories;
   }
 
-  private List<CalendarCategory> findCalendarCategorys(HashMap<String, String> queryParams) throws Exception {
+  private List<CalendarCategory> findCalendarCategories(HashMap<String, String> queryParams) throws Exception {
     List<CalendarCategory> categories = new ArrayList<CalendarCategory>();
     name.clear();
     for (int i = 0; i < readMaxCategories(queryParams); i++) {
