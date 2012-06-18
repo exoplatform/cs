@@ -402,15 +402,17 @@ public class CalendarServiceImpl implements CalendarService, Startable {
    * {@inheritDoc}
    */
   public void shareCalendar(String username, String calendarId, List<String> receiverUsers) throws Exception {
-    JobSchedulerServiceImpl  schedulerService_ = (JobSchedulerServiceImpl)PortalContainer.getInstance().getComponentInstance(JobSchedulerService.class) ;
+     
+    JobSchedulerServiceImpl  schedulerService_ = (JobSchedulerServiceImpl)ExoContainerContext.getCurrentContainer().getComponentInstance(JobSchedulerService.class) ;
     JobInfo jobInfo = ShareCalendarJob.getJobInfo(username);
     int maxUserRunJob = getMaxUserRunJob();
     if(findActiveShareClaJob(jobInfo.getJobName(), schedulerService_)){
-      ContinuationService continuation = (ContinuationService) PortalContainer.getInstance().getComponentInstanceOfType(ContinuationService.class);
+      ContinuationService continuation = (ContinuationService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(ContinuationService.class);
       continuation.sendMessage(username, "/eXo/Application/Calendar/notifySharaCalendar", ShareCalendarJob.STILL_SHARE_ID, ShareCalendarJob.STILL_SHARE_ID);
       return;
     }
     if(receiverUsers.size() > maxUserRunJob){
+      
       SimpleTrigger trigger = new SimpleTrigger(jobInfo.getJobName(), jobInfo.getGroupName(), new Date());
       JobDetail job = new JobDetail(jobInfo.getJobName(), jobInfo.getGroupName(), jobInfo.getJob());
       job.setDescription(jobInfo.getDescription());
