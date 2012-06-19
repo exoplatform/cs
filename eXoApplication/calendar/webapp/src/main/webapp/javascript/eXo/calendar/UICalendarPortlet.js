@@ -2890,13 +2890,24 @@ UICombobox.prototype.init = function() {
 		comboList[i].value = eXo.core.DOMUtil.findPreviousElementByTagName(comboList[i],"input").value;
 	  var onfocus = comboList[i].getAttribute("onfocus") ;
 	  var onclick = comboList[i].getAttribute("onclick") ;
-	  var onblur = comboList[i].getAttribute("onblur") ;
+	  var onchange = comboList[i].getAttribute("onchange") ;
+	  var onkeydown = comboList[i].getAttribute("onkeydown") ;
 	  if(!onfocus) comboList[i].onfocus = uiCombobox.show ;
 	  if(!onclick) comboList[i].onclick = uiCombobox.show ;
-	  if(!onblur)  comboList[i].onblur = uiCombobox.correct ;
+	  if(!onblur)  comboList[i].onchange = uiCombobox.correct ;
+		if(!onkeydown) comboList[i].onkeydown = uiCombobox.tabEvent;
 	}
 };
 
+UICombobox.prototype.tabEvent = function(evt) {
+	if (!evt) {
+		evt = window.event;
+	}
+	if (evt.keyCode == 9) {
+		var UICombobox = eXo.webui.UICombobox;
+		UICombobox.hide();
+	}
+};
 
 //fix for onblur event on calendar
 //For validating
