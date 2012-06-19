@@ -45,6 +45,19 @@ UIDateTimePicker.prototype.init = function(field, isDisplayTime) {
     iframe.style.height = blockClnd.offsetHeight + "px";
   }
   field.parentNode.insertBefore(cld, field) ;
+  
+  var uIDateTimePicker = eXo.cs.UIDateTimePicker ;
+  field.onkeydown = uIDateTimePicker.tabEvent;
+};
+
+UIDateTimePicker.prototype.tabEvent = function(evt) {
+	if (!evt) {
+		evt = window.event;
+	}
+	if (evt.keyCode == 9) {
+		var uIDateTimePicker = eXo.cs.UIDateTimePicker;
+		uIDateTimePicker.hide();
+	}
 };
 
 UIDateTimePicker.prototype.show = function() {
