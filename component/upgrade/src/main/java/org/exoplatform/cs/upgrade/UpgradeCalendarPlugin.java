@@ -39,7 +39,6 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.ComponentRequestLifecycle;
-import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
@@ -79,12 +78,12 @@ public class UpgradeCalendarPlugin extends UpgradeProductPlugin {
   
   
 
-  public UpgradeCalendarPlugin(InitParams initParams) {
+  public UpgradeCalendarPlugin(InitParams initParams, SocialChromatticLifeCycle socialLifeCycle) {
     super(initParams);
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     this.repoService_ = ((RepositoryService) container.getComponentInstance(RepositoryService.class));
     this.nodeHierarchy_ = ((NodeHierarchyCreator) container.getComponentInstance(NodeHierarchyCreator.class));
-    this.socialLifeCycle_ = (SocialChromatticLifeCycle) container.getComponentInstanceOfType(SocialChromatticLifeCycle.class);
+    this.socialLifeCycle_ = socialLifeCycle ;
   }
   public void processUpgrade(String oldVersion, String newVersion) {
     // Upgrade from CS 2.1.x to 2.2.x
@@ -217,7 +216,6 @@ public class UpgradeCalendarPlugin extends UpgradeProductPlugin {
   
   private void migrateActivityCalendarId(String oldId, String newId) {
     try {
-      RequestLifeCycle.begin(PortalContainer.getInstance());
       Session jcrSession = socialLifeCycle_.getSession().getJCRSession();
       QueryManager qm = jcrSession.getWorkspace().getQueryManager() ;
       String sql = "select * from soc:activityparam where CalendarID='" + oldId + "'";
@@ -230,8 +228,9 @@ public class UpgradeCalendarPlugin extends UpgradeProductPlugin {
         activityNode.save();
       }
       jcrSession.save();
-      RequestLifeCycle.end();
       log.info("Succesfully migrated " + nodeIterator.getSize() + " nodes");
+    } catch (NullPointerException ne) {
+        log.error("Failed to get social session data !",ne);
     } catch (Exception e) {
       log.error("Failed to migrate Activity CalendarID",e);
     }
