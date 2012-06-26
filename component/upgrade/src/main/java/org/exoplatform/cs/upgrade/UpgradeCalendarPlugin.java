@@ -49,6 +49,8 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.social.common.lifecycle.SocialChromatticLifeCycle;
+
 
 /**
  * Created by The eXo Platform SAS
@@ -71,14 +73,18 @@ public class UpgradeCalendarPlugin extends UpgradeProductPlugin {
   private RepositoryService    repoService_;
 
   private NodeHierarchyCreator nodeHierarchy_;
+  
+  private SocialChromatticLifeCycle socialLifeCycle_;
+  
+  
 
-  public UpgradeCalendarPlugin(InitParams initParams) {
+  public UpgradeCalendarPlugin(InitParams initParams, SocialChromatticLifeCycle socialLifeCycle) {
     super(initParams);
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     this.repoService_ = ((RepositoryService) container.getComponentInstance(RepositoryService.class));
     this.nodeHierarchy_ = ((NodeHierarchyCreator) container.getComponentInstance(NodeHierarchyCreator.class));
+    this.socialLifeCycle_ = socialLifeCycle ;
   }
-
   public void processUpgrade(String oldVersion, String newVersion) {
     // Upgrade from CS 2.1.x to 2.2.x
     try {
@@ -176,10 +182,15 @@ public class UpgradeCalendarPlugin extends UpgradeProductPlugin {
     if (iter.getSize() > 0) {
       Map<String, String> spaceGroupIds = getSpaceGroups();
       while (iter.hasNext()) {
+        
         Node calendarNode = iter.nextNode();
         List<String> spaceGroup = valuesToList(calendarNode.getProperty(Utils.EXO_GROUPS).getValues());
         String groupId = getGroupId(spaceGroup);
+        
         String newId = groupId + SPACE_CALENDAR_ID_SUFFIX;
+        String oldId = calendarNode.getProperty(Utils.EXO_ID).getString();
+        migrateActivityCalendarId(oldId, newId);
+        
         if (spaceGroupIds.containsKey(groupId) && !newId.equals(calendarNode.getName())) {
           calendarNode.setProperty(Utils.EXO_ID, newId);
           calendarNode.setProperty(Utils.EXO_NAME, spaceGroupIds.get(groupId));
@@ -201,6 +212,28 @@ public class UpgradeCalendarPlugin extends UpgradeProductPlugin {
       log.info("[UpgradeCalendarPlugin] There is not any space calendars to migrate.");
     }
     log.info("[UpgradeCalendarPlugin] Finished migrating space calendars. " + iter.getSize() + " calendars are migrated.");
+  }
+  
+  private void migrateActivityCalendarId(String oldId, String newId) {
+    try {
+      Session jcrSession = socialLifeCycle_.getSession().getJCRSession();
+      QueryManager qm = jcrSession.getWorkspace().getQueryManager() ;
+      String sql = "select * from soc:activityparam where CalendarID='" + oldId + "'";
+      Query q = qm.createQuery(sql, Query.SQL);
+      QueryResult result = q.execute();
+      NodeIterator nodeIterator = result.getNodes();
+      while(nodeIterator.hasNext()) {
+        Node activityNode = nodeIterator.nextNode();
+        activityNode.setProperty("CalendarID", newId);
+        activityNode.save();
+      }
+      jcrSession.save();
+      log.info("Succesfully migrated " + nodeIterator.getSize() + " nodes");
+    } catch (NullPointerException ne) {
+        log.error("Failed to get social session data !",ne);
+    } catch (Exception e) {
+      log.error("Failed to migrate Activity CalendarID",e);
+    }
   }
   
   private NodeIterator getSpaceCalendars() throws Exception {
