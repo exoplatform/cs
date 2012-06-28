@@ -1609,11 +1609,16 @@ UICalendarPortlet.prototype.resortEvents = function(){
         if (eXo.calendar.UICalendarPortlet.getElementById("UIDayViewGrid")) 
             eXo.calendar.UICalendarPortlet.showEvent();
         if (eXo.calendar.UICalendarPortlet.getElementById("UIWeekViewGrid")) {
-            eXo.calendar.UICalendarMan.initWeek();
+      			try {
+              eXo.calendar.UICalendarMan.initWeek();
+      			} catch (err) { 
+      			 window.status = err.message;       			 
+      			};
             eXo.calendar.UIWeekView.init();
         }
     } 
     catch (e) {
+      window.status = e.message;
     };
 	
 };
