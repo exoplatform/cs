@@ -36,7 +36,7 @@
   def rcontext = _ctx.getRequestContext() ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.listViewDblClick("'+uiform.id+'") ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.cs.CheckBox.init("'+uiform.id+'") ;') ;
-  rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.CalendarLayout.updateUICalendarViewLayout();');
+  rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.CalendarLayout.updateUICalendarViewLayout(\'UIListView\');');
   uicomponent.refreshBrowser();
   uicomponent.setCalClicked(false);
 %>

@@ -5,6 +5,7 @@ function CalendarLayout() {
   this.UI_CALENDAR_VIEW_CONTAINER = 'UICalendarViewContainer';
   this.TOGGLE_BUTTON_HEIGHT = 14;
   this.UI_CALENDARS_MIN_HEIGHT = 40;
+  this.UI_LIST_VIEW = "UIListView";
 }
 
 CalendarLayout.prototype.init = function() {
@@ -31,17 +32,21 @@ CalendarLayout.prototype.adjustApplicationHeight = function() {
   
 };
 
-CalendarLayout.prototype.updateUICalendarViewLayout = function() {
-  var CalendarLayout = eXo.calendar.CalendarLayout;
-  var UICalendarPortlet = document.getElementById(eXo.calendar.UICalendarPortlet.portletId);
-  var UICalendarViewContainer = eXo.core.DOMUtil.findFirstDescendantByClass(UICalendarPortlet, 'div', CalendarLayout.UI_CALENDAR_VIEW_CONTAINER);
-  var uCVCHeight = UICalendarViewContainer.offsetHeight;
-  if (uCVCHeight != CalendarLayout.uiCalendarWorkingContainerHeight) {
-    var uiMainWorkingArea = eXo.core.DOMUtil.findFirstDescendantByClass(UICalendarPortlet, 'div', CalendarLayout.MAIN_WORKING_PANEL);
-    if (uiMainWorkingArea) {
-      uiMainWorkingArea.style.height = (uiMainWorkingArea.offsetHeight + CalendarLayout.uiCalendarWorkingContainerHeight - uCVCHeight)+ "px";
-    }
-  }
+CalendarLayout.prototype.updateUICalendarViewLayout = function(view) {
+	var CalendarLayout = eXo.calendar.CalendarLayout;
+	var UICalendarPortlet = document .getElementById(eXo.calendar.UICalendarPortlet.portletId);
+	var UICalendarViewContainer = eXo.core.DOMUtil .findFirstDescendantByClass(UICalendarPortlet, 'div', CalendarLayout.UI_CALENDAR_VIEW_CONTAINER);
+	var uCVCHeight = UICalendarViewContainer.offsetHeight;
+	var uiMainWorkingArea = eXo.core.DOMUtil.findFirstDescendantByClass( UICalendarPortlet, 'div', CalendarLayout.MAIN_WORKING_PANEL);
+	if (uCVCHeight != CalendarLayout.uiCalendarWorkingContainerHeight) {
+		if (uiMainWorkingArea) {
+			if (view != this.UI_LIST_VIEW || uCVCHeight > CalendarLayout.uiCalendarWorkingContainerHeight) {
+				uiMainWorkingArea.style.height = (uiMainWorkingArea.offsetHeight + CalendarLayout.uiCalendarWorkingContainerHeight - uCVCHeight) + "px";
+			} else {
+				uiMainWorkingArea.style.height = "auto";
+			}
+		}
+	}
 };
 
 CalendarLayout.prototype.updateHeightParams = function() {

@@ -49,7 +49,7 @@
   rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.UICalendarPortlet.checkFilter();') ;
   rcontext.getJavascriptManager().addOnResizeJavascript('eXo.calendar.UICalendarPortlet.browserResizeCallback') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.currentDate = ' + uicomponent.getDefaultStartTimeOfEvent() +';') ;
-  rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.CalendarLayout.updateUICalendarViewLayout();');
+  rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.CalendarLayout.updateUICalendarViewLayout(\'UIDayView\');');
   cssClass = "Day" ;
   
   DateFormat tempFormat = new  SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss", Locale.ENGLISH) ;
