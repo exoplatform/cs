@@ -12,16 +12,16 @@
   def rcontext = _ctx.getRequestContext() ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.setSelected("'+uiform.id+'") ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.currentDate = ' + uicomponent.getDefaultStartTimeOfEvent() +';') ;
-  rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.CalendarLayout.updateUICalendarViewLayout();');
+  rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.CalendarLayout.updateUICalendarViewLayout(\'UIYearView\');');
   int currentYear = uicomponent.getCurrentYear() ;
   Calendar cal =  new GregorianCalendar() ;
   cal.setTimeInMillis(uicomponent.getCurrentCalendar().getTimeInMillis()) ;
   String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT, String.valueOf(Calendar.YEAR)) ;
-   String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS, String.valueOf(Calendar.YEAR)) ;
-   Map value = uicomponent.getValueMap() ;
-   dayOfYear = 1 ;
+  String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS, String.valueOf(Calendar.YEAR)) ;
+  Map value = uicomponent.getValueMap() ;
+  dayOfYear = 1 ;
   WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-   Locale locale = context.getParentAppRequestContext().getLocale() ;
+  Locale locale = context.getParentAppRequestContext().getLocale() ;
   DateFormat wf = new  SimpleDateFormat("E", locale) ;
 %>
 <div class="UIYearView" style="display: block;">
