@@ -113,6 +113,48 @@ public class ICalendarImportExport implements CalendarImportExport {
     storage_ = storage;
   }
 
+  public static void setPriorityCalEvent(PropertyList propertyList, CalendarEvent exoEvent) {
+    if (exoEvent.getPriority() != null) {
+      int priority = 0;
+      for (int i = 0; i < CalendarEvent.PRIORITY.length; i++) {
+        if (exoEvent.getPriority().equalsIgnoreCase(CalendarEvent.PRIORITY[i])) {
+          if (i == CalendarEvent.PRI_MEDIUM) {
+            priority = 5;
+          } else if (i == CalendarEvent.PRI_LOW) {
+            priority = 6;
+          } else {
+            priority = i;
+          }
+          propertyList.add(new Priority(priority));
+          propertyList.getProperty(Property.PRIORITY).getParameters()
+                      .add(net.fortuna.ical4j.model.parameter.Value.INTEGER);
+          break;
+        }
+      }
+    }
+  }
+
+  public static void setPriorityExoEvent(Priority priority, CalendarEvent exoEvent) {
+    if (priority != null) {
+      if (priority.getValue() != null) {
+        int priorityVl = 0;
+        try {
+          priorityVl = Integer.parseInt(priority.getValue());
+          if (1 < priorityVl && priorityVl <= 4) {
+            priorityVl = CalendarEvent.PRI_HIGH;
+          } else if (priorityVl == 5) {
+            priorityVl = CalendarEvent.PRI_MEDIUM;
+          } else if (priorityVl > 5) {
+            priorityVl = CalendarEvent.PRI_LOW;
+          }
+          exoEvent.setPriority(CalendarEvent.PRIORITY[priorityVl]);
+        } catch (NumberFormatException e) {
+          logger.warn("Can not set the priority of this event");
+        }
+      }
+    }
+  }
+
   public net.fortuna.ical4j.model.Calendar getCalendarComponent(net.fortuna.ical4j.model.Calendar calendar, CalendarEvent exoEvent, String componentType) throws Exception {
     Uid id = new Uid(exoEvent.getId());
     long start = exoEvent.getFromDateTime().getTime();
@@ -149,15 +191,7 @@ public class ICalendarImportExport implements CalendarImportExport {
       event.getProperties().add(new Categories(exoEvent.getEventCategoryName()));
       event.getProperties().getProperty(Property.CATEGORIES).getParameters().add(net.fortuna.ical4j.model.parameter.Value.TEXT);
     }
-    if (exoEvent.getPriority() != null) {
-      for (int i = 0; i < CalendarEvent.PRIORITY.length; i++) {
-        if (exoEvent.getPriority().equalsIgnoreCase(CalendarEvent.PRIORITY[i])) {
-          event.getProperties().add(new Priority(i));
-          event.getProperties().getProperty(Property.PRIORITY).getParameters().add(net.fortuna.ical4j.model.parameter.Value.INTEGER);
-          break;
-        }
-      }
-    }
+    setPriorityCalEvent(event.getProperties(), exoEvent);
 
     if (CalendarComponent.VTODO.equals(componentType)) {
       if (exoEvent.getCompletedDateTime() != null) {
@@ -385,15 +419,7 @@ public class ICalendarImportExport implements CalendarImportExport {
           exoEvent.setToDateTime(event.getEndDate().getDate());
         if (event.getLocation() != null)
           exoEvent.setLocation(event.getLocation().getValue());
-        if (event.getPriority() != null) {
-          try {
-            exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())]);
-          } catch (Exception e) {
-            if (logger.isDebugEnabled()) {
-              logger.debug("Fail to setPriority to exoEvent", e);
-            }
-          }
-        }
+        setPriorityExoEvent(event.getPriority(), exoEvent);
         try {
           RRule r = (RRule) event.getProperty(Property.RRULE);
           if (r != null && r.getRecur() != null) {
