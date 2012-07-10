@@ -589,6 +589,7 @@ public class ICalendarImportExport implements CalendarImportExport {
             exoEvent.setEventState(CalendarEvent.ST_BUSY);
           }
           exoEvent = RemoteCalendarServiceImpl.setEventAttachment(event, exoEvent,eValue,sValue);
+          exoEvent.setRepeatType(CalendarEvent.RP_NOREPEAT) ;
 
           if (event.getProperty(Property.RECURRENCE_ID) != null) {
             RecurrenceId recurId = (RecurrenceId) event.getProperty(Property.RECURRENCE_ID);
