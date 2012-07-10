@@ -2647,29 +2647,28 @@ eXo.calendar.EventTooltip = {
 	isDnD: false,
 	timer: 1000,
 	getContainer: function(evt){
-		var self = eXo.calendar.EventTooltip;
-		if(self._container) delete self._container;
-		if(!self._container){
-			var eventNode = eXo.core.EventManager.getEventTarget(evt);
-			eventNode = eXo.core.DOMUtil.findAncestorByClass(eventNode,"UICalendarPortlet");
-			self._container = eXo.core.DOMUtil.findFirstDescendantByClass(eventNode,"div","UICalendarEventTooltip");
-			eXo.core.EventManager.addEvent(self._container,"mouseover",function(evt){
-				self.cleanupTimer(evt);
-			});
-			eXo.core.EventManager.addEvent(self._container,"mouseout",function(evt){
-				self.hide(evt);
-			});
-			eXo.core.EventManager.addEvent(self._container,"click",function(evt){
-				self.hideElement();
-				self.editEvent(self.currentEvent);
-			});
-		}
+	  var self = eXo.calendar.EventTooltip;
+	  if(self._container) delete self._container;
+	  if(!self._container){
+		  var eventNode = eXo.core.EventManager.getEventTarget(evt);
+		  eventNode = eXo.core.DOMUtil.findAncestorByClass(eventNode,"UICalendarPortlet");
+		  self._container = eXo.core.DOMUtil.findFirstDescendantByClass(eventNode,"div","UICalendarEventTooltip");
+		  eXo.core.EventManager.addEvent(self._container,"mouseover",function(evt){
+		    self.cleanupTimer(evt);
+		  });
+		  eXo.core.EventManager.addEvent(self._container,"mouseout",function(evt){
+		    self.hide(evt);
+		  });
+	  }
 	},
-	editEvent: function(eventNode){				
-    var eventId = eventNode.getAttribute("eventId");
-    var calendarId = eventNode.getAttribute("calid");
-    var calendarType = eventNode.getAttribute("caltype");
-    eXo.webui.UIForm.submitEvent(eXo.calendar.UICalendarPortlet.portletId + '#' + eXo.calendar.UICalendarPortlet.viewType, 'Edit', '&subComponentId=' + eXo.calendar.UICalendarPortlet.viewType + '&objectId=' + eventId + '&calendarId=' + calendarId + '&calType=' + calendarType);
+	editEvent: function(){			
+	  var self = eXo.calendar.EventTooltip;	
+	  self.hideElement();
+	  var eventNode = self.currentEvent;
+      var eventId = eventNode.getAttribute("eventId");
+      var calendarId = eventNode.getAttribute("calid");
+      var calendarType = eventNode.getAttribute("caltype");
+      eXo.webui.UIForm.submitEvent(eXo.calendar.UICalendarPortlet.portletId + '#' + eXo.calendar.UICalendarPortlet.viewType, 'Edit', '&subComponentId=' + eXo.calendar.UICalendarPortlet.viewType + '&objectId=' + eventId + '&calendarId=' + calendarId + '&calType=' + calendarType);
 	},
 	show: function(evt){
 		var self = eXo.calendar.EventTooltip;
