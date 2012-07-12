@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<messagebundle>
+  <msg name="title">Mensagens</msg>
+  <msg name="baseurl">Url base</msg>
+  <msg name="subscribeurl">Url de inscri\u00e7\u00e3o</msg>
+  <msg name="limit">N\u00famero de itens exibido</msg>
+  <msg name="back">Voltar</msg>
+  <msg name="nomessage">Nenhuma mensagem n\u00e3o lida</msg>
+  <msg name="account">Conta</msg>
+  <msg name="folder">Pasta</msg>
+  <msg name="tag">Marcar</msg>
+  <msg name="save">Salvar</msg>
+  <msg name="cancel">Cancelar</msg>
+  <msg name="setting">Configura\u00e7\u00e3o</msg>
+  <msg name="showAll">Mostrar todos</msg>
+  <msg name="numberRequired">N\u00famero \u00e9 exigido no campo limite.</msg>
+  <msg name="selectfolderTagRequired">Selecione ou marque uma pasta.</msg>
+  <msg name="noAccount">conta n\u00e3o encontrada, crie uma no aplicativo de email</msg>
+</messagebundle>
