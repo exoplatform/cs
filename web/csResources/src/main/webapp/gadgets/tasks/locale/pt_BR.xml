@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<messagebundle>
+  <msg name="title">Minhas tarefas</msg>
+  <msg name="baseurl">Url base</msg>
+  <msg name="subscribeurl">Url de inscrição</msg>
+  <msg name="limit">Número de itens exibido</msg>
+  <msg name="format">Formato de data e hora</msg>
+  <msg name="showall">Mostrar todos</msg>
+  <msg name="noevent">Não há tarefas para hoje</msg>
+  <msg name="calendars">Calendário</msg>
+  <msg name="setting">Configuração</msg>
+  <msg name="save">Salvar</msg>
+  <msg name="cancel">Cancelar</msg>
+  <msg name="confirm">Tem certeza de que a tarefa foi concluída?</msg>
+</messagebundle>
