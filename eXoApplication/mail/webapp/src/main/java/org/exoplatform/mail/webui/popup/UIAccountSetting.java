@@ -461,7 +461,9 @@ public class UIAccountSetting extends UIFormTabPane {
   public List<Account> getAccounts() throws Exception {
     DataCache dataCache = (DataCache) WebuiRequestContext.getCurrentInstance().getAttribute(DataCache.class);
     String username = Util.getPortalRequestContext().getRemoteUser();
-    return dataCache.getAccounts(username);
+    List<Account> accounts = new ArrayList<Account>(dataCache.getAccounts(username));
+    accounts.addAll(dataCache.getDelegatedAccounts(username));
+    return accounts;
   }
   
   static  public class SelectAccountActionListener extends EventListener<UIAccountSetting> {
