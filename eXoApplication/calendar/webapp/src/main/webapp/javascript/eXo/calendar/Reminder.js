@@ -13,9 +13,9 @@ Reminder.prototype.init = function(eXoUser, eXoToken, cometdContextName) {
 			eventObj) {
 		eXo.calendar.Reminder.alarm(eventObj);
 	});
-	eXo.cs.CSCometd.subscribe('/eXo/Application/Calendar/notifySharaCalendar',
+	eXo.cs.CSCometd.subscribe('/eXo/Application/Calendar/notifyShareCalendar',
 			function(eventObj) {
-				eXo.calendar.Reminder.notifySharaCalendar(eventObj);
+				eXo.calendar.Reminder.notifyShareCalendar(eventObj);
 			});
 	// eXo.cs.CSCometd.addOnConnectionReadyCallback(this.initCometd);
 	if (!eXo.cs.CSCometd.isConnected()) {
@@ -28,13 +28,13 @@ Reminder.prototype.initCometd = function() {
 			eventObj) {
 		eXo.calendar.Reminder.alarm(eventObj);
 	});
-	eXo.cs.CSCometd.subscribe('/eXo/Application/Calendar/notifySharaCalendar',
+	eXo.cs.CSCometd.subscribe('/eXo/Application/Calendar/notifyShareCalendar',
 			function(eventObj) {
-				eXo.calendar.Reminder.notifySharaCalendar(eventObj);
+				eXo.calendar.Reminder.notifyShareCalendar(eventObj);
 			});
 }
 
-Reminder.prototype.notifySharaCalendar = function(eventObj){
+Reminder.prototype.notifyShareCalendar = function(eventObj){
 	dataMsg = eventObj.data
 	var classId = dataMsg;
 	var message = document.getElementById(classId).innerHTML;

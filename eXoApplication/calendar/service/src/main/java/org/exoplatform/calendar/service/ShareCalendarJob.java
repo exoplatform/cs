@@ -33,7 +33,8 @@ import org.quartz.UnableToInterruptJobException;
 
 /**
  * Created by The eXo Platform SARL 
- * Author : Haiddd haidd@exoplatform.com 
+ * Author : Haiddd 
+ *          haidd@exoplatform.com 
  * May 11, 2012
  */
 
@@ -47,7 +48,7 @@ public class ShareCalendarJob implements Job, InterruptableJob {
 
   public static final String CALENDAR_ID          = "calendarId";
 
-  public static final String JCR_JATA_STORAGE     = "JCRDataStorage";
+  public static final String JCR_DATA_STORAGE     = "JCRDataStorage";
 
   public static final String START_SHARE_ID       = "StartToShare";
 
@@ -55,7 +56,7 @@ public class ShareCalendarJob implements Job, InterruptableJob {
 
   public static final String STILL_SHARE_ID       = "StillToShare";
 
-  public static final String SHARE_CAL_CHANEL     = "/eXo/Application/Calendar/notifySharaCalendar";
+  public static final String SHARE_CAL_CHANEL     = "/eXo/Application/Calendar/notifyShareCalendar";
 
   private static Log         log                  = ExoLogger.getLogger("cs.service.job");
 
@@ -66,11 +67,12 @@ public class ShareCalendarJob implements Job, InterruptableJob {
   public void execute(JobExecutionContext context) throws JobExecutionException {
     ContinuationService continuation = (ContinuationService) PortalContainer.getInstance()
                                                                             .getComponentInstanceOfType(ContinuationService.class);
+    
     JobDataMap jobDataMap = context.getJobDetail().getJobDataMap();
     List<String> receiverUsers = (List<String>) jobDataMap.get(RECEIVER_USER);
     String user = jobDataMap.getString(USER_NAME);
     String calendarId = jobDataMap.getString(CALENDAR_ID);
-    JCRDataStorage jcrDataStorage = (JCRDataStorage) jobDataMap.get(JCR_JATA_STORAGE);
+    JCRDataStorage jcrDataStorage = (JCRDataStorage) jobDataMap.get(JCR_DATA_STORAGE);
     continuation.sendMessage(user, SHARE_CAL_CHANEL, START_SHARE_ID, START_SHARE_ID);
     try {
       jcrDataStorage.shareCalendar(user, calendarId, receiverUsers);
