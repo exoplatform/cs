@@ -25,7 +25,7 @@ Reminder.prototype.initCometd = function() {
 
 Reminder.prototype.alarm = function(eventObj){
 	var a = eXo.core.JSON.parse(eventObj.data);	
-	var message = '<a class="Item" href="#">('+ a.fromDateTime.hours + ':' + a.fromDateTime.minutes + ') ' +a.summary+'</a>' ;
+	var message = '<a class="Item" href="#">' + a.description + '</a>'; 
 	var html = this.generateHTML(message) ;
 	var popup = eXo.core.DOMUtil.findFirstDescendantByClass(this.createMessage(html, message), "div","UIPopupNotification") ;
 	eXo.webui.Box.config(popup,popup.offsetHeight, 5, this.openCallback, this.closeBox) ;

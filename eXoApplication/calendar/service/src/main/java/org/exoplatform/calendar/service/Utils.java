@@ -528,5 +528,36 @@ public class Utils {
     SessionProviderService sessionProviderService = (SessionProviderService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(SessionProviderService.class);
     return sessionProviderService.getSystemSessionProvider(null);
   }
+  /**
+   * render time zone label for a time zone.
+   * @param timeZoneID
+   * @return display string for the time zone id, which contains value of GMT offset and time zone id.
+   * For example, display string for "Asia/Ho_Chi_Minh" would be "GMT +07:00)"
+   */
+  public static String getTimeZoneLabel(String timeZoneID) {
+    String label = timeZoneID;
+    if(label.lastIndexOf("/") > 0 && label.toLowerCase().lastIndexOf("etc".toLowerCase()) < 0 && label.toLowerCase().lastIndexOf("system") < 0) {
+      TimeZone timeZone = TimeZone.getTimeZone(label) ;
+      int rawOffset = timeZone.getRawOffset() / 60000;
+      int hours = rawOffset / 60;
+      int minutes = Math.abs(rawOffset) % 60;
+      String hrStr = "";
+      if (Math.abs(hours) < 10) {
+        if (hours < 0) {
+          hrStr = "-0" + Math.abs(hours);
+        } else {
+          hrStr = "0" + Math.abs(hours);
+        }
+      } else {
+        hrStr = Integer.toString(hours);
+      }
+      String minStr = (minutes < 10) ? ("0" + Integer.toString(minutes)) : Integer.toString(minutes);
+      label = "GMT " + ((timeZone.getRawOffset() >= 0) ? "+" : "") 
+      + hrStr + ":" + minStr;
+      //subZoneMap.put(tz,  str) ;
+      
+    }
+    return label;
+  }
 
 }

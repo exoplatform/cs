@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TimeZone;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
@@ -1039,6 +1040,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   protected void sendMail(MailService svr, OrganizationService orSvr,CalendarSetting setting, Account acc, String fromId,  String toId, CalendarEvent event) throws Exception {
     List<Attachment> atts = getAttachments(null, false);
     DateFormat df = new SimpleDateFormat(setting.getDateFormat() + " " + setting.getTimeFormat()) ;
+    String timezoneId = setting.getTimeZone();
+    String labelGMT = org.exoplatform.calendar.service.Utils.getTimeZoneLabel(timezoneId);
+    TimeZone tz = TimeZone.getTimeZone(timezoneId);
+    df.setTimeZone(tz);
     User invitor = orSvr.getUserHandler().findUserByName(CalendarUtils.getCurrentUser()) ;
     StringBuffer sbSubject = new StringBuffer("["+getLabel("invitation")+"] ") ;
     sbSubject.append(event.getSummary()) ;
@@ -1069,8 +1074,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     sbBody.append("</tr>") ;
     sbBody.append("<tr>") ;
     sbBody.append("<td style=\"padding: 4px;  text-align: right; vertical-align: top; white-space:nowrap;\">"+getLabel("when")+":</td>") ;
-    sbBody.append("<td style=\"padding: 4px;\"> <div>"+getLabel(UIEventDetailTab.FIELD_FROM)+": " +df.format(event.getFromDateTime())+"</div>");
-    sbBody.append("<div>"+getLabel(UIEventDetailTab.FIELD_TO)+": "+df.format(event.getToDateTime())+"</div></td>") ;
+    sbBody.append("<td style=\"padding: 4px;\"> <div>"+getLabel(UIEventDetailTab.FIELD_FROM)+": " +df.format(event.getFromDateTime())+  "</div>");
+    sbBody.append("<div>"+getLabel(UIEventDetailTab.FIELD_TO)+": "+df.format(event.getToDateTime())+ " " + labelGMT + "</div></td>") ;
     sbBody.append("</tr>") ;
     sbBody.append("<tr>") ;
     sbBody.append("<td style=\"padding: 4px;  text-align: right; vertical-align: top; white-space:nowrap;\">"+getLabel(UIEventDetailTab.FIELD_PLACE)+":</td>") ;
