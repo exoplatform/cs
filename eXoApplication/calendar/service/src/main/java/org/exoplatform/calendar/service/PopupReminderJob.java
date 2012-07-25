@@ -18,8 +18,10 @@ package org.exoplatform.calendar.service;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -85,15 +87,8 @@ public class PopupReminderJob extends MultiTenancyJob {
             rmdObj.setReminderOwner(reminder.getProperty(Utils.EXO_OWNER).getString());
           if (reminder.hasProperty(Utils.EXO_EVENT_ID))
             rmdObj.setId(reminder.getProperty(Utils.EXO_EVENT_ID).getString());
-          if (reminder.hasProperty(Utils.EXO_FROM_DATE_TIME)) {
-            Calendar tempCal = reminder.getProperty(Utils.EXO_FROM_DATE_TIME).getDate();
-            rmdObj.setFromDateTime(tempCal.getTime());
-          }
-          if (reminder.hasProperty(Utils.EXO_SUMMARY))
-            rmdObj.setSummary(reminder.getProperty(Utils.EXO_SUMMARY).getString());
-          rmdObj.setAlarmBefore(remindTime);
-          if (reminder.hasProperty(Utils.EXO_REMINDER_TYPE))
-            rmdObj.setReminderType(reminder.getProperty(Utils.EXO_REMINDER_TYPE).getString());
+          if(reminder.hasProperty(Utils.EXO_DESCRIPTION))
+            rmdObj.setDescription(reminder.getProperty(Utils.EXO_DESCRIPTION).getString());
           if (isRepeat) {
             if (fromCalendar.getTimeInMillis() >= fromTime) {
               reminder.setProperty(Utils.EXO_IS_OVER, true);

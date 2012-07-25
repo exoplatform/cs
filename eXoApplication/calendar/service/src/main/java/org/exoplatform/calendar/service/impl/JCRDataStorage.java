@@ -1618,33 +1618,38 @@ public class JCRDataStorage implements DataStorage {
     summary.append("<br>");
     if (!Utils.isEmpty(reminder.getReminderOwner())) {
       try {
-        cal.setTimeZone(TimeZone.getTimeZone(getCalendarSetting(reminder.getReminderOwner()).getTimeZone()));
+        String timezoneId = getCalendarSetting(reminder.getReminderOwner()).getTimeZone();
+        String labelGMT = Utils.getTimeZoneLabel(timezoneId);
+ 
+        cal.setTimeZone(TimeZone.getTimeZone(timezoneId));
+        cal.setTime(eventNode.getProperty(Utils.EXO_FROM_DATE_TIME).getDate().getTime());
+        appendDateToSummary("From       : ", cal, summary);
+        summary.append("<br/>");
+        
+        cal.setTime(eventNode.getProperty(Utils.EXO_TO_DATE_TIME).getDate().getTime());
+        appendDateToSummary("To         : ", cal, summary);
+        
+        summary.append(labelGMT);
+        summary.append("<br/>");
+        reminderNode.setProperty(Utils.EXO_DESCRIPTION, summary.toString());
+        reminderNode.setProperty(Utils.EXO_SUMMARY, eventNode.getProperty(Utils.EXO_SUMMARY).getString());
+        if (!reminderFolder.isNew())
+          reminderFolder.save();
+        else
+          reminderFolder.getSession().save();
       } catch (Exception e) {
         if (log.isDebugEnabled()) {
           log.debug(e);          
         }
       }
     }
-    cal.setTime(eventNode.getProperty(Utils.EXO_FROM_DATE_TIME).getDate().getTime());
-    appendDateToSummary("From       : ", cal, summary);
-    
-    cal.setTime(eventNode.getProperty(Utils.EXO_TO_DATE_TIME).getDate().getTime());
-    appendDateToSummary("To         : ", cal, summary);
-    
-    reminderNode.setProperty(Utils.EXO_DESCRIPTION, summary.toString());
-    reminderNode.setProperty(Utils.EXO_SUMMARY, eventNode.getProperty(Utils.EXO_SUMMARY).getString());
-    if (!reminderFolder.isNew())
-      reminderFolder.save();
-    else
-      reminderFolder.getSession().save();
   }
 
   private void appendDateToSummary(String label, java.util.Calendar cal, StringBuilder summary) {
     summary.append(label).append(cal.get(java.util.Calendar.HOUR_OF_DAY)).append(Utils.COLON);
     summary.append(cal.get(java.util.Calendar.MINUTE)).append(" - ");
     summary.append(cal.get(java.util.Calendar.DATE)).append(Utils.SLASH);
-    summary.append(cal.get(java.util.Calendar.MONTH) + 1).append(Utils.SLASH);
-    summary.append(cal.get(java.util.Calendar.YEAR)).append("<br>");
+    summary.append(cal.get(java.util.Calendar.MONTH) + 1).append(" ");
   }
 
   /**
