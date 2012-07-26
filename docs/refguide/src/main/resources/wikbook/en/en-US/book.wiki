@@ -1,11 +1,7 @@
-h1. Prerequisites {anchor:id=CSref.Prerequisites}
-{include:document="Prequisites.wiki"}
-
 h1. Applications {anchor:id=CSref.Application}
 {include:document="Application.wiki"}
 h2. Portlets {anchor:id=CSref.Portlets}
 {include:document="List_portlets.wiki"}
-
 h2. Gadgets {anchor:id=CSref.Gadgets}
 {include:document="list_gadgets.wiki"}
 

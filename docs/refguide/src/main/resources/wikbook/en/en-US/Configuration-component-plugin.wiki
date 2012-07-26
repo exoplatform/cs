@@ -27,6 +27,7 @@ The following table describes the main functions of external component plugins:
 
 
 h2. Calendar Configuration {anchor:id=CSref.Configuration.CalendarConfiguration}
+This section describes the configuration of external component plugin used to implement the Calendar application.
 
 h3. NewUserListener {anchor:id=CSref.Configuration.Calendar.NewUserListener}
 

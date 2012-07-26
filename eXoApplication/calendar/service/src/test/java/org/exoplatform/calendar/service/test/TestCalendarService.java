@@ -16,6 +16,31 @@
  */
 package org.exoplatform.calendar.service.test;
 
+import org.exoplatform.calendar.service.Attachment;
+import org.exoplatform.calendar.service.Calendar;
+import org.exoplatform.calendar.service.CalendarCategory;
+import org.exoplatform.calendar.service.CalendarEvent;
+import org.exoplatform.calendar.service.CalendarImportExport;
+import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.CalendarSetting;
+import org.exoplatform.calendar.service.EventCategory;
+import org.exoplatform.calendar.service.EventQuery;
+import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.calendar.service.Reminder;
+import org.exoplatform.calendar.service.RemoteCalendar;
+import org.exoplatform.calendar.service.RemoteCalendarService;
+import org.exoplatform.calendar.service.RssData;
+import org.exoplatform.calendar.service.Utils;
+import org.exoplatform.calendar.service.impl.CalendarServiceImpl;
+import org.exoplatform.calendar.service.impl.JCRDataStorage;
+import org.exoplatform.calendar.service.impl.NewUserListener;
+import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.container.xml.ValueParam;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.jcr.util.IdGenerator;
+import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.User;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,30 +54,6 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import javax.jcr.PathNotFoundException;
-
-import org.exoplatform.calendar.service.Attachment;
-import org.exoplatform.calendar.service.Calendar;
-import org.exoplatform.calendar.service.CalendarCategory;
-import org.exoplatform.calendar.service.CalendarEvent;
-import org.exoplatform.calendar.service.CalendarService;
-import org.exoplatform.calendar.service.CalendarSetting;
-import org.exoplatform.calendar.service.EventCategory;
-import org.exoplatform.calendar.service.EventQuery;
-import org.exoplatform.calendar.service.GroupCalendarData;
-import org.exoplatform.calendar.service.Reminder;
-import org.exoplatform.calendar.service.RemoteCalendar;
-import org.exoplatform.calendar.service.RemoteCalendarService;
-import org.exoplatform.calendar.service.RssData;
-import org.exoplatform.calendar.service.Utils;
-import org.exoplatform.calendar.service.impl.JCRDataStorage;
-import org.exoplatform.calendar.service.impl.NewUserListener;
-import org.exoplatform.container.xml.InitParams;
-import org.exoplatform.container.xml.ValueParam;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
-import org.exoplatform.services.jcr.util.IdGenerator;
-import org.exoplatform.services.organization.OrganizationService;
-import org.exoplatform.services.organization.User;
 
 /**
  * Created by The eXo Platform SARL
@@ -75,8 +76,7 @@ public class TestCalendarService extends BaseCalendarTestCase {
   public TestCalendarService() throws Exception {
     super();
     calendarService_ = (CalendarService) container.getComponentInstanceOfType(CalendarService.class);
-    NodeHierarchyCreator nodeHierarchyCreator = (NodeHierarchyCreator) container.getComponentInstanceOfType(NodeHierarchyCreator.class);
-    storage_ = new JCRDataStorage(nodeHierarchyCreator, repositoryService);
+    storage_ = ((CalendarServiceImpl)calendarService_).getDataStorage();
     organizationService = (OrganizationService) container.getComponentInstanceOfType(OrganizationService.class);
   }
 
@@ -1273,5 +1273,46 @@ public class TestCalendarService extends BaseCalendarTestCase {
       fail();
       return null;
     }
+  }
+  
+    
+  public void testImportIcs() throws Exception {
+    CalendarImportExport calIE = calendarService_.getCalendarImportExports(CalendarService.ICALENDAR);
+    String categoryId = "IcsCategory";
+    String calendarId = "IcsCalendar";
+    CalendarCategory calCategory = new CalendarCategory();
+    calCategory.setName(categoryId);
+    calendarService_.saveCalendarCategory(username, calCategory, true);
+    Calendar cal = new Calendar();
+    cal.setId(calendarId);
+    cal.setName(calendarId);
+    cal.setCategoryId(calCategory.getId());
+    cal.setPublic(true);
+    calendarService_.saveUserCalendar(username, cal, true);
+    // event with high priority
+    InputStream icalInputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("ObmCalendar_isolated.ics");
+    // event with medium priority
+    InputStream icalInputStream2 = Thread.currentThread().getContextClassLoader().getResourceAsStream("ObmCalendar_isolated_p2.ics");
+    // event with low priority
+    InputStream icalInputStream3 = Thread.currentThread().getContextClassLoader().getResourceAsStream("ObmCalendar_isolated_p3.ics");
+
+    calIE.importCalendar(username, icalInputStream, calendarId, calendarId, null, null, false);
+    calIE.importCalendar(username, icalInputStream2, calendarId, calendarId, null, null, false);
+    calIE.importCalendar(username, icalInputStream3, calendarId, calendarId, null, null, false);
+    
+    List<String> calendarIds = new ArrayList<String>();
+    calendarIds.add(calendarId);
+    List<CalendarEvent> events = calendarService_.getUserEventByCalendar(username, calendarIds);
+    assertTrue(events.size() == 3);
+    CalendarEvent event = events.get(0) ;
+    assertEquals(CalendarEvent.PRIORITY[CalendarEvent.PRI_HIGH], event.getPriority());
+    
+    CalendarEvent event2 = events.get(1) ;
+    assertEquals(CalendarEvent.PRIORITY[CalendarEvent.PRI_MEDIUM],  event2.getPriority());
+    
+    CalendarEvent event3 = events.get(2) ;
+    assertEquals(CalendarEvent.PRIORITY[CalendarEvent.PRI_LOW],  event3.getPriority());
+    
+    icalInputStream.close();
   }
 }

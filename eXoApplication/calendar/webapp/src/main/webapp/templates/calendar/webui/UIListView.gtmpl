@@ -5,6 +5,7 @@
   import java.util.Calendar;
   import org.exoplatform.webui.application.WebuiRequestContext;
   import org.exoplatform.calendar.CalendarUtils;
+  import java.util.LinkedHashMap;
   uiform.begin() ;
   
   int currentDay = uicomponent.getCurrentDay() ;
@@ -13,14 +14,15 @@
   int currentYear = uicomponent.getCurrentYear() ;
   String currentDayName = uicomponent.getDayName(uicomponent.getDayOfWeek(currentYear, currentMonth, currentDay)) ;
   String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT, String.valueOf(Calendar.DATE)) ;
-   String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS, String.valueOf(Calendar.DATE)) ;
-   monthViewAction = uicomponent.TYPE_MONTH +"&currentTime="+ uicomponent.getCurrentCalendar().getTimeInMillis();
+  String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS, String.valueOf(Calendar.DATE)) ;
+  monthViewAction = uicomponent.TYPE_MONTH +"&currentTime="+ uicomponent.getCurrentCalendar().getTimeInMillis();
   yearViewAction = uicomponent.TYPE_YEAR +"&currentTime="+ uicomponent.getCurrentCalendar().getTimeInMillis();
   WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-   Locale locale = context.getParentAppRequestContext().getLocale() ;
+  Locale locale = context.getParentAppRequestContext().getLocale() ;
   dateTimeFormat = uicomponent.getDateTimeFormat() ;
   DateFormat df = new SimpleDateFormat(dateTimeFormat, locale) ;
   boolean searchDisplay = uicomponent.isDisplaySearchResult();
+  LinkedHashMap<String, String> colors = uicomponent.getColors();
   if(searchDisplay) {
 %>
     <div class="Result ListBar">
@@ -34,7 +36,7 @@
   def rcontext = _ctx.getRequestContext() ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.listViewDblClick("'+uiform.id+'") ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.cs.CheckBox.init("'+uiform.id+'") ;') ;
-  rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.CalendarLayout.updateUICalendarViewLayout();');
+  rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.CalendarLayout.updateUICalendarViewLayout(\'UIListView\');');
   uicomponent.refreshBrowser();
   uicomponent.setCalClicked(false);
 %>
@@ -103,7 +105,7 @@
               attachIcon = "" ;
               if(!event.getAttachment().isEmpty()) {attachIcon = "AttachmentIcon" ;}
               String actionLink = uicomponent.event("ViewDetail", event.getId()+"&calendarId="+event.getCalendarId()+"&calType="+event.getCalType()) ;     
-			  def color = uicomponent.getColors().get(event.getCalType() + CalendarUtils.COLON + event.getCalendarId()) ;
+              def color = colors.get(event.getCalType() + CalendarUtils.COLON + event.getCalendarId()) ;
           %>
               <tr actionLink="$actionLink" onclick="eXo.calendar.UICalendarPortlet.listViewClickCallback(this);" class="UIListViewRow" style="$rowStyle" eventid="<%=event.getId()%>" calid="<%=event.getCalendarId()%>" calType=<%=event.getCalType()%>>
               <%if(!searchDisplay) {%>

@@ -70,9 +70,9 @@
         </div>
       </div>
     <%
-      timeStep = uicomponent.getCalendarSetting().getTimeInterval() ; 
-      workingStart = uicomponent.getCalendarSetting().getWorkingTimeBegin() ;
       CalendarSetting calendarSetting = uicomponent.getCalendarSetting() ;
+      timeStep = calendarSetting.getTimeInterval() ; 
+      workingStart = calendarSetting.getWorkingTimeBegin() ;
       String timeFormat = calendarSetting.getTimeFormat() ;
       String settingTimeZone = uicomponent.getSettingTimeZone() ;
       def rcontext = _ctx.getRequestContext() ;

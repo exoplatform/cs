@@ -30,7 +30,7 @@ In eXo Collaboration, there are three plug-ins attached to the _DataInjectorServ
 * MailDataInjector
 
 
-h2. ContactDataInjector    {anchor:id=CSref.Configuration.DataInjectorService.ContactDataInjector}
+h1. ContactDataInjector    {anchor:id=CSref.Configuration.DataInjectorService.ContactDataInjector}
 The _ContactDataInjector_ plug\-in is used to manage data injection of the Address Book application.
 
 To use this plug-in, do as follows:
@@ -85,7 +85,7 @@ In which:
 * *{{{{rest}}}}*: The name of eXo REST service.
 
 
-h2. CalendarDataInjector    {anchor:id=CSref.Configuration.DataInjectorService.CalendarDataInjector}
+h1. CalendarDataInjector    {anchor:id=CSref.Configuration.DataInjectorService.CalendarDataInjector}
 The _CalendarDataInjector_ plug\-in is used to manage data injection in the Calendar application.
 
 To use this plug\-in, do as follows:
@@ -152,7 +152,7 @@ In which:
 http://{domain}/{rest}/bench/inject/CalendarDataInjector?mCt=5&mEcat=10&mCal=10&mEv=20&mTa=20&typeOfInject=private
 {code}
 
-h2. MailDataInjector    {anchor:id=CSref.Configuration.DataInjectorService.MailDataInjector}
+h1. MailDataInjector    {anchor:id=CSref.Configuration.DataInjectorService.MailDataInjector}
 
 The _MailDataInjector_ is used to manage data injection in the Mail application.
 
@@ -193,7 +193,16 @@ In which:
 
 * *Type*:  {{org.exoplatform.mail.service.bench.MailDataInjector}}
 
-h2. Usage of MailDataInjector  {anchor:id=CSref.Configuration.DataInjectorService.MailDataInjector.Usage}
+
+{docbook}
+<para xml:id="CSref.Configuration.DataInjectorService.MailDataInjector.Usage">
+<citetitle>
+<emphasis role="bold">
+Usage of MailDataInjector
+</emphasis>
+</citetitle>
+</para>
+{docbook}
 * To insert mail data into the Mail application, the request link is as follows:
 
 {code:language=html/xml}

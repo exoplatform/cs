@@ -9,6 +9,7 @@
   import org.exoplatform.webui.application.WebuiRequestContext;
   import org.exoplatform.calendar.service.CalendarEvent;
   import java.text.ParseException;
+  import java.util.LinkedHashMap;
   uiform.begin()
  
    Calendar currentCalendar = uicomponent.getCurrentCalendar() ;
@@ -32,11 +33,11 @@
   rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.UICalendarPortlet.checkFilter();') ;
   rcontext.getJavascriptManager().addOnResizeJavascript('eXo.calendar.UIWeekView.onResize') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.currentDate = ' + uicomponent.getDefaultStartTimeOfEvent() +';') ;
-  rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.CalendarLayout.updateUICalendarViewLayout();');
-   WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-   Locale locale = context.getParentAppRequestContext().getLocale() ;
-   String currentMonthName = uicomponent.getMonthName(currentMonth) ;
-   dateFormat = uicomponent.getDateFormat() ;
+  rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.CalendarLayout.updateUICalendarViewLayout(\'UIWeekView\');');
+  WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+  Locale locale = context.getParentAppRequestContext().getLocale() ;
+  String currentMonthName = uicomponent.getMonthName(currentMonth) ;
+  dateFormat = uicomponent.getDateFormat() ;
   timeFormat = uicomponent.getTimeFormat() ;
   dateTimeFormat = uicomponent.getDateTimeFormat() ;
   String startWorkingTime = uicomponent.getStartTime() ;
@@ -58,6 +59,7 @@
   DateFormat tempFormat =  new  SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss", Locale.ENGLISH) ;
   tempFormat.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;  
   def eventList = [];
+  LinkedHashMap<String, String> colors = uicomponent.getColors();
 %>
 <div class="UIWeekView">
  <%_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");%>
@@ -111,7 +113,7 @@
                     }      
                     long   startTime = event.getFromDateTime().getTime() ;  
                     long  finishTime = event.getToDateTime().getTime() ;  
-                    color = uicomponent.getColors().get(event.calType +CalendarUtils.COLON+ event.getCalendarId()) ;
+                    color = colors.get(event.calType +CalendarUtils.COLON+ event.getCalendarId()) ;
                     title = tf.format(event.getFromDateTime()) + "->" + tf.format(event.getToDateTime())+ ":&#013; " + event.summary ;
                     actionLink =  uicomponent.event("UpdateAllDayEvent",event.getId());
                     Boolean isOccur = (event.getRepeatType() != null && !CalendarEvent.RP_NOREPEAT.equals(event.getRepeatType()) && (event.getIsExceptionOccurrence() == null || !event.getIsExceptionOccurrence()));
@@ -173,7 +175,7 @@
             beginTime = cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;
             cal.setTime(event.getToDateTime()) ;
             endTime = cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;
-            color = uicomponent.getColors().get(event.calType +CalendarUtils.COLON+ event.getCalendarId()) ;
+            color = colors.get(event.calType +CalendarUtils.COLON+ event.getCalendarId()) ;
             //actionLink =  uicomponent.event("UpdateEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
             actionLink =  uicomponent.event("UpdateEvent",event.id) ;
             Boolean isOccur = (event.getRepeatType() != null && !CalendarEvent.RP_NOREPEAT.equals(event.getRepeatType()) && (event.getIsExceptionOccurrence() == null || !event.getIsExceptionOccurrence()));

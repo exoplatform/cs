@@ -44,6 +44,8 @@ import org.exoplatform.calendar.service.impl.CalendarEventListener;
 import org.exoplatform.calendar.service.impl.CsvImportExport;
 import org.exoplatform.calendar.service.impl.ICalendarImportExport;
 import org.exoplatform.calendar.service.impl.JCRDataStorage;
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.scheduler.JobSchedulerService;
@@ -63,8 +65,8 @@ public class MockCalendarService implements CalendarService{
   private Map<String, CalendarImportExport>   calendarImportExport_ = new LinkedHashMap<String, CalendarImportExport>();
 
   public MockCalendarService() throws Exception{
-    calendarImportExport_.put(CalendarService.ICALENDAR, new ICalendarImportExport(new JCRDataStorage(null, null)));
-    calendarImportExport_.put(CalendarService.EXPORTEDCSV, new CsvImportExport(new JCRDataStorage(null, null)));
+    calendarImportExport_.put(CalendarService.ICALENDAR, new ICalendarImportExport(new JCRDataStorage(null, null, (CacheService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CacheService.class))));
+    calendarImportExport_.put(CalendarService.EXPORTEDCSV, new CsvImportExport(new JCRDataStorage(null, null, (CacheService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CacheService.class))));
   }
 
   @Override
@@ -631,6 +633,13 @@ public class MockCalendarService implements CalendarService{
   @Override
   public boolean shareCalendarByRunJob(String username, String calendarId, List<String> receiverUsers) throws Exception {
     return true;
+  }
   
+  public void autoShareCalendar(List<String> groupsOfUser, String reciever)
+	throws Exception {
+  }
+
+  public void autoRemoveShareCalendar(String groupId, String username)
+	throws Exception {
   }
 }

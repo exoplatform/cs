@@ -11,6 +11,7 @@
   import org.exoplatform.webui.application.WebuiRequestContext;
   import java.util.SimpleTimeZone;
   import org.exoplatform.calendar.service.CalendarEvent;
+  import java.util.LinkedHashMap;
   uiform.begin() ;
   Date currentDate = uicomponent.getCurrentDate();
   int currentDay = uicomponent.getCurrentDay() ;
@@ -48,11 +49,12 @@
   rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.UICalendarPortlet.checkFilter();') ;
   rcontext.getJavascriptManager().addOnResizeJavascript('eXo.calendar.UICalendarPortlet.browserResizeCallback') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.currentDate = ' + uicomponent.getDefaultStartTimeOfEvent() +';') ;
-  rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.CalendarLayout.updateUICalendarViewLayout();');
+  rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.CalendarLayout.updateUICalendarViewLayout(\'UIDayView\');');
   cssClass = "Day" ;
   
   DateFormat tempFormat = new  SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss", Locale.ENGLISH) ;
   tempFormat.setCalendar(uicomponent.getInstanceTempCalendar()) ;
+  LinkedHashMap<String, String> colors = uicomponent.getColors();
   
 %>
 <div class="UIDayView">
@@ -67,7 +69,7 @@
             for(ce in uicomponent.getAllDayEvents()) {             
             actionLink = uicomponent.event("UpdateEvent",ce.id);
             long precent = (99 / size) ;
-            color = uicomponent.getColors().get(ce.calType +CalendarUtils.COLON+ ce.getCalendarId()) ;
+            color = colors.get(ce.calType +CalendarUtils.COLON+ ce.getCalendarId()) ;
             Boolean isOccur = (ce.getRepeatType() != null && !CalendarEvent.RP_NOREPEAT.equals(ce.getRepeatType()) && (ce.getIsExceptionOccurrence() == null || !ce.getIsExceptionOccurrence()));
             String recurId = ce.getRecurrenceId();
           %>
@@ -128,7 +130,7 @@
                    long   beginTime = cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;
                    cal.setTime(ce.getToDateTime()) ;
                    long  endTime = cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;
-                   color = uicomponent.getColors().get(ce.calType +CalendarUtils.COLON+ ce.getCalendarId()) ;                   
+                   color = colors.get(ce.calType +CalendarUtils.COLON+ ce.getCalendarId()) ;                   
                    actionLink = uicomponent.event("UpdateEvent",ce.id);
                    Boolean isOccur = (ce.getRepeatType() != null && !CalendarEvent.RP_NOREPEAT.equals(ce.getRepeatType()) && (ce.getIsExceptionOccurrence() == null || !ce.getIsExceptionOccurrence()));
                   String recurId = ce.getRecurrenceId();

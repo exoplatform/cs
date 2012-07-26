@@ -1,5 +1,19 @@
-This chapter supplies you with the basic knowledge about overridden components and REST APIs implemented in eXo Collaboration via the following topics:
-
-* [Extension points|#CSref.ExtensionPoints]
-
-* [Public REST APIs|#CSref.PublicREST_APIs]
+{docbook}
+<abstract>
+ <para>This chapter supplies you with the basic knowledge about overridden components and REST APIs implemented in eXo Collaboration via the following topics:</para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="CSref.ExtensionPoints">Extension points</link>
+          </emphasis> </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="CSref.PublicREST_APIs">Public REST APIs</link>
+          </emphasis> </para>
+      </listitem>
+    </itemizedlist>
+	</abstract>
+{docbook}
