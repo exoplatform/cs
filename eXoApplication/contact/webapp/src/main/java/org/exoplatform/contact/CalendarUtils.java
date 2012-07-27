@@ -302,20 +302,17 @@ public class CalendarUtils {
     for(String c : regexpression){ if(name.contains(c)) return false ;}
     return true ;
   }
-
-  public static boolean isValidEmailAddresses(String value) {
-    if (isEmpty(value))
-      return true;
-    value = StringUtils.remove(value, " ");
-    value = StringUtils.replace(value, SEMICOLON, COMMA);
+  
+  /**
+   * checks valid email addresses
+   * @since CS-5749
+   * @param email String
+   * @return true if email is valid, false if email is invalid
+   */
+  public static boolean isValidEmailAddresses(String email) {
     try {
-      InternetAddress[] iAdds = InternetAddress.parse(value, true);
-      String emailRegex = "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+\\.[A-Za-z]{2,6}";
-      for (int i = 0; i < iAdds.length; i++) {
-        if (!iAdds[i].getAddress().matches(emailRegex))
-          return false;
-      }
-    } catch (AddressException e) {
+      new javax.mail.internet.InternetAddress(email, true);
+    } catch (javax.mail.internet.AddressException e) {
       return false;
     }
     return true;
@@ -328,5 +325,4 @@ public class CalendarUtils {
     calendar.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ; 
     return  calendar;
   }
-  
 }

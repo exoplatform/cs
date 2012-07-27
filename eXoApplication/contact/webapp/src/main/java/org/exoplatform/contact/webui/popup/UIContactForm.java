@@ -236,7 +236,6 @@ public class UIContactForm extends UIFormTabPane {
         event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIContactForm.msg.invalid-email",
                                                                                        null,
                                                                                        ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(event.getRequestContext().getUIApplication().getUIPopupMessages());
         return;
       }
       contact.setEmailAddress(emails);

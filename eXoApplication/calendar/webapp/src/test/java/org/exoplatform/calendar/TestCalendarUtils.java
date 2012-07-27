@@ -47,5 +47,15 @@ public class TestCalendarUtils extends TestCase {
     values = "demo, root, exo/test  ,   platform/user ";
     assertEquals("demo,root,exo/test,platform/user", CalendarUtils.cleanValue(values));
   }
+  
+  /**
+   * Tests CalendarUtils.isValidEmailAddress
+   */
+  public void testValidEmail() {
+    assertTrue(CalendarUtils.isValidEmailAddresses("test@com"));
+    assertFalse(CalendarUtils.isValidEmailAddresses("test"));
+    assertFalse(CalendarUtils.isValidEmailAddresses("test;]["));
+    assertTrue(CalendarUtils.isValidEmailAddresses("quocviet.pfiev@gmail.com"));
+  }
 }
 
