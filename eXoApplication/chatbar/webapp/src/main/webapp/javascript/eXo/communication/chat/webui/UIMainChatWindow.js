@@ -417,24 +417,18 @@ UIMainChatWindow.prototype.loginWrapper = function() {
  */
 UIMainChatWindow.prototype.unsubscribeCometdTopics = function() {
   var Cometd = eXo.cs.CSCometd;
-  if (Cometd.isConnected()) {
+  if (!Cometd.isConnected()) {
     window.jsconsole.warn('Cometd is not connected');
+  } else {
+	  Cometd.unsubscribe('/eXo/Application/Chat/message');
+	  Cometd.unsubscribe('/eXo/Application/Chat/groupchat');
+	  Cometd.unsubscribe('/eXo/Application/Chat/presence');
+	  Cometd.unsubscribe('/eXo/Application/Chat/roster');
+	  Cometd.unsubscribe('/eXo/Application/Chat/subscription');
+	  Cometd.unsubscribe('/eXo/Application/Chat/FileExchange');
+	  Cometd.unsubscribe('/eXo/Application/Chat/fullnameExchange');
+	  Cometd.unsubscribe('/eXo/Application/Chat/notification');
   }
-  Cometd.unsubscribe('/eXo/Application/Chat/message');
-
-  Cometd.unsubscribe('/eXo/Application/Chat/groupchat');
-
-  Cometd.unsubscribe('/eXo/Application/Chat/presence');
-
-  Cometd.unsubscribe('/eXo/Application/Chat/roster');
-
-  Cometd.unsubscribe('/eXo/Application/Chat/subscription');
-
-  Cometd.unsubscribe('/eXo/Application/Chat/FileExchange');
-
-  Cometd.unsubscribe('/eXo/Application/Chat/fullnameExchange');
-  
-  Cometd.unsubscribe('/eXo/Application/Chat/notification');
 }
 
 /**
