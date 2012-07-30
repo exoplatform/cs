@@ -395,7 +395,7 @@
                     if (ContactUtils.isEmpty(email)) subEmail = "_" ;
                     else {
                       email = email.replaceAll(";", "; ") ;
-                      if (email.length() > 30) subEmail = email.substring(0, 30) + "..." ;
+                      if (email.length() > uicomponent.EMAIL_TEXT_SHOW_LENGTH) subEmail = email.substring(0, uicomponent.EMAIL_TEXT_SHOW_LENGTH) + "..." ;
                       else subEmail = email ;  
                     }
                    %>
@@ -485,7 +485,7 @@
                     if (ContactUtils.isEmpty(email)) subEmail = "_" ;
                         else {
                           email = email.replaceAll(";", "; ") ;
-                          if (email.length() > 30) subEmail = email.substring(0, 30) + "..." ;
+                          if (email.length() > uicomponent.EMAIL_TEXT_SHOW_LENGTH) subEmail = email.substring(0, uicomponent.EMAIL_TEXT_SHOW_LENGTH) + "..." ;
                           else subEmail = email ;  
                         }
                    %>
