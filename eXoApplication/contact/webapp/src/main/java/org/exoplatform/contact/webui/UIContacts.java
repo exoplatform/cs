@@ -154,6 +154,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
 
   public String                          checkedAll                         = "";
 
+  public static final int                EMAIL_TEXT_SHOW_LENGTH             = 60;
+
   public static final String             FIRST_PAGE                         = "FirstPage";
 
   public static final String             PREVIOUS_PAGE                      = "PreviousPage";
