@@ -331,8 +331,8 @@ public class ContactServiceImpl implements ContactService {
     storage_.pasteAddressBook(username, srcAddress, srcType, destAddress, destType);
   }
 
-  public List<Contact> pasteContacts(String username, String destAddress, String destType, Map<String, String> contactsMap) throws Exception {
-    return storage_.pasteContacts(username, destAddress, destType, contactsMap);
+  public List<Contact> pasteContacts(String username, String destAddress, String destType, Map<String, String> contactsMap, boolean isMove) throws Exception {
+    return storage_.pasteContacts(username, destAddress, destType, contactsMap, isMove);
   }
 
   public ContactImportExport getContactImportExports(String type) {

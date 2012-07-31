@@ -2033,7 +2033,7 @@ public class JCRDataStorage implements DataStorage {
   /**
    * {@inheritDoc}
    */
-  public List<Contact> pasteContacts(String username, String destAddress, String destType, Map<String, String> contactsMap) throws Exception {
+  public List<Contact> pasteContacts(String username, String destAddress, String destType, Map<String, String> contactsMap, boolean isMove) throws Exception {
     // CS-2389
     if (destType.equals(SHARED) && !haveEditPermissionOnAddressBook(username, destAddress)) {
       throw new AccessDeniedException();
@@ -2052,10 +2052,12 @@ public class JCRDataStorage implements DataStorage {
         if (contact == null)
           contact = getSharedContactAddressBook(username, contactId);
         // CS-2389
-        if (contact != null && !haveEditPermissionOnContact(username, contact)
-            && !haveEditPermissionOnAddressBook(username, contact.getAddressBookIds()[0])) {
-          log.error("do not have permission");
-          throw new AccessDeniedException();
+        if(isMove) {
+          if (contact != null && !haveEditPermissionOnContact(username, contact)
+              && !haveEditPermissionOnAddressBook(username, contact.getAddressBookIds()[0])) {
+            log.error("do not have permission");
+            throw new AccessDeniedException();
+          }
         }
       }
       if (contact != null)

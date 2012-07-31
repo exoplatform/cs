@@ -325,7 +325,7 @@ public class UIAddressBooks extends UIComponent {
         try {
           ContactUtils.getContactService().pasteContacts(username
                                                          , destAddress
-                                                         ,destType, uiAddressBook.getCopyContacts()) ;
+                                                         ,destType, uiAddressBook.getCopyContacts(),false) ;
         } catch (AccessDeniedException e) {
           event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIContacts.msg.noeditpermission",
                                                                                          null,
