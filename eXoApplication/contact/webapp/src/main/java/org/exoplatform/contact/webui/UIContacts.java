@@ -992,7 +992,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   
       if (sharedContacts.size() > 0) {
         try {
-          pastedContact = contactService.pasteContacts(username, addressBookId, type, copySharedContacts);   
+          pastedContact = contactService.pasteContacts(username, addressBookId, type, copySharedContacts, true);   
         } catch (AccessDeniedException e) {
           event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIContacts.msg.noeditpermission",
                                                                                          null,

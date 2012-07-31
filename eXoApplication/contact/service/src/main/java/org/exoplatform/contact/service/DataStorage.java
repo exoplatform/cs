@@ -568,10 +568,11 @@ public interface DataStorage {
    * @param destAddress
    * @param destType
    * @param contactsMap
+   * @param isMove TODO
    * @return
    * @throws Exception
    */
-  public List<Contact> pasteContacts(String username, String destAddress, String destType, Map<String, String> contactsMap) throws Exception;
+  public List<Contact> pasteContacts(String username, String destAddress, String destType, Map<String, String> contactsMap, boolean isMove) throws Exception;
 
   /**
    * @param contactHomeNode

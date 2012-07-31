@@ -178,7 +178,7 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       List<String> unMove = new ArrayList<String>();
       if (sharedContacts.size() > 0 ) {
         try {
-          pastedContact = contactService.pasteContacts(username, addressBookId, type, copySharedContacts);   
+          pastedContact = contactService.pasteContacts(username, addressBookId, type, copySharedContacts, true);   
         } catch (AccessDeniedException e) {
           event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIContacts.msg.noeditpermission",
                                                                                          null,
@@ -189,8 +189,11 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
           if(uiContacts.havePermission(contact)){
             if (uiContacts.isSharedAddress(contact)) {
               String addressId = null ;
-              for (String add : contact.getAddressBookIds())
-                if (uiContacts.getSharedGroupMap().containsKey(add)) addressId = add ;
+              for (String add : contact.getAddressBookIds()) {
+                if (uiContacts.getSharedGroupMap().containsKey(add)) {
+                  addressId = add ;
+                } 
+              }
               contactService.removeSharedContact(username, addressId, contact.getId()) ;
              } else {
               try {

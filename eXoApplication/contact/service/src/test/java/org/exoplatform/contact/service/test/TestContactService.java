@@ -772,7 +772,7 @@ public class TestContactService extends BaseContactServiceTestCase {
     // paste contact:
     Map<String, String> contacts = new LinkedHashMap<String, String>();
     contacts.put(contact3.getId(), contact3.getContactType());
-    contactService.pasteContacts(john, sharedBook.getId(), DataStorage.SHARED, contacts);
+    contactService.pasteContacts(john, sharedBook.getId(), DataStorage.SHARED, contacts,false);
     pageList = contactService.getSharedContactsByAddressBook(john, sharedAddressBook);
     pageList.setSession(datastorage.getSharedContactsHome(root).getSession());
     assertEquals(pageList.getAll().size(), 1);
