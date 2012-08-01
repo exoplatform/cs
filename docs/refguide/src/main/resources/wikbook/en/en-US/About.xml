@@ -1,0 +1,25 @@
+<preface xml:id="CSref.AboutThisGuide">
+  <title>About this guide</title>
+<abstract>
+    <para>
+    The intended readers of this guide are developers who want to develop Collaboration functions of eXo Platform 3.5.
+</para>
+<para>
+    This guide consists of the following main content:
+</para>
+<itemizedlist>
+<listitem>
+<para><emphasis role="bold"><link linkend="CSref.Application">Applications</link></emphasis>: Provides the comprehensive view about Collaboration applications of eXo Platform 3.5.</para>
+</listitem>
+<listitem>
+<para><emphasis role="bold"><link linkend="CSref.Configuration">Configurations</link></emphasis>: Provides the configuration of Collaboration components, external component plugins and other configurations.</para>
+</listitem>
+<listitem>
+<para><emphasis role="bold"><link linkend="CSref.JCRStructure">JCR structure</link></emphasis>: Provides the JCR structure of each Collaboration applications.</para>
+</listitem>
+<listitem>
+<para><emphasis role="bold"><link linkend="CSref.DeveloperReference">Developer reference</link></emphasis>: Provides the knowledge about overridden components and public REST APIs implemented in Collaboration functions of eXo Platform 3.5.</para>
+</listitem>
+</itemizedlist>
+  </abstract>
+</preface>
