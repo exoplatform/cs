@@ -127,7 +127,7 @@
       <a href="javascript:void(0);" onclick="eXo.mail.UIMailPortlet.printMessage()" class="ActionButton LightBlueStyle">$actionLabel</a>
       <% 
         String actionLabel2 = _ctx.appRes(uicomponent.getName() + ".action.Cancel") ;   
-        String link = uicomponent.event("Cancel") ;
+        String link = uicomponent.url("Cancel") ;
       %>
       <a href="$link" class="ActionButton LightBlueStyle">$actionLabel2</a>
   </div>
