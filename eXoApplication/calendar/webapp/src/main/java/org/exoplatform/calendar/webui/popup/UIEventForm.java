@@ -1884,6 +1884,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     public void execute(Event<UIUserSelector> event) throws Exception {
       UIUserSelector uiUserSelector = event.getSource();
       UIPopupContainer uiContainer = uiUserSelector.getAncestorOfType(UIPopupContainer.class) ;
+      UIPopupWindow uiPopupWindow = uiUserSelector.getParent() ;
+
       UIEventForm uiEventForm = uiContainer.getChild(UIEventForm.class);
       UIEventShareTab uiEventShareTab =  uiEventForm.getChild(UIEventShareTab.class);
       Long currentPage = uiEventShareTab.getCurrentPage();
@@ -1908,7 +1910,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       uiEventShareTab.updateCurrentPage(currentPage.intValue());
       ((UIEventAttenderTab)uiEventForm.getChildById(TAB_EVENTATTENDER)).updateParticipants(uiEventForm.getParticipantValues()) ; 
       uiEventForm.setMeetingInvitation(currentEmails.toArray(new String[currentEmails.size()])) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer);
+      //close select user popup
+      uiPopupWindow.setShow(false) ;      
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;  
     }
   }
   static  public class AddUserActionListener extends EventListener<UIEventForm> {

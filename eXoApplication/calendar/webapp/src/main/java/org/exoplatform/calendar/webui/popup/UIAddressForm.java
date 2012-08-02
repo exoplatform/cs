@@ -203,6 +203,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       UITaskForm uiTaskForm = uiContainer.findFirstComponentOfType(UITaskForm.class) ;
       UIEventForm uiEventForm = uiContainer.findFirstComponentOfType(UIEventForm.class) ;
       UIInvitationForm uiInvitationForm =uiContainer.findFirstComponentOfType(UIInvitationForm.class) ;
+      UIPopupAction chilPopup =  uiContainer.getChild(UIPopupAction.class) ;
       StringBuffer sb = new StringBuffer() ;
       if(uiTaskForm != null) {
         if(uiTaskForm.getEmailAddress() != null && uiTaskForm.getEmailAddress().trim().length() > 0) {
@@ -237,14 +238,20 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       if(uiTaskForm != null) {
         uiTaskForm.setSelectedTab(UITaskForm.TAB_TASKREMINDER) ;
         uiTaskForm.setEmailAddress(sb.toString()) ;
+        chilPopup.deActivate() ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(chilPopup) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiTaskForm) ;
       }else if(uiEventForm != null) {
         uiEventForm.setSelectedTab(UIEventForm.TAB_EVENTREMINDER) ;
         uiEventForm.setEmailAddress(sb.toString()) ;
+        chilPopup.deActivate() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(chilPopup) ;
       } else if(uiInvitationForm != null) {
         String value =  uiInvitationForm.appendValue(uiInvitationForm.getParticipantValue(),  sb.toString()) ;
         uiInvitationForm.getUIFormTextAreaInput(UIInvitationForm.FIELD_PARTICIPANT).setValue(value) ;
+        chilPopup.deActivate() ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(chilPopup) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiInvitationForm) ;
      }
     }
