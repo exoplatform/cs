@@ -714,14 +714,11 @@ UITabControl.prototype.createNewMsgNode = function(buddyId, msgObj) {
  var chatDateBoxNode = DOMUtil.findFirstDescendantByClass(messageNode, 'div', this.CSS_CLASS.chatDate);
   if (this.updatingHistoryMessage ||
       msgObj['dateSend']) {
-    //var chatTimeBoxNode = DOMUtil.findAncestorByClass(chatTimeNode, this.CSS_CLASS.chatTime);
     if (chatTimeBoxNode) {
       chatTimeBoxNode.className += ' ' + this.CSS_CLASS.chatTimeHistory;
-      //chatTimeNode = DOMUtil.findFirstDescendantByClass(messageNode, 'div', this.CSS_CLASS.chatTimeCenter);
     }
 		if (chatDateBoxNode) {
       chatDateBoxNode.className += ' ' + this.CSS_CLASS.chatTimeHistory;
-      //chatTimeNode = DOMUtil.findFirstDescendantByClass(messageNode, 'div', this.CSS_CLASS.chatTimeCenter);
     }
   }
   var dateTimeStamp = msgObj['dateSend'];
@@ -729,26 +726,17 @@ UITabControl.prototype.createNewMsgNode = function(buddyId, msgObj) {
   var timeStamp;
   if (!dateTimeStamp) {
     dateTimeStamp = new Date();
-    //dateTimeStamp = dateTimeStamp.getHours() + ':' + dateTimeStamp.getMinutes() + ':' + dateTimeStamp.getSeconds();
     dateStamp = dateTimeStamp.format('dd/mm/yyyy');
     timeStamp = dateTimeStamp.format('HH:MM:ss');
     
    
   } else {
     window.jsconsole.warn('dateTimeStamp before process: ' + dateTimeStamp);
-    /*dateTimeStamp = dateTimeStamp.replace('ICT', ''); // Remove ICT if exist
-    window.jsconsole.warn('dateTimeStamp after process: ' + dateTimeStamp);
-    var regexObj = /GMT(\+|\-)?\d{2}:\d{2}/g;
-    dateTimeStamp = dateTimeStamp.replace(regexObj, function(e) {return m.replace(/:\d{2}/, '');});*/
     var time = dateTimeStamp;
     dateTimeStamp = new Date();
     dateTimeStamp.setTime(time);
     dateStamp = dateTimeStamp.format('dd/mm/yyyy');
     timeStamp = dateTimeStamp.format('HH:MM:ss');
-    //dateTimeStamp = dateTimeStamp.getDate() + '/' + (dateTimeStamp.getMonth() + 1) + '/' + dateTimeStamp.getFullYear() +
-                //' - ' + 
-                //dateTimeStamp.getHours() + ':' + (dateTimeStamp.getMinutes() + 1) + ':' + dateTimeStamp.getSeconds();
-  
   }
   chatTimeBoxNode.innerHTML = dateStamp;
   chatDateBoxNode.innerHTML = timeStamp;    
@@ -1757,31 +1745,6 @@ UIChatWindow.prototype.getMessageHistory = function(event, timeNo) {
   this.UIMainChatWindow.jabberGetMessageHistory(targetPerson, startDate, endDate, activeTabControl.isGroupChat);
   historyStatus = timeNo;
   activeTabControl.tabPaneNode.historyStatus = historyStatus;
-  /*
-  // Remove link who clicked
-  event = event || window.event;
-  var srcElement = event.srcElement || event.target;
-  if (srcElement.className.indexOf('LinkHistory') != -1) {
-    var DOMUtil = eXo.core.DOMUtil;
-    var linkName = srcElement.textContent || srcElement.innerText;
-    var messageHistoryHint = DOMUtil.findAncestorByClass(srcElement, 'HistoryList');
-    linkName = linkName.toLowerCase();
-    // Remove separator if exist
-    var lineSeparator = DOMUtil.findPreviousElementByTagName(srcElement, 'div');
-    if (lineSeparator &&
-        lineSeparator.className &&
-        lineSeparator.className.indexOf('Line') != -1) {
-      DOMUtil.removeElement(lineSeparator);
-    }
-
-    DOMUtil.removeElement(srcElement);
-    // Remove message history hint if nothing remain
-    if (!DOMUtil.findFirstDescendantByClass(messageHistoryHint, 'a', 'LinkHistory') ||
-        linkName.indexOf('beginning') != -1) {
-      DOMUtil.removeElement(messageHistoryHint);
-    }
-  }
-  */
 };
 
 /**
