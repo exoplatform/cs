@@ -20,6 +20,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -58,6 +59,8 @@ public class HistoryUtils {
     Document document;
     Date delayedDate = null;
     DateFormat delayedFormatter = new SimpleDateFormat(XMPP_DELAY_DATETIME_FORMAT);
+    TimeZone tz = TimeZone.getTimeZone("GMT-00:00");
+    delayedFormatter.setTimeZone(tz);
     try {
       String xmlns = message.getExtension("jabber:x:delay").toXML();
       document = DocumentHelper.parseText(xmlns);
