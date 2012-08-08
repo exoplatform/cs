@@ -21,39 +21,39 @@
 
 <messagebundle>
 	<msg name="title">
-  	My Tasks
+  	مهامّي
   </msg>
 	<msg name="baseurl">
-  	Base url
+  	عنوان الموارد الموحد (URL) الأساسي
   </msg>
 	<msg name="subscribeurl">
-  	Subscription url
+  	عنوان الموارد الموحد (URL) الخاص بالإشتراك
   </msg>
 	<msg name="limit">
-  	Number of items is displayed
+  	عدد العناصر المعروضة
   </msg>
 	<msg name="format">
-  	Date time format
+  	صيغة التاريخ والتوقيت
   </msg>  
   <msg name="showall">
-  	Show all
+  	عرض الجميع
   </msg>
 	<msg name="noevent">
-  	No tasks for today
+  	لا أحداث هذا اليوم
   </msg>
 	<msg name="calendars">
-  	Calendar
+  	الرزنامة
   </msg>
 	<msg name="setting">
-  	Setting
+  	الإعدادات
   </msg>
 	<msg name="save">
-  	Save
+  	حفظ
   </msg>
 	<msg name="cancel">
-  	Cancel
+  	الـغـاء
   </msg>
 	<msg name="confirm">
-  	Are you sure this task completed?
+  	هل أنت متأكد من أن هذه المهمة قد أنجزت؟
   </msg>
 </messagebundle>

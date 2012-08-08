@@ -21,27 +21,27 @@
 
 <messagebundle>
 	<msg name="title">
-  	Upcoming Events
+  	الأحداث المقبلة
   </msg>
 	<msg name="baseurl">
-  	Base url
+  	عنوان الموارد الموحد (URL) الأساسي
   </msg>
 	<msg name="subscribeurl">
-  	Subscription url
+  	عنوان الموارد الموحد (URL) الخاص بالإشتراك
   </msg>
 	<msg name="limit">
-  	Number of items is displayed
+  	عدد العناصر المعروضة
   </msg>
 	<msg name="format">
-  	Date time format
+  	صيغة التاريخ والتوقيت
   </msg>
   <msg name="showall">
-  	Show all
+  	عرض الجميع
   </msg>
 	<msg name="noevent">
-  	No event on today
+  	لا أحداث هذا اليوم
   </msg>
 	<msg name="back">
-  	Back
+  	العودة
   </msg>
 </messagebundle>
