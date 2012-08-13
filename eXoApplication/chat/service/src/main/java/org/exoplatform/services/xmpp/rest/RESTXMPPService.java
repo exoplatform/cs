@@ -538,7 +538,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
 
     ContactBean inviteeProfile = new ContactBean();
     inviteeProfile.setUser(invitee);
-    UserInfo inviteeInfo = organization.getUserInfo(invitee);
+    UserInfo inviteeInfo = organization.getUserInfoFromRest(invitee);
     inviteeProfile.setFullName(inviteeInfo.getFirstName() + " " + inviteeInfo.getLastName());
     inviteeBean.setMyProfile(inviteeProfile);
     // 09/06/2010 add end
@@ -1537,7 +1537,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
 
       ContactBean myProfile = new ContactBean();
       myProfile.setUser(username);
-      UserInfo myInfo = organization.getUserInfo(username);
+      UserInfo myInfo = organization.getUserInfoFromRest(username);
       myProfile.setFullName(myInfo.getFirstName() + " " + myInfo.getLastName());
       initInfoBean.setMyProfile(myProfile);
 
