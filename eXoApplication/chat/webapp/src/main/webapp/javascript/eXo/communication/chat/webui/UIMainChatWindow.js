@@ -1277,12 +1277,18 @@ UIMainChatWindow.prototype.setChangeStatusMenuVisible = function(nodeObj, visibl
     menuNode.style.display = display;
   }
   if (display == 'block') {
-    if (eXo.core.Browser.browserType == 'ie') {
-      menuNode.parentNode.style.position = 'relative';
-    }
-    menuNode.style.top = nodeObj.offsetTop + nodeObj.offsetHeight + 'px';
-    menuNode.style.left = nodeObj.offsetLeft + 'px';
-  }
+	if (eXo.core.Browser.browserType == 'ie') {
+	  menuNode.parentNode.style.position = 'relative';
+	  menuNode.style.width = 'auto';
+	  menuNode.style.whiteSpace = 'nowrap';
+	  menuNode.style.textAlign = 'left';
+	  menuNode.style.top = nodeObj.offsetHeight + 'px';
+	  menuNode.style.left = 0 + 'px';
+	} else {
+	  menuNode.style.top = nodeObj.offsetTop + nodeObj.offsetHeight + 'px';
+	  menuNode.style.left = nodeObj.offsetLeft + 'px';
+      }
+  }	
   if (display == 'block') {
     AdvancedDOMEvent.addEventListener(document, 'click', this.setChangeStatusMenuVisibleWrapper, false);
   } else {
