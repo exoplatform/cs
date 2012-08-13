@@ -1052,16 +1052,8 @@ UIMainChatWindow.prototype.matchPresenceStatusIcon_  = function(presenceStatus){
 		if(presenceStatus == this.OFFLINE_STATUS) 		 presenceStatusIcon = this.OFFLINEICON;
 	}
 	
-	if(presenceStatusIcon != '') document.getElementById('id-state-chat').className = 'IconHolder ' + presenceStatusIcon;
 };
 
-UIMainChatWindow.prototype.getStatus_ = function(){
-	return document.getElementById('id-state-chat').getAttribute('title');
-};
-
-UIMainChatWindow.prototype.setStatus_ = function(st){
-	document.getElementById('id-state-chat').setAttribute('title', st);
-};
 /** getting previous status
  * @param {String} userName**/
 
@@ -1170,7 +1162,6 @@ UIMainChatWindow.prototype.preChangeStatus = function(status, skipCheck, event) 
     default:
       break;
   }
-  this.setStatus_(status);
 };
 
 /**
