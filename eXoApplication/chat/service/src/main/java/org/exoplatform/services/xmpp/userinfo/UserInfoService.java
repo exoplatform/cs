@@ -38,6 +38,13 @@ public interface UserInfoService {
   UserInfo getUserInfo(String userID);
 
   /**
+   * gets user info called in Rest service
+   * @since CS-5764
+   * @param userID the user id 
+   * @return the information about user
+   */
+  UserInfo getUserInfoFromRest(String userID);
+  /**
    * 
    * @param userID the user id
    * @return the password of user

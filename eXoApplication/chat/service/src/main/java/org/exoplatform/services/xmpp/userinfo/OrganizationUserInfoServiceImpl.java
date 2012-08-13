@@ -87,7 +87,28 @@ public class OrganizationUserInfoServiceImpl implements UserInfoService {
     }
     return null;
   }
-
+  
+  /**
+   * {@inheritDoc}
+   */
+  public UserInfo getUserInfoFromRest(String userID) {
+    try {
+      User user = organizationService.getUserHandler().findUserByName(userID);
+      UserInfo userInfo = new UserInfo();
+      userInfo.setUserName(user.getUserName());
+      userInfo.setFirstName(user.getFirstName());
+      userInfo.setLastName(user.getLastName());
+      userInfo.setEMail(user.getEmail());
+      userInfo.setOrganization(user.getOrganizationId());
+      // userInfo.setUnit("office"); //temporary
+      return userInfo;
+    } catch (Exception e) {
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to get the user info from organizationService", e);
+      }
+    }
+    return null;
+  }
   /**
    *  {@inheritDoc}}
    */
