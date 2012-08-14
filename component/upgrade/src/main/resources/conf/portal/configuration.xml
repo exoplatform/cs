@@ -5,7 +5,7 @@
 
   <external-component-plugins>
     <target-component>org.exoplatform.commons.upgrade.UpgradeProductService</target-component>
-    <component-plugin>
+    <component-plugin profiles="collaboration,all,default">
       <name>UpgradeCalendarPlugin</name>
       <set-method>addUpgradePlugin</set-method>
       <type>org.exoplatform.cs.upgrade.UpgradeCalendarPlugin</type>
