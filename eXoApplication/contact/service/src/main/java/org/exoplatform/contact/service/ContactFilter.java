@@ -70,6 +70,8 @@ public class ContactFilter {
   private String   relate                 = " and ";
 
   private int      limit                  = 0;
+  
+  private boolean isSortByLastName;
 
   public ContactFilter() {
     isAscending = true;
@@ -431,14 +433,32 @@ public class ContactFilter {
 
     if (!Utils.isEmpty(orderBy)) {
       stringBuffer.append(" order by @exo:").append(orderBy);
-      if (isAscending)
+      if ("firstName".equals(orderBy) || "lastName".equals(orderBy)) {
         stringBuffer.append(" ascending");
-      else
-        stringBuffer.append(" descending");
+      } else {
+        if (isAscending)
+          stringBuffer.append(" ascending");
+        else
+          stringBuffer.append(" descending");
+      }
     }
 
     if (hasConjuntion)
       queryString.append(stringBuffer);
     return queryString.toString();
+  }
+
+  /**
+   * @return the isSortByLastName
+   */
+  public boolean isSortByLastName() {
+    return isSortByLastName;
+  }
+
+  /**
+   * @param isSortByLastName the isSortByLastName to set
+   */
+  public void setSortByLastName(boolean isSortByLastName) {
+    this.isSortByLastName = isSortByLastName;
   }
 }

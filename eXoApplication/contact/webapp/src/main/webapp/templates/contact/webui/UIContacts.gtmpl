@@ -185,20 +185,16 @@
                   
                   <%
                     String fullName = uicomponent.fullName ;
-                    String sortedByName = uicomponent.event("Sort",fullName);
-                    String classArrowName = "";
-                    if (uicomponent.isNameSorted())  classArrowName = "UpArrow1Icon";
+                    String lastName = "lastName";
+                    String firstName = "firstName";        
+                    String sortedByName = "";
+                    if (uicomponent.isSortByLastName()) {
+                    	sortedByName = uicomponent.event("Sort",lastName);
+                    } else {
+                    	sortedByName = uicomponent.event("Sort",firstName);
+                    }            
+                    String classArrowName = "DownArrow1Icon";
                     group = uicomponent.getSelectedGroup() ;
-                    if (uicomponent.getSortedBy().equals(fullName)) {
-                      if (!ContactUtils.isEmpty(group)) {
-                        if (uicomponent.isAscending()) classArrowName = "UpArrow1Icon";
-                        else classArrowName = "DownArrow1Icon"
-                      } else {
-                        if (uicomponent.isAscName()) classArrowName = "UpArrow1Icon";
-                        else classArrowName = "DownArrow1Icon"
-                      }
-                    
-                    }
                   %>
                   <a href="$sortedByName">
                   <div style="width: 90%; cursor: pointer;" class="$classArrowName" title="<%=_ctx.appRes(uicomponent.getName() + ".label.sortByName")%>"> <%=_ctx.appRes(uicomponent.getName() + ".label.name")%> </div>

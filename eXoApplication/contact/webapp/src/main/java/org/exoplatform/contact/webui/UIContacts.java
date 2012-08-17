@@ -174,6 +174,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
 
   private LinkedHashMap<String, Contact> beforePrintMap                     = new LinkedHashMap<String, Contact>();
   
+  private boolean                        isSortByLastName_                = true;
+  
   public UIContacts() throws Exception {
   }
 
@@ -402,6 +404,14 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     viewListBeforePrint = isList;
   }
 
+  public boolean isSortByLastName() {
+    return isSortByLastName_;
+  }
+
+  public void setSortByLastName(boolean isSortByLastName) {
+    this.isSortByLastName_ = isSortByLastName;
+  }
+  
   public void setAscending(boolean isAsc) {
     isAscending_ = isAsc;
   }
@@ -1433,6 +1443,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource();
       String sortedBy = event.getRequestContext().getRequestParameter(OBJECTID);
+      uiContacts.setSortByLastName(!uiContacts.isSortByLastName_);
       uiContacts.setAscending(!uiContacts.isAscending_);
       uiContacts.setSortedBy(sortedBy);
       uiContacts.setDefaultNameSorted(false);
@@ -1442,6 +1453,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       if (!ContactUtils.isEmpty(group)) {
         ContactFilter filter = new ContactFilter();
         filter.setViewQuery(uiContacts.getViewQuery());
+        filter.setSortByLastName(uiContacts.isSortByLastName_);
         filter.setAscending(uiContacts.isAscending_);
         filter.setOrderBy(sortedBy);
         filter.setCategories(new String[] { group });
