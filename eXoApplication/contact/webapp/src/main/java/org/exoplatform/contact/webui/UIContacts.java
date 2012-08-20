@@ -174,6 +174,9 @@ public class UIContacts extends UIForm implements UIPopupComponent {
 
   private LinkedHashMap<String, Contact> beforePrintMap                     = new LinkedHashMap<String, Contact>();
   
+  //08/20/12-BinhNV: create new boolean isSortByLastName_ for check search condition of user
+  //isSortByLastName_ = true => sort by last name
+  //isSortByLastName_ = false => sort by first name
   private boolean                        isSortByLastName_                = true;
   
   public UIContacts() throws Exception {
@@ -1443,6 +1446,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource();
       String sortedBy = event.getRequestContext().getRequestParameter(OBJECTID);
+      //08/20/12-BinhNV:invert isSortByLastName_ value for next use
+      //isSortByLastName_ value will be check in UIContacts.gtmpl in next search
       uiContacts.setSortByLastName(!uiContacts.isSortByLastName_);
       uiContacts.setAscending(!uiContacts.isAscending_);
       uiContacts.setSortedBy(sortedBy);
@@ -1453,7 +1458,6 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       if (!ContactUtils.isEmpty(group)) {
         ContactFilter filter = new ContactFilter();
         filter.setViewQuery(uiContacts.getViewQuery());
-        filter.setSortByLastName(uiContacts.isSortByLastName_);
         filter.setAscending(uiContacts.isAscending_);
         filter.setOrderBy(sortedBy);
         filter.setCategories(new String[] { group });

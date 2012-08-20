@@ -71,8 +71,6 @@ public class ContactFilter {
 
   private int      limit                  = 0;
   
-  private boolean isSortByLastName;
-
   public ContactFilter() {
     isAscending = true;
   }
@@ -448,17 +446,4 @@ public class ContactFilter {
     return queryString.toString();
   }
 
-  /**
-   * @return the isSortByLastName
-   */
-  public boolean isSortByLastName() {
-    return isSortByLastName;
-  }
-
-  /**
-   * @param isSortByLastName the isSortByLastName to set
-   */
-  public void setSortByLastName(boolean isSortByLastName) {
-    this.isSortByLastName = isSortByLastName;
-  }
 }

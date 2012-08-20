@@ -185,16 +185,10 @@
                   
                   <%
                     String fullName = uicomponent.fullName ;
-                    String lastName = "lastName";
-                    String firstName = "firstName";        
-                    String sortedByName = "";
-                    if (uicomponent.isSortByLastName()) {
-                    	sortedByName = uicomponent.event("Sort",lastName);
-                    } else {
-                    	sortedByName = uicomponent.event("Sort",firstName);
-                    }            
+                    String typeOfSort = uicomponent.isSortByLastName() ? "lastName" : "firstName";
+                    String sortedByName = uicomponent.event("Sort", typeOfSort);
                     String classArrowName = "DownArrow1Icon";
-                    group = uicomponent.getSelectedGroup() ;
+                    group = uicomponent.getSelectedGroup();
                   %>
                   <a href="$sortedByName">
                   <div style="width: 90%; cursor: pointer;" class="$classArrowName" title="<%=_ctx.appRes(uicomponent.getName() + ".label.sortByName")%>"> <%=_ctx.appRes(uicomponent.getName() + ".label.name")%> </div>
