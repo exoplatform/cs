@@ -177,7 +177,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   //08/20/12-BinhNV: create new boolean isSortByLastName_ for check search condition of user
   //isSortByLastName_ = true => sort by last name
   //isSortByLastName_ = false => sort by first name
-  private boolean                        isSortByLastName_                = true;
+  private boolean                        isSortedByLastName_                = true;
   
   public UIContacts() throws Exception {
   }
@@ -407,12 +407,12 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     viewListBeforePrint = isList;
   }
 
-  public boolean isSortByLastName() {
-    return isSortByLastName_;
+  public boolean isSortedByLastName() {
+    return isSortedByLastName_;
   }
 
-  public void setSortByLastName(boolean isSortByLastName) {
-    this.isSortByLastName_ = isSortByLastName;
+  public void setSortedByLastName(boolean isSortedByLastName) {
+    this.isSortedByLastName_ = isSortedByLastName;
   }
   
   public void setAscending(boolean isAsc) {
@@ -1448,7 +1448,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       String sortedBy = event.getRequestContext().getRequestParameter(OBJECTID);
       //08/20/12-BinhNV:invert isSortByLastName_ value for next use
       //isSortByLastName_ value will be check in UIContacts.gtmpl in next search
-      uiContacts.setSortByLastName(!uiContacts.isSortByLastName_);
+      uiContacts.setSortedByLastName(!uiContacts.isSortedByLastName_);
       uiContacts.setAscending(!uiContacts.isAscending_);
       uiContacts.setSortedBy(sortedBy);
       uiContacts.setDefaultNameSorted(false);

@@ -185,7 +185,7 @@
                   
                   <%
                     String fullName = uicomponent.fullName ;
-                    String typeOfSort = uicomponent.isSortByLastName() ? "lastName" : "firstName";
+                    String typeOfSort = uicomponent.isSortedByLastName() ? "lastName" : "firstName";
                     String sortedByName = uicomponent.event("Sort", typeOfSort);
                     String classArrowName = "DownArrow1Icon";
                     group = uicomponent.getSelectedGroup();
