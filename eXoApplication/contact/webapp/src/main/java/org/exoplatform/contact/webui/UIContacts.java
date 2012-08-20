@@ -133,6 +133,10 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   public static String                   emailAddress                       = "emailAddress".intern();
 
   public static String                   jobTitle                           = "jobTitle".intern();
+  
+  public static String                   firstName                          = "firstName".intern();
+  
+  public static String                   lastName                           = "lastName".intern();
 
   private boolean                        isSearchResult                     = false;
 
@@ -453,7 +457,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   public boolean isAscName() {
     return FullNameComparator.isAsc;
   }
-
+  
   public boolean isAscEmail() {
     return EmailComparator.isAsc;
   }
@@ -1488,6 +1492,10 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           } else if (uiContacts.getSortedBy().equals(UIContacts.jobTitle)) {
             JobTitleComparator.isAsc = (!JobTitleComparator.isAsc);
             Collections.sort(contacts, new JobTitleComparator());
+          } else if (uiContacts.getSortedBy().equals(UIContacts.firstName)) {
+            Collections.sort(contacts, new FirstNameComparator());
+          } else if (uiContacts.getSortedBy().equals(UIContacts.lastName)) {
+            Collections.sort(contacts, new LastNameComparator());
           }
           pageList.setList(contacts);
         }
@@ -1507,6 +1515,32 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         return name1.compareTo(name2);
       else
         return name2.compareTo(name1);
+    }
+  }
+  
+  /**
+   * 
+   * @author binhnv
+   * Compare with last name
+   */
+  static public class LastNameComparator implements Comparator {
+    public int compare(Object o1, Object o2) throws ClassCastException {
+      String lastName1 = ((Contact) o1).getLastName();
+      String lastName2 = ((Contact) o2).getLastName();
+      return lastName1.compareTo(lastName2);
+    }
+  }
+  
+  /**
+   * 
+   * @author binhnv
+   * Compare with first name
+   */
+  static public class FirstNameComparator implements Comparator {
+    public int compare(Object o1, Object o2) throws ClassCastException {
+      String firstName1 = ((Contact) o1).getFirstName();
+      String firstName2 = ((Contact) o2).getFirstName();
+      return firstName1.compareTo(firstName2);
     }
   }
 
