@@ -184,14 +184,14 @@
                 <th style="width: 20%;" class="text">
                   
                   <%
-                    String fullName = uicomponent.fullName ;
                     String typeOfSort = uicomponent.isSortedByLastName() ? "lastName" : "firstName";
                     String sortedByName = uicomponent.event("Sort", typeOfSort);
                     String classArrowName = "DownArrow1Icon";
                     group = uicomponent.getSelectedGroup();
+                    String titleSort = uicomponent.isSortedByLastName() ? ".label.sortByLastName" : ".label.sortByFirstName";
                   %>
                   <a href="$sortedByName">
-                  <div style="width: 90%; cursor: pointer;" class="$classArrowName" title="<%=_ctx.appRes(uicomponent.getName() + ".label.sortByName")%>"> <%=_ctx.appRes(uicomponent.getName() + ".label.name")%> </div>
+                  <div style="width: 90%; cursor: pointer;" class="$classArrowName" title="<%=_ctx.appRes(uicomponent.getName() + titleSort)%>"> <%=_ctx.appRes(uicomponent.getName() + ".label.name")%> </div>
                   </a>
                 </th>
                  <th class="text">
@@ -374,8 +374,16 @@
                     if (uicomponent.isShareForOther(contact)) icon = "SharedContact";
                   %>
                   <div class="State $icon">
+                    <%
+                    	String displayName = "";
+                      	if (!uicomponent.isSortedByLastName()) {
+                      		displayName = contact.getLastName() + " " + contact.getFirstName();
+                      	} else {
+                      		displayName = contact.getFirstName() + " " + contact.getLastName();
+                      	}
+                    %>
                     <a href="$actionLink">
-                      <%=(ContactUtils.isEmpty(contact.getFullName()) ? "_" : ContactUtils.encodeHTML(contact.getFullName()))%>
+                      <%=(displayName)%>
                     </a>
                   </div>
                 </td>
@@ -464,8 +472,16 @@
                   %>
                 
                   <div class="State $icon">
+                    <%
+                    	String displayName = "";
+                      	if (!uicomponent.isSortedByLastName()) {
+                      		displayName = contact.getLastName() + " " + contact.getFirstName();
+                      	} else {
+                      		displayName = contact.getFirstName() + " " + contact.getLastName();
+                      	}
+                    %>
                     <a href="$actionLink">
-                      <%=(ContactUtils.isEmpty(contact.getFullName()) ? "_" : ContactUtils.encodeHTML(contact.getFullName()))%>
+                      <%=(displayName)%>
                     </a>
                   </div>
                 </td>

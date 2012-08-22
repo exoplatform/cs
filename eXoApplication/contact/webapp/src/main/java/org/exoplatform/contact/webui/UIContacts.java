@@ -1450,11 +1450,15 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource();
       String sortedBy = event.getRequestContext().getRequestParameter(OBJECTID);
-      //08/20/12-BinhNV:invert isSortByLastName_ value for next use
-      //isSortByLastName_ value will be check in UIContacts.gtmpl in next search
-      uiContacts.setSortedByLastName(!uiContacts.isSortedByLastName_);
       uiContacts.setAscending(!uiContacts.isAscending_);
       uiContacts.setSortedBy(sortedBy);
+      //08/20/12-BinhNV:invert isSortByLastName_ value for next use
+      //isSortByLastName_ value will be check in UIContacts.gtmpl in next search
+      if (uiContacts.getSortedBy().equals(UIContacts.firstName) || uiContacts.getSortedBy().equals(UIContacts.lastName)) {
+        uiContacts.setSortedByLastName(!uiContacts.isSortedByLastName_);
+      } else {
+        uiContacts.setSortedByLastName(uiContacts.isSortedByLastName_);
+      }
       uiContacts.setDefaultNameSorted(false);
 
       JCRPageList pageList = null;

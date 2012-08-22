@@ -95,6 +95,7 @@ import org.exoplatform.webui.event.EventListener;
     
 public class UIAddressBooks extends UIComponent {
   private static final Log log = ExoLogger.getExoLogger(UIAddressBooks.class);
+  private boolean                        isSortedByLastName_                = false;
   
   private String selectedGroup = null;
   private Map<String, String> privateAddressBookMap_ = new LinkedHashMap<String, String>() ;
@@ -637,6 +638,7 @@ public class UIAddressBooks extends UIComponent {
     uiContacts.setDisplaySearchResult(false);
     uiContacts.setDefaultNameSorted(true);
     uiContacts.setSelectSharedContacts(false);
+    uiContacts.setSortedByLastName(false);
     context.addUIComponentToUpdateByAjax(uiWorkingContainer);
   }
 
@@ -658,12 +660,13 @@ public class UIAddressBooks extends UIComponent {
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class);
       uiContacts.setContacts(ContactUtils.getContactService()
           .getPublicContactsByAddressBook(groupId));
-      uiContacts.setSortedBy(UIContacts.fullName) ;
+      uiContacts.setSortedBy(UIContacts.lastName) ;
       uiContacts.setSelectedGroup(groupId);
       uiContacts.setSelectedTag(null);
       uiContacts.setDisplaySearchResult(false) ;
       uiContacts.setDefaultNameSorted(true) ;
       uiContacts.setSelectSharedContacts(false) ;
+      uiContacts.setSortedByLastName(false);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer);
     }
   }
@@ -682,6 +685,7 @@ public class UIAddressBooks extends UIComponent {
       uiContacts.setDisplaySearchResult(false) ;
       uiContacts.setDefaultNameSorted(true) ;
       uiContacts.setSelectSharedContacts(true) ;
+      uiContacts.setSortedByLastName(false);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer);
     }
   }
@@ -742,6 +746,20 @@ public class UIAddressBooks extends UIComponent {
       uiContacts.setContactMap(contactMap) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(workingContainer) ;
     }
+  }
+
+  /**
+   * @return the isSortedByLastName_
+   */
+  public boolean isSortedByLastName() {
+    return isSortedByLastName_;
+  }
+
+  /**
+   * @param isSortedByLastName_ the isSortedByLastName_ to set
+   */
+  public void setSortedByLastName(boolean isSortedByLastName) {
+    this.isSortedByLastName_ = isSortedByLastName;
   }
     
 }
