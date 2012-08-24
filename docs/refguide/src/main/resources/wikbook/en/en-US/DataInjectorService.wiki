@@ -1,7 +1,37 @@
-Data injectors are used to create data for performance test.
-This part will describe which data injectors are implemented in eXo Collaboration and how to use them.
+h1. Data Injectors {anchor:id=CSref.Configuration.DataInjectorService}
+{docbook}
+<highlights>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="CSref.Configuration.DataInjectorService.ContactDataInjector">ContactDataInjector</link>
+          </emphasis> </para>
+          <para>Manages data injection in the Address Book application.</para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="CSref.Configuration.DataInjectorService.CalendarDataInjector">CalendarDataInjector</link>
+          </emphasis> </para>
+          <para>Manages data injection in the Calendar application.</para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="CSref.Configuration.DataInjectorService.MailDataInjector">MailDataInjector</link>
+          </emphasis> </para>
+          <para>Manages data injection in the Mail application.</para>
+      </listitem>
+    </itemizedlist>
+	</highlights>
+{docbook}
 
-In eXo Collaboration, data injectors are implemented as plug-ins attached to the _org.exoplatform.services.bench.DataInjectorService_ service and handled via RESTful requests. This service is normally registered to the portal container as a general component.
+
+Data injectors are used to create data for performance test.
+This part will describe which data injectors are implemented in Collaboration and how to use them.
+
+In Collaboration, data injectors are implemented as plug-ins attached to the _org.exoplatform.services.bench.DataInjectorService_ service and handled via RESTful requests. This service is normally registered to the portal container as a general component.
 
 To use this service, add the following dependency to the Classpath of the server:
 
@@ -21,7 +51,7 @@ To activate the _DataInjectorService_ component, you need to register it to a po
 
 When you want to inject data for a specific product, you must implement a class which extends "org.exoplatform.services.bench.DataInjector" and register it to the _DataInjectorService_ component as a plug\-in.
 
-In eXo Collaboration, there are three plug-ins attached to the _DataInjectorService_ component:
+In Collaboration, there are three plug-ins attached to the _DataInjectorService_ component:
 
 * ContactDataInjector
 
@@ -29,8 +59,19 @@ In eXo Collaboration, there are three plug-ins attached to the _DataInjectorServ
 
 * MailDataInjector
 
+{docbook}
+<para>
+<prompt>
+   <emphasis role="bold">See also</emphasis>
+</prompt>
+</para>
+{docbook}
 
-h1. ContactDataInjector    {anchor:id=CSref.Configuration.DataInjectorService.ContactDataInjector}
+* [Components|#CSref.Configuration.ComponentsineXoCollaborationConfiguration]
+* [External Component Plugins|#CSref.Configuration.ExternalComponentPlugins]
+* [eXo Chatserver Configuration|#CSref.Configuration.eXoChatserverConfiguration]
+
+h2. ContactDataInjector    {anchor:id=CSref.Configuration.DataInjectorService.ContactDataInjectorRoleNotInToc}
 The _ContactDataInjector_ plug\-in is used to manage data injection of the Address Book application.
 
 To use this plug-in, do as follows:
@@ -85,7 +126,7 @@ In which:
 * *{{{{rest}}}}*: The name of eXo REST service.
 
 
-h1. CalendarDataInjector    {anchor:id=CSref.Configuration.DataInjectorService.CalendarDataInjector}
+h2. CalendarDataInjector    {anchor:id=CSref.Configuration.DataInjectorService.CalendarDataInjectorRoleNotInToc}
 The _CalendarDataInjector_ plug\-in is used to manage data injection in the Calendar application.
 
 To use this plug\-in, do as follows:
@@ -152,11 +193,11 @@ In which:
 http://{domain}/{rest}/bench/inject/CalendarDataInjector?mCt=5&mEcat=10&mCal=10&mEv=20&mTa=20&typeOfInject=private
 {code}
 
-h1. MailDataInjector    {anchor:id=CSref.Configuration.DataInjectorService.MailDataInjector}
+h2. MailDataInjector    {anchor:id=CSref.Configuration.DataInjectorService.MailDataInjectorRoleNotInToc}
 
 The _MailDataInjector_ is used to manage data injection in the Mail application.
 
-Because of the quite complicated architecture of the Mail application in eXo Collaboration, the injector uses a simple mail server (a mock server) to simulate the way a mail server works. This will create real mail data without mocking effort from the injector and create a reliable testing environment.
+Because of the quite complicated architecture of the Mail application in Collaboration, the injector uses a simple mail server (a mock server) to simulate the way a mail server works. This will create real mail data without mocking effort from the injector and create a reliable testing environment.
 
 To use the injector, do as follows:
 
