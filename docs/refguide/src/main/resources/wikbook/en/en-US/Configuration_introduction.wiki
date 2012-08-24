@@ -1,24 +1,35 @@
 {docbook}
 <abstract>
- <para>This chapter describes about configurations used in eXo Collaboration. It consists of the following main sections:</para>
+ <para>This chapter describes about configurations used in Collaboration. It consists of the following main sections:</para>
     <itemizedlist>
       <listitem>
         <para>
           <emphasis role="bold">
-            <link linkend="CSref.Configuration.ComponentsineXoCollaborationConfiguration">Components in eXo Collaboration Configuration</link>
+            <link linkend="CSref.Configuration.ComponentsineXoCollaborationConfiguration">Components</link>
           </emphasis> </para>
+          <para>Description of the services which provide low-level functionality for UI components of Collaboration. </para>
       </listitem>
       <listitem>
         <para>
           <emphasis role="bold">
             <link linkend="CSref.Configuration.ExternalComponentPlugins">External Component Plugins</link>
           </emphasis> </para>
+          <para>Description of the main component plugins used in Collaboration. Each part supplies an example
+           configuration with the explanation about ini-params so you can know how to use these plugins. </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="CSref.Configuration.eXoChatserverConfiguration">Data Injectors</link>
+          </emphasis> </para>
+          <para>Description of data injectors used to create data for performance test in Collaboration and instruction on how to use them.</para>
       </listitem>
       <listitem>
         <para>
           <emphasis role="bold">
             <link linkend="CSref.Configuration.eXoChatserverConfiguration">eXo Chatserver Configuration</link>
           </emphasis> </para>
+          <para>Description of the eXo Chatserver configuration in Collaboration. </para>
       </listitem>
     </itemizedlist>
 	</abstract>

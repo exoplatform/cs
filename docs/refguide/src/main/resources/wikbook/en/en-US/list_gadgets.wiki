@@ -1,6 +1,43 @@
-eXo Collaboration consists of three gadgets: eventslist, taskslist and messageslist. They are packaged in the _csResources.war_ file.
+{docbook}
+<highlights>
+        <itemizedlist>
+          <listitem>
+            <para>
+              <link linkend="CSref.Gadgets.Evenslist">Eventslist</link>
+            </para>
+            <para>Lists the upcoming events with the user-configurable number of items.</para>
+          </listitem>
+          <listitem>
+            <para>
+              <link linkend="CSref.Gadgets.Taskslist">Taskslist</link>
+            </para>
+            <para>Lists the  upcoming tasks with the user-configurable number of items.</para>
+          </listitem>
+		      <listitem>
+            <para>
+              <link linkend="CSref.Gadgets.Messageslist">Messageslist</link>
+            </para>
+            <para>Lists the unread messages with the user-configurable number of items.</para>
+          </listitem>
+        </itemizedlist>
+</highlights>
+{docbook}
+{docbook}
+<para>
+Collaboration consists of three gadgets: Eventslist, Taskslist and Messageslist. They are packaged in the <filename>csResources.war</filename> file.
+</para>
+{docbook}
+{docbook}
+<para>
+<prompt>
+    <emphasis role="bold">See also</emphasis>
+</prompt>
+</para>
+{docbook}
+* [Portlet|#CSref.Portlets]
 
-h1. Eventslist {anchor:id=CSref.Gadgets.Evenslist}
+
+h1. Eventslist {anchor:id=CSref.Gadgets.EvenslistRoleNotInToc}
 
 Eventslist lists the maximum number of upcoming events, that is configurable by users. For example, they can set the preference list to 5 or 10 events.
 
@@ -46,7 +83,7 @@ It uses the _upcomingEvent_ service in the following package:
 _org.exoplatform.webservice.cs.calendar.CalendarWebservice.java_.
 
 
-h1. Taskslist {anchor:id=CSref.Gadgets.Taskslist}
+h1. Taskslist {anchor:id=CSref.Gadgets.TaskslistRoleNotInToc}
 Taskslist lists the maximum number of upcoming tasks that is configurable by users. For example, they can set the preference list to 5 or 10 tasks.
 
 {docbook}
@@ -81,7 +118,7 @@ Links to used REST services
 It uses upcomingEvent service in the following package:
 _org.exoplatform.webservice.cs.calendar.CalendarWebservice.java_.
 
-h1. Messageslist {anchor:id=CSref.Gadgets.Messageslist}
+h1. Messageslist {anchor:id=CSref.Gadgets.MessageslistRoleNotInToc}
 It lists the maximum number of unread messages, that is configurable by users.
 
 {docbook}

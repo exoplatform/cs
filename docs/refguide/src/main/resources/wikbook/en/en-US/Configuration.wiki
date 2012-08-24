@@ -1,14 +1,63 @@
-h1. Components in eXo Collaboration Configuration {anchor:id=CSref.Configuration.ComponentsineXoCollaborationConfiguration}
-This table shows some main components that take init-param in the applications of eXo Collaboration:
+h1. Components {anchor:id=CSref.Configuration.ComponentsineXoCollaborationConfiguration}
+{docbook}
+<highlights>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="CSref.Configuration.CalendarService">CalendarService</link>
+          </emphasis> </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="CSref.Configuration.HistoryImpl">HistoryImpl</link>
+          </emphasis> </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="CSref.Configuration.XMPPMessenger">XMPPMessenger</link>
+          </emphasis> </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="CSref.Configuration.DefaultPresenceStatus">DefaultPresenceStatus</link>
+          </emphasis> </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="CSref.Configuration.ContactService">ContactService</link>
+          </emphasis> </para>
+      </listitem>
+    </itemizedlist>
+	</highlights>
+{docbook}
+
+This table shows some main components that take init-param in the applications of Collaboration:
 
 || Applications|| Components || Description ||
-| *Calendar* | {{CalendarServiceImpl}} | It is a service that manages calendars in the Calendar application of eXo Collaboration.|
+| *Calendar* | {{CalendarService}} | It is a service that manages calendars in the Calendar application of Collaboration.|
 | *Chat* | {{HistoryImpl}}  {example}{example}{example}{example} {{XMPPMessenger}} {example}{example}{example}{example}  {{DefaultPresenceStatus}}| It is a service that saves the chat history of users. {example}{example} It is a service that processes messages of chat users, basing on the XMPP Protocol.  {example}{example}  It is a component that controls the presence status of chat users.|
-|*Contact* | {{ContactServiceImpl}} | It is a service that supplies functions to manage contacts in the Address Book application of eXo Collaboration. |
-| *Webservice* | {{AddActionsPlugin}} | It is used to register a listener for the actions on the nodes. |
+|*Contact* | {{ContactServiceImpl}} | It is a service that supplies functions to manage contacts in the Address Book application of Collaboration. |
+
+{docbook}
+<para>
+<prompt>
+   <emphasis role="bold">See also</emphasis>
+</prompt>
+</para>
+{docbook}
 
 
-h2. CalendarService {anchor:id=CSref.Configuration.CalendarService}
+* [External Component Plugins|#CSref.Configuration.ExternalComponentPlugins]
+* [Data Injectors|#CSref.Configuration.DataInjectorService]
+* [eXo Chatserver Configuration|#CSref.Configuration.eXoChatserverConfiguration]
+
+
+h2. CalendarService {anchor:id=CSref.Configuration.CalendarServiceRoleNotInToc}
 The configuration of the Calendar application is applied mainly in _/eXoApplication/calendar/service/src/main/resources/conf/portal/configuration.xml_.
 
 Use the CalendarService to configure the Calendar. The following information will explain details of its configuration.
@@ -31,7 +80,7 @@ Details:
 ||Properties-Param || Property name || Description || Possible Value || Default Value ||
 | *eventNumber* | {{eventNumber}} | The number of events in a calendar. | {{interger}} | {{100}} |
 
-h2. HistoryImpl {anchor:id=CSref.Configuration.HistoryImpl}
+h2. HistoryImpl {anchor:id=CSref.Configuration.HistoryImplRoleNotInToc}
 The configuration of historyImpl is found in the  _/extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/chat/chat-service-configuration.xml_.
 When this configuration file is executed, the component named _org.exoplatform.services.xmpp.history.impl.jcr.HistoryImpl_ initializes all the configured parameters.
 
@@ -62,8 +111,8 @@ Details:
 |*path*| The JCR path to the location where history data is stored. | {{string}} | {{exo:applications/eXoChat/history}}. |
 
 
-h2. XMPPMessenger {anchor:id=CSref.Configuration.XMPPMessenger}
-The configuration of the XMPPMessenger component is found in _/extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/chat/chat-service-configuration.xml_. It helps eXo Collaboration connect the Openfire instance.
+h2. XMPPMessenger {anchor:id=CSref.Configuration.XMPPMessengerRoleNotInToc}
+The configuration of the XMPPMessenger component is found in _/extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/chat/chat-service-configuration.xml_. It helps Collaboration connect the Openfire instance.
 
 {code:xml}
 <component>
@@ -88,7 +137,7 @@ Details:
 | *send-file*| {{timeout}} | The timeout before aborting attempt to establish a file transfer. | {{integer}} | {{7200000}} |
 
 
-h2. DefaultPresenceStatus {anchor:id=CSref.Configuration.DefaultPresenceStatus}
+h2. DefaultPresenceStatus {anchor:id=CSref.Configuration.DefaultPresenceStatusRoleNotInToc}
 The configuration of the DefaultPresenceStatus component is found in _/extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/chat/chat-service-configuration.xml_.
 
 {code:xml}
@@ -107,7 +156,7 @@ Details:
 || Properties-param || Property name|| Description || Possible Values || Default Value ||
 | *presence-status* | {{mode}} | Show the present status of users. | {{string}} | {{Free to chat}} |
 
-h2. ContactService {anchor:id=CSref.Configuration.ContactService}
+h2. ContactService {anchor:id=CSref.Configuration.ContactServiceRoleNotInToc}
 The configuration of the ContactService component is found in _eXoApplication/contact/service/src/main/resources/conf/portal/configuration.xml_.
 
 When the server starts, the configuration file which contains the declaration of ContactService component is executed. A ContactService component is then created with params and plugins in the configuration file.

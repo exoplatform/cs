@@ -1,18 +1,27 @@
 {docbook}
 <abstract>
- <para>This chapter supplies you with the basic knowledge about overridden components and REST APIs implemented in eXo Collaboration via the following topics:</para>
+ <para>This chapter supplies you with the basic knowledge about overridden components and REST APIs implemented in Collaboration via the following topics:</para>
     <itemizedlist>
       <listitem>
         <para>
           <emphasis role="bold">
             <link linkend="CSref.ExtensionPoints">Extension points</link>
           </emphasis> </para>
+          <para>Knowledge about some overridable components in Collaboration.</para>
       </listitem>
       <listitem>
         <para>
           <emphasis role="bold">
             <link linkend="CSref.PublicREST_APIs">Public REST APIs</link>
           </emphasis> </para>
+          <para>Information (such as name, service URL, service URL endpoint, location, parameter, and description) on Public REST APIs used in Collaboration. </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="CSref.JCRStructure">JCR Structure</link>
+          </emphasis> </para>
+          <para>Description of the JCR structure of the main applications in Collaboration.</para>
       </listitem>
     </itemizedlist>
 	</abstract>
