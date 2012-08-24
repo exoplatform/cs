@@ -1,4 +1,53 @@
 h1. External Component Plugins {anchor:id=CSref.Configuration.ExternalComponentPlugins}
+{docbook}
+<highlights>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="CSref.Configuration.CalendarService">Calendar Configuration</link>
+          </emphasis> </para>
+          <para>Description of the configuration of external component plugins used to implement the Calendar application.</para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="CSref.Configuration.XMPPMessenger">Chat Configuration</link>
+          </emphasis> </para>
+          <para>Description of the configuration of external component plugins used to implement the Chat application.</para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="CSref.Configuration.DefaultPresenceStatus">Contact Configuration</link>
+          </emphasis> </para>
+          <para>Description of the configuration of external component plugins used to implement the Address Book application.</para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="CSref.Configuration.ContentConfiguration">Content Configuration</link>
+          </emphasis> </para>
+          <para>Description of the configuration of external component plugins used to implement the Content application, such as RSS reader of Collaboration.</para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="CSref.Configuration.ContactService">Mail Configuration</link>
+          </emphasis> </para>
+          <para>Description of the configuration of external component plugins used to implement the Mail application. </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="CSref.Configuration.ContactService">Social Integration Configuration</link>
+          </emphasis> </para>
+          <para>Description of the configuration of external component plugins used to integrate Social with Collaboration.</para>
+      </listitem>
+    </itemizedlist>
+	</highlights>
+{docbook}
+
 The following table describes the main functions of external component plugins:
 
 || Applications|| Components || Description ||
@@ -25,8 +74,20 @@ The following table describes the main functions of external component plugins:
 |  | {{PortletPreferenceRequiredPlugin}} | Declare the application that will automatically create database. |
 
 
+{docbook}
+<para>
+<prompt>
+   <emphasis role="bold">See also</emphasis>
+</prompt>
+</para>
+{docbook}
 
-h2. Calendar Configuration {anchor:id=CSref.Configuration.CalendarConfiguration}
+
+* [Components|#CSref.Configuration.ComponentsineXoCollaborationConfiguration]
+* [Data Injectors|#CSref.Configuration.DataInjectorService]
+* [eXo Chatserver Configuration|#CSref.Configuration.eXoChatserverConfiguration]
+
+h2. Calendar Configuration {anchor:id=CSref.Configuration.CalendarConfigurationRoleNotInToc}
 This section describes the configuration of external component plugin used to implement the Calendar application.
 
 h3. NewUserListener {anchor:id=CSref.Configuration.Calendar.NewUserListener}
@@ -267,7 +328,7 @@ Details:
 * *Description*: It is a plugin used to execute sending reminder emails to users.
 
 h3. ReminderPeriodJob {anchor:id=CSref.Configuration.ReminderPeriodJob}
-The Calendar application of eXo Collaboration can send event reminders by using the email reminder plugin configuration. You will probably need to adjust this configuration to meet your own needs. The feature is based on a periodic poll of the stored reminders.
+The Calendar application of Collaboration send event reminders by using the email reminder plugin configuration. You will probably need to adjust this configuration to meet your own needs. The feature is based on a periodic poll of the stored reminders.
 
 You must use the following target component to use the plugin in this configuration:
 
@@ -374,7 +435,7 @@ See details about the init-params of the component in the following table:
 | | |{{endTime}}|The time when the job ends running.|{{Integer}}|{{None}}|
 |*popupreminder.info*|Save the monitor data periodically.|{{portalName}}|The name of the portal.|{{String}}|{{portal}}|
 
-h2. AddActionsPlugin {anchor:id=CSref.Configuration.AddActionsPlugin}
+h3. AddActionsPlugin {anchor:id=CSref.Configuration.AddActionsPlugin}
 The configuration of the AddActionsPlugin is found in _WEB-INF/cs-extension/cs/webservice/webservice-configuration.xml_.
 
 It is used to register the listener named {{org.exoplatform.webservice.cs.LastUpdateAction}} and it is executed, basing on eventTypes.
@@ -425,7 +486,7 @@ It is used to register the listener named {{org.exoplatform.webservice.cs.LastUp
 | *nodeTypes* | {{exo:calendarEvent}}| The type of the node. |
 | *actionClassName* | {{org.exoplatform.webservice.cs.LastUpdateAction}} |The registration class to execute the actions that the plugin requires. |
  
-h2. Chat Configuration {anchor:id=CSref.Configuration.ChatConfiguration}
+h2. Chat Configuration {anchor:id=CSref.Configuration.ChatConfigurationRoleNotInToc}
 The Chat Configuration is applied in _/extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/chat/chat-service-configuration.xml_.
 
 {docbook}
@@ -564,7 +625,7 @@ Details:
 * *Description*: It is used to end the session and log in the chat server.
 
 
-h2. Contact Configuration {anchor:id=CSref.Configuration.ContactConfiguration}
+h2. Contact Configuration {anchor:id=CSref.Configuration.ContactConfigurationRoleNotInToc}
 The Contact Application is configured by three external component plugins: {{NewUserListener}}, {{NewMembershipListener}}
 and {{UpdateUserProfileListener}}. They use the same target component:
 
@@ -629,9 +690,9 @@ Details:
 * *Type*: {{org.exoplatform.contact.service.impl.UpdateUserProfileListener}} - The class which executes all the requirements of the plugin.
 * *Description*: It is used to update the personal profile of a user when he changes it on the portal.
 
-h2. Content Configuration {anchor:id=CSref.Configuration.ContentConfiguration}
+h2. Content Configuration {anchor:id=CSref.Configuration.ContentConfigurationRoleNotInToc}
 
-The Content application, such as RSS reader of eXo Collaboration, is configured by two external component plugins: RSSContentPlugin and DescriptionPlugin.
+The Content application, such as RSS reader of Collaboration, is configured by two external component plugins: RSSContentPlugin and DescriptionPlugin.
 Both the external components plugins use the same target component:
 
 {code:xml}
@@ -675,7 +736,7 @@ Details:
 * *Type*: {{org.exoplatform.content.service.DescriptionPlugin}} - A class which executes all requirements of the plugin.
 * *Description*: It is a plugin to represent data from a RSS source.
 
-h2. Mail Configuration {anchor:id=CSref.Configuration.MailConfiguration}
+h2. Mail Configuration {anchor:id=CSref.Configuration.MailConfigurationRoleNotInToc}
 
 {docbook}
 <warning><para>
@@ -685,8 +746,8 @@ The Mail portlet and its services are deprecated. It remains fully supported for
 
 h3. AuthenticationLogoutListener {anchor:id=CSref.Configuration.AuthenticationLogoutListener}
 
-In the Mail application of eXo Collaboration, when a user checks messages for one account, the remote mailbox fetch is performed as a background job. Before eXo Collaboration 1.2, the job was continued until all messages had been retrieved or when the user stopped the check through the UI. Hence, even when a user was not logged in, the background job was continued. This can be the resource intensive for the server if many users have large mailboxes.
-Since eXo Collaboration 1.2,  one capability is added to halt the background job when the user session terminates (logout or timeout). It makes eXo Collaboration more friendly with server resources. If you want to activate this feature, you need to add a bunch of the xml congifuration in _/extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/mail/mail-service-configuration.xml_:
+In the Mail application of Collaboration, when a user checks messages for one account, the remote mailbox fetch is performed as a background job. Before Collaboration 1.2, the job was continued until all messages had been retrieved or when the user stopped the check through the UI. Hence, even when a user was not logged in, the background job was continued. This can be the resource intensive for the server if many users have large mailboxes.
+Since Collaboration 1.2,  one capability is added to halt the background job when the user session terminates (logout or timeout). It makes Collaboration more friendly with server resources. If you want to activate this feature, you need to add a bunch of the xml congifuration in _/extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/mail/mail-service-configuration.xml_:
 
 {code:xml}     
 <external-component-plugins>
@@ -708,7 +769,7 @@ Details:
 * *Description*: It is a plugin used to stop checking mails of a user when he logs out.
 
 h3. MailSettingConfigPlugin {anchor:id=CSref.Configuration.MailConfig.MailSettingConfigPlugin}
- Since eXo Collaboration 2.2.0, _MailSettingConfigPlugin_ is used to define the behavior, for example, showing/hiding fields and checking/unchecking checkboxes, of email account settings in the mail-server-configuration.xml file. It allows administrators to preconfigure all settings and to specify if end-users have the modification right on each specific setting or not. 
+ Since Collaboration 2.2.0, _MailSettingConfigPlugin_ is used to define the behavior, for example, showing/hiding fields and checking/unchecking checkboxes, of email account settings in the mail-server-configuration.xml file. It allows administrators to preconfigure all settings and to specify if end-users have the modification right on each specific setting or not.
 
 {code:xml}
 <external-component-plugins>
@@ -832,7 +893,7 @@ Details:
 
 
 || Object-param||Desciption ||
-|leaveOnServer|Options to keep the message on the mail server after it has been downloaded to the Mail application of eXo Collaboration.|
+|leaveOnServer|Options to keep the message on the mail server after it has been downloaded to the Mail application of Collaboration.|
 |incomingServer|The default incoming server used to check new mails.|
 |incomingPort|The default port of the incoming server used to check new mails.|
 |outgoingServer|The default port of the outgoing server used to send new mails.|
@@ -851,7 +912,7 @@ The object parameters have the same field names, but the values of the parameter
 |defaultValue|The default value of the field in the account settings form. |String|
 
 
-h2. Social Integration Configuration {anchor:id=CSref.Configuration.SocialIntegrationConfiguration}
+h2. Social Integration Configuration {anchor:id=CSref.Configuration.SocialIntegrationConfigurationRoleNotInToc}
 
 The Social Integration Configuration is applied in _/extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/social-integration/social-integration-configuration.xml_.
 
@@ -992,5 +1053,5 @@ See the details about the init-params of the component in the following table:
 || value-param || Possible value || Default value || Description ||
 | *portletsPrefsRequired* | {{String}} | {{ContactPortlet / ContactPortlet}}| The name of plugin added to SpaceService. |
 
-h1. Data Injectors {anchor:id=CSref.Configuration.DataInjectorService}
-{include:document="DataInjectorService.wiki"}
+
+

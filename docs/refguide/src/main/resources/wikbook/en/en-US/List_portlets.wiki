@@ -1,7 +1,61 @@
-This section provides all information, such as description, package, preferences, and portlet.xml about portlets included in eXo Collaboration.
+{docbook}
+<highlights>
+        <itemizedlist>
+          <listitem>
+            <para>
+              <link linkend="CSref.Portlets.CalendarPortlet">Calendar portlet</link>
+            </para>
+            <para>Shows the Calendar application of Collaboration with a lot of features provided to users.</para>
+          </listitem>
+          <listitem>
+            <para>
+              <link linkend="CSref.Portlets.ChatbatPortlet">Chatbar portlet</link>
+            </para>
+            <para>Shows the Chatbar application of Collaboration that can be positioned in the portal or page layout as any other, but behaves as a floating box.</para>
+          </listitem>
+		      <listitem>
+            <para>
+              <link linkend="CSref.Portlets.ChatPortlet">Chat Portlet</link>
+            </para>
+            <para>Shows the Chat application of Collaboration that allows users to enter chat rooms and communicate with online others at real time.</para>
+          </listitem>
+          <listitem>
+            <para>
+              <link linkend="CSref.Portlets.ContactPortlet">Contact Portlet</link>
+            </para>
+            <para>Shows the Contact application of Collaboration that allows users to personalize their contact view from different view types, such as List view and VCards view.</para>
+          </listitem>
+          <listitem>
+            <para>
+              <link linkend="CSref.Portlets.MailPortlet">Mail Portlet</link>
+            </para>
+            <para>Shows the Mail application of Collaboration that offers a lot of features to users such as sending, receiving or viewing their mails through Internet without actually downloading them to their computer.</para>
+          </listitem>
+          <listitem>
+            <para>
+              <link linkend="CSref.Portlets.RSSreaderPortlet">RSSreader Portlet</link>
+            </para>
+            <para>Facilitates users to quickly get a view of their favorite feeds around the web. They will get the latest news, the last updated posts from their favorite blogs, latest emails, and more.</para>
+          </listitem>
+        </itemizedlist>
+</highlights>
+{docbook}
+{docbook}
+<para>This section provides all information, such as description, package name, preferences, and <filename>portlet.xml</filename> of portlets included in Collaboration.</para>
+{docbook}
 
-h1. Calendar portlet {anchor:id=CSref.Portlets.CalendarPortlet}
-The Calendar portlet shows the Calendar application of eXo Collaboration with a lot of features provided to users.
+{docbook}
+<para>
+<prompt>
+    <emphasis role="bold">See also</emphasis>
+</prompt>
+</para>
+{docbook}
+
+* [Gadgets|#CSref.Gadgets]
+
+h1. Calendar portlet {anchor:id=CSref.Portlets.CalendarPortletRoleNotInToc}
+The Calendar portlet shows the Calendar application of Collaboration with a lot of features provided to users.
 
 The Calendar application includes the following features:
 
@@ -44,7 +98,7 @@ To see the portlet in the project, follow this path:
  _/eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/portlet.xml_.
 
 
-h1. Chatbar portlet {anchor:id=CSref.Portlets.ChatbatPortlet}
+h1. Chatbar portlet {anchor:id=CSref.Portlets.ChatbatPortletRoleNotInToc}
 
 {docbook}
 <note><para>
@@ -52,7 +106,7 @@ The Chatbar portlet and its services are deprecated. It remains fully supported 
 </para></note>
 {docbook}
 
-The Chatbar portlet shows the Chatbar application of eXo Collaboration that can be positioned in the portal or page layout as any other, but behaves as a floating box. The bar remains floating at its location even when the browser window is scrolled or resized. Its height is fixed, but can be expanded horizontally to any size available in its container. This allows the portlet to be placed in two layout cases:
+The Chatbar portlet shows the Chatbar application of Collaboration that can be positioned in the portal or page layout as any other, but behaves as a floating box. The bar remains floating at its location even when the browser window is scrolled or resized. Its height is fixed, but can be expanded horizontally to any size available in its container. This allows the portlet to be placed in two layout cases:
 
 - Large width area (typically header or footer).
 
@@ -155,14 +209,14 @@ See the portlet in the project following this path:
 _/eXoApplication/chatbar/webapp/src/main/webapp/WEB-INF/portlet.xml_.
 
 
-h1. Chat Portlet {anchor:id=CSref.Portlets.ChatPortlet}
+h1. Chat Portlet {anchor:id=CSref.Portlets.ChatPortletRoleNotInToc}
 {docbook}
 <note><para>
 The Chat portlet and its services are deprecated. It remains fully supported for eXo customers, however it will not receive any enhancement and will be removed from the product scope in the future.
 </para></note>
 {docbook}
 
-The Chat Portlet shows the Chat application of eXo Collaboration that allows users to enter chat rooms and communicate with online others at real time.
+The Chat Portlet shows the Chat application of Collaboration that allows users to enter chat rooms and communicate with online others at real time.
 
 {docbook}
 <para>
@@ -189,9 +243,9 @@ _/eXoApplication/chat/webapp/src/main/webapp/WEB-INF/portlet.xml_
 
 
 
-h1. Contact Portlet {anchor:id=CSref.Portlets.ContactPortlet}
+h1. Contact Portlet {anchor:id=CSref.Portlets.ContactPortletRoleNotInToc}
 
-Contact Portlet shows the Contact application of eXo Collaboration that allows users to personalize their contact view from different view types, such as List view and VCards view.
+Contact Portlet shows the Contact application of Collaboration that allows users to personalize their contact view from different view types, such as List view and VCards view.
 
 {docbook}
 <para>
@@ -217,7 +271,7 @@ See the portlet in the project following this path:
 _/eXoApplication/contact/webapp/src/main/webapp/WEB-INF/portlet.xml_.
 
 
-h1. Mail Portlet {anchor:id=CSref.Portlets.MailPortlet}
+h1. Mail Portlet {anchor:id=CSref.Portlets.MailPortletRoleNotInToc}
 
 {docbook}
 <note><para>
@@ -225,7 +279,7 @@ The Mail portlet and its services are deprecated. It remains fully supported for
 </para></note>
 {docbook}
 
-Mail Portlet shows the Mail application of eXo Collaboration that offers a lot of features to users such as sending, receiving or viewing their mails through Internet without actually downloading them to their computer. Users not only take advantages of eXo Mail by keeping and receiving all important messages, files and pictures forever but also by looking for and viewing their needed messages easily whenever they want. Additionally, the Mail application is smoothly integrated with other Collaboration modules, such as Address Book and Calendar.
+Mail Portlet shows the Mail application of Collaboration that offers a lot of features to users such as sending, receiving or viewing their mails through Internet without actually downloading them to their computer. Users not only take advantages of eXo Mail by keeping and receiving all important messages, files and pictures forever but also by looking for and viewing their needed messages easily whenever they want. Additionally, the Mail application is smoothly integrated with other Collaboration modules, such as Address Book and Calendar.
 
 {docbook}
 <para>
@@ -252,7 +306,7 @@ Portlet.xml
 _/eXoApplication/mail/webapp/src/main/webapp/WEB-INF/portlet.xml_.
 
 
-h1. RSSreader Portlet {anchor:id=CSref.Portlets.RSSreaderPortlet}
+h1. RSSreader Portlet {anchor:id=CSref.Portlets.RSSreaderPortletRoleNotInToc}
 
 {docbook}
 <warning><para>
@@ -260,7 +314,7 @@ The RSSreader portlet and its services are deprecated. It remains fully supporte
 </para></warning>
 {docbook}
 
-eXo Collaboration uses the RSS Reader Portlet that facilitates users to quickly get a view of their favorite feeds around the web. They will get the latest news, the last updated posts from their favorite blogs, latest emails, and more.
+Collaboration uses the RSS Reader Portlet that facilitates users to quickly get a view of their favorite feeds around the web. They will get the latest news, the last updated posts from their favorite blogs, latest emails, and more.
 
 {docbook}
 <para>

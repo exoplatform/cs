@@ -1,49 +1,63 @@
 {docbook}
-<abstract>
- <para>eXo Collaboration is a JCR-based product, so data of eXo Collaboration are managed by the eXo-JCR service with each specific structure. The chapter aims at outlining the JCR structure of each application in eXo Collaboration through diagrams and then describing properties of main node types.</para>
- <para>Each diagram shows nodes and their primary node types. Every node/child node must have only one primary node type represented in the round bracket () under the node/childnode, but may also have many mixin node types. Because mixin nodes cannot define the node structure like the primary nodes, they are not shown in the diagrams and their properties hereafter are not described.</para>
- <para>This chapter describes the structure of the main applications in eXo Collaboration via the following topics:</para>
-    <itemizedlist>
+<highlights>
+     <itemizedlist>
       <listitem>
         <para>
           <emphasis role="bold">
             <link linkend="CSref.JCRStructure.Calendar.JCR">Calendar JCR Structure</link>
           </emphasis> </para>
+          <para>Information on the Calendar JCR structure, such as nodes, child nodes, node types and their properties. </para>
       </listitem>
       <listitem>
         <para>
           <emphasis role="bold">
             <link linkend="CSref.JCRStructure.Chat">Chat JCR Structure</link>
           </emphasis> </para>
+          <para>Information on the Chat JCR structure, such as nodes, child nodes, node types and their properties. </para>
       </listitem>
       <listitem>
         <para>
           <emphasis role="bold">
             <link linkend="CSref.JCRStructure.AddressBook">Address Book JCR Structure</link>
           </emphasis> </para>
+          <para>Information on the Address Book JCR structure, such as nodes, child nodes, node types and their properties. </para>
       </listitem>
       <listitem>
         <para>
           <emphasis role="bold">
             <link linkend="CSref.JCRStructure.Mail">Mail JCR Structure</link>
           </emphasis> </para>
+          <para>Information on the Mail JCR structure, such as nodes, child nodes, node types and their properties. </para>
       </listitem>
       <listitem>
         <para>
           <emphasis role="bold">
             <link linkend="CSref.JCRStructure.RSS">RSS JCR Structure</link>
           </emphasis> </para>
+          <para>Information on the RSS JCR structure, such as nodes, child nodes, node types and their properties. </para>
       </listitem>
     </itemizedlist>
-	</abstract>
+    <para>Collaboration is a JCR-based product, so data of Collaboration are managed by the eXo-JCR service with each specific structure. The chapter aims at outlining the JCR structure of each application in Collaboration through diagrams and then describing properties of main node types.</para>
+ <para>Each diagram shows nodes and their primary node types. Every node/child node must have only one primary node type represented in the round bracket () under the node/childnode, but may also have many mixin node types. Because mixin nodes cannot define the node structure like the primary nodes, they are not shown in the diagrams and their properties hereafter are not described.</para>
+ <para>This section describes the structure of the main applications in Collaboration.</para>
+	</highlights>
 {docbook}
 
 {note}
-To learn more about the eXo Collaboration JCR Structure, you should have the certain knowledge of [JCR|http://jcp.org/en/jsr/detail?id=170].
+To learn more about the Collaboration JCR Structure, you should have the certain knowledge of [JCR|http://jcp.org/en/jsr/detail?id=170].
 {note} 
 
-h1. Calendar JCR Structure {anchor:id=CSref.JCRStructure.Calendar.JCR}
+{docbook}
+<para>
+<prompt>
+   <emphasis role="bold">See also</emphasis>
+</prompt>
+</para>
+{docbook}
+* [Extension points|#CSref.ExtensionPoints]
+* [Public REST APIs|#CSref.PublicREST_APIs]
 
+h1. Calendar JCR Structure {anchor:id=CSref.JCRStructure.Calendar.JCRRoleNotInToc}
 The Calendar data are saved in eXo-JCR under the CalendarApplication data directory. The Calendar JCR Structure is divided into two main branches: one for public (exo:application) and the other for users (Users).
 
 The whole JCR structure of Calendar can be visualized in the diagram below:
@@ -242,7 +256,7 @@ The _exo\:calendarSetting_ node type has the following properties:
 | exo:sharedCalendarsColors | String | true| Define the color of the shared calendar, which is in the format of [calendar id]:[color name]. |
 | exo:sendOption | String | false| The option to notify users before sending an invitation via email: never (not sending all time), always (sending message without asking) and ask (asking before sending). |
 
-h1. Chat JCR Structure {anchor:id=CSref.JCRStructure.Chat}
+h1. Chat JCR Structure {anchor:id=CSref.JCRStructure.ChatRoleNotInToc}
 
 {docbook}
 <warning><para>
@@ -296,7 +310,7 @@ The node type *lr\:presencestatus* contains information regarding to the current
 | lr:status | String | Current status of the user included in the _org.jivesoftware.smack.pack__ et.Presence.Type class. |
 
 
-h1. Address Book JCR Structure {anchor:id=CSref.JCRStructure.AddressBook}
+h1. Address Book JCR Structure {anchor:id=CSref.JCRStructure.AddressBookRoleNotInToc}
 
 {docbook}
 <warning><para>
@@ -308,7 +322,17 @@ The Address Book portlet is a JCR-based application. The Address Book data are s
 
 !images/Addressbook-JCR-Structure.png|align="center" width="120mm" fo:scalefit="1" html:scalefit="0"!
 
-h2. Contacts {anchor:id=CSref.JCRStructure.AddressBook.Contacts}
+
+{docbook}
+<para xml:id="CSref.JCRStructure.AddressBook.Contacts">
+<citetitle>
+<emphasis role="bold">
+Contacts
+</emphasis>
+</citetitle>
+</para>
+{docbook}
+
 The *Contacts* node of the _nt\:unstructured_ type has the child nodes of the _exo\:contact_. When a contact is created and added to an address book, it is stored in a node defined at the path: _{{{ContactAppication/Contacts/%contact_id%}}}_.
 When a contact is tagged, it is saved in the *tags* node with the _exo\:tags_ property. In case, a contact is shared to other users, it is referred to the *SharedContact* node of the _exo\:sharedId_ type.
 The _exo\:contact_ node type has the following properties:
@@ -323,7 +347,7 @@ The _exo\:contact_ node type has the following properties:
 | exo:birthday | Date | false | The birthday of the contact.|
 | exo:jobTitle | String |false | The job title of the contact. |
 | exo:emailAddress | String | true | The email address of the contact. |
-| exo:exoId | String | false | The Id of the user in the Chat application of eXo Collaboration. |
+| exo:exoId | String | false | The Id of the user in the Chat application of Collaboration. |
 | exo:googleId | String | false | The Google Id of the user. |
 | exo:msnId | String | false | The MSN Id of the user. |
 | exo:aolId | String | false | The AOL Id of the user. |
@@ -367,7 +391,17 @@ This node type may add the _exo\:contactShared_ mixin that has the following pro
 | exo:sharedUserId | String | false| The name of the user sharing the contact. |
 | exo:sharedId | Reference | true| The list of the references to shared users/groups.s|
 
-h2. ContactGroup {anchor:id=CSref.JCRStructure.AddressBook.ContactGroup}
+
+{docbook}
+<para xml:id="CSref.JCRStructure.AddressBook.ContactGroup">
+<citetitle>
+<emphasis role="bold">
+ContactGroup
+</emphasis>
+</citetitle>
+</para>
+{docbook}
+
 The *ContactGroup* node of the _nt\:unstructured_ type contains all the child nodes of the _exo\:contactGroup_ type. These child nodes store address books and are stored in _{{{ContactApplication/ContactGroup/%addressbook_id}}}_.
 This node is also referred to the _exo\:contact_ node type with the _exo\:categories_ property.
 When an address book is shared, it is referred to the *SharedAddressBook* node with the _exo\:sharedId_ property.
@@ -382,7 +416,17 @@ The information of each address book is contained in a node of the _exo\:contact
 | exo:editPermissionGroups | String | true| The list of groups having the permission to edit the address book. |
 | exo:viewPermissionGroups | String | true| The list of groups having the permission to view the address book. |
 
-h2. tags {anchor:id=CSref.JCRStructure.AddressBook.tags}
+
+{docbook}
+<para xml:id="CSref.JCRStructure.AddressBook.tags">
+<citetitle>
+<emphasis role="bold">
+tags
+</emphasis>
+</citetitle>
+</para>
+{docbook}
+
 Tags are used to categorize the contacts in groups, so users can easily find the contacts. The *tags* node of the _nt\:unstructured_ type contains the child nodes of the _exo\:contactTag_ type. When a new tag is created, it is stored in a node defined at the path: _{{{ApplicationData/ContactApplications/tags/%tags_id%}}}_.
 The information of each tag is contained in a node of the _exo\:contactTag_ type that has the following properties:
 
@@ -392,13 +436,21 @@ The information of each tag is contained in a node of the _exo\:contactTag_ type
 | exo:description | String |false| The brief description of the tag. |
 | exo:color | String | false| The color of the tag. |
 
-h2. Shared {anchor:id=CSref.JCRStructure.AddressBook.Shared}
+
+{docbook}
+<para xml:id="CSref.JCRStructure.AddressBook.Shared">
+<citetitle>
+<emphasis role="bold">
+Shared
+</emphasis>
+</citetitle>
+</para>
+{docbook}
+
 When a contact or a address book is shared to other users, it is referred to the *SharedContact* or *SharedAddressBook* node. Both of these child nodes have the _nt\:unstructured_ type.
 
 
-
-
-h1. Mail JCR Structure {anchor:id=CSref.JCRStructure.Mail}
+h1. Mail JCR Structure {anchor:id=CSref.JCRStructure.MailRoleNotInToc}
 
 {docbook}
 <warning><para>
@@ -510,7 +562,9 @@ The node type *exo\:mailSetting* has the following properties:
 | exo:layout | Long | Type of layout which is displayed to the user. |
 | exo:returnReceipt | Long | Action type of the user when receiving the "return receipt" to confirm the arrival of one email message, including: 0 = ask, 1 = never, 3 = always. |
 
-h1. RSS JCR Structure {anchor:id=CSref.JCRStructure.RSS}
+
+
+h1. RSS JCR Structure {anchor:id=CSref.JCRStructure.RSSRoleNotInToc}
 
 !images/RSS JCR Structure.png|align="center" width="70mm" fo:scalefit="1" html:scalefit="0"!
 
@@ -523,3 +577,4 @@ The node type *exo\:content* has the following properties:
 | data | String | XML string of the content navigation. |
 | createdDate | Date | Created date of the content. |
 | modifiedDate | Date | Modified date of the content. |
+

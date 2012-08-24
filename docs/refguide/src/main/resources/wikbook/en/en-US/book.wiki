@@ -9,10 +9,8 @@ h1. Configurations {anchor:id=CSref.Configuration}
 {include:document="Configuration_introduction.wiki"}
 {include:document="Configuration.wiki"}
 {include:document="Configuration-component-plugin.wiki"}
+{include:document="DataInjectorService.wiki"}
 {include:document="Chatserver-configuration.wiki"}
-
-h1. JCR Structure {anchor:id=CSref.JCRStructure}
-{include:document="eXoCollaborationJCRStructure.wiki"}
 
 h1. Developer reference {anchor:id=CSref.DeveloperReference}
 {include:document="Developer_reference.wiki"}
@@ -21,3 +19,6 @@ h2. Extension points {anchor:id=CSref.ExtensionPoints}
 
 h2. Public REST APIs {anchor:id=CSref.PublicREST_APIs}
 {include:document="public_rest_api.wiki"}
+
+h2. JCR Structure {anchor:id=CSref.JCRStructure}
+{include:document="eXoCollaborationJCRStructure.wiki"}

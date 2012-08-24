@@ -1,7 +1,45 @@
-eXo Collaboration implements and provides many public REST APIS to help built-in applications, such as Calendar, Chat and Mail to communicate and transfer data with the server. By using these public REST APIs, extended or 3rd party applications can make use of this to develop cool web applications faster without much implementation.
+{docbook}
+<highlights>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="CSref.PublicRESTAPIs.CalendarApplication">Calendar application</link>
+          </emphasis> </para>
+          <para>Uses CalendarWebservice to provide all APIs for working with calendars, such as creating personal/group calendars, sharing calendars, managing events/tasks.</para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="CSref.PublicRESTAPIs.MailApplication">Mail application</link>
+          </emphasis> </para>
+          <para>Uses MailWebservice to provide all APIs for working with mail, such as sending/checking/storing mail to JCR.</para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="bold">
+            <link linkend="CSref.PublicREST_APIs.ChatApplication">Chat application</link>
+          </emphasis> </para>
+          <para>Uses some APIs to help users create a room, join a room, invite other users to room, or send files, and more.</para>
+      </listitem>
+    </itemizedlist>
+	</highlights>
+{docbook}
 
-h1. Calendar application {anchor:id=CSref.PublicRESTAPIs.CalendarApplication}
-The Calendar application of eXo Collaboration uses CalendarWebservice to provide all APIs for working with calendars, such as creating personal/group calendars, sharing calendars, managing events/tasks.
+Collaboration implements and provides many public REST APIS to help built-in applications, such as Calendar, Chat and Mail to communicate and transfer data with the server. By using these public REST APIs, extended or 3rd party applications can make use of this to develop cool web applications faster without much implementation.
+{docbook}
+<para>
+<prompt>
+   <emphasis role="bold">See also</emphasis>
+</prompt>
+</para>
+{docbook}
+* [Extension points|#CSref.ExtensionPoints]
+* [JCR Structure|#CSref.JCRStructure]
+
+
+h1. Calendar application {anchor:id=CSref.PublicRESTAPIs.CalendarApplicationRoleNotInToc}
+The Calendar application of Collaboration uses CalendarWebservice to provide all APIs for working with calendars, such as creating personal/group calendars, sharing calendars, managing events/tasks.
 
 The REST API of Calendar portlet is exposed by _org.exoplatform.services.cs.calendar.CalendarWebservice_ class.
 
@@ -30,9 +68,9 @@ Use the following APIs to build all functions of the Calendar application:
 | *updateStatus* | {{{/cs/calendar/updatestatus/{taskid}?statusid={status_id}}}} | taskid {example}{example} status\_id | task id {example}{example} integer with following values: {example}{example} 1 - Need Action {example}{example}  2 - In Progress {example}{example} 3 - Completed {example}{example} 4 - Canceled | Update the status of a task. |
 | *getCalendars* | /cs/calendar/getcalendars| {{no param}} | {{}} |Get a list of calendars. |
 
-h1. Mail application {anchor:id=CSref.PublicRESTAPIs.MailApplication}
+h1. Mail application {anchor:id=CSref.PublicRESTAPIs.MailApplicationRoleNotInToc}
 
-The Mail application of eXo Collaboration uses MailWebservice to provide all APIs for working with mail, such as sending/checking/storing mail to JCR.
+The Mail application of Collaboration uses MailWebservice to provide all APIs for working with mail, such as sending/checking/storing mail to JCR.
 
 REST API of the Mail portlet is exposed by _org.exoplatform.services.cs.mail.MailWebservice_ class.
 
@@ -57,11 +95,14 @@ Use the following APIs to build all functions of the Mail application:
 |*searchemail* | {{{/searchemail/{keywords}}}} | keywords| string |Search information from emails. |
 
 
-h1. Chat application {anchor:id=CSref.PublicREST_APIs.ChatApplication}
+h1. Chat application {anchor:id=CSref.PublicREST_APIs.ChatApplicationRoleNotInToc}
 
 The Chat application uses some APIs to help users create a room, join a room, invite other users to room, or send files, and more.
 
-The Chat application of eXo Collaboration uses two services: RESTXMPPService and FileExchangeService to do these tasks.
+The Chat application of Collaboration uses two following services to do these tasks.
+
+* [RESTXMPPService|#CSref.PublicREST_APIs.RESTXMPPService]
+* [FileExchangeService|#CSref.PublicREST_APIs.FileExchangeService]
 
 {docbook}
 <warning><para>
@@ -69,7 +110,15 @@ The Chat portlet and its services are deprecated. It remains fully supported for
 </para></warning>
 {docbook}
 
-h2. RESTXMPPService {anchor:id=CSref.PublicREST_APIs.RESTXMPPService}
+{docbook}
+<para xml:id="CSref.PublicREST_APIs.RESTXMPPService">
+<citetitle>
+<emphasis role="bold">
+RESTXMPPService
+</emphasis>
+</citetitle>
+</para>
+{docbook}
 
 REST API _RESTXMPPService_ of the Chat portlet is exposed by _org.exoplatform.services.xmpp.rest.RESTXMPPService_ class.
 
@@ -128,7 +177,15 @@ Use the following APIs to build all functions of the Chat application:
 |*getPreviousStatus* | {{{/getprevstatus/{username}/}}} | username | user id |Get the tatus of a user in the last log-in.|
 
 
-h2. FileExchangeService {anchor:id=CSref.PublicREST_APIs.FileExchangeService}
+{docbook}
+<para xml:id="CSref.PublicREST_APIs.FileExchangeService">
+<citetitle>
+<emphasis role="bold">
+FileExchangeService
+</emphasis>
+</citetitle>
+</para>
+{docbook}
 
 REST API _FileExchangeService_ for uploading files is defined in _org.exoplatform.services.xmpp.rest.FileExchangeService_ class.
 

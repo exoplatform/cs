@@ -1,18 +1,20 @@
 {docbook}
 <abstract>
- <para>This chapter provides you a comprehensive view about applications in eXo Collaboration, including:</para>
+ <para>This chapter provides you a comprehensive view about applications in Collaboration, including:</para>
     <itemizedlist>
       <listitem>
         <para>
           <emphasis role="bold">
             <link linkend="CSref.Portlets">Portlets</link>
           </emphasis> </para>
+          <para>Provision of a list of all porlets used in Collaboration. </para>
       </listitem>
       <listitem>
         <para>
           <emphasis role="bold">
             <link linkend="CSref.Gadgets">Gadgets</link>
           </emphasis> </para>
+          <para>Provision of a list of all gadgets used in Collaboration.</para>
       </listitem>
     </itemizedlist>
   <para>These applications are packaged as Web application archives (WARs).
