@@ -202,7 +202,12 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
           }
         }
         if(sb.length() > 0) {
-          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UISharedForm.msg.not-founduser", new Object[]{sb.toString()}, 1)) ;
+          String invalidNames = sb.toString();
+          if(invalidNames.split(CalendarUtils.COMMA).length == 1) {
+        	  event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UISharedForm.msg.not-found-user", new Object[]{invalidNames.substring(0, invalidNames.length() - 1)}, 1)) ;	  
+          } else {
+        	  event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UISharedForm.msg.not-found-users", new Object[]{invalidNames.substring(0, invalidNames.length() - 1)}, 1)) ;
+            }
           return ;
         }
         if(receiverUsers.contains(username)) {
