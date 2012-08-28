@@ -341,33 +341,31 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
         return;
       }
       
-      try {
-        if (uiform.isAddNew_) {
+      if (uiform.isAddNew_) {
+        try {
           // access to remote calendar
           eXoCalendar = calService.importRemoteCalendar(remoteCalendar);
-        } else {
+        } catch (Exception e) {
+          logger.warn("Exception occurs when importing remote calendar", e);
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIRemoteCalendar.msg.cant-import-remote-calendar", null, ApplicationMessage.ERROR));
+          return;
+        } 
+       } else {
           remoteCalendar.setCalendarId(uiform.calendarId_) ;
           // update remote calendar info
           eXoCalendar = calService.updateRemoteCalendarInfo(remoteCalendar);
           // refresh calendar
           eXoCalendar = calService.refreshRemoteCalendar(remoteCalendar.getUsername(), uiform.calendarId_);
-        }
+         }
       
-        eXoCalendar.setCalendarColor(uiform.getSelectColor());
-        eXoCalendar.setDescription(uiform.getDescription());
-        calService.saveUserCalendar(remoteCalendar.getUsername(), eXoCalendar, false) ;
-      }
-      catch (Exception e) {
-        logger.warn("Exception occurs when importing remote calendar", e);
-        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIRemoteCalendar.msg.cant-import-remote-calendar", null, ApplicationMessage.ERROR));
-        return;
-      }
-      
+      eXoCalendar.setCalendarColor(uiform.getSelectColor());
+      eXoCalendar.setDescription(uiform.getDescription());
+      calService.saveUserCalendar(remoteCalendar.getUsername(), eXoCalendar, false) ;
       calendarPortlet.cancelAction() ;
       UICalendarWorkingContainer uiWorkingContainer = calendarPortlet.getChild(UICalendarWorkingContainer.class) ;
       event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIRemoteCalendar.msg-import-succesfully", null, ApplicationMessage.INFO));
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;      
-      
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
+            
     }
   }
   
