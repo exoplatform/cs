@@ -31,8 +31,8 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormRadioBoxInput;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -52,12 +52,12 @@ import org.exoplatform.webui.form.validator.URLValidator;
                    @EventConfig(listeners = UISubscribeForm.NextActionListener.class),
                    @EventConfig(listeners = UISubscribeForm.CancelActionListener.class, phase = Phase.DECODE)
                  }
-             )
+    )
 public class UISubscribeForm extends UIForm implements UIPopupComponent {
-  
+
   private final static String URL = "url".intern();
   private final static String TYPE = "type".intern();
-  
+
   public UISubscribeForm() throws Exception {
     List<SelectItemOption<String>> types = new ArrayList<SelectItemOption<String>>();
     types.add(new SelectItemOption<String>(CalendarService.ICALENDAR, CalendarService.ICALENDAR));
@@ -75,28 +75,28 @@ public class UISubscribeForm extends UIForm implements UIPopupComponent {
   public void deActivate() throws Exception {
 
   }
-  
+
   public void init(String type, String remoteUrl) {
     setType(type);
     setUrl(remoteUrl);
   }
-  
+
   protected void setType(String type) {
     this.getChild(UIFormRadioBoxInput.class).setValue(type);
   }
-  
+
   protected String getType() {
     return this.getChild(UIFormRadioBoxInput.class).getValue();
   }
-  
+
   protected void setUrl(String url) {
     this.getUIStringInput(URL).setValue(url);
   }
-  
+
   protected String getUrl() {
     return this.getUIStringInput(URL).getValue();
   }
-  
+
   public String getLabel(String id) throws Exception {
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
     ResourceBundle res = context.getApplicationResourceBundle() ;     
@@ -107,10 +107,10 @@ public class UISubscribeForm extends UIForm implements UIPopupComponent {
       return id ;
     }
   } 
-  
+
   public static class CancelActionListener extends EventListener<UISubscribeForm> {
     public void execute(Event<UISubscribeForm> event) throws Exception {
-        UISubscribeForm uiform = event.getSource();
+      UISubscribeForm uiform = event.getSource();
       UICalendarPortlet calendarPortlet = uiform.getAncestorOfType(UICalendarPortlet.class) ;
       calendarPortlet.cancelAction();
     }
@@ -123,28 +123,42 @@ public class UISubscribeForm extends UIForm implements UIPopupComponent {
       UICalendarPortlet calendarPortlet = uiform.getAncestorOfType(UICalendarPortlet.class);
       CalendarService calService = CalendarUtils.getCalendarService();
       String username = CalendarUtils.getCurrentUser();
-      
+
       String url = uiform.getUIStringInput(URL).getValue();
       String type = uiform.getChild(UIFormRadioBoxInput.class).getValue();
-      
-      
+
+
       if (CalendarUtils.isEmpty(type)) {
         event.getRequestContext()
-             .getUIApplication()
-             .addMessage(new ApplicationMessage("UISubscribeForm.msg.remote-type-is-not-null", null, ApplicationMessage.WARNING));
+        .getUIApplication()
+        .addMessage(new ApplicationMessage("UISubscribeForm.msg.remote-type-is-not-null", null, ApplicationMessage.WARNING));
+
         return;
       }
-      
+
+      try {
+        java.net.URL validUrl = new java.net.URL(url) ;
+        if(!"CalDAV".equals(type)){
+          validUrl.openStream();
+        }
+      } catch (Exception e) {
+
+        event.getRequestContext()
+        .getUIApplication()
+        .addMessage(new ApplicationMessage("UISubscribeForm.msg.url-is-not-available", null, ApplicationMessage.WARNING));
+        return;
+
+      }
       // check duplicate remote calendar
       if (calService.getRemoteCalendar(username, url, type) != null) {
         event.getRequestContext()
-             .getUIApplication()
-             .addMessage(new ApplicationMessage("UISubscribeForm.msg.this-remote-calendar-already-exists",
-                                                null,
-                                                ApplicationMessage.WARNING));
+        .getUIApplication()
+        .addMessage(new ApplicationMessage("UISubscribeForm.msg.this-remote-calendar-already-exists",
+                                           null,
+                                           ApplicationMessage.WARNING));
         return;
       }
-      
+
       UIPopupAction uiPopupAction = calendarPortlet.getChild(UIPopupAction.class);
       uiPopupAction.deActivate();
       UIRemoteCalendar uiRemoteCalendar = uiPopupAction.activate(UIRemoteCalendar.class, 600);
