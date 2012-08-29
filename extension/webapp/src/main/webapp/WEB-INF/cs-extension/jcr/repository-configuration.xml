@@ -50,6 +50,7 @@
               <property name="jbosscache-cluster-name" value="jcr-indexer${container.name.suffix}" />
               <property name="jbosscache-shareable" value="true" />
               <property name="max-volatile-time" value="60" />
+		<property name="analyzer" value="org.exoplatform.services.jcr.analyzer.IgnoreAccentAnalyzer"/>
             </properties>
           </query-handler>
           
