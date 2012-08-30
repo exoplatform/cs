@@ -6,21 +6,21 @@
           <emphasis role="bold">
             <link linkend="CSref.PublicRESTAPIs.CalendarApplication">Calendar application</link>
           </emphasis> </para>
-          <para>Uses CalendarWebservice to provide all APIs for working with calendars, such as creating personal/group calendars, sharing calendars, managing events/tasks.</para>
+          <para>Introduction to REST API of the Calendar portlet, and details of APIs (such as checkpermission, event, publicProcess) that are used to build all functions of the Calendar application.</para>
       </listitem>
       <listitem>
         <para>
           <emphasis role="bold">
             <link linkend="CSref.PublicRESTAPIs.MailApplication">Mail application</link>
           </emphasis> </para>
-          <para>Uses MailWebservice to provide all APIs for working with mail, such as sending/checking/storing mail to JCR.</para>
+          <para>Introduction to REST API of the Mail portlet, and details of APIs (such as checkMail, synchFolders, getCheckMailJobInfo) that are used to build all functions of the Mail application.</para>
       </listitem>
       <listitem>
         <para>
           <emphasis role="bold">
             <link linkend="CSref.PublicREST_APIs.ChatApplication">Chat application</link>
           </emphasis> </para>
-          <para>Uses some APIs to help users create a room, join a room, invite other users to room, or send files, and more.</para>
+          <para>Introduction to services (RESTXMPPService and FileExchangeService), and details of APIs (such as getRoomConfigForm, declineToRoom, getRoomConfigForm) that are used for building all functions of the Chat application.</para>
       </listitem>
     </itemizedlist>
 	</highlights>
@@ -46,16 +46,12 @@ The REST API of Calendar portlet is exposed by _org.exoplatform.services.cs.cale
 || Service name || Service URL || Location || Description ||
 | *CalendarWebservice* | {{$portalname/$restcontextname/cs/calendar}} | - Maven groupId: org.exoplatform.cs {example}{example} - ArtifactId: exo.cs.web.webservice | Call extended services of the Calendar application. |
 
-Details:
+*Details:*
 
 * $portalname: The name of the portal
 * $restcontextname: The context name of rest webapplication which is deployed to the "$portalname" portal.
 
-
-
-* *APIs usage*:
-
-Use the following APIs to build all functions of the Calendar application:
+*APIs usage:* Use the following APIs to build all functions of the Calendar application.
 
 || Name || Service URL endpoint || Parameters || Expected Values || Description ||
 | *checkpermission* | {{{/cs/calendar/checkPermission/{username}/{calendarId}/type}}}} | username {example}{example} calendarId {example}{example} type | user id {example}{example} calendar id {example}{example} {{{ INVALID_TYPE = -1 / PRIVATE_TYPE = 0 / SHARED_TYPE = 1 / PUBLIC_TYPE = 2 }}}|Check the permission of a user to a calendar, aiming at defining if the user has the edit permission to the calendar or not. |
@@ -83,8 +79,7 @@ The Mail portlet and its services are deprecated. It remains fully supported for
 || Service name || Service URL || Location || Description ||
 |*MailWebservice* | {{$portalname/$restcontextname/private/cs/mail}} | - Maven groupId: org.exoplatform.cs {example}{example} - artifactId: exo.cs.web.webservice |This service is used to call extended services of the Mail application. |
 
-* *APIs Usage*:
-Use the following APIs to build all functions of the Mail application:
+*APIs Usage:* Use the following APIs to build all functions of the Mail application.
 
 
 || Name || Service URL endpoint || Parameters || Expected Values || Description ||
@@ -126,8 +121,7 @@ REST API _RESTXMPPService_ of the Chat portlet is exposed by _org.exoplatform.se
 |*RESTXMPPService* | {{$portalname/$restcontextname/xmpp}} | * Maven groupid: org.exoplatform.cs {example}{example} * exo.cs.eXoApplication.chat.service| Implement all actions sent to the Chat server; |
 
 
-* *APIs Usage*:
-Use the following APIs to build all functions of the Chat application:
+*APIs Usage:* Use the following APIs to build all functions of the Chat application.
 
 || Name || Service URL endpoint || Parameters || Expected Values || Description ||
 |*loadJsResourceBundle* | {{{/loadJsResourceBundle/{locale}/}}} | locale| locale id |Read the language files in the Chat server. |
@@ -192,7 +186,7 @@ REST API _FileExchangeService_ for uploading files is defined in _org.exoplatfor
 || Service name || Service URL || Location || Description ||
 |*FileExchangeService* | {{$portalname/$restcontextname/fileexchange}} | - Maven groupid: org.exoplatform.cs {example}{example} - InterfactId: exo.cs.eXoApplication.chat.service| Upload a file to the server and inform the user that the file can be downloaded to the local computer. |
 
-* APIs usage: Use the following APIs to upload and send files to other users:
+*APIs Usage:* Use the following APIs to upload and send files to other users.
 
 || Name ||Service URL endpoint || Parameters || Expected Values ||Description ||
 |*upload* | $portalname/$restcontextname/fileexchange | description {example}{example} username {example}{example} requestor {example}{example} isroom| string {example}{example} user id {example}{example} user id {example}{example} true / false |Upload a file to the server.|

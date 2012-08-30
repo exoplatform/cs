@@ -6,43 +6,43 @@
           <emphasis role="bold">
             <link linkend="CSref.JCRStructure.Calendar.JCR">Calendar JCR Structure</link>
           </emphasis> </para>
-          <para>Information on the Calendar JCR structure, such as nodes, child nodes, node types and their properties. </para>
+          <para>Introduction to the Calendar JCR structure, details of child nodes, node types and properties of the following nodes: calendars, eventCategories, categories, eXoCalendarFeed, YY%yyyy% and calendarSetting.</para>
       </listitem>
       <listitem>
         <para>
           <emphasis role="bold">
             <link linkend="CSref.JCRStructure.Chat">Chat JCR Structure</link>
           </emphasis> </para>
-          <para>Information on the Chat JCR structure, such as nodes, child nodes, node types and their properties. </para>
+          <para>Introduction to the Chat JCR structure, and properties of its node types (lr:conversation, lr:historicalmessage, lr:participantchat, lr:interlocutor, lr:defaultpresencestatus, and lr:presencestatus).</para>
       </listitem>
       <listitem>
         <para>
           <emphasis role="bold">
             <link linkend="CSref.JCRStructure.AddressBook">Address Book JCR Structure</link>
           </emphasis> </para>
-          <para>Information on the Address Book JCR structure, such as nodes, child nodes, node types and their properties. </para>
+          <para>Introduction to the Address Book JCR structure, and details of its nodes (Contacts, ContactGroup, tags and shared).</para>
       </listitem>
       <listitem>
         <para>
           <emphasis role="bold">
             <link linkend="CSref.JCRStructure.Mail">Mail JCR Structure</link>
           </emphasis> </para>
-          <para>Information on the Mail JCR structure, such as nodes, child nodes, node types and their properties. </para>
+          <para>Introduction to the Mail JCR structure, and properties of its node types (exo:account, exo:folder, exo:message, exo:mailAttachment, exo:mailtag, exo:filter, exo:mailSetting).</para>
       </listitem>
       <listitem>
         <para>
           <emphasis role="bold">
             <link linkend="CSref.JCRStructure.RSS">RSS JCR Structure</link>
           </emphasis> </para>
-          <para>Information on the RSS JCR structure, such as nodes, child nodes, node types and their properties. </para>
+          <para>Introduction to the RSS JCR structure, and properties of its node type (exo:content).</para>
       </listitem>
     </itemizedlist>
-    <para>Collaboration is a JCR-based product, so data of Collaboration are managed by the eXo-JCR service with each specific structure. The chapter aims at outlining the JCR structure of each application in Collaboration through diagrams and then describing properties of main node types.</para>
- <para>Each diagram shows nodes and their primary node types. Every node/child node must have only one primary node type represented in the round bracket () under the node/childnode, but may also have many mixin node types. Because mixin nodes cannot define the node structure like the primary nodes, they are not shown in the diagrams and their properties hereafter are not described.</para>
- <para>This section describes the structure of the main applications in Collaboration.</para>
 	</highlights>
 {docbook}
 
+Collaboration is a JCR-based product, so data of Collaboration are managed by the eXo-JCR service with each specific structure. The chapter aims at outlining the JCR structure of each application in Collaboration through diagrams and then describing properties of main node types.
+
+Each diagram shows nodes and their primary node types. Every node/child node must have only one primary node type represented in the round bracket () under the node/childnode, but may also have many mixin node types. Because mixin nodes cannot define the node structure like the primary nodes, they are not shown in the diagrams and their properties hereafter are not described.
 {note}
 To learn more about the Collaboration JCR Structure, you should have the certain knowledge of [JCR|http://jcp.org/en/jsr/detail?id=170].
 {note} 
