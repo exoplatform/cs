@@ -7,42 +7,42 @@ h1. External Component Plugins {anchor:id=CSref.Configuration.ExternalComponentP
           <emphasis role="bold">
             <link linkend="CSref.Configuration.CalendarService">Calendar Configuration</link>
           </emphasis> </para>
-          <para>Description of the configuration of external component plugins used to implement the Calendar application.</para>
+          <para>Description of the configuration of external component plugins used to implement the Calendar application, including: NewUserListener, NewGroupListener, NewMembershipListener, ReminderPeriodJob, PopupReminderPeriodJob and AddActionsPlugin.</para>
       </listitem>
       <listitem>
         <para>
           <emphasis role="bold">
             <link linkend="CSref.Configuration.XMPPMessenger">Chat Configuration</link>
           </emphasis> </para>
-          <para>Description of the configuration of external component plugins used to implement the Chat application.</para>
+          <para>Description of the configuration of external component plugins used to implement the Chat application, including: HistoryPeriodJob, RequestFilterComponentPlugin and AuthenticationLoginListener and AuthenticationLogoutListener.</para>
       </listitem>
       <listitem>
         <para>
           <emphasis role="bold">
             <link linkend="CSref.Configuration.DefaultPresenceStatus">Contact Configuration</link>
           </emphasis> </para>
-          <para>Description of the configuration of external component plugins used to implement the Address Book application.</para>
+          <para>Description of the configuration of external component plugins used to implement the Address Book application, including: NewUserListener, NewMembershipListener, and UpdateUserProfileListener.</para>
       </listitem>
       <listitem>
         <para>
           <emphasis role="bold">
             <link linkend="CSref.Configuration.ContentConfiguration">Content Configuration</link>
           </emphasis> </para>
-          <para>Description of the configuration of external component plugins used to implement the Content application, such as RSS reader of Collaboration.</para>
+          <para>Description of the configuration of external component plugins used to implement the Content application, including: RSSContentPluginDescriptionPlugin and DescriptionPlugin.</para>
       </listitem>
       <listitem>
         <para>
           <emphasis role="bold">
             <link linkend="CSref.Configuration.ContactService">Mail Configuration</link>
           </emphasis> </para>
-          <para>Description of the configuration of external component plugins used to implement the Mail application. </para>
+          <para>Description of the configuration of external component plugins used to implement the Mail application, including: AuthenticationLogoutListener and MailSettingConfigPlugin.</para>
       </listitem>
       <listitem>
         <para>
           <emphasis role="bold">
             <link linkend="CSref.Configuration.ContactService">Social Integration Configuration</link>
           </emphasis> </para>
-          <para>Description of the configuration of external component plugins used to integrate Social with Collaboration.</para>
+          <para>Description of the configuration of external component plugins used to integrate Social with Collaboration, including: CalendarDataInitialize, ContactDataInitialize, ContactSpaceActivityPublisher, CalendarSpaceActivityPublisher, and PortletPreferenceRequiredPlugin.</para>
       </listitem>
     </itemizedlist>
 	</highlights>
@@ -183,7 +183,7 @@ The configuration is applied mainly in _extension/webapp/src/main/webapp/WEB-INF
 </component-plugin>   
 {code}
 
-Details:
+*Details:*
 
 * *Name*: {{calendar.new.user.event.listener}} - The unique key to avoid duplicate names. Users can change it.
 * *Set-method*: {{addListenerPlugin}} - The function is executed  at the target of the component to register NewUserListener.
@@ -284,7 +284,7 @@ The configuration is applied mainly in _extension/webapp/src/main/webapp/WEB-INF
 </component-plugin>
 {code}
 
-Details:
+*Details:*
 
 * *Name*: {{calendar.new.group.event.listener}} - The unique key to avoid duplicate names. Users can change it.
 * *Set-method*: {{addListenerPlugin}} - The function is executed at the target of the component to register NewGroupListener.
@@ -320,7 +320,7 @@ _extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/calendar/calendar-serv
 </component-plugin>     	
 {code}
 
-Details:
+*Details:*
 
 * *Name*: {{calendar.new.membership.event.listener}} - The unique key to avoid duplicate names. Users can change it.
 * *Set-method*: {{addListenerPlugin}} - The function which is executed at the target of the component.
@@ -360,7 +360,8 @@ The configuration is applied in _extension/webapp/src/main/webapp/WEB-INF/cs-ext
 </component-plugin>
 {code}
 
-Details:
+*Details:*
+
 * *Name*: {{RecordsJob}} - The name of a schedule job.
 * *Set-method*: {{addPeriodJob}} - The plugin which registers the method.
 * *Type*: {{org.exoplatform.calendar.service.ReminderPeriodJob}} - A class that executes to transfer data into database of Job Scheduler.
@@ -414,7 +415,7 @@ The configuration is applied in _extension/webapp/src/main/webapp/WEB-INF/cs-ext
 </component-plugin>
 {code}
 
-Details:
+*Details:*
 
 * *Name*: {{PopupRecordsJob}} - The name of the job. 
 * *Set-method*: {{addPeriodJob}} - The plugin registering method.
@@ -527,7 +528,7 @@ h3. HistoryPeriodJob {anchor:id=CSref.Configuration.HistoryPeriodJob}
 </external-component-plugins>
 {code}
 
-Details:
+*Details:*
 
 * *Name*: {{ChatRecordsJob}} - The name of the job.
 * *Set-method*: {{addPeriodJob}} - The plugin which registers the method.
@@ -565,7 +566,7 @@ h3. RequestFilterComponentPlugin {anchor:id=CSref.Configuration.RequestFilterCom
 </external-component-plugins>
 {code}
 
-Details:
+*Details:*
 
 * *Name*: {{ws.rs.request.filter}} - The name of the filter. 
 * *Set-method*: {{addPlugin}} - The plugin which registers the method.
@@ -577,7 +578,7 @@ See details about the init-params of the component in the following table:
 || Value-param || Description || Possible value || Default value ||
 | *RESTXMPPServiceFilter* | The name of the filter. | {{Class path}} | {{org.exoplatform.services.xmpp.rest.filter.RESTXMPPServiceFilter}}|
 
-h3. AuthenticationLoginListener and AuthenticationLogoutListener {anchor:id=CSref.Configuration.AuthenticationLoginListenerandAuthenticationLogoutListener}
+h3. AuthenticationLoginListener & AuthenticationLogoutListener {anchor:id=CSref.Configuration.AuthenticationLoginListenerandAuthenticationLogoutListener}
 
 Two functions, including login and logout of XMPPRestService, are responsible for creating a new XMPPSessionImpl and destroying an existing XMPPSessionImpl. They can be called by listeners: AuthenticationLoginListener, AuthenticationLogoutListener or from client(browser) through the REST protocol (jabberLogin, jabberLogout in UIMainChatWindow.js).
  
@@ -587,7 +588,13 @@ You must use the same target component for two external component plugins:
 <target-component>org.exoplatform.services.listener.ListenerService</target-component>
 {code}
 
-h4. AuthenticationLoginListener {anchor:id=CSref.Configuration.AuthenticationLoginListener}
+{docbook}
+<para xml:id="CSref.Configuration.AuthenticationLoginListener">
+<citetitle>
+	<emphasis role="bold">AuthenticationLoginListener</emphasis>
+</citetitle>
+</para>
+{docbook}
 
 {code:xml}
 <component-plugin>
@@ -598,15 +605,20 @@ h4. AuthenticationLoginListener {anchor:id=CSref.Configuration.AuthenticationLog
 </component-plugin> 
 {code}
 
-Details:
+*Details:*
 
 * *Name*: {{exo.core.security.ConversationRegistry.register}} - The name of plugin.
 * *Set-method*: {{addListener}} - The plugin which registers the method.
 * *Type*: {{org.exoplatform.services.xmpp.connection.impl.AuthenticationLoginListener}} - The class to execute the requests of the plugin.
 * *Description*: It is used to start the session and log in the chat server.
 
-
-h4. AuthenticationLogoutListener {anchor:id=CSref.Configuration.RequestFilterComponentPlugin.AuthenticationLogoutListener} 
+{docbook}
+<para xml:id="CSref.Configuration.RequestFilterComponentPlugin.AuthenticationLogoutListener">
+<citetitle>
+	<emphasis role="bold">AuthenticationLogoutListener</emphasis>
+</citetitle>
+</para>
+{docbook}
 
 {code:xml}
 <component-plugin>
@@ -617,13 +629,12 @@ h4. AuthenticationLogoutListener {anchor:id=CSref.Configuration.RequestFilterCom
 </component-plugin>         
 {code}
 
-Details:
+*Details:*
 
 * *Name*: {{exo.core.security.ConversationRegistry.register}} - The name of plugin.
 * *Set-method*: {{addListener}} - The plugin which registers the method.
 * *Type*: {{org.exoplatform.services.xmpp.connection.impl.AuthenticationLogoutListener}} - A class to execute the requests of the plugin.
 * *Description*: It is used to end the session and log in the chat server.
-
 
 h2. Contact Configuration {anchor:id=CSref.Configuration.ContactConfigurationRoleNotInToc}
 The Contact Application is configured by three external component plugins: {{NewUserListener}}, {{NewMembershipListener}}
@@ -635,7 +646,13 @@ and {{UpdateUserProfileListener}}. They use the same target component:
 
 The Contact configuration is found in _extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/contact/contact-service-configuration.xml_.
 
-h3. NewUserListener {anchor:id=CSref.Configuration.NewUserListener}
+{docbook}
+<para xml:id="CSref.Configuration.NewUserListener">
+	<citetitle>
+		<emphasis role="bold">NewUserListener</emphasis>
+	</citetitle>
+</para>
+{docbook}
 
 {code:xml}  	
 <component-plugin>
@@ -646,14 +663,20 @@ h3. NewUserListener {anchor:id=CSref.Configuration.NewUserListener}
 </component-plugin>
 {code}
 
-Details:
+*Details:*
 
 * *Name*: {{contact.new.user.event.listener}} - The name of listener.
 * *Set-method*: {{addListenerPlugin}} - The plugin which registers the method.
 * *Type*: {{org.exoplatform.contact.service.impl.NewUserListener}} - A class that executes all requirements of the plugin.
 * *Description*: It is used to initialize personal contact data for users.
 
-h3. NewMembershipListener {anchor:id=CSref.Configuration.NewUser.NewMembershipListener}
+{docbook}
+<para xml:id="CSref.Configuration.NewUser.NewMembershipListener">
+	<citetitle>
+		<emphasis role="bold">NewMembershipListener</emphasis>
+	</citetitle>
+</para>
+{docbook}
  
 {code:xml}
 <component-plugin>
@@ -664,14 +687,20 @@ h3. NewMembershipListener {anchor:id=CSref.Configuration.NewUser.NewMembershipLi
 </component-plugin>
 {code}
 
-Details:
+*Details:*
 
 * *Name*: {{contact.new.membership.event.listener}} - The name of the listener.
 * *Set-method*: {{addListenerPlugin}} - The plugin which registers the method. Keep this value.
 * *Type*: {{org.exoplatform.contact.service.impl.NewMembershipListener}} - The class which executes all requirements of the plugin.
 * *Description*: It is used to initialize an address book for a specific group.
 
-h3. UpdateUserProfileListener {anchor:id=CSref.Configuration.UpdateUserProfileListener}
+{docbook}
+<para xml:id="CSref.Configuration.UpdateUserProfileListener">
+	<citetitle>
+		<emphasis role="bold">UpdateUserProfileListener</emphasis>
+	</citetitle>
+</para>
+{docbook}
 
 {code:xml}
 <component-plugin>
@@ -683,7 +712,7 @@ h3. UpdateUserProfileListener {anchor:id=CSref.Configuration.UpdateUserProfileLi
 {code}
 
 
-Details:
+*Details:*
 
 * *Name*: {{contact.new.userprofile.event.listener}} - The name of the listener.
 * *Set-method*: {{addListenerPlugin}} - The plugin which registers the method. Keep this value.
@@ -700,7 +729,14 @@ Both the external components plugins use the same target component:
 {code}
 This content configuration is applied in _extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/content/content-service-configuration.xml_.
 
-h3. RSSContentPluginDescriptionPlugin {anchor:id=CSref.Configuration.RSSContentPluginDescriptionPlugin}
+{docbook}
+<para xml:id="CSref.Configuration.RSSContentPluginDescriptionPlugin">
+	<citetitle>
+		<emphasis role="bold">RSSContentPluginDescriptionPlugin</emphasis>
+	</citetitle>
+</para>
+{docbook}
+
 {code:xml}
 <component-plugin>
   <name>rssreader.listener</name>
@@ -710,15 +746,20 @@ h3. RSSContentPluginDescriptionPlugin {anchor:id=CSref.Configuration.RSSContentP
 </component-plugin>
 {code}
 
-
-Details:
+*Details:*
 
 * *Name*: {{rssreader.listener}} - The name of the listener.
 * *Set-method*: {{addPlugin}} - The plugin which registers the method. Keep this value.
 * *Type*: {{org.exoplatform.content.service.RSSContentPlugin}} - A class which extends ContentPlugin and implements the loadContentMeta method to get content items.
 * *Description*: It is a formater used to analyze the data from a RSS resource.
 
-h3. DescriptionPlugin {anchor:id=CSref.Configuration.DescriptionPlugin}
+{docbook}
+<para xml:id="CSref.Configuration.DescriptionPlugin">
+	<citetitle>
+		<emphasis role="bold">DescriptionPlugin</emphasis>
+	</citetitle>
+</para>
+{docbook}
 	    
 {code:xml}
 <component-plugin>
@@ -729,7 +770,7 @@ h3. DescriptionPlugin {anchor:id=CSref.Configuration.DescriptionPlugin}
 </component-plugin>	    
 {code}
 
-Details:
+*Details:*
 
 * *Name*: {{description.listener}} - The name of the listener. 
 * *Set-method*: {{addPlugin}} - The plugin registering method. Keep this value.
@@ -744,7 +785,13 @@ The Mail portlet and its services are deprecated. It remains fully supported for
 </para></warning>
 {docbook}
 
-h3. AuthenticationLogoutListener {anchor:id=CSref.Configuration.AuthenticationLogoutListener}
+{docbook}
+<para xml:id="CSref.Configuration.AuthenticationLogoutListener">
+	<citetitle>
+		<emphasis role="bold">AuthenticationLogoutListener</emphasis>
+	</citetitle>
+</para>
+{docbook}
 
 In the Mail application of Collaboration, when a user checks messages for one account, the remote mailbox fetch is performed as a background job. Before Collaboration 1.2, the job was continued until all messages had been retrieved or when the user stopped the check through the UI. Hence, even when a user was not logged in, the background job was continued. This can be the resource intensive for the server if many users have large mailboxes.
 Since Collaboration 1.2,  one capability is added to halt the background job when the user session terminates (logout or timeout). It makes Collaboration more friendly with server resources. If you want to activate this feature, you need to add a bunch of the xml congifuration in _/extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/mail/mail-service-configuration.xml_:
@@ -761,15 +808,22 @@ Since Collaboration 1.2,  one capability is added to halt the background job whe
 </external-component-plugins>
 {code}
 
-Details:
+*Details:*
 
 * *Name*: {{exo.core.security.ConversationRegistry.unregister}} - The name of listener.
 * *Set-method*: {{addListener}} The plugin which registers the method. Keep this value.
 * *Type*: {{org.exoplatform.mail.service.AuthenticationLogoutListener}} - A class which executes all requirements of the plugin.
 * *Description*: It is a plugin used to stop checking mails of a user when he logs out.
 
-h3. MailSettingConfigPlugin {anchor:id=CSref.Configuration.MailConfig.MailSettingConfigPlugin}
- Since Collaboration 2.2.0, _MailSettingConfigPlugin_ is used to define the behavior, for example, showing/hiding fields and checking/unchecking checkboxes, of email account settings in the mail-server-configuration.xml file. It allows administrators to preconfigure all settings and to specify if end-users have the modification right on each specific setting or not.
+{docbook}
+<para xml:id="CSref.Configuration.MailConfig.MailSettingConfigPlugin">
+	<citetitle>
+		<emphasis role="bold">MailSettingConfigPlugin</emphasis>
+	</citetitle>
+</para>
+{docbook}
+
+Since Collaboration 2.2.0, _MailSettingConfigPlugin_ is used to define the behavior, for example, showing/hiding fields and checking/unchecking checkboxes, of email account settings in the mail-server-configuration.xml file. It allows administrators to preconfigure all settings and to specify if end-users have the modification right on each specific setting or not.
 
 {code:xml}
 <external-component-plugins>
@@ -884,7 +938,8 @@ h3. MailSettingConfigPlugin {anchor:id=CSref.Configuration.MailConfig.MailSettin
   </external-component-plugins>
 {code}
 
-Details:
+*Details:*
+
 * *Name*: {{cs.mail.service.settings}} - The name of the mail settings.
 * *Set-method*: {{addPlugin}} - The plugin which registers the method.
 * *Type*: {{org.exoplatform.mail.service.MailSettingConfigPlugin}} - The plugin's class name.
@@ -935,7 +990,7 @@ h3. CalendarDataInitialize {anchor:id=CSref.Configuration.CalendarDataInitialize
 </external-component-plugins>
 {code}
 
-Details:
+*Details:*
 
 * *Name*: {{CalendarDataInitialize}} - The name of plugin.
 * *Set-method*: {{addSpaceListener}} - The plugin which registers the method.
@@ -967,7 +1022,7 @@ h3. ContactDataInitialize {anchor:id=CSref.Configuration.ContactDataInitialize}
 </external-component-plugins>
 {code}
 
-Details:
+*Details:*
 
 * *Name*: {{ContactDataInitialize}} - The name of the plugin.
 * *Set-method*: {{addSpaceListener}} - The plugin which registers the method.
@@ -993,7 +1048,7 @@ h3. ContactSpaceActivityPublisher {anchor:id=CSref.Configuration.ContactSpaceAct
 </external-component-plugins>
 {code}
 
-Details:
+*Details:*
 
 * *Name*: {{ContactEventListener}} - The name of the plugin.
 * *Set-method*: {{addListenerPlugin}} - The plugin which registers the method.
@@ -1013,7 +1068,7 @@ h3. CalendarSpaceActivityPublisher {anchor:id=CSref.Configuration.CalendarSpaceA
 </external-component-plugins>
 {code}
 
-Details:
+*Details:*
 
 * *Name*: {{CalendarEventListener}} - The name of the plugin.
 * *Set-method*: {{addEventListenerPlugin}} - The plugin which registers the method.
@@ -1041,7 +1096,7 @@ h3. PortletPreferenceRequiredPlugin {anchor:id=CSref.Configuration.PortletPrefer
 </external-component-plugins>
 {code}
 
-Details:
+*Details:*
 
 * *Name*: {{ortlets.prefs.required}} - The name of the plugin.
 * *Set-method*: {{setPortletsPrefsRequired}} - The plugin which registers the method.

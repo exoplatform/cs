@@ -101,8 +101,9 @@ See the following example:
 </external-component-plugins> 
 {code}
 
-Details:
-{{ContactSpaceActivityPublisher}} implements {{ContactLifeCycle}}. This implementation publishes activities in the space activity stream to notify of new and updated contacts in the space address book.
+*Details:*
+
+* {{ContactSpaceActivityPublisher}} implements {{ContactLifeCycle}}. This implementation publishes activities in the space activity stream to notify of new and updated contacts in the space address book.
 
 
 h1. Transport {anchor:id=CSref.ExtensionPoints.TransportRoleNotInToc}
@@ -112,7 +113,6 @@ _Transport_ is an overridable component used in the Chat application of Collabor
 This overridable component is used to help users add the protocol to the Chat application, such as: ICQ, YAHOO, MSN, XMPP, AIM, GTALk.
 
 The Chat application of Collaboration only uses the XMPP protocol that is implemented in the _XMPPTransport_ object.
-
 
 h1. EventLifeCycle {anchor:id=CSref.ExtensionPoints.EventLifeCycleRoleNotInToc}
 
@@ -131,5 +131,6 @@ See the following example:
 </external-component-plugins>
 {code}
 
-Details:
-{{CalendarSpaceActivityPublisher}} implements {{EventLifeCycle}}. It writes activities in the space activity stream when events or tasks are added/modified.
+*Details:*
+
+* {{CalendarSpaceActivityPublisher}} implements {{EventLifeCycle}}. It writes activities in the space activity stream when events or tasks are added/modified.

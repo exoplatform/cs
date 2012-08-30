@@ -1,5 +1,5 @@
 <abstract>
-    <para>
+<para>
     The intended readers of this guide are developers who want to develop Collaboration functions of eXo Platform 3.5.
 </para>
 <para>
@@ -7,16 +7,16 @@
 </para>
 <itemizedlist>
 <listitem>
-<para><emphasis role="bold"><link linkend="CSref.Application">Applications</link></emphasis>: Provides the comprehensive view about Collaboration applications of eXo Platform 3.5.</para>
+<para><emphasis role="bold"><link linkend="CSref.Application">Applications</link></emphasis></para>
+<para>Details of 2 applications, including Portlets and Gadgets which are used mainly in Collaboration.</para>
 </listitem>
 <listitem>
-<para><emphasis role="bold"><link linkend="CSref.Configuration">Configurations</link></emphasis>: Provides the configuration of Collaboration components, external component plugins and other configurations.</para>
+<para><emphasis role="bold"><link linkend="CSref.Configuration">Configurations</link></emphasis></para>
+<para>A configuration of Collaboration components, external component plugins and other configurations.</para>
 </listitem>
 <listitem>
-<para><emphasis role="bold"><link linkend="CSref.JCRStructure">JCR structure</link></emphasis>: Provides the JCR structure of each Collaboration applications.</para>
-</listitem>
-<listitem>
-<para><emphasis role="bold"><link linkend="CSref.DeveloperReference">Developer reference</link></emphasis>: Provides the knowledge of overridden components and public REST APIs implemented in the Collaboration functions of eXo Platform 3.5.</para>
+<para><emphasis role="bold"><link linkend="CSref.DeveloperReference">Developer reference</link></emphasis></para>
+<para>Knowledge of extension points, public REST APIs and JCR structure of the Collaboration applications.</para>
 </listitem>
 </itemizedlist>
 </abstract>

@@ -1,20 +1,20 @@
 {docbook}
 <abstract>
- <para>This chapter supplies you with the basic knowledge about overridden components and REST APIs implemented in Collaboration via the following topics:</para>
+ <para>This chapter supplies you with the basic knowledge of overridden components and REST APIs implemented in Collaboration via the following topics:</para>
     <itemizedlist>
       <listitem>
         <para>
           <emphasis role="bold">
             <link linkend="CSref.ExtensionPoints">Extension points</link>
           </emphasis> </para>
-          <para>Knowledge about some overridable components in Collaboration.</para>
+          <para>Knowledge of some overridable components in Collaboration, including ContentDAO, ContactLifeCycle, Transport, and EventLifeCycle.</para>
       </listitem>
       <listitem>
         <para>
           <emphasis role="bold">
             <link linkend="CSref.PublicREST_APIs">Public REST APIs</link>
           </emphasis> </para>
-          <para>Information (such as name, service URL, service URL endpoint, location, parameter, and description) on Public REST APIs used in Collaboration. </para>
+          <para>Details (such as name, service URL, service URL endpoint, location, parameter, and description) of Public REST APIs used in the Collaboration applications. </para>
       </listitem>
       <listitem>
         <para>

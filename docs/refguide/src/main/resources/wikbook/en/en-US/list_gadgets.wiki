@@ -5,26 +5,27 @@
             <para>
               <link linkend="CSref.Gadgets.Evenslist">Eventslist</link>
             </para>
-            <para>Lists the upcoming events with the user-configurable number of items.</para>
+            <para>Information of the Eventslist gadget that lists the upcoming events with the user-configurable number of items, its preferences and links to used REST services.</para>
           </listitem>
           <listitem>
             <para>
               <link linkend="CSref.Gadgets.Taskslist">Taskslist</link>
             </para>
-            <para>Lists the  upcoming tasks with the user-configurable number of items.</para>
+            <para>Information of the Taskslist gadget that lists the upcoming tasks with the user-configurable number of items, its preferences and links to used REST services.</para>
           </listitem>
 		      <listitem>
             <para>
               <link linkend="CSref.Gadgets.Messageslist">Messageslist</link>
             </para>
-            <para>Lists the unread messages with the user-configurable number of items.</para>
+            <para>Information of the Messageslist gadget that lists the unread messages with the user-configurable number of items, its preferences and links to used REST services.</para>
           </listitem>
         </itemizedlist>
 </highlights>
 {docbook}
+
 {docbook}
 <para>
-Collaboration consists of three gadgets: Eventslist, Taskslist and Messageslist. They are packaged in the <filename>csResources.war</filename> file.
+Collaboration consists of 3 gadgets: Eventslist, Taskslist and Messageslist. They are packaged in the <filename>csResources.war</filename> file.
 </para>
 {docbook}
 {docbook}
@@ -60,7 +61,7 @@ See preferences of this gadget in the following sample code:
 <UserPref name="timeformat" display_name="__MSG_format__" default_value="AM/PM" datatype="enum" />
 {code}
 
-Details:
+*Details:*
 || Preferences || Description ||
 | *url* | Link to the Calendar portlet. |
 | *Subscribeurl* | Link to the upcoming events. |
@@ -143,7 +144,8 @@ See the prefereces of this gadget in the following sample code:
 <UserPref name="tag" display_name="__MSG_tag__" default_value="" datatype="hidden" />
 {code}
 
-Details:
+*Details:*
+
 || Preferences || Description ||
 | *Url* | The URL of the Mail Application. |
 | *Subscribeurl* | The link to upcoming messages.  |
