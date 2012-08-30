@@ -11,7 +11,7 @@
       <table class="UIFormGrid">
           <tbody>
             <tr>
-              <td class="InputFieldLabel">
+              <td class="FieldLabel">
                 <%=uicomponent.getLabel(uicomponent.URL)%>
               </td>
               <td class="FieldComponent">
@@ -19,7 +19,7 @@
               </td>
             </tr>
             <tr>
-              <td class="InputFieldLabel">
+              <td class="FieldLabel">
                 <%=uicomponent.getLabel(uicomponent.NAME)%>
               </td>
               <td class="FieldComponent">
@@ -27,7 +27,7 @@
               </td>
             </tr>
             <tr>
-              <td class="InputFieldLabel">
+              <td class="FieldLabel">
                 <%=uicomponent.getLabel(uicomponent.DESCRIPTION)%>
               </td>
               <td class="FieldComponent">
@@ -35,7 +35,7 @@
               </td>
             </tr>
             <tr>
-              <td class="InputFieldLabel">
+              <td class="FieldLabel">
                 <%=uicomponent.getLabel(uicomponent.COLOR)%>
               </td>
               <td class="FieldComponent">
@@ -44,7 +44,7 @@
             </tr>
             <!--
             <tr>
-              <td class="InputFieldLabel">
+              <td class="FieldLabel">
                 <%=uicomponent.getLabel(uicomponent.AUTO_REFRESH)%>
               </td>
               <td class="FieldComponent">
@@ -52,7 +52,7 @@
               </td>
             </tr>  -->
             <tr>
-              <td class="InputFieldLabel">
+              <td class="FieldLabel">
                 <%=uicomponent.getLabel(uicomponent.FIELD_BEFORE_DATE_SELECTBOX)%>
               </td>
               <td class="FieldComponent">
@@ -60,81 +60,62 @@
               </td>
             </tr>
             <tr>
-              <td class="InputFieldLabel">
+              <td class="FieldLabel">
                 <%=uicomponent.getLabel(uicomponent.FIELD_AFTER_DATE_SELECTBOX)%>
               </td>
               <td class="FieldComponent">
                 <%uicomponent.renderField(uicomponent.FIELD_AFTER_DATE_SELECTBOX)%>
               </td>
             </tr>
-            <tr>
-              <td colspan="2">
-                <div>
-                  <table> 
-                    <%              
-                      field = uicomponent.getChildById(uicomponent.USE_AUTHENTICATION);
-                      label = _ctx.appRes(uicomponent.id + ".label." + field.getId()) ;
-                      def useAuthentication = field.isChecked();
-                      def accountColor = "";
-                      def fieldUsername = uicomponent.getChildById(uicomponent.USERNAME);
-                      def labelUsername = _ctx.appRes(uicomponent.id+ ".label." + fieldUsername.getId()) ;
-                      
-                      def fieldPW = uicomponent.getChildById(uicomponent.PASSWORD);
-                      def labelPW = _ctx.appRes(uicomponent.id+ ".label." + fieldPW.getId()) ;
-                      
-                      if(!useAuthentication){
-                        accountColor= "color:gray;"
-                        fieldUsername.setEnable(false);
-                        fieldPW.setEnable(false);
-                      } else {
-                        accountColor= "color:black;";
-                        fieldUsername.setEnable(true);
-                        fieldPW.setEnable(true);                
-                      }
-                    %>
-                    <tr style="height:25px;">
-                      <td>
-                        <div class="InputFieldLabel" id='<%=field.getId()%>'>
-                          <span class="FieldComponent" style="padding-left:0px;"><%uicomponent.renderUIComponent(field)%></span>
-                          <span class="Label" style="padding-left:10px;">$label</span>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr style="height:25px;">
-                      <td>
-                        <div style="padding-left:50px;">
-                          <table>
-                            <tr style="height:25px;">
-                              <td>
-                                <div class="FieldInput" id='id-<%=fieldUsername.getId()%>' style="white-space:nowarp; width:auto;">
-                                  <span class="InputFieldLabel" style="width:100px;<%=accountColor%>">$labelUsername</span>
-                                  <span class="FieldComponent"><%uicomponent.renderUIComponent(fieldUsername)%>&nbsp;*</span>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr style="height:22px;">
-                              <td>
-                                <div class="FieldInput" id='id-<%=fieldPW.getId()%>' style="white-space:nowarp; width:auto;">
-                                  <span class="InputFieldLabel" style="width:100px;<%=accountColor%>">$labelPW</span>
-                                  <span class="FieldComponent"><%uicomponent.renderUIComponent(fieldPW)%>&nbsp;*</span>
-                                </div>
-                              </td>
-                            </tr>
-                          </table>
-                        </div>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
-              </td>
-            </tr>
+			<%              
+			  field = uicomponent.getChildById(uicomponent.USE_AUTHENTICATION);
+			  label = _ctx.appRes(uicomponent.id + ".label." + field.getId()) ;
+			  def useAuthentication = field.isChecked();
+			  def accountColor = "";
+			  def fieldUsername = uicomponent.getChildById(uicomponent.USERNAME);
+			  def labelUsername = _ctx.appRes(uicomponent.id+ ".label." + fieldUsername.getId()) ;
+			  
+			  def fieldPW = uicomponent.getChildById(uicomponent.PASSWORD);
+			  def labelPW = _ctx.appRes(uicomponent.id+ ".label." + fieldPW.getId()) ;
+			  
+			  if(!useAuthentication){
+				accountColor= "color:gray;"
+				fieldUsername.setEnable(false);
+				fieldPW.setEnable(false);
+			  } else {
+				accountColor= "color:black;";
+				fieldUsername.setEnable(true);
+				fieldPW.setEnable(true);                
+			  }
+			%>
+			<tr id='<%=field.getId()%>'>
+			  <td class="FieldLabel">
+				 <%uicomponent.renderUIComponent(field)%>
+			  </td>
+			  <td class="FieldComponent" style="vertical-align: middle;">
+				$label
+			  </td>
+			</tr>
+		   
+			<tr>
+			  <td class="FieldLabel" id='id-<%=fieldUsername.getId()%>'>
+				  $labelUsername
+			  </td>
+			  <td class="FieldComponent"><%uicomponent.renderUIComponent(fieldUsername)%>&nbsp;*</td>
+			</tr>
+			<tr>
+			  <td class="FieldLabel" id='id-<%=fieldPW.getId()%>'>
+				  $labelPW
+			  </td>
+			  
+			  <td class="FieldComponent"><%uicomponent.renderUIComponent(fieldPW)%>&nbsp;*</td>
+			</tr>
             <% if (!uicomponent.isAddNew_) { %>
-            <tr><td colspan="2"><br/></td></tr>
             <tr>
-              <td class="InputFieldLabel">
+              <td class="FieldLabel">
                 <%=uicomponent.getLabel(uicomponent.LAST_UPDATED)%>
               </td>
-              <td class="InputFieldLabel">
+              <td class="FieldComponent">
                 <%=uicomponent.getLastUpdated()%>
               </td>
             </tr>
