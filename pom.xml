@@ -123,6 +123,10 @@
     <org.staxnav.version>0.9.6</org.staxnav.version>
     <nekohtml.version>1.9.14</nekohtml.version>
     <caja.version>r1</caja.version>
+	<!-- eXo style -->
+	<doc-style.version>1.0.7-SNAPSHOT</doc-style.version>
+	<!-- Wikbook -->
+	<version.wikbook.plugin>0.9.37</version.wikbook.plugin>
     <!-- ************** -->
     <!-- Build settings -->
     <!-- ************** -->
