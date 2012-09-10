@@ -15,14 +15,14 @@ h1. eXo Chatserver Configuration {anchor:id=CSref.Configuration.eXoChatserverCon
           <emphasis role="bold">
             <link linkend="CSref.Configuration.SystemConfiguration">System Configuration</link>
           </emphasis> </para>
-          <para>Information of several ports used for communication by Openfire.</para>
+          <para>Information about several ports used for communication by Openfire.</para>
       </listitem>
       <listitem>
         <para>
           <emphasis role="bold">
             <link linkend="CSref.Configuration.ASConfiguration">AS configuration</link>
           </emphasis> </para>
-          <para>Information of the AS configuration that supports SSO in Collaboration.</para>
+          <para>Information about the AS configuration that supports SSO in Collaboration.</para>
       </listitem>
     </itemizedlist>
 	</highlights>
