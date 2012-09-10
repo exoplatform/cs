@@ -10,7 +10,7 @@ h1. Contact View
 
 h2. List View
 
-List view displays all contacts on the list panel and detail information of the selected contact in the Contact View panel. Following these guides to view contacts by List View:
+List view displays all contacts on the list panel and detailed information about the selected contact in the Contact View panel. Following these guides to view contacts by List View:
 
 On the Main tool bar, click the *View* icon then select *List*:
 

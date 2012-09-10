@@ -5,19 +5,19 @@
             <para>
               <link linkend="CSref.Gadgets.Evenslist">Eventslist</link>
             </para>
-            <para>Information of the Eventslist gadget that lists the upcoming events with the user-configurable number of items, its preferences and links to used REST services.</para>
+            <para>Information about the Eventslist gadget that lists the upcoming events with the user-configurable number of items, its preferences and links to used REST services.</para>
           </listitem>
           <listitem>
             <para>
               <link linkend="CSref.Gadgets.Taskslist">Taskslist</link>
             </para>
-            <para>Information of the Taskslist gadget that lists the upcoming tasks with the user-configurable number of items, its preferences and links to used REST services.</para>
+            <para>Information about the Taskslist gadget that lists the upcoming tasks with the user-configurable number of items, its preferences and links to used REST services.</para>
           </listitem>
 		      <listitem>
             <para>
               <link linkend="CSref.Gadgets.Messageslist">Messageslist</link>
             </para>
-            <para>Information of the Messageslist gadget that lists the unread messages with the user-configurable number of items, its preferences and links to used REST services.</para>
+            <para>Information about the Messageslist gadget that lists the unread messages with the user-configurable number of items, its preferences and links to used REST services.</para>
           </listitem>
         </itemizedlist>
 </highlights>

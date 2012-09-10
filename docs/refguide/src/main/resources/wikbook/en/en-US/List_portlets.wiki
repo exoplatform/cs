@@ -5,37 +5,37 @@
             <para>
               <link linkend="CSref.Portlets.CalendarPortlet">Calendar portlet</link>
             </para>
-            <para>Information of the Calendar application, and its details (features, package and portlet.xml).</para>
+            <para>Information about the Calendar application, and its details (features, package and portlet.xml).</para>
           </listitem>
           <listitem>
             <para>
               <link linkend="CSref.Portlets.ChatbatPortlet">Chatbar portlet</link>
             </para>
-            <para>Information of the Chatbar application of Collaboration, and its details (package, portlet preferences and portlet.xml).</para>
+            <para>Information about the Chatbar application of Collaboration, and its details (package, portlet preferences and portlet.xml).</para>
           </listitem>
 		      <listitem>
             <para>
               <link linkend="CSref.Portlets.ChatPortlet">Chat Portlet</link>
             </para>
-            <para>Information of the Chat application of Collaboration that allows users to enter chat rooms and communicate with online others at real time, its package and portlet.xml.</para>
+            <para>Information about the Chat application of Collaboration that allows users to enter chat rooms and communicate with online others at real time, its package and portlet.xml.</para>
           </listitem>
           <listitem>
             <para>
               <link linkend="CSref.Portlets.ContactPortlet">Contact Portlet</link>
             </para>
-            <para>Information of the Contact application of Collaboration, its package and portlet.xml.</para>
+            <para>Information about the Contact application of Collaboration, its package and portlet.xml.</para>
           </listitem>
           <listitem>
             <para>
               <link linkend="CSref.Portlets.MailPortlet">Mail Portlet</link>
             </para>
-            <para>Information of the Mail application of Collaboration that offers a lot of features to users, such as sending, receiving or viewing their mails through Internet without actually downloading them to their computer, its package and portlet.xml.</para>
+            <para>Information about the Mail application of Collaboration that offers a lot of features to users, such as sending, receiving or viewing their mails through Internet without actually downloading them to their computer, its package and portlet.xml.</para>
           </listitem>
           <listitem>
             <para>
               <link linkend="CSref.Portlets.RSSreaderPortlet">RSSreader Portlet</link>
             </para>
-            <para>Information of the RSSreader application of Collaboration that allows you to quickly get a view of their favorite feeds around the web, its package and portlet.xml</para>
+            <para>Information about the RSSreader application of Collaboration that allows you to quickly get a view of their favorite feeds around the web, its package and portlet.xml</para>
           </listitem>
         </itemizedlist>
 </highlights>
