@@ -6,6 +6,8 @@
   import org.exoplatform.webui.form.UIFormCheckBoxInput;
   import org.exoplatform.calendar.webui.UICalendarPortlet;
   def rcontext = _ctx.getRequestContext() ;
+  def MAX_CALENDAR_NAME_LENGTH = 23;
+  def MAX_DISPLAYED_CALENDAR_NAME = 20;
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendars','/calendar/javascript/') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.CalendarLayout.updateUICalendarsLayout();') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendars.init("' + uiform.id + '") ;') ;
@@ -104,7 +106,11 @@
                   		<span class="$css"></span>
                   	</span>
                   </a>
-                  <a class="CalendarName" href="javascript:void(0);" title="$calendar.name">$calendar.name</a>
+                  <%
+                    def toolong = (calendar.name.length() > MAX_CALENDAR_NAME_LENGTH);
+                    def calendarLabel = (toolong ? calendar.name.substring(0, MAX_DISPLAYED_CALENDAR_NAME) + "..." : calendar.name);
+                  %>
+                  <a class="CalendarName" href="javascript:void(0);" title="$calendar.name">$calendarLabel</a>
                   <span style="display:none"><%uiform.renderField(calId)%></span>
                 </div>
             </li>
@@ -157,7 +163,12 @@
                   		<span class="$css"></span>
                   	</span>
                   </a>
-                  <a class="CalendarName" href="javascript:void(0);" title="<%=owner + calendar.getName()%>"><%=owner + calendar.getName()%></a>
+                  <%
+                    def sharedCalendarName = owner + calendar.getName();
+                    def toolong = (sharedCalendarName.length() > MAX_CALENDAR_NAME_LENGTH);
+                    def sharedCalendarLabel = (toolong ? sharedCalendarName.substring(0, MAX_DISPLAYED_CALENDAR_NAME) + "..." : sharedCalendarName);
+                  %>
+                  <a class="CalendarName" href="javascript:void(0);" title="$sharedCalendarName">$sharedCalendarLabel</a>
   								<span style="display:none;"><%uiform.renderField(calendar.getId())%></span>
 								</div>
             </li>
