@@ -10,8 +10,8 @@
   <artifactId>cs</artifactId>
   <version>2.2.11-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <name>eXo Collaboration</name>
-  <description>eXo Collaboration made of Address Book, Calendar, Mail and Chat.</description>
+  <name>Collaboration</name>
+  <description>Collaboration made of Address Book, Calendar, Mail and Chat.</description>
   <url>http://wiki.exoplatform.org/xwiki/bin/view/CS/</url>
   <scm>
     <connection>scm:git:git://github.com/exoplatform/cs.git</connection>
@@ -123,6 +123,10 @@
     <org.staxnav.version>0.9.6</org.staxnav.version>
     <nekohtml.version>1.9.14</nekohtml.version>
     <caja.version>r1</caja.version>
+    <!-- eXo style -->
+    <doc-style.version>1.0.8-SNAPSHOT</doc-style.version>
+    <!-- Wikbook -->
+    <version.wikbook.plugin>0.9.41</version.wikbook.plugin>
     <!-- ************** -->
     <!-- Build settings -->
     <!-- ************** -->
