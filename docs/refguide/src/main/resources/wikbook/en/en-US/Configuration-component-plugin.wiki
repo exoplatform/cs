@@ -370,12 +370,12 @@ The configuration is applied in _extension/webapp/src/main/webapp/WEB-INF/cs-ext
 See details about the init-params of the component in the following table:
 || Properties-param || Description || Property names || Description || Possible values || Default values ||
 | *job.info* | Save the monitor data  periodically. | {{jobName}} | The name of job | {{String}} | {{ReminderJob}}|
-| ** |  | {{groupName}} | The name of group job. | {{String}} | {{CollaborationSuite}} |
-| ** |  | {{job}} | The name of actual job class. | {{Class path}} | {{org.exoplatform.calendar.service.ReminderJob}} |
-| ** |  | {{repeatCount}} | How many times to run this job. | {{Long}} | {{0, ( use '0' which means 'run forever)}}  |
-| ** |  | {{period}} | The time interval (millisecond) between job executions. | {{Long}} | {{180000}} |
-| ** |  | {{startTime}} | The time when the job starts running. | {{Integer}} | {{+0}} |
-| ** |  | {{endTime}} | The time when the job ends running. | {{Integer}} | {{none}} |
+|  |  | {{groupName}} | The name of group job. | {{String}} | {{CollaborationSuite}} |
+|  |  | {{job}} | The name of actual job class. | {{Class path}} | {{org.exoplatform.calendar.service.ReminderJob}} |
+|  |  | {{repeatCount}} | How many times to run this job. | {{Long}} | {{0, ( use '0' which means 'run forever)}}  |
+|  |  | {{period}} | The time interval (millisecond) between job executions. | {{Long}} | {{180000}} |
+|  |  | {{startTime}} | The time when the job starts running. | {{Integer}} | {{+0}} |
+|  |  | {{endTime}} | The time when the job ends running. | {{Integer}} | {{none}} |
 
 
 h3. PopupReminderPeriodJob {anchor:id=CSref.Configuration.PopupReminderPeriodJob}
@@ -485,7 +485,8 @@ It is used to register the listener named {{org.exoplatform.webservice.cs.LastUp
 ||Field name||String||Description||
 | *eventTypes*| {{addNode,changeProperty}} | The type of the event. |
 | *nodeTypes* | {{exo:calendarEvent}}| The type of the node. |
-| *actionClassName* | {{org.exoplatform.webservice.cs.LastUpdateAction}} |The registration class to execute the actions that the plugin requires. |
+| *actionClassName* | {{org.exoplatform.webservice.cs.LastUpdateAction}} | The registration class to execute the actions that the plugin requires. |
+
  
 h2. Chat Configuration {anchor:id=CSref.Configuration.ChatConfigurationRoleNotInToc}
 The Chat Configuration is applied in _/extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/chat/chat-service-configuration.xml_.
@@ -539,12 +540,12 @@ See details about the init-params of the component in the following table:
 
 || Properties-param || Description || Property names || Description || Possible values || Default values ||
 | *job.info* | Save the monitor data  periodically. | {{jobName}} | The name of job. | {{String}} | {{messageToHistoricalMessageJob}}|
-| ** |  | {{groupName}} | The name of group name. | {{String}} | {{CollaborationSuite}} |
-| ** |  | {{job}} | The name of actual job class. | {{Class path}} | {{org.exoplatform.services.xmpp.connection.impl.HistoryJob}} |
-| ** |  | {{repeatCount}} | How many times to run this job. | {{integer}} | {{0}} ( use '0' which means 'run forever) |
-| ** |  | {{period}} | The time interval (millisecond) between job executions. | {{Long}} | {{3000}} |
-| ** |  | {{startTime}} | The time the job starts running. | {{Long}} | {{+0}} |
-| ** |  | {{endTime}} | The time the job ends running. | {{Long}} | {{none}} |
+|  |  | {{groupName}} | The name of group name. | {{String}} | {{CollaborationSuite}} |
+|  |  | {{job}} | The name of actual job class. | {{Class path}} | {{org.exoplatform.services.xmpp.connection.impl.HistoryJob}} |
+|  |  | {{repeatCount}} | How many times to run this job. | {{integer}} | {{0}} ( use '0' which means 'run forever) |
+|  |  | {{period}} | The time interval (millisecond) between job executions. | {{Long}} | {{3000}} |
+|  |  | {{startTime}} | The time the job starts running. | {{Long}} | {{+0}} |
+|  |  | {{endTime}} | The time the job ends running. | {{Long}} | {{none}} |
 | *history.info* | Save the monitor data  periodically. | {{logBatchSize}} | The maximum number of messages in the cache are saved once the job runs. | {{Integer}} | {{50}} |
 
 

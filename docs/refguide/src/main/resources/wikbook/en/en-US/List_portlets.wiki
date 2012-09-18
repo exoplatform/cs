@@ -194,6 +194,7 @@ In which:
 | *calendarUrl* | {{string}} | {{Portal/private/intranet/calendar}} | The URL to the Calendar application page in the portal without combining with the %domain name. The port% chatbar will resolve it from server. |
 | *contactUrl* | {{string}} | {{Portal/private/intranet/contact}} | The URL to the Address Book application page in the portal without combining with the %domain name. The port% chatbar will resolve it from server. |
 | *info* | {{Info}}| {{Info}}| This is only the key to get the resource bundle of the full key: UIConfigForm.label.info. |
+
       
 {docbook}
 <para xml:id="CSref.Portlets.ChatbarPortletxml">

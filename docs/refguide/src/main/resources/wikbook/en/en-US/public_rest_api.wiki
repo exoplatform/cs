@@ -44,7 +44,7 @@ The Calendar application of Collaboration uses CalendarWebservice to provide all
 The REST API of Calendar portlet is exposed by _org.exoplatform.services.cs.calendar.CalendarWebservice_ class.
 
 || Service name || Service URL || Location || Description ||
-| *CalendarWebservice* | {{$portalname/$restcontextname/cs/calendar}} | - Maven groupId: org.exoplatform.cs {example}{example} - ArtifactId: exo.cs.web.webservice | Call extended services of the Calendar application. |
+| *CalendarWebservice* | {{$portalname/$restcontextname/cs/calendar}} | Maven groupId: org.exoplatform.cs {example}{example}  ArtifactId: exo.cs.web.webservice | Call extended services of the Calendar application. |
 
 *Details:*
 
@@ -77,7 +77,7 @@ The Mail portlet and its services are deprecated. It remains fully supported for
 {docbook}
 
 || Service name || Service URL || Location || Description ||
-|*MailWebservice* | {{$portalname/$restcontextname/private/cs/mail}} | - Maven groupId: org.exoplatform.cs {example}{example} - artifactId: exo.cs.web.webservice |This service is used to call extended services of the Mail application. |
+|*MailWebservice* | {{$portalname/$restcontextname/private/cs/mail}} | Maven groupId: org.exoplatform.cs {example}{example} artifactId: exo.cs.web.webservice |This service is used to call extended services of the Mail application. |
 
 *APIs Usage:* Use the following APIs to build all functions of the Mail application.
 
@@ -118,7 +118,7 @@ RESTXMPPService
 REST API _RESTXMPPService_ of the Chat portlet is exposed by _org.exoplatform.services.xmpp.rest.RESTXMPPService_ class.
 
 || Service name || Service URL || Location || Description ||
-|*RESTXMPPService* | {{$portalname/$restcontextname/xmpp}} | * Maven groupid: org.exoplatform.cs {example}{example} * exo.cs.eXoApplication.chat.service| Implement all actions sent to the Chat server; |
+|*RESTXMPPService* | {{$portalname/$restcontextname/xmpp}} | Maven groupid: org.exoplatform.cs {example}{example} exo.cs.eXoApplication.chat.service| Implement all actions sent to the Chat server; |
 
 
 *APIs Usage:* Use the following APIs to build all functions of the Chat application.
@@ -164,7 +164,7 @@ REST API _RESTXMPPService_ of the Chat portlet is exposed by _org.exoplatform.se
 |*sendMessage* | {{{/sendmessage/{username}/}}} | username {example}{example} messageBean| usesr id {example}{example} object |Send an message to other users. |
 |*sendMUCMessage* | {{{/muc/sendmessage/{username}/}}} | username {example}{example} messageBean |user id {example}{example} object|Send a message to multile users or a group. |
 |*setUserStatus* | {{{/sendstatus/{username}/{status}/}}} | username {example}{example} status | user id {example}{example} available/ unavailabe / do not disturb / away / extend away |Change the status of a user.|
-|*subscribeUser* |{{{/subscribeuser/{username}/{subsuser}/}}} | username {example}{example} subsuser| user id {example}{example} user id | Change presence type into Subcribed type. |
+|*subscribeUser* | {{{/subscribeuser/{username}/{subsuser}/}}} | username {example}{example} subsuser | user id {example}{example} user id |Change presence type into Subcribed type.|
 |*unsubscribeUser* | {{{/unsubscribeuser/{username}/{unsubsuser}/}}} |username {example}{example} unsubsuser| user id {example}{example} user id |Change presence type into the Unsubscribed type. |
 |*acceptFile* | {{{/fileexchange/accept/{username}/{uuid}/}}}| username {example}{example} uuid | user id {example}{example} string |Accept getting a file sent from another user. |
 |*rejectFile* | {{{/fileexchange/reject/{username}/{uuid}/}}} | username {example}{example} uuid | user id {example}{example} string|Refuse getting a file sent from another user.|
@@ -184,7 +184,7 @@ FileExchangeService
 REST API _FileExchangeService_ for uploading files is defined in _org.exoplatform.services.xmpp.rest.FileExchangeService_ class.
 
 || Service name || Service URL || Location || Description ||
-|*FileExchangeService* | {{$portalname/$restcontextname/fileexchange}} | - Maven groupid: org.exoplatform.cs {example}{example} - InterfactId: exo.cs.eXoApplication.chat.service| Upload a file to the server and inform the user that the file can be downloaded to the local computer. |
+|*FileExchangeService* | {{$portalname/$restcontextname/fileexchange}} |  Maven groupid: org.exoplatform.cs {example}{example}  InterfactId: exo.cs.eXoApplication.chat.service| Upload a file to the server and inform the user that the file can be downloaded to the local computer. |
 
 *APIs Usage:* Use the following APIs to upload and send files to other users.
 
