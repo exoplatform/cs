@@ -22,6 +22,12 @@
 <div id="CalendarApplicationMinWidth">
     <div class="UICalendarPortlet" id="$uicomponent.id">
       <div class="UICalendarEventTooltip" onClick="eXo.calendar.EventTooltip.editEvent()" title="Click to edit" firstLoad="1"><span></span></div>
+      <div class="EventTooltipStatus" style="display:none;">
+      	<%=_ctx.appRes("UIPreview.label.needs-action")%>,<%=_ctx.appRes("UIPreview.label.in-process")%>,
+      	<%=_ctx.appRes("UIPreview.label.completed")%>,<%=_ctx.appRes("UIPreview.label.canceled")%>,
+      	<%=_ctx.appRes("UIPreview.label.free")%>,<%=_ctx.appRes("UIPreview.label.busy")%>,
+      	<%=_ctx.appRes("UIAdvancedSearchForm.label.option.tentative")%>,<%=_ctx.appRes("UIAdvancedSearchForm.label.option.confirmed")%>
+      </div>
       <div class="UINotification" style="display:none;">
         <div class="UIControlInfo ClearFix">
           <div class="LeftControlInfo">
