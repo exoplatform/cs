@@ -10,14 +10,7 @@
   <artifactId>exo.cs.docs</artifactId>
   <packaging>pom</packaging>
 
-  <name>eXo Collaboration Documentation</name>
-
-  <properties>
-    <wikbook.source>${project.build.directory}/wikbook-src</wikbook.source>
-    <wikbook.resources>${project.basedir}/src/main/resources</wikbook.resources>
-    <wikbook.target>${project.build.directory}/wikbook</wikbook.target>
-    <wikbook.version>0.9.26</wikbook.version>
-  </properties>
+  <name>Collaboration Documentation</name>
   
   <modules>
     <module>refguide</module>
