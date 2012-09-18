@@ -2646,12 +2646,25 @@ eXo.calendar.EventTooltip = {
   UTC_0: "UTC:0",
 	isDnD: false,
 	timer: 1000,
+        statusKey : ["needs-action", "in-process", "completed", "canceled", "free", "busy", "tentative", "confirmed"],
+        status : [],
+        getStatus : function (stt) {
+          var self = eXo.calendar.EventTooltip;
+          for (var i = 0; i < self.status.length; ++i){
+            if(self.statusKey[i] === stt) {
+              return (self.status[i]).toLowerCase();
+            }
+          }
+          return stt;
+        },
 	getContainer: function(evt){
 	  var self = eXo.calendar.EventTooltip;
 	  if(self._container) delete self._container;
 	  if(!self._container){
 		  var eventNode = eXo.core.EventManager.getEventTarget(evt);
 		  eventNode = eXo.core.DOMUtil.findAncestorByClass(eventNode,"UICalendarPortlet");
+                  var statusInfo = eXo.core.DOMUtil.findFirstDescendantByClass(eventNode,"div","EventTooltipStatus");
+                  self.status = String(statusInfo.innerHTML).split(",");
 		  self._container = eXo.core.DOMUtil.findFirstDescendantByClass(eventNode,"div","UICalendarEventTooltip");
 		  eXo.core.EventManager.addEvent(self._container,"mouseover",function(evt){
 		    self.cleanupTimer(evt);
@@ -2779,7 +2792,7 @@ eXo.calendar.EventTooltip = {
 		if(data.description) html += '<div class="Description">' + data.description + '</div>';
 		if(data.location)    html += '<div class="Location">' + data.location + '</div>';
 		if(data.priority)    html += '<div class="'+ data.priority.toLowerCase() +'PriorityIcon"><span></span></div>';
-		if(data.status != "null") html += '<div class="Status">' + data.status.replace("-"," ") + '</div>';
+		if(data.status != "null") html += '<div class="Status">' + self.getStatus(data.status) + '</div>';
 		self._container.style.display = "block";
 		//var topArrow = self.currentEvent.offsetHeight/2 - 7; 
 		self._container.innerHTML = '<div class="BgTLEvent"><div class="BgTREvent"><div class="BgTCEvent"><span></span></div></div></div><div class="BgMLEvent"><div class="BgMREvent"><div class="BgMCEvent">' + html + '</div></div></div><div class="BgBLEvent"><div class="BgBREvent"><div class="BgBCEvent"><span></span></div></div></div><div class="Clear"><span></span></div>';	
@@ -3153,4 +3166,3 @@ UICalendarPortlet.prototype.changeRepeatType = function(id) {
   }
 
 };
-
