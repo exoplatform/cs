@@ -17,11 +17,8 @@
 package org.exoplatform.calendar.service;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.TimeZone;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -30,8 +27,8 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
-import org.exoplatform.calendar.service.job.MultiTenancyJob;
 import org.exoplatform.commons.utils.ISO8601;
+import org.exoplatform.job.MultiTenancyJob;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
