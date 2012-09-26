@@ -631,7 +631,7 @@ You must use the same target component for two external component plugins:
 
 *Details:*
 
-* *Name*: {{exo.core.security.ConversationRegistry.register}} - The name of plugin.
+* *Name*: {{exo.core.security.ConversationRegistry.unregister}} - The name of plugin.
 * *Set-method*: {{addListener}} - The plugin which registers the method.
 * *Type*: {{org.exoplatform.services.xmpp.connection.impl.AuthenticationLogoutListener}} - A class to execute the requests of the plugin.
 * *Description*: It is used to end the session and log in the chat server.
