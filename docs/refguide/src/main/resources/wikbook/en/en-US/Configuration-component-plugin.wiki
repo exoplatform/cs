@@ -5,21 +5,21 @@ h1. External Component Plugins {anchor:id=CSref.Configuration.ExternalComponentP
       <listitem>
         <para>
           <emphasis role="bold">
-            <link linkend="CSref.Configuration.CalendarService">Calendar Configuration</link>
+            <link linkend="CSref.Configuration.CalendarConfiguration">Calendar Configuration</link>
           </emphasis> </para>
           <para>Description of the configuration of external component plugins used to implement the Calendar application, including: NewUserListener, NewGroupListener, NewMembershipListener, ReminderPeriodJob, PopupReminderPeriodJob and AddActionsPlugin.</para>
       </listitem>
       <listitem>
         <para>
           <emphasis role="bold">
-            <link linkend="CSref.Configuration.XMPPMessenger">Chat Configuration</link>
+            <link linkend="CSref.Configuration.ChatConfiguration">Chat Configuration</link>
           </emphasis> </para>
           <para>Description of the configuration of external component plugins used to implement the Chat application, including: HistoryPeriodJob, RequestFilterComponentPlugin and AuthenticationLoginListener and AuthenticationLogoutListener.</para>
       </listitem>
       <listitem>
         <para>
           <emphasis role="bold">
-            <link linkend="CSref.Configuration.DefaultPresenceStatus">Contact Configuration</link>
+            <link linkend="CSref.Configuration.ContactConfiguration">Contact Configuration</link>
           </emphasis> </para>
           <para>Description of the configuration of external component plugins used to implement the Address Book application, including: NewUserListener, NewMembershipListener, and UpdateUserProfileListener.</para>
       </listitem>
@@ -33,14 +33,14 @@ h1. External Component Plugins {anchor:id=CSref.Configuration.ExternalComponentP
       <listitem>
         <para>
           <emphasis role="bold">
-            <link linkend="CSref.Configuration.ContactService">Mail Configuration</link>
+            <link linkend="CSref.Configuration.MailConfiguration">Mail Configuration</link>
           </emphasis> </para>
           <para>Description of the configuration of external component plugins used to implement the Mail application, including: AuthenticationLogoutListener and MailSettingConfigPlugin.</para>
       </listitem>
       <listitem>
         <para>
           <emphasis role="bold">
-            <link linkend="CSref.Configuration.ContactService">Social Integration Configuration</link>
+            <link linkend="CSref.Configuration.SocialIntegrationConfiguration">Social Integration Configuration</link>
           </emphasis> </para>
           <para>Description of the configuration of external component plugins used to integrate Social with Collaboration, including: CalendarDataInitialize, ContactDataInitialize, ContactSpaceActivityPublisher, CalendarSpaceActivityPublisher, and PortletPreferenceRequiredPlugin.</para>
       </listitem>
