@@ -428,22 +428,16 @@ public class ContactFilter {
     }
 
     stringBuffer.append("]");
-
-    if (!Utils.isEmpty(orderBy)) {
-      stringBuffer.append(" order by @exo:").append(orderBy);
-      if ("firstName".equals(orderBy) || "lastName".equals(orderBy)) {
-        stringBuffer.append(" ascending");
-      } else {
-        if (isAscending)
-          stringBuffer.append(" ascending");
-        else
-          stringBuffer.append(" descending");
-      }
-    }
-
-    if (hasConjuntion)
-      queryString.append(stringBuffer);
-    return queryString.toString();
+      if (!Utils.isEmpty(orderBy)) {
+          stringBuffer.append(" order by @exo:").append(orderBy);
+          if ("firstName".equals(orderBy)) {
+              stringBuffer.append(" ascending, @exo:lastName ascending");
+          } else if ("lastName".equals(orderBy)) {
+              stringBuffer.append(" ascending, @exo:firstName ascending");
+          } else stringBuffer.append( (isAscending)  ? " ascending" : " descending");
+      } 
+      if (hasConjuntion) queryString.append(stringBuffer);
+      return queryString.toString();
   }
 
 }
