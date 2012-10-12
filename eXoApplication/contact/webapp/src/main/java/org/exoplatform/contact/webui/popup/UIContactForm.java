@@ -230,13 +230,14 @@ public class UIContactForm extends UIFormTabPane {
       
       if (!ContactUtils.isEmpty(profileTab.getFieldJobName())) contact.setJobTitle(profileTab.getFieldJobName().trim());
       String emails = profileTab.getFieldEmail();
-      if (!ContactUtils.isEmpty(emails))
+      if (!ContactUtils.isEmpty(emails)) {
         emails = emails.replaceAll(CalendarUtils.SEMICOLON, CalendarUtils.COLON);
-      if (!CalendarUtils.isValidEmailAddresses(emails)) {
-        event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIContactForm.msg.invalid-email",
+        if (!CalendarUtils.isValidEmailAddresses(emails)) {
+        	event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIContactForm.msg.invalid-email",
                                                                                        null,
                                                                                        ApplicationMessage.WARNING));
         return;
+        }
       }
       contact.setEmailAddress(emails);
       if(profileTab.getImage() != null) {
