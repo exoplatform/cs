@@ -24,10 +24,13 @@ import java.util.Map;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccessImpl;
+import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.service.ContactData;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.Utils;
 import org.exoplatform.contact.service.impl.NewUserListener;
@@ -65,8 +68,6 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   private UIPageIterator uiPageIterator_ ;
   protected String[] actions_ = new String[]{"Add", "Replace", "Cancel"}; 
   
-  // CS- 3130
-  // public LinkedHashMap<String, Contact> checkedList_ = new LinkedHashMap<String, Contact>() ;
   public List<String> checkedList_ = new ArrayList<String>();
   public void setRecipientsType(String type)  {
     recipientsType=type;
@@ -136,26 +137,14 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   @SuppressWarnings("unchecked")
   public void setContactList(ContactFilter filter) throws Exception {
     ContactService contactSrv = getApplicationComponent(ContactService.class);
-    Map<String, String> resultMap = contactSrv.searchEmails(CalendarUtils.getCurrentUser(), filter) ;
-    List<ContactData> data = new ArrayList<ContactData>() ;
-    for(String ct : resultMap.keySet()) {
-      String id  = ct ;
-      String value = resultMap.get(id) ; 
-      if(resultMap.get(id) != null && resultMap.get(id).trim().length() > 0) {
-        if(value.lastIndexOf(Utils.SPLIT) > 0) {
-          String fullName = value.substring(0,value.lastIndexOf(Utils.SPLIT)) ;
-          String email = value.substring(value.lastIndexOf(Utils.SPLIT) + Utils.SPLIT.length()) ;
-          if(!CalendarUtils.isEmpty(email)) data.add(new ContactData(id, fullName, email)) ;
-        }
-      }
-    }
+    List<ContactData> data = contactSrv.findEmailFromContacts(CalendarUtils.getCurrentUser(), filter);
     setContactList(data);
   }
   
   @SuppressWarnings({ "unchecked", "deprecation" })
   public List<ContactData> getContactList() {
     try {
-      return (List<ContactData>)uiPageIterator_.getPageList().getAll() ;
+    	return (List<ContactData>)uiPageIterator_.getCurrentPageData();
     } catch (Exception e) {
       return new ArrayList<ContactData>() ;
     }
@@ -163,7 +152,6 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   @SuppressWarnings({ "deprecation", "unchecked" })
   public void setContactList(List<ContactData> contactList) throws Exception {
     getUIFormSelectBox(FIELD_GROUP).setOptions(getGroups()) ;
-    //org.exoplatform.commons.utils.ObjectPageList objPageList = new org.exoplatform.commons.utils.ObjectPageList(contactList, 10) ;
     LazyPageList<ContactData> pageList = new LazyPageList<ContactData>(new ListAccessImpl<ContactData>(ContactData.class, contactList), 10);
     uiPageIterator_.setPageList(pageList) ;
     for (ContactData contact : contactList) {
@@ -188,8 +176,17 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   public UIPageIterator  getUIPageIterator() {  return uiPageIterator_ ; }
   public long getAvailablePage(){ return uiPageIterator_.getAvailablePage() ;}
   public long getCurrentPage() { return uiPageIterator_.getCurrentPage();}
+  
   protected void updateCurrentPage(int page) throws Exception{
-    uiPageIterator_.setCurrentPage(page) ;
+	  UIPopupAction uiPopupAction  = this.getAncestorOfType(UIPopupContainer.class).getChild(UIPopupAction.class) ;
+	  UIEventForm uiEventForm = uiPopupAction.findFirstComponentOfType(UIEventForm.class) ;
+	  UITaskForm uiTaskForm = uiPopupAction.findFirstComponentOfType(UITaskForm.class) ;
+	  String oldAddress =  "" ;
+	  if(uiEventForm != null) oldAddress = uiEventForm.getEmailAddress() ;
+	  else if (uiTaskForm != null) oldAddress = uiTaskForm.getEmailAddress() ;
+	  UITaskForm.showAddressForm(this, oldAddress) ;
+	  //setContactList(getContactList()) ;
+	  uiPageIterator_.setCurrentPage(page) ;
   }
 
   static public class AddActionListener extends EventListener<UIAddressForm> {
@@ -346,41 +343,5 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       uiAddressForm.updateCurrentPage(page) ; 
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressForm.getAncestorOfType(UIPopupAction.class));           
     }
-  }
-  public class ContactData {
-    private String id ;
-    private String fullName ;
-    private String email ;
-
-    public ContactData(String id,String fullName,String email){
-      this.id = id ;
-      this.fullName = fullName;
-      this.email = email ;
-    }
-
-    public void setId(String id) {
-      this.id = id;
-    }
-
-    public String getId() {
-      return id;
-    }
-
-    public void setFullName(String fullName) {
-      this.fullName = fullName;
-    }
-
-    public String getFullName() {
-      return fullName;
-    }
-
-    public void setEmail(String email) {
-      this.email = email;
-    }
-
-    public String getEmail() {
-      return email;
-    }
-
   }
 }

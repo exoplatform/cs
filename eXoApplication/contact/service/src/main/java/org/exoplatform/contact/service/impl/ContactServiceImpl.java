@@ -30,6 +30,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOCase;
 import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.service.ContactData;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactImportExport;
 import org.exoplatform.contact.service.ContactPageList;
@@ -472,7 +473,7 @@ public class ContactServiceImpl implements ContactService {
     return storage_.haveEditPermissionOnContact(username, contact);
   }
 
-  @Override
+   
   public void addListenerPlugin(ContactEventListener listener) throws Exception {
     listeners_.add(listener);
   }
@@ -480,4 +481,9 @@ public class ContactServiceImpl implements ContactService {
   public void savePublicAddressBook(AddressBook addressbook, boolean isNew) throws Exception {
     storage_.savePublicAddressBook(addressbook, isNew);
   }
+
+public List<ContactData> findEmailFromContacts(String userId, ContactFilter filter) throws Exception {
+	// TODO Auto-generated method stub
+	return storage_.findEmailFromContacts(userId, filter);
+}
 }

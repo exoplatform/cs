@@ -652,4 +652,13 @@ public interface DataStorage {
   public List<String> getPublicAddresses(String username) throws Exception;
 
   public void savePublicAddressBook(AddressBook addressbook, boolean isNew) throws Exception;
+  
+  /**
+   * this using to searching all contacts with email field to display on page
+   * @param userId
+   * @param filter
+   * @return
+   * @throws Exception
+   */
+  public List<ContactData> findEmailFromContacts(String userId, ContactFilter filter) throws Exception;
 }
