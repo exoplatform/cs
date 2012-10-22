@@ -788,6 +788,8 @@ public class TestContactService extends BaseContactServiceTestCase {
     contactFilter.setAccountPath(" /jcr:root/Users/root/ApplicationData/ContactApplication/contacts");
     contactFilter.setCategories(new String[] {});
     assertEquals(contactService.searchEmails(root, contactFilter).size(), 1);
+    
+    assertEquals(contactService.findEmailFromContacts(root, contactFilter).size(), 1);
 
     /**
      * Test Tag:

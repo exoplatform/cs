@@ -504,4 +504,14 @@ public interface ContactService {
   public void addListenerPlugin(ContactEventListener listener) throws Exception;
 
   public void savePublicAddressBook(AddressBook addressbook, boolean isNew) throws Exception;
+  /**
+   * 
+   * @param userId
+   * @param filter
+   * @param offset
+   * @param limit
+   * @return
+   * @throws Exception
+   */
+  public List<ContactData> findEmailFromContacts(String userId, ContactFilter filter) throws Exception;
 }
