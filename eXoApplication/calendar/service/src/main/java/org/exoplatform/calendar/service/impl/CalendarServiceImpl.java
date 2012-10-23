@@ -16,6 +16,18 @@
  **/
 package org.exoplatform.calendar.service.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+
+import javax.jcr.ItemExistsException;
+import javax.jcr.Node;
+
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -31,11 +43,13 @@ import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.RemoteCalendar;
 import org.exoplatform.calendar.service.RemoteCalendarService;
 import org.exoplatform.calendar.service.RssData;
+import org.exoplatform.calendar.service.ShareCalendarJob;
 import org.exoplatform.calendar.service.SynchronizeRemoteCalendarJob;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.commons.utils.ExoProperties;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -46,9 +60,13 @@ import org.exoplatform.services.resources.ResourceBundleService;
 import org.exoplatform.services.scheduler.JobInfo;
 import org.exoplatform.services.scheduler.JobSchedulerService;
 import org.exoplatform.services.scheduler.PeriodInfo;
+import org.exoplatform.services.scheduler.impl.JobSchedulerServiceImpl;
+import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 import org.picocontainer.Startable;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
+import org.quartz.JobExecutionContext;
+import org.quartz.SimpleTrigger;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -63,8 +81,10 @@ import javax.jcr.ItemExistsException;
 import javax.jcr.Node;
 
 /**
- * Created by The eXo Platform SARL Author : Hung Nguyen Quang
- * hung.nguyen@exoplatform.com Jul 11, 2007
+ * Created by The eXo Platform SARL 
+ * Author : Hung Nguyen Quang
+ *          hung.nguyen@exoplatform.com 
+ * Jul 11, 2007
  */
 public class CalendarServiceImpl implements CalendarService, Startable {
 
@@ -82,7 +102,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   protected List<CalendarEventListener>       eventListeners_       = new ArrayList<CalendarEventListener>(3);
 
   private RemoteCalendarService               remoteCalendarService;
-
+  
   public CalendarServiceImpl(InitParams params, NodeHierarchyCreator nodeHierarchyCreator, RepositoryService reposervice, 
      ResourceBundleService rbs, CacheService cservice) throws Exception {
     storage_ = new JCRDataStorage(nodeHierarchyCreator, reposervice, cservice);
@@ -395,7 +415,49 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   public void shareCalendar(String username, String calendarId, List<String> receiverUsers) throws Exception {
     storage_.shareCalendar(username, calendarId, receiverUsers);
   }
-
+  
+  /**
+  * {@inheritDoc}
+   * @return 
+  */
+  public boolean shareCalendarByRunJob(String username, String calendarId, List<String> receiverUsers) throws Exception{
+    JobSchedulerServiceImpl  schedulerService_ = (JobSchedulerServiceImpl)ExoContainerContext.getCurrentContainer().getComponentInstance(JobSchedulerService.class) ;
+    JobInfo jobInfo = ShareCalendarJob.getJobInfo(username);
+    if(findActiveShareClaJob(jobInfo.getJobName(), schedulerService_)){
+      ContinuationService continuation = (ContinuationService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(ContinuationService.class);
+      continuation.sendMessage(username, ShareCalendarJob.SHARE_CAL_CHANEL, ShareCalendarJob.STILL_SHARE_ID, ShareCalendarJob.STILL_SHARE_ID);
+      return true;
+    }
+    SimpleTrigger trigger = new SimpleTrigger(jobInfo.getJobName(), jobInfo.getGroupName(), new Date());
+    JobDetail job = new JobDetail(jobInfo.getJobName(), jobInfo.getGroupName(), jobInfo.getJob());
+    job.setDescription(jobInfo.getDescription());
+    job.getJobDataMap().put(ShareCalendarJob.RECEIVER_USER, receiverUsers);
+    job.getJobDataMap().put(ShareCalendarJob.USER_NAME, username);
+    job.getJobDataMap().put(ShareCalendarJob.CALENDAR_ID, calendarId);
+    job.getJobDataMap().put(ShareCalendarJob.JCR_DATA_STORAGE, storage_);
+    schedulerService_.addJob(job, trigger);
+    return true;
+  }
+  
+  /**
+   * Checking a exist calendar job is running
+   * @param userName
+   * @param schedulerService_
+   * @return boolean
+   * @throws Exception
+   */
+  private boolean findActiveShareClaJob(String userName, JobSchedulerServiceImpl schedulerService_) throws Exception {
+    List list = schedulerService_.getAllExcutingJobs();
+    for (Object obj : list) {
+      JobExecutionContext jec = (JobExecutionContext) obj;
+      JobDetail tmp = jec.getJobDetail();
+      if (tmp.getName().equals(userName)) {
+        return true;
+      }
+    }
+    return false;
+  }
+  
   /**
    * {@inheritDoc}
    */

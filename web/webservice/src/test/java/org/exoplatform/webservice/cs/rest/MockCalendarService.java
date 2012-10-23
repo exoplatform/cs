@@ -630,6 +630,11 @@ public class MockCalendarService implements CalendarService{
   public void removeSharedCalendarFolder(String username) throws Exception {
   }
 
+  @Override
+  public boolean shareCalendarByRunJob(String username, String calendarId, List<String> receiverUsers) throws Exception {
+    return true;
+  }
+  
   public void autoShareCalendar(List<String> groupsOfUser, String reciever)
 	throws Exception {
   }

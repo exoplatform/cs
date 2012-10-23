@@ -451,6 +451,15 @@ public interface CalendarService {
    * @throws Exception
    */
   public void shareCalendar(String username, String calendarId, List<String> receiverUsers) throws Exception;
+  
+  /**
+   * The method share the private calendar to other user by running a job in the background, it can share for one or many users
+   * @param username current user name(or user id)
+   * @param calendarId given calendar id
+   * @param receiverUsers List receive user username or id
+   * @throws Exception
+   */
+  public boolean shareCalendarByRunJob(String username, String calendarId, List<String> receiverUsers) throws Exception;
 
   /**
    * The method gets all shared calendars of the current user
