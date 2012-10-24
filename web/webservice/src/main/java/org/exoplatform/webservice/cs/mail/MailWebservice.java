@@ -43,7 +43,10 @@ import org.exoplatform.webservice.cs.bean.MessageData;
 
 /**
  * @author Uoc Nguyen Modified by : Phung Nam (phunghainam@gmail.com)
+ * @anchor CSref.PublicRESTAPIs.MailApplication
  */
+
+
 @Path("/cs/mail")
 public class MailWebservice implements ResourceContainer {
 
@@ -58,10 +61,22 @@ public class MailWebservice implements ResourceContainer {
   public static final int    MAX_TIMEOUT       = 16;
 
   private static final Log log = ExoLogger.getLogger("cs.mail.webservice");
-  
+
   public MailWebservice() {
-    
+
   } 
+
+  /**
+   * this service to provide communication from check mail job and update status on server 
+   * this service request to authentication and authorization only for users group
+   * @param userName : given user id 
+   * @param accountId : given user account, by implementation we can have multiple account for single user, so this should be specific account id 
+   * @param folderId : given folder id (name) to checking messages in side
+   * @return response in text/xml format 
+   * @throws Exception
+   * 
+   * @anchor CSref.PublicRESTAPIs.MailApplication.checkMail
+   */
   @GET
   @RolesAllowed("users")
   @Path("/checkmail/{username}/{accountId}/{folderId}/")
@@ -73,23 +88,31 @@ public class MailWebservice implements ResourceContainer {
     cacheControl.setNoStore(true);
     if(!isAuthorized(userName)) return Response.ok(Status.UNAUTHORIZED).cacheControl(cacheControl).build();
     MailService mailService = (MailService) PortalContainer.getInstance()
-                                                           .getComponentInstanceOfType(MailService.class);
+        .getComponentInstanceOfType(MailService.class);
     CheckingInfo checkingInfo = mailService.getCheckingInfo(userName, accountId);
-    
-    //checkingInfo = null;
     if (checkingInfo == null || checkingInfo.getStatusCode() == CheckingInfo.FINISHED_CHECKMAIL_STATUS
         || checkingInfo.getStatusCode() == CheckingInfo.CONNECTION_FAILURE || checkingInfo.getStatusCode() == CheckingInfo.RETRY_PASSWORD || 
         checkingInfo.getStatusCode() == CheckingInfo.COMMON_ERROR) {
       mailService.checkMail(userName, accountId, folderId);
     } else if (checkingInfo != null) {
       checkingInfo.setHasChanged(true);
-      mailService.updateCheckingMailStatusByCometd(userName, accountId, checkingInfo);
-      
+      mailService.updateCheckingMailStatusByCometd(userName, accountId, checkingInfo);   
     }
     StringBuffer buffer = new StringBuffer("");
     return Response.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
   }
 
+
+  /**
+   * this service to make synchronization folders of mail application
+   * this service request to authentication and authorization only for users group
+   * @param userName : given user name
+   * @param accountId : given user account, by implementation we can have multiple account for single user, so this should be specific account id 
+   * @return text/xml in response 
+   * @throws Exception
+   * 
+   * @anchor CSref.PublicRESTAPIs.MailApplication.syncFolders
+   */
   @GET
   @RolesAllowed("users")
   @Path("/synchfolders/{username}/{accountId}/")
@@ -100,7 +123,7 @@ public class MailWebservice implements ResourceContainer {
     cacheControl.setNoStore(true);
     if(!isAuthorized(userName)) return Response.ok(Status.UNAUTHORIZED).cacheControl(cacheControl).build();
     MailService mailService = (MailService) ExoContainerContext.getCurrentContainer()
-                                                               .getComponentInstanceOfType(MailService.class);
+        .getComponentInstanceOfType(MailService.class);
 
     CheckingInfo checkingInfo = mailService.getCheckingInfo(userName, accountId);
     if (checkingInfo == null || checkingInfo.getSyncFolderStatus() == CheckingInfo.FINISH_SYNC_FOLDER) {
@@ -116,10 +139,19 @@ public class MailWebservice implements ResourceContainer {
     }
     buffer.append("  </checkingmail>");
     buffer.append("</info>");
-//    mailService.removeCheckingInfo(userName, accountId);
     return Response.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
   }
 
+  /**
+   * this service to stop the checking mail job in case user don't want to run the check mail 
+   * this service request to authentication and authorization only for users group
+   * @param userName : given user id
+   * @param accountId : given user account, by implementation we can have multiple account for single user, so this should be specific account id 
+   * @return text/xml in response
+   * @throws Exception
+   * 
+   * @anchor CSref.PublicRESTAPIs.MailApplication.stopCheckMail
+   */
   @GET
   @RolesAllowed("users")
   @Path("/stopcheckmail/{username}/{accountId}/")
@@ -130,7 +162,7 @@ public class MailWebservice implements ResourceContainer {
     cacheControl.setNoStore(true);
     if(!isAuthorized(userName)) return Response.ok(Status.UNAUTHORIZED).cacheControl(cacheControl).build();
     MailService mailService = (MailService) ExoContainerContext.getCurrentContainer()
-                                                               .getComponentInstanceOfType(MailService.class);
+        .getComponentInstanceOfType(MailService.class);
     StringBuffer buffer = new StringBuffer();
     CheckingInfo checkingInfo = mailService.getCheckingInfo(userName, accountId);
     if (checkingInfo != null) {
@@ -140,9 +172,6 @@ public class MailWebservice implements ResourceContainer {
       buffer.append("    <statusmsg>" + checkingInfo.getStatusMsg() + "</statusmsg>");
       buffer.append("  </checkingmail>");
       buffer.append("</info>");
-
-//      checkingInfo.setRequestStop(true);
-//      mailService.removeCheckingInfo(userName, accountId);
       mailService.stopCheckMail(userName, accountId);
     } else {
       Response.status(HTTPStatus.INTERNAL_ERROR);
@@ -152,6 +181,16 @@ public class MailWebservice implements ResourceContainer {
     return Response.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
   }
 
+  /**
+   * this service to get more information of check mail running job
+   * this service request to authentication and authorization only for users group
+   * @param userName :  given user id
+   * @param accountId : given user account, by implementation we can have multiple account for single user, so this should be specific account id 
+   * @return text/xml in the response
+   * @throws Exception
+   * 
+   * @anchor CSref.PublicRESTAPIs.MailApplication.getCheckMailJobInfo
+   */
   @GET
   @RolesAllowed("users")
   @Path("/checkmailjobinfo/{username}/{accountId}/")
@@ -162,7 +201,7 @@ public class MailWebservice implements ResourceContainer {
     cacheControl.setNoStore(true);
     if(!isAuthorized(userName)) return Response.ok(Status.UNAUTHORIZED).cacheControl(cacheControl).build();
     MailService mailService = (MailService) ExoContainerContext.getCurrentContainer()
-                                                               .getComponentInstanceOfType(MailService.class);
+        .getComponentInstanceOfType(MailService.class);
     CheckingInfo checkingInfo = mailService.getCheckingInfo(userName, accountId);
     StringBuffer buffer = new StringBuffer();
     if (checkingInfo == null) {
@@ -175,7 +214,6 @@ public class MailWebservice implements ResourceContainer {
       buffer.append("</info>");
       return Response.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
     }
-
     if (checkingInfo != null && !checkingInfo.hasChanged()) {
       Thread.sleep(MailWebservice.MIN_SLEEP_TIMEOUT);
       for (int i = 1; i < MailWebservice.MIN_SLEEP_TIMEOUT * MailWebservice.MAX_TIMEOUT; i++) {
@@ -195,9 +233,6 @@ public class MailWebservice implements ResourceContainer {
         buffer.append("    <statusmsg>" + checkingInfo.getStatusMsg() + "</statusmsg>");
         buffer.append("  </checkingmail>");
         buffer.append("</info>");
-        if(checkingInfo.getStatusCode() == CheckingInfo.FINISHED_CHECKMAIL_STATUS){
-//          mailService.removeCheckingInfo(userName, accountId);
-        }
         return Response.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
       } else if (checkingInfo.hasChanged()) {
         buffer.append("<info>");
@@ -206,10 +241,10 @@ public class MailWebservice implements ResourceContainer {
         buffer.append("    <statusmsg>" + checkingInfo.getStatusMsg() + "</statusmsg>");
         buffer.append("    <total>" + checkingInfo.getTotalMsg() + "</total>");
         buffer.append("    <syncFolderStatus>" + checkingInfo.getSyncFolderStatus()
-            + "</syncFolderStatus>");
+                      + "</syncFolderStatus>");
         buffer.append("    <completed>" + checkingInfo.getFetching() + "</completed>");
         buffer.append("    <fetchingtofolders>" + checkingInfo.getFetchingToFolders()
-            + "</fetchingtofolders>");
+                      + "</fetchingtofolders>");
         if (checkingInfo.getMsgId() != null && !checkingInfo.getMsgId().equals("")) {
           buffer.append("    <messageid>"
               + checkingInfo.getMsgId().replace("<", "&lt;").replace(">", "&gt;") + "</messageid>");
@@ -231,11 +266,13 @@ public class MailWebservice implements ResourceContainer {
   }
 
   /**
-   * Get all emails from contacts data base, the security level will take from
-   * ConversationState
+   * this service lookup all contact's e-mail which has term similar with inputed keywords 
+   * this service request to authentication and authorization only for users group
+   * @param keywords : given keywords by user typed
+   * @return list of found e-mail in JSon object in response 
+   * @throws Exception
    * 
-   * @param keywords : the text to compare with data base
-   * @return application/json content type
+   * @anchor CSref.PublicRESTAPIs.MailApplication.searchemail
    */
   @GET
   @RolesAllowed("users")
@@ -243,7 +280,7 @@ public class MailWebservice implements ResourceContainer {
   @Produces(MediaType.APPLICATION_JSON)
   public Response searchemail(@PathParam("keywords") String keywords) throws Exception {
     ContactService contactSvr = (ContactService) PortalContainer.getInstance()
-                                                                .getComponentInstanceOfType(ContactService.class);
+        .getComponentInstanceOfType(ContactService.class);
     ContactData fullData = new ContactData();
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
@@ -268,7 +305,7 @@ public class MailWebservice implements ResourceContainer {
     }
     return Response.ok(fullData, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
   }
-  
+
   /**
    * list header of unread mails , the security level will take from
    * ConversationState
@@ -278,6 +315,8 @@ public class MailWebservice implements ResourceContainer {
    * @param tagId : the text to compare with data base
    * @param limit : number of return mails
    * @return application/json content type
+   * 
+   * @anchor CSref.PublicRESTAPIs.MailApplication.unreadMail
    */
   @GET
   @RolesAllowed("users")
@@ -291,7 +330,7 @@ public class MailWebservice implements ResourceContainer {
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
     MailService mailService = (MailService) ExoContainerContext
-      .getCurrentContainer().getComponentInstanceOfType(MailService.class);
+        .getCurrentContainer().getComponentInstanceOfType(MailService.class);
     String username = ConversationState.getCurrent().getIdentity().getUserId();
     MessageFilter filter = new MessageFilter("Folder");
     MessageData data = new MessageData();
@@ -315,11 +354,13 @@ public class MailWebservice implements ResourceContainer {
     }
     return Response.ok(data, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
   }
-  
+
   /**
    * list accounts of current user , the security level will take from
    * ConversationState
    * @return application/json content type
+   * 
+   * @anchor CSref.PublicRESTAPIs.MailApplication.getAccounts
    */
   @GET
   @RolesAllowed("users")
@@ -330,20 +371,21 @@ public class MailWebservice implements ResourceContainer {
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
     MailService mailService = (MailService) ExoContainerContext
-      .getCurrentContainer().getComponentInstanceOfType(MailService.class);
+        .getCurrentContainer().getComponentInstanceOfType(MailService.class);
     String username = ConversationState.getCurrent().getIdentity().getUserId();
     List<Account> accounts = mailService.getAccounts(username);
-    //if (accounts.size() == 0) return Response.noContent().build();
     AccountsData data = new AccountsData();
     if (accounts.size() > 0) data.setInfo(accounts);
     return Response.ok(data, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
   }
-  
+
   /**
    * list folders and tags of current accounts, the security level will take from
    * ConversationState
    * @param accountId : the text to compare with data base
    * @return application/json content type
+   * 
+   * @anchor CSref.PublicRESTAPIs.MailApplication.getFoldersTags
    */
   @GET
   @RolesAllowed("users")
@@ -354,20 +396,31 @@ public class MailWebservice implements ResourceContainer {
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
     MailService mailService = (MailService) ExoContainerContext
-      .getCurrentContainer().getComponentInstanceOfType(MailService.class);
+        .getCurrentContainer().getComponentInstanceOfType(MailService.class);
     String username = ConversationState.getCurrent().getIdentity().getUserId();
     FoldersTagsData data = new FoldersTagsData();
     data.setFolders(mailService.getFolders(username, accountId));
     data.setTags(mailService.getTags(username, accountId));
     return Response.ok(data, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
   }
-  
+
   private boolean isAuthorized(String usename) {
     return (ConversationState.getCurrent() != null && ConversationState.getCurrent().getIdentity() != null && 
         ConversationState.getCurrent().getIdentity().getUserId() != null && ConversationState.getCurrent().getIdentity().getUserId().equals(usename)  
-    );
+        );
   }
 
+  /**
+   * this service help to check supported types from any given mail server by host name or ip
+   * @param mechs : name of mechanisms to check
+   * @param username : given user name
+   * @param proto : type of protocol to check
+   * @param host : host name or mail server ip
+   * @return JSon object in response
+   * @throws Exception
+   * 
+   * @anchor CSref.PublicRESTAPIs.MailApplication.checkForSupportedTypes
+   */
   @GET
   @RolesAllowed("users")
   @Path("/checkforsupportedtypes/{mechs}/{username}/{protocol}/{host}")
@@ -378,8 +431,6 @@ public class MailWebservice implements ResourceContainer {
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
     StringBuilder data = new StringBuilder();
-    //Map props = new HashMap();
-    //props.put(Sasl.POLICY_NOPLAINTEXT, "true");
     String[] mechs = mechanisms.split(",");
     int i = 0;
     for(String m : mechs){
@@ -390,7 +441,6 @@ public class MailWebservice implements ResourceContainer {
     SaslClient sasl = Sasl.createSaslClient(mechs, username, proto, host, null, null);
     if(sasl != null)
       log.info(sasl.getMechanismName());
-    
     if(mechs != null && mechs.length>0){
       for(String mech : mechs){
         data.append(mech);
@@ -398,11 +448,13 @@ public class MailWebservice implements ResourceContainer {
     }
     return Response.ok(data, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
   }
-  
+
   /**
    * Get all users from portal user data base
    * @param keywords : the text to compare with data base
    * @return application/json content type
+   * 
+   * @anchor CSref.PublicRESTAPIs.MailApplication.searchUser
    */
   @SuppressWarnings({"deprecation" })
   @GET
@@ -414,24 +466,24 @@ public class MailWebservice implements ResourceContainer {
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
     ContactData fullData = new ContactData();
-    
+
     try {
       OrganizationService service = (OrganizationService)PortalContainer.getInstance().getComponentInstanceOfType(OrganizationService.class);
       List<User> user = service.getUserHandler().findUsers(new Query()).getAll();
       List<String> userList = new ArrayList<String>();
       if(user != null && user.size() > 0)
-      for(User u : user){
-        String username = u.getUserName();
-        if(username.contains(keywords)){
-          username =  "<div class='AutoCompleteItem'>" + username.replace(keywords,"<b>" + keywords + "</b>") + "</div>";
-          userList.add(username);
+        for(User u : user){
+          String username = u.getUserName();
+          if(username.contains(keywords)){
+            username =  "<div class='AutoCompleteItem'>" + username.replace(keywords,"<b>" + keywords + "</b>") + "</div>";
+            userList.add(username);
+          }
         }
-      }
       fullData.setInfo(userList);
     } catch (Exception e) {
       return Response.status(Status.INTERNAL_SERVER_ERROR).cacheControl(cacheControl).build();
     }
     return Response.ok(fullData, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
   }
-  
+
 }
