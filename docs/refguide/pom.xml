@@ -35,6 +35,20 @@
           <version>${doc-style.version}</version>
           <type>jar</type>
         </dependency>
+        
+      <dependency>
+          <groupId>org.exoplatform.cs</groupId>
+          <artifactId>exo.cs.web.webservice</artifactId>
+          <version>${project.version}</version>
+          <classifier>doc-jaxrs</classifier>
+      </dependency>
+      <dependency>
+          <groupId>org.exoplatform.cs</groupId>
+          <artifactId>exo.cs.eXoApplication.chat.service</artifactId>
+          <version>${project.version}</version>
+          <classifier>doc-jaxrs</classifier>
+          <scope>provided</scope>
+      </dependency>
       </dependencies>
 
       <build>
@@ -135,13 +149,29 @@
                       <includes>**</includes>
                       <excludes>META-INF/**</excludes>
                     </artifactItem>
-                  </artifactItems>
-                </configuration>
-              </execution>
-            </executions>
+                    <artifactItem>
+                      <groupId>org.exoplatform.cs</groupId>
+                      <artifactId>exo.cs.web.webservice</artifactId>
+                      <version>${project.version}</version>
+                      <outputDirectory>${project.build.directory}/wikbook-src/DeveloperReference/jaxrs</outputDirectory>
+                      <classifier>doc-jaxrs</classifier>
+                      <includes>**</includes>
+                      <excludes>META-INF/**</excludes>
+                    </artifactItem>
+                    <artifactItem>
+                      <groupId>org.exoplatform.cs</groupId>
+                      <artifactId>exo.cs.eXoApplication.chat.service</artifactId>
+                      <version>${project.version}</version>
+                      <outputDirectory>${project.build.directory}/wikbook-src/DeveloperReference/jaxrs</outputDirectory>
+                      <classifier>doc-jaxrs</classifier>
+                      <includes>**</includes>
+                      <excludes>META-INF/**</excludes>
+                      </artifactItem>
+                    </artifactItems>
+                  </configuration>
+                </execution>
+              </executions>
           </plugin>
-
-
           <!--
             3) The Wikbook Maven plugin generates the Docbook document from the Wiki source
           -->
@@ -192,6 +222,7 @@
                   <goal>run</goal>
                 </goals>
               </execution>
+              
             </executions>
           </plugin>
 
