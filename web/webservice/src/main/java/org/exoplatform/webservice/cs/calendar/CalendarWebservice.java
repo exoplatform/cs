@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.TimeZone;
 
 import javax.annotation.security.RolesAllowed;
-import javax.jcr.PathNotFoundException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -81,14 +80,40 @@ import com.sun.syndication.io.XmlReader;
 
 
 
+/**
+ * Calendar web service is the implementation of RESTFul service to provide information 
+ * to all needed request from calendar application system or out side, such as some gadgets or other
+ * request to interact with calendar application data 
+ * @anchor CSref.PublicRESTAPIs.CalendarApplication
+ */
 @Path("/cs/calendar")
 public class CalendarWebservice implements ResourceContainer{
+  /**
+   * base private URL to limited the access of request
+   * all request dedicated with PRIVAtE in URL mean the need to authentication  
+   **/
   public final static String PRIVATE = "/private";
+  /**
+   * base URL for all rest services implement from collaboration suite (CS) and using for calendar application
+   */
   public final static String BASE_URL = "/cs/calendar".intern();
+  /**
+   * base RSS URL, this use to retrieve the feed of calendar event 
+   */
   public final static String BASE_RSS_URL = BASE_URL + "/feed".intern();
+  /**
+   * base RSS URL, this use to retrieve the detail of event or answer event invitation
+   */
   public final static String BASE_EVENT_URL = BASE_URL + "/event".intern();
+  /**
+   * base URL to public a calendar to RSS type
+   */
   final public static String BASE_URL_PUBLIC = "/cs/calendar/subscribe/".intern();
+  /**
+   * base slash symbol use to combine the full URL
+   */
   final public static String BASE_URL_PRIVATE = BASE_URL + "/".intern();
+
   private Log log = ExoLogger.getExoLogger("calendar.webservice");
 
   static CacheControl cc = new CacheControl();
@@ -96,40 +121,41 @@ public class CalendarWebservice implements ResourceContainer{
     cc.setNoCache(true);
     cc.setNoStore(true);
   }
-  
-  private static CalendarService calendarService = null;
+  private CalendarService calendarService = null;
   private Object getCalendarService() {
     calendarService = (CalendarService)ExoContainerContext.getCurrentContainer()
-                                          .getComponentInstanceOfType(CalendarService.class);
+        .getComponentInstanceOfType(CalendarService.class);
     if(calendarService == null){
       return Response.status(HTTPStatus.UNAVAILABLE).cacheControl(cc).build();
     }
     return calendarService;
   }
-  
+
   public CalendarWebservice() {}
-  
+
   private boolean validateEventType(String type) {
     return type != null && (CalendarEvent.TYPE_EVENT.equals(type) || CalendarEvent.TYPE_TASK.equals(type));
   }
-  
+
   /**
-   * 
-   * @param username : user id
-   * @param calendarId : given calendar id
+   * this service to check permission of current logged user on any calendar by given calendar id
+   * the input parameters will be in URL and listed bellow:
+   * @param username : given user id, and can be current logged user
+   * @param calendarId : given calendar id which we prefer to check permission on
    * @param type : calendar type private, public or share
-   * @return json data value
+   * @return JSon data value will return
    * @throws Exception
+   * 
+   * @anchor CSref.PublicRESTAPIs.CalendarApplication.checkPermission
    */
   @GET
   @RolesAllowed("users")
   @Path("/checkPermission/{username}/{calendarId}/{type}/")
   public Response checkPermission(@PathParam("username")
-                                  String username, @PathParam("calendarId")
-                                  String calendarId, @PathParam("type")
-                                  String type) throws Exception {
-    //StringBuffer buffer = new StringBuffer();
-  EventData eventData = new EventData();
+  String username, @PathParam("calendarId")
+  String calendarId, @PathParam("type")
+  String type) throws Exception {
+    EventData eventData = new EventData();
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
@@ -145,9 +171,8 @@ public class CalendarWebservice implements ResourceContainer{
         } else eventData.setPermission(true);
       } else if(Utils.PUBLIC_TYPE == Integer.parseInt(type)) {
         OrganizationService oService = (OrganizationService)ExoContainerContext
-        .getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
+            .getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
         cal = calendarService.getGroupCalendar(calendarId) ;
-        // cs-4429: fix for group calendar permission
         if(Utils.canEdit(oService, cal.getEditPermission(), username)) {
           eventData.setPermission(true);
         } 
@@ -169,18 +194,20 @@ public class CalendarWebservice implements ResourceContainer{
   }
 
   /**
-   * 
+   * this service to provide one single event detail with given user name and given event id, the data return will be ics format
    * @param username : requested user name
    * @param eventFeedName : contains eventId and CalType
-   * @return : Rss feeds
+   * @return : RSS feeds in XML format
    * @throws Exception
+   * 
+   * @anchor CSref.PublicRESTAPIs.CalendarApplication.event
    */
   @GET
   @RolesAllowed("users")
   @Path("/event/{username}/{eventFeedName}/")
   public Response event(@PathParam("username")
-                        String username, @PathParam("eventFeedName")
-                        String eventFeedName) throws Exception {
+  String username, @PathParam("eventFeedName")
+  String eventFeedName) throws Exception {
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
@@ -209,8 +236,8 @@ public class CalendarWebservice implements ResourceContainer{
       OutputStream out = icalEx.exportEventCalendar(event);
       InputStream in = new ByteArrayInputStream(out.toString().getBytes());
       return Response.ok(in, "text/calendar")
-      .header("Cache-Control", "private max-age=600, s-maxage=120").
-      header("Content-Disposition", "attachment;filename=\"" + eventId + Utils.ICS_EXT).cacheControl(cacheControl).build();
+          .header("Cache-Control", "private max-age=600, s-maxage=120").
+          header("Content-Disposition", "attachment;filename=\"" + eventId + Utils.ICS_EXT).cacheControl(cacheControl).build();
     } catch (Exception e) {
       if(log.isDebugEnabled()) log.debug(e.getMessage());
       return Response.status(HTTPStatus.INTERNAL_ERROR).entity(e).cacheControl(cacheControl).build();
@@ -219,21 +246,23 @@ public class CalendarWebservice implements ResourceContainer{
 
 
   /**
-   * 
+   * this service return the XML RSS feed data of one single given calendar and follow a given user id
    * @param username : requested user name
    * @param calendarId : calendar id from system
    * @param type : calendar type
-   * @return : Rss feeds
+   * @return : RSS feeds
    * @throws Exception
+   * 
+   * @anchor CSref.PublicRESTAPIs.CalendarApplication.feed
    */
   @SuppressWarnings("unchecked")
   @GET
   @RolesAllowed("users")
   @Path("/feed/{username}/{feedname}/{filename}/")
   public Response feed(@PathParam("username")
-                       String username, @PathParam("feedname")
-                       String feedname, @PathParam("filename")
-                       String filename, @Context UriInfo uri) throws Exception {
+  String username, @PathParam("feedname")
+  String feedname, @PathParam("filename")
+  String filename, @Context UriInfo uri) throws Exception {
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
@@ -241,7 +270,6 @@ public class CalendarWebservice implements ResourceContainer{
       if(getCalendarService() instanceof Response) {
         return (Response) getCalendarService();
       }
-
       FeedData feed = null;
       for (FeedData feedData : calendarService.getFeeds(username)) {
         if (feedData.getTitle().equals(feedname)) {
@@ -288,18 +316,11 @@ public class CalendarWebservice implements ResourceContainer{
     }
   }
 
-  /**
-   * 
-   * @param auhtor : the feed create
-   * @param events : list of event from data
-   * @return
-   * @throws Exception
-   */
+
   private String makeFeed(String author, List<CalendarEvent> events, FeedData feedData, UriInfo uri) throws Exception{
     URI baseUri = uri.getBaseUri();
     String baseURL = baseUri.getScheme() + "://" + baseUri.getHost() + ":" + Integer.toString(baseUri.getPort());
     String baseRestURL = baseUri.toString();
-
     SyndFeed feed = new SyndFeedImpl();      
     feed.setFeedType("rss_2.0");
     feed.setTitle(feedData.getTitle());
@@ -331,21 +352,21 @@ public class CalendarWebservice implements ResourceContainer{
   }
 
   /**
-   * 
-   * @param username : 
-   * @param calendarId
-   * @param type
-   * @param eventId
-   * @return Icalendar data
+   * this service provide an end-point to subscribe calendar from exo calendar 
+   * @param username : given user id prefer to get data 
+   * @param calendarId : given calendar id
+   * @param type : calendar type such as : personal, shared, public 
+   * @return ICalendar data in text/calendar MimeType
    * @throws Exception
+   * 
+   * @anchor CSref.PublicRESTAPIs.CalendarApplication.publicProcess
    */
   @GET
-  //@Produces("text/calendar")
   @Path("/subscribe/{username}/{calendarId}/{type}")
   public Response publicProcess(@PathParam("username")
-                                String username, @PathParam("calendarId")
-                                String calendarId, @PathParam("type")
-                                String type) throws Exception {
+  String username, @PathParam("calendarId")
+  String calendarId, @PathParam("type")
+  String type) throws Exception {
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
@@ -363,19 +384,19 @@ public class CalendarWebservice implements ResourceContainer{
       }
       if ((calendar == null) || Utils.isEmpty(calendar.getPublicUrl())) {
         return Response.status(HTTPStatus.LOCKED)
-        .entity("Calendar " + calendarId + " is not public access").cacheControl(cacheControl).build();
+            .entity("Calendar " + calendarId + " is not public access").cacheControl(cacheControl).build();
       }
 
       CalendarImportExport icalEx = calendarService.getCalendarImportExports(CalendarService.ICALENDAR);
       OutputStream out = icalEx.exportCalendar(username, Arrays.asList(calendarId), type, -1);
       InputStream in = new ByteArrayInputStream(out.toString().getBytes());
       return Response.ok(in, "text/calendar")
-      .header("Cache-Control", "private max-age=600, s-maxage=120").
-      header("Content-Disposition", "attachment;filename=\"" + calendarId + ".ics").cacheControl(cacheControl).build();
+          .header("Cache-Control", "private max-age=600, s-maxage=120").
+          header("Content-Disposition", "attachment;filename=\"" + calendarId + ".ics").cacheControl(cacheControl).build();
     }catch (NullPointerException ne) {
       return Response.ok(null, "text/calendar")
-      .header("Cache-Control", "private max-age=600, s-maxage=120").
-      header("Content-Disposition", "attachment;filename=\"" + calendarId + ".ics").cacheControl(cacheControl).build();
+          .header("Cache-Control", "private max-age=600, s-maxage=120").
+          header("Content-Disposition", "attachment;filename=\"" + calendarId + ".ics").cacheControl(cacheControl).build();
     } catch (Exception e) {
       if(log.isDebugEnabled()) log.debug(e.getMessage());
       return Response.status(HTTPStatus.INTERNAL_ERROR).entity(e).cacheControl(cacheControl).build();
@@ -383,21 +404,22 @@ public class CalendarWebservice implements ResourceContainer{
   }
 
   /**
+   * this service generate the ICalendar data from given calendar id, the content of data will be all evnet in side
+   * this service require authentication and permits only Users group
+   * @param username : require user id to authentication and look up personal calendar
+   * @param calendarId : given calendar id to look up
+   * @param type : calendar type : private, shared, public
+   * @return : text/calendar MimeType (ICalendar format) 
    * 
-   * @param username : 
-   * @param calendarId
-   * @param type
-   * @param eventId
-   * @return Icalendar data
-   * @throws Exception
+   * @anchor CSref.PublicRESTAPIs.CalendarApplication.privateProcess
    */
   @GET
   @RolesAllowed("users")
   @Path("/{username}/{calendarId}/{type}")
   public Response privateProcess(@PathParam("username")
-                                 String username, @PathParam("calendarId")
-                                 String calendarId, @PathParam("type")
-                                 String type) throws Exception {
+  String username, @PathParam("calendarId")
+  String calendarId, @PathParam("type")
+  String type) throws Exception {
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
@@ -409,26 +431,29 @@ public class CalendarWebservice implements ResourceContainer{
       OutputStream out = icalEx.exportCalendar(username, Arrays.asList(calendarId), type, -1);
       InputStream in = new ByteArrayInputStream(out.toString().getBytes());
       return Response.ok(in, "text/calendar")
-      .header("Cache-Control", "private max-age=600, s-maxage=120").
-      header("Content-Disposition", "attachment;filename=\"" + calendarId + ".ics").cacheControl(cacheControl).build();
+          .header("Cache-Control", "private max-age=600, s-maxage=120").
+          header("Content-Disposition", "attachment;filename=\"" + calendarId + ".ics").cacheControl(cacheControl).build();
     }catch (NullPointerException ne) {
       return Response.ok(null, "text/calendar")
-      .header("Cache-Control", "private max-age=600, s-maxage=120").
-      header("Content-Disposition", "attachment;filename=\"" + calendarId + ".ics").cacheControl(cacheControl).build();
+          .header("Cache-Control", "private max-age=600, s-maxage=120").
+          header("Content-Disposition", "attachment;filename=\"" + calendarId + ".ics").cacheControl(cacheControl).build();
     } catch (Exception e) {
       if(log.isDebugEnabled()) log.debug(e.getMessage());
       return Response.status(HTTPStatus.INTERNAL_ERROR).entity(e).cacheControl(cacheControl).build();
     }
   }
-  
+
   /**
-   * get list of personal events by their type, list of calendar ids, from time, to time and the size limitation.
-   * @param type  type of the events. The possible values are "Event" and "Task". 
-   * @param calids a string contains calendar ids separated by commas (,). 
-   * @param from long value of the time which the events are started after. 
-   * @param to long value of the time which the events are started before. 
-   * @param limit limit number of returned events.
-   * @return Response of a Json object. The json object includes the list of events saved in "info" property.  
+   * this service get list of personal events by their type, list of calendar IDs, from time, to time and the size limitation.
+   * this service require authentication and permits only Users group
+   * @param type : type of the events. The possible values are "Event" and "Task". 
+   * @param calids : a string contains calendar IDs separated by commas (,). 
+   * @param from : long value of the time which the events are started after. 
+   * @param to : long value of the time which the events are started before. 
+   * @param limit : the limitation number of returned events.
+   * @return Response of a JSon object. The JSon object includes the list of events saved in "info" property.  
+   * 
+   * @anchor CSref.PublicRESTAPIs.CalendarApplication.getEvents
    */
   @GET
   @RolesAllowed("users")
@@ -470,22 +495,25 @@ public class CalendarWebservice implements ResourceContainer{
       return Response.status(HTTPStatus.INTERNAL_ERROR).cacheControl(cc).build();
     }
   }
-  
+
   /**
-   * listing up coming event or task given by current date time
-   * @param username : current loged-in user
+   * this service to listing up coming event or task given by current date time
+   * this service require authentication and permits only Users group
+   * @param username : current logged-in user
    * @param currentdatetime : current date time using ISO8601 format yyyyMMdd
    * @param type : event or task
    * @return page list of event or task
    * @throws Exception : HTTPStatus.INTERNAL_ERROR , HTTPStatus.UNAUTHORIZED , HTTPStatus.NO_CONTENT
+   * 
+   * @anchor CSref.PublicRESTAPIs.CalendarApplication.upcomingEvent
    */
   @GET
   @RolesAllowed("users")
   @Path("/getissues/{currentdatetime}/{type}/{limit}")
   public Response upcomingEvent(@PathParam("currentdatetime")
-                                String currentdatetime, @PathParam("type")
-                                String type, @PathParam("limit")
-                                int limit) throws Exception {
+  String currentdatetime, @PathParam("type")
+  String type, @PathParam("limit")
+  int limit) throws Exception {
     try {
       if (!validateEventType(type)) {
         return Response.status(HTTPStatus.BAD_REQUEST).cacheControl(cc).build();
@@ -524,12 +552,15 @@ public class CalendarWebservice implements ResourceContainer{
     }
 
   }
-  
+
   /**
-   * Update status of a task
-   * @param taskid 
+   * this service help user to update status of a task
+   * this service require authentication and permits only Users group
+   * @param taskid : given task id 
    * @param statusId id of the status. Possible values are: 1 - Need action, 2 - In Progress, 3 -Completed, 4 - Cancelled.
    * @return true/false
+   * 
+   * @anchor CSref.PublicRESTAPIs.CalendarApplication.updateStatus
    */
   @GET
   @RolesAllowed("users")
@@ -561,6 +592,15 @@ public class CalendarWebservice implements ResourceContainer{
       return Response.status(HTTPStatus.INTERNAL_ERROR).cacheControl(cc).build();
     }
   }
+
+  /**
+   * this service retrieve all data of private (personal) calendar of logged in user
+   * this service require authentication and permits only Users group
+   * @return : json object 
+   * @throws Exception
+   * 
+   * @anchor CSref.PublicRESTAPIs.CalendarApplication.getCalendars
+   */
   @GET
   @RolesAllowed("users")
   @Path("/getcalendars")
@@ -578,7 +618,7 @@ public class CalendarWebservice implements ResourceContainer{
       return Response.status(HTTPStatus.INTERNAL_ERROR).cacheControl(cc).build();
     }
   }
-  
+
   private SingleEvent makeSingleEvent(CalendarSetting calSetting, CalendarEvent cEvent) {
     if (calSetting == null || cEvent == null) {
       throw new IllegalArgumentException("parameters must be not null");
@@ -589,7 +629,6 @@ public class CalendarWebservice implements ResourceContainer{
     event.setLocation(cEvent.getLocation());
     event.setPriority(cEvent.getPriority());
     event.setSummary(cEvent.getSummary());
-    // evaluate timeoffset
     TimeZone timeZone = TimeZone.getTimeZone(calSetting.getTimeZone());
     event.setStartDateTime(cEvent.getFromDateTime().getTime());
     event.setStartTimeOffset(timeZone.getOffset(cEvent.getFromDateTime().getTime()));
@@ -598,7 +637,16 @@ public class CalendarWebservice implements ResourceContainer{
     event.setDateFormat(calSetting.getDateFormat());
     return event;
   }
-  
+
+  /**
+   * this service to produce content of an event following given event id
+   * this service require authentication and permits only Users group
+   * @param eventid : id of event
+   * @return JSon data type 
+   * @throws Exception
+   * 
+   * @anchor CSref.PublicRESTAPIs.CalendarApplication.getEvent
+   */
   @GET
   @RolesAllowed("users")
   @Path("/getevent/{eventid}")
@@ -612,31 +660,41 @@ public class CalendarWebservice implements ResourceContainer{
       CalendarSetting calSetting = calendarService.getCalendarSetting(username);
       if(!calEvent.getAttachment().isEmpty()) calEvent.setAttachment(null);
       SingleEvent data = makeSingleEvent(calSetting, calEvent);
-      //data.setCalendars(calList);
       return Response.ok(data, MediaType.APPLICATION_JSON).cacheControl(cc).build();
     }catch(Exception e){
       return Response.status(HTTPStatus.INTERNAL_ERROR).cacheControl(cc).build();
     }
   }
-  
+
+  /**
+   * this service provide the end-point to answer or reply an invitation to join any given event id
+   * @param calendarId : the calendar id of calendar that event belong to
+   * @param calType : calendar type such as public, private, shared type
+   * @param eventId : given event id to retrieve the data to update
+   * @param inviter : the given user id of inviter ( owner of invitation )
+   * @param invitee : the given user id of receiver ( participant )
+   * @param eXoId   : given user id when user logged in 
+   * @param answer  : the answer of invitation such as : accept, refuse, or may be will join
+   * @return will be HTML in response
+   * @throws Exception
+   * 
+   * @anchor CSref.PublicRESTAPIs.CalendarApplication.processInvitationReply
+   */
   @GET
   @Path("/invitation/{calendarId}/{calType}/{eventId}/{inviter}/{invitee}/{eXoId}/{answer}")
-  public Response processInvitationReply(@PathParam("calendarId") 
-                                         String calendarId, @PathParam("calType")
-                                         String calType, @PathParam("eventId") 
-                                         String eventId, @PathParam("inviter")
-                                         String inviter, @PathParam("invitee") 
-                                         String invitee, @PathParam("eXoId")
-                                         String eXoId, @PathParam("answer") 
-                                         String answer) throws Exception {
+  public Response processInvitationReply(@PathParam("calendarId") String calendarId,
+                                         @PathParam("calType") String calType, 
+                                         @PathParam("eventId") String eventId, 
+                                         @PathParam("inviter") String inviter, 
+                                         @PathParam("invitee") String invitee, 
+                                         @PathParam("eXoId") String eXoId, 
+                                         @PathParam("answer") String answer) throws Exception {
     try {
       if(getCalendarService() instanceof Response) {
         return (Response) getCalendarService();
       }
       String userId = eXoId.equals("null")?null:eXoId;
-      // save invitation status
       calendarService.confirmInvitation(inviter, invitee, userId, Integer.parseInt(calType), calendarId, eventId, Integer.parseInt(answer));
-      
       int ans = Integer.parseInt(answer);
       StringBuffer response = new StringBuffer();
       response.append("<html><head><title>Invitation Answer</title></head>");
@@ -652,7 +710,6 @@ public class CalendarWebservice implements ResourceContainer{
         response.append("You have answered invitation from " + inviter + " : Not sure!");
         break;
       }
-      
       response.append("</body></html>");
       return Response.ok(response.toString(), MediaType.TEXT_HTML).cacheControl(cc).build();
     } catch (Exception e) {
