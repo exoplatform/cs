@@ -53,6 +53,8 @@ import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.calendar.webui.popup.UIAddressForm.ContactData;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
@@ -75,6 +77,8 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.core.model.SelectOption;
 import org.exoplatform.webui.core.model.SelectOptionGroup;
 import org.exoplatform.ws.frameworks.cometd.ContinuationService;
+
+import com.sun.tools.javac.code.Attribute.Array;
 
 /**
  * Created by The eXo Platform SARL

@@ -459,7 +459,7 @@ public interface CalendarService {
    * @param receiverUsers List receive user username or id
    * @throws Exception
    */
-  public boolean shareCalendarByRunJob(String username, String calendarId, List<String> receiverUsers) throws Exception;
+  public boolean shareCalendarByRunJob(String username, String calendarId, List<String> receivedGroups) throws Exception;
 
   /**
    * The method gets all shared calendars of the current user

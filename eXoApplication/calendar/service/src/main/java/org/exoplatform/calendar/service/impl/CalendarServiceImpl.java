@@ -420,7 +420,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   * {@inheritDoc}
    * @return 
   */
-  public boolean shareCalendarByRunJob(String username, String calendarId, List<String> receiverUsers) throws Exception{
+  public boolean shareCalendarByRunJob(String username, String calendarId, List<String> receivedGroups) throws Exception{
     JobSchedulerServiceImpl  schedulerService_ = (JobSchedulerServiceImpl)ExoContainerContext.getCurrentContainer().getComponentInstance(JobSchedulerService.class) ;
     JobInfo jobInfo = ShareCalendarJob.getJobInfo(username);
     if(findActiveShareClaJob(jobInfo.getJobName(), schedulerService_)){
@@ -431,7 +431,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     SimpleTrigger trigger = new SimpleTrigger(jobInfo.getJobName(), jobInfo.getGroupName(), new Date());
     JobDetail job = new JobDetail(jobInfo.getJobName(), jobInfo.getGroupName(), jobInfo.getJob());
     job.setDescription(jobInfo.getDescription());
-    job.getJobDataMap().put(ShareCalendarJob.RECEIVER_USER, receiverUsers);
+    job.getJobDataMap().put(ShareCalendarJob.RECEIVED_GROUPS, receivedGroups);
     job.getJobDataMap().put(ShareCalendarJob.USER_NAME, username);
     job.getJobDataMap().put(ShareCalendarJob.CALENDAR_ID, calendarId);
     job.getJobDataMap().put(ShareCalendarJob.JCR_DATA_STORAGE, storage_);
@@ -869,5 +869,4 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   public void autoRemoveShareCalendar(String groupId, String username) throws Exception {
     storage_.autoRemoveShareCalendar(groupId, username);
   }
-
 }

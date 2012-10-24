@@ -631,7 +631,7 @@ public class MockCalendarService implements CalendarService{
   }
 
   @Override
-  public boolean shareCalendarByRunJob(String username, String calendarId, List<String> receiverUsers) throws Exception {
+  public boolean shareCalendarByRunJob(String username, String calendarId, List<String> receivedUsers) throws Exception {
     return true;
   }
   
@@ -642,4 +642,6 @@ public class MockCalendarService implements CalendarService{
   public void autoRemoveShareCalendar(String groupId, String username)
 	throws Exception {
   }
+
+ 
 }
