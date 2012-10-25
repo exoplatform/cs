@@ -51,7 +51,7 @@ The REST API of Calendar portlet is exposed by _org.exoplatform.services.cs.cale
 * $portalname: The name of the portal
 * $restcontextname: The context name of rest webapplication which is deployed to the "$portalname" portal.
 
-*APIs usage:* Use the following APIs to build all functions of the Calendar application.
+*APIs usage:* Use the APIs to build all functions of the Calendar application.
 {include:document="DeveloperReference/jaxrs/generated/org.exoplatform.webservice.cs.calendar.CalendarWebservice.wiki" /}
 
 h1. Mail application {anchor:id=CSref.PublicRESTAPIs.MailApplicationRoleNotInToc}
@@ -69,7 +69,7 @@ The Mail portlet and its services are deprecated. It remains fully supported for
 || Service name || Service URL || Location || Description ||
 |*MailWebservice* | {{$portalname/$restcontextname/private/cs/mail}} | Maven groupId: org.exoplatform.cs {example}{example} artifactId: exo.cs.web.webservice |This service is used to call extended services of the Mail application. |
 
-*APIs Usage:* Use the following APIs to build all functions of the Mail application.
+*APIs Usage:* Use the APIs to build all functions of the Mail application.
 {include:document="DeveloperReference/jaxrs/generated/org.exoplatform.webservice.cs.mail.MailWebservice.wiki" /}
 
 h1. Chat application {anchor:id=CSref.PublicREST_APIs.ChatApplicationRoleNotInToc}
@@ -110,7 +110,7 @@ REST API _RESTXMPPService_ of the Chat portlet is exposed by _org.exoplatform.se
 |*createRoom* | {{{/muc/createroom/{username}/}}} | username {example}{example} room {example}{example} nickname| user id {example}{example} room name {example}{example} display name |Create a chat room or a group chat. |
 |*configRoom* | {{{/muc/configroom/{username}/}}} | username {example}{example} room | user id {example}{example} room name |Establish the configuration of a chat room. |
 |*getRoomConfigForm* | {{{/muc/getroomconfig/{username}/}}} | username {example}{example} room| user id {example}{example} room name |Get the configuration of a chat room created. |
-|*getRoomInfo* | {{{/muc/getroominfo/{username}/}}} |username  {example}{example} room| user id {example}{example} string |Get the inforamtion of a chat room created. |
+|*getRoomInfo* | {{{/muc/getroominfo/{username}/}}} |username  {example}{example} room| user id {example}{example} string |Get the information of a chat room created. |
 |*getJoinedRooms* | {{{/muc/joinedrooms/{username}/}}} | username| user id|List chat rooms that a user has been joined. |
 |*getRooms* | {{{/muc/rooms/{username}/}}}| username| user id |Get a list of group chat or chat rooms created.|
 |*declineToRoom* | {{{/muc/decline/{username}/{inviter}/}}} |username {example}{example} inviter {example}{example} room {example}{example} reason | user id {example}{example} user id {example}{example} room name {example}{example} string |Refuse the invitation to join the chat room. |
@@ -141,16 +141,16 @@ REST API _RESTXMPPService_ of the Chat portlet is exposed by _org.exoplatform.se
 |*logout* | {{{/logout/{username}/{presencestatus}/}}}| username {example}{example} presencestatus |user id {example}{example} presencestatus |Allow a user to log out the chat server. |
 |*messageReceive* | {{{/history/messagereceive/{username}/{messageid}/}}} |username{example}{example} messageid | user id {example}{example} message id |Receive a message from other users. |
 |*removeBuddy* | {{{/roster/del/{username}/{removeboddy}/}}} |username {example}{example} removeboddy | user id {example}{example} user id |Delete a contact from the contact list.|
-|*removeTransport* | {{{/removetransport/{username}/{transport}/}}} |username {example}{example} transport |user id {example}{example} transport servive (e.g: Yahoo, XMPP) |Reset the presence type at the service that is being used. |
+|*removeTransport* | {{{/removetransport/{username}/{transport}/}}} |username {example}{example} transport |user id {example}{example} transport service (e.g: Yahoo, XMPP) |Reset the presence type at the service that is being used. |
 |*searchUsers* | {{{/searchuser/{username}/}}} | username {example}{example} search {example}{example} byUsername {example}{example} byName {example}{example} byEmail {example}{example} searchService | user id {example}{example} string {example}{example} true / false {example}{example} true /false {example}{example} true / false {example}{example} string |Search users in the chat server.|
 |*sendMessage* | {{{/sendmessage/{username}/}}} | username {example}{example} messageBean| usesr id {example}{example} object |Send an message to other users. |
-|*sendMUCMessage* | {{{/muc/sendmessage/{username}/}}} | username {example}{example} messageBean |user id {example}{example} object|Send a message to multile users or a group. |
-|*setUserStatus* | {{{/sendstatus/{username}/{status}/}}} | username {example}{example} status | user id {example}{example} available/ unavailabe / do not disturb / away / extend away |Change the status of a user.|
-|*subscribeUser* | {{{/subscribeuser/{username}/{subsuser}/}}} | username {example}{example} subsuser | user id {example}{example} user id |Change presence type into Subcribed type.|
+|*sendMUCMessage* | {{{/muc/sendmessage/{username}/}}} | username {example}{example} messageBean |user id {example}{example} object|Send a message to multiple users or a group. |
+|*setUserStatus* | {{{/sendstatus/{username}/{status}/}}} | username {example}{example} status | user id {example}{example} available/ unavailable / do not disturb / away / extend away |Change the status of a user.|
+|*subscribeUser* | {{{/subscribeuser/{username}/{subsuser}/}}} | username {example}{example} subsuser | user id {example}{example} user id |Change presence type into Subscribed type.|
 |*unsubscribeUser* | {{{/unsubscribeuser/{username}/{unsubsuser}/}}} |username {example}{example} unsubsuser| user id {example}{example} user id |Change presence type into the Unsubscribed type. |
 |*acceptFile* | {{{/fileexchange/accept/{username}/{uuid}/}}}| username {example}{example} uuid | user id {example}{example} string |Accept getting a file sent from another user. |
 |*rejectFile* | {{{/fileexchange/reject/{username}/{uuid}/}}} | username {example}{example} uuid | user id {example}{example} string|Refuse getting a file sent from another user.|
-|*getPreviousStatus* | {{{/getprevstatus/{username}/}}} | username | user id |Get the tatus of a user in the last log-in.|
+|*getPreviousStatus* | {{{/getprevstatus/{username}/}}} | username | user id |Get the status of a user in the last log-in.|
 
 
 {docbook}
