@@ -224,7 +224,12 @@
                 		<span class="$css"></span>
                 	</span>
                 	</a>
-                	<a class="CalendarName" href="javascript:void(0);" title="<%=calendar.getName()%>"><%=calendar.getName()%></a>
+									<%
+										def groupCalendarName = calendar.getName(); 
+                    def toolong = (groupCalendarName.length() > MAX_CALENDAR_NAME_LENGTH);
+                    def groupCalendarLabel = (toolong ? groupCalendarName.substring(0, MAX_DISPLAYED_CALENDAR_NAME) + "..." : groupCalendarName);
+                  %>
+                	<a class="CalendarName" href="javascript:void(0);" title="$groupCalendarName">$groupCalendarLabel</a>
                 	<span style="display:none"><%uiform.renderField(calendar.getId())%></span>
                </div>
             </li>
