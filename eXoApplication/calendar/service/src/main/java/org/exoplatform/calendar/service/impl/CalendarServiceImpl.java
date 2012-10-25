@@ -17,11 +17,13 @@
 package org.exoplatform.calendar.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 import javax.jcr.ItemExistsException;
@@ -40,16 +42,25 @@ import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.FeedData;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.RssData;
+import org.exoplatform.calendar.service.ShareCalendarJob;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.commons.utils.ExoProperties;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.resources.ResourceBundleService;
+import org.exoplatform.services.scheduler.JobInfo;
+import org.exoplatform.services.scheduler.JobSchedulerService;
+import org.exoplatform.services.scheduler.impl.JobSchedulerServiceImpl;
+import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 import org.picocontainer.Startable;
+import org.quartz.JobDetail;
+import org.quartz.JobExecutionContext;
+import org.quartz.SimpleTrigger;
 
 /**
  * Created by The eXo Platform SARL Author : Hung Nguyen Quang
@@ -57,12 +68,21 @@ import org.picocontainer.Startable;
  */
 public class CalendarServiceImpl implements CalendarService, Startable {
 
-  private ResourceBundle rb_;
-  private ResourceBundleService rbs_ ;
+  private ResourceBundle                      rb_;
+
+  private ResourceBundleService               rbs_;
+
   private JCRDataStorage                      storage_;
-  private Map<String, CalendarImportExport>   calendarImportExport_ = new LinkedHashMap<String, CalendarImportExport>();
-  protected List<CalendarUpdateEventListener> listeners_            = new ArrayList<CalendarUpdateEventListener>(3);
-  protected List<CalendarEventListener> eventListeners_ = new ArrayList<CalendarEventListener>(3);
+
+  private Map<String, CalendarImportExport>   calendarImportExport_    = new LinkedHashMap<String, CalendarImportExport>();
+
+  protected List<CalendarUpdateEventListener> listeners_               = new ArrayList<CalendarUpdateEventListener>(3);
+
+  protected List<CalendarEventListener>       eventListeners_          = new ArrayList<CalendarEventListener>(3);
+
+  public static final String                  MAX_USER_RUN_JOB_KEY     = "cs.calendar.sharing.max_user_run_job";
+  
+  public static final String                  MAX_USER_RUN_JOB_DEFAULT = "500";
 
   public CalendarServiceImpl(InitParams params,NodeHierarchyCreator nodeHierarchyCreator, RepositoryService reposervice, ResourceBundleService rbs) throws Exception {
     storage_ = new JCRDataStorage(nodeHierarchyCreator, reposervice);
@@ -385,7 +405,54 @@ public class CalendarServiceImpl implements CalendarService, Startable {
    * {@inheritDoc}
    */
   public void shareCalendar(String username, String calendarId, List<String> receiverUsers) throws Exception {
-    storage_.shareCalendar(username, calendarId, receiverUsers);
+    JobSchedulerServiceImpl  schedulerService_ = (JobSchedulerServiceImpl)PortalContainer.getInstance().getComponentInstance(JobSchedulerService.class) ;
+    JobInfo jobInfo = ShareCalendarJob.getJobInfo(username);
+    int maxUserRunJob = getMaxUserRunJob();
+    if(findActiveShareClaJob(jobInfo.getJobName(), schedulerService_)){
+      ContinuationService continuation = (ContinuationService) PortalContainer.getInstance().getComponentInstanceOfType(ContinuationService.class);
+      continuation.sendMessage(username, "/eXo/Application/Calendar/notifySharaCalendar", ShareCalendarJob.STILL_SHARE_ID, ShareCalendarJob.STILL_SHARE_ID);
+      return;
+    }
+    if(receiverUsers.size() > maxUserRunJob){
+      SimpleTrigger trigger = new SimpleTrigger(jobInfo.getJobName(), jobInfo.getGroupName(), new Date());
+      JobDetail job = new JobDetail(jobInfo.getJobName(), jobInfo.getGroupName(), jobInfo.getJob());
+      job.setDescription(jobInfo.getDescription());
+      job.getJobDataMap().put(ShareCalendarJob.RECEIVER_USER, receiverUsers);
+      job.getJobDataMap().put(ShareCalendarJob.USER_NAME, username);
+      job.getJobDataMap().put(ShareCalendarJob.CALENDAR_ID, calendarId);
+      job.getJobDataMap().put(ShareCalendarJob.JCR_JATA_STORAGE, storage_);
+      schedulerService_.addJob(job, trigger);
+    }else{
+      storage_.shareCalendar(username, calendarId, receiverUsers);
+    }
+  }
+  
+  /**
+   * Checking a exist calendar job is running
+   * @param userName
+   * @param schedulerService_
+   * @return boolean
+   * @throws Exception
+   */
+  private boolean findActiveShareClaJob(String userName, JobSchedulerServiceImpl schedulerService_) throws Exception {
+    List list = schedulerService_.getAllExcutingJobs();
+    for (Object obj : list) {
+      JobExecutionContext jec = (JobExecutionContext) obj;
+      JobDetail tmp = jec.getJobDetail();
+      if (tmp.getName().equals(userName)) {
+        return true;
+      }
+    }
+    return false;
+  }
+  
+  private int getMaxUserRunJob(){
+    Properties props = new Properties(System.getProperties());
+    String maxUserStr = props.getProperty(MAX_USER_RUN_JOB_KEY);
+    if(Utils.isEmpty(maxUserStr)){
+      maxUserStr = MAX_USER_RUN_JOB_DEFAULT;
+    }
+    return Integer.parseInt(maxUserStr);
   }
 
   /**
