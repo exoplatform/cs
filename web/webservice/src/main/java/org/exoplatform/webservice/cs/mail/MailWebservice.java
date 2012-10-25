@@ -67,11 +67,11 @@ public class MailWebservice implements ResourceContainer {
   } 
 
   /**
-   * this service to provide communication from check mail job and update status on server 
-   * this service request to authentication and authorization only for users group
-   * @param userName : given user id 
-   * @param accountId : given user account, by implementation we can have multiple account for single user, so this should be specific account id 
-   * @param folderId : given folder id (name) to checking messages in side
+   * This service is used to provide communication from the checking-mail job and update the status on the server.
+   * This service requests for authentication and authorization only for the _Users_ group.
+   * @param userName The given user Id
+   * @param accountId The Id of a given user account. By implementation, there are multiple accounts for a single user, so this should be specific account Id.
+   * @param folderId The given folder Id (name) to check messages inside.
    * @return response in text/xml format 
    * @throws Exception
    * 
@@ -104,10 +104,10 @@ public class MailWebservice implements ResourceContainer {
 
 
   /**
-   * this service to make synchronization folders of mail application
-   * this service request to authentication and authorization only for users group
-   * @param userName : given user name
-   * @param accountId : given user account, by implementation we can have multiple account for single user, so this should be specific account id 
+   * This service is used to make synchronization folders of the Mail application.
+   * This service requests for authentication and authorization only for the _Users_ group.
+   * @param userName The given user name.
+   * @param accountId The given user account. By implementation, there are multiple accounts for a single user, so this should be a specific account Id.
    * @return text/xml in response 
    * @throws Exception
    * 
@@ -143,10 +143,10 @@ public class MailWebservice implements ResourceContainer {
   }
 
   /**
-   * this service to stop the checking mail job in case user don't want to run the check mail 
-   * this service request to authentication and authorization only for users group
-   * @param userName : given user id
-   * @param accountId : given user account, by implementation we can have multiple account for single user, so this should be specific account id 
+   * This service is used to stop the checking-mail job in case the user does not want to run the checking mail.
+   * This service requests for authentication and authorization only for the _Users_ group.
+   * @param userName The given user Id.
+   * @param accountId The given user account. By implementation, there are multiple accounts for a single user, so this should be a specific account Id.
    * @return text/xml in response
    * @throws Exception
    * 
@@ -182,10 +182,10 @@ public class MailWebservice implements ResourceContainer {
   }
 
   /**
-   * this service to get more information of check mail running job
-   * this service request to authentication and authorization only for users group
-   * @param userName :  given user id
-   * @param accountId : given user account, by implementation we can have multiple account for single user, so this should be specific account id 
+   * This service is used to get more information of the mail-checking job.
+   * This service requests for authentication and authorization only for the _Users_ group.
+   * @param userName The given user Id.
+   * @param accountId The given user account. By implementation, there are multiple accounts for a single user, so this should be a specific account Id.
    * @return text/xml in the response
    * @throws Exception
    * 
@@ -266,9 +266,9 @@ public class MailWebservice implements ResourceContainer {
   }
 
   /**
-   * this service lookup all contact's e-mail which has term similar with inputed keywords 
-   * this service request to authentication and authorization only for users group
-   * @param keywords : given keywords by user typed
+   * This service looks up all contacts' e-mails which have the term similar to the input keywords.
+   * This service requests for authentication and authorization for the _Users_ group only.
+   * @param keywords The given keywords.
    * @return list of found e-mail in JSon object in response 
    * @throws Exception
    * 
@@ -307,13 +307,13 @@ public class MailWebservice implements ResourceContainer {
   }
 
   /**
-   * list header of unread mails , the security level will take from
-   * ConversationState
+   * List the header of unread mails. The security level will take from
+   * _ConversationState_.
    * 
-   * @param accountId : the text to compare with data base
-   * @param folderId : the text to compare with data base
-   * @param tagId : the text to compare with data base
-   * @param limit : number of return mails
+   * @param accountId The text to compare with database.
+   * @param folderId The text to compare with database.
+   * @param tagId The text to compare with database.
+   * @param limit The number of returned mails.
    * @return application/json content type
    * 
    * @anchor CSref.PublicRESTAPIs.MailApplication.unreadMail
@@ -356,8 +356,8 @@ public class MailWebservice implements ResourceContainer {
   }
 
   /**
-   * list accounts of current user , the security level will take from
-   * ConversationState
+   * List the accounts of the current user. The security level will take from
+   * _ConversationState_.
    * @return application/json content type
    * 
    * @anchor CSref.PublicRESTAPIs.MailApplication.getAccounts
@@ -380,9 +380,9 @@ public class MailWebservice implements ResourceContainer {
   }
 
   /**
-   * list folders and tags of current accounts, the security level will take from
-   * ConversationState
-   * @param accountId : the text to compare with data base
+   * List folders and tags of the current accounts. The security level will take from
+   * _ConversationState_.
+   * @param accountId The text to compare with database.
    * @return application/json content type
    * 
    * @anchor CSref.PublicRESTAPIs.MailApplication.getFoldersTags
@@ -411,11 +411,11 @@ public class MailWebservice implements ResourceContainer {
   }
 
   /**
-   * this service help to check supported types from any given mail server by host name or ip
-   * @param mechs : name of mechanisms to check
-   * @param username : given user name
-   * @param proto : type of protocol to check
-   * @param host : host name or mail server ip
+   * This service helps checking supported types from any given mail server by host name or IP.
+   * @param mechanisms The name of mechanisms to check.
+   * @param username The given username.
+   * @param proto The type of protocol to check.
+   * @param host The host name or the mail server IP.
    * @return JSon object in response
    * @throws Exception
    * 
@@ -450,8 +450,8 @@ public class MailWebservice implements ResourceContainer {
   }
 
   /**
-   * Get all users from portal user data base
-   * @param keywords : the text to compare with data base
+   * Get all users from the user database of the portal.
+   * @param keywords The text to compare with database.
    * @return application/json content type
    * 
    * @anchor CSref.PublicRESTAPIs.MailApplication.searchUser
