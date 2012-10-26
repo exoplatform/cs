@@ -48,8 +48,8 @@ The REST API of Calendar portlet is exposed by _org.exoplatform.services.cs.cale
 
 *Details:*
 
-* $portalname: The name of the portal
-* $restcontextname: The context name of rest webapplication which is deployed to the "$portalname" portal.
+* $portalname: The name of the portal.
+* $restcontextname: The context name of REST web application which is configured into the "$portalname" portal.
 
 *APIs usage:* Use the APIs to build all functions of the Calendar application.
 {include:document="DeveloperReference/jaxrs/generated/org.exoplatform.webservice.cs.calendar.CalendarWebservice.wiki" /}
