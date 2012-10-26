@@ -138,9 +138,9 @@ public class CalendarWebservice implements ResourceContainer{
   }
 
   /**
-   * This service is used to check permission of the current logged user on any calendar by the given calendar Id.
+   * Check permission of the currently logged user on any calendar by the given calendar Id.
    * The input parameters will be in the URL of the calendar.
-   * @param username The given user's Id, or the current logged user.
+   * @param username The given user's Id, or the currently logged user.
    * @param calendarId The given calendar Id on which the permission is checked.
    * @param type The calendar type: _private_, _public_ or _shared_.
    * @return JSon data value will return
@@ -194,9 +194,9 @@ public class CalendarWebservice implements ResourceContainer{
   }
 
   /**
-   * This service is used to provide the details of a single event with the given user name and the given event Id. The data returned will be the _ics_ format.
-   * @param username The requested user name.
-   * @param eventFeedName Contains _eventId_ and _CalType_.
+   * Provide details of an event with the given username and event Id. The data returned will be in the _ics_ format.
+   * @param username The requested username.
+   * @param eventFeedName Contain _eventId_ and _CalType_.
    * @return : RSS feeds in the _XML_ format.
    * @throws Exception
    * 
@@ -246,7 +246,7 @@ public class CalendarWebservice implements ResourceContainer{
 
 
   /**
-   * This service returns the XML RSS feed data of one single given calendar and follows a given user Id.
+   * Return the XML RSS feed data of one user's calendar.
    * @param username The requested username.
    * @param feedname The name of the RSS feed.
    * @param filename The file name.
@@ -352,8 +352,8 @@ public class CalendarWebservice implements ResourceContainer{
   }
 
   /**
-   * This service provides an end-point to subscribe calendars from the Calendar function of eXo Platform.
-   * @param username The given user Id who wants to get data.
+   * Provide an end-point to subscribe calendars from the Calendar function of eXo Platform.
+   * @param username The given Id of the user who wants to get data.
    * @param calendarId The given calendar Id.
    * @param type The calendar type, such as _personal_, _shared_,  and _public_.
    * @return ICalendar data in text/calendar MimeType
@@ -404,8 +404,8 @@ public class CalendarWebservice implements ResourceContainer{
   }
 
   /**
-   * This service generates the ICalendar data from a given calendar Id. The data content will be all events inside.
-   * This service requires authentication and permission for the _Users_ group only.
+   * Generate the ICalendar data from a given calendar Id. The data content will be all events inside.
+   * This service requires authentication and permission of the _Users_ group only.
    * @param username Require the user Id for authentication and look up the personal calendar.
    * @param calendarId The given calendar Id to look up.
    * @param type The calendar type, such as _private_, _shared_, _public_.
@@ -444,13 +444,13 @@ public class CalendarWebservice implements ResourceContainer{
   }
 
   /**
-   * This service gets a list of personal events by their type, a list of calendar Ids, from time, to time and the size limitation.
-   * This service requires authentication and permits the _Users_ group only.
+   * Get a list of personal events by their type, a list of calendar Ids, from time, to time and the size limitation.
+   * This service requires authentication and permission of the _Users_ group only.
    * @param type The type of the events. The possible values are "_Event_" and "_Task_".
-   * @param calids A string contains calendar iDs separated by commas (,).
-   * @param from Long value of the time which the events are started after.
-   * @param to Long value of the time which the events are started before.
-   * @param limit The limitation number of returned events.
+   * @param calids A string of calendar Ids separated by commas (,).
+   * @param from A value of period (in miliseconds) during which the events are started.
+   * @param to A value of period (in miliseconds) during which the events are ended.
+   * @param limit The maximum number of returned events.
    * @return Response of a JSon object. The JSon object includes the list of events saved in "info" property.  
    * 
    * @anchor CSref.PublicRESTAPIs.CalendarApplication.getEvents
@@ -497,12 +497,11 @@ public class CalendarWebservice implements ResourceContainer{
   }
 
   /**
-   * Tis service is used to list up-coming events or tasks by the current date/time.
-   * This service requires authentication and permits the _Users_ group only.
-   * @param username : current logged-in user
-   * @param currentdatetime The current date time using the _yyyyMMdd_ ISO8601 format.
+   * List upcoming events or tasks by the current date.
+   * This service requires authentication and permission of the _Users_ group only.
+   * @param currentdatetime The current date using the ISO 8601 format (_yyyyMMdd_).
    * @param type The event or task.
-   * @param limit The maximum events/events/ returned by the current date/time.
+   * @param limit The maximum number of events returned by the current date.
    * @throws Exception : HTTPStatus.INTERNAL_ERROR , HTTPStatus.UNAUTHORIZED , HTTPStatus.NO_CONTENT
    * 
    * @anchor CSref.PublicRESTAPIs.CalendarApplication.upcomingEvent
@@ -554,10 +553,10 @@ public class CalendarWebservice implements ResourceContainer{
   }
 
   /**
-   * This service helps users to update the status of a task.
-   * This service requires authentication and permits the _Users_ group only.
+   * Allow users to update the status of a task.
+   * This service requires authentication and permission of the _Users_ group only.
    * @param taskid The given task Id.
-   * @param statusId The Id of the status. The Possible values are 1 - _Need action_, 2 - _In Progress_, 3 - _Completed_, and 4 - _Cancelled_.
+   * @param statusId The Id of the status. Possible values are 1 - _Need action_, 2 - _In Progress_, 3 - _Completed_, and 4 - _Canceled_.
    * @return true/false
    * 
    * @anchor CSref.PublicRESTAPIs.CalendarApplication.updateStatus
@@ -594,8 +593,8 @@ public class CalendarWebservice implements ResourceContainer{
   }
 
   /**
-   * This service retrieves all data of a private (personal) calendar of a logged-in user.
-   * It requires authentication and permits the _Users_ group only.
+   * Retrieve all data of a private (personal) calendar of a logged-in user.
+   * It requires authentication and permission of the _Users_ group only.
    * @return : json object 
    * @throws Exception
    * 
@@ -639,8 +638,8 @@ public class CalendarWebservice implements ResourceContainer{
   }
 
   /**
-   * This service is used to produce the content of a given event basing on its Id.
-   * It requires authentication and permits the _Users_ group only.
+   * Produce the content of a given event basing on its Id.
+   * It requires authentication and permission of the _Users_ group only.
    * @param eventid The event Id.
    * @return JSon data type 
    * @throws Exception
@@ -667,13 +666,13 @@ public class CalendarWebservice implements ResourceContainer{
   }
 
   /**
-   * This service provides the end-point to answer or reply an invitation to join any given event by its Id.
+   * Provide the end-point to answer or reply an invitation to join any given event by its Id.
    * @param calendarId The calendar Id to which the event belongs.
-   * @param calType The calendar type, such as _public_, _private_, and _shared_ type.
-   * @param eventId The given event Id to retrieve the data to update.
-   * @param inviter The given user Id of the inviter/the owner of invitation.
-   * @param invitee The given user Id of the receiver/participant.
-   * @param eXoId  The given user Id when being logged in.
+   * @param calType The calendar type, such as _public_, _private_, and _shared_.
+   * @param eventId The Id which retrieves the event data.
+   * @param inviter The user Id of the inviter (owner of invitation).
+   * @param invitee The user Id of the receiver/participant.
+   * @param eXoId  The user Id when being logged in.
    * @param answer  The answer of invitation, such as _accept_, _refuse_, or _will join_.
    * @return will be HTML in response
    * @throws Exception
