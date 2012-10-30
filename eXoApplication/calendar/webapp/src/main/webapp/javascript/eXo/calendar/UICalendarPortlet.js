@@ -2838,7 +2838,7 @@ UICombobox.prototype.init = function() {
 	  var onkeydown = comboList[i].getAttribute("onkeydown") ;
 	  if(!onfocus) comboList[i].onfocus = uiCombobox.show ;
 	  if(!onclick) comboList[i].onclick = uiCombobox.show ;
-	  if(!onblur)  comboList[i].onchange = uiCombobox.correct ;
+	  if(!onchange)  comboList[i].onchange = uiCombobox.correct ;
 		if(!onkeydown) comboList[i].onkeydown = uiCombobox.tabEvent;
 	}
 };
