@@ -170,7 +170,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   final public static String ACT_ADDEMAIL = "AddEmailAddress".intern() ;
   final public static String ACT_ADDCATEGORY = "AddCategory".intern() ;
   final public static String ACT_EDITREPEAT = "EditRepeat".intern();
-  final public static String STATUS_EMPTY = "".intern();
+  final public static String STATUS_EMPTY = "empty".intern();
   final public static String STATUS_PENDING = "pending".intern();
   final public static String STATUS_YES = "yes".intern();
   final public static String STATUS_NO = "no".intern();
@@ -1358,10 +1358,13 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
           String[] entry = parSt.split(":");
           if (entry.length > 1)
             parsUpdated.add(entry[0] + ":" + entry[1]);
-          else
+          else {
+            log.info("change status to pending");
             parsUpdated.add(entry[0] + ":" + STATUS_PENDING);
+          }
         }
         calendarEvent.setParticipantStatus(parsUpdated.toArray(new String[parsUpdated.size()]));
+        log.info("pars updated " + parsUpdated.toString());
       }
       return calendarEvent;
     } catch (Exception e) {
