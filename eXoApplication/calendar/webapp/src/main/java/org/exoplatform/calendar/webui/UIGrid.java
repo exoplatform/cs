@@ -35,7 +35,7 @@ import java.util.List;
  *
  * @see UIPageIterator
  */
-@ComponentConfig(template = "app:/templates/calendar/webui/UIParticipantList.gtmpl")
+@ComponentConfig(template = "app:/templates/calendar/webui/UIGrid.gtmpl")
 @Serialized
 public class UIGrid extends UIComponent
 {

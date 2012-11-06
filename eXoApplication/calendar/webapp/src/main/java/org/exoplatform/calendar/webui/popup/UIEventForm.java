@@ -1325,9 +1325,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     } else {
       // select new Invitation email
       Map<String, String> invitations = new LinkedHashMap<String, String>();
-      for (String s : calendarEvent.getInvitation())
+      for (String s : calendarEvent.getInvitation()) {
         invitations.put(s, s);
-      for (String parSt : calendarEvent.getParticipantStatus()) {
+      }
+      for (String parSt : calendarEvent.getParticipantStatus()) {   
         String[] entry = parSt.split(":");
         // is old
         if (entry.length > 1 && entry[0].contains("@"))
@@ -1352,9 +1353,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     }
     try {
       if (toId != null) {
-        sendMail(CalendarUtils.getMailService(), CalendarUtils.getOrganizationService(), calSetting, acc, username, toId, calendarEvent);
+        sendMail(CalendarUtils.getMailService(), CalendarUtils.getOrganizationService(), calSetting, acc, username, toId, calendarEvent);      
         List<String> parsUpdated = new LinkedList<String>();
-        for (String parSt : calendarEvent.getParticipantStatus()) {
+        for (String parSt : calendarEvent.getParticipantStatus()) {   
           String[] entry = parSt.split(":");
           if (entry.length > 1)
             parsUpdated.add(entry[0] + ":" + entry[1]);
