@@ -1,0 +1,21 @@
+<%	
+    def pageShown = uicomponent.getPageShown();
+    def isLastPage = uicomponent.isLastPage();
+%>
+<div class="UIPageIterator">
+
+  <% if (isLastPage) { %>
+    <a class="Icon DisableNextPageIcon" title="<%=_ctx.appRes("UIPageIterator.label.next")%>"></a>
+  <% } else { %>
+    <a href="<%=uicomponent.event("ShowPage","${pageShown + 1}")%>" class="Icon NextPageIcon" title="<%=_ctx.appRes("UIPageIterator.label.next")%>"></a>
+  <% } %>
+  
+  <a href="<%=uicomponent.event("ShowPage","${pageShown}")%>" class="Number PageSelected"><%=pageShown %></a>
+
+  <% if( pageShown - 1 > 0 ){ %>				
+    <a href="<%=uicomponent.event("ShowPage","${pageShown - 1}")%>" class="Icon LastPageIcon" title="<%=_ctx.appRes("UIPageIterator.label.previous")%>"></a>
+  <% } else {%>
+    <a class="Icon DisableLastPageIcon" title="<%=_ctx.appRes("UIPageIterator.label.previous")%>"></a>
+  <%}%>
+	
+</div>

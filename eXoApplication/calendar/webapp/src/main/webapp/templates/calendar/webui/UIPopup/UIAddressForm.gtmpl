@@ -6,6 +6,7 @@
  String actionLink = uicomponent.event('Search') ;
  rcontext.getJavascriptManager().addJavascript('eXo.cs.Utils.captureInput("'+uiform.FIELD_KEYWORD+'","'+actionLink+'") ;') ;
  rcontext.getJavascriptManager().addJavascript('eXo.cs.CheckBox.init("' + uiform.id + '"); ') ;
+ def isSearchEnabled = uicomponent.isSearchEnabled();
 %>
 <div class="UIInsertAddress">
   <div class="InsertAddressContainer">
@@ -73,8 +74,12 @@
                 </tr>
               <%}%>
         </tbody>
-        </table>      
-        <%_ctx.include("app:/templates/calendar/webui/UIPageIterator.gtmpl");%>        
+        </table>  
+        <% if (!isSearchEnabled) {   
+            _ctx.include("app:/templates/calendar/webui/UILazyPageIterator.gtmpl"); } 
+           else { 
+            _ctx.include("app:/templates/calendar/webui/UIPageIterator.gtmpl"); } 
+        %>         
       </div>
       
     </div>

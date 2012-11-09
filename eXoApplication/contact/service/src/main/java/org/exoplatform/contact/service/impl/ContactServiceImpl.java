@@ -53,6 +53,7 @@ import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.security.Identity;
+import org.exoplatform.contact.service.QueryState;
 
 /**
  * Created by The eXo Platform SARL
@@ -482,8 +483,13 @@ public class ContactServiceImpl implements ContactService {
     storage_.savePublicAddressBook(addressbook, isNew);
   }
 
-public List<ContactData> findEmailFromContacts(String userId, ContactFilter filter) throws Exception {
-	// TODO Auto-generated method stub
-	return storage_.findEmailFromContacts(userId, filter);
-}
+  public List<ContactData> findEmailFromContacts(String userId, ContactFilter filter) throws Exception {
+	  // TODO Auto-generated method stub
+	  return storage_.findEmailFromContacts(userId, filter);
+  }
+  
+  public List<ContactData> findNextEmailsForType(String username, ContactFilter filter, Integer offset, Integer resultLimit, QueryState queryState) throws Exception 
+  {
+    return storage_.findNextEmailsForType(username, filter, offset, resultLimit, queryState);
+  }
 }
