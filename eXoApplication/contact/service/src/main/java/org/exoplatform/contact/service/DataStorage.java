@@ -661,4 +661,6 @@ public interface DataStorage {
    * @throws Exception
    */
   public List<ContactData> findEmailFromContacts(String userId, ContactFilter filter) throws Exception;
+  
+  public List<ContactData> findNextEmailsForType(String username, ContactFilter filter, Integer offset, Integer resultLimit, QueryState queryState) throws Exception; 
 }

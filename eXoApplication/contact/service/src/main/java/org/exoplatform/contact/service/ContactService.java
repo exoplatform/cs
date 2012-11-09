@@ -514,4 +514,8 @@ public interface ContactService {
    * @throws Exception
    */
   public List<ContactData> findEmailFromContacts(String userId, ContactFilter filter) throws Exception;
+  
+  // CS-5825
+  public List<ContactData> findNextEmailsForType(String username, ContactFilter filter, Integer offset, Integer resultLimit, QueryState queryState) throws Exception; 
+
 }

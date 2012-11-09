@@ -74,6 +74,7 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.security.Identity;
+import org.exoplatform.contact.service.QueryState;
 
 /**
  * Created by The eXo Platform SARL
@@ -2542,5 +2543,234 @@ public List<ContactData> findEmailFromContacts(String username, ContactFilter fi
 	    emails.add(new ContactData(id, fullName,emailAddresses));
       }
 	return new ArrayList<ContactData>(emails);
-}
+  }
+
+
+  // CS-5825
+  public List<ContactData> findNextEmailsForType(String username, ContactFilter filter, Integer offset, Integer resultLimit, QueryState queryState) throws Exception 
+  {
+    if (filter.getType() == null)  {
+      return getNextEmails(username, filter, offset, resultLimit, queryState);
+    } // invoke the below function
+    else if (filter.getType().equals(PUBLIC)) {
+      queryState.isOn("publicContacts");
+      return getNextPublicEmails(username, filter, offset, resultLimit, queryState);
+    }
+    else if (filter.getType().equals(PERSONAL)) {
+    
+    }
+    else if (filter.getType().equals(SHARED)) {
+    
+    }
+  
+    return null;
+  }
+
+  // queryState must always stay on publicContacts
+  private List<ContactData> getNextPublicEmails(String username, ContactFilter filter, Integer offset, Integer resultLimit, QueryState queryState) throws Exception
+  {
+    log.info("getNextPublicEmails");
+    List<ContactData> publicContacts = new ArrayList<ContactData>();
+
+    if ( !queryState.getLastOffset().equals(offset) ) 
+    {
+      log.info("different last offset: " + offset + "set on publicContacts rel offset:" + offset + " lastOffset:" + offset);
+      queryState.on("publicContacts").withRelativeOffset(offset).lastOffset(offset);
+      return getNextPublicEmails(username, filter, offset, resultLimit, queryState); 
+    } 
+ 
+    publicContacts = searchFromPublicContacts( username, filter, queryState.getRelativeOffset(), resultLimit );
+    queryState.withRelativeOffset( queryState.getRelativeOffset() + publicContacts.size() ).lastOffset(offset + publicContacts.size());
+  
+    return publicContacts;
+  }
+
+  // Anh-Tu NGUYEN
+  private List<ContactData> getNextEmails(String username, ContactFilter filter, Integer offset, Integer resultLimit, QueryState queryState) throws Exception 
+  {
+    // we always search from relative offset
+    log.info("--- getNextEmails ---");
+    log.info("Rel offset: " + queryState.getRelativeOffset() + " on " + queryState.getQuery() + " with limit: " + resultLimit
+           + "lastOffset:" + queryState.getLastOffset());
+  
+    List<ContactData> publicContacts = new ArrayList<ContactData>();
+    List<ContactData> personalContacts = new ArrayList<ContactData>();
+    List<ContactData> sharedContacts = new ArrayList<ContactData>();
+  
+    if ( !queryState.getLastOffset().equals(offset) ) 
+    {
+      log.info("different last offset: " + offset + "set on publicContacts rel offset:" + offset + " lastOffset:" + offset);
+      queryState.on("publicContacts").withRelativeOffset(offset).lastOffset(offset);
+      return getNextEmails(username, filter, offset, resultLimit, queryState);
+    }  
+  
+    if ( queryState.isOn("publicContacts") )
+    {
+      publicContacts = searchFromPublicContacts( username, filter, queryState.getRelativeOffset(), resultLimit );
+    
+      if ( new Integer(publicContacts.size() ).equals(resultLimit) ) // enough result
+      {
+        log.info("enough result rel offset = lastOffset:" + new Integer(queryState.getRelativeOffset() + resultLimit));
+        queryState.withRelativeOffset( queryState.getRelativeOffset() + resultLimit ).lastOffset(offset + resultLimit);
+        return publicContacts; 
+      }
+      else  // not enough result - continue to search on personal contacts
+      {
+        log.info("not enough result - set on personalContacts rel offset:0 lastOffset:" 
+          + new Integer(offset + publicContacts.size()));
+        queryState.on("personalContacts").withRelativeOffset(0)
+          .lastOffset(offset + publicContacts.size());
+        personalContacts = getNextEmails(username, filter, offset + publicContacts.size(), resultLimit - publicContacts.size(), queryState);
+        publicContacts.addAll(personalContacts);
+        return publicContacts;
+      }
+    }
+
+    if ( queryState.isOn("personalContacts") )
+    {
+      personalContacts = searchFromPersonalContacts( username, filter, queryState.getRelativeOffset(), resultLimit );
+
+      if ( new Integer(personalContacts.size()).equals(resultLimit) )
+      {
+        log.info("enough result rel offset = lastOffset:" + new Integer(queryState.getRelativeOffset() + resultLimit));
+        queryState.withRelativeOffset( queryState.getRelativeOffset() + resultLimit )
+          .lastOffset(offset + resultLimit);
+        return personalContacts;
+      }
+      else
+      {
+        log.info("not enough result - set on sharedContacts rel offset:0 lastOffset:" + new Integer(offset + personalContacts.size()));
+        queryState.on("sharedContacts").withRelativeOffset(0).lastOffset(offset + personalContacts.size());
+        sharedContacts = getNextEmails( username, filter, offset + personalContacts.size(), resultLimit - personalContacts.size(), queryState );
+        personalContacts.addAll(sharedContacts);
+        return personalContacts;
+      }
+    }
+  
+    if ( queryState.isOn("sharedContacts") )
+    {  
+      sharedContacts = searchFromSharedContacts( username, filter, queryState.getRelativeOffset(), resultLimit);
+    
+      // if enough or not, still have to return and quit
+      log.info("rel offset:" + new Integer( queryState.getRelativeOffset() + sharedContacts.size()) + " lastOffset: " 
+        + new Integer(offset + sharedContacts.size()));
+    
+      queryState.withRelativeOffset( queryState.getRelativeOffset() + sharedContacts.size() ).lastOffset(offset + sharedContacts.size());
+      return sharedContacts;  
+    }
+  
+    return null;
+  }
+  
+  
+  private List<ContactData> searchFromPublicContacts(String username, ContactFilter filter, Integer offset, Integer resultLimit) throws Exception
+  {
+    log.info(" searchFromPublicContacts offset:" + offset + " limit:" + resultLimit);
+    
+    String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH);
+    filter.setAccountPath(usersPath);
+    QueryManager qm = getContactUserDataHome(username).getSession().getWorkspace().getQueryManager();
+    
+    QueryImpl query = (QueryImpl) qm.createQuery(filter.getStatement(), Query.XPATH);
+    query.setOffset( offset );   // search from a starting position: offset
+    query.setLimit( resultLimit );  
+    
+    Set<ContactData> emails = new HashSet<ContactData>();
+    NodeIterator it = query.execute().getNodes();
+    
+    while (it.hasNext())
+    {
+      Node contactNode = (Node) it.next();         
+      String id = contactNode.getProperty("exo:id").getString();
+      String fullName = contactNode.getProperty("exo:fullName").getString();
+      String emailAddresses = Utils.valuesToString(contactNode.getProperty("exo:emailAddress").getValues());
+      emails.add(new ContactData(id, fullName,emailAddresses));
+      }
+    
+    log.info("result size: " + emails.size());
+    
+    return new ArrayList<ContactData>(emails);
+  }
+  
+  private List<ContactData> searchFromPersonalContacts(String username, ContactFilter filter, Integer offset, Integer resultLimit) throws Exception
+  {
+    log.info(" searchFromPersonalContacts offset:" + offset + " limit:" + resultLimit);
+    
+    Node contactHome = getPersonalContactsHome(username);
+    filter.setAccountPath(contactHome.getPath());
+    QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
+        
+    QueryImpl query = (QueryImpl) qm.createQuery(filter.getStatement(), Query.XPATH);
+    query.setOffset( offset );   // search from a starting position: offset
+    query.setLimit( resultLimit );  
+    
+    Set<ContactData> emails = new HashSet<ContactData>();
+    NodeIterator it = query.execute().getNodes();
+    
+    while (it.hasNext())
+    {
+      Node contactNode = (Node) it.next();         
+      String id = contactNode.getProperty("exo:id").getString();
+      String fullName = contactNode.getProperty("exo:fullName").getString();
+      String emailAddresses = Utils.valuesToString(contactNode.getProperty("exo:emailAddress").getValues());
+      emails.add(new ContactData(id, fullName,emailAddresses));
+    }
+    
+    log.info("result size: " + emails.size());
+    
+    return new ArrayList<ContactData>(emails);
+  }
+  
+  private List<ContactData> searchFromSharedContacts(String username, ContactFilter filter, Integer offset, Integer resultLimit) throws Exception
+  {
+    log.info(" searchFromSharedContacts offset:" + offset + " limit:" + resultLimit);
+    
+    String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH);
+    Set<ContactData> emails = new HashSet<ContactData>();
+    NodeIterator it = null;
+    
+    try 
+    {
+      Node sharedContact = getSharedContact(username);
+      PropertyIterator iter = sharedContact.getReferences();
+      
+      while (iter.hasNext()) 
+      {
+        try 
+        {
+          Node sharedContactHomeNode = iter.nextProperty().getParent().getParent();
+          filter.setAccountPath(sharedContactHomeNode.getPath());
+          String split = "/";
+          String temp = sharedContactHomeNode.getPath().split(usersPath)[1];
+          String userId = temp.split(split)[1];
+          filter.setUsername(userId);
+          QueryManager qm = sharedContactHomeNode.getSession().getWorkspace().getQueryManager();
+          QueryImpl query = (QueryImpl)qm.createQuery(filter.getStatement(), Query.XPATH);
+          it = query.execute().getNodes();
+                    
+          while (it.hasNext())
+          {
+            Node contactNode = (Node) it.next();         
+            String id = contactNode.getProperty("exo:id").getString();
+            String fullName = contactNode.getProperty("exo:fullName").getString();
+            String emailAddresses = Utils.valuesToString(contactNode.getProperty("exo:emailAddress").getValues());
+            emails.add(new ContactData(id, fullName,emailAddresses));
+          } 
+        } 
+        catch (Exception e) 
+        {
+          if (log.isDebugEnabled()) log.debug("Exception in method findEmailsByFilter", e);
+        }
+      }
+      
+    } 
+    catch (PathNotFoundException e) 
+    {
+      if (log.isDebugEnabled()) log.debug("Failed to get item by path", e);
+    }
+    
+    log.info("result size: " + emails.size());
+    return new ArrayList<ContactData>(emails);
+  }
+   
 }
