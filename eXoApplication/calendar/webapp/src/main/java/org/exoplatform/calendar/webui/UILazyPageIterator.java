@@ -58,20 +58,20 @@ public class UILazyPageIterator extends UIComponent
    private Set<String> selectedItems = new HashSet<String>();
    
    /* current page number to be displayed in the UI */
-   private Integer pageShown; //at
+   private int pageShown; //at
    
    public UILazyPageIterator()
    {
      // first page is 1
-     pageShown = new Integer(1);
+     pageShown = 1;
    }
 
-   public void setPageShown(Integer pageNumber)
+   public void setPageShown(int pageNumber)
    {
      pageShown = pageNumber;
    }
    
-   public Integer getPageShown()
+   public int getPageShown()
    {
      return pageShown;
    }

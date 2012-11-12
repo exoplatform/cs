@@ -18,13 +18,7 @@ package org.exoplatform.contact.service.impl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOCase;
@@ -487,9 +481,16 @@ public class ContactServiceImpl implements ContactService {
 	  // TODO Auto-generated method stub
 	  return storage_.findEmailFromContacts(userId, filter);
   }
-  
+
+    /*
   public List<ContactData> findNextEmailsForType(String username, ContactFilter filter, Integer offset, Integer resultLimit, QueryState queryState) throws Exception 
   {
     return storage_.findNextEmailsForType(username, filter, offset, resultLimit, queryState);
+  }
+  */
+
+  public List<ContactData> getNextEmails(String username, ContactFilter filter, int resultLimit, QueryState queryState)  throws Exception
+  {
+    return storage_.getNextEmails(username, filter, resultLimit, queryState);
   }
 }

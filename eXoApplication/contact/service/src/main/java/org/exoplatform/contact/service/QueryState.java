@@ -24,7 +24,7 @@ package org.exoplatform.contact.service;
  */
 public class QueryState 
 {
-  private Integer relativeOffset;
+  private int relativeOffset;
   
   private Integer lastOffset;
   
@@ -36,13 +36,13 @@ public class QueryState
     return this;
   }
   
-  public QueryState withRelativeOffset(Integer offset)
+  public QueryState withRelativeOffset(int offset)
   {
     this.relativeOffset = offset;
     return this;
   }
   
-  public Integer getRelativeOffset()
+  public int getRelativeOffset()
   {
     return relativeOffset;
   }
@@ -63,7 +63,7 @@ public class QueryState
     return this;
   }
   
-  public Integer getLastOffset()
+  public int getLastOffset()
   {
     return lastOffset;
   }
