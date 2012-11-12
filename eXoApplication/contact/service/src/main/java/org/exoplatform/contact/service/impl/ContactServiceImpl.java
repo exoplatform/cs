@@ -482,12 +482,10 @@ public class ContactServiceImpl implements ContactService {
 	  return storage_.findEmailFromContacts(userId, filter);
   }
 
-    /*
-  public List<ContactData> findNextEmailsForType(String username, ContactFilter filter, Integer offset, Integer resultLimit, QueryState queryState) throws Exception 
+  public List<ContactData> findNextEmailsForType(String username, ContactFilter filter, int resultLimit, QueryState queryState) throws Exception 
   {
-    return storage_.findNextEmailsForType(username, filter, offset, resultLimit, queryState);
+    return storage_.findNextEmailsForType(username, filter, resultLimit, queryState);
   }
-  */
 
   public List<ContactData> getNextEmails(String username, ContactFilter filter, int resultLimit, QueryState queryState)  throws Exception
   {

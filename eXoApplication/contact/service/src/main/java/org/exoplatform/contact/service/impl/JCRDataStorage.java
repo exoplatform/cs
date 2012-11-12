@@ -284,13 +284,29 @@ public class JCRDataStorage implements DataStorage {
       return AddressBookType.Shared;
     }
 
-    AddressBook personal = findPersonalAddressBookById(username, addressBookId);
+    //AddressBook personal = findPersonalAddressBookById(username, addressBookId);
+    AddressBook personal = getPersonalAddressBookById(username, addressBookId);
     if (personal != null) {
       return AddressBookType.Personal;
+    }
+    
+    return AddressBookType.Public;
+  }
+
+  public AddressBook getPersonalAddressBookById(String username, String addressBookId) throws Exception {
+    Node personalAddressBookNode = getPersonalAddressBooksHome(username);
+    PropertyIterator iter = personalAddressBookNode.getReferences();
+    Node addressBook;
+    while (iter.hasNext()) {
+      addressBook = iter.nextProperty().getParent();
+      if (addressBook.getName().equals(addressBookId)) {
+        return toAddressBook(addressBook);
+      }
     }
     return null;
   }
 
+  
   public AddressBook findPersonalAddressBookById(String username, String addressBookId) {
     throw new UnsupportedOperationException();
   }
@@ -2461,14 +2477,23 @@ public class JCRDataStorage implements DataStorage {
   }
 
 public List<ContactData> findEmailFromContacts(String username, ContactFilter filter) throws Exception {
-	IteratorChain combiner = new IteratorChain() ;
+  AddressBookType type = null;
+  if (filter.getCategories() != null) {
+    type = getAddressBookType(username, filter.getCategories()[0]);
+    log.info("type: " + type);
+  }
+  
+  IteratorChain combiner = new IteratorChain() ;
 	Set<ContactData> emails = new HashSet<ContactData>();
     filter.setUsername(username);
     filter.setHasEmails(true);
     QueryManager qm = getContactUserDataHome(username).getSession().getWorkspace().getQueryManager();
     QueryImpl query;
     String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH);
-    if (filter.getType() == null || filter.getType().equals(PUBLIC)) {
+    
+    //if (filter.getType() == null || filter.getType().equals(PUBLIC)) {
+    if (type == null || type.equals(PUBLIC)) {
+      log.info("type public");
       filter.setAccountPath(usersPath);
       filter.setOwner("true");
       query = (QueryImpl)qm.createQuery(filter.getStatement(), Query.XPATH);
@@ -2477,7 +2502,8 @@ public List<ContactData> findEmailFromContacts(String username, ContactFilter fi
       filter.setOwner(null);
     }
     // query personal contacts
-    if (filter.getType() == null || filter.getType().equals(PERSONAL)) {
+    //if (filter.getType() == null || filter.getType().equals(PERSONAL)) {
+    if (type == null || type.equals(PERSONAL)) {
       if (username != null && username.length() > 0) {
         Node contactHome = getPersonalContactsHome(username);
         filter.setAccountPath(contactHome.getPath());
@@ -2488,7 +2514,8 @@ public List<ContactData> findEmailFromContacts(String username, ContactFilter fi
       }
     }
     // query shared contacts
-    if (filter.getType() == null || filter.getType().equals(SHARED)) {
+    //if (filter.getType() == null || filter.getType().equals(SHARED)) {
+    if (type == null || type.equals(SHARED)) {
       try {
         Node sharedContact = getSharedContact(username);
         PropertyIterator iter = sharedContact.getReferences();
@@ -2547,7 +2574,6 @@ public List<ContactData> findEmailFromContacts(String username, ContactFilter fi
 
 
   // CS-5825
-
   public List<ContactData> getNextEmails(String username, ContactFilter filter, int resultLimit, QueryState queryState) throws Exception
   {
       // we always search from relative offset
@@ -2611,39 +2637,71 @@ public List<ContactData> findEmailFromContacts(String username, ContactFilter fi
       return null;
   }
 
-  /*
-  public List<ContactData> findNextEmailsForType(String username, ContactFilter filter, Integer offset, Integer resultLimit, QueryState queryState) throws Exception 
+  public List<ContactData> findNextEmailsForType(String username, ContactFilter filter, int resultLimit, QueryState queryState) throws Exception 
   {
-    if (filter.getType() == null)  {
-      return getNextEmails(username, filter, offset, resultLimit, queryState);
+    AddressBookType type = null;
+    if (filter.getCategories() != null) {
+      type = getAddressBookType(username, filter.getCategories()[0]);
+      log.info("type: " + type);
+    }
+    
+    if (type == null)  {
+      return getNextEmails(username, filter, resultLimit, queryState);
     } // invoke the below function
-    else if (filter.getType().equals(PUBLIC)) {
-      queryState.isOn("publicContacts");
-      return getNextPublicEmails(username, filter, offset, resultLimit, queryState);
+    else if (type == AddressBookType.Public) {
+      queryState.on("publicContacts");
+      return getNextPublicEmails(username, filter, resultLimit, queryState);
     }
     else if (filter.getType().equals(PERSONAL)) {
-    
+      queryState.on("personalContacts");
+      return getNextPersonalEmails(username, filter, resultLimit, queryState);
+ 
     }
     else if (filter.getType().equals(SHARED)) {
-    
+      queryState.on("sharedContacts");
+      return getNextSharedEmails(username, filter, resultLimit, queryState);
     }
   
     return null;
   }
-  */
 
   // queryState must always stay on publicContacts
-  private List<ContactData> getNextPublicEmails(String username, ContactFilter filter, Integer offset, Integer resultLimit, QueryState queryState) throws Exception
+  private List<ContactData> getNextPublicEmails(String username, ContactFilter filter, int resultLimit, QueryState queryState) throws Exception
   {
     log.info("getNextPublicEmails");
     List<ContactData> publicContacts = new ArrayList<ContactData>();
 
     publicContacts = searchFromPublicContacts( username, filter, queryState.getRelativeOffset(), resultLimit );
-    queryState.withRelativeOffset( queryState.getRelativeOffset() + publicContacts.size() ).lastOffset(offset + publicContacts.size());
-  
+    queryState.withRelativeOffset( queryState.getRelativeOffset() + publicContacts.size() );
+    log.info("result found: " + publicContacts.size());
     return publicContacts;
   }
 
+  // getNextPersonal contacts
+  private List<ContactData> getNextPersonalEmails(String username, ContactFilter filter, int resultLimit, QueryState queryState) throws Exception
+  {
+    log.info("getNextPersonalEmails");
+    List<ContactData> personalContacts = new ArrayList<ContactData>();
+
+    personalContacts = searchFromPersonalContacts( username, filter, queryState.getRelativeOffset(), resultLimit );
+    queryState.withRelativeOffset( queryState.getRelativeOffset() + personalContacts.size() );
+    log.info("result found: " + personalContacts.size());
+    return personalContacts;
+  }
+  
+  //getNextShared contacts
+ private List<ContactData> getNextSharedEmails(String username, ContactFilter filter, int resultLimit, QueryState queryState) throws Exception
+ {
+   log.info("getNextSharedEmails");
+   List<ContactData> sharedContacts = new ArrayList<ContactData>();
+
+   sharedContacts = searchFromPersonalContacts( username, filter, queryState.getRelativeOffset(), resultLimit );
+   queryState.withRelativeOffset( queryState.getRelativeOffset() + sharedContacts.size() );
+   log.info("result found: " + sharedContacts.size());
+   return sharedContacts;
+ }
+  
+  
   // Anh-Tu NGUYEN
   /*
   private List<ContactData> getNextEmails(String username, ContactFilter filter, Integer offset, Integer resultLimit, QueryState queryState) throws Exception 
