@@ -34,9 +34,15 @@ public class ContactData {
     public String getEmail() {
       return email;
     }
-    
+
+    @Override
     public boolean equals(Object o) {
-    	return this.id.equals(((ContactData)o).id) ; 
+      if  (!(o instanceof ContactData)) return false;
+      return this.id.equals(((ContactData)o).id) ;
     }
 
+    @Override
+    public int hashCode(){
+      return id.hashCode();
+    }
   }

@@ -18,6 +18,7 @@ package org.exoplatform.contact.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.exoplatform.contact.service.impl.ContactEventListener;
 import org.exoplatform.services.organization.User;
@@ -516,6 +517,7 @@ public interface ContactService {
   public List<ContactData> findEmailFromContacts(String userId, ContactFilter filter) throws Exception;
   
   // CS-5825
-  public List<ContactData> findNextEmailsForType(String username, ContactFilter filter, Integer offset, Integer resultLimit, QueryState queryState) throws Exception; 
+  //public List<ContactData> findNextEmailsForType(String username, ContactFilter filter, Integer offset, Integer resultLimit, QueryState queryState) throws Exception;
 
+  public List<ContactData> getNextEmails(String username, ContactFilter filter, int resultLimit, QueryState queryState) throws Exception;
 }

@@ -16,16 +16,15 @@
  */
 package org.exoplatform.contact.service;
 
-import java.util.List;
-import java.util.Map;
+import org.exoplatform.contact.service.impl.AddressBookNotFoundException;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.organization.User;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
-
-import org.exoplatform.contact.service.impl.AddressBookNotFoundException;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.organization.User;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by The eXo Platform SAS
@@ -662,5 +661,8 @@ public interface DataStorage {
    */
   public List<ContactData> findEmailFromContacts(String userId, ContactFilter filter) throws Exception;
   
-  public List<ContactData> findNextEmailsForType(String username, ContactFilter filter, Integer offset, Integer resultLimit, QueryState queryState) throws Exception; 
+  //public List<ContactData> findNextEmailsForType(String username, ContactFilter filter, Integer offset, Integer resultLimit, QueryState queryState) throws Exception;
+
+  public List<ContactData> getNextEmails(String username, ContactFilter filter, int resultLimit, QueryState queryState) throws Exception;
 }
+

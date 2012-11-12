@@ -2547,6 +2547,71 @@ public List<ContactData> findEmailFromContacts(String username, ContactFilter fi
 
 
   // CS-5825
+
+  public List<ContactData> getNextEmails(String username, ContactFilter filter, int resultLimit, QueryState queryState) throws Exception
+  {
+      // we always search from relative offset
+      log.info("--- getNextEmails ---");
+      log.info("Rel offset: " + queryState.getRelativeOffset() + " on " + queryState.getQuery() + " with limit: " + resultLimit);
+
+      List<ContactData> publicContacts = new ArrayList<ContactData>();
+      List<ContactData> personalContacts = new ArrayList<ContactData>();
+      List<ContactData> sharedContacts = new ArrayList<ContactData>();
+
+      if ( queryState.isOn("publicContacts") )
+      {
+          publicContacts = searchFromPublicContacts( username, filter, queryState.getRelativeOffset(), resultLimit );
+
+          if ( publicContacts.size() == resultLimit ) // enough result
+          {
+              log.info("enough result rel offset = lastOffset:" + (queryState.getRelativeOffset() + resultLimit));
+              queryState.withRelativeOffset( queryState.getRelativeOffset() + resultLimit );
+              return publicContacts;
+          }
+          else  // not enough result - continue to search on personal contacts
+          {
+              log.info("not enough result - set on personalContacts rel offset:0");
+              queryState.on("personalContacts").withRelativeOffset(0);
+              personalContacts = getNextEmails(username, filter, resultLimit - publicContacts.size(), queryState);
+              publicContacts.addAll(personalContacts);
+              return publicContacts;
+          }
+      }
+
+      if ( queryState.isOn("personalContacts") )
+      {
+          personalContacts = searchFromPersonalContacts( username, filter, queryState.getRelativeOffset(), resultLimit );
+
+          if ( personalContacts.size() == resultLimit )
+          {
+              log.info("enough result rel offset: " + (queryState.getRelativeOffset() + resultLimit));
+              queryState.withRelativeOffset( queryState.getRelativeOffset() + resultLimit );
+              return personalContacts;
+          }
+          else
+          {
+              log.info("not enough result - set on sharedContacts rel offset:0: ");
+              queryState.on("sharedContacts").withRelativeOffset(0);
+              sharedContacts = getNextEmails( username, filter, resultLimit - personalContacts.size(), queryState );
+              personalContacts.addAll(sharedContacts);
+              return personalContacts;
+          }
+      }
+
+      if ( queryState.isOn("sharedContacts") )
+      {
+          sharedContacts = searchFromSharedContacts( username, filter, queryState.getRelativeOffset(), resultLimit);
+
+          // if enough or not, still have to return and quit
+          log.info("rel offset:" + ( queryState.getRelativeOffset() + sharedContacts.size()));
+          queryState.withRelativeOffset( queryState.getRelativeOffset() + sharedContacts.size() );
+          return sharedContacts;
+      }
+
+      return null;
+  }
+
+  /*
   public List<ContactData> findNextEmailsForType(String username, ContactFilter filter, Integer offset, Integer resultLimit, QueryState queryState) throws Exception 
   {
     if (filter.getType() == null)  {
@@ -2565,6 +2630,7 @@ public List<ContactData> findEmailFromContacts(String username, ContactFilter fi
   
     return null;
   }
+  */
 
   // queryState must always stay on publicContacts
   private List<ContactData> getNextPublicEmails(String username, ContactFilter filter, Integer offset, Integer resultLimit, QueryState queryState) throws Exception
@@ -2572,13 +2638,6 @@ public List<ContactData> findEmailFromContacts(String username, ContactFilter fi
     log.info("getNextPublicEmails");
     List<ContactData> publicContacts = new ArrayList<ContactData>();
 
-    if ( !queryState.getLastOffset().equals(offset) ) 
-    {
-      log.info("different last offset: " + offset + "set on publicContacts rel offset:" + offset + " lastOffset:" + offset);
-      queryState.on("publicContacts").withRelativeOffset(offset).lastOffset(offset);
-      return getNextPublicEmails(username, filter, offset, resultLimit, queryState); 
-    } 
- 
     publicContacts = searchFromPublicContacts( username, filter, queryState.getRelativeOffset(), resultLimit );
     queryState.withRelativeOffset( queryState.getRelativeOffset() + publicContacts.size() ).lastOffset(offset + publicContacts.size());
   
@@ -2586,6 +2645,7 @@ public List<ContactData> findEmailFromContacts(String username, ContactFilter fi
   }
 
   // Anh-Tu NGUYEN
+  /*
   private List<ContactData> getNextEmails(String username, ContactFilter filter, Integer offset, Integer resultLimit, QueryState queryState) throws Exception 
   {
     // we always search from relative offset
@@ -2661,9 +2721,9 @@ public List<ContactData> findEmailFromContacts(String username, ContactFilter fi
   
     return null;
   }
+  */
   
-  
-  private List<ContactData> searchFromPublicContacts(String username, ContactFilter filter, Integer offset, Integer resultLimit) throws Exception
+  private List<ContactData> searchFromPublicContacts(String username, ContactFilter filter, int offset, Integer resultLimit) throws Exception
   {
     log.info(" searchFromPublicContacts offset:" + offset + " limit:" + resultLimit);
     
@@ -2692,7 +2752,7 @@ public List<ContactData> findEmailFromContacts(String username, ContactFilter fi
     return new ArrayList<ContactData>(emails);
   }
   
-  private List<ContactData> searchFromPersonalContacts(String username, ContactFilter filter, Integer offset, Integer resultLimit) throws Exception
+  private List<ContactData> searchFromPersonalContacts(String username, ContactFilter filter, int offset, Integer resultLimit) throws Exception
   {
     log.info(" searchFromPersonalContacts offset:" + offset + " limit:" + resultLimit);
     
@@ -2721,7 +2781,7 @@ public List<ContactData> findEmailFromContacts(String username, ContactFilter fi
     return new ArrayList<ContactData>(emails);
   }
   
-  private List<ContactData> searchFromSharedContacts(String username, ContactFilter filter, Integer offset, Integer resultLimit) throws Exception
+  private List<ContactData> searchFromSharedContacts(String username, ContactFilter filter, int offset, Integer resultLimit) throws Exception
   {
     log.info(" searchFromSharedContacts offset:" + offset + " limit:" + resultLimit);
     
