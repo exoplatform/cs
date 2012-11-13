@@ -505,19 +505,18 @@ public interface ContactService {
   public void addListenerPlugin(ContactEventListener listener) throws Exception;
 
   public void savePublicAddressBook(AddressBook addressbook, boolean isNew) throws Exception;
-  /**
-   * 
-   * @param userId
-   * @param filter
-   * @param offset
-   * @param limit
-   * @return
-   * @throws Exception
-   */
+  
+  //CS-5825
   public List<ContactData> findEmailFromContacts(String userId, ContactFilter filter) throws Exception;
   
-  // CS-5825
+  //CS-5825
+ /**
+  * find contact email for a particular type of contacts: public, personal or shared
+  * 
+  * @param username 
+  * @param filter filter on a particular category or type of contacts
+  * @param resultLimit number of result we want to return
+  * @param queryState uses queryState to know the position of our last query
+  */
   public List<ContactData> findNextEmailsForType(String username, ContactFilter filter, int resultLimit, QueryState queryState) throws Exception;
-
-  public List<ContactData> getNextEmails(String username, ContactFilter filter, int resultLimit, QueryState queryState) throws Exception;
 }

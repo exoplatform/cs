@@ -467,7 +467,6 @@ public class ContactServiceImpl implements ContactService {
   public boolean haveEditPermissionOnContact(String username, Contact contact) throws Exception {
     return storage_.haveEditPermissionOnContact(username, contact);
   }
-
    
   public void addListenerPlugin(ContactEventListener listener) throws Exception {
     listeners_.add(listener);
@@ -482,13 +481,9 @@ public class ContactServiceImpl implements ContactService {
 	  return storage_.findEmailFromContacts(userId, filter);
   }
 
+  // CS-5825
   public List<ContactData> findNextEmailsForType(String username, ContactFilter filter, int resultLimit, QueryState queryState) throws Exception 
   {
     return storage_.findNextEmailsForType(username, filter, resultLimit, queryState);
-  }
-
-  public List<ContactData> getNextEmails(String username, ContactFilter filter, int resultLimit, QueryState queryState)  throws Exception
-  {
-    return storage_.getNextEmails(username, filter, resultLimit, queryState);
   }
 }

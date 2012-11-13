@@ -27,6 +27,7 @@ import org.exoplatform.services.log.Log;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.core.UIPageIterator;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
@@ -35,30 +36,20 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Customize org.exoplatform.webui.core UIPageIterator 
- * - Customize template 
- * A component that allows pagination, with an iterator to change pages
- *
+ * A customized version of org.exoplatform.webui.core UIPageIterator 
+ * in order to show only current page. 
+ * Each time next page button is clicked, new data is querying from JCR 
+ * 
  */
 @ComponentConfig(
   template = "app:/templates/calendar/webui/UILazyPageIterator.gtmpl", 
   events = @EventConfig(listeners = UILazyPageIterator.ShowPageActionListener.class)
 )
-
 @Serialized
-public class UILazyPageIterator extends UIComponent
-{
-  private static final Log log = ExoLogger.getExoLogger(UILazyPageIterator.class);
-  
-   /**
-    * The list of pages
-    */
-   private PageList pageList_ = EmptySerializablePageList.get();
-
-   private Set<String> selectedItems = new HashSet<String>();
-   
+public class UILazyPageIterator extends UIPageIterator
+{   
    /* current page number to be displayed in the UI */
-   private int pageShown; //at
+   private int pageShown; 
    
    public UILazyPageIterator()
    {
@@ -75,93 +66,4 @@ public class UILazyPageIterator extends UIComponent
    {
      return pageShown;
    }
-   
-   public void setPageList(PageList pageList)
-   {
-      pageList_ = pageList;
-   }
-
-   public PageList getPageList()
-   {
-      return pageList_;
-   }
-
-   public int getAvailablePage()
-   {
-      return pageList_.getAvailablePage();
-   }
-
-   public int getCurrentPage()
-   {
-      return pageList_.getCurrentPage();
-   }
-
-   public List getCurrentPageData() throws Exception
-   {
-      return pageList_.currentPage();
-   }
-
-   public int getAvailable()
-   {
-      return pageList_.getAvailable();
-   }
-
-   public int getFrom()
-   {
-      return pageList_.getFrom();
-   }
-
-   public int getTo()
-   {
-      return pageList_.getTo();
-   }
-
-   public Object getObjectInPage(int index) throws Exception
-   {
-      return pageList_.currentPage().get(index);
-   }
-
-   public void setCurrentPage(int page) throws Exception
-   {
-      pageList_.getPage(page);
-   }
-   
-   public void setSelectedItem(String key, boolean value)
-   {
-      if (value == false && this.selectedItems.contains(key))
-      {
-         selectedItems.remove(key);
-      }
-      else if (value)
-      {
-         selectedItems.add(key);
-      }
-   }
-   
-   public Set<String> getSelectedItems()
-   {
-      return selectedItems;
-   }
-   
-   public boolean isSelectedItem(String key)
-   {
-      return selectedItems.contains(key);
-   }
-
-  @SuppressWarnings("unused")
-  static public class ShowPageActionListener extends EventListener<UILazyPageIterator>
-  {
-    public void execute(Event<UILazyPageIterator> event) throws Exception
-    {
-      log.info("Show Page Event page: " + event.getRequestContext().getRequestParameter(OBJECTID));
-        
-      UILazyPageIterator uiPageIterator = event.getSource();
-      int page = Integer.parseInt(event.getRequestContext().getRequestParameter(OBJECTID));
-      uiPageIterator.setCurrentPage(page);
-      UIComponent parent = uiPageIterator.getParent();
-      if (parent == null) return;
-      event.getRequestContext().addUIComponentToUpdateByAjax(parent);
-      parent.broadcast(event, event.getExecutionPhase());
-    }
-  }
 }
