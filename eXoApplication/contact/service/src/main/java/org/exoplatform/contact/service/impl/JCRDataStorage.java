@@ -2483,6 +2483,7 @@ public List<ContactData> findEmailFromContacts(String username, ContactFilter fi
     log.info("type: " + type);
   }
   
+  log.info("filter type " + filter.getType());
   IteratorChain combiner = new IteratorChain() ;
 	Set<ContactData> emails = new HashSet<ContactData>();
     filter.setUsername(username);
@@ -2491,8 +2492,8 @@ public List<ContactData> findEmailFromContacts(String username, ContactFilter fi
     QueryImpl query;
     String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH);
     
-    //if (filter.getType() == null || filter.getType().equals(PUBLIC)) {
-    if (type == null || type.equals(PUBLIC)) {
+    if (filter.getType() == null || filter.getType().equals(PUBLIC)) {
+    //if (type == null || type == AddressBookType.Public) {
       log.info("type public");
       filter.setAccountPath(usersPath);
       filter.setOwner("true");
@@ -2502,8 +2503,8 @@ public List<ContactData> findEmailFromContacts(String username, ContactFilter fi
       filter.setOwner(null);
     }
     // query personal contacts
-    //if (filter.getType() == null || filter.getType().equals(PERSONAL)) {
-    if (type == null || type.equals(PERSONAL)) {
+    if (filter.getType() == null || filter.getType().equals(PERSONAL)) {
+    //if (type == null || type == AddressBookType.Personal) {
       if (username != null && username.length() > 0) {
         Node contactHome = getPersonalContactsHome(username);
         filter.setAccountPath(contactHome.getPath());
@@ -2514,8 +2515,8 @@ public List<ContactData> findEmailFromContacts(String username, ContactFilter fi
       }
     }
     // query shared contacts
-    //if (filter.getType() == null || filter.getType().equals(SHARED)) {
-    if (type == null || type.equals(SHARED)) {
+    if (filter.getType() == null || filter.getType().equals(SHARED)) {
+    //if (type == null || type == AddressBookType.Shared) {
       try {
         Node sharedContact = getSharedContact(username);
         PropertyIterator iter = sharedContact.getReferences();
@@ -2652,12 +2653,11 @@ public List<ContactData> findEmailFromContacts(String username, ContactFilter fi
       queryState.on("publicContacts");
       return getNextPublicEmails(username, filter, resultLimit, queryState);
     }
-    else if (filter.getType().equals(PERSONAL)) {
+    else if (type == AddressBookType.Personal) {
       queryState.on("personalContacts");
       return getNextPersonalEmails(username, filter, resultLimit, queryState);
- 
     }
-    else if (filter.getType().equals(SHARED)) {
+    else if (type == AddressBookType.Shared) {
       queryState.on("sharedContacts");
       return getNextSharedEmails(username, filter, resultLimit, queryState);
     }
@@ -2695,7 +2695,7 @@ public List<ContactData> findEmailFromContacts(String username, ContactFilter fi
    log.info("getNextSharedEmails");
    List<ContactData> sharedContacts = new ArrayList<ContactData>();
 
-   sharedContacts = searchFromPersonalContacts( username, filter, queryState.getRelativeOffset(), resultLimit );
+   sharedContacts = searchFromSharedContacts( username, filter, queryState.getRelativeOffset(), resultLimit );
    queryState.withRelativeOffset( queryState.getRelativeOffset() + sharedContacts.size() );
    log.info("result found: " + sharedContacts.size());
    return sharedContacts;
@@ -2781,7 +2781,7 @@ public List<ContactData> findEmailFromContacts(String username, ContactFilter fi
   }
   */
   
-  private List<ContactData> searchFromPublicContacts(String username, ContactFilter filter, int offset, Integer resultLimit) throws Exception
+  private List<ContactData> searchFromPublicContacts(String username, ContactFilter filter, int offset, int resultLimit) throws Exception
   {
     log.info(" searchFromPublicContacts offset:" + offset + " limit:" + resultLimit);
     
@@ -2810,7 +2810,7 @@ public List<ContactData> findEmailFromContacts(String username, ContactFilter fi
     return new ArrayList<ContactData>(emails);
   }
   
-  private List<ContactData> searchFromPersonalContacts(String username, ContactFilter filter, int offset, Integer resultLimit) throws Exception
+  private List<ContactData> searchFromPersonalContacts(String username, ContactFilter filter, int offset, int resultLimit) throws Exception
   {
     log.info(" searchFromPersonalContacts offset:" + offset + " limit:" + resultLimit);
     
@@ -2839,7 +2839,7 @@ public List<ContactData> findEmailFromContacts(String username, ContactFilter fi
     return new ArrayList<ContactData>(emails);
   }
   
-  private List<ContactData> searchFromSharedContacts(String username, ContactFilter filter, int offset, Integer resultLimit) throws Exception
+  private List<ContactData> searchFromSharedContacts(String username, ContactFilter filter, int offset, int resultLimit) throws Exception
   {
     log.info(" searchFromSharedContacts offset:" + offset + " limit:" + resultLimit);
     

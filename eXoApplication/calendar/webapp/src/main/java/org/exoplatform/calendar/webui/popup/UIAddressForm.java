@@ -102,6 +102,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     isLastPage = true;
   }
   public int getPageShown() { return uiLazyPageIterator.getPageShown(); }
+  public void setPageShown(int page) { uiLazyPageIterator.setPageShown(page); } 
   public void notLastPage() { isLastPage = false; }
   
   public UIAddressForm() throws Exception {  
@@ -447,7 +448,6 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
           filter.setCategories(new String[]{uiForm.selectedAddressId_}) ;
         } 
         if(!CalendarUtils.isEmpty(text)) filter.setText(CalendarUtils.encodeJCRText(text)) ;
-        
         uiForm.setSearchEnabled(true);
         uiForm.setContactList(filter) ; // this actually do the SEARCH 
         uiForm.getUIFormSelectBox(UIAddressForm.FIELD_GROUP).setValue(category) ;
@@ -467,6 +467,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       uiForm.selectedAddressId_ = category ;
       uiForm.loadNewPage = true;
       uiForm.clearContacts(); // have to clear contact to restart querying JCR
+      uiForm.setPageShown(1);
       uiForm.setSearchEnabled(false);
       uiForm.queryState.withRelativeOffset(0); // reset query
       uiForm.setContactList(category) ;
