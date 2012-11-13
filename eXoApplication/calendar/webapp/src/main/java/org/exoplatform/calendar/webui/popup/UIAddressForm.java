@@ -60,28 +60,29 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   final public static String FIELD_GROUP = "group".intern() ;
   private String recipientsType = "";
   protected String selectedAddressId_ = "" ;
-  private UILazyPageIterator uiLazyPageIterator ; // CS-5825
   private UIPageIterator uiPageIterator; 
   protected String[] actions_ = new String[]{"Add", "Replace", "Cancel"}; 
   
   public List<String> checkedList_ = new ArrayList<String>();
-  private boolean loadNewPage = true;
+  
   // CS-5825
-  private static final int NUMBER_OF_ITEMS_SHOWN_ON_ONE_PAGE = 5;
+  private static final int NUMBER_OF_ITEMS_SHOWN_ON_ONE_PAGE = 10;
     
+  /* use 2 different UIPageIterator, this one for displaying */
+  private UILazyPageIterator uiLazyPageIterator ; // CS-5825
+
+  private boolean loadNewPage = true;
+  
   private QueryState queryState;
     
   private boolean isLastPage = false;
   
   private boolean isSearchEnabled = false;
   
+  /* saves ContactData in contacts to avoid re-querying JCR */
   private Set<ContactData> contacts;
   
-  public void clearContacts()
-  {
-    contacts.clear();
-  }
-  
+  public void clearContacts() { contacts.clear(); }
   public boolean isSearchEnabled() { return isSearchEnabled; }
   public void setSearchEnabled(boolean isSearchEnabled) { this.isSearchEnabled = isSearchEnabled; }
   
@@ -105,9 +106,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   public void setPageShown(int page) { uiLazyPageIterator.setPageShown(page); } 
   public void notLastPage() { isLastPage = false; }
   
-  public UIAddressForm() throws Exception {  
-    log.info("--- UIAddressForm constructor ---"); //at
-    
+  public UIAddressForm() throws Exception {      
     addUIFormInput(new UIFormStringInput(FIELD_KEYWORD, FIELD_KEYWORD, null)) ;
     UIFormSelectBox fieldGroup = new UIFormSelectBox(FIELD_GROUP, FIELD_GROUP, getGroups()) ;
     fieldGroup.setOnChange("ChangeGroup") ;
@@ -120,7 +119,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     uiPageIterator.setId("UICalendarAddressPage1") ;
     
     queryState = new QueryState();
-    queryState.on("publicContacts").withRelativeOffset(0);
+    queryState.on("publicContacts").withRelativeOffset(0); // by default query on public contacts with position 0
   }
   
   private List<SelectItemOption<String>> getGroups() throws Exception {
@@ -179,20 +178,17 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   }
   @SuppressWarnings("unchecked")
   public void setContactList(ContactFilter filter) throws Exception {
-    log.info("--- setContactList contact filter ---"); //at
     
-    if (isSearchEnabled()) {
-      log.info("searchEnabled");
+    if (isSearchEnabled()) /* if search is enabled we use findEmailFromContacts() */
+    {  
       ContactService contactSrv = getApplicationComponent(ContactService.class);
       List<ContactData> data = contactSrv.findEmailFromContacts(CalendarUtils.getCurrentUser(), filter);
-      log.info("data size: " + data.size());
       setContactList(data);
-      return;
+      return ;
     }
 
-    if (loadNewPage == false) 
+    if (loadNewPage == false) /* if we want to display previous page, no need to query JCR just display from contacts */
     {
-      log.info("load new page false");
       notLastPage();
       List<ContactData> contactList = new ArrayList<ContactData>(contacts);
       int firstIndex = (getPageShown() - 1) * NUMBER_OF_ITEMS_SHOWN_ON_ONE_PAGE;
@@ -205,30 +201,28 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       setContactList( contactList.subList( firstIndex, lastIndex) );
       return ;
     }
-
+    
+    /* show new page */
     List<ContactData> data = null;
     ContactService contactSrv = getApplicationComponent(ContactService.class);
-    // List<ContactData> data = contactSrv.findEmailFromContacts(CalendarUtils.getCurrentUser(), filter);
     
     int previousSize = contacts.size();
     int diff = 0;
-    log.info("contact size: " + contacts.size());
+    
+    /* while number of result if not enough, continue to query JCR */
     while (contacts.size() - previousSize < NUMBER_OF_ITEMS_SHOWN_ON_ONE_PAGE)
     {
       diff = contacts.size() - previousSize;
       data = contactSrv.findNextEmailsForType(CalendarUtils.getCurrentUser(), filter, NUMBER_OF_ITEMS_SHOWN_ON_ONE_PAGE - diff, queryState);
       if (data.size() == 0)  break; // no result should break
       contacts.addAll(data);
-      log.info("after adding data - contact size: " + contacts.size());
     }
 
     diff = contacts.size() - previousSize;
-    log.info("diff: " + diff);
-    if ( diff < NUMBER_OF_ITEMS_SHOWN_ON_ONE_PAGE)
+    if ( diff < NUMBER_OF_ITEMS_SHOWN_ON_ONE_PAGE) /* if result displayed is not enough, means we get to the last page */
     {
-      log.info("we get to the last results - have to reset page");
       getToLastPage();
-      if (diff == 0 && contacts.size() != 0 )  // does not increase the page - re-show the last page
+      if (diff == 0 && contacts.size() != 0 )  /* does not increase the page - re-show the last page */
       { 
         uiLazyPageIterator.setPageShown(getPageShown() - 1);
         return;
@@ -236,6 +230,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     } 
     else notLastPage();
     
+    /* not the last page, show new data */
     List<ContactData> contactList = new ArrayList<ContactData>(contacts);
     int firstIndex = (getPageShown() - 1) * NUMBER_OF_ITEMS_SHOWN_ON_ONE_PAGE;
     int lastIndex = firstIndex + NUMBER_OF_ITEMS_SHOWN_ON_ONE_PAGE;
@@ -256,9 +251,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   }
   @SuppressWarnings({ "deprecation", "unchecked" })
   public void setContactList(List<ContactData> contactList) throws Exception {
-    getUIFormSelectBox(FIELD_GROUP).setOptions(getGroups()) ;
-    //LazyPageList<ContactData> pageList = new LazyPageList<ContactData>(new ListAccessImpl<ContactData>(ContactData.class, contactList), 10);
-    
+    getUIFormSelectBox(FIELD_GROUP).setOptions(getGroups()) ;    
     LazyPageList<ContactData> pageList = new LazyPageList<ContactData>(new ListAccessImpl<ContactData>(ContactData.class, contactList), NUMBER_OF_ITEMS_SHOWN_ON_ONE_PAGE);
 
     if (!isSearchEnabled())
@@ -297,17 +290,11 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         
     return contactList;
   }
-  //public UILazyPageIterator getUIPageIterator() { 
-  //  if (!isSearchEnabled()) return uiLazyPageIterator ; 
-  //  else return uiPageIterator;
-  //}
   
-  public long getAvailablePage(){ return uiLazyPageIterator.getAvailablePage() ;}
-  public long getCurrentPage() { return uiLazyPageIterator.getCurrentPage();}
+  public long getAvailablePage(){ return uiPageIterator.getAvailablePage() ;}
+  public long getCurrentPage() { return uiPageIterator.getCurrentPage();}
   
   protected void updateCurrentPage(int page) throws Exception{
-    log.info("--- update current page: " + page + " ---");
-
 	  UIPopupAction uiPopupAction  = this.getAncestorOfType(UIPopupContainer.class).getChild(UIPopupAction.class) ;
 	  UIEventForm uiEventForm = uiPopupAction.findFirstComponentOfType(UIEventForm.class) ;
 	  UITaskForm uiTaskForm = uiPopupAction.findFirstComponentOfType(UITaskForm.class) ;
@@ -321,7 +308,6 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
 	    UITaskForm.showAddressForm(this, oldAddress) ;
 	  }
 	  else {
-	    //setContactList(getContactList()) ;
 	    uiPageIterator.setCurrentPage(page) ;
 	    UITaskForm.showAddressForm(this, oldAddress) ;
 	  }
@@ -449,7 +435,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         } 
         if(!CalendarUtils.isEmpty(text)) filter.setText(CalendarUtils.encodeJCRText(text)) ;
         uiForm.setSearchEnabled(true);
-        uiForm.setContactList(filter) ; // this actually do the SEARCH 
+        uiForm.setContactList(filter) ; 
         uiForm.getUIFormSelectBox(UIAddressForm.FIELD_GROUP).setValue(category) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
       } catch (Exception e) {
@@ -458,9 +444,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     }
   }
   static  public class ChangeGroupActionListener extends EventListener<UIAddressForm> {
-    public void execute(Event<UIAddressForm> event) throws Exception {
-      log.info("change group clicked");
-      
+    public void execute(Event<UIAddressForm> event) throws Exception {      
       UIAddressForm uiForm = event.getSource();  
       String category = uiForm.getUIFormSelectBox(UIAddressForm.FIELD_GROUP).getValue() ;
       if(category.equals(NewUserListener.DEFAULTGROUP)) category = category + CalendarUtils.getCurrentUser() ;
@@ -469,7 +453,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       uiForm.clearContacts(); // have to clear contact to restart querying JCR
       uiForm.setPageShown(1);
       uiForm.setSearchEnabled(false);
-      uiForm.queryState.withRelativeOffset(0); // reset query
+      uiForm.queryState.withRelativeOffset(0); // reset query - CS-5825
       uiForm.setContactList(category) ;
       uiForm.getUIStringInput(UIAddressForm.FIELD_KEYWORD).setValue(null) ;
       uiForm.getUIFormSelectBox(UIAddressForm.FIELD_GROUP).setValue(uiForm.selectedAddressId_) ;
@@ -487,9 +471,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   }
 
   static  public class ShowPageActionListener extends EventListener<UIAddressForm> {
-    public void execute(Event<UIAddressForm> event) throws Exception {
-      log.info("--- ShowPageAction event: number " + event.getRequestContext().getRequestParameter(OBJECTID) + " ---"); //at
-      
+    public void execute(Event<UIAddressForm> event) throws Exception {      
       UIAddressForm uiAddressForm = event.getSource() ;
       int page = Integer.parseInt(event.getRequestContext().getRequestParameter(OBJECTID)) ;
       uiAddressForm.updateCurrentPage(page) ; 

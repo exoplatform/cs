@@ -16,18 +16,29 @@
  */
 package org.exoplatform.contact.service;
 
-/**
- * Created by The eXo Platform SAS
- * Author : Anh-Tu Nguyen
- *          tuna@exoplatform.com
- * Nov 1, 2012  
+/** 
+ * stores the state of the current JCR query
+ * used for the next JCR query
+ * @see {@link QueryState#relativeOffset}, {@link QueryState#currentQuery}
+ * 
+ * @author Created by The eXo Platform SAS
+ * <br/>Anh-Tu Nguyen
+ * <br/><a href="mailto:tuna@exoplatform.com">tuna@exoplatform.com<a/>
+ * <br/>Nov 1, 2012  
  */
 public class QueryState 
 {
+  /**
+   * stores the relative position of offset in the current JCR query
+   * 
+   */
   private int relativeOffset;
-  
-  private Integer lastOffset;
-  
+   
+  /**
+   * stores the type of contacts where the JCR query is on 
+   * currentQuery can be "public contacts" or "personal contacts" or "shared contacts"
+   *
+   */
   private String currentQuery;
     
   public QueryState on(String currentQuery)
@@ -55,16 +66,5 @@ public class QueryState
   public String getQuery()
   {
     return currentQuery;
-  }
-  
-  public QueryState lastOffset(Integer offset)
-  {
-    this.lastOffset = offset;
-    return this;
-  }
-  
-  public int getLastOffset()
-  {
-    return lastOffset;
   }
 }
