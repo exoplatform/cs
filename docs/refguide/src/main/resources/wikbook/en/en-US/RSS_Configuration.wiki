@@ -5,8 +5,7 @@ Place of the configuration file
 or override on your own product
 *  web/csportal/src/main/webapp/WEB-INF/conf/portal/user/%username%/content.xml
 
-{code:xml}
-<?xml version="1.0" encoding="utf-8"?>
+{code:xml}<?xml version="1.0" encoding="utf-8"?>
 <content-navigation>
   <owner>%username%</owner>
   <description> description for content navigation</description>
@@ -28,9 +27,7 @@ or override on your own product
     </content-node>
 
   </content-nodes>
-</content-navigation>
-
-{code}
+</content-navigation>{code}
 
 h1. RSS Reader with Proxy
 

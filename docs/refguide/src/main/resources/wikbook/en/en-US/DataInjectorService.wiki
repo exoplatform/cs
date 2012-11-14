@@ -34,19 +34,15 @@ In Collaboration, data injectors are implemented as plug-ins attached to the _or
 
 To use this service, add the following dependency to the Classpath of the server:
 
-{code:xml}
-<dependency>
+{code:xml}<dependency>
       <groupId>org.exoplatform.commons</groupId>
       <artifactId>exo.platform.commons.component</artifactId>      
-</dependency>
-{code}
+</dependency>{code}
 
 To activate the _DataInjectorService_ component, you need to register it to a portal container by the following configuration:
-{code:xml}
-<component>
+{code:xml}<component>
     <type>org.exoplatform.services.bench.DataInjectorService</type>
-</component>
-{code}
+</component>{code}
 
 When you want to inject data for a specific product, you must implement a class which extends "org.exoplatform.services.bench.DataInjector" and register it to the _DataInjectorService_ component as a plug\-in.
 
@@ -77,8 +73,7 @@ To use this plug-in, do as follows:
 
 *1.* Add the following configuration to the _configuration.xml_ file to register the plug-in to the _DataInjectorService_ component:
 
-{code:xml}
-<external-component-plugins>
+{code:xml}<external-component-plugins>
     <target-component>org.exoplatform.services.bench.DataInjectorService</target-component>
     <component-plugin>
       <name>ContactDataInjector</name>
@@ -96,8 +91,7 @@ To use this plug-in, do as follows:
         </value-param>
       </init-params>
     </component-plugin>
-</external-component-plugins>
-{code}
+</external-component-plugins>{code}
 
 In which:
 
@@ -114,9 +108,7 @@ In which:
 
 *2.* Execute the injector by the RESTful request as follows:
 
-{code:}
-http://{domain}/{rest}/bench/inject/ContactDataInjector?mA=5&mC=10
-{code}
+{code}http://{domain}/{rest}/bench/inject/ContactDataInjector?mA=5&mC=10{code}
 
 In which:
 
@@ -131,8 +123,7 @@ The _CalendarDataInjector_ plug\-in is used to manage data injection in the Cale
 To use this plug\-in, do as follows:
 
 *1.* Add the following configuration to the _configuration.xml_ file to register the plug-in to the _DataInjectorService_ component:
-{code:xml}
-<external-component-plugins>
+{code:xml}<external-component-plugins>
     <target-component>org.exoplatform.services.bench.DataInjectorService</target-component>
     <component-plugin>
       <name>CalendarDataInjector</name>
@@ -166,8 +157,7 @@ To use this plug\-in, do as follows:
         </value-param>
       </init-params>
     </component-plugin>
-</external-component-plugins>
-{code}
+</external-component-plugins>{code}
 
 In which:
 
@@ -188,9 +178,7 @@ In which:
 
 *2.* Execute the injector by the RESTful request as follows.
 
-{code:language=html/xml}
-http://{domain}/{rest}/bench/inject/CalendarDataInjector?mCt=5&mEcat=10&mCal=10&mEv=20&mTa=20&typeOfInject=private
-{code}
+{code}http://{domain}/{rest}/bench/inject/CalendarDataInjector?mCt=5&mEcat=10&mCal=10&mEv=20&mTa=20&typeOfInject=private{code}
 
 h2. MailDataInjector    {anchor:id=CSref.Configuration.DataInjectorService.MailDataInjectorRoleNotInToc}
 
@@ -205,16 +193,13 @@ To use the injector, do as follows:
 
 *2.* Initialize this component as a service of GateIn, then it will be invoked by MailDataInjector.
 
-{code:xml}
-<component>
+{code:xml}<component>
     <type>org.exoplatform.mail.service.bench.SimpleMailServerInitializer</type>
-</component>
-{code}
+</component>{code}
 
 *3.* Register _MailDataInjector_ to _DataInjectorService_ by the following configuration:
 
-{code:xml}
-<external-component-plugins>
+{code:xml}<external-component-plugins>
   <target-component>org.exoplatform.services.bench.DataInjectorService</target-component>
   <component-plugin>
       <name>MailDataInjector</name>
@@ -222,8 +207,7 @@ To use the injector, do as follows:
       <type>org.exoplatform.mail.service.bench.MailDataInjector</type>
       <description>inject data for Contact</description>
     </component-plugin>
-</external-component-plugins>
-{code}
+</external-component-plugins>{code}
 
 In which:
 
@@ -245,9 +229,7 @@ Usage of MailDataInjector
 {docbook}
 * To insert mail data into the Mail application, the request link is as follows:
 
-{code:language=html/xml}
- http://{domain}/{rest}/bench/inject/MailDataInjector/?users=mary,root&accounts=2,account&inPro=IMAP&check=true&msgs=100&attSize=100
-{code}
+{code}http://{domain}/{rest}/bench/inject/MailDataInjector/?users=mary,root&accounts=2,account&inPro=IMAP&check=true&msgs=100&attSize=100{code}
 
 || Params || Values || Description  ||
 | users | String| The list of users separated by commas.  |
@@ -258,9 +240,9 @@ Usage of MailDataInjector
 | attSize | Number  | The size of an attachment. If it does not exist or is equal to 0, no file is attached to the mail message. |
 
 * To reject mail data from the Mail application, the request link is as follows:
-{code:language=html/xml}
-http://{domain}/{rest}/bench/reject/MailDataInjector/?users=root&accounts=2,account
-{code}
+
+{code}http://{domain}/{rest}/bench/reject/MailDataInjector/?users=root&accounts=2,account{code}
+
 This link will request for removing 2 accounts of "root" of which Id starts with "account".
 
 {note}

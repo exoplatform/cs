@@ -65,15 +65,13 @@ Configuration in Openfire.xml
 
 The Openfire server has a single configuration file called _openfire.xml_ and located under the _exo\-openfire/conf_ directory. Configuration is based on properties expressed in an XML syntax. For example, to set the property prop.name.is.blah=value, you would write this xml snippet:
 
-{code:xml}
-<prop>
+{code:xml}<prop>
   <name>
     <is>
       <blah>value</blah>
     </is>
   </name>
-</prop>
-{code}
+</prop>{code}
 
 Openfire has an extensive list of configuration properties. You can read a list of all properties on this page: http://www.igniterealtime.org/community/docs/DOC-1061.
 
@@ -158,14 +156,10 @@ To enable the propagation of identity across the Chat webapp, you are required t
 * For the Tomcat server, edit _tomcat/conf/server.xml_.
 The valve should already be there, you just need to uncomment it if it is not already done.
 
-{code:xml}
-<Valve className="org.apache.catalina.authenticator.SingleSignOn" />
-{code}
+{code:xml}<Valve className="org.apache.catalina.authenticator.SingleSignOn" />{code}
 
 In case of the cluster deployment, you may want to use {{ClusteredSingleSignOn}} instead.
 
-{code:xml}
-<Valve className="org.jboss.web.tomcat.service.sso.ClusteredSingleSignOn" />
-{code}
+{code:xml}<Valve className="org.jboss.web.tomcat.service.sso.ClusteredSingleSignOn" />{code}
 
 
