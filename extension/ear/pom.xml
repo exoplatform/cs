@@ -15,6 +15,12 @@
       <groupId>org.exoplatform.cs</groupId>
       <artifactId>exo.cs.web.webservice</artifactId>
       <version>${project.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.exoplatform.doc</groupId>
+          <artifactId>doc-style</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.exoplatform.cs</groupId>
@@ -78,7 +84,13 @@
     <dependency>
       <groupId>org.exoplatform.cs</groupId>
       <artifactId>exo.cs.eXoApplication.chat.service</artifactId>
-      <version>${project.version}</version>    
+      <version>${project.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.exoplatform.doc</groupId>
+          <artifactId>doc-style</artifactId>
+        </exclusion>
+      </exclusions> 
     </dependency>
     <dependency>
       <groupId>org.exoplatform.cs</groupId>
