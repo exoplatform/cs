@@ -144,8 +144,7 @@ Portlet preferences
 
 The Chatbar Portlet consists of some preferences as in the following sample code:
  
-{code:xml}
-<portlet-preferences>
+{code:xml}<portlet-preferences>
   <preference>
     <name>showMailLink</name>
     <value>true</value> <!--true/false -->
@@ -181,8 +180,7 @@ The Chatbar Portlet consists of some preferences as in the following sample code
     <value>info</value> <!--this is only the key to get the resource bundle the full key : UIConfigForm.label.info -->
     <read-only>true</read-only>
   </preference>
-</portlet-preferences>
-{code}
+</portlet-preferences>{code}
 
 In which:
 

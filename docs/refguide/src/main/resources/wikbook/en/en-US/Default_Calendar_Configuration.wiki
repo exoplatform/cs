@@ -22,8 +22,7 @@ h1. Default personal calendar
 Each user can have a default personal calendar created. Use the {{NewUserListener}} to configure that.
 
 
-{code:xml}
-<component-plugin>
+{code:xml}<component-plugin>
   <name>calendar.new.user.event.listener</name>
   <set-method>addListenerPlugin</set-method>
   <type>org.exoplatform.calendar.service.impl.NewUserListener</type>
@@ -42,8 +41,7 @@ Each user can have a default personal calendar created. Use the {{NewUserListene
       <value>Anniversary,Calls,Clients,Holiday,Meeting</value>
     </value-param>
   </init-params>
-</component-plugin>
-{code}
+</component-plugin>{code}
 
 You may want to change the following :
 
@@ -63,13 +61,11 @@ The following information may be interesting to them :
 
 #info("Since cs 1.3.1 we add exception create default calendar to the configuration file")
 * We need to add this in side the  \<init-params> tag
-{code:xml}
-<values-param>
+{code:xml}<values-param>
   <name>ignoredUsers</name>
   <description>Definition users to ignore create default calendar</description>
   <value>demo</value>
-  <value>marry</value>
-</values-param>
+  <value>marry</value></values-param>
 {code}
 
 || parameter || description || value ||
@@ -83,52 +79,50 @@ h1. Default calendar settings
 
 Default user settings for eXo Calendar application are also configured by the NewUserListener:
 
-{code:xml}
-  <value-param>
-    <name>viewType</name>
-    <value>1</value>
-  </value-param>
-  <value-param>
-    <name>timeInterval</name>
-    <value>15</value>
-  </value-param>
-  <value-param>
-    <name>weekStartOn</name>
-    <value>2</value>
-  </value-param>
-  <value-param>
-    <name>dateFormat</name>
-    <value>MM/dd/yyyy</value>
-  </value-param>
-  <value-param>
-    <name>timeFormat</name>
-    <value>HH:mm</value>
-  </value-param>
-  <value-param>
-    <name>localeId</name>
-    <value>BEL</value>
-  </value-param>
-  <value-param>
-    <name>timezoneId</name>
-    <value>Europe/Brussels</value>
-  </value-param>
-  <value-param>
-    <name>baseUrlForRss</name>
-    <value></value>
-  </value-param>
-  <value-param>
-    <name>isShowWorkingTime</name>
-    <value>false</value>
-  </value-param>
-  <value-param>
-    <name>workingTimeBegin</name>
-    <value>08:00</value>
-  </value-param>
-  <value-param>
-    <name>workingTimeEnd</name>
-    <value>18:00</value>
-  </value-param>
-{code}
+{code:xml}<value-param>
+  <name>viewType</name>
+  <value>1</value>
+</value-param>
+<value-param>
+  <name>timeInterval</name>
+  <value>15</value>
+</value-param>
+<value-param>
+  <name>weekStartOn</name>
+  <value>2</value>
+</value-param>
+<value-param>
+  <name>dateFormat</name>
+  <value>MM/dd/yyyy</value>
+</value-param>
+<value-param>
+  <name>timeFormat</name>
+  <value>HH:mm</value>
+</value-param>
+<value-param>
+  <name>localeId</name>
+  <value>BEL</value>
+</value-param>
+<value-param>
+  <name>timezoneId</name>
+  <value>Europe/Brussels</value>
+</value-param>
+<value-param>
+  <name>baseUrlForRss</name>
+  <value></value>
+</value-param>
+<value-param>
+  <name>isShowWorkingTime</name>
+  <value>false</value>
+</value-param>
+<value-param>
+  <name>workingTimeBegin</name>
+  <value>08:00</value>
+</value-param>
+<value-param>
+  <name>workingTimeEnd</name>
+  <value>18:00</value>
+</value-param>{code}
 
 You may want to change the following :
 
@@ -176,8 +170,7 @@ You may want to change the following :
 1 Group calendars
 
 To create a default group calendar: Beside using the Organization Portlet to create an user, we also use it to create a group. Calendar service will generate a Calendar for that group (Group calendar means : we have a calendar for all users in that group and the user can do actions in that Calendar ). To do that we have some more listeners define below:
-{code:xml}
-<component-plugin>
+{code:xml}<component-plugin>
   <name>calendar.new.group.event.listener</name>
   <set-method>addListenerPlugin</set-method>
   <type>org.exoplatform.calendar.service.impl.NewGroupListener</type>
@@ -200,8 +193,7 @@ To create a default group calendar: Beside using the Organization Portlet to cre
       <value>Europe/Brussels</value>
     </value-param>
   </init-params>
-</component-plugin>
-{code}
+</component-plugin>{code}
 
 * Name: defaultEditPermission: The default Edit permission  value: *.* it means all users in that group have modify and add, remove calendar, events of calendar .(Multi value membership, use coma (,) to split values)
 * Name:  defaultViewPermission. Value: *.* stands for all in that group can view this calendar and all the events of this calendar (Multi value membership, use coma (,) to split values)
@@ -213,13 +205,11 @@ To create a default group calendar: Beside using the Organization Portlet to cre
 Since cs 1.3.1 we add exception create default group calendar to the configuration file
 {info}
 * We need to add this in side the \<init-params> tag
-{code:xml}
- <values-param>
+{code:xml}<values-param>
   <name>ignoredGroups</name>
   <description>Definition group to ignore create default calendar</description>	
   <value>/platform/guests</value>	
- </values-param>
-{code}
+</values-param>{code}
 
 || parameter || description || value ||
 | ignoredGroups| Definition group to ignore create default calendar | group id, use line to define multiple value |

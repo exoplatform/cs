@@ -94,13 +94,10 @@ h3. NewUserListener {anchor:id=CSref.Configuration.Calendar.NewUserListener}
 
 Each user can have a default personal calendar created. Use the NewUserListener to configure that. To use the plugin in the component configuration, you must use the target-component:
 
-{code:xml}
-<target-component>org.exoplatform.services.organization.OrganizationService</target-component>
-{code}
+{code:xml}<target-component>org.exoplatform.services.organization.OrganizationService</target-component>{code}
 The configuration is applied mainly in _extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/calendar/calendar-service-configuration.xml_.
 
-{code:xml} 
-<component-plugin>
+{code:xml}<component-plugin>
   <name>calendar.new.user.event.listener</name>
   <set-method>addListenerPlugin</set-method>
   <type>org.exoplatform.calendar.service.impl.NewUserListener</type>
@@ -180,8 +177,7 @@ The configuration is applied mainly in _extension/webapp/src/main/webapp/WEB-INF
       <!-- <value>demo</value> <value>marry</value> -->
     </values-param>
   </init-params>
-</component-plugin>   
-{code}
+</component-plugin>{code}
 
 *Details:*
 
@@ -245,14 +241,11 @@ h3. NewGroupListener {anchor:id=CSref.Configuration.NewGroupListener}
 
 To use the plugin in the component configuration, you must use the target-component:
 
-{code:xml}
-<target-component>org.exoplatform.services.organization.OrganizationService</target-component>
-{code}
+{code:xml}<target-component>org.exoplatform.services.organization.OrganizationService</target-component>{code}
 
 The configuration is applied mainly in _extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/calendar/calendar-service-configuration.xml_.
 
-{code:xml}
-<component-plugin>
+{code:xml}<component-plugin>
   <name>calendar.new.group.event.listener</name>
   <set-method>addListenerPlugin</set-method>
   <type>org.exoplatform.calendar.service.impl.NewGroupListener</type>
@@ -281,8 +274,7 @@ The configuration is applied mainly in _extension/webapp/src/main/webapp/WEB-INF
       <value>/spaces/*</value> <!-- single value, use more <value> tags to add more group -->
     </values-param>
   </init-params>
-</component-plugin>
-{code}
+</component-plugin>{code}
 
 *Details:*
 
@@ -304,21 +296,17 @@ See the details about the init-params of the component in the following table:
 h3. NewMembershipListener {anchor:id=CSref.Configuration.NewGroup.NewMembershipListener}
 To use the plugin in the component configuration, you must use the target-component:
 
-{code:xml}
-<target-component>org.exoplatform.services.organization.OrganizationService</target-component>
-{code}
+{code:xml}<target-component>org.exoplatform.services.organization.OrganizationService</target-component>{code}
 
 The configuration is applied mainly in 
 _extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/calendar/calendar-service-configuration.xml_.
 
-{code:xml}
-<component-plugin>
+{code:xml}<component-plugin>
   <name>calendar.new.membership.event.listener</name>
   <set-method>addListenerPlugin</set-method>
   <type>org.exoplatform.calendar.service.impl.NewMembershipListener</type>
   <description>description</description>
-</component-plugin>     	
-{code}
+</component-plugin>{code}
 
 *Details:*
 
@@ -332,14 +320,11 @@ The Calendar application of Collaboration send event reminders by using the emai
 
 You must use the following target component to use the plugin in this configuration:
 
-{code:xml}
-<target-component>org.exoplatform.services.scheduler.JobSchedulerService</target-component>
-{code}
+{code:xml}<target-component>org.exoplatform.services.scheduler.JobSchedulerService</target-component>{code}
 
 The configuration is applied in _extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/cs-configuration.xml_.
 
-{code:Xml}
-<component-plugin>
+{code:xml}<component-plugin>
   <name>RecordsJob</name>
   <set-method>addPeriodJob</set-method>
   <type>org.exoplatform.calendar.service.ReminderPeriodJob</type>
@@ -357,8 +342,7 @@ The configuration is applied in _extension/webapp/src/main/webapp/WEB-INF/cs-ext
       <property name="endTime" value="" />
     </properties-param>
   </init-params>
-</component-plugin>
-{code}
+</component-plugin>{code}
 
 *Details:*
 
@@ -382,14 +366,11 @@ h3. PopupReminderPeriodJob {anchor:id=CSref.Configuration.PopupReminderPeriodJob
 
 You must use the following target component to use the plugin in this configuration:
 
-{code:xml}
-<target-component>org.exoplatform.services.scheduler.JobSchedulerService</target-component>
-{code}
+{code:xml}<target-component>org.exoplatform.services.scheduler.JobSchedulerService</target-component>{code}
 
 The configuration is applied in _extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/cs-configuration.xml_.
 
-{code:xml}
-<component-plugin>
+{code:xml}<component-plugin>
   <name>PopupRecordsJob</name>
   <set-method>addPeriodJob</set-method>
   <type>org.exoplatform.calendar.service.PopupReminderPeriodJob</type>
@@ -412,8 +393,7 @@ The configuration is applied in _extension/webapp/src/main/webapp/WEB-INF/cs-ext
       <property name="portalName" value="portal" />
     </properties-param>
   </init-params>
-</component-plugin>
-{code}
+</component-plugin>{code}
 
 *Details:*
 
@@ -441,8 +421,7 @@ The configuration of the AddActionsPlugin is found in _WEB-INF/cs-extension/cs/w
 
 It is used to register the listener named {{org.exoplatform.webservice.cs.LastUpdateAction}} and it is executed, basing on eventTypes.
 
-{code:xml}
-<component>
+{code:xml}<component>
   <type>org.exoplatform.services.jcr.impl.ext.action.SessionActionCatalog</type>
   <component-plugins>
     <component-plugin>
@@ -476,8 +455,7 @@ It is used to register the listener named {{org.exoplatform.webservice.cs.LastUp
       </init-params>
     </component-plugin>
   </component-plugins>
-</component>
-{code}
+</component>{code}
 
 * *object-param*: {{Actions}} - The name of the object.
 * *object type*: {{org.exoplatform.services.jcr.impl.ext.action.AddActionsPlugin$ActionsConfig}} - A class used to register the following field names in the table below:
@@ -499,8 +477,7 @@ The Chat portlet and its services are deprecated. It remains fully supported for
 
 h3. HistoryPeriodJob {anchor:id=CSref.Configuration.HistoryPeriodJob}
 
-{code:xml}
-<external-component-plugins>
+{code:xml}<external-component-plugins>
   <target-component>org.exoplatform.services.scheduler.JobSchedulerService</target-component>
   <component-plugin>
     <name>ChatRecordsJob</name>
@@ -526,8 +503,7 @@ h3. HistoryPeriodJob {anchor:id=CSref.Configuration.HistoryPeriodJob}
       </properties-param>
     </init-params>
   </component-plugin>
-</external-component-plugins>
-{code}
+</external-component-plugins>{code}
 
 *Details:*
 
@@ -550,8 +526,7 @@ See details about the init-params of the component in the following table:
 
 
 h3. RequestFilterComponentPlugin {anchor:id=CSref.Configuration.RequestFilterComponentPlugin}
-{code:xml}
-<external-component-plugins>
+{code:xml}<external-component-plugins>
   <target-component>org.exoplatform.services.rest.impl.RequestHandlerImpl</target-component>
   <component-plugin>
     <name>ws.rs.request.filter</name>
@@ -564,8 +539,7 @@ h3. RequestFilterComponentPlugin {anchor:id=CSref.Configuration.RequestFilterCom
       </value-param>
     </init-params>
   </component-plugin>
-</external-component-plugins>
-{code}
+</external-component-plugins>{code}
 
 *Details:*
 
@@ -585,9 +559,7 @@ Two functions, including login and logout of XMPPRestService, are responsible fo
  
 You must use the same target component for two external component plugins: 
 
-{code:xml}
-<target-component>org.exoplatform.services.listener.ListenerService</target-component>
-{code}
+{code:xml}<target-component>org.exoplatform.services.listener.ListenerService</target-component>{code}
 
 {docbook}
 <para xml:id="CSref.Configuration.AuthenticationLoginListener">
@@ -597,14 +569,12 @@ You must use the same target component for two external component plugins:
 </para>
 {docbook}
 
-{code:xml}
-<component-plugin>
+{code:xml}<component-plugin>
   <name>exo.core.security.ConversationRegistry.register</name>
   <set-method>addListener</set-method>
   <type>org.exoplatform.services.xmpp.connection.impl.AuthenticationLoginListener</type>
   <description>description</description>
-</component-plugin> 
-{code}
+</component-plugin>{code}
 
 *Details:*
 
@@ -621,14 +591,12 @@ You must use the same target component for two external component plugins:
 </para>
 {docbook}
 
-{code:xml}
-<component-plugin>
+{code:xml}<component-plugin>
   <name>exo.core.security.ConversationRegistry.unregister</name>
   <set-method>addListener</set-method>
   <type>org.exoplatform.services.xmpp.connection.impl.AuthenticationLogoutListener</type>
   <description>description</description>
-</component-plugin>         
-{code}
+</component-plugin>{code}
 
 *Details:*
 
@@ -641,9 +609,7 @@ h2. Contact Configuration {anchor:id=CSref.Configuration.ContactConfigurationRol
 The Contact Application is configured by three external component plugins: {{NewUserListener}}, {{NewMembershipListener}}
 and {{UpdateUserProfileListener}}. They use the same target component:
 
-{code:xml}
-<target-component>org.exoplatform.services.organization.OrganizationService</target-component>	
-{code}
+{code:xml}<target-component>org.exoplatform.services.organization.OrganizationService</target-component>	{code}
 
 The Contact configuration is found in _extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/contact/contact-service-configuration.xml_.
 
@@ -655,14 +621,12 @@ The Contact configuration is found in _extension/webapp/src/main/webapp/WEB-INF/
 </para>
 {docbook}
 
-{code:xml}  	
-<component-plugin>
+{code:xml}<component-plugin>
   <name>contact.new.user.event.listener</name>
   <set-method>addListenerPlugin</set-method>
   <type>org.exoplatform.contact.service.impl.NewUserListener</type>
   <description>description</description>
-</component-plugin>
-{code}
+</component-plugin>{code}
 
 *Details:*
 
@@ -679,14 +643,12 @@ The Contact configuration is found in _extension/webapp/src/main/webapp/WEB-INF/
 </para>
 {docbook}
  
-{code:xml}
-<component-plugin>
+{code:xml}<component-plugin>
   <name>contact.new.membership.event.listener</name>
   <set-method>addListenerPlugin</set-method>
   <type>org.exoplatform.contact.service.impl.NewMembershipListener</type>
   <description>description</description>
-</component-plugin>
-{code}
+</component-plugin>{code}
 
 *Details:*
 
@@ -703,14 +665,12 @@ The Contact configuration is found in _extension/webapp/src/main/webapp/WEB-INF/
 </para>
 {docbook}
 
-{code:xml}
-<component-plugin>
+{code:xml}<component-plugin>
   <name>contact.new.userprofile.event.listener</name>
   <set-method>addListenerPlugin</set-method>
   <type>org.exoplatform.contact.service.impl.UpdateUserProfileListener</type>
   <description>description</description>
-</component-plugin>
-{code}
+</component-plugin>{code}
 
 
 *Details:*
@@ -725,9 +685,7 @@ h2. Content Configuration {anchor:id=CSref.Configuration.ContentConfigurationRol
 The Content application, such as RSS reader of Collaboration, is configured by two external component plugins: RSSContentPlugin and DescriptionPlugin.
 Both the external components plugins use the same target component:
 
-{code:xml}
-<target-component>org.exoplatform.content.service.ContentDAO</target-component> 
-{code}
+{code:xml}<target-component>org.exoplatform.content.service.ContentDAO</target-component> {code}
 This content configuration is applied in _extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/content/content-service-configuration.xml_.
 
 {docbook}
@@ -738,14 +696,12 @@ This content configuration is applied in _extension/webapp/src/main/webapp/WEB-I
 </para>
 {docbook}
 
-{code:xml}
-<component-plugin>
+{code:xml}<component-plugin>
   <name>rssreader.listener</name>
   <set-method>addPlugin</set-method>
   <type>org.exoplatform.content.service.RSSContentPlugin</type>
   <description>rss reader plugin</description>
-</component-plugin>
-{code}
+</component-plugin>{code}
 
 *Details:*
 
@@ -762,14 +718,12 @@ This content configuration is applied in _extension/webapp/src/main/webapp/WEB-I
 </para>
 {docbook}
 	    
-{code:xml}
-<component-plugin>
+{code:xml}<component-plugin>
   <name>description.listener</name>
   <set-method>addPlugin</set-method>
   <type>org.exoplatform.content.service.DescriptionPlugin</type>
   <description>Description plugin</description>
-</component-plugin>	    
-{code}
+</component-plugin>{code}
 
 *Details:*
 
@@ -797,8 +751,7 @@ The Mail portlet and its services are deprecated. It remains fully supported for
 In the Mail application of Collaboration, when a user checks messages for one account, the remote mailbox fetch is performed as a background job. Before Collaboration 1.2, the job was continued until all messages had been retrieved or when the user stopped the check through the UI. Hence, even when a user was not logged in, the background job was continued. This can be the resource intensive for the server if many users have large mailboxes.
 Since Collaboration 1.2,  one capability is added to halt the background job when the user session terminates (logout or timeout). It makes Collaboration more friendly with server resources. If you want to activate this feature, you need to add a bunch of the xml congifuration in _/extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/mail/mail-service-configuration.xml_:
 
-{code:xml}     
-<external-component-plugins>
+{code:xml}<external-component-plugins>
   <target-component>org.exoplatform.services.listener.ListenerService</target-component>
    <component-plugin>
     <name>exo.core.security.ConversationRegistry.unregister</name>
@@ -806,8 +759,7 @@ Since Collaboration 1.2,  one capability is added to halt the background job whe
     <type>org.exoplatform.mail.service.AuthenticationLogoutListener</type>
     <description>description</description>
   </component-plugin>
-</external-component-plugins>
-{code}
+</external-component-plugins>{code}
 
 *Details:*
 
@@ -826,8 +778,7 @@ Since Collaboration 1.2,  one capability is added to halt the background job whe
 
 Since Collaboration 2.2.0, _MailSettingConfigPlugin_ is used to define the behavior, for example, showing/hiding fields and checking/unchecking checkboxes, of email account settings in the mail-server-configuration.xml file. It allows administrators to preconfigure all settings and to specify if end-users have the modification right on each specific setting or not.
 
-{code:xml}
-<external-component-plugins>
+{code:xml}<external-component-plugins>
   <target-component>org.exoplatform.mail.service.MailService</target-component>
 	<component-plugin>   
 		<name>cs.mail.service.settings</name>
@@ -936,8 +887,7 @@ Since Collaboration 2.2.0, _MailSettingConfigPlugin_ is used to define the behav
 				</object-param>
 			</init-params>
   	</component-plugin>      
-  </external-component-plugins>
-{code}
+  </external-component-plugins>{code}
 
 *Details:*
 
@@ -974,8 +924,7 @@ The Social Integration Configuration is applied in _/extension/webapp/src/main/w
 
 h3. CalendarDataInitialize {anchor:id=CSref.Configuration.CalendarDataInitialize}
 
-{code:xml}
-<external-component-plugins>
+{code:xml}<external-component-plugins>
   <target-component>org.exoplatform.social.core.space.spi.SpaceService</target-component>
   <component-plugin>
     <name>CalendarDataInitialize</name>
@@ -988,8 +937,7 @@ h3. CalendarDataInitialize {anchor:id=CSref.Configuration.CalendarDataInitialize
       </value-param>
     </init-params>
   </component-plugin>
-</external-component-plugins>
-{code}
+</external-component-plugins>{code}
 
 *Details:*
 
@@ -1006,8 +954,7 @@ See the details about the init-params of the component in the following table:
 
 h3. ContactDataInitialize {anchor:id=CSref.Configuration.ContactDataInitialize}
 
-{code:Xml}
-<external-component-plugins>
+{code:Xml}<external-component-plugins>
   <target-component>org.exoplatform.social.core.space.spi.SpaceService</target-component>
   <component-plugin>
     <name>ContactDataInitialize</name>
@@ -1020,8 +967,7 @@ h3. ContactDataInitialize {anchor:id=CSref.Configuration.ContactDataInitialize}
       </value-param>
     </init-params>
   </component-plugin>
-</external-component-plugins>
-{code}
+</external-component-plugins>{code}
 
 *Details:*
 
@@ -1038,16 +984,14 @@ See the details about the init-params of the component in the following table:
 
 h3. ContactSpaceActivityPublisher {anchor:id=CSref.Configuration.ContactSpaceActivityPublisher}
 
-{code:xml}
-<external-component-plugins>
+{code:xml}<external-component-plugins>
   <target-component>org.exoplatform.contact.service.ContactService</target-component>
   <component-plugin>
     <name>ContactEventListener</name>
     <set-method>addListenerPlugin</set-method>
     <type>org.exoplatform.cs.ext.impl.ContactSpaceActivityPublisher</type>
   </component-plugin>
-</external-component-plugins>
-{code}
+</external-component-plugins>{code}
 
 *Details:*
 
@@ -1058,16 +1002,14 @@ h3. ContactSpaceActivityPublisher {anchor:id=CSref.Configuration.ContactSpaceAct
 
 h3. CalendarSpaceActivityPublisher {anchor:id=CSref.Configuration.CalendarSpaceActivityPublisher}
 
-{code:xml}
-<external-component-plugins>
+{code:xml}<external-component-plugins>
   <target-component>org.exoplatform.calendar.service.CalendarService</target-component>
   <component-plugin>
     <name>CalendarEventListener</name>
     <set-method>addEventListenerPlugin</set-method>
     <type>org.exoplatform.cs.ext.impl.CalendarSpaceActivityPublisher</type>
   </component-plugin>
-</external-component-plugins>
-{code}
+</external-component-plugins>{code}
 
 *Details:*
 
@@ -1079,8 +1021,7 @@ h3. CalendarSpaceActivityPublisher {anchor:id=CSref.Configuration.CalendarSpaceA
 
 h3. PortletPreferenceRequiredPlugin {anchor:id=CSref.Configuration.PortletPreferenceRequiredPlugin}
 
-{code:xml}
-<external-component-plugins>
+{code:xml}<external-component-plugins>
   <target-component>org.exoplatform.social.core.space.spi.SpaceService</target-component>
   <component-plugin>
     <name>portlets.prefs.required</name>
@@ -1094,8 +1035,7 @@ h3. PortletPreferenceRequiredPlugin {anchor:id=CSref.Configuration.PortletPrefer
       </values-param>
     </init-params>
   </component-plugin>
-</external-component-plugins>
-{code}
+</external-component-plugins>{code}
 
 *Details:*
 

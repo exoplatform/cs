@@ -11,8 +11,7 @@ h1. Setting
 
 File to edit: {{cs-plugins-configuration.xml}}:
 
-{code:xml}
-<external-component-plugins>
+{code:xml}<external-component-plugins>
     <target-component>org.exoplatform.services.scheduler.JobSchedulerService</target-component>
     <component-plugin>
       <name>RemindersJob</name>
@@ -43,8 +42,7 @@ File to edit: {{cs-plugins-configuration.xml}}:
        </properties-param>
     </init-params>
   </component-plugin>
-</external-component-plugins>
-{code}
+</external-component-plugins>{code}
 
 The interesting settings are :
 || property || description || values ||

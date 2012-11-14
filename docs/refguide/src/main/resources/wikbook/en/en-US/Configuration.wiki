@@ -29,8 +29,7 @@ The configuration of the Calendar application is applied mainly in _/eXoApplicat
 Use the CalendarService to configure the Calendar. The following information will explain details of its configuration.
 When this configuration file is executed, the component named _org.exoplatform.calendar.service.impl.CalendarServiceImpl_ will process actions of the Calendar application.
 
-{code:xml}
-<component>
+{code:xml}<component>
 	<key>org.exoplatform.calendar.service.CalendarService</key>
 	<type>org.exoplatform.calendar.service.impl.CalendarServiceImpl</type>
 	<init-params>
@@ -39,8 +38,7 @@ When this configuration file is executed, the component named _org.exoplatform.c
 			<property name="eventNumber" value="100" />
 		</properties-param>
 	</init-params>
-</component>
-{code}
+</component>{code}
 
 *Details:*
 ||Properties-Param || Property name || Description || Possible Value || Default Value ||
@@ -50,8 +48,7 @@ h2. HistoryImpl {anchor:id=CSref.Configuration.HistoryImplRoleNotInToc}
 The configuration of historyImpl is found in the  _/extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/chat/chat-service-configuration.xml_.
 When this configuration file is executed, the component named _org.exoplatform.services.xmpp.history.impl.jcr.HistoryImpl_ initializes all the configured parameters.
 
-{code:xml}
-<component>
+{code:xml}<component>
 	<type>org.exoplatform.services.xmpp.history.impl.jcr.HistoryImpl</type>
 	<init-params>
 		<value-param>
@@ -67,8 +64,7 @@ When this configuration file is executed, the component named _org.exoplatform.s
 			<value>exo:applications/eXoChat/history</value>
 		</value-param>
 	</init-params>
-</component>
-{code}
+</component>{code}
 
 *Details:*
 ||Value-Param || Description || Possible Values || Default Value ||
@@ -80,8 +76,7 @@ When this configuration file is executed, the component named _org.exoplatform.s
 h2. XMPPMessenger {anchor:id=CSref.Configuration.XMPPMessengerRoleNotInToc}
 The configuration of the XMPPMessenger component is found in _/extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/chat/chat-service-configuration.xml_. It helps Collaboration connect the Openfire instance.
 
-{code:xml}
-<component>
+{code:xml}<component>
   <type>org.exoplatform.services.xmpp.connection.impl.XMPPMessenger</type>
   <init-params>
     <properties-param>
@@ -94,8 +89,7 @@ The configuration of the XMPPMessenger component is found in _/extension/webapp/
       <property name="timeout" value="7200000" />
     </properties-param>
   </init-params>
-</component>
-{code}
+</component>{code}
 
 *Details:*
 ||Properties-param || Property name || Description || Possible Values || Default Value ||
@@ -105,8 +99,7 @@ The configuration of the XMPPMessenger component is found in _/extension/webapp/
 h2. DefaultPresenceStatus {anchor:id=CSref.Configuration.DefaultPresenceStatusRoleNotInToc}
 The configuration of the DefaultPresenceStatus component is found in _/extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/chat/chat-service-configuration.xml_.
 
-{code:xml}
-<component>
+{code:xml}<component>
   <type>org.exoplatform.services.presence.DefaultPresenceStatus</type>
   <init-params>
     <properties-param>
@@ -114,8 +107,7 @@ The configuration of the DefaultPresenceStatus component is found in _/extension
       <property name="mode" value="Free to chat" />
     </properties-param>
   </init-params>
-</component>
-{code}
+</component>{code}
 
 *Details:*
 || Properties-param || Property name|| Description || Possible Values || Default Value ||
@@ -126,8 +118,7 @@ The configuration of the ContactService component is found in _eXoApplication/co
 
 When the server starts, the configuration file which contains the declaration of ContactService component is executed. A ContactService component is then created with params and plugins in the configuration file.
 
-{code:xml}
-<component>
+{code:xml}<component>
   <key>org.exoplatform.contact.service.ContactService</key>
   <type>org.exoplatform.contact.service.impl.ContactServiceImpl</type>
   <init-params>
@@ -141,8 +132,7 @@ When the server starts, the configuration file which contains the declaration of
       <description>Groups that should not be displayed in broadcast list. Wildcards may be used in groups name</description>
     </values-param>
   </init-params>
-</component>
-{code}
+</component>{code}
 
 *Details:*
 || Values-param || Description || Possible Values || Default Value ||
