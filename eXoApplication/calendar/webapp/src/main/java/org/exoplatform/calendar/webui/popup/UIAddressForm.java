@@ -16,6 +16,12 @@
  **/
 package org.exoplatform.calendar.webui.popup;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.webui.UILazyPageIterator;
 import org.exoplatform.commons.utils.LazyPageList;
@@ -38,7 +44,6 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 
-import java.util.*;
 
 @ComponentConfig(
   lifecycle = UIFormLifecycle.class,
@@ -111,7 +116,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     UIFormSelectBox fieldGroup = new UIFormSelectBox(FIELD_GROUP, FIELD_GROUP, getGroups()) ;
     fieldGroup.setOnChange("ChangeGroup") ;
     addUIFormInput(fieldGroup) ;
-    contacts = new LinkedHashSet<ContactData>();
+    contacts = new LinkedHashSet<ContactData>(); /* use LinkedHashSet to keep order of interation */
     uiLazyPageIterator = new UILazyPageIterator() ;
     uiLazyPageIterator.setId("UICalendarAddressPage") ;
     
@@ -178,7 +183,10 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   }
   @SuppressWarnings("unchecked")
   public void setContactList(ContactFilter filter) throws Exception {
-    
+    if (filter.getCategories() == null)  /* if no filter for a specific group then reset select box */
+    /* get groups of contact for select box */
+      getUIFormSelectBox(FIELD_GROUP).setOptions(getGroups()) ;    
+
     if (isSearchEnabled()) /* if search is enabled we use findEmailFromContacts() */
     {  
       ContactService contactSrv = getApplicationComponent(ContactService.class);
@@ -251,7 +259,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   }
   @SuppressWarnings({ "deprecation", "unchecked" })
   public void setContactList(List<ContactData> contactList) throws Exception {
-    getUIFormSelectBox(FIELD_GROUP).setOptions(getGroups()) ;    
+    //getUIFormSelectBox(FIELD_GROUP).setOptions(getGroups()) ;    
     LazyPageList<ContactData> pageList = new LazyPageList<ContactData>(new ListAccessImpl<ContactData>(ContactData.class, contactList), NUMBER_OF_ITEMS_SHOWN_ON_ONE_PAGE);
 
     if (!isSearchEnabled())
