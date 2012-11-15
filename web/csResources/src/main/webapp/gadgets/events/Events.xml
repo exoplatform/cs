@@ -14,7 +14,7 @@
     <Require feature="setprefs"/>
     <Require feature="dynamic-height"/>
   </ModulePrefs>  
-  <UserPref name="setting" default_value="/calendar;/rest/cs/calendar/getissues;10;AM/PM;Default" datatype="hidden" />
+  <!--UserPref name="setting" default_value="/calendar;/rest/cs/calendar/getissues;10;AM/PM;Default" datatype="hidden" /-->
   <Content type="html">
     <![CDATA[
       <link rel="stylesheet" href="skin/events.css" type="text/css"/>
@@ -61,9 +61,9 @@
       <div class="UIGadgetThemes UIYellowThemes">
         <div class="TitGad ClearFix">
           <a href="#demo" class="IconDropDown" id="ShowAll" target="_blank">__MSG_showall__</a>
-          <div class="SettingButton" id="SettingButton" title="__MSG_setting__">
+          <!--div class="SettingButton" id="SettingButton" title="__MSG_setting__">
             <a href="javascript:eXoEventGadget.showHideSetting(true);"><span></span></a>
-          </div>
+          </div-->
           <div class="ContTit">__MSG_title__</div>
         </div>
         <div class="GadCont UpcomingEvents" id="ItemContainer">

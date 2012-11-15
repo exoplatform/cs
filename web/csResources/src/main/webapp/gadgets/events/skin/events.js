@@ -119,11 +119,11 @@ function eXoEventGadget(){
 } ;
 
 eXoEventGadget.prototype.getPrefs = function(){
-	var setting = (new gadgets.Prefs()).getString("setting");
-	if(setting =="") setting = ["","/rest/cs/calendar/getissues","10","AM/PM","defaultCalendarName"];
-	else {
-		setting = setting.split(";");
-	}
+	//var setting = (new gadgets.Prefs()).getString("setting");
+	setting = ["","/rest/cs/calendar/getissues","10","AM/PM","defaultCalendarName"];
+	//else {
+	//	setting = setting.split(";");
+	//}
 	this.prefs = {
 		"url"  : setting[0],
 		"subscribeurl"  : setting[1],
@@ -197,7 +197,8 @@ eXoEventGadget.prototype.showDetail = function(obj){
 
 eXoEventGadget.prototype.onLoadHander = function(){
 	eXoEventGadget.getPrefs();
-	eXoEventGadget.getCalendars();
+	//eXoEventGadget.getCalendars();
+	eXoEventGadget.getData();
 	setTimeout(eXoEventGadget.adjustHeight,500);
 }
 eXoEventGadget.prototype.ajaxAsyncGetRequest = function(url, callback) {
@@ -225,7 +226,8 @@ eXoEventGadget.prototype.ajaxAsyncGetRequest = function(url, callback) {
 	}					
 }
 eXoEventGadget.prototype.notify = function(){
-	var msg = gadgets.Prefs().getMsg("noevent");
+        var prefs = new gadgets.Prefs();
+	var msg = prefs.getMsg("noevent");
 	document.getElementById("ItemContainer").innerHTML = '<div class="Warning">' + msg + '</div>';
 	eXoEventGadget.setLink();
 }
