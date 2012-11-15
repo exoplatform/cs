@@ -20,20 +20,9 @@
 package org.exoplatform.calendar.webui;
 
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
-import org.exoplatform.commons.utils.EmptySerializablePageList;
-import org.exoplatform.commons.utils.PageList;
-import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.log.Log;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIPageIterator;
-import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * A customized version of org.exoplatform.webui.core UIPageIterator 

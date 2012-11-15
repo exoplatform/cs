@@ -284,7 +284,6 @@ public class JCRDataStorage implements DataStorage {
       return AddressBookType.Shared;
     }
 
-    //AddressBook personal = findPersonalAddressBookById(username, addressBookId);
     AddressBook personal = getPersonalAddressBookById(username, addressBookId);
     if (personal != null) {
       return AddressBookType.Personal;
