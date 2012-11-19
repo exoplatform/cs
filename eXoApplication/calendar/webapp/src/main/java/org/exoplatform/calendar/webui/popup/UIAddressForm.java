@@ -116,7 +116,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     UIFormSelectBox fieldGroup = new UIFormSelectBox(FIELD_GROUP, FIELD_GROUP, getGroups()) ;
     fieldGroup.setOnChange("ChangeGroup") ;
     addUIFormInput(fieldGroup) ;
-    contacts = new LinkedHashSet<ContactData>(); /* use LinkedHashSet to keep order of interation */
+    contacts = new LinkedHashSet<ContactData>(); /* use LinkedHashSet to keep order of iteration */
     uiLazyPageIterator = new UILazyPageIterator() ;
     uiLazyPageIterator.setId("UICalendarAddressPage") ;
     
@@ -184,7 +184,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   @SuppressWarnings("unchecked")
   public void setContactList(ContactFilter filter) throws Exception {
     if (filter.getCategories() == null)  /* if no filter for a specific group then reset select box */
-    /* get groups of contact for select box */
+      /* get groups of contact for select box */
       getUIFormSelectBox(FIELD_GROUP).setOptions(getGroups()) ;    
 
     if (isSearchEnabled()) /* if search is enabled we use findEmailFromContacts() */
@@ -259,7 +259,6 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   }
   @SuppressWarnings({ "deprecation", "unchecked" })
   public void setContactList(List<ContactData> contactList) throws Exception {
-    //getUIFormSelectBox(FIELD_GROUP).setOptions(getGroups()) ;    
     LazyPageList<ContactData> pageList = new LazyPageList<ContactData>(new ListAccessImpl<ContactData>(ContactData.class, contactList), NUMBER_OF_ITEMS_SHOWN_ON_ONE_PAGE);
 
     if (!isSearchEnabled())
