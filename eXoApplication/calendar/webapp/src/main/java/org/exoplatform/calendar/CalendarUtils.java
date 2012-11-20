@@ -53,6 +53,8 @@ import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.calendar.webui.popup.UIAddressForm.ContactData;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
@@ -76,6 +78,8 @@ import org.exoplatform.webui.core.model.SelectOption;
 import org.exoplatform.webui.core.model.SelectOptionGroup;
 import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 
+import com.sun.tools.javac.code.Attribute.Array;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen Quang
@@ -84,6 +88,12 @@ import org.exoplatform.ws.frameworks.cometd.ContinuationService;
  */
 
 public class CalendarUtils {
+  
+  public static final String   START_SHARE_CALENDAR_JOB_KEY  = "ShareCalendarJob.start_share_job";
+  
+  public static final String   FINISH_SHARE_CALENDAR_JOB_KEY = "ShareCalendarJob.finish_share_job";
+  
+  public static final String   STILL_SHARE_CALENDAR_JOB_KEY  = "ShareCalendarJob.is_still_running";
 
   public static final String PRIVATE_CALENDARS = "privateCalendar".intern();
   public static final String SHARED_CALENDARS = "sharedCalendar".intern();
