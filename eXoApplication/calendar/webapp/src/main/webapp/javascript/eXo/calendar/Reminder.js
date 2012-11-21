@@ -35,9 +35,10 @@ Reminder.prototype.initCometd = function() {
 }
 
 Reminder.prototype.notifyShareCalendar = function(eventObj){
-	dataMsg = eventObj.data
-	var classId = dataMsg;
-	var message = document.getElementById(classId).innerHTML;
+//	dataMsg = eventObj.data
+//	var classId = dataMsg;
+//	var message = document.getElementById(classId).innerHTML;
+	var message = eventObj.data;
 	var html = this.generateHTML(message) ;
 	var popup = eXo.core.DOMUtil.findFirstDescendantByClass(this.createMessage(html, message), "div","UIPopupNotification") ;
 	eXo.webui.Box.config(popup,popup.offsetHeight, 5, this.openCallback, this.closeBox) ;

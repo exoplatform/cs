@@ -85,12 +85,6 @@ import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 
 public class CalendarUtils {
   
-  public static final String   START_SHARE_CALENDAR_JOB_KEY  = "ShareCalendarJob.start_share_job";
-  
-  public static final String   FINISH_SHARE_CALENDAR_JOB_KEY = "ShareCalendarJob.finish_share_job";
-  
-  public static final String   STILL_SHARE_CALENDAR_JOB_KEY  = "ShareCalendarJob.is_still_running";
-
   public static final String PRIVATE_CALENDARS = "privateCalendar".intern();
   public static final String SHARED_CALENDARS = "sharedCalendar".intern();
   public static final String PUBLIC_CALENDARS = "publicCalendar".intern();

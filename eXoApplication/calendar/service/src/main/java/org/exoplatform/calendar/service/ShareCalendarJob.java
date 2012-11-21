@@ -16,13 +16,17 @@
  **/
 package org.exoplatform.calendar.service;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.exoplatform.calendar.service.impl.JCRDataStorage;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
-import org.exoplatform.services.scheduler.JobInfo;
+import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.User;
 import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 import org.quartz.InterruptableJob;
 import org.quartz.Job;
@@ -40,24 +44,6 @@ import org.quartz.UnableToInterruptJobException;
 
 public class ShareCalendarJob implements Job, InterruptableJob {
 
-  public static final String SHARE_CALENDAR_GROUP = "CS-ShareCalenar";
-
-  public static final String RECEIVER_USER        = "receiverUsers";
-
-  public static final String USER_NAME            = "userName";
-
-  public static final String CALENDAR_ID          = "calendarId";
-
-  public static final String JCR_DATA_STORAGE     = "JCRDataStorage";
-
-  public static final String START_SHARE_ID       = "StartToShare";
-
-  public static final String FINISH_SHARE_ID      = "FinishToShare";
-
-  public static final String STILL_SHARE_ID       = "StillToShare";
-
-  public static final String SHARE_CAL_CHANEL     = "/eXo/Application/Calendar/notifyShareCalendar";
-
   private static Log         log                  = ExoLogger.getLogger("cs.service.job");
 
   public ShareCalendarJob() throws Exception {
@@ -65,33 +51,60 @@ public class ShareCalendarJob implements Job, InterruptableJob {
   }
 
   public void execute(JobExecutionContext context) throws JobExecutionException {
+    log.info("Starting sharing calendar for groups");
     ContinuationService continuation = (ContinuationService) PortalContainer.getInstance()
-                                                                            .getComponentInstanceOfType(ContinuationService.class);
-    
+        .getComponentInstanceOfType(ContinuationService.class);
+
+    OrganizationService oService = (OrganizationService)PortalContainer.getInstance().getComponentInstance(OrganizationService.class) ;
+
+    CalendarService calendarService = (CalendarService)PortalContainer.getInstance().getComponentInstance(CalendarService.class) ;
+
     JobDataMap jobDataMap = context.getJobDetail().getJobDataMap();
-    List<String> receiverUsers = (List<String>) jobDataMap.get(RECEIVER_USER);
-    String user = jobDataMap.getString(USER_NAME);
-    String calendarId = jobDataMap.getString(CALENDAR_ID);
-    JCRDataStorage jcrDataStorage = (JCRDataStorage) jobDataMap.get(JCR_DATA_STORAGE);
-    continuation.sendMessage(user, SHARE_CAL_CHANEL, START_SHARE_ID, START_SHARE_ID);
+
+    Map<String, String> perms = new HashMap<String, String>() ;
+
+    Map<String, String> sharedUsers  = new HashMap<String, String>() ;
+
+    List<String> sharedGroups = (List<String>) jobDataMap.get(Utils.SHARED_GROUPS);
+    String user = jobDataMap.getString(Utils.USER_NAME);
+    String calendarId = jobDataMap.getString(Utils.CALENDAR_ID);
+    String stopMessage = jobDataMap.getString(Utils.STOP_MESSAGE);
+    JCRDataStorage jcrDataStorage = (JCRDataStorage) jobDataMap.get(Utils.JCR_DATA_STORAGE);
+
     try {
-      jcrDataStorage.shareCalendar(user, calendarId, receiverUsers);
+      Calendar cal = calendarService.getUserCalendar(user, calendarId) ;
+
+      if(cal.getViewPermission() != null) {
+        for(String v : cal.getViewPermission()) {
+          perms.put(v,String.valueOf(cal.getEditPermission()!= null && Arrays.asList(cal.getEditPermission()).contains(v))) ;
+        }
+      }
+
+      for(String name : sharedGroups) {
+        for (User userTmp : oService.getUserHandler().findUsersByGroup(name.trim()).getAll()) {
+          String userId = userTmp.getUserName();
+          // checks if already shared
+          if(perms.get(userId) == null) {
+            sharedUsers.put(userId, userId);
+          }
+        }
+      }
+      sharedUsers.remove(user);
+      jcrDataStorage.shareCalendar(user, calendarId, Arrays.asList(sharedUsers.keySet().toArray(new String[sharedUsers.keySet().size()])));
+      continuation.sendMessage(user, Utils.SHARE_CAL_CHANEL, stopMessage);
+      log.info("Finish sharing calendar for groups");
     } catch (Exception e) {
       log.debug("Exception in method:" + e);
+      String errorMessage = jobDataMap.getString(Utils.ERROR_MESSAGE);
+      continuation.sendMessage(user,  Utils.SHARE_CAL_CHANEL, errorMessage);
     }
-    continuation.sendMessage(user, SHARE_CAL_CHANEL, FINISH_SHARE_ID, FINISH_SHARE_ID);
+    
   }
 
-  public static JobInfo getJobInfo(String userId) {
-    JobInfo info = new JobInfo(userId,
-                               ShareCalendarJob.SHARE_CALENDAR_GROUP,
-                               ShareCalendarJob.class);
-
-    info.setDescription("There are too many users");
-    return info;
-  }
-
+  @Override
   public void interrupt() throws UnableToInterruptJobException {
-    log.debug("\n\n######### CALLED INTERRUPT!\n\n");
+   
   }
+
+
 }

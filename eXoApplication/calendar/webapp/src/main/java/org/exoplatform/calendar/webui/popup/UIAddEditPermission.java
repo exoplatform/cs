@@ -30,6 +30,7 @@ import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendars;
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccessImpl;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.services.log.ExoLogger;
@@ -37,6 +38,9 @@ import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.scheduler.JobSchedulerService;
+import org.exoplatform.services.scheduler.impl.JobSchedulerServiceImpl;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -53,12 +57,12 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
  * Feb 27, 2008  
  */
 @ComponentConfig (
-    lifecycle = UIContainerLifecycle.class, 
-    events = {
-      @EventConfig(listeners = UIAddEditPermission.EditActionListener.class),
-      @EventConfig(listeners = UIAddEditPermission.DeleteActionListener.class, confirm = "UIEventCategoryManager.msg.confirm-delete")
-    }
-)
+                  lifecycle = UIContainerLifecycle.class, 
+                  events = {
+                    @EventConfig(listeners = UIAddEditPermission.EditActionListener.class),
+                    @EventConfig(listeners = UIAddEditPermission.DeleteActionListener.class, confirm = "UIEventCategoryManager.msg.confirm-delete")
+                  }
+    )
 
 public class UIAddEditPermission extends UIContainer implements UIPopupComponent {
   protected Log log = ExoLogger.getLogger(this.getClass());
@@ -88,7 +92,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
     UIGrid permissionList = getChild(UIGrid.class);
     return permissionList.getUIPageIterator().getCurrentPage();
   }
-  
+
   @SuppressWarnings("unchecked")
   public void updateGrid(Calendar cal, int currentPage) throws Exception {
     List<data> dataRow = new ArrayList<data>() ;
@@ -112,7 +116,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
     //ObjectPageList objPageList = new ObjectPageList(dataRow, 10) ;
     LazyPageList<data> pageList = new LazyPageList<data>(new ListAccessImpl<data>(data.class, dataRow), 10);
     permissionList.getUIPageIterator().setPageList(pageList) ;
-  //cs-3854
+    //cs-3854
     if(currentPage>1 && currentPage<=permissionList.getUIPageIterator().getAvailablePage()){
       permissionList.getUIPageIterator().setCurrentPage(currentPage);      
     }
@@ -126,7 +130,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
       UIFormCheckBoxInput checkBox = shareForm.getUIFormCheckBoxInput(UISharedTab.FIELD_EDIT) ;
       CalendarService calService = CalendarUtils.getCalendarService() ;
       String username = CalendarUtils.getCurrentUser() ;
-      
+
       Calendar cal = calService.getUserCalendar(username, addEdit.calendarId_) ;
       if (resiceUser.contains(Utils.SLASH)) {
         shareForm.setSharedGroup(resiceUser);
@@ -141,54 +145,46 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
   static public class DeleteActionListener extends EventListener<UIAddEditPermission> {
     public void execute(Event<UIAddEditPermission> event) throws Exception {
       UIAddEditPermission addEdit = event.getSource();
-      String resiceUser = event.getRequestContext().getRequestParameter(OBJECTID);
+      String removedUsers = event.getRequestContext().getRequestParameter(OBJECTID);
       CalendarService calService = CalendarUtils.getCalendarService() ;
       String username = CalendarUtils.getCurrentUser() ;
       Calendar cal = calService.getUserCalendar(username, addEdit.calendarId_) ;
       OrganizationService organizationService = 
-        (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
-      if (resiceUser.contains(Utils.SLASH)) {
+          (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+
+      if (removedUsers.contains(Utils.SLASH)) {
+        JobSchedulerServiceImpl  schedulerService = (JobSchedulerServiceImpl)PortalContainer.getComponent(JobSchedulerService.class) ;
+        if(calService.isGroupBeingShared(removedUsers,schedulerService)) {
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("Unshare.beingshared.message",null)) ;
+
+          return;
+        }
+
         List<String> newViewPerms = new ArrayList<String>() ;
         for(String s : cal.getViewPermission()) {
-          if(!s.equals(resiceUser)) {
+          if(!s.equals(removedUsers)) {
             newViewPerms.add(s) ;
           }
         }
         cal.setViewPermission(newViewPerms.toArray(new String[newViewPerms.size()])) ;
+        
         if(cal.getEditPermission() != null) {
           List<String> newEditPerms = new ArrayList<String>() ;
           for(String s : cal.getEditPermission()) {
-            if(!s.equals(resiceUser)) {
+            if(!s.equals(removedUsers)) {
               newEditPerms.add(s) ;
             }
           }
           cal.setEditPermission(newEditPerms.toArray(new String[newEditPerms.size()])) ;
         }
-        List<String> viewUsers = new ArrayList<String>() ;
-        if (cal.getViewPermission() != null) {
-          viewUsers = Arrays.asList(cal.getViewPermission()) ;
-        }
-        for (User user : organizationService.getUserHandler().findUsersByGroup(resiceUser).getAll()) {
-          String userId = user.getUserName();
-          boolean deleteShared = true ;
-          if (!viewUsers.contains(userId)) {
-            Object[] groups = organizationService.getGroupHandler().findGroupsOfUser(userId).toArray() ;
-            for (Object object : groups) {
-              if (Arrays.asList(cal.getViewPermission()).contains(((Group)object).getId())) {
-                deleteShared = false ;
-                break ;
-              }               
-            }
-            if (deleteShared) {
-              calService.removeSharedCalendar(userId, addEdit.calendarId_) ;
-            }
-          }
-        }        
+        
+        calService.removeSharedCalendarByJob(username, removedUsers, addEdit.calendarId_);   
+        
       } else {
         if(cal.getViewPermission() != null) {
           List<String> newPerms = new ArrayList<String>() ;
           for(String s : cal.getViewPermission()) {
-            if(!s.equals(resiceUser)) {
+            if(!s.equals(removedUsers)) {
               newPerms.add(s) ;
             }
           }
@@ -197,14 +193,14 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
         if(cal.getEditPermission() != null) {
           List<String> newPerms = new ArrayList<String>() ;
           for(String s : cal.getEditPermission()) {
-            if(!s.equals(resiceUser)) {
+            if(!s.equals(removedUsers)) {
               newPerms.add(s) ;
             }
           }
           cal.setEditPermission(newPerms.toArray(new String[newPerms.size()])) ;
         }        
         boolean deleteShared = true ;
-        Object[] groups = organizationService.getGroupHandler().findGroupsOfUser(resiceUser).toArray() ;
+        Object[] groups = organizationService.getGroupHandler().findGroupsOfUser(removedUsers).toArray() ;
         for (Object object : groups) {
           if (Arrays.asList(cal.getViewPermission()).contains(((Group)object).getId())) {
             deleteShared = false ;
@@ -212,7 +208,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
           }               
         } 
         if (deleteShared) {
-          calService.removeSharedCalendar(resiceUser, addEdit.calendarId_) ;
+          calService.removeSharedCalendar(removedUsers, addEdit.calendarId_) ;
         }
       }      
       calService.saveUserCalendar(username, cal, false) ;
@@ -221,7 +217,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
       event.getRequestContext().addUIComponentToUpdateByAjax(addEdit.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UICalendars.class)) ;
     }
   }
-  
+
   static public class UserDataComparator implements Comparator{
     public int compare(Object o1, Object o2) throws ClassCastException {
       String name1 = ((data) o1).getViewPermission() ;

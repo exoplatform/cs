@@ -343,6 +343,57 @@ public class Utils {
   public static final String RESOURCEBUNDLE_NAME        = "locale.portlet.calendar.CalendarPortlet";
 
   public static int          EVENT_NUMBER               = -1;
+  
+  //constants for sharing and deleting job
+  public static final String SHARE_CALENDAR_GROUP = "CS-ShareCalenar";
+  
+  public static final String DELETE_SHARED_GROUP = "CS-DeleteShare";
+
+  public static final String SHARED_GROUPS        = "sharedGroups";
+
+  public static final String USER_NAME            = "userName";
+
+  public static final String CALENDAR_ID          = "calendarId";
+
+  public static final String JCR_DATA_STORAGE     = "JCRDataStorage";
+
+  public static final String START_SHARE_ID       = "StartToShare";
+
+  public static final String FINISH_SHARE_ID      = "FinishToShare";
+
+  public static final String STILL_SHARE_ID       = "StillToShare";
+
+  public static final String SHARE_CAL_CHANEL     = "/eXo/Application/Calendar/notifyShareCalendar";
+  
+  public static final String START_DELETE_ID = "StartDeleting";
+  
+  public static final String STILL_DELETE_ID = "StillDeleting";
+
+  public static final String FINISH_DELETE_ID = "FinishDeleting";
+  
+  public static final String REMOVED_USERS = "removedUsers";
+  
+  public static final String START_MESSAGE = "startMessage";
+  
+  public static final String STOP_MESSAGE = "stopMessage";
+  
+  public static final String ERROR_MESSAGE = "errorMessage";
+  
+  public static final String   START_SHARE_CALENDAR_JOB_KEY  = "ShareCalendarJob.start_share_job";
+  
+  public static final String   FINISH_SHARE_CALENDAR_JOB_KEY = "ShareCalendarJob.finish_share_job";
+  
+  public static final String   STILL_SHARE_CALENDAR_JOB_KEY  = "ShareCalendarJob.is_still_running";
+  
+  public static final String ERROR_SHARE_CALENDAR_JOB_KEY = "ShareCalendarJob.error";
+  //constants for deleting job
+  public static final String START_DELETING_CALENDAR_JOB_KEY = "DeleteShareJob.start_deleting";
+  
+  public static final String FINISH_DELETING_CALENDAR_JOB_KEY = "DeleteShareJob.finish_deleting";
+  
+  public static final String STILL_DELETING_CALENDAR_JOB_KEY = "DeleteShareJob.still_deleting";
+  
+  public static final String ERROR_DELETING_CALENDAR_JOB_KEY = "DeleteShareJob.error";
 
   /**
    * These constants were used to determine synchronization period of remote calendar

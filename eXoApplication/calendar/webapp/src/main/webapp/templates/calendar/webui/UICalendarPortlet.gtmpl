@@ -68,11 +68,7 @@
               <div class="BCPopupNotification"><span></span></div>
             </div>
           </div>
-          <div class="ShareCalendarResourceBundle">
-            <div id="StartToShare"><%=CalendarUtils.getResourceBundle(CalendarUtils.START_SHARE_CALENDAR_JOB_KEY, "")%></div>
-            <div id="FinishToShare"><%=CalendarUtils.getResourceBundle(CalendarUtils.FINISH_SHARE_CALENDAR_JOB_KEY, "")%></div>
-            <div id="StillToShare"><%=CalendarUtils.getResourceBundle(CalendarUtils.STILL_SHARE_CALENDAR_JOB_KEY, "")%></div>
-          </div>
+          
         </div>
       </div>
     <%

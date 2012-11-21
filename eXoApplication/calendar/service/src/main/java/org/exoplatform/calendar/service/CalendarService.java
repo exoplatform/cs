@@ -18,6 +18,7 @@ package org.exoplatform.calendar.service;
 
 import org.exoplatform.calendar.service.impl.CalendarEventListener;
 import org.exoplatform.services.scheduler.JobSchedulerService;
+import org.exoplatform.services.scheduler.impl.JobSchedulerServiceImpl;
 import org.quartz.JobDetail;
 
 import java.util.LinkedHashMap;
@@ -459,7 +460,7 @@ public interface CalendarService {
    * @param receiverUsers List receive user username or id
    * @throws Exception
    */
-  public boolean shareCalendarByRunJob(String username, String calendarId, List<String> receiverUsers) throws Exception;
+  public void shareCalendarByRunJob(String username, String calendarId, List<String> sharedGroups) throws Exception;
 
   /**
    * The method gets all shared calendars of the current user
@@ -491,6 +492,13 @@ public interface CalendarService {
    */
   public void removeSharedCalendar(String username, String calendarId) throws Exception;
   
+  /**
+   * removes shared calendar by job
+   * @param username current user name(or user id)
+   * @param calendarId given calendar id
+   * @throws Exception
+   */
+  public void removeSharedCalendarByJob(String username, String removedUsers, String calendarId) throws Exception;
   /**
    * This method removes the shared calendar folder of this user and all references (from shared calendars) to this folder.   
    * @param username the username
@@ -797,4 +805,7 @@ public interface CalendarService {
   public void autoShareCalendar(List<String> groupsOfUser, String reciever) throws Exception;
 
   public void autoRemoveShareCalendar(String groupId, String username) throws Exception;  
+  
+  public boolean isGroupBeingShared(String deletedGroup, JobSchedulerServiceImpl schedulerService_) throws Exception;
+
 }

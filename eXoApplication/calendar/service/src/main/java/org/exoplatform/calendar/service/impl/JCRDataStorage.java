@@ -4318,6 +4318,7 @@ public class JCRDataStorage implements DataStorage {
     }
   }
   
+ 
   public void removeSharedCalendarFolder(String username) throws Exception {
     Node sharedCalendarHome = getSharedCalendarHome();
     if (sharedCalendarHome.hasNode(username)) {
