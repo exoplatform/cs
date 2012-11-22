@@ -234,6 +234,29 @@ UIJoinRoomPopupWindow.prototype.joinSelectedRoomAction = function(obj) {
 	    }
 	  }*/
 	};
+
+	/* Encoding sensitive username to bypass the limitation in only insensitive username of Openfire */
+	function encodeUserName(username) {
+		if (username == null) {
+			return "";
+    }	
+		var lusername = username.toLowerCase();
+    if (username==lusername) {
+					return username;		      
+		}
+		var result = "";
+		for (var i = 0; i < username.length; i++) {
+			var c = username.charAt(i);
+			var lc = lusername.charAt(i);
+      if (c == lc) {
+				result+=c;
+			} else {
+				result+="s220w748s8xn3btua";
+				result+=lc;
+			}
+    }		
+		return result;
+	};
 	
 	UIJoinRoomPopupWindow.prototype.joinSelectedRoomByIdAction = function(event) {
 		event = event || window.event;
@@ -246,17 +269,15 @@ UIJoinRoomPopupWindow.prototype.joinSelectedRoomAction = function(obj) {
       for (var i=0; i<joinedRooms.length; i++) {
         var joinedRoomInfo = joinedRooms[i];
         if (joinedRoomInfo.roomInfo.room == roomId) {
-        	//
         	var isThisUserJoined = false;
         	var roomOccupantsList = joinedRoomInfo.occupants;
 		  		for(var j=0; j<roomOccupantsList.length; j++){
 		  			var occupant = roomOccupantsList[j];
-		  			if(occupant.jid.indexOf(userName)==0){
+		  			if(occupant.jid.indexOf(encodeUserName(userName))==0){
 		  				isThisUserJoined = true;
 		  				break;
 		  			}
 		  		}
-		  		//
         	if(isThisUserJoined){
         		var uiTabControlObj = this.UIMainChatWindow.UIChatWindow.createNewTab(joinedRoomInfo.roomInfo.room, true); 
         				uiTabControlObj.roomConfigured = true;
