@@ -3,6 +3,7 @@
   import org.exoplatform.calendar.webui.UICalendarWorkingContainer ;
   import org.exoplatform.calendar.webui.popup.UIPopupAction ;
   import org.exoplatform.calendar.service.CalendarSetting;
+  import org.exoplatform.calendar.CalendarUtils;
   try {
     def rcontext = _ctx.getRequestContext() ;
     rcontext.getJavascriptManager().addJavascript('eXo.calendar.restContext = "'+ uicomponent.getRestContextName() +'" ;') ;
@@ -67,6 +68,7 @@
               <div class="BCPopupNotification"><span></span></div>
             </div>
           </div>
+          
         </div>
       </div>
     <%

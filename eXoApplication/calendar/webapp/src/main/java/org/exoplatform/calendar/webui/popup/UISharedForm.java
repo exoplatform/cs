@@ -27,8 +27,11 @@ import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendars;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.scheduler.JobSchedulerService;
+import org.exoplatform.services.scheduler.impl.JobSchedulerServiceImpl;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
@@ -221,7 +224,8 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
           }
         }
         for(String u : receiverUsers) {
-          if(perms.get(u) == null) newUsers.add(u) ; 
+          if(perms.get(u) == null) 
+            newUsers.add(u) ; 
           perms.put(u, String.valueOf(uiForm.canEdit())) ;
         }
         for (String newUser : newUsers) {
@@ -234,45 +238,50 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         }
         cal.setEditPermission(tempList.toArray(new String[tempList.size()])) ;
       }
-      
+      sharedUsers.remove(username);
+      calendarService.shareCalendar(username, uiForm.calendarId_, Arrays.asList(sharedUsers.keySet().toArray(new String[sharedUsers.keySet().size()]))) ;      
+
       if (!CalendarUtils.isEmpty(groups)) {
+        List<String> sharedGroups = new ArrayList<String>();
+//        sharedGroups = Arrays.asList(groups.split(CalendarUtils.COMMA));
         StringBuffer sb = new StringBuffer() ;
         for(String name : Arrays.asList(groups.split(CalendarUtils.COMMA))) {
           name = name.trim();
-          if( oService.getGroupHandler().findGroupById(name) != null) {
-            for (User user : oService.getUserHandler().findUsersByGroup(name.trim()).getAll()) {
-              String userId = user.getUserName();
-              sharedUsers.put(userId, userId);
-            }
-          } else{
-            sb.append(name) ;
-            sb.append(CalendarUtils.COMMA) ;
+          if(oService.getGroupHandler().findGroupById(name) != null) {
+            sharedGroups.add(name);
+          } else {
+            sb.append(name);
+            sb.append(CalendarUtils.COMMA);
           }
         }
         if(sb.length() > 0) {
           event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UISharedForm.msg.not-foundgroup", new Object[]{sb.toString()}, 1)) ;
           return ;
         }
-        sharedUsers.remove(username);
+        
         Map<String, String> perms = new HashMap<String, String>() ;
         if(cal.getViewPermission() != null) {
           for(String v : cal.getViewPermission()) {
             perms.put(v,String.valueOf(cal.getEditPermission() != null && Arrays.asList(cal.getEditPermission()).contains(v))) ;
           }
         }
-        for(String groupId : groups.split(CalendarUtils.COMMA)) { 
+        for(String groupId : sharedGroups) { 
           perms.put(groupId, String.valueOf(uiForm.canEdit())) ;
         }
         cal.setViewPermission(perms.keySet().toArray(new String[perms.keySet().size()])) ;
         List<String> tempList = new ArrayList<String>() ;
         for(String v : perms.keySet()) {
-          if(Boolean.parseBoolean(perms.get(v))) tempList.add(v) ;       
+          if(Boolean.parseBoolean(perms.get(v))) 
+            tempList.add(v) ;       
         }
+        
         cal.setEditPermission(tempList.toArray(new String[tempList.size()])) ;
+        
+        calendarService.shareCalendarByRunJob(username, uiForm.calendarId_, sharedGroups);
       }
       
       calendarService.saveUserCalendar(username, cal, false) ;
-      calendarService.shareCalendar(username, uiForm.calendarId_, Arrays.asList(sharedUsers.keySet().toArray(new String[sharedUsers.keySet().size()]))) ;      
+
       UIAddEditPermission uiAddEdit = uiForm.getParent() ;
       uiAddEdit.updateGrid(cal, uiAddEdit.getCurrentPage());
       uiForm.setCanEdit(false) ;

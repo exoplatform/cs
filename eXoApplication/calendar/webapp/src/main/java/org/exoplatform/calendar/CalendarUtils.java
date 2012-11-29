@@ -84,7 +84,7 @@ import org.exoplatform.ws.frameworks.cometd.ContinuationService;
  */
 
 public class CalendarUtils {
-
+  
   public static final String PRIVATE_CALENDARS = "privateCalendar".intern();
   public static final String SHARED_CALENDARS = "sharedCalendar".intern();
   public static final String PUBLIC_CALENDARS = "publicCalendar".intern();

@@ -160,6 +160,7 @@ public class JCRDataStorage implements DataStorage {
     groupCalendarCache_ = cservice.getCacheInstance("cs.calendar.service.GroupCalendarCache");
   }
   
+  
   /**
    * Gives the lock related to the given type and given id
    * @param type the type of the object for which we want a lock
@@ -4317,6 +4318,7 @@ public class JCRDataStorage implements DataStorage {
     }
   }
   
+ 
   public void removeSharedCalendarFolder(String username) throws Exception {
     Node sharedCalendarHome = getSharedCalendarHome();
     if (sharedCalendarHome.hasNode(username)) {

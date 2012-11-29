@@ -1360,5 +1360,10 @@
       <feedName_existed>Tên này đã tồn tại. Hãy chọn một tên khác.</feedName_existed>
     </msg>
   </UIEditFeed>
+  <ShareCalendarJob>
+  	<is_still_running>Chia sẻ lịch đang chạy</is_still_running>
+  	<start_share_job>Bắt đầu chia sẻ lịch</start_share_job>
+  	<finish_share_job>Kết thúc chia sẻ lịch</finish_share_job>
+  </ShareCalendarJob>
 </bundle>
 
