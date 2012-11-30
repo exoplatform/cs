@@ -23,6 +23,7 @@ import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.CalendarUpdateEventListener;
+import org.exoplatform.calendar.service.DeleteShareJob;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventPageList;
 import org.exoplatform.calendar.service.EventQuery;
@@ -31,11 +32,13 @@ import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.RemoteCalendar;
 import org.exoplatform.calendar.service.RemoteCalendarService;
 import org.exoplatform.calendar.service.RssData;
+import org.exoplatform.calendar.service.ShareCalendarJob;
 import org.exoplatform.calendar.service.SynchronizeRemoteCalendarJob;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.commons.utils.ExoProperties;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -46,11 +49,16 @@ import org.exoplatform.services.resources.ResourceBundleService;
 import org.exoplatform.services.scheduler.JobInfo;
 import org.exoplatform.services.scheduler.JobSchedulerService;
 import org.exoplatform.services.scheduler.PeriodInfo;
+import org.exoplatform.services.scheduler.impl.JobSchedulerServiceImpl;
+import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 import org.picocontainer.Startable;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
+import org.quartz.JobExecutionContext;
+import org.quartz.SimpleTrigger;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -808,4 +816,90 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     storage_.autoRemoveShareCalendar(groupId, username);
   }
 
+//@since CS-5722 Add jobs for sharing and unsharing calendar with group
+  /**
+   * {@inheritDoc}
+   */
+  public void shareCalendarByRunJob(String username, String calendarId, List<String> sharedGroups) throws Exception{
+    JobSchedulerServiceImpl  schedulerService = (JobSchedulerServiceImpl)ExoContainerContext.getCurrentContainer().getComponentInstance(JobSchedulerService.class) ;
+    ContinuationService continuation = (ContinuationService) PortalContainer.getInstance()
+        .getComponentInstanceOfType(ContinuationService.class);
+    
+    JobInfo jobInfo = new JobInfo(sharedGroups.toString(),Utils.SHARE_CALENDAR_GROUP, ShareCalendarJob.class);
+    List<String> newSharedGroups = new ArrayList<String>();
+    //check if a group is being shared, remove it from the job
+    for(String group : sharedGroups) {
+      if(!isGroupBeingShared(group, schedulerService)) {
+        newSharedGroups.add(group);
+      }
+    }
+    if(newSharedGroups.size() > 0) {
+      ResourceBundle rb = getResourceBundle();
+
+      String startMessage = String.format(rb.getString(Utils.START_SHARE_CALENDAR_JOB_KEY),sharedGroups.toString());
+      continuation.sendMessage(username, Utils.SHARE_CAL_CHANEL,startMessage);
+
+      String stopMessage = String.format(rb.getString(Utils.FINISH_SHARE_CALENDAR_JOB_KEY),sharedGroups.toString());
+      String errorMessage = String.format(rb.getString(Utils.ERROR_SHARE_CALENDAR_JOB_KEY),sharedGroups.toString());
+
+      SimpleTrigger trigger = new SimpleTrigger(jobInfo.getJobName(), jobInfo.getGroupName(), new Date());
+      JobDetail job = new JobDetail(jobInfo.getJobName(), jobInfo.getGroupName(), jobInfo.getJob());
+      job.setDescription(jobInfo.getDescription());
+      job.getJobDataMap().put(Utils.SHARED_GROUPS, newSharedGroups);
+      job.getJobDataMap().put(Utils.USER_NAME, username);
+      job.getJobDataMap().put(Utils.CALENDAR_ID, calendarId);
+      job.getJobDataMap().put(Utils.JCR_DATA_STORAGE, storage_);
+      job.getJobDataMap().put(Utils.STOP_MESSAGE, stopMessage);
+      job.getJobDataMap().put(Utils.ERROR_MESSAGE, errorMessage);
+
+      schedulerService.addJob(job, trigger);
+    }
+    
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void removeSharedCalendarByJob(String username, String removedUsers, String calendarId) throws Exception {
+    JobSchedulerServiceImpl  schedulerService_ = (JobSchedulerServiceImpl)ExoContainerContext.getCurrentContainer().getComponentInstance(JobSchedulerService.class) ;
+    ContinuationService continuation = (ContinuationService) PortalContainer.getInstance()
+        .getComponentInstanceOfType(ContinuationService.class);
+    
+    JobInfo jobInfo = new JobInfo(removedUsers, Utils.DELETE_SHARED_GROUP, DeleteShareJob.class);
+    
+    ResourceBundle rb = getResourceBundle();
+    
+    String startMessage = String.format(rb.getString(Utils.START_DELETING_CALENDAR_JOB_KEY),removedUsers);
+    continuation.sendMessage(username,Utils.SHARE_CAL_CHANEL,startMessage);
+    
+    String stopMessage = String.format(rb.getString(Utils.FINISH_DELETING_CALENDAR_JOB_KEY),removedUsers);
+    String errorMessage = String.format(rb.getString(Utils.ERROR_DELETING_CALENDAR_JOB_KEY),removedUsers);
+    SimpleTrigger trigger = new SimpleTrigger(jobInfo.getJobName(), jobInfo.getGroupName(), new Date());
+    
+    JobDetail job = new JobDetail(jobInfo.getJobName(), jobInfo.getGroupName(), jobInfo.getJob());
+    job.setDescription(jobInfo.getDescription());
+    job.getJobDataMap().put(Utils.USER_NAME, username);
+    job.getJobDataMap().put(Utils.REMOVED_USERS,removedUsers);
+    job.getJobDataMap().put(Utils.CALENDAR_ID, calendarId);
+    job.getJobDataMap().put(Utils.STOP_MESSAGE, stopMessage);
+    job.getJobDataMap().put(Utils.ERROR_MESSAGE, errorMessage);
+    
+    schedulerService_.addJob(job, trigger);
+  }  
+
+  public boolean isGroupBeingShared(String deletedGroup, JobSchedulerServiceImpl schedulerService_) throws Exception {
+    List<?> list = schedulerService_.getAllExcutingJobs();
+
+    for (Object obj : list) {
+      JobExecutionContext jec = (JobExecutionContext) obj;
+      JobDetail tmp = jec.getJobDetail();
+      if (tmp.getGroup().equals(Utils.SHARE_CALENDAR_GROUP)) {
+        List<String> sharedGroups = (List<String>) tmp.getJobDataMap().get(Utils.SHARED_GROUPS);
+        if(sharedGroups.contains(deletedGroup)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
 }

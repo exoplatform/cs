@@ -37,6 +37,9 @@ import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.scheduler.JobSchedulerService;
+import org.exoplatform.services.scheduler.impl.JobSchedulerServiceImpl;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -141,54 +144,45 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
   static public class DeleteActionListener extends EventListener<UIAddEditPermission> {
     public void execute(Event<UIAddEditPermission> event) throws Exception {
       UIAddEditPermission addEdit = event.getSource();
-      String resiceUser = event.getRequestContext().getRequestParameter(OBJECTID);
+      String removedUsers = event.getRequestContext().getRequestParameter(OBJECTID);
       CalendarService calService = CalendarUtils.getCalendarService() ;
       String username = CalendarUtils.getCurrentUser() ;
       Calendar cal = calService.getUserCalendar(username, addEdit.calendarId_) ;
       OrganizationService organizationService = 
-        (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
-      if (resiceUser.contains(Utils.SLASH)) {
+          (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+      
+      if (removedUsers.contains(Utils.SLASH)) {//unshare with a group
+        JobSchedulerServiceImpl  schedulerService = (JobSchedulerServiceImpl)PortalContainer.getComponent(JobSchedulerService.class) ;
+        if(calService.isGroupBeingShared(removedUsers,schedulerService)) {
+          event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("Unshare.beingshared.message",null)) ;
+          return;
+        }
+
         List<String> newViewPerms = new ArrayList<String>() ;
         for(String s : cal.getViewPermission()) {
-          if(!s.equals(resiceUser)) {
+          if(!s.equals(removedUsers)) {
             newViewPerms.add(s) ;
           }
         }
         cal.setViewPermission(newViewPerms.toArray(new String[newViewPerms.size()])) ;
+
         if(cal.getEditPermission() != null) {
           List<String> newEditPerms = new ArrayList<String>() ;
           for(String s : cal.getEditPermission()) {
-            if(!s.equals(resiceUser)) {
+            if(!s.equals(removedUsers)) {
               newEditPerms.add(s) ;
             }
           }
           cal.setEditPermission(newEditPerms.toArray(new String[newEditPerms.size()])) ;
         }
-        List<String> viewUsers = new ArrayList<String>() ;
-        if (cal.getViewPermission() != null) {
-          viewUsers = Arrays.asList(cal.getViewPermission()) ;
-        }
-        for (User user : organizationService.getUserHandler().findUsersByGroup(resiceUser).getAll()) {
-          String userId = user.getUserName();
-          boolean deleteShared = true ;
-          if (!viewUsers.contains(userId)) {
-            Object[] groups = organizationService.getGroupHandler().findGroupsOfUser(userId).toArray() ;
-            for (Object object : groups) {
-              if (Arrays.asList(cal.getViewPermission()).contains(((Group)object).getId())) {
-                deleteShared = false ;
-                break ;
-              }               
-            }
-            if (deleteShared) {
-              calService.removeSharedCalendar(userId, addEdit.calendarId_) ;
-            }
-          }
-        }        
+
+        calService.removeSharedCalendarByJob(username, removedUsers, addEdit.calendarId_);   
+
       } else {
         if(cal.getViewPermission() != null) {
           List<String> newPerms = new ArrayList<String>() ;
           for(String s : cal.getViewPermission()) {
-            if(!s.equals(resiceUser)) {
+            if(!s.equals(removedUsers)) {
               newPerms.add(s) ;
             }
           }
@@ -197,14 +191,14 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
         if(cal.getEditPermission() != null) {
           List<String> newPerms = new ArrayList<String>() ;
           for(String s : cal.getEditPermission()) {
-            if(!s.equals(resiceUser)) {
+            if(!s.equals(removedUsers)) {
               newPerms.add(s) ;
             }
           }
           cal.setEditPermission(newPerms.toArray(new String[newPerms.size()])) ;
         }        
         boolean deleteShared = true ;
-        Object[] groups = organizationService.getGroupHandler().findGroupsOfUser(resiceUser).toArray() ;
+        Object[] groups = organizationService.getGroupHandler().findGroupsOfUser(removedUsers).toArray() ;
         for (Object object : groups) {
           if (Arrays.asList(cal.getViewPermission()).contains(((Group)object).getId())) {
             deleteShared = false ;
@@ -212,7 +206,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
           }               
         } 
         if (deleteShared) {
-          calService.removeSharedCalendar(resiceUser, addEdit.calendarId_) ;
+          calService.removeSharedCalendar(removedUsers, addEdit.calendarId_) ;
         }
       }      
       calService.saveUserCalendar(username, cal, false) ;

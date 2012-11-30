@@ -49,6 +49,7 @@ import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.scheduler.JobSchedulerService;
+import org.exoplatform.services.scheduler.impl.JobSchedulerServiceImpl;
 import org.quartz.JobDetail;
 
 /**
@@ -636,5 +637,18 @@ public class MockCalendarService implements CalendarService{
 
   public void autoRemoveShareCalendar(String groupId, String username)
 	throws Exception {
+  }
+
+  @Override
+  public void shareCalendarByRunJob(String username, String calendarId, List<String> sharedGroups) throws Exception {
+  }
+
+  @Override
+  public void removeSharedCalendarByJob(String username, String removedUsers, String calendarId) throws Exception {
+  }
+
+  @Override
+  public boolean isGroupBeingShared(String deletedGroup, JobSchedulerServiceImpl schedulerService_) throws Exception {
+    return false;
   }
 }

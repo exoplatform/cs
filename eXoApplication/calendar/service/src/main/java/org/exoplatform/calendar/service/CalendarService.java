@@ -18,6 +18,7 @@ package org.exoplatform.calendar.service;
 
 import org.exoplatform.calendar.service.impl.CalendarEventListener;
 import org.exoplatform.services.scheduler.JobSchedulerService;
+import org.exoplatform.services.scheduler.impl.JobSchedulerServiceImpl;
 import org.quartz.JobDetail;
 
 import java.util.LinkedHashMap;
@@ -788,4 +789,35 @@ public interface CalendarService {
   public void autoShareCalendar(List<String> groupsOfUser, String reciever) throws Exception;
 
   public void autoRemoveShareCalendar(String groupId, String username) throws Exception;  
+  
+  /**
+   * sharing a calendar with a group will run in background
+   * @since CS-5722
+   * @param username
+   * @param calendarId
+   * @param sharedGroups
+   * @throws Exception
+   */
+  public void shareCalendarByRunJob(String username, String calendarId, List<String> sharedGroups) throws Exception;
+
+  /**
+   * unsharing a calendar with a group will run in background
+   * @since CS-5722
+   * @param username
+   * @param removedUsers
+   * @param calendarId
+   * @throws Exception
+   */
+  public void removeSharedCalendarByJob(String username, String removedUsers, String calendarId) throws Exception;
+
+  /**
+   * checks if a group is belong to a list of groups that's being shared
+   * @since CS-5722
+   * @param deletedGroup
+   * @param schedulerService_
+   * @return
+   * @throws Exception
+   */
+  public boolean isGroupBeingShared(String deletedGroup, JobSchedulerServiceImpl schedulerService_) throws Exception;
+
 }
