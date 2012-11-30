@@ -3,26 +3,43 @@ function Reminder() {
 } ;
 
 Reminder.prototype.init = function(eXoUser, eXoToken, cometdContextName){
-	if(!eXo.cs.CSCometd) eXo.cs.CSCometd = eXo.core.Cometd;
-	eXo.cs.CSCometd.exoId = eXoUser;
-	eXo.cs.CSCometd.exoToken = eXoToken;
-	if(cometdContextName)
-		eXo.cs.CSCometd.url = '/' + cometdContextName + '/cometd';
-	eXo.cs.CSCometd.subscribe('/eXo/Application/Calendar/messages', function(eventObj) {		
-		eXo.calendar.Reminder.alarm(eventObj) ;
-  });
-  //eXo.cs.CSCometd.addOnConnectionReadyCallback(this.initCometd);
-	if (!eXo.cs.CSCometd.isConnected()) {
-		eXo.cs.CSCometd.init();
-  }
+    if(!eXo.cs.CSCometd) eXo.cs.CSCometd = eXo.core.Cometd;
+    eXo.cs.CSCometd.exoId = eXoUser;
+    eXo.cs.CSCometd.exoToken = eXoToken;
+    if(cometdContextName)
+	eXo.cs.CSCometd.url = '/' + cometdContextName + '/cometd';
+    eXo.cs.CSCometd.subscribe('/eXo/Application/Calendar/messages', function(eventObj) {		
+	eXo.calendar.Reminder.alarm(eventObj) ;
+    });
+    eXo.cs.CSCometd.subscribe('/eXo/Application/Calendar/notifyShareCalendar',
+	    function(eventObj) {
+	eXo.calendar.Reminder.notifyShareCalendar(eventObj);
+    });
+    //eXo.cs.CSCometd.addOnConnectionReadyCallback(this.initCometd);
+    if (!eXo.cs.CSCometd.isConnected()) {
+	eXo.cs.CSCometd.init();
+    }
 } ;
 
 Reminder.prototype.initCometd = function() {
-	eXo.cs.CSCometd.subscribe('/eXo/Application/Calendar/messages', function(eventObj) {		
-		eXo.calendar.Reminder.alarm(eventObj) ;
-  });
+    eXo.cs.CSCometd.subscribe('/eXo/Application/Calendar/messages', function(eventObj) {		
+	eXo.calendar.Reminder.alarm(eventObj) ;
+    });
+    eXo.cs.CSCometd.subscribe('/eXo/Application/Calendar/notifyShareCalendar',
+	    function(eventObj) {
+	eXo.calendar.Reminder.notifyShareCalendar(eventObj);
+    });
 }
 
+// @since CS-5722 popup notification for calendar sharing and unsharing job 
+Reminder.prototype.notifyShareCalendar = function(eventObj){
+	var message = eventObj.data;
+	var html = this.generateHTML(message) ;
+	var popup = eXo.core.DOMUtil.findFirstDescendantByClass(this.createMessage(html, message), "div","UIPopupNotification") ;
+	eXo.webui.Box.config(popup,popup.offsetHeight, 5, this.openCallback, this.closeBox) ;
+	window.focus() ;
+	return ;
+} ;
 Reminder.prototype.alarm = function(eventObj){
 	var a = eXo.core.JSON.parse(eventObj.data);	
 	var message = '<a class="Item" href="#">' + a.description + '</a>'; 

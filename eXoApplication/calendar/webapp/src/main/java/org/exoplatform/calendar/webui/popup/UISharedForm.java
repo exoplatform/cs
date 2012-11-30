@@ -177,7 +177,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       UISharedForm uiForm = event.getSource() ;
       String names = uiForm.getUIStringInput(UISharedTab.FIELD_USER).getValue() ;
       String groups = uiForm.getUIStringInput(UISharedTab.FIELD_GROUP).getValue() ;
-      
+
       if(CalendarUtils.isEmpty(names) && CalendarUtils.isEmpty(groups)) {
         event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UISharedForm.msg.required", null)) ;
         return ;
@@ -187,7 +187,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       String username = CalendarUtils.getCurrentUser() ;
       Calendar cal = calendarService.getUserCalendar(username, uiForm.calendarId_) ;
       Map<String, String> sharedUsers  = new HashMap<String, String>() ;
-      
+
       if (!CalendarUtils.isEmpty(names)) {
         List<String> newUsers = new ArrayList<String>();
         List<String> receiverUsers  = new ArrayList<String>() ;
@@ -204,10 +204,10 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         if(sb.length() > 0) {
           String invalidNames = sb.toString();
           if(invalidNames.split(CalendarUtils.COMMA).length == 1) {
-        	  event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UISharedForm.msg.not-found-user", new Object[]{invalidNames.substring(0, invalidNames.length() - 1)}, 1)) ;	  
+            event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UISharedForm.msg.not-found-user", new Object[]{invalidNames.substring(0, invalidNames.length() - 1)}, 1)) ;   
           } else {
-        	  event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UISharedForm.msg.not-found-users", new Object[]{invalidNames.substring(0, invalidNames.length() - 1)}, 1)) ;
-            }
+            event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UISharedForm.msg.not-found-users", new Object[]{invalidNames.substring(0, invalidNames.length() - 1)}, 1)) ;
+          }
           return ;
         }
         if(receiverUsers.contains(username)) {
@@ -221,7 +221,8 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
           }
         }
         for(String u : receiverUsers) {
-          if(perms.get(u) == null) newUsers.add(u) ; 
+          if(perms.get(u) == null) 
+            newUsers.add(u) ; 
           perms.put(u, String.valueOf(uiForm.canEdit())) ;
         }
         for (String newUser : newUsers) {
@@ -234,45 +235,49 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         }
         cal.setEditPermission(tempList.toArray(new String[tempList.size()])) ;
       }
-      
+      sharedUsers.remove(username);
+      calendarService.shareCalendar(username, uiForm.calendarId_, Arrays.asList(sharedUsers.keySet().toArray(new String[sharedUsers.keySet().size()]))) ;      
+
       if (!CalendarUtils.isEmpty(groups)) {
+        List<String> sharedGroups = new ArrayList<String>();
         StringBuffer sb = new StringBuffer() ;
         for(String name : Arrays.asList(groups.split(CalendarUtils.COMMA))) {
           name = name.trim();
-          if( oService.getGroupHandler().findGroupById(name) != null) {
-            for (User user : oService.getUserHandler().findUsersByGroup(name.trim()).getAll()) {
-              String userId = user.getUserName();
-              sharedUsers.put(userId, userId);
-            }
-          } else{
-            sb.append(name) ;
-            sb.append(CalendarUtils.COMMA) ;
+          if(oService.getGroupHandler().findGroupById(name) != null) {
+            sharedGroups.add(name);
+          } else {
+            sb.append(name);
+            sb.append(CalendarUtils.COMMA);
           }
         }
         if(sb.length() > 0) {
           event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UISharedForm.msg.not-foundgroup", new Object[]{sb.toString()}, 1)) ;
           return ;
         }
-        sharedUsers.remove(username);
+
         Map<String, String> perms = new HashMap<String, String>() ;
         if(cal.getViewPermission() != null) {
           for(String v : cal.getViewPermission()) {
             perms.put(v,String.valueOf(cal.getEditPermission() != null && Arrays.asList(cal.getEditPermission()).contains(v))) ;
           }
         }
-        for(String groupId : groups.split(CalendarUtils.COMMA)) { 
+        for(String groupId : sharedGroups) { 
           perms.put(groupId, String.valueOf(uiForm.canEdit())) ;
         }
         cal.setViewPermission(perms.keySet().toArray(new String[perms.keySet().size()])) ;
         List<String> tempList = new ArrayList<String>() ;
         for(String v : perms.keySet()) {
-          if(Boolean.parseBoolean(perms.get(v))) tempList.add(v) ;       
+          if(Boolean.parseBoolean(perms.get(v))) 
+            tempList.add(v) ;       
         }
+
         cal.setEditPermission(tempList.toArray(new String[tempList.size()])) ;
+
+        calendarService.shareCalendarByRunJob(username, uiForm.calendarId_, sharedGroups);
       }
-      
+
       calendarService.saveUserCalendar(username, cal, false) ;
-      calendarService.shareCalendar(username, uiForm.calendarId_, Arrays.asList(sharedUsers.keySet().toArray(new String[sharedUsers.keySet().size()]))) ;      
+
       UIAddEditPermission uiAddEdit = uiForm.getParent() ;
       uiAddEdit.updateGrid(cal, uiAddEdit.getCurrentPage());
       uiForm.setCanEdit(false) ;
