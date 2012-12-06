@@ -834,14 +834,19 @@ public class CalendarServiceImpl implements CalendarService, Startable {
       }
     }
     if(newSharedGroups.size() > 0) {
+      String startMessage = String.format(Utils.START_SHARE_MESSAGE, sharedGroups.toString());
+      String stopMessage = String.format(Utils.STOP_SHARE_MESSAGE, sharedGroups.toString());
+      String errorMessage = String.format(Utils.ERROR_SHARE_MESSAGE, sharedGroups.toString());
       ResourceBundle rb = getResourceBundle();
+      if(rb!=null) {
+        startMessage = String.format(rb.getString(Utils.START_SHARE_CALENDAR_JOB_KEY),sharedGroups.toString());
 
-      String startMessage = String.format(rb.getString(Utils.START_SHARE_CALENDAR_JOB_KEY),sharedGroups.toString());
+
+        stopMessage = String.format(rb.getString(Utils.FINISH_SHARE_CALENDAR_JOB_KEY),sharedGroups.toString());
+        errorMessage = String.format(rb.getString(Utils.ERROR_SHARE_CALENDAR_JOB_KEY),sharedGroups.toString());
+
+      }
       continuation.sendMessage(username, Utils.SHARE_CAL_CHANEL,startMessage);
-
-      String stopMessage = String.format(rb.getString(Utils.FINISH_SHARE_CALENDAR_JOB_KEY),sharedGroups.toString());
-      String errorMessage = String.format(rb.getString(Utils.ERROR_SHARE_CALENDAR_JOB_KEY),sharedGroups.toString());
-
       SimpleTrigger trigger = new SimpleTrigger(jobInfo.getJobName(), jobInfo.getGroupName(), new Date());
       JobDetail job = new JobDetail(jobInfo.getJobName(), jobInfo.getGroupName(), jobInfo.getJob());
       job.setDescription(jobInfo.getDescription());
@@ -867,13 +872,17 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     
     JobInfo jobInfo = new JobInfo(removedUsers, Utils.DELETE_SHARED_GROUP, DeleteShareJob.class);
     
+    String startMessage = String.format(Utils.START_UN_SHARE_MESSAGE, removedUsers);
+    String stopMessage = String.format(Utils.STOP_UN_SHARE_MESSAGE, removedUsers);
+    String errorMessage = String.format(Utils.ERROR_UN_SHARE_MESSAGE, removedUsers);
+    
     ResourceBundle rb = getResourceBundle();
-    
-    String startMessage = String.format(rb.getString(Utils.START_DELETING_CALENDAR_JOB_KEY),removedUsers);
+    if(rb != null) {
+      startMessage = String.format(rb.getString(Utils.START_DELETING_CALENDAR_JOB_KEY),removedUsers);
+      stopMessage = String.format(rb.getString(Utils.FINISH_DELETING_CALENDAR_JOB_KEY),removedUsers);
+      errorMessage = String.format(rb.getString(Utils.ERROR_DELETING_CALENDAR_JOB_KEY),removedUsers);
+    }
     continuation.sendMessage(username,Utils.SHARE_CAL_CHANEL,startMessage);
-    
-    String stopMessage = String.format(rb.getString(Utils.FINISH_DELETING_CALENDAR_JOB_KEY),removedUsers);
-    String errorMessage = String.format(rb.getString(Utils.ERROR_DELETING_CALENDAR_JOB_KEY),removedUsers);
     SimpleTrigger trigger = new SimpleTrigger(jobInfo.getJobName(), jobInfo.getGroupName(), new Date());
     
     JobDetail job = new JobDetail(jobInfo.getJobName(), jobInfo.getGroupName(), jobInfo.getJob());
