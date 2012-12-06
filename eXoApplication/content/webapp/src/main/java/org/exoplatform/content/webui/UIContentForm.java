@@ -146,10 +146,6 @@ public class UIContentForm extends UIForm {
         s = "http:" + s;
       }
       String[] k = s.split(":");
-      if(k.length > 3) {
-        Object[] args = { uiInput.getName(), uiInput.getBindingField() };
-        throw new MessageException(new ApplicationMessage("URLValidator.msg.Invalid-config", args)) ;
-      }
       for(int i = 0; i < s.length(); i ++){
         char c = s.charAt(i);
         // Tung.Pham modified
