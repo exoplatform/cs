@@ -122,6 +122,8 @@
 /eXoApplication/calendar/service/temp
 /eXoApplication/calendar/service/bin
 /eXoApplication/calendar/service/target
+/eXoApplication/calendar/service/.buildpath
+
 
 # /eXoApplication/calendar/webapp/
 /eXoApplication/calendar/webapp/.settings
@@ -134,6 +136,7 @@
 /eXoApplication/calendar/webapp/temp
 /eXoApplication/calendar/webapp/bin
 /eXoApplication/calendar/webapp/target
+/eXoApplication/calendar/webapp/.buildpath
 
 # /eXoApplication/chat/
 /eXoApplication/chat/.settings
@@ -218,6 +221,7 @@
 /eXoApplication/contact/service/temp
 /eXoApplication/contact/service/bin
 /eXoApplication/contact/service/target
+/eXoApplication/contact/service/.buildpath
 
 # /eXoApplication/contact/webapp/
 /eXoApplication/contact/webapp/.settings
@@ -230,6 +234,7 @@
 /eXoApplication/contact/webapp/temp
 /eXoApplication/contact/webapp/bin
 /eXoApplication/contact/webapp/target
+/eXoApplication/contact/webapp/.buildpath
 
 # /eXoApplication/content/
 /eXoApplication/content/.settings
