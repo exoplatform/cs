@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<buildpath>
-	<buildpathentry external="true" kind="lib" path="/Volumes/STORAGE/java/exo-dependencies/repository/caja/caja/r4251/caja-r4251.jar"/>
-	<buildpathentry external="true" kind="lib" path="/Volumes/STORAGE/java/exo-dependencies/repository/org/exoplatform/portal/exo.portal.gadgets-core/3.2.6-PLF-SNAPSHOT/exo.portal.gadgets-core-3.2.6-PLF-SNAPSHOT.jar"/>
-	<buildpathentry external="true" kind="lib" path="/Volumes/STORAGE/java/exo-dependencies/repository/org/gatein/shindig/shindig-common/2.0.2/shindig-common-2.0.2.jar"/>
-	<buildpathentry external="true" kind="lib" path="/Volumes/STORAGE/java/exo-dependencies/repository/org/gatein/shindig/shindig-features/2.0.2/shindig-features-2.0.2.jar"/>
-	<buildpathentry external="true" kind="lib" path="/Volumes/STORAGE/java/exo-dependencies/repository/org/gatein/shindig/shindig-gadgets/2.0.2/shindig-gadgets-2.0.2.jar"/>
-</buildpath>
