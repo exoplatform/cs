@@ -142,8 +142,7 @@ public class UICalendarPortlet extends UIPortletApplication {
       Space space = sService.getSpaceByUrl(spaceUrl);
       spaceIdStr = space.getPrettyName();
       pContext.setAttribute(SPACE_ID_KEY, spaceIdStr); 
-    }
-    log.info(spaceIdStr);
+    } 
     return spaceIdStr;
   }
   
