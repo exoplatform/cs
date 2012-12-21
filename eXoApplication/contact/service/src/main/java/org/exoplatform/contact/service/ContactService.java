@@ -18,6 +18,7 @@ package org.exoplatform.contact.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.exoplatform.contact.service.impl.ContactEventListener;
 import org.exoplatform.services.organization.User;
@@ -504,4 +505,18 @@ public interface ContactService {
   public void addListenerPlugin(ContactEventListener listener) throws Exception;
 
   public void savePublicAddressBook(AddressBook addressbook, boolean isNew) throws Exception;
+  
+  //CS-5825
+  public List<ContactData> findEmailFromContacts(String userId, ContactFilter filter) throws Exception;
+  
+  //CS-5825
+ /**
+  * find contact email for a particular type of contacts: public, personal or shared
+  * 
+  * @param username 
+  * @param filter filter on a particular category or type of contacts
+  * @param resultLimit number of result we want to return
+  * @param queryState uses queryState to know the position of our last query
+  */
+  public List<ContactData> findNextEmailsForType(String username, ContactFilter filter, int resultLimit, QueryState queryState) throws Exception;
 }

@@ -43,7 +43,7 @@ import org.exoplatform.calendar.webui.UIListContainer;
 import org.exoplatform.calendar.webui.UIListView;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.calendar.webui.UIPreview;
-import org.exoplatform.calendar.webui.popup.UIAddressForm.ContactData;
+import org.exoplatform.contact.service.ContactData;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.OrganizationService;
@@ -739,7 +739,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   }
   
   public static void showAddressForm(UIAddressForm uiAddressForm, String oldAddress) throws Exception {
-    uiAddressForm.setContactList("") ;
+    uiAddressForm.setContactList(uiAddressForm.selectedAddressId_) ;
     List<ContactData> contacts = uiAddressForm.getContactList() ;
     if(!CalendarUtils.isEmpty(oldAddress)) {
       for(String address : oldAddress.split(",")) {

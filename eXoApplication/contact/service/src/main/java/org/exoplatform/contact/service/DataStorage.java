@@ -16,16 +16,15 @@
  */
 package org.exoplatform.contact.service;
 
-import java.util.List;
-import java.util.Map;
+import org.exoplatform.contact.service.impl.AddressBookNotFoundException;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.organization.User;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
-
-import org.exoplatform.contact.service.impl.AddressBookNotFoundException;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.organization.User;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by The eXo Platform SAS
@@ -652,4 +651,25 @@ public interface DataStorage {
   public List<String> getPublicAddresses(String username) throws Exception;
 
   public void savePublicAddressBook(AddressBook addressbook, boolean isNew) throws Exception;
+  
+  /**
+   * this using to searching all contacts with email field to display on page
+   * @param userId
+   * @param filter
+   * @return
+   * @throws Exception
+   */
+  public List<ContactData> findEmailFromContacts(String userId, ContactFilter filter) throws Exception;
+  
+  // CS-5825
+  /**
+   * find contact email for a particular type of contacts: public, personal or shared
+   * 
+   * @param username 
+   * @param filter filter on a particular category or type of contacts
+   * @param resultLimit number of result we want to return
+   * @param queryState uses queryState to know the position of our last query
+   */
+  public List<ContactData> findNextEmailsForType(String username, ContactFilter filter, int resultLimit, QueryState queryState) throws Exception;
 }
+

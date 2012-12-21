@@ -40,10 +40,12 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
+import org.apache.commons.collections.iterators.IteratorChain;
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
+import org.exoplatform.contact.service.ContactData;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.DataPageList;
@@ -63,6 +65,7 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.services.jcr.impl.core.query.QueryImpl;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -71,6 +74,7 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.security.Identity;
+import org.exoplatform.contact.service.QueryState;
 
 /**
  * Created by The eXo Platform SARL
@@ -280,13 +284,28 @@ public class JCRDataStorage implements DataStorage {
       return AddressBookType.Shared;
     }
 
-    AddressBook personal = findPersonalAddressBookById(username, addressBookId);
+    AddressBook personal = getPersonalAddressBookById(username, addressBookId);
     if (personal != null) {
       return AddressBookType.Personal;
+    }
+    
+    return AddressBookType.Public;
+  }
+
+  public AddressBook getPersonalAddressBookById(String username, String addressBookId) throws Exception {
+    Node personalAddressBookNode = getPersonalAddressBooksHome(username);
+    PropertyIterator iter = personalAddressBookNode.getReferences();
+    Node addressBook;
+    while (iter.hasNext()) {
+      addressBook = iter.nextProperty().getParent();
+      if (addressBook.getName().equals(addressBookId)) {
+        return toAddressBook(addressBook);
+      }
     }
     return null;
   }
 
+  
   public AddressBook findPersonalAddressBookById(String username, String addressBookId) {
     throw new UnsupportedOperationException();
   }
@@ -1775,6 +1794,13 @@ public class JCRDataStorage implements DataStorage {
     String emailAddresses = Utils.valuesToString(contactNode.getProperty("exo:emailAddress").getValues());
     emails.put(id, fullName + Utils.SPLIT + emailAddresses);
   }
+  
+  public void feedEmailResult(List<ContactData> emails, Node contactNode) throws Exception {
+	    String id = contactNode.getProperty("exo:id").getString();
+	    String fullName = contactNode.getProperty("exo:fullName").getString();
+	    String emailAddresses = Utils.valuesToString(contactNode.getProperty("exo:emailAddress").getValues());
+	    emails.add(new ContactData(id, fullName,emailAddresses));
+ }
 
   // created by Duy Tu <tu.duy@exoplatform.com>
   public List<String> searchEmailsByFilter(String username, ContactFilter filter) throws Exception {
@@ -2295,7 +2321,6 @@ public class JCRDataStorage implements DataStorage {
   /**
    * {@inheritDoc}
    */
-  @Override
   public Node getContactApplicationDataHome() throws Exception {
     SessionProvider sProvider = createSystemProvider();
     Node applicationDataHome = getNodeByPath(nodeHierarchyCreator_.getPublicApplicationNode(sProvider).getPath(), sProvider);
@@ -2308,7 +2333,6 @@ public class JCRDataStorage implements DataStorage {
     }
   }
 
-  @Override
   public Node getContactUserDataHome(String username) throws Exception {
     SessionProvider sessionProvider = createSystemProvider();
     Node userDataHome = getNodeByPath(nodeHierarchyCreator_.getUserApplicationNode(sessionProvider, username).getPath(),
@@ -2325,7 +2349,6 @@ public class JCRDataStorage implements DataStorage {
   /**
    * {@inheritDoc}
    */
-  @Override
   public Node getPersonalAddressBooksHome(String username) throws Exception {
     Node userDataHome = getContactUserDataHome(username);
     try {
@@ -2340,7 +2363,6 @@ public class JCRDataStorage implements DataStorage {
   /**
    * {@inheritDoc}
    */
-  @Override
   public Node getPersonalContactsHome(String username) throws Exception {
     Node userDataHome = getContactUserDataHome(username);
     try {
@@ -2355,7 +2377,6 @@ public class JCRDataStorage implements DataStorage {
   /**
    * {@inheritDoc}
    */
-  @Override
   public List<GroupContactData> getPublicContacts(String[] groupIds) throws Exception {
     List<GroupContactData> contactByGroup = new ArrayList<GroupContactData>();
     List<Contact> contacts;
@@ -2370,7 +2391,6 @@ public class JCRDataStorage implements DataStorage {
   /**
    * {@inheritDoc}
    */
-  @Override
   public Node getPublicContactsHome() throws Exception {
     Node contactServiceHome = getContactApplicationDataHome();
     try {
@@ -2396,7 +2416,6 @@ public class JCRDataStorage implements DataStorage {
   /**
    * {@inheritDoc}
    */
-  @Override
   public Node getTagsHome(String username) throws Exception {
     Node contactServiceHome = getContactUserDataHome(username);
     try {
@@ -2411,7 +2430,6 @@ public class JCRDataStorage implements DataStorage {
   /**
    * {@inheritDoc}
    */
-  @Override
   public List<String> getUserContactNodesByGroup(String username, String groupId) throws Exception {
 
     Node contactHome = getPersonalContactsHome(username);
@@ -2430,7 +2448,6 @@ public class JCRDataStorage implements DataStorage {
   /**
    * {@inheritDoc}
    */
-  @Override
   public boolean hasContacts(String groupId) throws Exception {
     Node contactHome = getPublicContactsHome();
     QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
@@ -2446,7 +2463,6 @@ public class JCRDataStorage implements DataStorage {
   /**
    * {@inheritDoc}
    */
-  @Override
   public Node getSharedContactsHome(String user) throws Exception {
     Node contactHome = getContactUserDataHome(user);
     Node sharedHome;
@@ -2458,4 +2474,352 @@ public class JCRDataStorage implements DataStorage {
     }
     return sharedHome;
   }
+
+public List<ContactData> findEmailFromContacts(String username, ContactFilter filter) throws Exception {
+  IteratorChain combiner = new IteratorChain() ;
+	Set<ContactData> emails = new HashSet<ContactData>();
+    filter.setUsername(username);
+    filter.setHasEmails(true);
+    QueryManager qm = getContactUserDataHome(username).getSession().getWorkspace().getQueryManager();
+    QueryImpl query;
+    String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH);
+    
+    if (filter.getType() == null || filter.getType().equals(PUBLIC)) {
+      filter.setAccountPath(usersPath);
+      filter.setOwner("true");
+      query = (QueryImpl)qm.createQuery(filter.getStatement(), Query.XPATH);
+      NodeIterator itpublic = query.execute().getNodes();
+      combiner.addIterator(itpublic) ;
+      filter.setOwner(null);
+    }
+    // query personal contacts
+    if (filter.getType() == null || filter.getType().equals(PERSONAL)) {
+      if (username != null && username.length() > 0) {
+        Node contactHome = getPersonalContactsHome(username);
+        filter.setAccountPath(contactHome.getPath());
+        qm = contactHome.getSession().getWorkspace().getQueryManager();
+        query = (QueryImpl)qm.createQuery(filter.getStatement(), Query.XPATH);
+        NodeIterator it = query.execute().getNodes();
+        combiner.addIterator(it) ;
+      }
+    }
+    // query shared contacts
+    if (filter.getType() == null || filter.getType().equals(SHARED)) {
+      try {
+        Node sharedContact = getSharedContact(username);
+        PropertyIterator iter = sharedContact.getReferences();
+        while (iter.hasNext()) {
+          try {
+            Node sharedContactHomeNode = iter.nextProperty().getParent().getParent();
+            filter.setAccountPath(sharedContactHomeNode.getPath());
+            String split = "/";
+            String temp = sharedContactHomeNode.getPath().split(usersPath)[1];
+            String userId = temp.split(split)[1];
+            filter.setUsername(userId);
+            qm = sharedContactHomeNode.getSession().getWorkspace().getQueryManager();
+            query = (QueryImpl)qm.createQuery(filter.getStatement(), Query.XPATH);
+            NodeIterator it = query.execute().getNodes();
+            combiner.addIterator(it) ;
+          } catch (Exception e) {
+            if (log.isDebugEnabled()) {
+              log.debug("Exception in method findEmailsByFilter", e);
+            }
+          }
+        }
+      } catch (PathNotFoundException e) {
+        if (log.isDebugEnabled()) {
+          log.debug("Failed to get item by path", e);
+        }
+      }
+      if (!filter.isSearchSharedContacts()) {
+        Node sharedAddressBookMock = getSharedAddressBooksHome(username);
+        PropertyIterator iter = sharedAddressBookMock.getReferences();
+        Node addressBook;
+
+        boolean hasGroup = (filter.getCategories() != null && filter.getCategories().length > 0);
+        while (iter.hasNext()) {
+          addressBook = iter.nextProperty().getParent();
+          Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS);
+          filter.setAccountPath(contactHomeNode.getPath());
+          if (!hasGroup)
+            filter.setCategories(new String[] { addressBook.getName() });
+          filter.setUsername(addressBook.getProperty("exo:sharedUserId").getString());
+          qm = contactHomeNode.getSession().getWorkspace().getQueryManager();
+          query = (QueryImpl)qm.createQuery(filter.getStatement(), Query.XPATH);
+          NodeIterator it = query.execute().getNodes();
+          combiner.addIterator(it) ;
+        }
+      }
+    }
+    while (combiner.hasNext()) {
+        Node contactNode = (Node)combiner.next() ;         
+        String id = contactNode.getProperty("exo:id").getString();
+	    String fullName = contactNode.getProperty("exo:fullName").getString();
+	    String emailAddresses = Utils.valuesToString(contactNode.getProperty("exo:emailAddress").getValues());
+	    emails.add(new ContactData(id, fullName,emailAddresses));
+      }
+	return new ArrayList<ContactData>(emails);
+  }
+
+
+  // CS-5825
+  /**
+   * find contact email for a particular type of contacts: public, personal or shared
+   * this function is the entry point to delegate finding tasks to other functions depending
+   * on type contacts
+   * 
+   * @param username 
+   * @param filter filter on a particular category or type of contacts
+   * @param resultLimit number of result we want to return
+   * @param queryState uses queryState to know the position of our last query
+   */
+  public List<ContactData> findNextEmailsForType(String username, ContactFilter filter, int resultLimit, QueryState queryState) throws Exception 
+  {
+    AddressBookType type = null;
+    if (filter.getCategories() != null) {
+      type = getAddressBookType(username, filter.getCategories()[0]);
+    }
+    
+    if (type == null)  {  // search for all types of contacts
+      return getNextEmails(username, filter, resultLimit, queryState);
+    } 
+    else if (type == AddressBookType.Public) {
+      queryState.on("publicContacts");  // search only for public contacts
+      return getNextPublicEmails(username, filter, resultLimit, queryState);
+    }
+    else if (type == AddressBookType.Personal) {
+      queryState.on("personalContacts");  // search only for personal contacts
+      return getNextPersonalEmails(username, filter, resultLimit, queryState);
+    }
+    else if (type == AddressBookType.Shared) { // search only for shared contacts
+      queryState.on("sharedContacts");
+      return getNextSharedEmails(username, filter, resultLimit, queryState);
+    }
+    return null;
+  }
+  
+  /** 
+   * getting contacts from all contact type, start querying from public then personal then shared contacts 
+   * until the number of result equal resultLimit or stops when there's no more result 
+   * 
+   * @param username 
+   * @param filter filter on a particular category or type of contacts
+   * @param resultLimit number of result we want to return
+   * @param queryState uses queryState to know the position of our last query
+   */
+  private List<ContactData> getNextEmails(String username, ContactFilter filter, int resultLimit, QueryState queryState) throws Exception
+  {
+    // we always search from relative offset
+    List<ContactData> publicContacts = new ArrayList<ContactData>();
+    List<ContactData> personalContacts = new ArrayList<ContactData>();
+    List<ContactData> sharedContacts = new ArrayList<ContactData>();
+
+    if ( queryState.isOn("publicContacts") )
+    {
+      publicContacts = searchFromPublicContacts( username, filter, queryState.getRelativeOffset(), resultLimit );
+      if ( publicContacts.size() == resultLimit ) // enough result then stop and return
+      {
+        queryState.withRelativeOffset( queryState.getRelativeOffset() + resultLimit );
+        return publicContacts;
+      }
+      else  // not enough result - continue to search on personal contacts - reset relative offset to 0
+      {
+         queryState.on("personalContacts").withRelativeOffset(0); 
+         personalContacts = getNextEmails(username, filter, resultLimit - publicContacts.size(), queryState);
+         publicContacts.addAll(personalContacts);
+         return publicContacts;
+      }
+    }
+
+    if ( queryState.isOn("personalContacts") )
+    {
+      personalContacts = searchFromPersonalContacts( username, filter, queryState.getRelativeOffset(), resultLimit );
+      if ( personalContacts.size() == resultLimit )
+      {
+        queryState.withRelativeOffset( queryState.getRelativeOffset() + resultLimit );
+        return personalContacts;
+      }
+      else
+      {
+        queryState.on("sharedContacts").withRelativeOffset(0);
+        sharedContacts = getNextEmails( username, filter, resultLimit - personalContacts.size(), queryState );
+        personalContacts.addAll(sharedContacts);
+        return personalContacts;
+      }
+    }
+
+    if ( queryState.isOn("sharedContacts") )
+    {
+      sharedContacts = searchFromSharedContacts( username, filter, queryState.getRelativeOffset(), resultLimit);
+      // if enough result or not, still have to return and quit
+      queryState.withRelativeOffset( queryState.getRelativeOffset() + sharedContacts.size() );
+      return sharedContacts;
+    }
+    return null;
+  }
+
+  /**
+   * same as {@link JCRDataStorage#getNextEmails} except querying only on public contacts
+   */
+  private List<ContactData> getNextPublicEmails(String username, ContactFilter filter, int resultLimit, QueryState queryState) throws Exception
+  {
+    List<ContactData> publicContacts = new ArrayList<ContactData>();
+    publicContacts = searchFromPublicContacts( username, filter, queryState.getRelativeOffset(), resultLimit );
+    queryState.withRelativeOffset( queryState.getRelativeOffset() + publicContacts.size() );
+    return publicContacts;
+  }
+
+  /**
+   * same as {@link JCRDataStorage#getNextEmails} except querying only on personal contacts
+   */  
+  private List<ContactData> getNextPersonalEmails(String username, ContactFilter filter, int resultLimit, QueryState queryState) throws Exception
+  {
+    List<ContactData> personalContacts = new ArrayList<ContactData>();
+    personalContacts = searchFromPersonalContacts( username, filter, queryState.getRelativeOffset(), resultLimit );
+    queryState.withRelativeOffset( queryState.getRelativeOffset() + personalContacts.size() );
+    return personalContacts;
+  }
+  
+  /**
+   * same as {@link JCRDataStorage#getNextEmails} except querying only on shared contacts
+   */
+  private List<ContactData> getNextSharedEmails(String username, ContactFilter filter, int resultLimit, QueryState queryState) throws Exception
+  {
+    List<ContactData> sharedContacts = new ArrayList<ContactData>();
+    sharedContacts = searchFromSharedContacts( username, filter, queryState.getRelativeOffset(), resultLimit );
+    queryState.withRelativeOffset( queryState.getRelativeOffset() + sharedContacts.size() );
+    return sharedContacts;
+  }
+  
+  /**
+   * performs the actual JCR querying
+   * It gets contacts only from public contacts
+   * 
+   * @param username
+   * @param filter
+   * @param offset
+   * @param resultLimit
+   * @return
+   * @throws Exception
+   */
+  private List<ContactData> searchFromPublicContacts(String username, ContactFilter filter, int offset, int resultLimit) throws Exception
+  {    
+    String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH);
+    filter.setAccountPath(usersPath);
+    QueryManager qm = getContactUserDataHome(username).getSession().getWorkspace().getQueryManager();
+    
+    QueryImpl query = (QueryImpl) qm.createQuery(filter.getStatement(), Query.XPATH);
+    query.setOffset( offset );   // search from a starting position: offset
+    query.setLimit( resultLimit );  
+    
+    Set<ContactData> emails = new HashSet<ContactData>();
+    NodeIterator it = query.execute().getNodes();
+    
+    while (it.hasNext())
+    {
+      Node contactNode = (Node) it.next();         
+      String id = contactNode.getProperty("exo:id").getString();
+      String fullName = contactNode.getProperty("exo:fullName").getString();
+      String emailAddresses = Utils.valuesToString(contactNode.getProperty("exo:emailAddress").getValues());
+      emails.add(new ContactData(id, fullName,emailAddresses));
+      }
+        
+    return new ArrayList<ContactData>(emails);
+  }
+  
+  /**
+   * performs the actual JCR querying
+   * It gets contacts only from personal contacts
+   * 
+   * @param username
+   * @param filter
+   * @param offset
+   * @param resultLimit
+   * @return
+   * @throws Exception
+   */
+  private List<ContactData> searchFromPersonalContacts(String username, ContactFilter filter, int offset, int resultLimit) throws Exception
+  {
+    Node contactHome = getPersonalContactsHome(username);
+    filter.setAccountPath(contactHome.getPath());
+    QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
+        
+    QueryImpl query = (QueryImpl) qm.createQuery(filter.getStatement(), Query.XPATH);
+    query.setOffset( offset );   // search from a starting position: offset
+    query.setLimit( resultLimit );  
+    
+    Set<ContactData> emails = new HashSet<ContactData>();
+    NodeIterator it = query.execute().getNodes();
+    
+    while (it.hasNext())
+    {
+      Node contactNode = (Node) it.next();         
+      String id = contactNode.getProperty("exo:id").getString();
+      String fullName = contactNode.getProperty("exo:fullName").getString();
+      String emailAddresses = Utils.valuesToString(contactNode.getProperty("exo:emailAddress").getValues());
+      emails.add(new ContactData(id, fullName,emailAddresses));
+    }
+
+    return new ArrayList<ContactData>(emails);
+  }
+  
+  /**
+   * performs the actual JCR querying
+   * It gets contacts only from shared contacts
+   * 
+   * @param username
+   * @param filter
+   * @param offset
+   * @param resultLimit
+   * @return
+   * @throws Exception
+   */
+  private List<ContactData> searchFromSharedContacts(String username, ContactFilter filter, int offset, int resultLimit) throws Exception
+  {
+    String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH);
+    Set<ContactData> emails = new HashSet<ContactData>();
+    NodeIterator it = null;
+    
+    try 
+    {
+      Node sharedContact = getSharedContact(username);
+      PropertyIterator iter = sharedContact.getReferences();
+      
+      while (iter.hasNext()) 
+      {
+        try 
+        {
+          Node sharedContactHomeNode = iter.nextProperty().getParent().getParent();
+          filter.setAccountPath(sharedContactHomeNode.getPath());
+          String split = "/";
+          String temp = sharedContactHomeNode.getPath().split(usersPath)[1];
+          String userId = temp.split(split)[1];
+          filter.setUsername(userId);
+          QueryManager qm = sharedContactHomeNode.getSession().getWorkspace().getQueryManager();
+          QueryImpl query = (QueryImpl)qm.createQuery(filter.getStatement(), Query.XPATH);
+          it = query.execute().getNodes();
+                    
+          while (it.hasNext())
+          {
+            Node contactNode = (Node) it.next();         
+            String id = contactNode.getProperty("exo:id").getString();
+            String fullName = contactNode.getProperty("exo:fullName").getString();
+            String emailAddresses = Utils.valuesToString(contactNode.getProperty("exo:emailAddress").getValues());
+            emails.add(new ContactData(id, fullName,emailAddresses));
+          } 
+        } 
+        catch (Exception e) 
+        {
+          if (log.isDebugEnabled()) log.debug("Exception in method findEmailsByFilter", e);
+        }
+      }
+      
+    } 
+    catch (PathNotFoundException e) 
+    {
+      if (log.isDebugEnabled()) log.debug("Failed to get item by path", e);
+    }    
+    return new ArrayList<ContactData>(emails);
+  }
+   
 }

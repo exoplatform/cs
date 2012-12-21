@@ -30,6 +30,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOCase;
 import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.service.ContactData;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactImportExport;
 import org.exoplatform.contact.service.ContactPageList;
@@ -52,6 +53,7 @@ import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.security.Identity;
+import org.exoplatform.contact.service.QueryState;
 
 /**
  * Created by The eXo Platform SARL
@@ -471,13 +473,23 @@ public class ContactServiceImpl implements ContactService {
   public boolean haveEditPermissionOnContact(String username, Contact contact) throws Exception {
     return storage_.haveEditPermissionOnContact(username, contact);
   }
-
-  @Override
+   
   public void addListenerPlugin(ContactEventListener listener) throws Exception {
     listeners_.add(listener);
   }
 
   public void savePublicAddressBook(AddressBook addressbook, boolean isNew) throws Exception {
     storage_.savePublicAddressBook(addressbook, isNew);
+  }
+
+  public List<ContactData> findEmailFromContacts(String userId, ContactFilter filter) throws Exception {
+	  // TODO Auto-generated method stub
+	  return storage_.findEmailFromContacts(userId, filter);
+  }
+
+  // CS-5825
+  public List<ContactData> findNextEmailsForType(String username, ContactFilter filter, int resultLimit, QueryState queryState) throws Exception 
+  {
+    return storage_.findNextEmailsForType(username, filter, resultLimit, queryState);
   }
 }
