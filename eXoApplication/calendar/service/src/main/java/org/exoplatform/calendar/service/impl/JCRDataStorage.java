@@ -625,9 +625,7 @@ public class JCRDataStorage implements DataStorage {
     QueryManager qm = calendarHome.getSession().getWorkspace().getQueryManager();
     while (iter.hasNext()) {
       Node categoryNode = iter.nextNode();
-      String categoryId = categoryNode.getProperty(Utils.EXO_ID).getString();
-      log.info("\n\n calendarHome.getPath(): " + calendarHome.getPath());
-      log.info("categoryId: " + categoryId + "\n\n");
+      String categoryId = categoryNode.getProperty(Utils.EXO_ID).getString();      
       StringBuilder queryString = new StringBuilder("/jcr:root" + calendarHome.getPath() + "//element(*,exo:calendar)[@exo:categoryId='").append(categoryId).append("']");
       Query query = qm.createQuery(queryString.toString(), Query.XPATH);
       QueryResult result = query.execute();
