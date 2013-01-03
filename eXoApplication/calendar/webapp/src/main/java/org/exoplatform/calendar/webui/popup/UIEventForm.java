@@ -33,6 +33,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TimeZone;
+import java.util.Properties;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
@@ -176,6 +177,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   public final static String RP_END_BYDATE = "endByDate";
   public final static String RP_END_AFTER = "endAfter";
   public final static String RP_END_NEVER = "neverEnd";
+  final public static String DOMAIN_KEY   = "gatein.email.domain.url".intern();
   
   private boolean isAddNew_ = true ;
   private boolean isChangedSignificantly = false;
@@ -1237,9 +1239,19 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   }
   
   protected String getReplyInvitationLink(int answer, User invitor, String invitee, String eXoId, CalendarEvent event) throws Exception{
-    String portalURL = CalendarUtils.getServerBaseUrl() + PortalContainer.getCurrentPortalContainerName();
+    Properties props = new Properties(System.getProperties());
+    String baseURL = CalendarUtils.getServerBaseUrl();
+    String domainKey = props.getProperty(DOMAIN_KEY, baseURL).toString();
+    String portalURL = "";
+    String calendarURL = "";
+    if (domainKey == null || domainKey.equals("")){
+      portalURL = baseURL + PortalContainer.getCurrentPortalContainerName();      
+      calendarURL = CalendarUtils.getCalendarURL();
+    } else {
+      portalURL = domainKey +"/"+ PortalContainer.getCurrentPortalContainerName();      
+      calendarURL = CalendarUtils.getCalendarURL().replaceFirst(baseURL,domainKey+"/");
+    }    
     String restURL = portalURL + "/" + PortalContainer.getCurrentRestContextName();
-    String calendarURL = CalendarUtils.getCalendarURL();
     
     if (answer == org.exoplatform.calendar.service.Utils.ACCEPT || answer == org.exoplatform.calendar.service.Utils.DENY ||
         answer == org.exoplatform.calendar.service.Utils.NOTSURE) {
