@@ -1039,7 +1039,7 @@ h3. PortletPreferenceRequiredPlugin {anchor:id=CSref.Configuration.PortletPrefer
 
 *Details:*
 
-* *Name*: {{ortlets.prefs.required}} - The name of the plugin.
+* *Name*: {{portlets.prefs.required}} - The name of the plugin.
 * *Set-method*: {{setPortletsPrefsRequired}} - The plugin which registers the method.
 * *Type*: {{org.exoplatform.social.core.application.PortletPreferenceRequiredPlugin}} - A class that executes all the requires of the plugin.
 * *Description*: It is a plugin used to declare the application that will automatically create database.
