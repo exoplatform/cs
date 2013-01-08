@@ -99,7 +99,8 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
   }
   
   public UIEditFeed() throws Exception {
-    
+	WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    ResourceBundle res = context.getApplicationResourceBundle() ;
     String feedName = getDefaultFeedName();
     addUIFormInput(new UIFormStringInput(NAME, NAME, feedName).addValidator(MandatoryValidator.class).addValidator(SpecialCharacterValidator.class)) ;
     addUIFormInput(new UIFormStringInput(URL, URL, getURL(feedName)).addValidator(MandatoryValidator.class)) ;
@@ -108,14 +109,14 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
     resetURL.setActionListener("ResetURL") ;
     resetURL.setCssIconClass("ResetURLIcon");
     resetURL.setActionType(ActionData.TYPE_ICON) ;
-    resetURL.setActionName("ResetURL") ;
+    resetURL.setActionName(res.getString("UIEditFeed.action.ResetURL")) ;
     actions.add(resetURL) ;
     
     ActionData generateURL = new ActionData() ;
     generateURL.setActionListener("GenerateURL") ;
     generateURL.setCssIconClass("GenerateURLIcon");
     generateURL.setActionType(ActionData.TYPE_ICON) ;
-    generateURL.setActionName("GenerateURL") ;
+    generateURL.setActionName(res.getString("UIEditFeed.action.GenerateURL")) ;
     actions.add(generateURL) ;
     setActionField(URL, actions) ;
     
@@ -128,7 +129,7 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
     ActionData addCalendar = new ActionData() ;
     addCalendar.setActionListener("AddCalendar") ;
     addCalendar.setActionType(ActionData.TYPE_ICON) ;
-    addCalendar.setActionName("AddCalendar") ;
+    addCalendar.setActionName(res.getString("UICalendars.label.AddCalendar")) ;
     actions2.add(addCalendar) ;
     setActionField(ADDMORE, actions2) ;
     comboBox.setValue(null);
