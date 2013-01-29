@@ -15,7 +15,7 @@
 <para>A configuration of Collaboration components, external component plugins and other configurations.</para>
 </listitem>
 <listitem>
-<para><emphasis role="bold"><link linkend="CSref.DeveloperReference">Developer reference</link></emphasis></para>
+<para><emphasis role="bold"><link linkend="CSref.DeveloperReference">Developer Reference</link></emphasis></para>
 <para>Knowledge of extension points, public REST APIs and JCR structure of the Collaboration applications.</para>
 </listitem>
 </itemizedlist>
