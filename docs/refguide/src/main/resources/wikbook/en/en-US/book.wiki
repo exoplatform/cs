@@ -12,7 +12,7 @@ h1. Configurations {anchor:id=CSref.Configuration}
 {include:document="DataInjectorService.wiki"}
 {include:document="Chatserver-configuration.wiki"}
 
-h1. Developer reference {anchor:id=CSref.DeveloperReference}
+h1. Developer Reference {anchor:id=CSref.DeveloperReference}
 {include:document="Developer_reference.wiki"}
 h2. Extension points {anchor:id=CSref.ExtensionPoints}
 {include:document="Overridable_components.wiki"}
