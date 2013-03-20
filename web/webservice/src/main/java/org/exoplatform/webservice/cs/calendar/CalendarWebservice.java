@@ -112,7 +112,7 @@ public class CalendarWebservice implements ResourceContainer{
   /**
    * base slash symbol use to combine the full URL
    */
-  final public static String BASE_URL_PRIVATE = BASE_URL + "/".intern();
+  final public static String BASE_URL_PRIVATE = PRIVATE + BASE_URL + "/".intern();
 
   private Log log = ExoLogger.getExoLogger("calendar.webservice");
 
