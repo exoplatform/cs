@@ -70,10 +70,10 @@ public class NewMembershipListener extends MembershipEventListener {
 
     String username = m.getUserName();
     String groupId = m.getGroupId();
-    cservice_.addUserContactInAddressBook(username, groupId);
     DataStorage storage_ = new JCRDataStorage(nodeHierarchyCreator_, reposervice_);
     SessionProvider systemSession = SessionProvider.createSystemProvider();
     try {
+      cservice_.addUserContactInAddressBook(username, groupId);
       String usersPath = nodeHierarchyCreator_.getJcrPath(DataStorage.USERS_PATH);
       Contact contact = cservice_.getPublicContact(username);
       QueryManager qm = getSession(systemSession).getWorkspace().getQueryManager();
@@ -117,6 +117,10 @@ public class NewMembershipListener extends MembershipEventListener {
 
   public void preDelete(Membership m) throws Exception {
     Contact contact = cservice_.getPublicContact(m.getUserName());
+    if (contact == null){
+       log.error("Cannot find contact in method preDelete");
+       return;
+    }
     Map<String, String> groupIds = new LinkedHashMap<String, String>();
     for (String group : contact.getAddressBookIds())
       groupIds.put(group, group);
