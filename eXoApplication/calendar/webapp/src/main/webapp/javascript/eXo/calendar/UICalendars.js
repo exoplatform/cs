@@ -59,11 +59,7 @@ UICalendars.prototype.calendarMenuCallback = function(anchorElm, evt) {
   var calColor = obj.getAttribute("calColor");
   var canEdit = String(obj.getAttribute("canedit")).toLowerCase();
   var UICalendars = eXo.calendar.UICalendars;
-  var menu = UICalendars.currentMenuElm;
-  var contentContainerElm = DOMUtil.findAncestorByClass(anchorElm, "ContentContainer");
-  if (contentContainerElm) {
-    menu.style.top = (eXo.core.Browser.findPosY(menu) - contentContainerElm.scrollTop) + 'px';
-  }
+  var menu = UICalendars.currentMenuElm;  
   try {
     var selectedCategory = (eXo.calendar.UICalendarPortlet.filterSelect) ? eXo.calendar.UICalendarPortlet.filterSelect : null;
     if (selectedCategory) {
