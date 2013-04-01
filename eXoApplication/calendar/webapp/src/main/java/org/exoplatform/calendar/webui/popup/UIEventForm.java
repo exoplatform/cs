@@ -1304,9 +1304,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
        );
   }
   
-  private CalendarEvent sendInvitation(Event<UIEventForm> event, CalendarSetting calSetting, CalendarEvent calendarEvent) throws Exception {
-    String username = WebuiRequestContext.getCurrentInstance().getRemoteUser();
-    Account acc = CalendarUtils.getMailService().getDefaultAccount(username);
+  private CalendarEvent sendInvitation(Event<UIEventForm> event, CalendarEvent calendarEvent) throws Exception {
     String toId = null;
     if (this.isAddNew_ || this.isChangedSignificantly) {
       toId = getParticipantValues();
@@ -1340,7 +1338,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     }
     try {
       if (toId != null) {
-        sendMail(CalendarUtils.getMailService(), CalendarUtils.getOrganizationService(), calSetting, acc, username, toId, calendarEvent);
         List<String> parsUpdated = new LinkedList<String>();
         for (String parSt : calendarEvent.getParticipantStatus()) {
           String[] entry = parSt.split(":");
@@ -1360,7 +1357,42 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     }
     return null;
   }
-  
+
+  private void sendInvitationMail(Event<UIEventForm> event, CalendarSetting calSetting, CalendarEvent calendarEvent) throws Exception {
+    String username = WebuiRequestContext.getCurrentInstance().getRemoteUser();
+    Account acc = CalendarUtils.getMailService().getDefaultAccount(username);
+    String toId = null;
+    if (this.isAddNew_ || this.isChangedSignificantly) {
+      toId = getParticipantValues();
+    } else {
+      // select new User
+      StringBuilder builder = new StringBuilder("");
+      for (String parSt : calendarEvent.getParticipantStatus()) {
+        String[] entry = parSt.split(":");
+        // is new
+        if ((entry.length == 1) && (!entry[0].contains("@"))) {
+          if (builder.length() > 0)
+            builder.append(CalendarUtils.BREAK_LINE);
+          builder.append(entry[0]);
+        }
+      }
+
+      if (builder.toString().trim().length() > 0) {
+        toId = builder.toString();
+      }
+    }
+    try {
+      if (toId != null) {
+        sendMail(CalendarUtils.getMailService(), CalendarUtils.getOrganizationService(), calSetting, acc, username, toId, calendarEvent);
+      }
+    } catch (Exception e) {
+      event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UIEventForm.msg.error-send-email", null));
+      if (log.isDebugEnabled()) {
+        log.debug("Fail to send mail ivitation to the participant", e);
+      }
+    }
+}
+
   public void saveAndNoAsk(Event<UIEventForm> event, boolean isSend, boolean updateSeries)throws Exception {
     UIEventForm uiForm = event.getSource() ;
     UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
@@ -1523,7 +1555,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     try {
       if (calendarEvent != null && isSend) {
         try {
-          CalendarEvent tempCal = sendInvitation(event, calSetting, calendarEvent);
+          CalendarEvent tempCal = sendInvitation(event, calendarEvent);
           calendarEvent = tempCal != null ? tempCal : calendarEvent;
         } catch (Exception e) {
           if (log.isWarnEnabled()) log.warn("Sending invitation failed!" , e);
@@ -1567,7 +1599,15 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         }
         UITaskForm.updateListView(calendarView, calendarEvent, calService, username);
       }
-
+      
+      if (calendarEvent != null && isSend) {
+        try {
+		  sendInvitationMail(event, calSetting, calendarEvent);
+        } catch (Exception e) {
+          if (log.isWarnEnabled()) log.warn("Sending invitation Mail failed!" , e);
+        }
+      }      
+      
       if(calendarView instanceof UIListContainer) {
         UIListContainer uiListContainer = (UIListContainer)calendarView ;
         if (!uiListContainer.isDisplaySearchResult()) {
