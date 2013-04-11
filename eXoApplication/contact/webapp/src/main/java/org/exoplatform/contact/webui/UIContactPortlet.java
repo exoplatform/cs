@@ -66,12 +66,12 @@ public class UIContactPortlet extends UIPortletApplication {
   }
   
   private void processByGroupInSpace(PortletRequestContext pcontext) throws Exception {
+    String url;
     try {
-      PortletPreferences pref = pcontext.getRequest().getPreferences();
-      String url;
+      url = org.exoplatform.social.webui.Utils.getSpaceUrlByContext();
       UIAddressBooks addressBooks = findFirstComponentOfType(UIAddressBooks.class);
-      if ((url = pref.getValue(SpaceUtils.SPACE_URL, null)) != null) {
-        SpaceService sService = (SpaceService) getApplicationComponent(SpaceService.class);
+      if (url  != null &&  url != "") {
+        SpaceService sService = (SpaceService) PortalContainer.getInstance().getComponentInstanceOfType(SpaceService.class);
         Space space = sService.getSpaceByUrl(url);
         String groupId = Utils.ADDRESSBOOK_ID_PREFIX + space.getPrettyName();
         addressBooks.processSelectGroup(pcontext, groupId);
