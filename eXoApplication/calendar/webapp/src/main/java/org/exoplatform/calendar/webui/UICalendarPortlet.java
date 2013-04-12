@@ -130,16 +130,15 @@ public class UICalendarPortlet extends UIPortletApplication {
    * @return 
    */
   public static String getSpaceId() {
+    String spacePrettyName;
     PortletRequestContext pContext = WebuiRequestContext.getCurrentInstance();
     String spaceIdStr = (String) pContext.getAttribute(SPACE_ID_KEY);
     if (spaceIdStr == null) {
       try {
-        PortletRequest portletRequest = pContext.getRequest();
-        PortletPreferences pref = portletRequest.getPreferences();
-        if (pref.getValue("SPACE_URL", null) != null) {
-          String url = pref.getValue("SPACE_URL", null);
+        spacePrettyName = org.exoplatform.webui.utils.Utils.getSpacePrettyNameByContext();
+        if (spacePrettyName != null) {
           SpaceService sService = (SpaceService) PortalContainer.getInstance().getComponentInstanceOfType(SpaceService.class);
-          Space space = sService.getSpaceByUrl(url);
+          Space space = sService.getSpaceByPrettyName(spacePrettyName);
           spaceIdStr = space.getPrettyName();
           pContext.setAttribute(SPACE_ID_KEY, spaceIdStr);
         }

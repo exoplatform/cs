@@ -16,8 +16,6 @@
  */
 package org.exoplatform.contact.webui;
 
-import javax.portlet.PortletPreferences;
-
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Utils;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
@@ -67,12 +65,12 @@ public class UIContactPortlet extends UIPortletApplication {
   
   private void processByGroupInSpace(PortletRequestContext pcontext) throws Exception {
     try {
-      PortletPreferences pref = pcontext.getRequest().getPreferences();
-      String url;
+      String spacePrettyName;
       UIAddressBooks addressBooks = findFirstComponentOfType(UIAddressBooks.class);
-      if ((url = pref.getValue(SpaceUtils.SPACE_URL, null)) != null) {
+      spacePrettyName = org.exoplatform.webui.utils.Utils.getSpacePrettyNameByContext();
+      if ( spacePrettyName!= null) {
         SpaceService sService = (SpaceService) getApplicationComponent(SpaceService.class);
-        Space space = sService.getSpaceByUrl(url);
+        Space space = sService.getSpaceByPrettyName(spacePrettyName);
         String groupId = Utils.ADDRESSBOOK_ID_PREFIX + space.getPrettyName();
         addressBooks.processSelectGroup(pcontext, groupId);
       }
