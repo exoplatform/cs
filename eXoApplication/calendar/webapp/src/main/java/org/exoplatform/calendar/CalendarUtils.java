@@ -75,6 +75,7 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.core.model.SelectOption;
 import org.exoplatform.webui.core.model.SelectOptionGroup;
 import org.exoplatform.ws.frameworks.cometd.ContinuationService;
+import org.exoplatform.webservice.cs.calendar.CalendarWebservice;
 
 /**
  * Created by The eXo Platform SARL
@@ -1072,5 +1073,16 @@ public class CalendarUtils {
       limitMB = DEFAULT_VALUE_UPLOAD_PORTAL;
     }
     return limitMB;
+  }
+  
+  public static String buildSubscribeUrl(String calId, String calType, boolean isPrivate){
+    try {
+      String baseUrl = isPrivate ? CalendarWebservice.BASE_URL_PRIVATE : CalendarWebservice.BASE_URL_PUBLIC;
+      return new StringBuffer(SLASH).append(PortalContainer.getCurrentRestContextName())
+          .append(baseUrl).append(getCurrentUser()).append(SLASH)
+          .append(calId).append(SLASH).append(calType).toString();      
+    } catch (Exception e) {
+      return null;
+    }
   }
 }
