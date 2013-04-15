@@ -35,7 +35,6 @@ import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarWorkingContainer;
-import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
@@ -43,7 +42,6 @@ import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webservice.cs.calendar.CalendarWebservice;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -62,6 +60,7 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 import org.exoplatform.webui.form.ext.UIFormColorPicker;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.SpecialCharacterValidator;
+import org.exoplatform.calendar.service.Utils;
 
 /**
  * Created by The eXo Platform SARL
@@ -95,22 +94,22 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   final public static String EDIT_PERMISSION = "editPermission" ;
   final public static String SELECT_COLOR = "selectColor" ;
   final public static String SELECT_GROUPS = "selectGroups" ;
-  final public static String INPUT_CALENDAR = "calendarDetail".intern() ;
-  final public static String INPUT_SHARE = "public".intern() ;
+  final public static String INPUT_CALENDAR = "calendarDetail";
+  final public static String INPUT_SHARE = "public";
   final public static String TIMEZONE = "timeZone" ;
   final public static String LOCALE = "locale" ;
-  final public static String PERMISSION_SUB = "_permission".intern() ;
-  final public static String PUBLIC_URL = "public-url".intern();
-  final public static String PRIVATE_URL = "private-url".intern();
-  final public static String PUBLIC_URL_MSG = "public-url-msg-active".intern();
-  final public static String PUBLIC_URL_MSG_D = "public-url-msg-deactive".intern();
-  final public static String ACT_SELECT_PERM = "SelectPermission".intern();
-  final public static String ACT_ADD_CATEGORY = "AddCategory".intern();
+  final public static String PERMISSION_SUB = "_permission";
+  final public static String PUBLIC_URL = "public-url";
+  final public static String PRIVATE_URL = "private-url";
+  final public static String PUBLIC_URL_MSG = "public-url-msg-active";
+  final public static String PUBLIC_URL_MSG_D = "public-url-msg-deactive";
+  final public static String ACT_SELECT_PERM = "SelectPermission";
+  final public static String ACT_ADD_CATEGORY = "AddCategory";
 
-  final public static String ACT_OPEN = "Open".intern();
-  final public static String ACT_SUBSCRIBE = "Subscribe".intern();
-  final public static String ACT_ACTIVE = "Active".intern();
-  final public static String ACT_DEACTIVE = "Deactive".intern();
+  final public static String ACT_OPEN = "Open";
+  final public static String ACT_SUBSCRIBE = "Subscribe";
+  final public static String ACT_ACTIVE = "Active";
+  final public static String ACT_DEACTIVE = "Deactive";
 
   public Map<String, String> permission_ = new HashMap<String, String>() ;
   public Map<String, Map<String, String>> perms_ = new HashMap<String, Map<String, String>>() ;
@@ -283,7 +282,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
                 if(groupId.equals(id)) {
                   if(!checkList.contains(s.split(CalendarUtils.SLASH_COLON)[1])) {
                     checkList.add(perm) ;
-                    if(sb.length() > 0) sb.append(CalendarUtils.COMMA) ;
+                    if(sb.length() > 0) sb.append(CalendarUtils.COMMA + Utils.SPACE) ;
                     sb.append(perm) ;
                   }
                 }
@@ -303,11 +302,8 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     //    setLocale(calendar.getLocale()) ;
     //    setTimeZone(calendar.getTimeZone()) ;
     setSelectedColor(calendar.getCalendarColor()) ;
-    if(calendar.getPrivateUrl() == null || calendar.getPrivateUrl().isEmpty()) {
-      String privateUrl = "/" + PortalContainer.getCurrentPortalContainerName() +"/"+ 
-      PortalContainer.getCurrentRestContextName() + CalendarWebservice.BASE_URL_PRIVATE + CalendarUtils.getCurrentUser()+"/"+
-      calendar.getId() +"/"+ calType_ ;
-      calendar_.setPrivateUrl(privateUrl);
+    if(calendar.getPrivateUrl() == null || calendar.getPrivateUrl().isEmpty()) {      
+      calendar_.setPrivateUrl(CalendarUtils.buildSubscribeUrl(calendar.getId(), calType_, true));
     }
 
     UIFormInputInfo privateUrl = new UIFormInputInfo(PRIVATE_URL, PRIVATE_URL, null);
@@ -539,11 +535,8 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
         calendar.setName(displayName) ;
         calendar.setDescription(uiForm.getDescription()) ;
         calendar.setCalendarColor(uiForm.getSelectedColor()) ;
-        calendar.setCalendarOwner(username) ;
-        String url =  "/" + PortalContainer.getCurrentPortalContainerName() +"/"+ 
-        PortalContainer.getCurrentRestContextName() + CalendarWebservice.BASE_URL_PRIVATE + CalendarUtils.getCurrentUser()+"/"+
-        calendar.getId() +"/"+ uiForm.calType_ ;
-        calendar.setPrivateUrl(url);
+        calendar.setCalendarOwner(username) ;        
+        calendar.setPrivateUrl(CalendarUtils.buildSubscribeUrl(calendar.getId() , uiForm.calType_, true));
         if(CalendarUtils.PRIVATE_TYPE.equals(uiForm.calType_)) {
           if(CalendarUtils.isEmpty(calendarCategoryId)) {
             event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendarForm.msg.category-empty", null, ApplicationMessage.WARNING) ) ;
@@ -749,11 +742,8 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
 
       if(uiForm.isAddNew_) {
         event.getRequestContext().getUIApplication().addMessage(new ApplicationMessage("UICalendarForm.msg.need-save-calendar-first", null, ApplicationMessage.WARNING)) ;
-        } else {
-        String url = "/" + PortalContainer.getCurrentPortalContainerName() +"/"+ 
-        PortalContainer.getCurrentRestContextName() + CalendarWebservice.BASE_URL_PUBLIC + CalendarUtils.getCurrentUser()+"/"+
-        uiForm.calendar_.getId() +"/"+ uiForm.calType_ ;
-        uiForm.calendar_.setPublicUrl(url);
+      } else {        
+        uiForm.calendar_.setPublicUrl(CalendarUtils.buildSubscribeUrl(uiForm.calendar_.getId(), uiForm.calType_ , false));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;     
       }
     }

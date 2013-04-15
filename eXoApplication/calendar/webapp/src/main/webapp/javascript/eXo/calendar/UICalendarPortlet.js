@@ -164,7 +164,7 @@ UICalendarPortlet.prototype.getCheckedCalendar = function(calendarForm){
  */
 UICalendarPortlet.prototype.addQuickShowHidden = function(obj, type){
   var startTime = (this.currentDate) ? new Date(this.currentDate).getTime() : new Date().getTime();
-  this.addQuickShowHiddenWithTime(obj, type, startTime, startTime + 15*60*1000) ;
+  this.addQuickShowHiddenWithTime(obj, type, startTime, startTime + 30*60*1000) ;
 } ;
 
 /**
