@@ -551,10 +551,10 @@ public class CalendarUtils {
     if (url.indexOf(portalName) > 0) {
       if(url.indexOf(portalName + "/" + selectedNode) < 0){
         url = url.replaceFirst(portalName, portalName + "/" + selectedNode) ;
-      } 
-    } 
-    selectedNode = portalName + "/" + selectedNode;
-    url = url.substring(0, url.lastIndexOf(selectedNode) + selectedNode.length());
+      }
+      selectedNode = portalName + "/" + selectedNode;
+      url = url.substring(0, url.lastIndexOf(selectedNode) + selectedNode.length());
+    }    
     return url;
   }
 
