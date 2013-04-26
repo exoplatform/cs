@@ -1240,19 +1240,13 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   
   protected String getReplyInvitationLink(int answer, User invitor, String invitee, String eXoId, CalendarEvent event) throws Exception{
     Properties props = new Properties(System.getProperties());
-    String baseURL = CalendarUtils.getServerBaseUrl();
+    String baseURL = CalendarUtils.getServerBaseUrl().replaceAll("/$", "");
     String domainKey = props.getProperty(DOMAIN_KEY, baseURL).toString();
     String portalURL = "";
-    String calendarURL = "";
-    if (domainKey == null || domainKey.equals("")){
-      portalURL = baseURL + PortalContainer.getCurrentPortalContainerName();      
-      calendarURL = CalendarUtils.getCalendarURL();
-    } else {
-      portalURL = domainKey +"/"+ PortalContainer.getCurrentPortalContainerName();      
-      calendarURL = CalendarUtils.getCalendarURL().replaceFirst(baseURL,domainKey+"/");
-    }    
-    String restURL = portalURL + "/" + PortalContainer.getCurrentRestContextName();
-    
+    String calendarURL = "";    
+    portalURL = domainKey +"/"+ PortalContainer.getCurrentPortalContainerName();      
+    calendarURL = CalendarUtils.getCalendarURL().replaceFirst(baseURL,domainKey);        
+    String restURL = portalURL + "/" + PortalContainer.getCurrentRestContextName();    
     if (answer == org.exoplatform.calendar.service.Utils.ACCEPT || answer == org.exoplatform.calendar.service.Utils.DENY ||
         answer == org.exoplatform.calendar.service.Utils.NOTSURE) {
       return (restURL + "/cs/calendar" + CalendarUtils.INVITATION_URL + event.getCalendarId() + "/" + event.getCalType() + "/" + event.getId() + "/" + invitor.getUserName() + "/" + invitee + "/" + eXoId + "/" + answer);
