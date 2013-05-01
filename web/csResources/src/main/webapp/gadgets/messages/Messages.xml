@@ -10,7 +10,8 @@
     <Locale lang="ar" messages="/csResources/gadgets/messages/locale/ar.xml" language_direction="rtl"/>
     <Locale lang="fr" messages="/csResources/gadgets/messages/locale/fr.xml" />
     <Locale lang="vi" messages="/csResources/gadgets/messages/locale/vi.xml" />
-    <Locale lang="it" messages="/csResources/gadgets/events/locale/it.xml" />
+    <Locale lang="it" messages="/csResources/gadgets/messages/locale/it.xml" />
+    <Locale lang="es" messages="/csResources/gadgets/messages/locale/es_ES.xml" />
     <Require feature="setprefs"/>
     <Require feature="dynamic-height"/>
   </ModulePrefs>
