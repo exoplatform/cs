@@ -73,7 +73,7 @@
         <div class="Result ClearFix">
           
           <% if (availableContact > 10) { %>
-          <div class="UIAddressPageList" style="float: right; width: 250px">
+          <div class="UIAddressPageList">
             <div class="ContactIteratorContainer">
               <div class="RightPageIteratorBlock ClearFix">
                 <a href="$firstPageAction" title="<%=_ctx.appRes(uicomponent.getName() + ".label.firstPage")%>" class="$cssPreviousPage FirstPageArrow"/></a>        
