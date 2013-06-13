@@ -478,11 +478,11 @@ UIContactPortlet.prototype.checkLayout = function() {
 	var contactLayout3 = eXo.contact.UIContactPortlet.getElementById("UITags");
 	var contactLayout4 = DOMUtil.findFirstDescendantByClass(portletNode, "div", "UIContactPreview");
 	var contactLayout5 = DOMUtil.findFirstDescendantByClass(portletNode, "div", "ResizeReadingPane");
-	eXo.contact.LayoutManager.layouts.push(contactLayout1);
-	eXo.contact.LayoutManager.layouts.push(contactLayout2);
-	eXo.contact.LayoutManager.layouts.push(contactLayout3);
-	eXo.contact.LayoutManager.layouts.push(contactLayout4);
-	eXo.contact.LayoutManager.layouts.push(contactLayout5);
+  for(var i=0;i<=5;i++){
+    if(("contactLayout"+i) != undefined) {
+      eXo.contact.LayoutManager.layouts.push("contactLayout"+i);
+    }
+  }
 	eXo.contact.LayoutManager.switchCallback = eXo.contact.UIContactPortlet.swithLayoutCallback ;
 	eXo.contact.LayoutManager.callback = eXo.contact.UIContactPortlet.checkLayoutCallback ;
 	eXo.contact.LayoutManager.resetCallback = eXo.contact.UIContactPortlet.resetLayoutCallback ;
