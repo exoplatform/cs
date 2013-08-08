@@ -39,10 +39,10 @@
     <org.exoplatform.exopackage.version>1.1.4</org.exoplatform.exopackage.version>
     <version.chromattic>1.1.2</version.chromattic>    
      <!--commons dependencies-->
-     <org.exoplatform.commons.version>1.1.13</org.exoplatform.commons.version>	      
+     <org.exoplatform.commons.version>1.1.14-SNAPSHOT</org.exoplatform.commons.version>	      
     <org.hsqldb.version>2.0.0</org.hsqldb.version>
      <!-- eXo extended service -->
-     <org.exoplatform.social.version>1.2.14</org.exoplatform.social.version>
+     <org.exoplatform.social.version>1.2.15-SNAPSHOT</org.exoplatform.social.version>
      <!-- 3rd parties -->
     <org.aspectj.version>1.6.10</org.aspectj.version>
     <ehcache.version>1.6.0</ehcache.version>
