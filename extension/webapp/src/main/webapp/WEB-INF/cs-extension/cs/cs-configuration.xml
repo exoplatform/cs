@@ -32,7 +32,11 @@
           <property name="startTime" value="+60000"/>
           <property name="endTime" value=""/>               
         </properties-param>
-        
+        <properties-param>
+          <name>reminder.info</name>
+          <description>save the monitor data  periodically</description>
+          <property name="portalName" value="portal"/> 
+        </properties-param>        
       </init-params>
     </component-plugin>
   <component-plugin>
