@@ -1057,6 +1057,9 @@ public class ICalendarImportExport implements CalendarImportExport{
         if(vFreeBusyData.get(event.getUid().getValue()) != null) {
           exoEvent.setStatus(CalendarEvent.ST_BUSY) ;
         }
+        if(event.getProperty(Utils.X_STATUS) != null) {
+          exoEvent.setEventState(event.getProperty(Utils.X_STATUS).getValue()) ;
+        }
         if(event.getClassification() != null) exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue())) ;
         //List<Reminder> list = null ;
         /*if(!event.getAlarms().isEmpty()){
