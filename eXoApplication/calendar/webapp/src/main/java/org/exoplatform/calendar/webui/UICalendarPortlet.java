@@ -20,7 +20,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 
-import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 import javax.servlet.http.HttpServletRequest;
 
@@ -130,24 +129,19 @@ public class UICalendarPortlet extends UIPortletApplication {
    * @return 
    */
   public static String getSpaceId() {
+    String spaceUrl = org.exoplatform.social.webui.Utils.getSpaceUrlByContext();
+    if (spaceUrl == null || spaceUrl == "") {
+      return null;
+    }
+  
     PortletRequestContext pContext = WebuiRequestContext.getCurrentInstance();
     String spaceIdStr = (String) pContext.getAttribute(SPACE_ID_KEY);
     if (spaceIdStr == null) {
-      try {
-        PortletRequest portletRequest = pContext.getRequest();
-        PortletPreferences pref = portletRequest.getPreferences();
-        if (pref.getValue("SPACE_URL", null) != null) {
-          String url = pref.getValue("SPACE_URL", null);
-          SpaceService sService = (SpaceService) PortalContainer.getInstance().getComponentInstanceOfType(SpaceService.class);
-          Space space = sService.getSpaceByUrl(url);
-          spaceIdStr = space.getPrettyName();
-          pContext.setAttribute(SPACE_ID_KEY, spaceIdStr);
-        }
-      } catch (Exception e) {
-        if (log.isDebugEnabled())
-          log.debug("Getting space id in the UICalendar portlet failed.", e);
-      }
-    }
+      SpaceService sService = (SpaceService) PortalContainer.getInstance().getComponentInstanceOfType(SpaceService.class);
+      Space space = sService.getSpaceByUrl(spaceUrl);
+      spaceIdStr = space.getPrettyName();
+      pContext.setAttribute(SPACE_ID_KEY, spaceIdStr); 
+    } 
     return spaceIdStr;
   }
   
