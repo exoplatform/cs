@@ -87,7 +87,7 @@
     <jivesoftware.smack.version>3.1.0</jivesoftware.smack.version>
     <jivesoftware.smackx.version>3.1.0</jivesoftware.smackx.version>
     <dom4j.version>1.6.1</dom4j.version>
-    <commons-fileupload.version>1.2.1</commons-fileupload.version>
+    <commons-fileupload.version>1.3.3</commons-fileupload.version>
     <!--exo.cs.eXoApplication.contact.service-->
     <jpim-0.1.version>1.0</jpim-0.1.version>
     <!--exo.cs.eXoApplication.organization.client.openfire-->
